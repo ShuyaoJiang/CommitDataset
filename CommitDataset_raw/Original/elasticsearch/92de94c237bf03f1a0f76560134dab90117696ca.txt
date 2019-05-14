@@ -1,0 +1,10 @@
+[ML] Don't treat stale FAILED jobs as OPENING in job allocation (#31800)
+
+Job persistent tasks with stale allocation IDs used to always be
+considered as OPENING jobs in the ML job node allocation decision.
+However, FAILED jobs are not relocated to other nodes, which leads
+to them blocking up the nodes they failed on after node restarts.
+FAILED jobs should not restrict how many other jobs can open on a
+node, regardless of whether they are stale or not.
+
+Closes #31794

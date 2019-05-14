@@ -1,0 +1,11 @@
+Use index-prefix fields for terms of length min_chars - 1 (#36703)
+
+The default index_prefix settings will index prefixes of between 2 and 5 characters in length. 
+Currently, if a prefix search falls outside of this range at either end we fall back to a standard prefix 
+expansion, which is still very expensive for single character prefixes. However, we have an option 
+here to use a wildcard expansion rather than a prefix expansion, so that a query of a* gets remapped 
+to a? against the _index_prefix field - likely to be a very small set of terms, and certain to be much
+smaller than a* against the whole index.
+
+This commit adds this extra level of mapping for any prefix term whose length is one less than
+the min_chars parameter of the index_prefixes field.

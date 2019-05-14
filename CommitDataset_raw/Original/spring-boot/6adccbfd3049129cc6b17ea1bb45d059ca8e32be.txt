@@ -1,0 +1,14 @@
+Make LoggingApplicationListener and tests more robust on Windows
+
+Previously, LoggingApplicationListener its tests, and LogFile made some
+assumptions that do not hold true on Windows. Specifically,
+LoggingApplicationListenerTests used TestPropertySourceUtils to add
+properties to the environment. This uses Java's standard Properties
+parsing which does a poor job of handling Windows file paths (Strings
+with backslashes in them). Secondly, LogFile made assumptions about
+the use of forward clashes for the file separator.
+
+This commit replaces the use of TestPropertySourceUtils and removes
+the assumption about the OS's file separator.
+
+Closes gh-15471

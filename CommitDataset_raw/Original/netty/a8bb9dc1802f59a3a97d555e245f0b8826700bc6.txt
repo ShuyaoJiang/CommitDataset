@@ -1,0 +1,10 @@
+AbstractByteBuf readSlice bound check bug
+
+Motivation:
+AbstractByteBuf#readSlice relied upon the bounds checking of the slice operation in order to detect index out of bounds conditions. However the slice bounds checking operation allows for the slice to go beyond the writer index, and this is out of bounds for a read operation.
+
+Modifications:
+- AbstractByteBuf#readSlice and AbstractByteBuf#readRetainedSlice should ensure the desired amount of bytes are readable before taking a slice
+
+Result:
+No reading of undefined data in AbstractByteBuf#readSlice and AbstractByteBuf#readRetainedSlice.

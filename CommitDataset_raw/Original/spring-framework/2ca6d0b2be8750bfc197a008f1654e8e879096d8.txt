@@ -1,0 +1,16 @@
+Centralize license, notice, etc in src/dist
+
+Prior to this change, license.txt and notice.txt files were duplicated
+across every subproject in their respective src/main/resources/META-INF
+directories.
+
+This commit centralizes these files under the root project at src/dist,
+along with the changelog and readme files. The definition of the 'jar'
+task has been been extended to include the license and notice files in
+module jars as they are created.
+
+The directory is named src/dist because these files are all related to
+distribution - the readme is different than the one you see at the root
+of the source tree - the intended audience is for users who download
+the spring-framework distribution zip. A task to create that
+distribution zip will be added in subsequent commits.

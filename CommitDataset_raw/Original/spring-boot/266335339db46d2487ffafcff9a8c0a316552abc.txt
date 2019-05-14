@@ -1,0 +1,10 @@
+Extract BindingResult if necessary
+
+Previously, no `errors` attribute is made available in the standard JSON
+error document if a request body object is invalid. This is due to the
+fact that the framework throws a `MethodArgumentNotValidException holding
+a `BindingResult` object that was not detected.
+
+We now make sure to extract the `BindingResult` from such exception.
+
+Closes gh-4166

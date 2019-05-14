@@ -1,0 +1,12 @@
+Fall back to application conversion service in BindConverter
+
+Previously, if a user declared a custom conversionService bean that
+was not an ApplicationConversionService instance, the binder lost
+the ability to convert a String to a Duration (along with any other
+conversions that are specific to ApplicationConversionService).
+
+This commit updates BindConverter so that, if the ConversionService
+with which it is created is not an ApplicationConversionService, it
+will use one as an additional service when performing conversion.
+
+Closes gh-12237

@@ -1,0 +1,4 @@
+Make NioByteUnsafe.read() respect ChannelConfig.maxMessagesPerRead and adjust the default from 16 to 1
+
+- Fixes #1486
+- Decreased the default from 16 to 1 because unnecessary extra read on req-res protocols results in lower throughput due to extra syscalls.

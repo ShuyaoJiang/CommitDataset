@@ -1,0 +1,25 @@
+Introduce 'value' alias for 'attribute' in @AliasFor
+
+SPR-11512 introduced support for annotation attribute aliases via
+@AliasFor, requiring the explicit declaration of the 'attribute'
+attribute. However, for aliases within an annotation, this explicit
+declaration is unnecessary.
+
+This commit improves the readability of alias pairs declared within an
+annotation by introducing a 'value' attribute in @AliasFor that is an
+alias for the existing 'attribute' attribute. This allows annotations
+such as @ContextConfiguration from the spring-test module to declare
+aliases as follows.
+
+public @interface ContextConfiguration {
+
+     @AliasFor("locations")
+     String[] value() default {};
+
+     @AliasFor("value")
+     String[] locations() default {};
+
+    // ...
+}
+
+Issue: SPR-13289

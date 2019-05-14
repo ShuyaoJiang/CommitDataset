@@ -1,0 +1,13 @@
+Use full profile on JDK 10 builds
+
+JDK 10 has gone fully-modular. This means that:
+ - when targeting JDK 8 with a JDK 10 compiler, we have to use the full
+   profile
+ - when targeting JDK 10 with a JDK 10 compiler, we have to use
+   -add-modules java.base
+
+Today we only target JDK 8 (our minimum compatibility version) so we
+need to change the compiler flags conditional on using a JDK 10
+compiler. This commit does that.
+
+Relates #27884

@@ -1,0 +1,13 @@
+[5382] HttpContentEncoder should not set chunked transfer-encoding for HTTP/1.0
+
+Motivation:
+
+When using HttpContentCompressor and the HttpResponse is protocol version 1.0, HttpContentEncoder.encode() should not set the transfer-encoding header to chunked. Chunked transfer-encoding is not valid for HTTP 1.0 - this causes ERR_CONTENT_DECODING_FAILED errors in chrome and similar failures in IE.
+
+Modifications:
+
+Skip HTTP/1.0 messages
+
+Result:
+
+Be able to serve HTTP/1.0 as well when HttpContentEncoder is in the pipeline.

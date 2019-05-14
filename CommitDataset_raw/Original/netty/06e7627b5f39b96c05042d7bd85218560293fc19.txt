@@ -1,0 +1,38 @@
+Read Only Http2Headers
+
+Motivation:
+A read only implementation of Http2Headers can allow for a more efficient usage of memory and more performant combined construction and iteration during serialization.
+
+Modifications:
+- Add a new ReadOnlyHttp2Headers class
+
+Result:
+ReadOnlyHttp2Headers exists and can be used for performance reasons when appropriate.
+
+```
+Benchmark                                            (headerCount)  Mode  Cnt    Score   Error  Units
+ReadOnlyHttp2HeadersBenchmark.defaultClientHeaders               1  avgt   20   96.156 ± 1.902  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultClientHeaders               5  avgt   20  157.925 ± 3.847  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultClientHeaders              10  avgt   20  236.257 ± 2.663  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultClientHeaders              20  avgt   20  392.861 ± 3.932  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultServerHeaders               1  avgt   20   48.759 ± 0.466  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultServerHeaders               5  avgt   20  113.122 ± 0.948  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultServerHeaders              10  avgt   20  192.698 ± 1.936  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultServerHeaders              20  avgt   20  348.974 ± 3.111  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultTrailers                    1  avgt   20   35.694 ± 0.271  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultTrailers                    5  avgt   20   98.993 ± 2.933  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultTrailers                   10  avgt   20  171.035 ± 5.068  ns/op
+ReadOnlyHttp2HeadersBenchmark.defaultTrailers                   20  avgt   20  330.621 ± 3.381  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyClientHeaders              1  avgt   20   40.573 ± 0.474  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyClientHeaders              5  avgt   20   56.516 ± 0.660  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyClientHeaders             10  avgt   20   76.890 ± 0.776  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyClientHeaders             20  avgt   20  117.531 ± 1.393  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyServerHeaders              1  avgt   20   29.206 ± 0.264  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyServerHeaders              5  avgt   20   44.587 ± 0.312  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyServerHeaders             10  avgt   20   64.458 ± 1.169  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyServerHeaders             20  avgt   20  107.179 ± 0.881  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyTrailers                   1  avgt   20   21.563 ± 0.202  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyTrailers                   5  avgt   20   41.019 ± 0.440  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyTrailers                  10  avgt   20   64.053 ± 0.785  ns/op
+ReadOnlyHttp2HeadersBenchmark.readOnlyTrailers                  20  avgt   20  113.737 ± 4.433  ns/op
+```

@@ -1,0 +1,15 @@
+Remove immediate operation retry after mapping update (#38873)
+
+Prior to this commit, when an indexing operation resulted in an
+`Engine.Result.Type.MAPPING_UPDATE_REQUIRED`, TransportShardBulkAction
+immediately retries the indexing operation to see if it succeeds. In the event
+that it succeeds the context does not wait until the mapping update has
+propagated through the cluster state before finishing the indexing.
+
+In some of our tests we rely on mappings being available as soon as they've been
+introduced in a document that indexed correctly. By removing the immediate retry
+we always wait for this to be the case.
+
+Resolves #38428
+Supercedes #38579
+Relates to #38711

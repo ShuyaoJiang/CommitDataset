@@ -1,0 +1,14 @@
+Compare HttpMethod by reference (#8815)
+
+Motivation:
+
+In most cases, HttpMethod instance is built from the factory method and the same instance is taken for known Http Methods. So we can implement fast path for equals().
+
+Modification:
+
+Replace == checks with HttpMethod.equals;
+Use this == o within HttpMethod.equals;
+Replaced known new HttpMethod with HttpMethod.valueOf;
+Result:
+
+Comparisons should be a bit faster in some cases.

@@ -1,0 +1,13 @@
+Added configurable ByteBuf bounds checking (#7521)
+
+Motivation:
+
+The JVM isn't always able to hoist out/reduce bounds checking (due to ref counting operations etc etc) hence making it configurable could improve performances for most CPU intensive use cases.
+
+Modifications:
+
+Each AbstractByteBuf bounds check has been tested against a new static final configuration property similar to checkAccessible ie io.netty.buffer.bytebuf.checkBounds.
+
+Result:
+
+Any user could disable ByteBuf bounds checking in order to get extra performances.

@@ -1,0 +1,9 @@
+Build: Stop double generating buildSrc pom (#32408)
+
+When we added the `java-gradle-plugin` to `buildSrc` it added a second
+task to generate the pom that duplicates the publishing work that we
+configure in `BuildPlugin`. Not only does it dupliciate the pom, it
+creates a pom that is missing things like `name` and `description` which
+are required for publishing to maven central.
+
+This change disables the duplicate pom generation.

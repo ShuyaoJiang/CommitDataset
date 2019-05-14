@@ -1,0 +1,35 @@
+Change PoolThreadCache to use LIFO for better cache performance
+
+Motiviation:
+
+At the moment we use FIFO for the PoolThreadCache which is sub-optimal as this may reduce the changes to have the cached memory actual still in the cpu-cache.
+
+Modification:
+
+- Change to use LIFO as this increase the chance to be able to serve buffers from the cpu-cache
+
+Results:
+
+Faster allocation out of the ThreadLocal cache.
+
+Before the commit:
+[xxx wrk]$ ./wrk -H 'Connection: keep-alive' -d 120 -c 256 -t 16 -s scripts/pipeline-many.lua  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    14.69ms   10.06ms 131.43ms   80.10%
+    Req/Sec   283.89k    40.37k  433.69k    66.81%
+  533859742 requests in 2.00m, 72.09GB read
+Requests/sec: 4449510.51
+Transfer/sec:    615.29MB
+
+After the commit:
+[xxx wrk]$ ./wrk -H 'Connection: keep-alive' -d 120 -c 256 -t 16 -s scripts/pipeline-many.lua  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    16.38ms   26.32ms 734.06ms   97.38%
+    Req/Sec   283.86k    39.31k  361.69k    83.38%
+  540836511 requests in 2.00m, 73.04GB read
+Requests/sec: 4508150.18
+Transfer/sec:    623.40MB

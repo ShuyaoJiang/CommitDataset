@@ -1,0 +1,32 @@
+Remove single shard optimization when suggesting shard_size (#37041)
+
+When executing terms aggregations we set the shard_size, meaning the
+number of buckets to collect on each shard, to a value that's higher than
+the number of requested buckets, to guarantee some basic level of
+precision. We have an optimization in place so that we leave shard_size
+set to size whenever we are searching against a single shard, in which
+case maximum precision is guaranteed by definition.
+
+Such optimization requires us access to the total number of shards that
+the search is executing against. In the context of cross-cluster search,
+once we will introduce multiple reduction steps (one per cluster) each
+cluster will only know the number of local shards, which is problematic
+as we should only optimize if we are searching against a single shard in a
+single cluster. It could be that we are searching against one shard per cluster
+in which case the current code would optimize number of terms causing
+a loss of precision.
+
+While discussing how to address the CCS scenario, we decided that we do
+not want to introduce further complexity caused by this single shard
+optimization, as it benefits only a minority of cases, especially when
+the benefits are not so great.
+
+This commit removes the single shard optimization, meaning that we will
+always have heuristic enabled on how many number of buckets to collect
+on the shards, even when searching against a single shard.
+
+This will cause more buckets to be collected when searching against a single
+shard compared to before. If that becomes a problem for some users, they
+can work around that by setting the shard_size equal to the size.
+
+Relates to #32125

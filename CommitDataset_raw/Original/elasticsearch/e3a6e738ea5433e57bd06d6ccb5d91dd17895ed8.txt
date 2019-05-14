@@ -1,0 +1,13 @@
+Fix InternalIndexLifecycleContext to update state in memory (#3505)
+
+* Fix InternalIndexLifecycleContext to update state in memory
+
+The internal and the mock index-lifecycle-context implementations differed
+in that the InternalIndexLifecycleContext assumed no one would be using it after
+it mutated state. This is not the case. We assume that the current context is updated after
+a `#setAction` is called so that the listener can then appropriately use the newly modified
+cluster state. since idxMeta was not being updated, any call to `context.getAction` was stale and
+either returning null or the previous action, not the next action that was updated by `#setAction`.
+Same goes for `setPhase`.
+
+This PR should fix this so that the Mock and Internal implementations are more in line.

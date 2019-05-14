@@ -1,0 +1,44 @@
+Add ChannelHandlerContext.invoker()
+
+Motivation:
+
+Being able to access the invoker() is useful when adding additional
+handlers that should be running in the same thread. Since an application
+may be using a threading model unsupported by the default invoker, they
+can specify their own. Because of that, in a handler that auto-adds
+other handlers:
+
+// This is a good pattern
+ctx.pipeline().addBefore(ctx.invoker(), ctx.name(), null, newHandler);
+// This will generally work, but prevents using custom invoker.
+ctx.pipeline().addBefore(ctx.executor(), ctx.name(), null, newHandler);
+
+That's why I believe in commit 110745b0, for the now-defunct 5.0 branch,
+when ChannelHandlerAppender was added the invoker() method was also
+necessary.
+
+There is a side-benefit to exposing the invoker: in certain advanced
+use-cases using the invoker for a particular handler is useful. Using
+the invoker you are able to invoke a _particular_ handler, from possibly
+a different thread yet still using standard exception processing.
+
+ChannelHandlerContext does part of that, but is unwieldy when trying to
+invoke a particular handler because it invokes the prev or next handler,
+not the one the context is for. A workaround is to use the next or prev
+context (respectively), but this breaks when the pipeline changes.
+
+This came up during writing the Http2MultiplexCodec which uses a
+separate child channel for each http/2 stream and wants to send messages
+from the child channel directly to the Http2MultiplexCodec handler that
+created it.
+
+Modifications:
+
+Add the invoker() method to ChannelHandlerContext. It was already being
+implemented by AbstractChannelHandlerContext. The two other
+implementations of ChannelHandlerContext needed minor tweaks.
+
+Result:
+
+Access to the invoker used for a particular handler, for either reusing
+for other handlers or for advanced use-cases. Fixes #4738

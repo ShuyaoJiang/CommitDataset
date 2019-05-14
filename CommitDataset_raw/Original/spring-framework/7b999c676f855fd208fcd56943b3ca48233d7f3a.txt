@@ -1,0 +1,39 @@
+Introduce ReflectionUtils#getUniqueDeclaredMethods
+
+This change is in support of certain polymorphism cases in
+@Configuration class inheritance hierarchies.  Consider the following
+scenario:
+
+@Configuration
+public abstract class AbstractConfig {
+    public abstract Object bean();
+}
+
+@Configuration
+public class ConcreteConfig {
+    @Override
+    @Bean
+    public BeanPostProcessor bean() { ... }
+}
+
+ConcreteConfig overrides AbstractConfig's #bean() method with a
+covariant return type, in this case returning an object of type
+BeanPostProcessor.  It is critically important that the container
+is able to detect the return type of ConcreteConfig#bean() in order
+to instantiate the BPP at the right point in the lifecycle.
+
+Prior to this change, the container could not do this.
+AbstractAutowireCapableBeanFactory#getTypeForFactoryMethod called
+ReflectionUtils#getAllDeclaredMethods, which returned Method objects
+for both the Object and BeanPostProcessor signatures of the #bean()
+method.  This confused the implementation sufficiently as not to
+choose a type for the factory method at all.  This means that the
+BPP never gets detected as a BPP.
+
+The new method being introduced here, #getUniqueDeclaredMethods, takes
+covariant return types into account, and filters out duplicates,
+favoring the most specific / narrow return type.
+
+Additionally, it filters out any CGLIB 'rewritten' methods, which
+is important in the case of @Configuration classes, which are
+enhanced by CGLIB.  See the implementation for further details.

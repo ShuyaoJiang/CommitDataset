@@ -1,0 +1,18 @@
+Add capacity limit to Recycler / Optimize when assertion is off
+
+Motivation:
+
+- As reported recently [1], Recycler's thread-local object pool has unbounded capacity which is a potential problem.
+- It accesses a hash table on each push and pop for debugging purposes.  We don't really need it besides debugging Netty itself.
+
+Modifications:
+
+- Introduced the maxCapacity constructor parameter to Recycler.  The default default maxCapacity is retrieved from the system property whose default is 256K, which should be plenty for most cases.
+- Recycler.Stack.map is now created and accessed only when assertion is enabled for Recycler.
+
+Result:
+
+- Recycler does not grow infinitely anymore.
+- If assertion is disabled, Recycler should be much faster.
+
+[1] https://github.com/netty/netty/issues/1841

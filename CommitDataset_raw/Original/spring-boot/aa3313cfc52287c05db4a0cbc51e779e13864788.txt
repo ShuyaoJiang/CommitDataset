@@ -1,0 +1,9 @@
+Update NamePatternFilter to detect regular expression character class
+
+Previously, NamePatternFilter looked for “*”, “$”, “^”, or “+” when
+trying to identify a string as being a regular expression. This meant
+that it missed the use of a character class ([a-z], for example). This
+commit adds “[“} to the list of characters that are considered to be
+part of a regular expression.
+
+Closes gh-4233

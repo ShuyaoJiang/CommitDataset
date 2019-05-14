@@ -1,0 +1,10 @@
+Ignore external resources in CssLinkResourceTransormer
+
+Prior to this commit, the CssLinkResourceTransformer would transform
+"external resources", i.e. resources not served by the web application.
+
+This commit only allows transformation for resources which path don't
+contain scheme such as "file://" or "http://". Only relative and
+absolute paths for resources served by the webapp are valid.
+
+Issue: SPR-11860

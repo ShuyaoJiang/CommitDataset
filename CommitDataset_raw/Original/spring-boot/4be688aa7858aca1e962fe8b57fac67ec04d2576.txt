@@ -1,0 +1,20 @@
+Fix Gradle repackaging so it is only performed on the desired jars
+
+The logic that determined whether or not the repackaging action should
+be applied to a particular jar task was broken and caused problems
+when a custom RepackageTask was used in a project's build.
+
+This commit updates the logic so that repackaging will be applied:
+
+ - To the default jar task if RepackageTask.withJarTask is null
+ - To a jar task if it is equal to RepackageTask.withJarTask
+ - To a jar task if its name is equal to RepackageTask.withJarTask
+
+Repackaging is not applied if:
+
+ - RepackageTask.enabled is false
+
+Numerous integration tests have been added to verify the repackaging
+behaviour.
+
+Fixes #1204

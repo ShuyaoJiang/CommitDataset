@@ -1,0 +1,16 @@
+Let search phases override max concurrent requests
+
+If the query coordinating node is also a data node that holds all the
+shards for a search request, we can end up recursing through the can
+match phase (because we send a local request and on response in the
+listener move to the next shard and do this again, without ever having
+returned from previous shards). This recursion can lead to stack
+overflow for even a reasonable number of indices (daily indices over a
+sixty days with five shards per day is enough to trigger the stack
+overflow). Moreover, all this execution would be happening on a network
+thread (the thread that initially received the query). With this commit,
+we allow search phases to override max concurrent requests. This allows
+the can match phase to avoid recursing through the shards towards a
+stack overflow.
+
+Relates #26484

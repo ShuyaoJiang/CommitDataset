@@ -1,0 +1,10 @@
+Create SockJS ThreadPoolTaskScheduler extension
+
+Commit 5d2e6f enabled the setRemoveOnCancelPolicy of the SockJS
+ScheduledThreadPoolExecutor by default. However that property is only
+available in JDK 1.7 or later. This change fixes the issue and
+introduces an extension of ThreadPoolTaskScheduler for for use with
+SockJS which is necessary in any case since ThreadPoolTaskScheduler
+does not expose the underlying ScheduledThreadPoolExecutor otherwise.
+
+Issue: SPR-11918

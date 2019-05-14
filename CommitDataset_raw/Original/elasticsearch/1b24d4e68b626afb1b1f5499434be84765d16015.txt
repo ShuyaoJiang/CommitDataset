@@ -1,0 +1,8 @@
+Avoid side-effect in VersionMap when assertion enabled (#29585)
+
+Today when a version map does not require safe access, we will skip that
+document. However, if the assertion is enabled, we remove the delete
+tombstone of that document if existed. This side-effect may accidentally
+hide bugs in which stale delete tombstone can be accessed.
+
+This change ensures putAssertionMap not modify the tombstone maps.

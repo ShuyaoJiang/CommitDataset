@@ -1,0 +1,8 @@
+Improve ResponseBodyEmitter error handling
+
+After send error, ignore calls to complete or completeWithError by the
+application in the same thread (e.g. try-catch block), to avoid a
+competing with an error callback from servlet container during which
+the same action is taken.
+
+Issue: SPR-16548

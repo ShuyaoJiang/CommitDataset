@@ -1,0 +1,14 @@
+Correctly take position into account when wrap a ByteBuffer via ReadOnlyUnsafeDirectByteBuf
+
+Motivation:
+
+We did not correctly take the position into account when wrapping a ByteBuffer via ReadOnlyUnsafeDirectByteBuf as we obtained the memory address from the original ByteBuffer and not the slice we take.
+
+Modifications:
+
+- Correctly use the slice to obtain memory address.
+- Add test case.
+
+Result:
+
+Fixes [#7565].

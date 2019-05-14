@@ -1,0 +1,51 @@
+Attach Value Without Wrapping
+
+I found a way to pass the value down the chain without wrapping the Throwable. This way it only shows up if using `onErrorFlatMap` or looking at the final cause on any given Throwable.
+
+A final cause will be added so Throwables end up like this:
+
+java.lang.RuntimeException: Forced Failure
+	at rx.operators.OperatorMapTest$5.call(OperatorMapTest.java:164)
+	at rx.operators.OperatorMapTest$5.call(OperatorMapTest.java:1)
+	at rx.operators.OperatorMap$1.onNext(OperatorMap.java:54)
+	at rx.operators.OnSubscribeFromIterable.call(OnSubscribeFromIterable.java:43)
+	at rx.operators.OnSubscribeFromIterable.call(OnSubscribeFromIterable.java:1)
+	at rx.Observable$2.call(Observable.java:269)
+	at rx.Observable$2.call(Observable.java:1)
+	at rx.Observable$2.call(Observable.java:269)
+	at rx.Observable$2.call(Observable.java:1)
+	at rx.Observable.subscribe(Observable.java:7022)
+	at rx.Observable.subscribe(Observable.java:6945)
+	at rx.operators.OperatorMapTest.testMapWithError(OperatorMapTest.java:177)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:45)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:42)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:263)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:68)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:47)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:231)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:60)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:229)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:50)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:222)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:300)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+Caused by: rx.exceptions.OnErrorThrowable$OnNextValue: OnError while emitting onNext value: fail
+	at rx.exceptions.OnErrorThrowable.decorate(OnErrorThrowable.java:55)
+	at rx.operators.OperatorMap$1.onNext(OperatorMap.java:56)
+	... 33 more
+
+Note the final cause: Caused by: rx.exceptions.OnErrorThrowable$OnNextValue: OnError while emitting onNext value: fail
+
+Then when onErrorFlatMap is used, it retrieves that final cause out to create an OnErrorThrowable so people don't have to go fetch it from the cause chain.

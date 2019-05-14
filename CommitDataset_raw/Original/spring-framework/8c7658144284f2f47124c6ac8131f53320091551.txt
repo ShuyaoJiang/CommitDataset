@@ -1,0 +1,23 @@
+Provide rich type information to ConversionService
+
+When using the ConversionService to check and bridge to and from
+reactive types we now generallly provide the full type information
+available from method signatures. However that full type information
+is not always necessary such as when we perform additional checks on
+the generics of the reactive type (e.g. Mono<ResponseEntity>).
+
+This allows us to switch to use DefaultFormattingConversionService
+instead of GenericConversionService while also ensuring that the
+CollectionToObjectConverter doesn't think it can convert List<?> to
+any reactive type.
+
+The ObjectToObjectConverter can also interfere because it is smart
+enough to find the "from(Publisher<?>)" method on Flux and Mono.
+To make up for that on the response side we now check if a type
+is assignable to Publisher first in which case it is a simple cast.
+
+In turn that means we don't need a PublisherToFluxConverter which can
+be problematic in its own right because it can convert from Mono to
+Flux which technically doesn't lose data but switches stream semantics.
+
+Issue: #124, #128

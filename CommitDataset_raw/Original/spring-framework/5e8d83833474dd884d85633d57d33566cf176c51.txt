@@ -1,0 +1,9 @@
+CORS-related refinements
+
+After this change CorsProcessor has a single processRequest method and
+it also explicitly deals with a null CorsConfiguration, which for
+pre-flight requests results in a rejection while for simple requests
+results in no CORS headers added.
+
+The AbstractHandlerMapping now uses a LinkedHashMap to preserve the
+order in which global patterns are provided.

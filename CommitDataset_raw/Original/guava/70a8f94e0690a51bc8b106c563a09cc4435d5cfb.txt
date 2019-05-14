@@ -1,0 +1,10 @@
+Ensure that ByteStreams.skipFully/skipUpTo don't skip more bytes than remain in the stream.
+
+This is a horrible thing that is possible with FileInputStream in JDK7, despite that it violates the contract of InputStream.skip. The solution (which we were already doing in our method for counting a stream via skip) is to never ask to skip more bytes than the stream reports as available().
+
+This does unfortunately change skipFully to skip by reading when the InputStream always returns 0 from available() (the default behavior if it isn't overridden), but as far as I can tell it's necessary to ensure correct behavior.
+
+This issue is causing test failures under JDK7 with the recent change to the behavior of ByteSource.slice.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=102586216

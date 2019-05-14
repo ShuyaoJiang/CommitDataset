@@ -1,0 +1,31 @@
+Add a pax-exam based OSGi test suite
+
+Motivation:
+
+Release 4.0.25 was not usable in OSGi environments due to a simple typo.
+An automated test could have caught the problem even before it was
+committed.
+
+Modifications:
+
+This patch introduces a new artifact, osgitests, which pulls in all
+production artifacts (which we want to be checked for OSGi compliance).
+It contains only a single unit test, which runs a pax-exam container
+with felix OSGi.
+
+At initialization time, it scans all the artifact's dependencies,
+looking for things belonging to io.netty group. The container is
+configured to deploy those artifacts as bundles and fail if any bundle
+is found to be unresolved. It performs a final check to see if any
+bundles were tested this way, to make sure the mechanism is not
+completely broken.
+
+We are using wrappedBundle(), as two of our third-party dependencies do
+not export packages correctly -- this masks the problem, assuming that
+whoever deploys our artifacts depending on them will figure out how to
+OSGify them.
+
+Result:
+
+Simple typos and other bundle manifest errors should be caught during
+test phase of every build.

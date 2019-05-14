@@ -1,0 +1,24 @@
+Enhance MessageHeaderAccessor support
+
+Refine semantics of ID and TIMESTAMP headers provided to protected
+MessageHeaders constructor.
+
+Refactor internal implementation of MessageHeaderAccessor.
+
+Support mutating headers from a single thread while a message is being
+built (e.g. StompDecoder creating message + then adding session id).
+
+Improve immutablity in NativeMessageHeaderAccessor and in
+StompHeaderAccessor.
+
+Optimize object creation for initializing messages and subsequent
+accessing their headers.
+
+Introduce MessageHeaderAccessorFactory support to enable applying a
+common strategies for ID and TIMESTAMP generation to every message.
+
+Add MessageBuilder shortcut factory method for creating messages from
+payload and a full-prepared MessageHeaders instance. Also add
+equivalent constructors to GenericMessage and ErrorMessage.
+
+Issue: SPR-11468

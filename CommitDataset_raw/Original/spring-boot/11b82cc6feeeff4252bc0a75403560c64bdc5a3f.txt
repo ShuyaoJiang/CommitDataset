@@ -1,0 +1,9 @@
+Properly guard DB health indicator
+
+The DataSource health indicator uses `JdbcTemplate` behind the scenes
+but nothing was checking that it is actually available.
+
+`DataSourcesHealthIndicatorConfiguration` is now disabled if
+`spring-jdbc` is not on the classpath.
+
+Fixes gh-3765

@@ -1,0 +1,19 @@
+SQL: Fix issue timezone issues with JDBC getDate/getTime (#40360)
+
+Previously, `getDate(int columnIdx)/getDate(String columnLabel)` and
+were using legacy`java.util.Calendar` instead of the the `java.time.*`
+classes to reset to the start of day. This resulted in different results 
+for certain timestamps and timezones when calling
+`getDate(col)` vs`getObject(col, java.sql.Date)`
+
+Now only the methods (that must be implemented due to the JDBC spec)
+`getDate(int columnIdx, Calendar cal)/getDate(String columnLabel, Calendar cal)`
+are still using the `java.util.Calendar` for those conversion.
+
+The same change was applied to
+`getTime(int columnIdx)/getTime(String columnLabel)`
+and
+`getTimestamp(int columnIdx)/getTimestamp(String columnLabel)`
+
+Fixes: #40289
+

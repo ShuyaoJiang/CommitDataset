@@ -1,0 +1,10 @@
+Scripts: Convert template uses to return String instead of BytesReference (elastic/x-pack-elasticsearch#1279)
+
+This is the xpack side of elastic/elasticsearch#24447. The one caveat is
+there are a number of places within the xpack api that use
+BytesReference to pass down to templates. These are convert to encode
+into a BytesArray when necessary, so as not to require changing all of
+those apis here at once, but they should all be convert to String as
+well.
+
+Original commit: elastic/x-pack-elasticsearch@8399b9d8c33f28f1277ff597b5674dd297e4f40a

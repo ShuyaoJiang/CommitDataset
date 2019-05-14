@@ -1,0 +1,14 @@
+Better document #result semantic
+
+Commit 240f254 has introduced support for `java.util.Optional` in the
+cache abstraction. If such type is present, the contained value is cached
+if it is present.
+
+This new feature slightly changed the semantic of `#result` that was
+documented up till this commit as the "return value of the method
+invocation". This is no longer true as `#result` for `Optional<T>`
+refers to the `T` instance and not the `Optional` instance.
+
+This commit clarifies both the javadoc and the documentation.
+
+Issue: SPR-14587

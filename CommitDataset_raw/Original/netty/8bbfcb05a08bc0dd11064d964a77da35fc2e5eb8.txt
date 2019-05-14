@@ -1,0 +1,15 @@
+Make flow-controller a write-queue for HEADERS and DATA
+
+Motivation:
+
+Previously flow-controller had to know the implementation details of each frame type in order to write it correctly. That concern is more correctly handled by the encoder. By encapsulating the payload types to be flow-controlled it will be easier to add support for extension types later. This change also fixes #3353.
+
+Modifications:
+
+Add interface FlowControlled which is now delivered to flow-controller.
+Implement this interface for HEADERS and DATA
+Refactor and improve tests for flow-control.
+
+Result:
+
+Flow control semantics are more cleanly separated for data encoding and implementation is simpler overall.

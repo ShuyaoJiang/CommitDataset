@@ -1,0 +1,14 @@
+EPOLL SO_LINGER=0 sends FIN+RST
+
+Motivation:
+If SO_LINGER is set to 0 the EPOLL transport will send a FIN followed by a RST. This is not consistent with the behavior of the NIO transport. This variation in behavior can cause protocol violations in streaming protocols (e.g. HTTP) where a FIN may be interpreted as a valid end to a data stream, but RST may be treated as the data is corrupted and should be discarded.
+
+https://github.com/netty/netty/issues/4170 Claims the behavior of NIO always issues a shutdown when close occurs. I could not find any evidence of this in Netty's NIO transport nor in the JDK's SocketChannel.close() implementation.
+
+Modifications:
+- AbstractEpollChannel should be consistent with the NIO transport and not force a shutdown on every close
+- FileDescriptor to keep state in a consistent manner with the JDK and not allow a shutdown after a close
+- Unit tests for NIO and EPOLL to ensure consistent behavior
+
+Result:
+EPOLL is capable of sending just a RST to terminate a connection.

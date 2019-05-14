@@ -1,0 +1,13 @@
+Get Aliases with wildcard exclusion expression (#34230)
+
+This commit adds the code in the HTTP layer that will parse exclusion wildcard
+expressions.
+The existing code issues 404s for wildcards as well as explicit indices.
+But, in general, in an expression with exclude wildcards (-...*) following other
+include wildcards, there is no way to tell if the include wildcard produced no
+results or they were subsequently excluded.
+Therefore, the proposed change is breaking the behavior of 404s for
+wildcards. Specifically, no 404s will be returned for wildcards, even
+if they are not followed by exclude wildcards or the exclude wildcards
+could not possibly exclude what has previously been included.
+Only explicitly requested aliases will be called out as missing.

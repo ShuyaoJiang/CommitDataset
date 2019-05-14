@@ -1,0 +1,15 @@
+Ensure external refreshes will also refresh internal searcher to minimize segment creation (#27253)
+
+We cut over to internal and external IndexReader/IndexSearcher in #26972 which uses
+two independent searcher managers. This has the downside that refreshes of the external
+reader will never clear the internal version map which in-turn will trigger additional
+and potentially unnecessary segment flushes since memory must be freed. Under heavy
+indexing load with low refresh intervals this can cause excessive segment creation which
+causes high GC activity and significantly increases the required segment merges.
+
+This change adds a dedicated external reference manager that delegates refreshes to the
+internal reference manager that then `steals` the refreshed reader from the internal
+reference manager for external usage. This ensures that external and internal readers
+are consistent on an external refresh. As a sideeffect this also releases old segments
+referenced by the internal reference manager which can potentially hold on to already merged
+away segments until it is refreshed due to a flush or indexing activity.

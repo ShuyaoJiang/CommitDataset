@@ -1,0 +1,14 @@
+Recover from Selector IOException (#8569)
+
+Motivation:
+
+When the Selector throws an IOException during our EventLoop processing we should rebuild it and transfer the registered Channels. At the moment we will continue trying to use it which will never work.
+
+Modifications:
+
+- Rebuild Selector when an IOException is thrown during any select*(...) methods.
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8566.

@@ -1,0 +1,13 @@
+Refactor Gradle plugin tests to use runner's plugin classpath
+
+Previously, each test build script used a property to configure its
+classpath. This commit simplifies the tests by setting the classpath
+once on the GradleRunner, thereby removing the need for it to be set in
+each test script. It also allows, and, in fact, requires, the use of
+the plugins block to apply the Boot plugin under test.
+
+Unfortunately, this doesn't work for the tests for the reaction to the
+Kotlin plugin. See the comments in the GradleBuild class and in each
+KotlingPluginActionIntegrationTests build script.
+
+See gh-14680

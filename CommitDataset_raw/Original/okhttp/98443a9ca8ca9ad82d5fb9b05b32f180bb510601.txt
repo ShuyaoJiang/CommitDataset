@@ -1,0 +1,8 @@
+Release duplicated multiplexed connections.
+
+If we make concurrent requests to an HTTP/2 server, close all but
+the first connection. Creating multiple connections and then later
+releasing them is somewhat pessimistic; it's also much safer for
+awkward cases like connect attempts being canceled.
+
+Closes: https://github.com/square/okhttp/issues/373

@@ -1,0 +1,13 @@
+Reduce SO_TIMEOUT of testsuite so it finishes sooner
+
+Motivation:
+
+Testing the OIO transport takes longer time than other transports because it has to wait for SO_TIMEOUT if there is nothing to read.  In production, it's not a good idea to decrease this value (1000ms) because it will result in so many SocketTimeoutExceptions internally, but doing so in the testsuite should be fine.
+
+Modifications:
+
+Reduce the default SO_TIMEOUT of OIO channels to 10 ms.
+
+Result:
+
+Our testsuite finishes sooner.

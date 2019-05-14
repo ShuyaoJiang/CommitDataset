@@ -1,0 +1,12 @@
+Don't wrap resolver exceptions in InvocableHandlerMethod
+
+Prior to this commit, exceptions thrown by the
+`HandlerMethodArgumentResolver` would be wrapped into
+`IllegalStateException`s.
+
+This commit makes sure that a DEBUG log is written with the relevant
+information and that the root cause is not wrapped into another
+exception, so that the appropriate `ExceptionHandler` can be used to
+deal with this error.
+
+Issue: SPR-14618

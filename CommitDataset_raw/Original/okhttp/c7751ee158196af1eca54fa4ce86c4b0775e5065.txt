@@ -1,0 +1,7 @@
+Increase the stream drain timeout from 30ms to 100ms.
+
+We were missing out on opportunities to reuse HTTPS connections
+with the previous timeout. This even occured on unit tests where
+the latency should be very low.
+
+https://github.com/square/okhttp/issues/90

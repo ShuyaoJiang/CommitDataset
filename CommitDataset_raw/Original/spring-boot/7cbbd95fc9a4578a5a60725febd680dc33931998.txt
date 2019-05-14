@@ -1,0 +1,12 @@
+Ignore invalid Accept headers in WebFlux error handling
+
+Prior to this commit, the `DefaultErrorWebExceptionHandler` would parse
+the HTTP "Accept" headers when routing the request to the error handler;
+if an error occured during parsing, an `InvalidMediaTypeException` would
+be thrown and break the error handling for this request.
+
+This commit ignores those exceptions and makes sure that the error
+handling function does not override the response status or the error
+itself with those exceptions.
+
+Closes: gh-13372

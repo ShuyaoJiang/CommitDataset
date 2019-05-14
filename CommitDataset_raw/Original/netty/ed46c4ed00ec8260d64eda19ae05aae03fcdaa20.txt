@@ -1,0 +1,13 @@
+Copies from read-only heap ByteBuffer to direct ByteBuf can avoid stealth ByteBuf allocation and additional copies
+
+Motivation:
+
+Read-only heap ByteBuffer doesn't expose array: the existent method to perform copies to direct ByteBuf involves the creation of a (maybe pooled) additional heap ByteBuf instance and copy
+
+Modifications:
+
+To avoid stressing the allocator with additional (and stealth) heap ByteBuf allocations is provided a method to perform copies using the (pooled) internal NIO buffer
+
+Result:
+
+Copies from read-only heap ByteBuffer to direct ByteBuf won't create any intermediate ByteBuf

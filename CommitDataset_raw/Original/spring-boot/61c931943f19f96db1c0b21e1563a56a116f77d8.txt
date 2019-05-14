@@ -1,0 +1,15 @@
+Fix Devtools PatternResolver Servlet support
+
+Update ClassLoaderFilesResourcePatternResolver to support servlet
+resources when it's being used with a WebApplicationContext.
+
+Prior to commit 918e122ddc a `ResourceLoader` was not added to the
+`ApplicationContext`, meaning that servlet resources could be found by
+virtue of the protected `getResourceByPath()` method. Following commit
+918e122ddc, the context `ResourceLoader` is set, meaning that all calls
+to `getResource` delegate to the `ResourceLoader` and the
+`ApplicationContext` methods are not invoked. Since the devtools
+`ResourceLoader` wasn't Servlet aware, servlet resources could not
+be found.
+
+Fixes gh-7752

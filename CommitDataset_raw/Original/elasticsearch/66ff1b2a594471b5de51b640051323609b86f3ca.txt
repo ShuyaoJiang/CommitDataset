@@ -1,0 +1,9 @@
+Tests: Wipe cluster settings after every test (#28410)
+
+Cluster settings shouldn't leak into the next test.
+
+I played with failing the test if it left over any settings but that
+felt like it added more ceremony then it was worth. The advantage is
+that any test that intentionally wants to leave settings in place after
+the test would fail and require looking at but, so far as I can tell, we
+don't have any such tests.

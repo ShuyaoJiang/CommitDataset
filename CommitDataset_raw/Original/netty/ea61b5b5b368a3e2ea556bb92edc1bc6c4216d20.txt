@@ -1,0 +1,13 @@
+[#5223] Remove indirection in DefaultChannelPipeline.executorSafe(...)
+
+Motivation:
+
+We use channel.unsafe().invoker().executor() in DefaultChannelPipeline.executorSafe(...) which is an unnecessary indirection to channel.eventLoop().
+
+Modifications:
+
+Remove indirection by using channel.eventLoop().
+
+Result:
+
+Cleaner code.

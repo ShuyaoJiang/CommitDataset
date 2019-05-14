@@ -1,0 +1,12 @@
+Remove S3 output stream (#27280)
+
+Now the blob size information is available before writing anything, 
+the repository implementation can know upfront what will be the 
+more suitable API to upload the blob to S3.
+
+This commit removes the DefaultS3OutputStream and S3OutputStream 
+classes and moves the implementation of the upload logic directly in the 
+S3BlobContainer.
+
+related #26993
+closes #26969

@@ -1,0 +1,8 @@
+Revert transport.port change for tests (#36809)
+
+Commit #36786 updated docs and strings to reference transport.port instead of
+transport.tcp.port. However, this breaks backwards compatibility tests
+as the tests rely on string configurations and transport.port does not
+exist prior to 6.6. This commit reverts the places were we reference
+transport.tcp.port for tests. This work will need to be reintroduced in
+a backwards compatible way.

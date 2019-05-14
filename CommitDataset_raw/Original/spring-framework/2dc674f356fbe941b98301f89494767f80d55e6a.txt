@@ -1,0 +1,11 @@
+Restore AbstractPropertyAccessor
+
+Commit 3d86f15 added a lot of new feature in AbstractPropertyAccessor
+shared by both DirectFieldAccessor and BeanWrapperImpl. This makes this
+abstract class harder to implement for others having simpler use cases.
+
+It turns that Spring Data has such use case; this commit split these new
+features in a dedicated new base class, leaving AbstractPropertyAccessor
+untouched.
+
+Issue: SPR-12805

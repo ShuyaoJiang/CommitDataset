@@ -1,0 +1,13 @@
+Correctly handle autoRead == false when epoll LT is used
+
+Motivation:
+
+When epoll LT is used and autoRead == false when entering epollIn() we need to return without reading any data.
+
+Modifications:
+
+Correctly respect autoRead == false if using epoll LT.
+
+Result:
+
+Consistent and correct behaviour.

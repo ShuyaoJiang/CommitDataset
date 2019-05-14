@@ -1,0 +1,8 @@
+CCR: replicates max seq_no of updates to follower (#34051)
+
+This commit replicates the max_seq_no_of_updates on the leading index
+to the primaries of the following index via ShardFollowNodeTask. The
+max_seq_of_updates is then transmitted to the replicas of the follower
+via replication requests (that's BulkShardOperationsRequest).
+
+Relates #33656

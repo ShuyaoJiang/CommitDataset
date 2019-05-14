@@ -1,0 +1,19 @@
+Timeout Overrides in Messaging Templates
+
+Provide a mechanism to override the configured send and receive
+timeouts in the GenericMessagingTemplate.
+
+- overload `doReceive()` to take a receive timeout argument
+- for `sendAndReceive()` methods examine message headers for these
+  timeout values
+  - remove headers to avoid propagation
+  - avoid the unconditional rebuild of the reply message if the
+    original headers weren't present
+- also remove headers from simple `send()` operations
+- change javadocs for the setters to indicate they are now defaults
+- add properties to allow the user to override the header names used
+- change `TemporaryReplyChannel` to use `send` arg and change to static
+  - add package-protected ctor to avoid the compiler creating a
+    synthetic constructor for access
+
+Issue: SPR-15591

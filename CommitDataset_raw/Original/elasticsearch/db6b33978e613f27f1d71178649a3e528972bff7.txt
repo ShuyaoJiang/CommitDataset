@@ -1,0 +1,13 @@
+Configurable password hashing algorithm/cost (#31234)
+
+Make password hashing algorithm/cost configurable for the 
+stored passwords of users for the realms that this applies
+(native, reserved). Replaces predefined choice of bcrypt with
+cost factor 10.
+This also introduces PBKDF2 with configurable cost
+(number of iterations) as an algorithm option for password hashing
+both for storing passwords and for the user cache.
+Password hash validation algorithm selection takes into
+consideration the stored hash prefix and only a specific number
+of algorithnm and cost factor options for brypt and pbkdf2 are 
+whitelisted and can be selected in the relevant setting. 

@@ -1,0 +1,11 @@
+Add 'classifier' property to Gradle plugin
+
+The default behaviour doesn't change with this commit, but now
+the user has the option to specify a 'classifier' property
+either in springBoot { classifier = 'exec' } (i.e. globally
+for all repackage tasks) or in each repackage task, e.g.
+bootRepackage { classifier = 'exec' }. In that case the original
+archive is not overwritten but copied into <file>-<classifier>.jar
+(or .war etc.) and then enhanced.
+
+Fixes gh-1113, fixes gh-141 also I believe.

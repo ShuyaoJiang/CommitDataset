@@ -1,0 +1,11 @@
+Use main thread in OnClassCondition if thread create/start fails
+
+Previously, as a result of the changes made in de50cfa21e5f, an
+application would fail to start on Google AppEngine as it prevents
+the creation of new threads.
+
+This commit updates OnClassCondition so that it falls back to
+performing the work on the main thread when its unable to shift it
+to a separate thread.
+
+Closes gh-8584

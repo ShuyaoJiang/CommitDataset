@@ -1,0 +1,11 @@
+TEST: Avoid merges in testSeqNoAndCheckpoints
+
+Since LUCENE-8263, testSeqNoAndCheckpoints might trigger merges because
+of the updates and deletes in the test. Our merge scheduler will trigger
+a flush if there is no pending merge. Those extra flushes will change
+the last committed segmentInfos in the engine and fail the test.
+
+This commit uses LogMergePolicy for the engine in the test to avoid
+merges.
+
+Closes #32430

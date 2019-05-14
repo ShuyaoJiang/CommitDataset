@@ -1,0 +1,18 @@
+Explicitly order AbstractTestExecutionListener subclasses
+
+By default, AbstractTestExecutionListeners have an order of lowest
+precedence. This means that it is impossible to write a listener with
+lower precedence that any listener that's using the default order.
+
+This commit updates Boot's 6 AbstractTestExecutionListeners to order
+them explicitly. MockitoTestExecutionListener performs injection of
+Mockito mocks and spies into the test instance. It now has an order of
+2050 giving it slightly lower precedence than the dependency injection
+test execution listener (2000).
+
+The remaining 5 listeners have all been ordered with lowest precedence
+- 100. This leaves them near their current lowest precedence position
+while creating some room for any listeners that require lower
+precedence.
+
+Closes gh-11796

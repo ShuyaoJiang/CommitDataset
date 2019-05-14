@@ -1,0 +1,18 @@
+Use jetty-alpn-agent to simplify pom.xml
+
+Motivation:
+
+We had to add a new profile for each OpenJDK/OracleJDK release to make
+Maven choose the correct alpn-boot.jar and npn-boot.jar. As a result,
+our pom.xml has a large number of `<profile/>` sections.
+
+Modifications:
+
+- Use jetty-alpn-agent, which chooses the correct alpn-boot.jar and
+  npn-boot.jar automatically to remove all the nasty profile sections
+  from pom.xml
+  - Visit https://github.com/trustin/jetty-alpn-agent for more info
+
+Result:
+
+Cleaner pom.xml

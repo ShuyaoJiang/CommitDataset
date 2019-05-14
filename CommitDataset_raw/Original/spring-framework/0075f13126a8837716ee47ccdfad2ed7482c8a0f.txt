@@ -1,0 +1,15 @@
+Improve CORS list properties combination logic
+
+This commit allows CorsConfiguration#combine()
+to differentiate permit default values set by
+CorsConfiguration#applyPermitDefaultValues()
+from values configured explicitly by the user.
+
+Those permit default values will be overridden
+by any user-provided ones while user-provided values
+will be combined in an additive way, including
+when "*" is specified.
+
+Documentation has been improved accordingly.
+
+Issue: SPR-15772

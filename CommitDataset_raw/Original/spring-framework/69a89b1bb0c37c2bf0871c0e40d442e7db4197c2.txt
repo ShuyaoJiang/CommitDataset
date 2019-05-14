@@ -1,0 +1,18 @@
+Fix off-by-one regression in AbstractMethodMockingControl
+
+This commit fixes the off-by-one regression accidentally introduced in
+commit 55961544a722e827f2e0dfe8012d7b576d652f93.
+
+Specifically, this fix ensures that the correct recorded call is
+indexed in the 'calls' list in the implementation of
+AbstractMethodMockingControl.Expectations.nextCall().
+
+In addition, this commit improves the Javadoc for
+AbstractMethodMockingControl, @MockStaticEntityMethods, and
+AnnotationDrivenStaticEntityMockingControl and introduces a proper
+toString() implementation for the internal Expectations.Call class in
+AbstractMethodMockingControl. Furthermore, code from the obsolete
+Delegate test class has been inlined in
+AnnotationDrivenStaticEntityMockingControlTests.
+
+Issue: SPR-11385, SPR-10885

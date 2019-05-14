@@ -1,0 +1,13 @@
+Allow HTTP2 frame writer to accept arbitrarily large frames
+
+Motivation:
+
+The encoder is currently responsible for chunking frames when writing in order to conform to max frame size. The frame writer would be a better place for this since it could perform a reuse the same promise aggregator for all the write and could also perform a single allocation for all of the frame headers.
+
+Modifications:
+
+Modified `DefaultHttp2FrameWriter` to perform the chunking and modified the contract in the `Http2FrameWriter` interface. Modified `DefaultHttp2ConnectionEncoder` to send give all allocated bytes to the writer.
+
+Result:
+
+Fixes #3966

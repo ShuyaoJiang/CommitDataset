@@ -1,0 +1,10 @@
+Fix shard follow task startup error handling (#39053)
+
+Prior to this commit, if during fetch leader / follower GCP
+a fatal error occurred, then the shard follow task was removed.
+
+This is unexpected, because if such an error occurs during the lifetime of shard follow task then replication is stopped and the fatal error flag is set. This allows the ccr stats api to report the fatal exception that has occurred (instead of the user grepping through the elasticsearch logs).
+
+This issue was found by a rare failure of the  `FollowStatsIT#testFollowStatsApiIncludeShardFollowStatsWithRemovedFollowerIndex` test.
+
+Closes #38779

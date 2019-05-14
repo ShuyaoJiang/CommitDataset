@@ -1,0 +1,56 @@
+javadoc -> scaladoc translation
+
+with the following replacements:
+
+\{@link (\w+)#(\w+)\s+(\w+)\}
+[[$1.$2 $3]]
+
+\{@link (\w+)#(\w+)\((.*)\)\}
+[[$1.$2($3)]]
+
+\{@link #(\w+)\}
+[[Observable.$1]]
+
+\{@link (\w+)#(\w+)\}
+[[$1.$2]]
+
+<code>
+`
+
+</code>
+`
+
+\*\s*<p>\s*\n
+*\n
+
+\{@link (\w+)\}
+[[$1]]
+
+\{@link ((\w|\.)+)\}
+[[$1]]
+
+\[\[rx\.
+[[rx.lang.scala.
+
+\{@code\s*(([^}])+)\}
+`$1`
+
+@param <(\w+)>
+@tparam $1
+
+&lt;(\w+)&gt;
+[$1]
+
+<(\w+)>
+[$1]
+
+"timespan" argument
+`timespan` argument
+
+"timeshift" argument
+`timeshift` argument
+
+\[\[Action0\]\]
+function
+
+plus some manual replacements

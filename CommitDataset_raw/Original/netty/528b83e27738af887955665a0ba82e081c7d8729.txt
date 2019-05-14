@@ -1,0 +1,17 @@
+Set the session id context properly to make client authentication work with open ssl provider.
+
+Motivation:
+
+When netty is used with open ssl provider and client authentication the following errors can occur:
+error:140D9115:SSL routines:ssl_get_prev_session:session id context uninitialized
+error:140A1175:SSL routines:ssl_bytes_to_cipher_list:inappropriate fallback
+error:140760FC:SSL routines:SSL23_GET_CLIENT_HELLO:unknown protocol
+
+Modifications:
+
+Set the session id context in OpenSslServerContext so that sessions which use client authentication
+which are cached have the same context id value.
+
+Result:
+
+Client authentication now works with open ssl provider.

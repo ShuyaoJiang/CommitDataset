@@ -1,0 +1,46 @@
+Adds `index.lifecycle.step_info` setting and uses it on ERROR and incomplete steps (#30465)
+
+* Adds `index.lifecycle.step_info` setting and uses it on ERROR
+
+This change make a new `index.lifecycle.step_info` setting which can be
+used to store a JSON blob of containing context about the current step.
+It then adds code so that when we move to the error step we serialise
+the exception to JSON  and store it in this setting so the user can get
+information on why the step failed.
+
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/LifecycleSettings.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycle.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTask.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTaskTests.java
+
+* Adds step information for AsyncWaitSteps
+
+The Listener for AsyncWaitStep now takes a ToXContentObject which
+represents information about the status of the condition if it has not
+completed. This object is then serialised to a JSON string and stored
+in the `index.lifecycle.step_info` index setting. This information is
+only stored if the step is not complete. If the step is complete the
+step info is ignored sice we will move straight to the next step where
+the info is no longer relevant.
+
+Changes for the `ClusterStateWaitStep` will be very similar but will be
+made in a following commit after this approach has been agreed. I do
+not intend to have information for `AsyncActionStep` to have the
+ability to set step info since actions should either be done or not
+done and if they error they should transition to the ERROR step.
+
+* Clear step info when transitioning to next step
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java
+
+* Addresses review comments

@@ -1,0 +1,10 @@
+Change codec auto-configuration in HandlerStrategies
+
+Since SPR-15415 and SPR-15435, the HandlerStrategies and its companion
+builder are now using the new CodecConfigurer infrastructure to
+configure codecs in a cross-cutting way.
+
+This commit looks for a custom instance of `HandlerStrategies.Builder`
+provided by the user, or create a default one if none was found.
+
+Fixes gh-8897

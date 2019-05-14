@@ -1,0 +1,15 @@
+[#2685] Epoll transport should use GetPrimitiveArrayCritical / ReleasePrimitiveArrayCritical
+
+Motivation:
+
+At the moment we use Get*ArrayElement all the time in the epoll transport which may be wasteful as the JVM may do a memory copy for this. For code-path that will get executed fast (without blocking) we should better make use of GetPrimitiveArrayCritical and ReleasePrimitiveArrayCritical as this signal the JVM that we not want to do any memory copy if not really needed. It is important to only do this on non-blocking code-path as this may even suspend the GC to disallow the JVM to move the arrays around.
+
+See also http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html#GetPrimitiveArrayCritical
+
+Modification:
+
+Make use of GetPrimitiveArrayCritical / ReleasePrimitiveArrayCritical as replacement for Get*ArrayElement / Release*ArrayElement where possible.
+
+Result:
+
+Better performance due less memory copies.

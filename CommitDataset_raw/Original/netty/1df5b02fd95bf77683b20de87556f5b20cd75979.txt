@@ -1,0 +1,16 @@
+Do not fire outbound exception throught the pipeline when using Http2FrameCodec / Http2MultiplexCodec
+
+Motivation:
+
+Usually when using netty exceptions which happen for outbound operations should not be fired through the pipeline but only the ChannelPromise should be failed.
+
+Modifications:
+
+- Change Http2LifecycleManager.onError(...) to take also an boolean that indicate if the error was caused by an outbound operation
+- Channel Http2ConnectionHandler.on*Error(...) methods to also take this boolean
+- Change Http2FrameCodec to only fire exceptions through the pipeline if these are not outbound operations related
+- Add unit test.
+
+Result:
+
+More consistent error handling when using Http2FrameCodec and Http2MultiplexCodec.

@@ -1,0 +1,12 @@
+ByteBufs which are not resizable should not throw in ensureWritable(int,boolean)
+
+Motivation:
+ByteBuf#ensureWritable(int,boolean) returns an int indicating the status of the resize operation. For buffers that are unmodifiable or cannot be resized this method shouldn't throw but just return 1.
+ByteBuf#ensureWriteable(int) should throw unmodifiable buffers.
+
+Modifications:
+- ReadOnlyByteBuf should be updated as described above.
+- Add a unit test to SslHandler which verifies the read only buffer can be tolerated in the aggregation algorithm.
+
+Result:
+Fixes https://github.com/netty/netty/issues/7002.

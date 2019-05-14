@@ -1,0 +1,28 @@
+Fix APC registration for @EnableTransactionManagement
+
+Prior to this change, @EnableTransactionManagement (via the
+ProxyTransactionManagementConfiguration class) did not properly
+register its auto-proxy creator through the usual AopConfigUtils
+methods.  It was trying to register the APC as a normal @Bean method,
+but this causes issues (SPR-8494) with the logic in
+AopConfigUtils#registerOrEscalateApcAsRequired, which expects the APC
+bean definition to have a beanClassName property.  When the APC is
+registered via a @Bean definition, it is actually a
+factoryBean/factoryMethod situation with no directly resolvable
+beanClass/beanClassName.
+
+To solve this problem, ImportSelector#selectImports has been refactored
+to accept an ImportSelector.Context instance. This object contains the
+AnnotationMetadata of the importing class as well as the enclosing
+BeanDefinitionRegistry to allow for the kind of conditional bean
+registration necessary here. In this case, the bean definition that
+must be registered conditionally is that of the auto-proxy creator.
+It should only be registered if AdviceMode == PROXY, and thus the
+ImportSelector is an appropriate place to make this happen.  It must
+happen as a BeanDefinition (rather than a @Bean method) for
+compatibility with AopConfigUtils, and working with the
+BeanDefinitionRegistry API allows for that. This change does mean that
+in certain cases like this one, #selectImports has container modifying
+side effects. Documentation has been updated to reflect.
+
+Issue: SPR-8411, SPR-8494

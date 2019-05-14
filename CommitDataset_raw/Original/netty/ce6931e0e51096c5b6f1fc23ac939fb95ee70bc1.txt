@@ -1,0 +1,11 @@
+EPOLL exception processing feedback loop
+
+Motivation:
+Commit cf171ff52555b9e984a3b9103287f6b897dc8626 changed the way read operations were done. This change introduced a feedback loop between fireException and epollInReady.
+
+Modifications:
+- All EPOLL*Channel* classes should not call fireException and also continue to read. Instead a read operation should be executed on the eventloop (if the channel's input is not closed, and other conditions are satisfied)
+
+Result:
+Exception processing and channelRead will not be in a feedback loop.
+Fixes https://github.com/netty/netty/issues/4091

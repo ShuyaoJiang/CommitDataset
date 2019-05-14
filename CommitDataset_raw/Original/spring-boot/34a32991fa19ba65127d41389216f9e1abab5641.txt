@@ -1,0 +1,11 @@
+Be defensive about solr classes required
+
+Update SolrAutoConfiguration to specifically require HttpSolrServer
+and CloudSolrServer classes rather than the generic SolrServer.
+
+This prevents the rather cryptic "@ConditionalOnMissingBean annotations
+must specify at least one bean" error that can occur if an earlier
+version of solr happens to be on the classpath (as is the case when
+hibernate-search is used).
+
+Fixes gh-1098

@@ -1,0 +1,23 @@
+Polish contribution
+
+This commit polihes the original Neo4j contribution in several areas.
+
+Rather than providing the packages to scan, this commit rearranges the
+`EntityScan` and `EntityScanRegistrar` so that the logic can be shared
+for other components. If no package is provided, scanning now defaults to
+the "auto-configured" package(s) and a `@NodeEntityScan` annotation
+allows to override that.
+
+The configuration has also been updated to detect the driver based on the
+`uri` property. If the embedded driver is available we use that by
+default. If it is not available, we're trying to connect to a Neo4j
+server running on localhost. It is possible to disable the embedded mode
+or set the `uri` parameter explicitly to deviate from these defaults.
+
+The sample no longer relies on the embedded driver for licensing reason:
+rather it expects an instance running on localhost (like other
+data-related samples) and gracefully ignore any connection error. A
+README has been added in the sample to further explain the available
+options;
+
+Closes gh-5458

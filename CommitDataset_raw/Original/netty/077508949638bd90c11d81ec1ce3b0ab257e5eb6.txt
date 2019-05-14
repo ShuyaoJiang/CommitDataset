@@ -1,0 +1,15 @@
+Replace SpdyOrHttpChooser and Http2OrHttpChooser with ApplicationProtocolNegotiationHandler
+
+Motivation:
+
+SpdyOrHttpChooser and Http2OrHttpChooser duplicate fair amount code with each other.
+
+Modification:
+
+- Replace SpdyOrHttpChooser and Http2OrHttpChooser with ApplicationProtocolNegotiationHandler
+- Add ApplicationProtocolNames to define the known application-level protocol names
+
+Result:
+
+- Less code duplication
+- A user can perform dynamic pipeline configuration that follows ALPN/NPN for any protocols.

@@ -1,0 +1,9 @@
+Forbid expensive query parts in ranking evaluation (#30151)
+
+Currently the ranking evaluation API accepts the full query syntax for
+the queries specified in the evaluation set and executes them via multi
+search. This potentially runs costly aggregations and suggestions too.
+This change adds checks that forbid using aggregations, suggesters, 
+highlighters and the explain and profile options in the queries that are 
+run as part of the ranking evaluation since they are irrelevent in the 
+context of this API.

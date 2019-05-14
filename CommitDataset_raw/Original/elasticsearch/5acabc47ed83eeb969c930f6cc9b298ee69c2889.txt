@@ -1,0 +1,10 @@
+DISCOVERY: Use Realistic Num. of Min Master Nodes (#34854)
+
+* DISCOVERY: Use Realistic Num. of Min Master Nodes
+
+* With all 3 nodes starting in parallel 2 nodes can win a master election and
+start waiting for nodes to join when started in parallel. We wait for 30s on the
+rest tests for the cluster health endpoint to show 3 nodes which breaks if
+one of the master nodes itself waits for 30s for joining nodes, waiting for 5 seconds
+fixes the issue and allows us to run with `minimum master nodes < node count`
+* relates #33675 

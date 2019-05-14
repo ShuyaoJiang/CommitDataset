@@ -1,0 +1,15 @@
+StringUtil cleanup. NewLine char initializing simplified and code in static section simplified.
+
+Motivation:
+
+NewLine initializing is complex, with unnecessary allocations and non-standard.
+Static section is overloaded with StringBuilders for simple "s" + "s" concatenation pattern that compiler optimizes perfectly.
+
+Modifications:
+
+NewLine initializing replaced with standard System.getProperty("line.separator").
+Removed StringBuilders in static section.
+
+Result:
+
+Less complex code.

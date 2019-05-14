@@ -1,0 +1,11 @@
+[Tests] Add unit tests for NestedSortBuilder (#26458)
+
+The new NestedSortBuilder currently is only tested via its use in the other
+SortBuilder implementations it can be used in. This adds its own simple unit
+test class that at first checks our usual fromXContent parsing, serialization
+and hashCode/equals checks. It also adds tests for cases where NestedSortBuilder
+is nested in itself and reuses the code for creating randomized instances in the
+other SortBuilder tests.
+
+In addition to the tests, this changes the `path` parameter in NestedSortBuilder
+to be mandatory and removes the `read` method since it is not really needed.

@@ -1,0 +1,10 @@
+Remove STOMP relay integration test
+
+The test was verifying that when a DISCONNECT frame is sent to the
+broker, there will be no further messages on the clientOutboundChannel.
+
+This is generally true, however in some cases when the broker receives
+a DISCONNECT it may close its connection fast enough (before we do) in
+which case we send an ERROR message downstream to ensure the WebSocket
+side is cleaned up. Either way the downstream should be idempotent
+with regards to cleaning up sessions.

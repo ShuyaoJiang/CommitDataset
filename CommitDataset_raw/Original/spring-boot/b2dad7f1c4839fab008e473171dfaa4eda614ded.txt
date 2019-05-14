@@ -1,0 +1,40 @@
+Rework entry ordering of repackaged archives
+
+Previously, the Repackager would write entries in the following
+order:
+
+- Libraries that require unpacking
+- Existing entries
+    - Application classes
+    - WEB-INF/lib jars in a war
+- Libraries that do not require unpacking
+- Loader classes
+
+Libraries that require unpacking were written before existing entries
+so that, when repackaging a war, an entry in WEB-INF/lib would not
+get in first and prevent a library with same location from being
+unpacked. However, this had the unwanted side-effect of changing
+the classpath order when an entry requires unpacking.
+
+This commit reworks the handling of existing entries and libraries
+that require unpacking so that existing entries can be written first
+while also marking any that match a library that requires unpacking
+as requiring unpacking.
+
+Additionally, loader classes are now written first. They are the
+first classes in the jar that will be used so it seems to make sense
+for them to appear first. This aligns Maven-based repackaging
+with the Gradle plugin's behaviour and with the structure documented
+in the reference documentation's "The Executable Jar Format" appendix.
+
+The net result of the changes described above is that entries are
+now written in the following order:
+
+- Loader classes
+- Existing entries
+    - Application classes
+    - WEB-INF/lib jars in a war marked for unpacking if needed
+- Libraries
+
+Closes gh-11695
+Closes gh-11696

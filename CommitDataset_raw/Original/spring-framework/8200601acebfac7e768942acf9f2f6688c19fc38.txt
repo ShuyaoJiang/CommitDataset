@@ -1,0 +1,18 @@
+Tighten up exception handling strategy
+
+WebSocketHandler implementations:
+- methods must deal with exceptions locally
+- uncaught runtime exceptions are handled by ending the session
+- transport errors (websocket engine) are passed into handleError
+
+WebSocketSession methods may raise IOException
+
+SockJS implementation of WebSocketHandler:
+- delegate SockJS transport errors into handleError
+- stop runtime exceptions from user WebSocketHandler and end session
+
+SockJsServce and TransportHandlers:
+- raise IOException or TransportErrorException
+
+HandshakeHandler:
+- raise IOException

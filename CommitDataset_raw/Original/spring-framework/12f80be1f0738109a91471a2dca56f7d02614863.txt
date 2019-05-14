@@ -1,0 +1,11 @@
+AbstractListenerWebSocketSession handles Mono<Void>
+
+The HandlerSubcriber from each listener session implementation is now
+consolidated into AbstractListenerWebSocketSession since the handling
+of onComplete or onError in any case is about delegating to the
+session.
+
+This also allows for the UndertowWebSocketHandlerAdapter to become
+simply an (Undertow) AbstractReceiveListener.
+
+Issue: SPR-14527

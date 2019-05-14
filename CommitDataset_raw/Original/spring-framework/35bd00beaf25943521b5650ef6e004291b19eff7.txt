@@ -1,0 +1,15 @@
+Remove String#toCharArray from ScriptUtils
+
+ScriptUtils contains two calls to String#toCharArray for the sole
+purpose to iterating over all chars in a String. Not only is this
+unnecessary and can be replaced with String#charAt it also causes
+additional allocator and heap pressure because String#toCharArray
+rather than returning the backing array (which is gone in Java 9)
+creates a copy.
+
+This commit contains the following changes:
+
+ - remove String#toCharArray from ScriptUtils and replace with
+   String#charAt
+
+Issue: SPR-15075

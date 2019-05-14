@@ -1,0 +1,17 @@
+Ensure matching user destination returned
+
+Before this change, when a client subscribed to a "user" destination
+(e.g. /user/foo), actual messages received in response to that
+subscription contained the server-translated, unique user destination
+(e.g. /foo-user123).
+
+This is not an issue for clients such as stomp.js since the
+subscription is unique and sufficient to match subscription responses.
+However, other STOMP clients do additional checks on the destination
+of the subscription and the response.
+
+This change ensures that messages sent to clients on user destionations
+always contain a destination that matches the one on the original
+subscription.
+
+Issue: SPR-11423

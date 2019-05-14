@@ -1,0 +1,10 @@
+Ensure the AuthenticationManager is created when needed
+
+There was too much state really in the old implementation of
+AuthenticationManagerConfiguration, and it was leading occasionally
+to null pointers when method A assumed that method B had already
+been called and it hadn't. This change manages to concentrate all the
+references to an AuthenticationManagerBuilder into a single method
+call, removoing the need for storing it at all.
+
+Fixes gh-1556

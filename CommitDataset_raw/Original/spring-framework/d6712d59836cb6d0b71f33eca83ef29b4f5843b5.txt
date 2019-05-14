@@ -1,0 +1,16 @@
+Generate spring-oxm test classes and bindings
+
+ - Generate castor test classes with genCastor task
+ - Generate xmlbeans test classes with genXmlbeans task
+ - Generate JAXB2 test classes with genJaxb task
+ - Generate JiBX bindings by extending existing compileTestJava task
+
+Test classes are written into their own dedicated output folders and
+tied into the spring-oxm classpath using the files(...).builtBy(...)
+directive.
+
+Incremental build works as expected across all of these customizations.
+
+`gradle eclipse` and `gradle idea` generate correct .project / .iml
+metadata respectively, i.e., these special cases do not cause a problem
+in the IDE (as they used to prior to the move to Gradle).

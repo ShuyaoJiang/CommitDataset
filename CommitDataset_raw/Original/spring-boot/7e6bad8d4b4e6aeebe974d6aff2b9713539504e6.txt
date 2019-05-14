@@ -1,0 +1,9 @@
+Fix @ActiveProfile to override existing profiles
+
+Change SpringApplicationContextLoader to set active profiles using the
+`spring.profiles.active` environment property rather than calling
+`SpringApplication.setAdditionalProfiles`. This allows @ActiveProfiles
+to replace existing profiles rather than add to them which is consistent
+with the Spring TestContext Framework.
+
+Fixes gh-1469

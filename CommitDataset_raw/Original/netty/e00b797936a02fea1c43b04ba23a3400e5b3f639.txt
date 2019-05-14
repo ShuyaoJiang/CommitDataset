@@ -1,0 +1,24 @@
+Acquire Java version simply
+
+Motivation:
+
+The Java version is used for platform dependent logic. Yet, the logic
+for acquiring the Java version requires special permissions (the runtime
+permission "getClassLoader") that some downstream projects will never
+grant. As such, these projects are doomed to have Netty act is their
+Java major version is six.  While there are ways to maintain the same
+logic without requiring these special permissions, the logic is
+needlessly complicated because it relies on loading classes that exist
+in version n but not version n - 1. This complexity can be removed. As a
+bonanza, the dangerous permission is no longer required.
+
+Modifications:
+
+Rather than attempting to load classes that exist in version n but not
+in version n - 1, we can just parse the Java specification version. This
+only requires a begign property (property permission
+"java.specification.version") and is simple.
+
+Result:
+
+Acquisition of the Java version is safe and simple.

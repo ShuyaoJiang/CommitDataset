@@ -1,0 +1,10 @@
+Set the working directory to that of the jar when using start-stop-daemon
+
+By default, start-stop-daemon will chdir to the root directory before
+starting the process. This prevents an application.properties file that
+sits alongside the jar from being found.
+
+This commit updates the call to start-stop-daemon to use --chdir to
+set the working directory to that of the jar that’s being launched.
+
+Closes gh-4281

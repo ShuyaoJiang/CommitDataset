@@ -1,0 +1,11 @@
+Fix (simple)_query_string to ignore removed terms (#28871)
+
+This change ensures that we ignore terms removed from the analysis rather than returning a match_no_docs query for the part
+that contain the stop word. For instance a query like "the AND fox" should ignore "the" if it is considered as a stop word instead of
+adding a match_no_docs query.
+This change also fixes the analysis of prefix terms that start with a stop word (e.g. `the*`). In such case if `analyze_wildcard` is true and `the`
+is considered as a stop word this part of the query is rewritten into a match_no_docs query. Since it's a prefix query this change forces the prefix query
+on `the` even if it is removed from the analysis.
+
+Fixes #28855
+Fixes #28856

@@ -1,0 +1,10 @@
+HTTP/2 example upgrade refcnt bug
+
+Motivation:
+Http2ServerInitializer uses a SimpleChannelHandler in an attempt to ease putting an HttpObjectAggregator in the pipeline when no upgrade is attempted. However the message is double released because it is fired up the pipeline (which will be released) and also released by SimpleChannelHandler in a finally block.
+
+Modifications:
+- Retain the message if we fire it up the pipeline
+
+Result:
+HTTP/2 examples don't encounter a reference count error if no upgrade was attempted.

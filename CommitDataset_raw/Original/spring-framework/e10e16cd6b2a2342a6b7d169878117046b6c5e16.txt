@@ -1,0 +1,11 @@
+Support fall-back to ASM parsing @Configuration
+
+Update ConfigurationClassParser to fall-back to ASM parsing if standard
+annotation processing fails. This change allows @Conditional annotations
+that refer to missing classes to work.
+
+This commit also introduces a new inner SourceClass object that
+encapsulates the conditional logic required when reading the source
+classes.
+
+Issue: SPR-10646

@@ -1,0 +1,12 @@
+Speed up sorted scroll when the index sort matches the search sort (#25138)
+
+Sorted scroll search can use early termination when the index sort matches the scroll search sort.
+The optimization can be done after the first query (which still needs to collect all documents)
+by applying a query that only matches documents that are greater than the last doc retrieved in the previous request.
+Since the index is sorted, retrieving the list of documents that are greater than the last doc
+only requires a binary search on each segment.
+This change introduces this new query called `SortedSearchAfterDocQuery` and apply it when possible.
+Scrolls with this optimization will search all documents on the first request and then will early terminate each segment
+after $size doc for any subsequent requests.
+
+Relates #6720

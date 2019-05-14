@@ -1,0 +1,15 @@
+codec-http2: Stop leaking in header downgrader test
+
+Motivation:
+
+We're leaking requests in our Http2ServerDowngrader tests when we
+allocate a buffer using the local allocator.
+
+Modification:
+
+Release the request later when the request is constructed with the local
+allocator.
+
+Result:
+
+Less leaky tests.

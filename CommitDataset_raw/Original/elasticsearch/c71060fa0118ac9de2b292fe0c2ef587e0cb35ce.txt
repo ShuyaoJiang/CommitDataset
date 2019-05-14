@@ -1,0 +1,11 @@
+Test: fix race in auth result propagation test
+
+This commit fixes a race condition in a test introduced by #36900 that
+verifies concurrent authentications get a result propagated from the
+first thread that attempts to authenticate. Previously, a thread may
+be in a state where it had not attempted to authenticate when the first
+thread that authenticates finishes the authentication, which would
+cause the test to fail as there would be an additional authentication
+attempt. This change adds additional latches to ensure all threads have
+attempted to authenticate before a result gets returned in the
+thread that is performing authentication.

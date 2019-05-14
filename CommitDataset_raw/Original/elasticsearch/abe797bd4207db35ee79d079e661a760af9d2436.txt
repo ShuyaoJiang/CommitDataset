@@ -1,0 +1,19 @@
+SQL: Teach the CLI to ignore empty commands (#30265)
+
+Cause the CLI to ignore commands that are empty or consist only of
+newlines. This is a fairly standard thing for SQL CLIs to do.
+
+It looks like:
+```
+sql> ;
+sql>
+   |
+   | ;
+sql> exit;
+Bye!
+```
+
+I think I *could* have implemented this with a `CliCommand` that throws
+out empty string but it felt simpler to bake it in to the `CliRepl`.
+
+Closes #30000

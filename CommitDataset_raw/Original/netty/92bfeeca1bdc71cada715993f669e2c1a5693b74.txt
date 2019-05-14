@@ -1,0 +1,14 @@
+No need to release lock and acquire again when allocate normal size.
+
+Motiviation:
+
+When tried to allocate tiny and small sized and failed to serve these out of the PoolSubPage we exit the synchronization
+block just to enter it again when call allocateNormal(...).
+
+Modification:
+
+Not exit the synchronized block until allocateNormal(...) is done.
+
+Result:
+
+Better performance.

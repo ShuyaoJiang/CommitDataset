@@ -1,0 +1,17 @@
+Uninstall SLF4J’s Java logging bridge handler during shutdown
+
+Previously, when LogbackLoggingSystem or Log4JLoggingSystem were
+initialized during application start up, they would install SLF4J’s Java
+logging bridge handler, however no corresponding uninstall was performed
+during application shutdown. When deployed to a servlet container, where
+the application’s lifecycle doesn’t match the JVM’s lifecycle, this lead
+to a memory leak.
+
+This commit updates LoggingSystem to introduce a new cleanUp method. An
+empty implementation is provided to preserve backwards compatibility
+with existing LoggingSystem subclasses. Both LogbackLoggingSystem and
+Log4JLoggingSystem have been updated to implement cleanUp and uninstall
+the SLF4J bridge handler. LoggingApplicationListener has been updated
+to call LoggingSystem.cleanUp in response to a ContextClosedEvent.
+
+Closes gh-2324

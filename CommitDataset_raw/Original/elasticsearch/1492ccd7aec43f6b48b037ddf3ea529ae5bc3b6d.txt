@@ -1,0 +1,9 @@
+Fix environment-aware command tests
+
+This commit fixes tests for environment-aware commands. A previous
+change added a check that es.path.conf is not null. The problem is that
+this system property is not being set in tests so this check trips every
+single time. To fix this, we move the check into a method that can be
+overridden, and then override this method in relevant places in tests to
+avoid having to set the property in tests. We also add a test that this
+check works as expected.

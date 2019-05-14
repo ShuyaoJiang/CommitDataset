@@ -1,0 +1,12 @@
+Reduce conditionals in AbstractReferenceCounted
+
+Motivation:
+AbstractReferenceCounted as independent conditional statements to check the bounds of the retain IllegalReferenceCountException condition. One of the exceptions also uses the incorrect increment.
+
+Modifications:
+- Combined independent conditional checks into 1 where possible
+- Correct IllegalReferenceCountException with incorrect increment
+- Remove the subtract to check for overflow and re-use the addition and check for overflow to remove 1 arithmetic operation (see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.18.2)
+
+Result:
+AbstractReferenceCounted has less independent branch statements and more correct IllegalReferenceCountException. Compilation size of AbstractReferenceCounted.retain() is reduced from 58 bytes to 47 bytes.

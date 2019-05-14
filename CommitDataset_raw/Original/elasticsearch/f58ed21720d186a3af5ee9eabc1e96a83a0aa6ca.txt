@@ -1,0 +1,12 @@
+Refactor TransportShardBulkAction to better support retries (#31821)
+
+Processing bulk request goes item by item. Sometimes during processing, we need to stop execution and wait for a new mapping update to be processed by the node. This is currently achieved by throwing a `RetryOnPrimaryException`, which is caught higher up. When the exception is caught, we wait for the next cluster state to arrive and process the request again. Sadly this is a problem because all operations that were already done until the mapping change was required are applied again and get new sequence numbers. This in turn means that the previously issued sequence numbers are never replicated to the replicas. That causes the local checkpoint of those shards to be stuck and with it all the seq# based infrastructure.
+
+This commit refactors how we deal with retries with the goal of removing  `RetryOnPrimaryException` and `RetryOnReplicaException` (not done yet). It achieves so by introducing a class `BulkPrimaryExecutionContext` that is used the capture the execution state and allows continuing from where the execution stopped. The class also formalizes the steps each item has to go through:
+1) A translation phase for updates
+2) Execution phase (always index/delete)
+3) Waiting for a mapping update to come in, if needed
+4) Requires a retry (for updates and cases where the mapping are still not available after the put mapping call returns)
+5) A finalization phase which allows updates to the index/delete result to an update result.
+
+

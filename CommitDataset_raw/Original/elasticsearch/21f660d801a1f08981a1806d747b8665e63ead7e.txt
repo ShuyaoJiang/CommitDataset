@@ -1,0 +1,13 @@
+[Rollup] Remove builders from DateHistogramGroupConfig (#32555)
+
+Same motivation as #32507 but for the DateHistogramGroupConfig
+configuration object. This pull request also changes the format of the
+time zone from a Joda's DateTimeZone to a simple String.
+
+It should help to port the API to the high level rest client and allows
+clients to not be forced to use the Joda Time library. Serialization is
+impacted but does not need a backward compatibility layer as
+DateTimeZone are serialized as String anyway. XContent also expects
+a String for timezone, so I found it easier to move everything to String.
+
+Related to #29827

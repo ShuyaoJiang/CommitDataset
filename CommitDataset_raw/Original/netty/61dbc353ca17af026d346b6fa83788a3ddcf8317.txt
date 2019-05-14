@@ -1,0 +1,12 @@
+[#2436] Unsafe*ByteBuf implementation should only invert bytes if ByteOrder differ from native ByteOrder
+
+Motivation:
+Our Unsafe*ByteBuf implementation always invert bytes when the native ByteOrder is LITTLE_ENDIAN (this is true on intel), even when the user calls order(ByteOrder.LITTLE_ENDIAN). This is not optimal for performance reasons as the user should be able to set the ByteOrder to LITTLE_ENDIAN and so write bytes without the extra inverting.
+
+Modification:
+- Introduce a new special SwappedByteBuf (called UnsafeDirectSwappedByteBuf) that is used by all the Unsafe*ByteBuf implementation and allows to write without inverting the bytes.
+- Add benchmark
+- Upgrade jmh to 0.8
+
+Result:
+The user is be able to get the max performance even on servers that have ByteOrder.LITTLE_ENDIAN as their native ByteOrder.

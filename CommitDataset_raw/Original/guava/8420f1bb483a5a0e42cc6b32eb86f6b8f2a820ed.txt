@@ -1,0 +1,12 @@
+Eliminate references to ImmutableAsList in ImmutableMultiset.
+
+ImmutableMultiset, for once, doesn't have a specialized asList(), so this does the right thing on both server side and Android: on Java 7, it returns a normal ImmutableList, on server-side it returns an ImmutableList whose contains() method delegates to the backing ImmutableMultiset.
+
+Effects on ImmutableMultisetProGuard ([]
+80423 bytes => 78313 bytes
+34 classes => 31 classes
+257 methods => 240 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=152304598

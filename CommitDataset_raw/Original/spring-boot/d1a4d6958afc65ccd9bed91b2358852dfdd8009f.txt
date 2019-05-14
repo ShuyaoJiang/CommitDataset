@@ -1,0 +1,11 @@
+Document spring.datasource.name
+
+The `spring.datasource.name` property was hidden behind the 'name'
+attribute of the Tomcat connection pool (since we are mapping all
+datasource implementations on the `spring.datasource` namespace.
+
+This commit replace the injected value by hand with the use of the
+regular `DataSourceProperties`. That way, we generate proper meta-data
+for it as well.
+
+Closes gh-3755

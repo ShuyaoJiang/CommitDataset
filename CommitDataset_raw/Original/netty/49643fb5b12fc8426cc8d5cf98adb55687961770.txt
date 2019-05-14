@@ -1,0 +1,16 @@
+[#3848] Respect EPOLLERR event
+
+Motivation:
+
+Some glibc/kernel versions will trigger an EPOLLERR event to notify
+about failed connect and not an EPOLLOUT. Also EPOLLERR may be triggered
+when a connection is broke.
+
+Modification:
+
+React on EPOLLERR like if an EPOLLOUT / EPOLLIN was received, this will work in
+all cases as we handle errors in EPOLLOUT / EPOLLIN anyway.
+
+Result:
+
+Correctly detect errors.

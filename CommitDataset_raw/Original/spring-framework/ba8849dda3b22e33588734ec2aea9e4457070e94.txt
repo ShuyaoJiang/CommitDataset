@@ -1,0 +1,22 @@
+Avoid MimeType garbage creation
+
+Prior to this commit, calls to `MimeType` and `MediaType` would create a
+significant amount of garbage:
+
+* during startup time, in the static sections of `MimeType` and
+`MediaType` when creating well-known types
+* at runtime, when parsing media types for content negotiation or
+writing known media types as strings in HTTP response headers
+
+This commit does the following:
+
+* Avoid parsing the well-known types and use regular constructors
+instead
+* Cache types in a simple LRU cache once they've been parsed, since an
+application is likely to deal with a limited set of types
+* Avoid using `java.util.stream.Stream` in hot code paths
+
+Benchmarks show that a complete revision of the `MimeTypeUtils` parser
+is not required, since the LRU cache is enough there.
+
+Closes gh-22340

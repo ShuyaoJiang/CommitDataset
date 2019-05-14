@@ -1,0 +1,20 @@
+Recursively process DeferredImportSelector properly
+
+Previously, if a DeferredImportSelector was identified at a later stage
+as part of processing the collected set of deferred imports, such
+selector was processed as a regular import selector.
+
+Semantically, it makes sense as we already are in the deferred phase at
+this point and it doesn't make much sense to bother about the extra
+contract.
+
+However, Spring Framework 5 introduced the notion of Group that a
+deferred import selector can define. When it does, the container has to
+honour the contract of the Group rather than calling the simpler
+ImportSelector parent contract.
+
+This commit restructures the processing of such case. When a deferred
+import selector is detected while processing deferred import selectors,
+a group is created with only that selector and the group API is invoked.
+
+Issue: SPR-17351

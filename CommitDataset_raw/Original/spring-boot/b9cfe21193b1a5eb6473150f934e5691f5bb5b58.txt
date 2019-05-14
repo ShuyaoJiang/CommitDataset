@@ -1,0 +1,11 @@
+Make @ImportAutoConfiguration not register package
+
+Update `@ImportAutoConfiguration` so that it is no longer annotated with
+`@AutoConfigurationPackage` and as such isn't a marker for
+`AutoConfigurationPackages`.
+
+Having `@ImportAutoConfiguration` marked as an auto-configuration
+package is particularly problematic in tests since it frequently breaks
+context caching.
+
+Fixes gh-9282

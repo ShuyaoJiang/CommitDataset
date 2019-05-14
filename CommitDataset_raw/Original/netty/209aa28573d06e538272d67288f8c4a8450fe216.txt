@@ -1,0 +1,10 @@
+SPDY codec must check headers are lower case
+
+Motivation:
+The SPDY spec requires that all header names be lowercase (see https://www.chromium.org/spdy/spdy-protocol/spdy-protocol-draft3-1#TOC-3.2-HTTP-Request-Response). The SPDY codec header name validator does not enforce this requirement.
+
+Modifications:
+- SpdyCodecUtil.validateHeaderName should check for upper case characters and throw an error if any are found.
+
+Result:
+SPDY codec header validation enforces specification requirement.

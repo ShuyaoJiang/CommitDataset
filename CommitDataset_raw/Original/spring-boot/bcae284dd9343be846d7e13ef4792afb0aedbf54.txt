@@ -1,0 +1,9 @@
+Add a shim Endpoint if management context is child
+
+When management endpoints are on a different port the HandlerMappings
+are restricted to a single EndpointHandlerMapping, so the error
+controller (which is a normal @Controller with @RequestMappings) does
+not get mapped.
+
+Fixed by addinga shim Endpoint on "/error" that delegates to the
+ErrorController (which interface picks up an extra method).

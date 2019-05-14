@@ -1,0 +1,13 @@
+Harmonize JTA properties
+
+Previously, both Atomikos and Bitronix were bound on the `spring.jta`
+namespace which makes very hard to figure out which property belong to
+which implementation. Besides, `AtomikosProperties` only exposed public
+setter which does not generate any useful meta-data.
+
+This commit moves the external configuration for Atomikos and Bitronix to
+`spring.jta.atomikos.properties` and `spring.jta.bitronix.properties`
+respectively. It also improves the meta-data support for those two
+namespaces.
+
+Closes gh-5165

@@ -1,0 +1,18 @@
+A new ChannelHandler that allows the user to control the flow of messages if upstream handlers emit more than one event for each read()
+
+Motivation:
+
+Some handlers such as HttpObjectDecoder can emit more than one event per read()
+which leads to problems in downstream handlers that expect only one event and hope
+that ChannelConfig#setAutoRead(false) prevents further events being sent while they're
+processing the one they've just received.
+
+Modifications:
+
+A new handler called FlowControlHandler that feeds off read() and isAutoRead() and acts
+as a holding buffer if auto reading gets turned off and more events arrive while auto reading
+is off.
+
+Result:
+
+Fixes issues such as #4895.

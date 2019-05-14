@@ -1,0 +1,14 @@
+Ensure ChannelHandler.handlerAdded(...) is always called as first method of the handler
+
+Motivation:
+
+If a user adds a ChannelHandler from outside the EventLoop it is possible to get into the situation that handlerAdded(...) is scheduled on the EventLoop and so called after another methods of the ChannelHandler as the EventLoop may already be executing on this point in time.
+
+Modification:
+
+- Ensure we always check if the handlerAdded(...) method was called already and if not add the currently needed call to the EventLoop so it will be picked up after handlerAdded(...) was called. This works as if the handler is added to the ChannelPipeline from outside the EventLoop the actual handlerAdded(...) operation is scheduled on the EventLoop.
+- Some cleanup in the DefaultChannelPipeline
+
+Result:
+
+Correctly order of method executions of ChannelHandler.

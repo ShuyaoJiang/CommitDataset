@@ -1,0 +1,10 @@
+PlatformDependent0 should enforce array index scale for byte[] explicitly
+
+Motivation:
+PlatformDependent0 makes assumptions that the array index scale for byte[] is always 1. If this is not the case the results from methods which make this assumption will be undefined.
+
+Modifications:
+- PlatformDependent0 should check if unsafe.arrayIndexScale(byte[].class) is not 1, and if so not use unsafe
+
+Result:
+Assumptions made by optimizations in PlatformDependent0 which use byte[] are explicitly enforced.

@@ -1,0 +1,19 @@
+Port r1623 changes to C++
+
+This provide C++ support for Hanzi from issue 582. With it the C++
+qrcode blackbox test results again match the Java results.
+
+The changes are mostly a re-port of various pieces of the Java code
+for supporting modes and bit stream parsing in QR codes. It expands
+the modes/parsing including ECI and FNC, refactors StringUtils as was
+done in Java, and makes DecoderResult include the fields that the Java
+code has.
+
+Although the non-qrcode blackbox tests don't all match the Java code
+(a known issue) the entire blackbox suite was run under valgrind and
+has no errors, including invalid memory references and leaks.
+
+This commit also includes a few cleanups for things like files that
+had mixed line endings, i.e., a combination of LF and CR-LF.
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@1966 59b500cc-1b3d-0410-9834-0bbf25fbcc57

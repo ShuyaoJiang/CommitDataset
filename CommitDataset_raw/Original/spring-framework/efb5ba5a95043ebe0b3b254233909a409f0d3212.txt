@@ -1,0 +1,10 @@
+Refactor VersionStrategy in WebFlux
+
+Collapse the base interface VersionPathStrategy into its extension
+VersionStrategy and then turn the prefix nad fliename based
+implementations into abstract base classes (vs delegate strategies).
+
+It is simpler to have one VersionStrategy hierarchy vs that plus a
+separate VersionPathStrategy as a delegate. In practice each
+VersionStrategy is suited to be prefix or filename based. Also none
+of our code cares about the distinction between those two interfaces.

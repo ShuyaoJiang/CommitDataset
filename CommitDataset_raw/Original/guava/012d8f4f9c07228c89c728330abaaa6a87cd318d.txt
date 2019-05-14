@@ -1,0 +1,6 @@
+Make Iterables.unmodifiableIterable() and Iterators.unmodifiableIterator() methods accept (Iterable|Iterator)<? extends T> instead of (Iterable|Iterator)<T>. Some of our unmodifiable*() methods already did this (e.g. unmodifiableMultiset(), unmodifiableBiMap()), and the "? extends T" signature is consistent with the unmodifiable*() methods in Collections.java.
+
+Note that SortedMap only does it for values, not keys, due to the various Key-typed methods that return views in the interface. Maps.unmodifiableMultimap() also has some issues that at the very least make it tricky (maybe impossible, didn't investigate enough to be sure) to follow this pattern.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=115705731

@@ -1,0 +1,20 @@
+Add Tomcat-specific failure analysis for connector start failures
+
+Previously, when a Tomcat connector failed to start it was assumed that
+the failure was due to the port being in use and a PortInUseException
+was thrown. Unfortunately, this assumption doesn’t always hold true.
+For example, a Tomcat connector will also fail to start when its using
+SSL and the key store password is wrong. This could lead to incorrect
+guidance from the PortInUseFailureAnalyzer indicating that a port clash
+had occurred when, in fact, it was the SSL configuration that needed to
+be corrected.
+
+Unfortunately, Tomcat only tells us that the connector failed to start.
+It doesn’t provide access to the exception that would allow us to
+determine why it failed to start. This commit updates the embedded
+Tomcat container to throw a ConnectorStartFailedException in the event
+of a connector failing to start. A new failure analyser,
+ConnectorStartFailureAnalyzer, has been introduced to analyse the new
+exception and offer some more general guidance.
+
+Closes gh-6896

@@ -1,0 +1,18 @@
+Add exposeHeaders and allowedRequestHeaders that accept CharSequence, close #6328
+
+Motivation:
+
+Netty 4.1 introduced AsciiString and defines HttpHeaderNames constants
+as such.
+
+It would be convenient to be able to pass them to `exposeHeaders` and
+`allowedRequestHeaders` directly without having to call `toString`.
+
+Modifications:
+
+Add `exposeHeaders` and `allowedRequestHeaders` overloads that take a
+`CharSequence`.
+
+Result:
+
+More convenient API

@@ -1,0 +1,8 @@
+Reduce logging for reserved realm authc failures (elastic/x-pack-elasticsearch#1711)
+
+We recently added logging for critical authentication failures as they had previously been silent (with respect to logs) but would cause authentication processing to stop.
+
+However, the reserved realm intentionally uses exceptions to stop any other realm authenticating a reserved user if the password is entered incorrectly.
+Since this is the most common use of exceptions in the authc chain, we reduce the logging verbosity in normal cases (drop the stack trace, remove "unexpected") and only log the full details in debug.
+
+Original commit: elastic/x-pack-elasticsearch@686a98010bbc11cac515917817fe12834e9fa716

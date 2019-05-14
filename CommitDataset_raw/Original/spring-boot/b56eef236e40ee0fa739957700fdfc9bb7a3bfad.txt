@@ -1,0 +1,12 @@
+Close Reader used by MustacheViewResolver when compiling a Template
+
+Previously, MustacheViewResolver would create an InputStreamReader
+that wraps the template Resource's InputStream but would fail to close
+the Reader. When the InputStream was a FileInputStream, this caused
+the resolver to leak file handles.
+
+This commit updates the resolver to close the Reader once the Template
+has been compiled, thereby allowing any underlying resources to be
+cleaned up immediately, rather than having to wait for the JVM to exit.
+
+Closes gh-4921

@@ -1,0 +1,12 @@
+Introduce TestContextManager cache in SpringClassRule
+
+In order to simplify configuration of the SpringMethodRule and to ensure
+that the correct TestContextManager is always retrieved for the
+currently executing test class, this commit introduces a static
+TestContextManager cache in SpringClassRule.
+
+In addition, since it is not foreseen that SpringClassRule and
+SpringMethodRule should be able to be subclassed, their internal methods
+are now private instead of protected.
+
+Issue: SPR-7731

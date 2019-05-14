@@ -1,0 +1,8 @@
+Make sure metricsExecutor is shutdown cleanly
+
+The default executor for publishing metrics was a single
+thread (native JDK) ExecutorService with a non-daemon thread.
+Changed it to a Spring-managed thread pool of size 1, which
+is then shutdown with e ApplicationContext automatically.
+
+Fixes gh-388

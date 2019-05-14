@@ -1,0 +1,13 @@
+Removed HeapByteBuffer address field check.
+
+Motivation:
+
+In JDK9 heap byte buffers have an address field, so we have to remove
+the current check as it is invalid in JDK9.
+
+Modifications:
+
+Removed the address field check for heap byte buffers.
+
+Result:
+Netty continues to find sun.misc.Unsafe in JDK9 as in previous JDKs.

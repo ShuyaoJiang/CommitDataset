@@ -1,0 +1,10 @@
+[Tests] Improve error message for failed xContentEquivalent() tests (#24828)
+
+For comparing actual and parsed object equality for the response parsing we
+currently rely on comparing the original xContent and the output of the parsed 
+object. Currently we only have cryptic error messages if this comparison fails 
+which are hard to read also because we recursively compare lists and maps of 
+the xContent structures we compare.
+
+This commits leverages the existing NotEqualMessageBuilder for providing error 
+messages  that are more detailed and useful for debugging if an error occurs.

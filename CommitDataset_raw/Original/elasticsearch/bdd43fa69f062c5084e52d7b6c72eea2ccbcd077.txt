@@ -1,0 +1,12 @@
+Change signature of Get Repositories Response (#30333)
+
+The Get Repositories response object held a list of RepositoryMetaData
+entries. This object does not have the from/toXContent methods that are
+needed to expose this to the high level REST client. The
+RepositoriesMetaData, however, does, and it also contains a list of
+RepositoryMetaData objects within it. So rather than duplicate this
+logic or move it (RepositoriesMetaData is a fragment object used by
+cluster state), the object holding state in the Response was changed to
+use the RepositoriesMetaData instead. This also cleans up the read/write
+methods in the response, as they can now use the same read/write in
+RepositoriesMetaData, which also were not present in the singular class.

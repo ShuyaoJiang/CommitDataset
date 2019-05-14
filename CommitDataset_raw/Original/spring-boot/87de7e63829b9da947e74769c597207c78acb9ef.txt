@@ -1,0 +1,15 @@
+Return the correct manifest for a JarFile create from a nested directory
+
+Previously, if a JarFile was created from a directory nested inside
+another jar file, it would look for the manifest in
+pathFromRoot/META-INF/MANIFEST.MF. This is incorrect as, unlike a
+JarFile created from a jar file, the archives are one and the same
+so the manifests should be too.
+
+This commit updates JarFile so that its aware of how it was created
+(direct from a file, from a nested directory, from a nested jar). If
+it was created from a file or from a nested jar, it uses its manifest.
+If it was created from a nested directory, it uses the manifest of the
+root archive.
+
+Closes gh-5609

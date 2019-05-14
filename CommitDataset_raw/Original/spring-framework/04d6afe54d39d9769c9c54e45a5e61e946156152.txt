@@ -1,0 +1,11 @@
+Support arbitrary levels of meta-annotations in TypeDescriptor
+
+Prior to this commit, the `getAnnotation()` method in `TypeDescriptor`
+only supported a single level of meta-annotations. In other words, the
+annotation hierarchy would not be exhaustively searched.
+
+This commit provides support for arbitrary levels of meta-annotations
+in `TypeDescriptor` by delegating to `AnnotationUtils.findAnnotation()`
+within `TypeDescriptor.getAnnotation()`.
+
+Issue: SPR-12793

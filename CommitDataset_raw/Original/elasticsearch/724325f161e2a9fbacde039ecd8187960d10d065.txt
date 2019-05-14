@@ -1,0 +1,11 @@
+Fallback to `keystore.seed` as a bootstrap password if actual password is not present (elastic/x-pack-elasticsearch#2295)
+
+Today we require the `bootstrap.password` to be present in the keystore in order to
+bootstrap xpack. With the addition of `keystore.seed` we have a randomly generated password
+per node to do the bootstrapping. This will improve the initial user experience significantly
+since the user doesn't need to create a keystore and add a password, they keystore is created
+automatically unless already present and is always created with this random seed.
+
+Relates to elastic/elasticsearch#26253
+
+Original commit: elastic/x-pack-elasticsearch@5a984b4fd8ce63239d233e143d3cb1764c6de1ab

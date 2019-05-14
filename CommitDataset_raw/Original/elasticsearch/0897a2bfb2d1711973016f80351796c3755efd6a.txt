@@ -1,0 +1,10 @@
+Allow ILM to stop if indices have nonexistent policies (#40820)
+
+Prior to this PR, there is a bug in ILM which does not allow ILM to stop
+if one or more indices have an index.lifecycle.name which refers to
+a policy that does not exist - the operation_mode will be stuck as
+STOPPING until either the policy is created or the nonexistent
+policy is removed from those indices.
+
+This change allows ILM to stop in this case and makes the logging more
+clear as to why ILM is not stopping.

@@ -1,0 +1,12 @@
+Check index under the store metadata lock (#27768)
+
+Today when we get a metadata snapshot directly from a store directory, 
+we acquire a metadata lock, then acquire an IndexWriter lock. However,
+we create a CheckIndex in IndexShard without acquiring the metadata lock 
+first. This causes a recovery failed because the IndexWriter lock can be
+still held by method snapshotStoreMetadata. This commit makes sure to
+create a CheckIndex under the metadata lock.
+
+Closes #24481
+Closes #27731
+Relates #24787

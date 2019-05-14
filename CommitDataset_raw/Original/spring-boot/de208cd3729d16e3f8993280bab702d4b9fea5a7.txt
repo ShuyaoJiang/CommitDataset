@@ -1,0 +1,13 @@
+Do not handle WebFlux errors if response is committed
+
+If the WebFlux handler commits the response but still sends an error
+signal in the reactive pipeline, Spring Boot error handling should not
+try to handle that error: once committed, it is impossible to change the
+response status or the response headers. Writing to the body might also
+lead to invalid responses.
+
+This commit skips error handling if the response is committed and
+delegates to Spring Framework's `HttpWebHandlerAdapter` which will log
+the error.
+
+Fixes gh-11168

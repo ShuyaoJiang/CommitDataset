@@ -1,0 +1,12 @@
+Fix issue in GlassfishRequestUpgradeStrategy
+
+The observed behavior was that the client does not get a response from
+the WebSocket HTTP handshake. On the server the handshake actually
+succeeds, the response is set correctly to status 101, and the
+WebSocketHandler gets notified of the successfully established
+connection.
+
+This change flushes the ServletResponse just before returning from the
+GlassfishRequestUpgradeStrategy. This is actually what Glassfish's own
+TyrusServletFilter does as well at the end along with a comment that it
+is a possible bug.

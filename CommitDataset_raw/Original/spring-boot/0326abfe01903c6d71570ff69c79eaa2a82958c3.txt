@@ -1,0 +1,18 @@
+Support for composed "any" condition
+
+Add `AnyNestedCondition` which can be used to create a logical 'or' of
+other conditions contained on nested classes. For example:
+
+	static class OnJndiOrProperty extends AnyNestedCondition {
+
+		@ConditionalOnJndi()
+		static class OnJndi {
+		}
+
+		@ConditionalOnProperty("something")
+		static class OnProperty {
+		}
+
+	}
+
+Fixes gh-1490

@@ -1,0 +1,20 @@
+HTTP/2 Remove Http2FrameStream#CONNECTION_STREAM
+
+Motivation:
+Http2FrameStream#CONNECTION_STREAM is required to identify the
+connection stream. However this leads to inconsistent usage from a user
+perspective. When a user creates a Http2Frame for a non-connection
+stream, the Http2MultiplexCodec automatically sets the stream, and the
+user is never exposed to the Http2FrameStream object. However when the
+user writes a Http2Frame for a connection stream they are required to
+set the Http2FrameStream object. We can remove the Http2FrameStream#CONNECTION_STREAM
+and keep the Http2FrameStream object internal, and therefore consistent
+between the connection and non-connection use cases.
+
+Modifications:
+- Remove Http2FrameStream#CONNECTION_STREAM
+- Update Http2FrameCodec to handle Http2Frame#stream() which returns
+null
+
+Result:
+More consistent usage on http2 parent channel and http2 child channel.

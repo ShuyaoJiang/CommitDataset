@@ -1,0 +1,8 @@
+Avoid setting connection request timeout (#30384)
+
+We've been setting this value to 500ms in the default low-level REST
+client configuration, misunderstanding the effect that it would have.
+This proved very problematic, as it ends up causing `TimeoutException`
+returned from the leased pool in some cases even for successful requests.
+
+Closes #24069

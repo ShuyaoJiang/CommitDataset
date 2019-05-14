@@ -1,0 +1,19 @@
+Fix memory leak in serializable bean factory management (SPR-7502)
+
+GenericApplicationContext and AbstractRefreshableApplicationContext
+implementations now call DefaultListableBeanFactory.setSerializationId()
+only upon successful refresh() instead of on instantiation of the
+context, as was previously the case with GAC.
+
+DLBF.setSerializationId() adds the beanFactory to the *static*
+DLBF.serializableFactories map, and while calling close() on the
+application context removes entries from that map, it does so only if
+the context is currently active (i.e. refresh() has been called).
+
+Also, cancelRefresh() has been overridden in GAC just as it has been
+in ARAC to accomodate the possibility of a BeansException being thrown.
+In this case, the beanFactory serializationId will be nulled out and
+the beanFactory removed from the serializableFactories map.
+
+The SerializableBeanFactoryMemoryLeakTests test case provides full
+coverage of these scenarios.

@@ -1,0 +1,14 @@
+Allow DevTools to find and configure Spring Session 1.1's RedisTemplate
+
+Previously, when Spring Session 1.1.0.M1 and DevTools were declared as
+dependencies the application failed to start, because
+sessionRedisTemplate could not be resolved.
+
+This commit relaxes the dependency for sessionRedisTemplate in
+restartCompatibleRedisSerializerConfigurer from
+RedisTemplate<String, ExpiringSession> to RedisTemplate<?, ?> and uses
+the bean name in a @Qualifer to ensure that the right RedisTemplate
+bean gets injected.
+
+Fixes gh-4895
+Closes gh-4896

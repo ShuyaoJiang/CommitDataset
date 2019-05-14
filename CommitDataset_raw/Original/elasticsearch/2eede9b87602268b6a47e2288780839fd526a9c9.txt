@@ -1,0 +1,14 @@
+Reindex: Shore up rethrottle test
+
+The rethrottle test fails from time to time because one of the child
+task that want to be rethrottled hasn't properly started yet. We retry
+in this case but it looks like the retry either isn't long enough or
+something else strange is happening.
+
+This change adds yet more logging so future failure of this kind will be
+easier to track down and it adds an extra wait condition: this waits for
+all child tasks to be running or completed before rethrottling. This
+*might* avoid the failure because once a child task is properly started
+it should be quite ok to rethrottle.
+
+Relates to #26192

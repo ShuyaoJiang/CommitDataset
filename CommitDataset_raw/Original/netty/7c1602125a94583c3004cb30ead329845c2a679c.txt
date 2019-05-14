@@ -1,0 +1,20 @@
+Builder to construct DomainNameMapping.
+
+Motivation:
+
+DomainNameMapping.add() makes DomainNameMapping look like it's safe to call add() anytime, and this is never true. It's probably better deprecate add() and introduce DomainNameMappingBuilder.
+
+Modifications:
+
+Made an immutable implementation of DomainNameMapping;
+Added Builder for immutable DomainNameMapping;
+Replaced regex pattern with String::startsWith check;
+Replaced HashMap with two arrays in ImmutableDomainNameMapping;
+Deprecated mutable API;
+Estimation for StringBuilder initial size in ImmutableDomainNameMapping#toString()
+Added StringUtil#commonSuffixOfLength
+Replaced unnecessary substrings creation in DomainNameMapping#matches with regionMatches
+
+Result:
+
+Clients will be able to create immutable instances of DomainNameMapping with builder API.

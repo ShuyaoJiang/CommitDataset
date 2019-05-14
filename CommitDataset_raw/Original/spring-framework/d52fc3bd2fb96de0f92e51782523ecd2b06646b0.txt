@@ -1,0 +1,8 @@
+Prevent response updates if @ResponseStatus has reason
+
+When @ResponseStatus has a reason and servletResponse.sendError() is
+called, the response is committed and should no longer be written to.
+After this change, the ServletInvocableHandlerMethod will mark the
+response fully handled and will ignore any non-null return values.
+
+Issue: SPR-9159

@@ -1,0 +1,18 @@
+Output all empty snapshot info fields if in verbose mode (#25455)
+
+In #24477, a less verbose option was added to retrieve snapshot info via
+GET /_snapshot/{repo}/{snapshots}.  The point of adding this less
+verbose option was so that if the repository is a cloud based one, and
+there are many snapshots for which the snapshot info needed to be
+retrieved, then each snapshot would require reading a separate snapshot
+metadata file to pull out the necessary information.  This can be costly
+(performance and cost) on cloud based repositories, so a less verbose
+option was added that only retrieves very basic information about each
+snapshot that is all available in the index-N blob - requiring only one
+read!
+
+In order to display this less verbose snapshot info appropriately, logic
+was added to not display those fields which could not be populated.
+However, this broke integrators (e.g. ECE) that required these fields to
+be present, even if empty.  This commit is to return these fields in the
+response, even if empty, if the verbose option is set.

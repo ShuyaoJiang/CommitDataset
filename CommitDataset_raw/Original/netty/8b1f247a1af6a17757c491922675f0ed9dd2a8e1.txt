@@ -1,0 +1,13 @@
+[#3623] CompositeByteBuf.iterator() should return optimized Iterable
+
+Motivation:
+
+CompositeByteBuf.iterator() currently creates a new ArrayList and fill it with the ByteBufs, which is more expensive then it needs to be.
+
+Modifications:
+
+- Use special Iterator implementation
+
+Result:
+
+Less overhead when calling iterator()

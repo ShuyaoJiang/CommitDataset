@@ -1,0 +1,10 @@
+Fix annotation value mapping regression
+
+Refine `TypeMappedAnnotation.getValueFromMetaAnnotation` to correctly
+account for aliases when finding values from meta-annotations. Prior
+to this commit, only convention based mappings were considered when
+searching for values on meta-annotations. This meant that declared
+meta-annotations that used aliases could return the "default value"
+rather than the merged value.
+
+Closes gh-22654

@@ -1,0 +1,5 @@
+InternalEngineTests.testConcurrentOutOfOrderDocsOnReplica should use two documents (#30121)
+
+We were recently looking at bugs that can only occur if two different documents were indexed concurrently. For example, what happens if the local checkpoint advances above the sequence number of  a document that's being indexed. That can only happen if another concurrent operation caused the checkpoint to advance. It has to be another document to allow concurrency as we acquire a per uid lock.While our investigation proved that the suspected bug doesn't exists, we still discovered our unit testing coverage is not good enough to cover this case. 
+
+This PR extend the test concurrent out of order replica processing to use two documents in its history.

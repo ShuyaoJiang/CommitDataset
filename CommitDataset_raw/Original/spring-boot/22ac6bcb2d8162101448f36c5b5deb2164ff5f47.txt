@@ -1,0 +1,16 @@
+Break GaugeWriter dependency cycle in MetricExportAutoConfiguration
+
+Previously, MetricExportAutoConfiguration consumed
+ExportMetricWriter-annotated GaugeWriter beans in its constructor and
+also produced such a bean from one of its @Bean methods. This cycle
+caused a BeanCurrentlyInCreationException to be thrown when the
+bean method was active (the spring.metrics.export.statsd.host property
+was set).
+
+This commit break the cycle by moving the bean method into a separate,
+nested configuration class. It also updates the existing test for
+auto-configuration of a Statsd writer to catch any possible cycles
+and to verify that the writer has be registered with the
+MetricsExporter.
+
+Closes gh-6544

@@ -1,0 +1,13 @@
+Replace WebSocketHandlerAdapterSupport with delegation
+
+This commit removes the base class WebSocketHandlerAdapterSupport which
+was mainly a container for properties. Instead we use a
+java.util.Function to create the WebSocketSession which differs in any
+way by client and server, which in turn allows  HandshakeInfo to become
+a simple immutable container once again.
+
+Also for Undertow the WebSocketConnectionCallback implementation has
+been moved into the server.upgrade package since it is for server-side
+use only.
+
+Issue: SPR-14527

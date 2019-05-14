@@ -1,0 +1,12 @@
+Correctly throw IndexOutOfBoundsException when writerIndex < readerIndex
+
+Motivation:
+
+If someone invoke writeByte(), markWriterIndex(), readByte() in order first, and then invoke resetWriterIndex() should be throw a IndexOutOfBoundsException to obey the rule that the buffer declared "0 <= readerIndex <= writerIndex <= capacity".
+
+Modification:
+
+Changed the code writerIndex = markedWriterIndex; into writerIndex(markedWriterIndex); to make the check affect
+
+Result:
+Throw IndexOutOfBoundsException if any invalid happened in resetWriterIndex.

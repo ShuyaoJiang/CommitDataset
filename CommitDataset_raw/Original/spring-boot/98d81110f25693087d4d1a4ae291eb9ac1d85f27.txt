@@ -1,0 +1,15 @@
+Write management and main server access logs to separate files
+
+Previously, when access logging was enabled and the management server
+was running on a separate port, both the main server and the management
+server would write their access logs to the same file. Having two
+separate containers writing to the same file could cause problems such
+as causing log rotation to break.
+
+This commit updates the actuator so that when the management server is
+running on a separate port (and therefore using a separate container)
+it prepends management_ to the access log prefix so that the main
+server and the management server write their access logs to separate
+files in the same directory.
+
+Closes gh-6618

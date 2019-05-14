@@ -1,0 +1,14 @@
+Document need for ServerEndpointExporter and show its use in a sample
+
+Traditionally, a @ServerEndpoint-annotated bean is found by a servlet
+container initialiser, however Boot does not run servlet container
+initialisers when an embedded container is being used. To be able to use
+@ServerEndpoint in a Boot app that uses embedded Tomcat a
+ServerEndpointExporter bean must be declared.
+
+This commit updates the documentation to describe this requirement and
+also updates the WebSockets sample to illustrate the use of
+ServerEndpointExporter. The version of Spring Framework has been updated
+to 4.0.8.BUILD-SNAPSHOT. This picks up the fix for SPR-12340.
+
+Closes gh-1722

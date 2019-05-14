@@ -1,0 +1,13 @@
+Update MutableGraph javadoc to state in no uncertain terms that there can only be a single edge connecting a pair of nodes. Delete TODOs regarding parallel edges for Graphs, which we will not do.
+
+Regarding motivation:
+
+1) Having a Graph with parallel edges complicates things a fair bit. There are certain assumptions you can make about graphs without parallel edges that you cannot make about graphs with parallel edges. Given that we don't even expose an "allowsParallelEdges()" method, there's literally no way to future-proof yourself if we did later add Graphs with parallel edges. We'd just break a lot of code.
+
+2) In order for a Graph with parallel edges to actually make sense, we would have to expose several additional methods (at the least, getEdgeCount(nodeA, nodeB), setEdgeCount(nodeA, nodeB), and allowsParallelEdges()). Given that Graph is supposed to be the simpler interface, this would be unfortunate.
+
+3) With my proposed ValueGraph interface, a ValueGraph<N, Integer> would be exactly analogous to a Graph<N> with parallel edges, but with clearer semantics. However, I feel points #1 and #2 are sufficient to resolve this matter.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=128824588

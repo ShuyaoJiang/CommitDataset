@@ -1,0 +1,5 @@
+Introduced  DefaultParameterNameDiscoverer which checks JDK 8's standard reflection first and then falls back to ASM-based debug symbol analysis
+
+Also, StandardReflectionParameterNameDiscoverer calls "Parameter.isNamePresent()" now to return null (and pass on to the next discoverer) if no JDK 8 parameters are available. Note that this requires OpenJDK 8 b100 or higher to compile now.
+
+Issue: SPR-10532

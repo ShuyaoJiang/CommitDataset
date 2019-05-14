@@ -1,0 +1,13 @@
+Better "no content" support and polish in WebTestClient
+
+The WebTestClient now takes advantage of the support for decoding
+response to Void.class in WebClient so that applications can use
+expectBody(Void.class) to the same effect as using
+response.bodyToMono(Void.class) as documneted on WebClient#exchange.
+
+The top-level, no-arg returnResult method (added very recently) has been
+retracted, since the use of returnResult at that level, i.e. without
+consuming the response content, should be used mainly for streaming.
+It shouldn't be used for "no content" scenarios.
+
+Documentation and Javadoc have been udpated accordingly.

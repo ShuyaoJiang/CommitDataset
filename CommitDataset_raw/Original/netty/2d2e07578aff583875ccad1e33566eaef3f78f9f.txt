@@ -1,0 +1,13 @@
+Remove HashMap for lookup name / ctx from DefaultChannelPipeline to reduce memory footprint
+
+Motivation:
+
+If you start to have 1M+ concurrent connections memory footprint can be come a big issue. We should try to reduce it as much as possible in the core of netty.
+
+Modifications:
+
+- Remove HashMap that was used to store name to ctx mapping. This was only used for validation and access a handler by name. As a pipeline is not expected to be very long (like 100+ handlers) we can just walk the linked list structure to find the ctx with a given name.
+
+Result:
+
+Less memory footprint of the DefaultChannelPipeline.

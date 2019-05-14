@@ -1,0 +1,14 @@
+Update launch script to wait for pid to be written to pid file
+
+Previously, the launch script would wait for the pid file to exist
+before continuing. This didn’t work 100% of the time as it left a 
+window where the file had been created but the PID had not been written
+to it that could result in an incorrect report of the app failing to
+start.
+
+This commit updates the script to wait for the file to have a size
+greater than zero before continuing. This ensures that the pid has
+been written to the file before the pid is read from the file and used
+to check that the process is running.
+
+Closes gh-4923

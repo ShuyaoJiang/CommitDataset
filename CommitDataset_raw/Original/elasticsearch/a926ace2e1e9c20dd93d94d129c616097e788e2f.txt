@@ -1,0 +1,14 @@
+Update Painless to Use New Script Contexts (#25015)
+
+*  All public methods starting with get will be added as local variables
+to the execute method.
+* The execute method on a ScriptContext must be both public and
+abstract.  This method will be implemented by the Painless compiler.
+* A static list of parameter names for the execute method must be
+provided since the names will be eliminated at runtime.
+* The uses$ methods will still be implemented as before.
+* A single constructor may be provided by the ScriptContext.  This
+constructor will be overridden by the Painless compiler to include the
+exact same arguments.  This allows instances of a Painless script to
+potentially contain state.  If a constructor is not provided it is
+assumed the default constructor with no arguments will be used.

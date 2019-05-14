@@ -1,0 +1,20 @@
+Restore compile dependencies in generated POMs
+
+Ensure that merge projects do not downgrade the compile time
+dependencies of the projects that they are merged into.
+
+This commit restores the scope of the following dependencies which
+were inadvertently changed between Spring 3.2.0 and 3.2.1:
+
+    spring-orm
+    -> spring-tx
+    -> spring-jdbc
+
+    spring-webmvc
+    -> spring-context
+    -> spring-web
+
+    spring-test
+    -> spring-webmvc
+
+Issue: SPR-10218

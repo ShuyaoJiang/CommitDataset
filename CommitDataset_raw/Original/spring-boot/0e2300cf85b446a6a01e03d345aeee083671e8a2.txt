@@ -1,0 +1,14 @@
+Disable check of Groovy template location by default for CLI apps
+
+In 1.1, the Groovy template support did not check that its configured
+template location exists. A check was added in 1.2, however this
+breaks CLI web applications that don't have the expected templates
+location.
+
+Rather than reintroducing 1.1's behaviour by removing the check, this
+commit updates the CLI to set
+spring.groovy.template.check-template-location to false by default.
+This allows flow-blown applications to benefit from the check, while
+allowing CLI apps to behave as they did in 1.1.
+
+Closes gh-1959

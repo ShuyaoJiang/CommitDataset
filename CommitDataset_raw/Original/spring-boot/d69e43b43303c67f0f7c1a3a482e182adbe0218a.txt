@@ -1,0 +1,35 @@
+Refactor Spring Integration metrics support
+
+Update Spring Integration metrics support since Spring Integration
+`4.3.6`+ no longer needs `spring-integration-jmx` enable
+`MessageChannel`, `MessageHandler` and `MessageSource` metrics.
+
+- Add `IntegrationManagementConfiguration` conditional auto-configuration
+  to provide `@EnableIntegrationManagement` when JMX is `enabled` or there
+  is no `IntegrationManagementConfigurer.MANAGEMENT_CONFIGURER_NAME` bean.
+  By default this bean doesn't exist and you explicitly should declare it
+  (e.g. via `@EnableIntegrationManagement`) if you would like to collect
+  metrics. At the same time Spring Integration enables it when JMX
+  management is present (that is a purpose of that new
+  `IntegrationManagementConfiguration`)
+
+- Change `SpringIntegrationMetricReader` to read metrics from the
+  `IntegrationManagementConfigurer`, not `IntegrationMBeanExporter`
+
+- Change `PublicMetricsAutoConfiguration` to register
+  `IntegrationManagementConfigurer.MANAGEMENT_CONFIGURER_NAME` bean if
+  not present. Since we are here in `actuator`, therefore we are
+  interested in the metrics for SI as well.
+
+- Since we don't need JMX for the metrics any more, remove SI-JMX
+  dependency from the `spring-boot-starter-integration`.
+
+- Remove `IntegrationManagementConfiguration` modification from the
+  `integrationMbeanExporter()`, since that looks like mutation of an
+  external object, when end-user would prefer their own options.
+  Therefore we don't need `ObjectProvider<IntegrationManagementConfigurer>`, too
+
+- Add missed `MessageSourceMetrics` gathering for the
+  `SpringIntegrationMetricReader`
+
+Closes gh-7722

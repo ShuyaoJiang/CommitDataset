@@ -1,0 +1,13 @@
+[#2768] Correctly duplicate buffer for CloseWebSocketFrames
+
+Motivation:
+
+The _0XFF_0X00 buffer is not duplicated and empty after the first usage preventing the connection close to happen on subsequent close frames.
+
+Modifications:
+
+Correctly duplicate the buffer.
+
+Result:
+
+Multiple CloseWebSocketFrames are handled correctly.

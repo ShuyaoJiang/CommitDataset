@@ -1,0 +1,10 @@
+SQL: Fix metric aggs on date/time to not return double (#40377)
+
+Previously metric aggregations on date fields would return a double
+which caused errors when trying to apply scalar functions on top, e.g.:
+```
+SELECT YEAR(MAX(date)) FROM test
+```
+
+Fixes: #40376
+

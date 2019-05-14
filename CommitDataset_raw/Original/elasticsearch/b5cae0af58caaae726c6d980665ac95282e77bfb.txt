@@ -1,0 +1,7 @@
+Enforce max_buckets limit only in the final reduction phase (#36152)
+
+Given that we check the max buckets limit on each shard when collecting the buckets, and that non final reduction cannot add buckets (see #35921), there is no point in counting and checking the number of buckets as part of non final reduction phases.
+
+Such check is still needed though in the final reduction phases to make sure that the number of returned buckets is not above the allowed threshold.
+
+Relates somehow to #32125 as we will make use of non final reduction phases in CCS alternate execution mode and that increases the chance that this check trips for nothing when reducing aggs in each remote cluster.

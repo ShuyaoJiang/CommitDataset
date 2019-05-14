@@ -1,0 +1,37 @@
+[ML] Fix calendar and filter updates from non-master nodes (#31804)
+
+Job updates or changes to calendars or filters may
+result into updating the job process if it has been
+running. To preserve the order of updates, process
+updates are queued through the UpdateJobProcessNotifier
+which is only running on the master node. All actions
+performing such updates must run on the master node.
+
+However, the CRUD actions for calendars and filters
+are not master node actions. They have been submitting
+the updates to the UpdateJobProcessNotifier even though
+it might have not been running (given the action was
+run on a non-master node). When that happens, the update
+never reaches the process.
+
+This commit fixes this problem by ensuring the notifier
+runs on all nodes and by ensuring the process update action
+gets the resources again before updating the process
+(instead of having those resources passed in the request).
+
+This ensures that even if the order of the updates
+gets messed up, the latest update will read the latest
+state of those resource and the process will get back
+in sync.
+
+This leaves us with 2 types of updates:
+
+  1. updates to the job config should happen on the master
+  node. This is because we cannot refetch the entire job
+  and update it. We need to know the parts that have been changed.
+
+  2. updates to resources the job uses. Those can be handled
+  on non-master nodes but they should be re-fetched by the
+  update process action.
+
+Closes #31803

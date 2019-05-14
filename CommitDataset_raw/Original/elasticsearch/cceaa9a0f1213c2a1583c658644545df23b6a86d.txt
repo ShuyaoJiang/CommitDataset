@@ -1,0 +1,6 @@
+Only ack cluster state updates successfully applied on all nodes (#30672)
+
+The cluster state acking mechanism currently incorrectly acks cluster state updates that have not
+successfully been applied on all nodes. In a situation, for example, where some of the nodes
+disconnect during publishing, and don't acknowledge receiving the new cluster state, the user-facing
+action (e.g. create index request) will still consider this as an ack.

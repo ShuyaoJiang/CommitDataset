@@ -1,0 +1,24 @@
+Refactor the test classes from the previous hierarchy:
+
+                      AbstractGraphTest
+                        |           |
+                        v           v
+        AbstractMutableGraphTest   AbstractImmutableGraphTest
+         |                    |
+         v                    v
+AbstractDirectedGraphTest   AbstractUndirectedGraphTest
+
+to the following:
+
+                      AbstractGraphTest
+                        |           |
+                        v           v
+      AbstractDirectedGraphTest   AbstractUndirectedGraphTest
+                  |                             |
+                  v                             v
+AbstractImmutableDirectedGraphTest   AbstractImmutableUndirectedGraphTest
+
+Unfortunately the lack of multiple inheritance in Java means we have to choose between whether we want inherit from a base "immutable graph test" or get all the functionality of the base "(un)directed graph" test. Both involve some amount of code duplication for full test coverage, but I think this is the better option of the two given that the (un)directed tests are likely to have more tests added over time, whereas a base immutability test is unlikely to be expanded much (the tests for this are currently repeated between AbstractImmutableDirectedGraphTest and  AbstractImmutableUndirectedGraphTest).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=113542823

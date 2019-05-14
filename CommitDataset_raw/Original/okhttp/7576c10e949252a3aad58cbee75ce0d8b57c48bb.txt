@@ -1,0 +1,7 @@
+Fix a flaky test by waiting until the Okio watchdog is caught up.
+
+We had tests that flake because they expected the watchdog to have
+completed closing a connection, but we weren't blocking until that
+work was done.
+
+Closes https://github.com/square/okhttp/issues/1328

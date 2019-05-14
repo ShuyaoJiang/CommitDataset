@@ -1,0 +1,12 @@
+SPR-8867 Fix issue with Content-Length header and UTF-8 charset.
+
+The AbstractHttpMessageConverter was using the requested Content-Type
+rather than the actual response Content-Type to determine the length
+of the content. This can lead to a problem when a controller returns
+a ResponseEntity with a Content-Type header that ignores (overrides)
+the requested Content-Type. The fix ensures that actual response 
+Content-Type is the one used both to write to the response and to 
+determine the length of the content.
+
+
+

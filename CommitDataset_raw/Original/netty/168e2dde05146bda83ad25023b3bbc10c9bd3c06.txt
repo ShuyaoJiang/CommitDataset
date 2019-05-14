@@ -1,0 +1,13 @@
+[#2706] Allow pid up to 4194304
+
+Motivation:
+
+The PID_MAX_LIMIT on 64bit linux systems is 4194304 and on osx it is 99998. At the moment we use 65535 as an upper-limit which is too small.
+
+Modifications:
+
+Use 4194304 as max possible value
+
+Result:
+
+No more false-positives when try to detect current pid.

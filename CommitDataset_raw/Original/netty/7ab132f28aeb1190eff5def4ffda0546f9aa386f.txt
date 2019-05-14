@@ -1,0 +1,13 @@
+Making HTTP/2 stream byte assignment pluggable
+
+Motivation:
+
+The DefaultHttp2RemoteFlowController has become very large and is getting difficult to understand and maintain. It is also desirable for some applications to be able to disable the priority algorithm altogether for performance reasons.
+
+Modifications:
+
+Abstract the stream byte assignment logic (renamed allocation->assignment for clarity) behind an interface `StreamByteAssigner` with a single implementation `PriorityStreamByteAssigner`.
+
+Result:
+
+Goes some way towards supporting #4246

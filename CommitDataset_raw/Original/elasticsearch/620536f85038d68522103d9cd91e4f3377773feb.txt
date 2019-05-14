@@ -1,0 +1,12 @@
+Release operation permit on thread-pool rejection (#25930)
+
+At the shard level we use an operation permit to coordinate between regular shard operations and special operations that need exclusive access. In ES versions < 6, the operation requiring exclusive access was invoked during primary relocation, but ES versions >= 6 this exclusive access is also used when a replica learns about a new primary or when a replica is promoted to primary.
+
+These special operations requiring exclusive access delay regular operations from running, by adding them to a queue, and after finishing the exclusive access, release these operations which then need to be put back on the original thread-pool they were running on. In the presence of thread pool rejections, the current implementation had two issues:
+
+- it would not properly release the operation permit when hitting a rejection (i.e. when calling ThreadedActionListener.onResponse from IndexShardOperationPermits.acquire).
+- it would not invoke the onFailure method of the action listener when the shard was closed, and just log a warning instead (see ThreadedActionListener.onFailure), which would ultimately lead to the replication task never being cleaned up (see #25863).
+
+This commit fixes both issues by introducing a custom threaded action listener that is permit-aware and properly deals with rejections.
+
+Closes #25863

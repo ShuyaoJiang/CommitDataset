@@ -1,0 +1,25 @@
+Allow plugins to plug rescore implementations (#26368)
+
+This allows plugins to plug rescore implementations into
+Elasticsearch. While this is a fairly expert thing to do I've
+done my best to point folks to the QueryRescorer as one that at
+least documents the tradeoffs that it makes. I've attempted to
+limit the API surface area by removing `SearchContext` from the
+exposed interface, instead exposing just the IndexSearcher and
+`QueryShardContext`. I also tried to make some of the class names
+more consistent and do some general cleanup while I was there.
+
+I entertained the notion of moving the `QueryRescorer` to module.
+After all, it'd be a wonderful test to prove that you can plug
+rescore implementation into Elasticsearch if the only built in
+rescore implementation is in the module. But I decided against it
+because the new module would require a client jar and it'd require
+moving some more things around. I think if we really want to do
+it, we should do it as a followup.
+
+I did, on the other hand, create an "example" rescore plugin which
+should both be a nice example for anyone wanting to plug in their
+own rescore implementation and servers as a good integration test
+to make sure that you can indeed plug one in.
+
+Closes #26208

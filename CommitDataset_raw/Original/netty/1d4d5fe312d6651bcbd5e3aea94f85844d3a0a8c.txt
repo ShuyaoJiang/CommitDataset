@@ -1,0 +1,11 @@
+DefaultHttp2Headers should throw exception of type Http2Exception
+
+Motivation:
+The DefaultHttp2Headers code is throwing a IllegalArgumentException if an invalid character is detected. This is being ignored by the HTTP/2 codec instead of generating a GOAWAY.
+
+Modifications:
+- Throw a Http2Exception of type PROTOCOL_ERROR in accordance with https://tools.ietf.org/html/rfc7540#section-8.1.2.6
+- Update examples which were building invalid headers
+
+Result:
+More compliant with https://tools.ietf.org/html/rfc7540#section-8.1.2.6

@@ -1,0 +1,15 @@
+Add cause to assert_no_failure when replay translog (#39333)
+
+We tripped this assertion three times for the last two weeks. However,
+it only says "this IndexWriter is closed" without the actual cause.
+
+```
+[2019-02-14T11:46:31,144][ERROR][o.e.b.ElasticsearchUncaughtExceptionHandler] [node-1] fatal error in thread [elasticsearch[node-1][generic][T#2]], exiting
+
+java.lang.AssertionError: unexpected failure while replicating translog entry: org.apache.lucene.store.AlreadyClosedException: this IndexWriter is closed
+```
+
+This change replaces an assert with an AssertionError so that we will
+have the actual cause in the next build failures.
+
+Relates #38898

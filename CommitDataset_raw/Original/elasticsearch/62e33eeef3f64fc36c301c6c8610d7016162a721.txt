@@ -1,0 +1,12 @@
+[TEST] REST client request without leading '/' (#29471)
+
+The following is the current behaviour, tested now through a specific
+test.
+
+The low-level REST client doesn't add a leading wildcard when not
+provided, unless a `pathPrefix` is configured in which case a trailing
+slash will be automatically added when concatenating the prefix and the
+provided uri.
+
+Also when configuring a pathPrefix, if it doesn't start with a '/' it
+will be modified by adding the missing leading '/'.

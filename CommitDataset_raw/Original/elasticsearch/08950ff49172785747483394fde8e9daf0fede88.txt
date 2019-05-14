@@ -1,0 +1,11 @@
+Remove security filter, replaced by get index api call which returns filtered mappings
+
+Given that we get now filtered mappings directly from the get index API (in case security is configured with FLS), we don't need the security filter nor the filtered catalog. That means we can remove the delayed action support also from AuthorizationService and rather make SQLAction a composite action like others. It will be authorized as an action, but its indices won't be checked while that will happen with its inner actions (get index and search) which need to be properly authorized.
+
+Also, SQLGetIndicesAction is not needed anymore, as its purpose was to retrieve the indices access resolver put in the context by the security plugin for delayed actions, which are not supported anymore.
+
+This commit kind of reverts elastic/x-pack-elasticsearch#2162, as it is now possible to integrate with security out-of-the-box
+
+relates elastic/x-pack-elasticsearch#2934
+
+Original commit: elastic/x-pack-elasticsearch@64d504442662a5a0319bbeece724dad3ee2c4826

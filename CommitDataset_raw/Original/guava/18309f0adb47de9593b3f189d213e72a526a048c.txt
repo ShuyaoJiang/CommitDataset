@@ -1,0 +1,11 @@
+Avoid mentioning ImmutableSortedSet in the ImmutableSet implementation.
+
+I'm not sure why ProGuard couldn't strip this out already, but ImmutableSortedSet and several of *its* dependencies were getting retained when ProGuard stripped ImmutableSet, and this fixes it.
+
+Effects on ImmutableSetProGuard: ([]37524 bytes => 31249 bytes
+34 classes => 28 classes
+263 methods => 198 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146427279

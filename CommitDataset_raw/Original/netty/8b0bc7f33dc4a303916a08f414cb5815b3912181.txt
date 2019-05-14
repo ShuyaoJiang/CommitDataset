@@ -1,0 +1,12 @@
+[#2651] Fix possible infinite-loop when cancel tasks
+
+Motivations:
+In our new version of HWT we used some kind of lazy cancelation of timeouts by put them back in the queue and let them pick up on the next tick. This  multiple problems:
+ - we may corrupt the MpscLinkedQueue if the task is used as tombstone
+ - this sometimes lead to an uncessary delay especially when someone did executed some "heavy" logic in the TimeTask
+
+Modifications:
+Use a Lock per HashedWheelBucket for save and fast removal.
+
+Modifications:
+Cancellation of tasks can be done fast and so stuff can be GC'ed and no more infinite-loop possible

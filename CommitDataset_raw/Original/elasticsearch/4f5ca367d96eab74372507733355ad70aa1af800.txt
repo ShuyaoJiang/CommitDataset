@@ -1,0 +1,13 @@
+Remove the index type from internal watcher indexes (#39761)
+
+This commit removes the "doc" type from watcher internal indexes.
+The template still carries the "_doc" type since that is needed for
+the internal representation.
+
+This impacts the .watches, .triggered-watches, and .watch-history indexes.
+
+External consumers do not need any changes since all external calls
+go through the _watcher API, and should not interact with the the .index directly.
+
+Relates #38637
+

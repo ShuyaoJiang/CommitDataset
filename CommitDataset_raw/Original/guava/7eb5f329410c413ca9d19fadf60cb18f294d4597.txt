@@ -1,0 +1,11 @@
+Get rid of usages of TestUtil from common.io test classes and open source most of FilesTest.
+
+This includes several changes:
+
+1. Replacing the use of TestUtil.getSrcDir() to get at resources in the testdata package as Files. This is handled by creating a File from the URL path directly if it's a file:// URL and copying the resources to a temp dir on demand if it's not.
+2. Replacing the use of TestUtil.getTmpDirFile() with a temp dir created in a manner similar to Files.createTempDir(). Also, IoTestCase's tearDown() should ensure that any temp dirs/files created during tests are deleted afterwards.
+3. Changing some file paths in FilesTest to be built dynamically from their parts so as to hopefully work correctly on Windows as well as Unix systems. For example, instead of "/foo/bar", file(root(), "foo", "bar").
+4. Fixing a few things with the testdata resources in the BUILD file.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=48592858

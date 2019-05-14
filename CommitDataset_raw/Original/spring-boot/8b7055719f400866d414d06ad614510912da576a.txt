@@ -1,0 +1,10 @@
+Move InMemoryMultiMetricRepository to a separate class
+
+This commit moves the `MultiMetricRepository` implementation from
+`InMemoryMetricRepository` to `InMemoryMultiMetricRepository`. Both
+implementations can share the same underlying store (and are for backward
+compatible reasons).
+
+The side effect is that `reset` now works as expected for a group.
+
+Closes gh-7687

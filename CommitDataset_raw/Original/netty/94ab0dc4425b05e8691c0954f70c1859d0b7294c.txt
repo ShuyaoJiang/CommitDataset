@@ -1,0 +1,18 @@
+codec-http2: Better keep track of nameLength in HpackDecoder.decode
+
+Motivation:
+
+http/2 counts header sizes somewhat inconsistently.  Sometimes, headers
+which are substantively less than the header list size will be measured
+as longer than the header list size.
+
+Modifications:
+
+Keep better track of the nameLength of a given name, so that we don't
+accidentally end up reusing a nameLength.
+
+Result:
+
+More consistent measurement of header list size.
+
+Fixes #7511.

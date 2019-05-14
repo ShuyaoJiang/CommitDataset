@@ -1,0 +1,10 @@
+DnsNameResolver hangs if search domain results in invalid hostname (#8180)
+
+Motivation:
+DnsNameResolver manages search domains and will retry the request with the different search domains provided to it. However if the query results in an invalid hostname, the Future corresponding to the resolve request will never be completed.
+
+Modifications:
+- If a resolve attempt results in an invalid hostname and the query isn't issued we should fail the associated promise
+
+Result:
+No more hang from DnsNameResolver if search domain results in invalid hostname.

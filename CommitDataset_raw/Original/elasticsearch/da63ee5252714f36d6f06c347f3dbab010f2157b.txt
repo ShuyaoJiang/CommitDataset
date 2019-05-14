@@ -1,0 +1,12 @@
+Correct rebuilt persian analyzer (#38724)
+
+Make substitution of \u200C with a space explicit
+
+The problem with this symbol `\u200C` in a test string, 
+that **SHOULD** be substituted with space in the rebuilt Persian analyzer, but it is not.
+
+Correcting this line `"mappings": [ "\\u200C=> "] <1>` to
+ `"mappings": [ "\\u200C=>\\u0020"] <1>` in solves the problem.
+This change explicitly says to substitute ZWNJ with a space.
+
+Closes #38188

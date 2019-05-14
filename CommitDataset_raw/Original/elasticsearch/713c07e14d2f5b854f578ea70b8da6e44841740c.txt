@@ -1,0 +1,8 @@
+Add early termination support to BucketCollector (#33279)
+
+This commit adds the support to early terminate the collection of a leaf
+in the aggregation framework. This change introduces a MultiBucketCollector which
+handles CollectionTerminatedException exactly like the Lucene MultiCollector.
+Any aggregator can now throw a CollectionTerminatedException without stopping
+the collection of a sibling aggregator. This is useful for aggregators that
+can infer their result without visiting all documents (e.g.: a min/max aggregation on a match_all query).

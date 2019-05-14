@@ -1,0 +1,14 @@
+Add ResponseBodyInterceptor
+
+This change introduces a new ResponseBodyInterceptor interface that can
+be used to modify the response after @ResponseBody or ResponseEntity
+methods but before the body is actually written to the response with the
+selected HttpMessageConverter.
+
+The RequestMappingHandlerAdapter and ExceptionHandlerExceptionResolver
+each have a property to configure such interceptors. In addition both
+RequestMappingHandlerAdapter and ExceptionHandlerExceptionResolver
+detect if any @ControllerAdvice bean implements ResponseBodyInterceptor
+and use it accordingly.
+
+Issue: SPR-10859

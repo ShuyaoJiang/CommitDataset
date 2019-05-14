@@ -1,0 +1,11 @@
+Make DefaultCorsProcessor Servlet 2.5 compliant
+
+This commit adds CORS related headers to HttpHeaders
+and update DefaultCorsProcessor implementation to
+use ServerHttpRequest and ServerHttpResponse instead
+of HttpServletRequest and HttpServletResponse. Usage
+of ServerHttpResponse allows to avoid using Servlet 3.0
+specific methods in order keep CORS support Servlet 2.5
+compliant.
+
+Issue: SPR-12885

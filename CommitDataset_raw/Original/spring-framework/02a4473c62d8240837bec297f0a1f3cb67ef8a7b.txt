@@ -1,0 +1,18 @@
+Rename modules {org.springframework.*=>spring-*}
+
+This renaming more intuitively expresses the relationship between
+subprojects and the JAR artifacts they produce.
+
+Tracking history across these renames is possible, but it requires
+use of the --follow flag to `git log`, for example
+
+    $ git log spring-aop/src/main/java/org/springframework/aop/Advisor.java
+
+will show history up until the renaming event, where
+
+    $ git log --follow spring-aop/src/main/java/org/springframework/aop/Advisor.java
+
+will show history for all changes to the file, before and after the
+renaming.
+
+See http://chrisbeams.com/git-diff-across-renamed-directories

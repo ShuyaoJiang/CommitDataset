@@ -1,0 +1,15 @@
+[ML] Tighten up use of aliases rather than concrete indices (#37874)
+
+We have read and write aliases for the ML results indices.  However,
+the job still had methods that purported to reliably return the name
+of the concrete results index being used by the job.  After reindexing
+prior to upgrade to 7.x this will be wrong, so the method has been
+renamed and the comments made more explicit to say the returned index
+name may not be the actual concrete index name for the lifetime of the
+job.  Additionally, the selection of indices when deleting the job
+has been changed so that it works regardless of concrete index names.
+
+All these changes are nice-to-have for 6.7 and 7.0, but will become
+critical if we add rolling results indices in the 7.x release stream
+as 6.7 and 7.0 nodes may have to operate in a mixed version cluster
+that includes a version that can roll results indices.

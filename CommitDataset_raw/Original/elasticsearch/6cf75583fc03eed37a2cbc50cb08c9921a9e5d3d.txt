@@ -1,0 +1,17 @@
+Add roles and cluster privileges for data frame transforms (#39661)
+
+This change adds two new cluster privileges:
+
+* manage_data_frame_transforms
+* monitor_data_frame_transforms
+
+And two new built-in roles:
+
+* data_frame_transforms_admin
+* data_frame_transforms_user
+
+These permit access to the data frame transform endpoints.
+(Index privileges are also required on the source and
+destination indices for each data frame transform, but
+since these indices are configurable they it is not
+appropriate to grant them via built-in roles.)

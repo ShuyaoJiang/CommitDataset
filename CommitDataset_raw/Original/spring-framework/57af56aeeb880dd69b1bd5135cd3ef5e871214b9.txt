@@ -1,0 +1,6 @@
+Improve logging in STOMP broker relay
+
+Ignore DISCONNECT messages if already disconnected. This can occur if
+the client explicitly sends a DISCONNECT frame and then closes the
+socket quickly. The closing of the WebSocket sessions also sends a
+DISCONNECT upstream to ensure the broker is aware.

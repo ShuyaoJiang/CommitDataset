@@ -1,0 +1,15 @@
+Fix DN resolution when ndots is greater than 1
+
+Motivation:
+
+DN resolution does not fall back to the "original name" lookup after search list is checked. This results in a failure to resolve any name (outside of search list) that has number of dots less than resolv.conf's ndots value (which, for example, is often the case in the context of Kubernetes where kubelet passes on resolv.conf containing "options ndots:5").
+
+It also does not go through the search list in a situation described in resolv.conf man:
+"The default for n[dots] is 1, meaning that if there are any dots in a name, the name will be tried first as an absolute name before any search list elements are appended to it."
+
+Modifications:
+
+DnsNameResolverContext::resolve was updated to match Go's https://github.com/golang/go/blob/release-branch.go1.9/src/net/dnsclient_unix.go#L338 logic.
+
+Result:
+DnsNameResolverContext::resolve will now try to resolve "original name" if search list yields no results when number of dots in the original name is less than resolv.conf's ndots value. It will also go through the search list in case "origin name" resolution fails and number of dots is equal or larger than resolv.conf's ndots value.

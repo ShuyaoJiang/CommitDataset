@@ -1,0 +1,18 @@
+Cache MethodParameter annotation lookup results
+
+Prior to this change, Spring's MethodParameter#getParameterAnnotations
+called java.lang.Method#getParameterAnnotations on every invocation.
+The latter ends up contending for a monitor inside (Sun) JDK code. This
+is problematic when dealing with the high number of @RequestMapping
+invocations that can occur in a Spring MVC @Controller.
+
+This commit eliminates this contention by caching values returned by
+java.lang.Method#getParameterAnnotations in a static ConcurrentMap.
+
+Note that only Method parameter annotations are cached, while
+Constructor parameter annotations are not. This is because the
+issue of primary concern is, as mentioned above, @RequestMapping
+methods. By nature, constructors are called much more infrequently, and
+in most cases in a single-threaded fashion.
+
+Issue: SPR-9298

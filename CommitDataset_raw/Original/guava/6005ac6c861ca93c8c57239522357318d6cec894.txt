@@ -1,0 +1,18 @@
+Added null check from NullPointerTester-generated proxies.
+
+It should be reasonable for the follow method to check null through a collaborator:
+
+public void foo(String a, RejectNull b) {
+b.rejectNull(a);
+}
+
+interface RejectNull {
+void rejectNull(String s);
+}
+
+Because RejectNull *should* throw NPE by contract.
+
+If NPT generates this proxy, it should make sure the proxy checks nulls mandated by the method signature.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=33016839

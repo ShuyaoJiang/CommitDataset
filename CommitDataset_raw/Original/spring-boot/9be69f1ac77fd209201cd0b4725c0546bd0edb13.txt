@@ -1,0 +1,18 @@
+Improve JDBC driver dependency management and class name test coverage
+
+Previously, the DatabaseDriver enumeration contained entries for
+some databases without having dependency management for the database
+driver dependency. This leads to the possibility of a user inadvertently
+using the wrong version of a driver where the class names do not match
+those listed in the enumeration. A further problem is that we do not
+test that the class names listed in the enumeration match the
+names of Driver and XADataSource implementations in the database driver.
+
+This commit completes the database driver dependency management so that
+dependency management is provided for every driver that is both listed
+in DatabaseDriver and available in Maven Central. It also adds tests
+for DatabaseDriver that ensures that each class that is listed exists
+and implements the required interface (java.sql.Driver or
+javax.sql.XADataSource).
+
+Closes gh-4946

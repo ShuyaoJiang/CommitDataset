@@ -1,0 +1,20 @@
+Handle null SSLSessions during invalidation (#34130)
+
+The SSLService invalidates SSLSessions when there is a change to any of
+the underlying key or trust material. However, this invalidation code
+did not check for a null SSLSession being returned from the context and
+assumed that the context would always return a non-null object. The
+return of a null object is possible in all versions, but JDK11 seems to
+return them more often due to changes for TLS 1.3. There are a number
+of reasons that we get a id of a session but the context returns null
+when the session with that id is requested. Some of the reasons for
+this are:
+
+* Session was evicted by session cache
+* Session has timed out
+* Session has been invalidated by another caller
+
+To handle this, the SSLService now checks if the value is null before
+calling invalidate on the SSLSession.
+
+Closes #32124

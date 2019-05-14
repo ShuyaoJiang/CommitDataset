@@ -1,0 +1,20 @@
+[ML] Parsing objects from internal indices should be lenient (elastic/x-pack-elasticsearch#4256)
+
+All ML objects stored in internal indices are currently parsed
+strictly. This means unknown fields lead to parsing failures.
+In turn, this means we cannot add new fields in any of those
+objects (e.g. bucket, record, calendar, etc.) as it is not
+backwards compatible.
+
+This commit changes this by introducing lenient parsing when
+it comes to reading those objects from the internal indices.
+Note we still use strict parsing for the objects we read from
+the c++ process, which is nice as it guarantees we would detect
+if any of the fields were renamed on one side but not the other.
+
+Also note that even though this is going in from 6.3, we cannot
+introduce new fields until 7.0.
+
+relates elastic/x-pack-elasticsearch#4232
+
+Original commit: elastic/x-pack-elasticsearch@3f95d3c7b96c67cbe9b5a9639560537c1a462bc0

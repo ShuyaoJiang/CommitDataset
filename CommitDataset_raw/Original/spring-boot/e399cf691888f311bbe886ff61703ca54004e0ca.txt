@@ -1,0 +1,13 @@
+Improve WebFlux error logging
+
+This commit avoids printing the stacktrace for ResponseStatusException
+in order to be consistent with WebFlux ResponseStatusExceptionHandler
+and because this stacktrace is usually not very useful in Reactive
+world and mainly pollutes the logs, only the message is logged in that
+case.
+
+It also logs a WARN message for Bad Request (400) HTTP responses in
+order to have a feedback when an exception is thrown due to client error
+(unable to deserialize request body for example).
+
+See related SPR-15083 issue on Spring Framework side.

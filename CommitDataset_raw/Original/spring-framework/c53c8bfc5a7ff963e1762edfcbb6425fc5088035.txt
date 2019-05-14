@@ -1,0 +1,7 @@
+Set 304 status on ServerResponse when ETag/LastModified match
+
+This commit checks the Etag/LastModified headers on the incoming
+request, and sets a 304 Not Modified status with no body when they
+match, by delegating to ServerWebExchange.checkNotModified.
+
+Issue: SPR-16348

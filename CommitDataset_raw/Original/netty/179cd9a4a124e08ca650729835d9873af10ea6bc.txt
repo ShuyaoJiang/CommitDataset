@@ -1,0 +1,14 @@
+Correctly update internal handshake state on beginHandshake()
+
+Motivation:
+
+We missed to correctly update the internal handshake state on beginHandshake() if we was able to finish the handshake directly. Also we not handled the case correctly when beginHandshake() was called after the first handshake was finished, which incorrectly throw an Error.
+
+Modifications:
+
+- Correctly set internal handshake state in all cases
+- Correctly handle beginHandshake() once first handshake was finished.
+
+Result:
+
+Correctly handle OpenSslEngine.beginHandshake()

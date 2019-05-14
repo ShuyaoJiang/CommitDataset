@@ -1,0 +1,12 @@
+HTTP/2 DefaultHttp2RemoteFlowController Stream writability notification broken
+
+Motivation:
+DefaultHttp2RemoteFlowController.ListenerWritabilityMonitor no longer reliably detects when a stream's writability change occurs.
+
+Modifications:
+- Ensure writiability is reliabily reported by DefaultHttp2RemoteFlowController.ListenerWritabilityMonitor
+- Fix infinite loop issue (https://github.com/netty/netty/issues/4588) detected when consolidating unit tests
+
+Result:
+Reliable stream writability change notification, and 1 less infinite loop in UniformStreamByteDistributor.
+Fixes https://github.com/netty/netty/issues/4587

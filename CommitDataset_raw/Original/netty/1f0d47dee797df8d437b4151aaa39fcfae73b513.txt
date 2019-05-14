@@ -1,0 +1,13 @@
+Added PROXY Protocol TLV support
+
+Motivation:
+
+The current PROXY protocol implementation does not have support for optional Type-Length-Value fields. This pull requests adds the TLV values as specified in the PROXY protocol specification (http://www.haproxy.org/download/1.5/doc/proxy-protocol.txt) and adds support for arbitrary TLVs.
+
+Modifications:
+
+The existing HAProxyMessage implements an additional TLV reading operation. A small bug in the AF_UNIX reader which didn’t set the reader index correctly was also fixed.
+
+Result:
+
+The PROXY protocol supports TLVs

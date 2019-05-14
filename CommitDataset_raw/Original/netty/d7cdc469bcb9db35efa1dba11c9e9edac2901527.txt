@@ -1,0 +1,10 @@
+HTTP/2 CompressorHttp2ConnectionEncoder bug
+
+Motivation:
+The CompressorHttp2ConnectionEncoder is attempting to attach a property to streams before the exist.
+
+Modifications:
+- Allow the super class to create the streams before attempting to attach a property to the stream.
+
+Result:
+CompressorHttp2ConnectionEncoder is able to set the property and access the compressor.

@@ -1,0 +1,10 @@
+Extend DefaultDispatcherServletCondition to check for a registration
+
+...bean with no explicit @Bean DispatcherServlet. We still have to check
+by bean name (slightly unfortunate, but we need to avoid instantiating
+too early) so there's now another magic
+bean name for the registration bean ("dispatcherServletRegistration")
+that the user has to replace if he wants the registration without
+defining a servlet @Bean
+
+Fixes gh-482

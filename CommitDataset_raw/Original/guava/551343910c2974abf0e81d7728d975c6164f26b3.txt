@@ -1,0 +1,17 @@
+Automated g4 rollback of changelist 162220754.
+
+*** Reason for rollback ***
+
+app-engine has a buggy implementation of FileInputStream.available() which is throwing IOException
+
+*** Original change description ***
+
+Implement ByteSource.asCharSource(charset).read() using the decoding string constructor instead of streaming the contents into a StringBuilder.
+
+this allows us to avoid a number of copies that are currently happening for each character (1. into a temporary CharBuffer, 2. into a StringBuilder, 3 into the String char[]) and replace it with simply whatever is required by ByteSource.read() and the String(byte[], charset) constructor.  For certain ByteSource implementations (like FileByteSource) Byte...
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=162245286

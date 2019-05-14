@@ -1,0 +1,8 @@
+Avoid NPE on shard changes action (#32630)
+
+If a leader index is deleted while there is an active follower, the
+follower will send shard changes requests bound for the leader
+index. Today this will result in a null pointer exception because there
+will not be an index routing table for the index. A null pointer
+exception looks like a bug to a user so this commit addresses this by
+throwing an index not found exception instead.

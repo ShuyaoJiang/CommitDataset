@@ -1,0 +1,20 @@
+Fix a bug where SpdySession.getActiveStreams() returns incorrect set
+
+Related issue: #2743
+
+Motivation:
+
+When there are more than one stream with the same priority, the set
+returned by SpdySession.getActiveStream() will not include all of them,
+because it uses TreeSet and only compares the priority of streams. If
+two different streams have the same priority, one of them will be
+discarded by TreeSet.
+
+Modification:
+
+- Rename getActiveStreams() to activeStreams()
+- Replace PriorityComparator with StreamComparator
+
+Result:
+
+Two different streams with the same priority are compared correctly.

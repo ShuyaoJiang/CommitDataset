@@ -1,0 +1,13 @@
+Expose the ChannelHandlerContext from SniHandler's select() step to the user.
+
+Motivation
+
+I'm looking to harden our SSL impl. a little bit and add some guards agaist certain types of abuse. One can think of invalid hostname strings in the SNI extenstion or invalid SNI handshakes altogether. This will require measuring, velocity tracking and other things.
+
+Modifications
+
+Adding a protected `lookup(ctx, hostname)` method that is called from SniHandler's `select(...)` method which users can override and implement custom behaviour. The default implementation will simply call the AsyncMapper.
+
+Result
+
+It's possible to get a hold onto the ChannelHandlerContext. Users can override that method and do something with it right there or they can delegate it to something else. SniHandler is happy as long as a `Future<SslContext>` is being returned.

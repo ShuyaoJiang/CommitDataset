@@ -1,0 +1,8 @@
+Update PortletRequestUtilsTests float test timeout
+
+Float parameter handling appears to be marginally more expensive under
+JDK7, with the testGetFloatParameterWithDefaultValueHandlingIsFastEnough
+test clocking in anywhere from 250 to 315 ms. This violates the current
+test threshold of 250 ms, so this commit ups the timeout value to 350 ms
+with the assumption that this is indeed a marginal and therefore overall
+negligible performance degradation.

@@ -1,0 +1,33 @@
+Include Http 1 request in error message
+
+Motivation:
+
+When An HTTP server is listening in plaintext mode, it doesn't have
+a chance to negotiate "h2" in the tls handshake.  HTTP 1 clients
+that are not expecting an HTTP2 server will accidentally a request
+that isn't an upgrade, which the HTTP/2 decoder will not
+understand.  The decoder treats the bytes as hex and adds them to
+the error message.
+
+These error messages are hard to understand by humans, and result
+in extra, manual work to decode.
+
+Modification:
+
+If the first bytes of the request are not the preface, the decoder
+will now see if they are an HTTP/1 request first.  If so, the error
+message will include the method and path of the original request in
+the error message.
+
+In case the path is long, the decoder will check up to the first
+1024 bytes to see if it matches.  This could be a DoS vector if
+tons of bad requests or other garbage come in.  A future optimization
+would be to treat the first few bytes as an AsciiString and not do
+any Charset decoding.  ByteBuf.toCharSequence alludes to such an
+optimization.
+
+The code has been left simple for the time being.
+
+Result:
+
+Faster identification of errant HTTP requests.

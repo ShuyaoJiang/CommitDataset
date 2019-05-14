@@ -1,0 +1,10 @@
+Fix some stream leaks.
+
+There's a few places where OkHttp could leak a connection that needed to be
+closed. With our new connection pool model this is easier to find. This fixes
+two specific problems:
+ - too many redirects doesn't release the last used connection
+ - interceptors that throw runtime exceptions don't release the connection
+
+There are likely more situations. I have hacked together a small little test
+harness to make finding these leaks easier; that's not included in this PR.

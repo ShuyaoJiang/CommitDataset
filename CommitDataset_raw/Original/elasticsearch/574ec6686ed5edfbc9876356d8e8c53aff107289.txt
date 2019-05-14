@@ -1,0 +1,18 @@
+Include realm type in Security Realm setting keys (#30241)
+
+This moves all Realm settings to an Affix definition.
+However, because different realm types define different settings
+(potentially conflicting settings) this requires that the realm type
+become part of the setting key.
+
+Thus, we now need to define realm settings as:
+
+    xpack.security.authc.realms:
+      file.file1:
+        order: 0
+
+      native.native1:
+        order: 1
+
+- This is a breaking change to realm config
+- This is also a breaking change to custom security realms (SecurityExtension)

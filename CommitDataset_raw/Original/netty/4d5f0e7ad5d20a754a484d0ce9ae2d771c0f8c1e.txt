@@ -1,0 +1,13 @@
+NativeLibraryLoader should check the result of ClassLoader#getResource method
+
+Motivation:
+
+NativeLibraryLoader uses ClassLoader#getResource method that can return nulls when the resource cannot be found. The returned url variable should be checked for nullity and fail in a more usable manner than a NullPointerException
+
+Modifications:
+
+Fail with a FileNotFoundException
+
+Result:
+
+Fixes [#7222].

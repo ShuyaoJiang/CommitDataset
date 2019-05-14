@@ -1,0 +1,15 @@
+Rework properties for enabling Spring Data repositories
+
+Rather than using two properties to enable or disable reactive and
+imperative repositories for a particular store, this commit introduces
+a new repository type condition that's backed by a single
+spring.data.<store>.repositories.type property. The type can be
+auto (automatically enables whatever's available), imperative (enables
+imperative repositories), none (enables nothing), or reactive (enables
+reactive repositories). The default is auto.
+
+Repositories do not have a reactive option (such as JPA) continue to
+have a spring.data.<store>.repositories.enabled property that takes a
+boolean value.
+
+Closes gh-11134

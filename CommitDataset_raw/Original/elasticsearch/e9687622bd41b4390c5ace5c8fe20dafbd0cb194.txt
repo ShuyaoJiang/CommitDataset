@@ -1,0 +1,11 @@
+Rename CONF_DIR to ES_PATH_CONF
+
+The environment variable CONF_DIR was previously inconsistently used in
+our packaging to customize the location of Elasticsearch configuration
+files. The importance of this environment variable has increased
+starting in 6.0.0 as it's now used consistently to ensure Elasticsearch
+and all secondary scripts (e.g., elasticsearch-keystore) all use the
+same configuration. The name CONF_DIR is there for legacy reasons yet
+it's too generic. This commit renames CONF_DIR to ES_PATH_CONF.
+
+Relates #26197

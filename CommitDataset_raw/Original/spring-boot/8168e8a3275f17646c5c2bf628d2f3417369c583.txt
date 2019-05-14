@@ -1,0 +1,10 @@
+Special case for root of classpath resource in archive
+
+This turns out to affect JPA, but only because it looks for a URL for the
+root of the classpath using ClassLoader.getResource("") which barfs in
+an app launched from an executable JAR. It's easy to make a special case
+for "" in the class loader, so I went ahead and did that. Possibly need
+to think what the implication of getResources("") is as well (not
+tested in an app yet).
+
+Fixes gh-420

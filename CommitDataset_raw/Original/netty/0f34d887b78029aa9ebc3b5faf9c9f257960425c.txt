@@ -1,0 +1,13 @@
+Only reset readIsPending if outboundBuffer is not empty. (#7874)
+
+Motivation:
+
+We need to ensure we only reset readInProgress if the outboundBuffer is not empty as otherwise we may miss to call fireChannelRead(...) later on when using the LocalChannel.
+
+Modifications:
+
+Also check if the outboundBuffer is not empty before setting readInProgress to false again
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7855

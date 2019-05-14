@@ -1,0 +1,10 @@
+Watcher: Reduce logging noise if no local watcher shards exist (elastic/x-pack-elasticsearch#1846)
+
+Every cluster state update resulted in a log message, that watcher
+pauses execution. This has been fixed to only log, if there was an
+actual state switch from executing to pausing, but do nothing if
+there are no local shards anyway.
+
+This will reduce the logging noise in tests a lot.
+
+Original commit: elastic/x-pack-elasticsearch@32ab86610c5fc4a2710f9b59fdafc35e2c0867c2

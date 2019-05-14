@@ -1,0 +1,10 @@
+Apply DestinationResolver to listener container
+
+Previously, a custom `DestinationResolver` was not made available
+to the underlying `MessageListener`: if a reply needs to be sent, the
+default `DestinationResolver` was used.
+
+This commit ensures that if a custom `DestinationResolver` has been set,
+it is also configured accordingly for replies.
+
+Issue: SPR-12927

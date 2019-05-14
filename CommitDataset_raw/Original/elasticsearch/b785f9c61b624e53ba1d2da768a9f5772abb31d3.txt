@@ -1,0 +1,9 @@
+Build: Use md5 to determine whether ml snapshot needs downloading (elastic/x-pack-elasticsearch#3612)
+
+This commit makes ML snapshot downloading happen less often. It does
+that by first moving the download location to a directory outside the
+destructive power of gradle clean, and then also uses the md5 of the zip
+to compare to that found in s3. This allows us to do a cheap HEAD
+request to find if the file has changed.
+
+Original commit: elastic/x-pack-elasticsearch@cd8b00fd31e56e4afed16b7faa06beb8055094d5

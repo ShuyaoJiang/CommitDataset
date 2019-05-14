@@ -1,0 +1,16 @@
+Fix improper synchronization in DefaultPromise. Fixes #5489
+
+Motivation:
+
+A race detector found that DefaultPromise.listeners is improperly synchronized [1].
+Worst case a listener will not be executed when the promise is completed.
+
+Modifications:
+
+Make DefaultPromise.listeners a volatile.
+
+Result:
+
+Hopefully, DefaultPromise is more correct under concurrent execution.
+
+[1] https://github.com/grpc/grpc-java/issues/2015

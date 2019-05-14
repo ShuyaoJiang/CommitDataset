@@ -1,0 +1,26 @@
+Fix @PropertySource bug with multiple values
+
+Prior to this commit, specifying a named @PropertySource with multiple
+values would not work as expected. e.g.:
+
+  @PropertySource(
+      name = "ps",
+      value = { "classpath:a.properties", "classpath:b.properties" })
+
+In this scenario, the implementation would register a.properties with
+the name "ps", and subsequently register b.properties with the name
+"ps", overwriting the entry for a.properties.
+
+To fix this behavior, a CompositePropertySource type has been introduced
+which accepts a single name and a set of PropertySource objects to
+iterate over. ConfigurationClassParser's @PropertySource parsing routine
+has been updated to use this composite approach when necessary, i.e.
+when both an explicit name and more than one location have been
+specified.
+
+Note that if no explicit name is specified, the generated property
+source names are enough to distinguish the instances and avoid
+overwriting each other; this is why the composite wrapper is not used
+in these cases.
+
+Issue: SPR-9127

@@ -1,0 +1,11 @@
+Switch disallowedMethods test to use PATCH
+
+Update the requestsWithDisallowedMethodsAreRejected test to use PATCH
+rather than HEAD. The change is to allow support for Spring Framework
+4.3 which will implicitly map HEAD requests to GET.
+
+Pre-flight requests are also only for "non-simple" HTTP methods [1]
+(i.e. anything but GET, HEAD, POST) so there is really no such a thing
+as a pre-flight request for HEAD.
+
+[1] https://www.w3.org/TR/cors/#resource-preflight-requests

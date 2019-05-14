@@ -1,0 +1,13 @@
+ingest: correctly measure chained pipeline stats (#33912)
+
+Prior to this change when a pipeline processor called another
+pipeline, only the stats for the first processor were recorded.
+The stats for the subsequent pipelines were ignored. This change
+properly accounts for pipelines irregardless if they are the first
+or subsequently called pipelines.
+
+This change moves the state of the stats from the IngestService
+to the pipeline itself. Cluster updates are safe since the pipelines
+map is atomically swapped, and if a cluster update happens
+while iterating over stats (now read directly from the pipeline)
+a slightly stale view of stats may be shown.

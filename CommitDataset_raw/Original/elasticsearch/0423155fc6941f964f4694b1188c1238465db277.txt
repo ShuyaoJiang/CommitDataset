@@ -1,0 +1,9 @@
+Also skip Javadoc task for client JARs on JDK 10
+
+We disabled the Javadoc task on JDK 10 due to an apparent bug in Javadoc
+generation on JDK 10. However, the client JAR task sets up its own
+Javadoc task for client JARs (because it merely copies the non-client
+Javadoc JAR). This commit diables that task too, since the Javadocs for
+the non-client JAR will not exist.
+
+Relates #27962

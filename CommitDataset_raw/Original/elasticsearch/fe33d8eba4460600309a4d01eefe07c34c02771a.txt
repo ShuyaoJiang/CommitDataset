@@ -1,0 +1,10 @@
+[Security] Include doc-type in _id for tokens (elastic/x-pack-elasticsearch#1473)
+
+In preparation for the removal of types, new security types like invalidated-tokens are stored in the .security
+index under the generic "doc" type, with a query filter on `doc_type`.
+
+In order to avoid id clashes, we also need to use that doc_type as part of the document id.
+
+relates elastic/x-pack-elasticsearch#1300
+
+Original commit: elastic/x-pack-elasticsearch@469724a228f6db7e6e377d7df1b3c81736d19e59

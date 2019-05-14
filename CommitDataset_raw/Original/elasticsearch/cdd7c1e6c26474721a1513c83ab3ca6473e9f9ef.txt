@@ -1,0 +1,6 @@
+Return List instead of an array from settings (#26903)
+
+Today we return a `String[]` that requires copying values for every
+access. Yet, we already store the setting as a list so we can also directly
+return the unmodifiable list directly. This makes list / array access in settings
+a much cheaper operation especially if lists are large.

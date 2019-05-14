@@ -1,0 +1,25 @@
+Throw ISEs in MockHttpSession for invalid session
+
+The Javadoc for several methods in HttpSession specifies that an
+IllegalStateException must be thrown if the method is called on an
+invalidated session; however, Spring's MockHttpSession did not implement
+this behavior consistently prior to this commit.
+
+This commit therefore ensures that the following methods in
+MockHttpSession properly throw an IllegalStateException as defined in
+the Servlet specification.
+
+ - long getCreationTime()
+ - long getLastAccessedTime()
+ - Object getAttribute(String)
+ - Object getValue(String)
+ - Enumeration<String> getAttributeNames()
+ - String[] getValueNames()
+ - void setAttribute(String, Object)
+ - void putValue(String , Object)
+ - void removeAttribute(String)
+ - void removeValue(String)
+ - void invalidate()
+ - boolean isNew()
+
+Issue: SPR-7659

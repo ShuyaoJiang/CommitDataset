@@ -1,0 +1,11 @@
+Have ImmutableMaps for zero and one element use RegularImmutableMap instead of {Empty,Singleton}ImmutableBiMap, avoiding pulling in ImmutableBiMap and all its dependencies.
+
+The increase in the size of singleton maps does require an increase in the constant overhead in MemoryTester for immutable multimaps and tables, but a constant overhead isn't worth that much concern.  (We might come back to work on these when we start trying to improve multimap and table size, though.)
+
+Effects on ImmutableMapProGuard: ([]59284 bytes => 52710 bytes
+64 classes => 57 classes
+363 methods => 312 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146528004

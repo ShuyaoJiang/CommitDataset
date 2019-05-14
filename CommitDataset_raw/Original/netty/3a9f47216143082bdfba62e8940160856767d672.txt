@@ -1,0 +1,34 @@
+Make retained derived buffers recyclable
+
+Related: #4333 #4421 #5128
+
+Motivation:
+
+slice(), duplicate() and readSlice() currently create a non-recyclable
+derived buffer instance. Under heavy load, an application that creates a
+lot of derived buffers can put the garbage collector under pressure.
+
+Modifications:
+
+- Add the following methods which creates a non-recyclable derived buffer
+  - retainedSlice()
+  - retainedDuplicate()
+  - readRetainedSlice()
+- Add the new recyclable derived buffer implementations, which has its
+  own reference count value
+- Add ByteBufHolder.retainedDuplicate()
+- Add ByteBufHolder.replace(ByteBuf) so that..
+  - a user can replace the content of the holder in a consistent way
+  - copy/duplicate/retainedDuplicate() can delegate the holder
+    construction to replace(ByteBuf)
+- Use retainedDuplicate() and retainedSlice() wherever possible
+- Miscellaneous:
+  - Rename DuplicateByteBufTest to DuplicatedByteBufTest (missing 'D')
+  - Make ReplayingDecoderByteBuf.reject() return an exception instead of
+    throwing it so that its callers don't need to add dummy return
+    statement
+
+Result:
+
+Derived buffers are now recycled when created via retainedSlice() and
+retainedDuplicate() and derived from a pooled buffer

@@ -1,0 +1,73 @@
+Add more contexts to painless execute api (#30511)
+
+This change adds two contexts the execute scripts against:
+
+* SEARCH_SCRIPT: Allows to run scripts in a search script context.
+This context is used in `function_score` query's script function,
+script fields, script sorting and `terms_set` query.
+
+* FILTER_SCRIPT: Allows to run scripts in a filter script context.
+This context is used in the `script` query.
+
+In both contexts a index name needs to be specified and a sample document.
+The document is needed to create an in-memory index that the script can
+access via the `doc[...]` and other notations. The index name is needed
+because a mapping is needed to index the document.
+
+Examples:
+
+```
+POST /_scripts/painless/_execute
+{
+  "script": {
+    "source": "doc['field'].value.length()"
+  },
+  "context" : {
+    "search_script": {
+      "document": {
+        "field": "four"
+      },
+      "index": "my-index"
+    }
+  }
+}
+```
+
+Returns:
+
+```
+{
+  "result": 4
+}
+```
+
+POST /_scripts/painless/_execute
+{
+  "script": {
+    "source": "doc['field'].value.length() <= params.max_length",
+    "params": {
+      "max_length": 4
+    }
+  },
+  "context" : {
+    "filter_script": {
+      "document": {
+        "field": "four"
+      },
+      "index": "my-index"
+    }
+  }
+}
+
+Returns:
+
+```
+{
+  "result": true
+}
+```
+
+Also changed PainlessExecuteAction.TransportAction to use TransportSingleShardAction
+instead of HandledAction, because now in case score or filter contexts are used
+the request needs to be redirected to a node that has an active IndexService
+for the index being referenced (a node with a shard copy for that index).

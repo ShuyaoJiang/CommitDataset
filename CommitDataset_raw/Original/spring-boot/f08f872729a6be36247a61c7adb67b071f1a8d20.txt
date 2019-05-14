@@ -1,0 +1,23 @@
+Restore original embedded container shutdown order
+
+Update EmbeddedWebApplicationContext so that the servlet container is
+shutdown after the context is closed. Unfortunately shutting the
+container down before the context has been closed causes exceptions if
+the `/shutdown` actuator endpoint is used. It can also cause the Tomcat
+classloader to throw IllegalStateExceptions if resources are accessed
+during shutdown.
+
+As this commit effectively reverts 0069e41c we need to fix the shutdown
+deadlock issue reported in gh-4130 in a different way. The deadlock can
+be caused when an incoming HTTP connection occurs whilst the context is
+closing. The incoming connection triggers the `FrameworkServlet` to
+call `initWebApplicationContext` which in turn calls `refresh`. The
+`FrameworkServlet` checks `ApplicationContext.isActive()` before
+performing an initialization but prior to this commit we would set
+active to `false` before stopping the servlet container. We now override
+`onClose` rather than `doClose` in `EmbeddedWebApplicationContext` to
+ensure that the active flag is only set to `false` once the servlet
+container has been stopped.
+
+See gh-4130
+Fixes gh-4396

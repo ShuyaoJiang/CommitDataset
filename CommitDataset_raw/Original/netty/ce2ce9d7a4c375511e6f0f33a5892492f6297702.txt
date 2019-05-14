@@ -1,0 +1,10 @@
+ByteToMessageDecoder#handlerRemoved may release cumulation buffer prematurely
+
+Motivation:
+ByteToMessageDecoder#handlerRemoved will immediately release the cumulation buffer, but it is possible that a child class may still be using this buffer, and therefore use a dereferenced buffer.
+
+Modifications:
+- ByteToMessageDecoder#handlerRemoved and ByteToMessageDecoder#decode should coordinate to avoid the case where a child class is using the cumulation buffer but ByteToMessageDecoder releases that buffer.
+
+Result:
+Child classes of ByteToMessageDecoder are less likely to reference a released buffer.

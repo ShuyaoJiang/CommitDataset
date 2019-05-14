@@ -1,0 +1,18 @@
+Only handle status errors when sendError is called
+
+Update ErrorPageFilter to only handle errors when `response.sendError`
+has been called. This should allow custom @ExceptionHandlers to
+completely handle errors and return custom status codes without
+triggering the "Cannot forward to error page" log message.
+
+The Javadoc for sendError states:
+
+  "The server defaults to creating the response to look like an
+   HTML-formatted server error page containing the specified message"
+
+Where as setStatus states
+
+  "This method is used to set the return status code when there is
+   no error "
+
+Fixes gh-2745

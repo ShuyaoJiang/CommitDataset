@@ -1,0 +1,24 @@
+SPDY: fix SpdySessionHandler::updateSendWindowSize
+
+In Netty 3, downstream writes of SPDY data frames and upstream reads of
+SPDY window udpate frames occur on different threads.
+
+When receiving a window update frame, we synchronize on a java object
+(SpdySessionHandler::flowControlLock) while sending any pending writes
+that are now able to complete.
+
+When writing a data frame, we check the send window size to see if we
+are allowed to write it to the socket, or if we have to enqueue it as a
+pending write. To prevent races with the window update frame, this is
+also synchronized on the same SpdySessionHandler::flowControlLock.
+
+In Netty 4, upstream and downstream operations on any given channel now
+occur on the same thread. Since java locks are re-entrant, this now
+allows downstream writes to occur while processing window update frames.
+
+In particular, when we receive a window update frame that unblocks a
+pending write, this write completes which triggers an event notification
+on the response, which in turn triggers a write of a data frame. Since
+this is on the same thread it re-enters the lock and modifies the send
+window. When the write completes, we continue processing pending writes
+without knowledge that the window size has been decremented.

@@ -1,0 +1,14 @@
+Update tests to not use TestUtils.getFreePort() and so ensure we not try to use a port that is used by the system in the meantime.
+
+Motivation:
+
+We should not try to detect a free port in tests put just use 0 when bind so there is no race in which the system my bind something to the port we choosen before.
+
+Modifications:
+
+- Remove the usage of TestUtils.getFreePort() in the testsuite
+- Remove hack to workaround bind errors which will not happen anymore now
+
+Result:
+
+Less flacky tests.

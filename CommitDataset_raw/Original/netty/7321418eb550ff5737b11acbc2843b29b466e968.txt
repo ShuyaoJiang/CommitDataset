@@ -1,0 +1,13 @@
+Fix possible NPE in ReferenceCountedOpenSslEngine.rejectRemoteInitiatedRenegotiation()
+
+Motivation:
+
+ReferenceCountedOpenSslEngine.rejectRemoteInitiatedRenegotiation() is called in a finally block to ensure we always check for renegotiation. The problem here is that sometimes we will already shutdown the engine before we call the method which will lead to an NPE in this case as the ssl pointer was already destroyed.
+
+Modifications:
+
+Check that the engine is not destroyed yet before calling SSL.getHandshakeCount(...)
+
+Result:
+
+Fixes [#7353].

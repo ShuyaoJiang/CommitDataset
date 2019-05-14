@@ -1,0 +1,27 @@
+[ML] Allow asynchronous job deletion (#34058)
+
+This changes the delete job API by adding
+the choice to delete a job asynchronously.
+The commit adds a `wait_for_completion` parameter
+to the delete job request. When set to `false`,
+the action returns immediately and the response
+contains the task id.
+
+This also changes the handling of subsequent
+delete requests for a job that is already being
+deleted. It now uses the task framework to check
+if the job is being deleted instead of the cluster
+state. This is a beneficial for it is going to also
+be working once the job configs are moved out of the
+cluster state and into an index. Also, force delete
+requests that are waiting for the job to be deleted
+will not proceed with the deletion if the first task
+fails. This will prevent overloading the cluster. Instead,
+the failure is communicated better via notifications
+so that the user may retry.
+
+Finally, this makes the `deleting` property of the job
+visible (also it was renamed from `deleted`). This allows
+a client to render a deleting job differently.
+
+Closes #32836

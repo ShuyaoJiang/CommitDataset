@@ -1,0 +1,34 @@
+Azure snapshots can not be restored anymore (#26778)
+
+While working on #26751 and doing some manual integration testing I found that this #22858 removed an important line of our code:
+
+`AzureRepository` overrides default `initializeSnapshot` method which creates metadata files and do other stuff.
+
+But with PR #22858, I wrote:
+
+```java
+    @Override
+    public void initializeSnapshot(SnapshotId snapshotId, List<IndexId> indices, MetaData clusterMetadata) {
+        if (blobStore.doesContainerExist(blobStore.container()) == false) {
+            throw new IllegalArgumentException("The bucket [" + blobStore.container() + "] does not exist. Please create it before " +
+                " creating an azure snapshot repository backed by it.");
+        }
+    }
+```
+
+instead of
+
+```java
+    @Override
+    public void initializeSnapshot(SnapshotId snapshotId, List<IndexId> indices, MetaData clusterMetadata) {
+        if (blobStore.doesContainerExist(blobStore.container()) == false) {
+            throw new IllegalArgumentException("The bucket [" + blobStore.container() + "] does not exist. Please create it before " +
+                " creating an azure snapshot repository backed by it.");
+        }
+        super.initializeSnapshot(snapshotId, indices, clusterMetadata);
+    }
+```
+
+As we never call `super.initializeSnapshot(...)` files are not created and we can't restore what we saved.
+
+Closes #26777.

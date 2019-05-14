@@ -1,0 +1,20 @@
+Honor unpack for war files
+
+Previously repackaging of an archive was performed in three steps:
+
+1. Write the manifest
+2. Write entries from the source archive into the destination
+3. Write any libraries into the destination if they’re not already there
+
+This worked fine for jar files, but not for war files. In the war file
+case the libraries are already in the source archive’s WEB-INF/lib
+directory so they’re copied into the destination in step 2. This means
+that step 3 largely becomes a no-op and, crucially, the UNPACK comment
+is not applied to any libraries that require it.
+
+This commit reorders steps 2 and 3 so that the libraries are copied into
+the destination first (allowing the UNPACK comment to be written, if
+required) and then any entries in the source are written into the
+destination if they’re not already there.
+
+Fixes gh-2588

@@ -1,0 +1,16 @@
+[Rollup] Add more diagnostic stats to job (#35471)
+
+* [Rollup] Add more diagnostic stats to job
+
+To help debug future performance issues, this adds the
+ min/max/avg/count/total latencies (in milliseconds) for search
+and bulk phase.  This latency is the total service time including
+transfer between nodes, not just the `took` time.
+
+It also adds the count of search/bulk failures encountered during
+runtime.  This information is also in the log, but a runtime counter
+will help expose problems faster
+
+* review cleanup
+
+* Remove dead ParseFields

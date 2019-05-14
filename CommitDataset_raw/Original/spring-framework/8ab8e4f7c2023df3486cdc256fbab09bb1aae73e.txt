@@ -1,0 +1,12 @@
+Make the methodParameter field of HandlerMethod final
+
+Previously the methodParameter array field was initialized lazily since
+it requires reflection. However, in practice the field is always used
+and there is not much benefit from the lazy initialization.
+
+In Spring Framework 3.2, the methodParameter field was copied when a
+new HandlerMethod instance (with the resolved bean) is created for
+performance reasons. That introduced a synchronization issue since
+the lazy initialization was not synchronized.
+
+Issue: SPR-10365

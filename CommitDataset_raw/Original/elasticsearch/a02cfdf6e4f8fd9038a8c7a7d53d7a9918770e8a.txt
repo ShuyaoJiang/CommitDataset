@@ -1,0 +1,11 @@
+Switch InternalTestClusterTests to zen2 (#36977)
+
+Today InternalTestClusterTests is still using zen1.
+This commit fixes it.
+Two types of changes were required:
+
+1. Explicitly pass file discovery host provider setting. It's done in
+ESIntegTestCase as a part of the Zen2 feature and should be done here
+as well.
+2. For the test, that uses autoManageMinMasterNodes = false perform
+cluster bootstrap.

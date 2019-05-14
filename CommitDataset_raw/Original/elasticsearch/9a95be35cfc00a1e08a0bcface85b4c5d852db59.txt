@@ -1,0 +1,14 @@
+[Tests] Extract the testing logic for Google Cloud Storage (#28576)
+
+This pull request extracts in a dedicated class the request/response 
+logic that "emulates" a Google Cloud Storage service in our 
+repository-gcs tests.
+
+The idea behind this is to make the logic more reusable. The class 
+MockHttpTransport has been renamed to MockStorage which now 
+only takes care of instantiating a Storage client and does the low-level 
+request/response plumbing needed by this client.
+
+The "Google Cloud Storage" logic has been extracted from 
+MockHttpTransport and put in a new GoogleCloudStorageTestServer 
+that is now independent from the google client testing framework.

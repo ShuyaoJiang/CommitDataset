@@ -1,0 +1,16 @@
+serialize suggestion responses as named writeables (#30284)
+
+Suggestion responses were previously serialized as streamables which
+made writing suggesters in plugins with custom suggestion response types
+impossible. This commit makes them serialized as named writeables and
+provides a facility for registering a reader for suggestion responses
+when registering a suggester.
+
+This also makes Suggestion responses abstract, requiring a suggester
+implementation to provide its own types. Suggesters which do not need
+anything additional to what is defined in Suggest.Suggestion should
+provide a minimal subclass.
+
+The existing plugin suggester integration tests are removed and
+replaced with an equivalent implementation as an example
+plugin.

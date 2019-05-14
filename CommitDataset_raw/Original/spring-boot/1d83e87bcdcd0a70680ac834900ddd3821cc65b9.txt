@@ -1,0 +1,17 @@
+Validate @ConfigurationProperties on @Bean methods
+
+Refactor `ConfigurationPropertiesBindingPostProcessor` to allow JSR-303
+validation on `@ConfigurationProperties` defined at the `@Bean` method
+level.
+
+JSR-303 validation is now applied when a JSR-303 implementation is
+available and `@Validated` is present on either the configuration
+properties class itself or the `@Bean` method that creates it.
+
+Standard Spring validation is also supported using a validator bean
+named `configurationPropertiesValidator`, or by having the configuration
+properties implement `Validator`.
+
+The commit also consolidates tests into a single location.
+
+Fixes gh-10803

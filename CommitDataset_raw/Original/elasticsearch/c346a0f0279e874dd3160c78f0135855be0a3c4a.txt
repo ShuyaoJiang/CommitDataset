@@ -1,0 +1,15 @@
+[Rollup] Add `wait_for_completion` option to StopRollupJob API (#34811)
+
+This adds a `wait_for_completion` flag which allows the user to block 
+the Stop API until the task has actually moved to a stopped state, 
+instead of returning immediately.  If the flag is set, a `timeout` parameter
+can be specified to determine how long (at max) to block the API
+call.  If unspecified, the timeout is 30s.
+
+If the timeout is exceeded before the job moves to STOPPED, a
+timeout exception is thrown.  Note: this is just signifying that the API
+call itself timed out.  The job will remain in STOPPING and evenutally
+flip over to STOPPED in the background.
+
+If the user asks the API to block, we move over the the generic
+threadpool so that we don't hold up a networking thread.

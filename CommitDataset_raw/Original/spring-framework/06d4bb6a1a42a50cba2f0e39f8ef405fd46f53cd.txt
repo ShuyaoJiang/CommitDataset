@@ -1,0 +1,12 @@
+Let users control SSE stream completion
+
+This commit avoid merging automatically the SSE stream with
+Flux.never(). Since browsers automatically reconnect when
+the HTTP connection is closed, it is now the user responsability
+to optionally perform a concatWith(Flux.never()) on streams that
+complete in order to avoid receiving the data multiple times on
+client side.
+
+The behavior with hot streams that never complete does not change.
+
+Issue: SPR-14578

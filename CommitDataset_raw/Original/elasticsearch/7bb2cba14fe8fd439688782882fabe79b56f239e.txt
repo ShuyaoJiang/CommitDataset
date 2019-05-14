@@ -1,0 +1,10 @@
+[Security] Reset IndexAuditTrail to INITIALISED before start (elastic/x-pack-elasticsearch#3807)
+
+Calling start() when already in the STARTING state doesn't do anything, so the component
+gets stuck in STARTING state forever.
+
+Also: wait on the required index name not just the cluster.
+
+Also: added more logging to help diagnose such issues (either in RemoteIndexAuditTrailStartingTests or production)
+
+Original commit: elastic/x-pack-elasticsearch@fb81214fe70260b29f7144b756acb40458a24ba4

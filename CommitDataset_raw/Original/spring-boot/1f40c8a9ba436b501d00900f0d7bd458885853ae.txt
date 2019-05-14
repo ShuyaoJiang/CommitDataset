@@ -1,0 +1,13 @@
+Tolerate breaking API changes in ActiveMQ 5.11.0
+
+In ActiveMQ 5.11 the signature of
+PooledConnectionFactory.setConnectionFactory has changed. It now takes
+an Object rather than a ConnectionFactory. This change is not binary
+backwards compatible so it causes a NoSuchMethodError as we compile
+against 5.10.
+
+This commit updates ActiveMQConnectionFactoryConfiguration to call
+the setConnectionFactory method reflectively, looking for both the
+ConnectionFactory and Object variants.
+
+Closes gh-2640

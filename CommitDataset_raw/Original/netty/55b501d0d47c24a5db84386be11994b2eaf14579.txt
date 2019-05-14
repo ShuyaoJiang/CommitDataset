@@ -1,0 +1,14 @@
+Correctly update Channel writability when queueing data in SslHandler.
+
+Motivation:
+
+A regression was introduced in 86e653e which had the effect that the writability was not updated for a Channel while queueing data in the SslHandler.
+
+Modifications:
+
+- Factor out code that will increment / decrement pending bytes and use it in AbstractCoalescingBufferQueue and PendingWriteQueue
+- Add test-case
+
+Result:
+
+Channel writability changes are triggered again.

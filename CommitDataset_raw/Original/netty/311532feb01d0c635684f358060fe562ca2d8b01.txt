@@ -1,0 +1,23 @@
+Fix IllegalReferenceCountException in DnsNameResolver
+
+Related: #3797
+
+Motivation:
+
+There is a race condition where DnsNameResolver.query() can attempt to
+increase the reference count of the DNS response which was released
+already by other thread.
+
+Modifications:
+
+- Make DnsCacheEntry a top-level class for clear access control
+- Use 'synchronized' to avoid the race condition
+  - Add DnsCacheEntry.retainedResponse() to make sure that the response
+    is never released while it is retained
+  - Make retainedResponse() return null when the response has been
+    released already, so that DnsNameResolver.query() knows that the
+    cached entry has been released
+
+Result:
+
+The forementioned race condition has been fixed.

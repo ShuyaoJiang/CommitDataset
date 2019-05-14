@@ -1,0 +1,13 @@
+[#2623] Release local references to guard against StackOverflow in JNI
+
+Motivation:
+
+When we do a (env*)->GetObjectArrayElement(...) call we may created many local references which will only be cleaned up once we exist the native method. Thus a lot of memory can be used and so a StackOverFlow may be triggered. Beside this the JNI specification only say that an implementation must cope with 16 local references.
+
+Modification:
+
+Call (env*)->ReleaseLocalRef(...) to release the resource once not needed anymore.
+
+Result:
+
+Less memory usage and guard against StackOverflow

@@ -1,0 +1,9 @@
+Allow to set response status on Undertow
+
+Refactored Undertow support to register a response listener only when
+the body is written to, as opposed to registering it at startup. The
+reason for this is that getting the response channel from the
+HttpServerExchange commits the status and response, making it impossible
+to change them after the fact.
+
+Fixed issue #119.

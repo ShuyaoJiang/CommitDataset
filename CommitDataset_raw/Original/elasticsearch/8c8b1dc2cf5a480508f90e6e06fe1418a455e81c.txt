@@ -1,0 +1,12 @@
+Fix index with unknown setting test
+
+This commit fixes the test of an index with an unknown setting. The
+problem here is that we were manipulating the index state on disk, but a
+cluster state update could arrive between us manipulating the index
+state on disk and us restarting the node, leading to the index state
+that we just intentionally broke being fixed. As such, after restart,
+the index state would not be in the state that we expected it to be in
+and the test would fail. To address this, we hook into the restart and
+break the index state immediately before the node is started again.
+
+Relates #26995

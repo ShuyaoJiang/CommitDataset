@@ -1,0 +1,22 @@
+Only connect to new nodes on new cluster state (#39629)
+
+Today, when applying new cluster state we attempt to connect to all of its
+nodes as a blocking part of the application process. This is the right thing to
+do with new nodes, and is a no-op on any already-connected nodes, but is
+questionable on known nodes from which we are currently disconnected: there is
+a risk that we are partitioned from these nodes so that any attempt to connect
+to them will hang until it times out. This can dramatically slow down the
+application of new cluster states which hinders the recovery of the cluster
+during certain kinds of partition.
+
+If nodes are disconnected from the master then it is likely that they are to be
+removed as part of a subsequent cluster state update, so there's no need to try
+and reconnect to them like this. Moreover there is no need to attempt to
+reconnect to disconnected nodes as part of the cluster state application
+process, because we periodically try and reconnect to any disconnected nodes,
+and handle their disconnectedness reasonably gracefully in the meantime.
+
+This commit alters this behaviour to avoid reconnecting to known nodes during
+cluster state application.
+
+Resolves #29025.

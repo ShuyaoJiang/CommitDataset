@@ -1,0 +1,21 @@
+Adapt Http2ServerDowngrader to work with clients
+
+Motivation:
+Http2ServerDowngrader is specifically built for server channels where
+inbound Http2StreamFrames are converted into HttpRequests, and outbound
+HttpResponses are converted into Http2StreamFrames. It can be easily
+made to be more generic to work with client channels where inbound
+Http2StreamFrames are converted into HttpResponses, and outbound
+HttpRequests are converted into Http2StreamFrames.
+
+Modification:
+- Renamed Http2ServerDowngrader to a more general
+  Http2StreamFrameToHttpObjectCodec
+- Made it take in an "isServer" parameter to determine whether encoding
+  inbound Http2StreamFrames should create HttpRequests (for server) or
+  HttpResponses (for client)
+- Norman fixed a leak in the unit test. Thanks! :-)
+
+Result:
+Now Http2StreamFrameToHttpObjectCodec can be used to translate
+Http2StreamFrame to HttpObject for both server and client.

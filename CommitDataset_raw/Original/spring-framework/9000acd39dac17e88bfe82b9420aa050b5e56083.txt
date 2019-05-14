@@ -1,0 +1,24 @@
+Rework compilation of OpNE/OpEQ SpEL operators
+
+For SPR-14863 we need to adjust the code generation for OpNE
+to use !x.equals(y) rather than x!=y. There are also further
+cases in the equalityCheck() code in Operator that were not
+being handled in the compilation case (when comparators are
+used for example). This latter issue also affects OpEQ.
+
+Rather than add yet more bytecode generation, both OpNE and
+OpEQ generateCode() methods have been simplified. The
+generated code now delegates to equalityCheck() in Operator
+which is exactly what the interpreted case does.
+
+This ensures that the compiled code continues to behave just
+like the interpreted case. It ensures changes to the interpreted
+case are automatically picked up for the compiled case. It
+makes the bytecode generation simpler.
+
+The benefit of compilation of SpEL expressions is to avoid
+slow reflective calls - that doesn't apply for a basic
+(in)equality test so there is no need to go crazy in bytecode
+gen.
+
+Issue: SPR-14863

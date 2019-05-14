@@ -1,0 +1,13 @@
+Remove BytesArray and BytesReference usage from XContentFactory (#29151)
+
+* Remove BytesArray and BytesReference usage from XContentFactory
+
+This removes the usage of `BytesArray` and `BytesReference` from
+`XContentFactory`. Instead, a regular `byte[]` should be passed. To assist with
+this a helper has been added to `XContentHelper` that will preserve the offset
+and length from the underlying BytesReference.
+
+This is part of ongoing work to separate the XContent parts from ES so they can
+be factored into their own jar.
+
+Relates to #28504

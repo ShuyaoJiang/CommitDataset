@@ -1,0 +1,13 @@
+Retain ByteBuf extras when aggregating
+
+Motivation:
+
+BinaryMemcacheObjectAggregator doesn't retain ByteBuf `extras`. So `io.netty.util.IllegalReferenceCountException: refCnt: 0, decrement: 1` will be thrown when aggregating a message containing `extras`. See the unit test for an example.
+
+Modifications:
+
+`ratain` extras to fix IllegalReferenceCountException.
+
+Result:
+
+`extras` is retained.

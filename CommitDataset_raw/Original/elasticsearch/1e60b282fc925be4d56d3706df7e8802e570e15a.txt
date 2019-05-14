@@ -1,0 +1,9 @@
+Grant .tasks access to kibana_system role (#35573)
+
+Kibana now uses the tasks API to manage automatic reindexing of the
+.kibana index during upgrades.
+
+The implementation of the tasks API requires that
+1. the user executing the task can create & write to the ".tasks" index
+2. the user checking on the status of the task can read (Get) the
+   relevant document from the ".tasks" index

@@ -1,0 +1,11 @@
+Properly handle class reference
+
+Previously, a condition on a class targeting an inner class would
+generate an invalid String representation of it. Unfortunately, the
+`toString` representation misses the `$` sign between the outer class
+and the inner class name.
+
+This commit post-processes the values to generate the appropriate
+representation.
+
+Closes gh-11282

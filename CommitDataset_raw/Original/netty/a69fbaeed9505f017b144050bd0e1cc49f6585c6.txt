@@ -1,0 +1,15 @@
+Not execute shutdownOutput(...) and close(...) in the EventLoop if SO_LINGER is used.
+
+Motivation:
+
+If SO_LINGER is used shutdownOutput() and close() syscalls will block until either all data was send or until the timeout exceed. This is a problem when we try to execute them on the EventLoop as this means the EventLoop may be blocked and so can not process any other I/O.
+
+Modifications:
+
+- Add AbstractUnsafe.closeExecutor() which returns null by default and use this Executor for close if not null.
+- Override the closeExecutor() in NioSocketChannel and EpollSocketChannel and return GlobalEventExecutor.INSTANCE if getSoLinger() > 0
+- use closeExecutor() in shutdownInput(...) in NioSocketChannel and EpollSocketChannel
+
+ Result:
+
+No more blocking of the EventLoop if SO_LINGER is used and shutdownOutput() or close() is called.

@@ -1,0 +1,9 @@
+Use project dependency instead of substitutions for distributions (#37730)
+
+Currently integration tests which use either bwc snapshot versions or
+the current version of elasticsearch depend on project substitutions to
+link to the build of those artifacts. Likewise, vagrant tests use
+dependency substitutions to get to bwc snapshots of rpm and debs.
+This commit changes those to depend on the relevant project/configuration
+and removes the dependency substitutions for distributions we do not
+publish.

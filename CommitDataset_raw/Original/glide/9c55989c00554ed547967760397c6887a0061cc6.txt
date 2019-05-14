@@ -1,0 +1,7 @@
+Run jobs decoding source only on source executor.
+
+Fixes an issue where using DiskCacheStrategy.NONE
+caused decodes for content not in cache to be 
+decoded serially. Animated GIFs in particular
+were affected because frames are only ever decoded
+from source.

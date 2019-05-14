@@ -1,0 +1,24 @@
+Relax the sanity check in HttpClientUpgradeHandler
+
+Motivation:
+
+HttpClientUpgradeHandler currently throws an IllegalStateException when
+the server sends a '101 Switching Protocols' response that has no
+'Upgrade' header.
+
+Some servers do not send the 'Upgrade' header on a successful protocol
+upgrade and we could safely assume that the server accepted the
+requested protocol upgrade in such a case, looking from the response
+status code (101)
+
+Modifications:
+
+- Do not throw an IllegalStateException when the server responded 101
+  without a 'Upgrade' header
+- Note that we still check the equality of the 'Upgrade' header when it
+  is present.
+
+Result:
+
+- Fixes #4523
+- Better interoperability

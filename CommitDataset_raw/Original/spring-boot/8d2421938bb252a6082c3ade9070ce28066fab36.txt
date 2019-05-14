@@ -1,0 +1,12 @@
+Perform failure analysis of NoUniqueBeanDefinitionException
+
+This commit introduces a new failure analyser for
+NoUniqueBeanDefinitionException. The analyser provides details of the
+consumer whose dependency could not be satisfied and the names and
+sources of the non-unique beans.
+
+This analysis requires access to the BeanFactory, so FailureAnalyzers
+has been updated to support BeanFactory injection via an analyzer
+implementing BeanFactoryAware.
+
+Closes gh-5299

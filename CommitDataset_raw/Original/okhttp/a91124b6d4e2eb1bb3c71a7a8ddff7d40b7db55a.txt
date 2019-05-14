@@ -1,0 +1,7 @@
+Use one callback for SYN_STREAM, SYN_REPLY and HEADERS.
+
+This is closer to the semantics of HTTP/2.0, which uses the HEADERS
+frame for all three types. SPDY is a bit more strict because it
+relies on redundancy; it's an error to send a SYN_REPLY after a
+HEADERS frame. With HTTP/2.0, there's only one type so there's
+no error to detect.

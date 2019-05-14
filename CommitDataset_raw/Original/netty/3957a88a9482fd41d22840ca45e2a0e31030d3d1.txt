@@ -1,0 +1,18 @@
+Make PendingWriteQueue.recycle() update its state before triggering an event
+
+Related: #3212
+
+Motivation:
+
+PendingWriteQueue.recycle() updates its data structure after triggering
+a channelWritabilityChanged() event. It causes a rare corruption such as
+double free when channelWritabilityChanged() method accesses the
+PendingWriteQueue.
+
+Modifications:
+
+Update the state of PendingWriteQueue before triggering an event.
+
+Result:
+
+Fix a rare double-free problem

@@ -1,0 +1,13 @@
+Reindex: Wait for deletion in test
+
+The test failure tracked by #28053 occurs because we fail to get the
+failure response from the reindex on the first try and on our second try
+the delete index API call that was supposed to trigger the failure
+actually deletes the index during document creation. This causes the
+test to fail catastrophically.
+
+This PR attempts to wait for the failure to finish before the test moves
+on to the second attempt. The failure doesn't reproduce locally for me
+so I can't be sure that this helps at all with the failure, but it
+certainly feels like it should help some. Here is hoping this prevents
+similar failures in the future.

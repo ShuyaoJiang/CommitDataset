@@ -1,0 +1,6 @@
+Picks offset source for the unified highlighter directly from the es mapping (#25747)
+
+This commit changes how the offset source is picked for each field using the es mapping rather than the underlying Lucene field infos.
+It's mandatory for large mappings where field infos retrieval can be costly (the global field infos is merged for each highlighted field in every hit by the Lucene impl).
+
+Fixes #25699

@@ -1,0 +1,5 @@
+Enforce non-null value from getBean and at injection points
+
+Bean-derived null values may still get passed into bean properties and injection points but only if those are declared as non-required. Note that getBean will never return null; a manual bean.equals(null) / "null".equals(bean.toString()) check identifies expected null values now.  This will only ever happen with custom FactoryBeans or factory methods returning null - and since all common cases are handled by autowiring or bean property values in bean definitions, there should be no need to ever manually check for such a null value received from getBean.
+
+Issue: SPR-15829

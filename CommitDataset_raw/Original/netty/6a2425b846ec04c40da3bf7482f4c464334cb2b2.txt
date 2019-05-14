@@ -1,0 +1,12 @@
+HTTP/2 SimpleChannelPromiseAggregator don't fail fast
+
+Motivation:
+Http2Codec.SimpleChannelPromiseAggregator currently fails fast if as soon as a tryFailure or setFailure method is called. This can lead to write operations which pass the result of SimpleChannelPromiseAggregator.newPromise to multiple channel.write calls throwing exceptions due to the promise being already done. This behavior is not expected by most of the Netty codecs (SslHandler) and can also create unexpected leaks in the http2 codec (DefaultHttp2FrameWriter).
+
+Modifications:
+- Http2Codec.SimpleChannelPromiseAggregator shouldn't complete the promise until doneAllocatingPromises is called
+- Usages of Http2Codec.SimpleChannelPromiseAggregator should be adjusted to handle the change in behavior
+- What were leaks in DefaultHttp2FrameWriter should be fixed to catch any other cases where ctx.write may throw
+
+Result:
+SimpleChannelPromiseAggregator won't generate promises which are done when newPromise is called.

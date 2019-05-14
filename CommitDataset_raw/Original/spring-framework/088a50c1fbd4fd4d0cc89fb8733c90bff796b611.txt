@@ -1,0 +1,12 @@
+Improve setDateHeader impl in MockServletResponse
+
+Prior to this change, calling the `setDateHeader` method on a
+MockHttpServletResponse instance (internal implementation for testing
+the spring-web module) would just store the given long value in a Map,
+not writing it as a formatted date String.
+
+This can be problematic when testing features related to date headers
+such as "Expires", "If-Modified-Since", "Last-Modified", etc.
+
+This commit formats long dates into date Strings using the date format
+recommended by the RFC and the GMT time zone.

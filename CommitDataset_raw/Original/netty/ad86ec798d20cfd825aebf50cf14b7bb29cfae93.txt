@@ -1,0 +1,13 @@
+Move calculateNewCapacity(...) to ByteBufAllocator
+
+Motivation:
+
+Currently we have the algorithm of calculate the new capacity of a ByteBuf implemented in AbstractByteBuf. The problem with this is that it is impossible for a user to change it if it not fits well it's use-case. We should better move it to ByteBufAllocator and so let the user implement it's own by either write his/her own ByteBufAllocator or just override the default implementation in one of our provided ByteBufAllocators.
+
+Modifications:
+
+Move calculateNewCapacity(...) to ByteBufAllocator and move the implementation (which was part of AbstractByteBuf) to AbstractByteBufAllocator.
+
+Result:
+
+The user can now override the default calculation algorithm when needed.

@@ -1,0 +1,12 @@
+Add group discriminant in case of conflict
+
+Prior to this commit, the repackage goal silently ignored the case of
+two libraries having the same name and version but a different group.
+As a result, the second library was overwriting the first one in the
+repackaged jar.
+
+This commit adds support for custom Library names and updates the
+Maven and Gradle plugins so that the name includes the group ID
+when there would otherwise be a duplicate.
+
+Fixes gh-1475

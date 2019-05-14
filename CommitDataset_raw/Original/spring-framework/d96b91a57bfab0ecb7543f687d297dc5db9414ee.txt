@@ -1,0 +1,9 @@
+Fix SerializableTypeWrapper equals() performance
+
+Change SerializableTypeWrapper proxies to directly call equals() methods
+on the underlying Type, rather than possibly generating more wrappers.
+
+This should help to improve performance, especially as the equals()
+method is called many times when the ResolvableType cache is checked.
+
+Issue: SPR-11335

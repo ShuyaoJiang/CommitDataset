@@ -1,0 +1,19 @@
+Set SNI servernames in OpenSSL engine when created in client mode (#8178)
+
+Motivation:
+
+When using the JDK SSL provider in client mode, the SNI host names (called serverNames in SslEngineImpl) is set to the peerHost (if available) that is used to initialize the SSL Engine:
+
+http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/sun/security/ssl/SSLEngineImpl.java#l377
+
+This allows one to call SslEngine.getSSLParameters() and inspect what is the SNI name to be sent. The same should be done in the OpenSSL provider as well. Currently even though the the SNI name is sent by the OpenSSL provider during handshake when the peerHost is specified, it is missing from the parameters.
+
+Modification:
+
+Set the sniHostNames field when SNI is to be used. Also verifies the peer is actually a hostname before setting it as the SNI name, which is consistent with JDK SSL provider's behavior.
+
+Result:
+
+SslEngine using the OpenSSL provider created in client mode with peerHost will initialize sniHostNames with the peerHost.
+
+Calling SslEngine.getSSLParameters().getServerNames() will return a list that contains that name.

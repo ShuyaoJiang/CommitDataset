@@ -1,0 +1,10 @@
+DefaultPromise make listeners not volatile
+
+Motivation:
+DefaultPromise has a listeners member variable which is volatile to allow for an optimization which makes notification of listeners less expensive when there are no listeners to notify. However this change makes all other operations involving the listeners member variable more costly. This optimization which requires listeners to be volatile can be removed to avoid volatile writes/reads for every access on the listeners member variable.
+
+Modifications:
+- DefaultPromise listeners is made non-volatile and the null check optimization is removed
+
+Result:
+DefaultPromise.listeners is no longer volatile.

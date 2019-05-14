@@ -1,0 +1,7 @@
+Move DeleteByQuery and Reindex requests into core (#24578)
+
+This allows other plugins to use a client to call the functionality
+that is in the core modules without duplicating the logic.
+Plugins can now safely send the request and response classes via the
+client even if the requests are executed locally. All relevant classes
+are loaded by the core classloader such that plugins can share them.

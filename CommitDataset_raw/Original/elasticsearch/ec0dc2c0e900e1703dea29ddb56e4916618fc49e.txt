@@ -1,0 +1,100 @@
+[Geo] Integrate Lucene's LatLonShape (BKD Backed GeoShapes) as default `geo_shape` indexing approach (#36751)
+
+* [Geo] Expose BKDBackedGeoShapes as new VECTOR strategy
+
+This commit exposes lucene's LatLonShape field as a new
+strategy in GeoShapeFieldMapper. To use the new indexing
+approach, strategy should be set to "vector" in the
+geo_shape field mapper. If the tree parameter is set
+the mapper will throw an IAE. Note the following:
+
+When using vector strategy:
+
+* geo_shape query does not support querying by POINT,
+MULTIPOINT, or GEOMETRYCOLLECTION.
+* LINESTRING and MULTILINESTRING queries do not support
+WITHIN relation.
+* CONTAINS relation is not supported.
+* The tree, precision, tree_levels, distance_error_pct,
+and points_only parameters will not throw an exception
+but they have no effect and will be marked as
+deprecated..
+
+All other features are supported.
+
+* revert change to PercolatorFieldMapper
+
+* fix ExistsQuery for geo_shape vector strategy
+
+* add deprecation logging for tree, precision, tree_levels, distance_error_pct, and points_only
+
+* initial update to geoshape docs, including mapping migration updates
+
+* initial support for GeoCollection queries
+
+* fix docs and javadoc errors
+
+* clean up geocollection queries
+
+* set deprecated mapping tests to NOTCONSOLE
+
+* fix geo-shape mapper asciidoc mapping and test warnings
+
+* add support for point queries using LatLonShapeBoundingBoxQuery
+
+* update GeoShapeQueryBuilderTests to include POINT queries for VECTOR strategy. Other comment cleanups
+
+* add lucene geometry build testing to ShapeBuilder tests
+
+* remove deprecated prefix tree mapping from geo-shape.asciidoc
+
+* refactor GeoShapeFieldMapper into LegacyGeoShapeFieldMapper and GeoShapeFieldMapper
+
+Both classes derive from BaseGeoShapeFieldMapper that provides shared parameters:
+coerce, ignoreMalformed, ignore_z_value, orientation.
+
+* update docs to remove vector strategy
+
+* fix GeometryCollectionBuilder#buildLucene to return the object created by the shape builder
+
+* fix LineLength failure in GeoJsonShapeParserTests
+
+* ShapeMapper refactor changes from PR feedback
+
+* fix typo in geo-shape.asciidoc
+
+* ignore circle test in docs
+
+* update indexing-approach ref to geoshape-indexing-approach
+
+* add warnings check for LegacyGeoShapeFieldMapper to AbstractBuilderTestCase
+
+* fix deprecatedParameters setup
+
+* update indexing approach
+
+* fixing unexpected warnings failures
+
+* move orientation back to field type
+
+* remove if in LegacyGeoShapeFieldMapper#doXContent. Fix GeoShapeFieldMapper to work with double array as a point
+
+* fix indexing-approach link in circle section of geoshape docs
+
+* add strategy to deprecation warnings check
+
+* fix test failures
+
+* fix typo in QueryStringQueryBuilderTests
+
+* fix total hits to totalHits().value
+
+* fix version number
+
+* add version check to BaseGeoShapeFieldMapper
+
+* fix line length!
+
+* revert version check in BaseGeoShapeFieldMapper
+
+* Fix serialization of mappings of legacy shapes.

@@ -1,0 +1,5 @@
+Introduce a buffer in SpdyStream's outgoing frames.
+
+Previously we'd consistently send 2048 byte frames because that was
+Okio's default segment size. This increases OkHttp's typical segment
+size to the 16 KiB frame size that all HTTP/2 endpoints support.

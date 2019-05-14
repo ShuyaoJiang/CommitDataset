@@ -1,0 +1,1 @@
+Change all instances of encoded.subSequence() to use a simple start index offset, which reduces the Java memory footprint for TrieParser by at at least 130 MBs. This is because the original call to subSequence() would generate a new String on the heap for each call, where as just using an offset avoids the need to generate a new String all together.

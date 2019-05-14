@@ -1,0 +1,12 @@
+Detect startup failures in additional Tomcat connectors
+
+Previously, only the state of the primary connector was checked when
+verifying that the embedded Tomcat instance has started successfully.
+This commit updates the verification logic to examine all of the
+service's connectors, thereby also detecting startup failures of any
+additional connectors the have been configured.
+
+A check on the primary connector's state has been removed from
+initialize as, at this stage, its state will always be NEW.
+
+Fixes gh-1591

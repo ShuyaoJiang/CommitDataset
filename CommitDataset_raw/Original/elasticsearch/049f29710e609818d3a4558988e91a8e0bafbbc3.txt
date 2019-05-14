@@ -1,0 +1,10 @@
+Reindex: log more on rare test failure
+
+The test failure tracked by #26758 occurs when we cancel a running reindex
+request that has been sliced into many children. The main reindex
+response *looks* canceled but none of the children look canceled. This
+is super strange because for the main request to look canceled for any
+length of time one of the children has to be canceled.
+
+This change adds additional logging to the test so we have more to go on
+to debug this the next time it fails.

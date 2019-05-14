@@ -1,0 +1,10 @@
+Fix third-party audit tasks on JDK 8
+
+This one is interesting. The third party audit task runs inside the
+Gradle JVM. This means that if Gradle is started on JDK 8, the third
+party audit tasks will fail as a result of the changes to support
+building Elasticsearch with the JDK 9 compiler. This commit reverts the
+third party audit changes to support running this task when Gradle is
+started with JDK 8.
+
+Relates #28256

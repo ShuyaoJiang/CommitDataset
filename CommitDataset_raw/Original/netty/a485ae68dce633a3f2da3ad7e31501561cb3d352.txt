@@ -1,0 +1,14 @@
+Guard against race when calling SslHandler.handshakeFuture().sync()
+
+Motivation:
+
+If the handlerAdded(...) callback was not called, the checkDeadLock() of the handshakeFuture will produce an IllegalStateException.
+This was first reported at https://github.com/impossibl/pgjdbc-ng/issues/168 .
+
+Modifications:
+
+Pass deadlock check if ctx is null
+
+Result:
+
+No more race and so IllegalStateException.

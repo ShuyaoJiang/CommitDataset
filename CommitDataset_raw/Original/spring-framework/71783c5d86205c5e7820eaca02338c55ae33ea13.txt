@@ -1,0 +1,17 @@
+Allow default settings of a custom HttpClient to apply
+
+Previously the default settings of a custom HttpClient were always
+ignored since a RequestConfig instance was always set no matter if
+some customizations were applied or not.
+
+This commit keeps an internal RequestConfig object instance that is
+only initialized if the user applies a customization. If he does not, the
+default settings of the HttpClient are used as it should.
+
+Note that if the HttpComponents API exposed the default RequestConfig
+of a given HttpClient, we would be able to merge our customizations with
+the one specified by the client. Unfortunately, such API does not exist
+and the "defaultSettingsOfHttpClientLostOnExecutorCustomization" test
+illustrates that limitation.
+
+Issue: SPR-12540

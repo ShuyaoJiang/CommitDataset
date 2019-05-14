@@ -1,0 +1,15 @@
+Correctly run pending tasks before flush and also remove incorrect assert.
+
+Motivation:
+
+We need to ensure we run all pending tasks before doing any flush in writeOutbound(...) to ensure all pending tasks are run first. Also we should remove the assert of the future and just add a listener to it so it is processed later if needed. This is true as a user may schedule a write for later execution.
+
+Modifications:
+
+- Remove assert of future in writeOutbound(...)
+- Correctly run pending tasks before doing the flush and also before doing the close of the channel.
+- Add unit tests to proof the defect is fixed.
+
+Result:
+
+Correclty handle the situation of delayed writes.

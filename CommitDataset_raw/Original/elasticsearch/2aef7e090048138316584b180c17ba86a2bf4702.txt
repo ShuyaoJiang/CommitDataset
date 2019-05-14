@@ -1,0 +1,10 @@
+Introduce mapping version to index metadata (#33147)
+
+This commit introduces mapping version to index metadata. This value is
+monotonically increasing and is updated on mapping updates. This will be
+useful in cross-cluster replication so that we can request mapping
+updates from the leader only when there is a mapping update as opposed
+to the strategy we employ today which is to request a mapping update any
+time there is an index metadata update. As index metadata updates can
+occur for many reasons other than mapping updates, this leads to some
+unnecessary requests and work in cross-cluster replication.

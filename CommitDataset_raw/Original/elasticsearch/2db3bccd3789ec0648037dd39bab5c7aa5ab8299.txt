@@ -1,0 +1,9 @@
+Invalid JSON request body caused endless loop (#26680)
+
+Request bodys that only consists of a String value can lead to endless loops in the
+parser of several rest requests like e.g. `_count`. Up to 5.2 this seems to have been caught 
+in the logic guessing the content type of the request, but since then it causes the node to
+block. This change introduces checks for receiving a valid xContent object before starting the
+parsing in RestActions#parseTopLevelQueryBuilder().
+
+Closes #26083

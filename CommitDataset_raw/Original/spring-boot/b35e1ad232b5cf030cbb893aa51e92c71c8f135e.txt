@@ -1,0 +1,19 @@
+Avoid unbounded metrics creation for requests not handled by Spring MVC
+
+Previously, if an HTTP request that used a templated URI was handled
+by something other than Spring MVC, a potentially unbounded number of
+metrics would be created. This happened because, in the absence of
+Spring MVC's best matching pattern attribute, MetricsFilter would fall
+back to using the request's path. If the handling route was templated,
+MetricsFilter would be unaware and would record different metrics for
+each different path, rather than a single metric for the matching
+pattern.
+
+This cimmit updates MetricsFilter so that it falls back to using
+unmapped when Spring MVC's best matching pattern attribute is not
+available. This ensures that an unbounded number of metrics will no
+longer be created, at the cost of losing specific metrics for requests
+that are not handled by Spring MVC and that do not use a templated
+path.
+
+Closes gh-5875

@@ -1,0 +1,15 @@
+Add ServerHttpRequest & ServerHttpResponse
+
+This commit introduces HTTP request and response abstractions along
+with Servlet-based implementations similar to the ones in the http
+package of spring-web but using Reactive Streams.
+
+In turn HttpHandler now accepts the request and response types and
+returns Publisher<Void> that reflects the end of handling.
+
+The write method on the response also returns Publisher<Void> allowing
+deferred writing. At the moment however the underlying Servlet 3.1
+support only supports a single publisher after which the connection
+is closed.
+
+Only simple byte[] is supported for reading and writing.

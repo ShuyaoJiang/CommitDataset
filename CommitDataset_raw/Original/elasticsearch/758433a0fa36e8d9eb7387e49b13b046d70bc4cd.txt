@@ -1,0 +1,11 @@
+Monitoring: Ensure all monitoring watches filter by timestamp (elastic/x-pack-elasticsearch#3238)
+
+Only the Logstash and Kibana version mismatch watches contain a time
+filter, the others are only sorting by timestamp. In combination with
+searching in all `.monitoring-es-*` indices, this is IMO pretty resource
+intensive, as we cannot exit early on any search request.
+
+This commit adds time based filters to remaining three watches, using
+the same range than the other two.
+
+Original commit: elastic/x-pack-elasticsearch@3eb6bf0de2b9fb36564717e22a9f406457c0bddc

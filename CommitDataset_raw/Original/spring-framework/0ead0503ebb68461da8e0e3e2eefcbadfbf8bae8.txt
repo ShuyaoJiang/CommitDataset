@@ -1,0 +1,12 @@
+AbstractJackson2Encoder uses private fields
+
+Make the protected fields in AbstractJackson2Encoder private plus
+minor refactoring to the way streaming separators are applied.
+
+The current (5.0.3) behavior is to always use '\n', but in 5.0.4 the
+newly supported "application/stream+x-jackson-smile" needs to be
+excluded from that. For now, separator determination remains private
+in the abstract base class, but current behavior remains which is to
+apply '\n' by default.
+
+Issue: SPR-15424

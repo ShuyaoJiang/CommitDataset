@@ -1,0 +1,22 @@
+Create a new API for handling merged annotations
+
+Add new `MergedAnnotations` and `MergedAnnotation` interfaces that
+attempt to provide a uniform way for dealing with merged annotations.
+
+Specifically, the new API provides alternatives for the static methods
+in `AnnotationUtils` and `AnnotatedElementUtils` and supports Spring's
+comprehensive annotation attribute `@AliasFor` features. The interfaces
+also open the possibility of the same API being exposed from the
+`AnnotationMetadata` interface.
+
+Additional utility classes for collecting, filtering and selecting
+annotations have also been added.
+
+Typical usage for the new API would be something like:
+
+	MergedAnnotations.from(Example.class)
+		.stream(MyAnnotation.class)
+		.map(a -> a.getString("value"))
+		.forEach(System.out::println);
+
+Closes gh-21697

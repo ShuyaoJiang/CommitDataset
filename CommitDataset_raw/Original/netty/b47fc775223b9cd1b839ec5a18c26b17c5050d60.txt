@@ -1,0 +1,18 @@
+Add PooledByteBufAllocator + microbenchmark module
+
+This pull request introduces the new default ByteBufAllocator implementation based on jemalloc, with a some differences:
+
+* Minimum possible buffer capacity is 16 (jemalloc: 2)
+* Uses binary heap with random branching (jemalloc: red-black tree)
+* No thread-local cache yet (jemalloc has thread-local cache)
+* Default page size is 8 KiB (jemalloc: 4 KiB)
+* Default chunk size is 16 MiB (jemalloc: 2 MiB)
+* Cannot allocate a buffer bigger than the chunk size (jemalloc: possible) because we don't have control over memory layout in Java. A user can work around this issue by creating a composite buffer, but it's not always a feasible option. Although 16 MiB is a pretty big default, a user's handler might need to deal with the bounded buffers when the user wants to deal with a large message.
+
+Also, to ensure the new allocator performs good enough, I wrote a microbenchmark for it and made it a dedicated Maven module. It uses Google's Caliper framework to run and publish the test result (example)
+
+Miscellaneous changes:
+
+* Made some ByteBuf implementations public so that those who implements a new allocator can make use of them.
+* Added ByteBufAllocator.compositeBuffer() and its variants.
+* ByteBufAllocator.ioBuffer() creates a buffer with 0 capacity.

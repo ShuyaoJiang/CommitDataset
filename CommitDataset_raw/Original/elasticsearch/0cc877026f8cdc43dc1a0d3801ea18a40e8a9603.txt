@@ -1,0 +1,10 @@
+Subclass NIOFSDirectory instead of using FileSwitchDirectory (#37140)
+
+We don't want two FSDirectories manage pending deletes separately
+and optimize file listing. This confuses IndexWriter and causes exceptions
+when files are deleted twice but are pending for deletion. This change
+move to using a NIOFS subclass that only delegates to MMAP for opening files
+all metadata and pending deletes are managed on top.
+
+Closes #37111
+Relates to #36668

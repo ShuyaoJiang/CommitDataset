@@ -1,0 +1,10 @@
+HttpObjectDecoder resetRequested not updated after reset
+
+Motivation:
+HttpObjectDecoder maintains a resetRequested flag which is used to determine if internal state should be reset when a decode occurs. However after a reset is done the resetRequested flag is not set to false. This leads to all data after this point being discarded.
+
+Modifications:
+- Set resetRequested to false when a reset is done
+
+Result:
+HttpObjectDecoder can still function after a reset.

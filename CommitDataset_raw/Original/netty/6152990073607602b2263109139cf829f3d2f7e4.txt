@@ -1,0 +1,10 @@
+OpenSslEngine protocol selection must be contiguous
+
+Motivation:
+TLS doesn't support a way to advertise non-contiguous versions from the client's perspective, and the client just advertises the max supported version. The TLS protocol also doesn't support all different combinations of discrete protocols, and instead assumes contiguous ranges. OpenSSL has some unexpected behavior (e.g. handshake failures) if non-contiguous protocols are used even where there is a compatible set of protocols and ciphers. For these reasons this method will determine the minimum protocol and the maximum protocol and enabled a contiguous range from [min protocol, max protocol] in OpenSSL.
+
+Modifications:
+- ReferenceCountedOpenSslEngine#setEnabledProtocols should determine the min/max protocol versions and enable a contiguous range
+
+Result:
+OpenSslEngine is more consistent with the JDK's SslEngineImpl and no more unexpected handshake failures due to protocol selection quirks.

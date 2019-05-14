@@ -1,0 +1,11 @@
+Fix issue with extracting matrix variables
+
+The servlet spec recommends removing path parameters from the
+contextPath, servletPath, and pathInfo but not from the requestURI.
+This poses a challenge for the UrlPathHelper, which determines the
+lookup path by comparing the above.
+
+This change introduces a method that matches the requestURI to the
+contextPath and servletPath ignoring path parameters (i.e. matrix
+variables) for comparison purposes while also preserving them in the
+resulting lookup path.

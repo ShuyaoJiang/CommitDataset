@@ -1,0 +1,17 @@
+Make the flow-controllers write fewer, fatter frames to improve throughput.
+
+Motivation:
+
+Coalescing many small writes into a larger DATA frame reduces framing overheads on the wire and reduces the number of calls to Http2FrameListeners on the remote side.
+Delaying the write of WINDOW_UPDATE until flush allows for more consumed bytes to be returned as the aggregate of consumed bytes is returned and not the amount consumed when the threshold was crossed.
+
+Modifications:
+- Remote flow controller no longer immediately writes bytes when a flow-controlled payload is enqueued. Sequential data payloads are now merged into a single CompositeByteBuf which are written when 'writePendingBytes' is called.
+- Listener added to remote flow-controller which observes written bytes per stream.
+- Local flow-controller no longer immediately writes WINDOW_UPDATE when the ratio threshold is crossed. Now an explicit call to 'writeWindowUpdates' triggers the WINDOW_UPDATE for all streams who's ratio is exceeded at that time. This results in
+  fewer window updates being sent and more bytes being returned.
+- Http2ConnectionHandler.flush triggers 'writeWindowUpdates' on the local flow-controller followed by 'writePendingBytes' on the remote flow-controller so WINDOW_UPDATES preceed DATA frames on the wire.
+
+Result:
+- Better throughput for writing many small DATA chunks followed by a flush, saving 9-bytes per coalesced frame.
+- Fewer WINDOW_UPDATES being written and more flow-control bytes returned to remote side more quickly, thereby improving throughput.

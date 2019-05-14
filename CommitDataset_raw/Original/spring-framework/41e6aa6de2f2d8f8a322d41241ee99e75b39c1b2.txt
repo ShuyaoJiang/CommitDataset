@@ -1,0 +1,13 @@
+Restore log level for resolved exceptions
+
+The fix for SPR-17178 switched from debug to warn level warning for
+all sub-classes of AbstractHandlerExceptionResolver where the request
+concerned the DefaultHandlerExceptionResolver only.
+
+This commit restores the original DEBUG level logging that was in
+AbstractHandlerExceptionResolver from before SPR-17178. In addition
+DefaultHandlerExceptionResolver registers a warnLogCategory by default
+which enables warn logging and hence fulfilling the original goal
+for SPR-17178.
+
+Issue: SPR-17383

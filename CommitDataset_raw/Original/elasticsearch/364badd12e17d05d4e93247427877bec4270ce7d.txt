@@ -1,0 +1,12 @@
+Fix serialization bug in painless execute api request (#36075)
+
+The `xContentType` was incorrectly serialized:
+`xContentType.mediaTypeWithoutParameters()` was used to serialize, but
+`xContentType.mediaType()` was used to de-serialize.
+
+Also the serialization test class did not test `ContextSetup` well,
+this was due to limitation in serialization test base class. Changed the
+test class to manually test xcontent serialization, so that for both binary
+and xcontent serialization tests, the `ContextSetup` is properly tested.
+
+Closes #36050

@@ -1,0 +1,7 @@
+Increase the maximum number of filters that may be in the cache. (#30655)
+
+We added this limit because we occasionally saw cases where most of the memory
+usage of the cache was spent on the keys (ie. queries) rather than the values,
+which caused the cache to vastly underestimate its memory usage. In recent
+releases, we disabled caching on heavy `terms` queries, which were the main
+source of the problem, so putting more entries in the cache should be safer.

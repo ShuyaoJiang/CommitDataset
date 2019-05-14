@@ -1,0 +1,5 @@
+Trim down usages of `ShardOperationFailedException` interface (elastic/x-pack-elasticsearch#3662)
+
+In many cases we use the `ShardOperationFailedException` interface to abstract an exception that can only be of one type, namely `DefaultShardOperationException`. There is no need to use the interface in such cases, the concrete type should be used instead. That has the additional advantage of simplifying parsing such exceptions back from rest responses for the high-level REST client.
+
+Original commit: elastic/x-pack-elasticsearch@b2259afcbfadedc6765eb672d7ad3848d16e0242

@@ -1,0 +1,8 @@
+[Security] Handle non-existent user in native realm (elastic/x-pack-elasticsearch#2044)
+
+Since change elastic/x-pack-elasticsearch@f796949 authentication is not allowed to respond with null, it must be AuthenticationResult.notHandled()
+
+- Fixes 1 case where the native realm would respond null if the user was not found
+- Fixes some edge cases in the LDAP realm.
+
+Original commit: elastic/x-pack-elasticsearch@bc739a1d40453fbec84f0033e2b0f1a51c9a6713

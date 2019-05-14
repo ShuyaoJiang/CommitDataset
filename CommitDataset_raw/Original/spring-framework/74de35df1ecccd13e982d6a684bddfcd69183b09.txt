@@ -1,0 +1,14 @@
+Refactor async result handling in Spring MVC Test
+
+This change removes the use of a CountDownLatch to wait for the
+asynchronously computed controller method return value. Instead we
+check in a loop every 200 milliseconds if the result has been set.
+If the result is not set within the specified amount of time to wait
+an IllegalStateException is raised.
+
+Additional changes:
+ - Use AtomicReference to hold the async result
+ - Remove @Ignore annotations on AsyncTests methods
+ - Remove checks for the presence of Servlet 3
+
+Issue: SPR-11516

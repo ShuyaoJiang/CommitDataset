@@ -1,0 +1,10 @@
+Reduce memory requirements for MockWebServerTest.disconnectHalfway().
+
+MockWebServer.readRequest() was accumulating the request body (1 GByte)
+into an unbounded buffer held in memory. This caused the test to fail
+with an OutOfMemoryError on low-memory devices. Due to the OOME, not
+even a stacktrace was available.
+
+This CL introduces setBodyLimit() to limit the amount of data held in
+memory. Note that this is similar to the call to setBodyLimit(0) that
+already exists in URLConnectionTest.veryLargeFixedLengthRequest().

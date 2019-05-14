@@ -1,0 +1,11 @@
+Avoid unsafely recycling Bitmaps in DrawableTransformation.
+
+There were two issues here:
+1. The BitmapPool used by the Drawable converter was recycling Bitmaps
+when it was used specifically to avoid recycling Bitmaps when the converter didn’t allocate the returned values
+2. If the Drawable wasn’t transformed, because the BitmapTransformation that the DrawableTransformation wrapped didn’t need to mutate the 
+converted Drawable, the intermediate Bitmap would be placed into the
+BitmapPool twice.
+
+Both of these issues should be fixed with some additional tests to 
+hopefully prevent this from happening again.

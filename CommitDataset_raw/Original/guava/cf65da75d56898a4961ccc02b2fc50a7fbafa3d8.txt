@@ -1,0 +1,11 @@
+Harmonize NPE @throws clauses on FluentIterable.toXX() methods and friends
+
+I noticed that toSet() and toList() each lacked an @throws NullPointerException for the case where an element of the FluentIterable is null; this seems like an omission given that their sorted cousins have the @throws, as do the various other toXX() methods that return an ImmutableXX as well as index() and uniqueIndex() which are similar in spirit.
+
+I also standardized toMap(), index(), and uniqueIndex() to each use the same format for listing the reasons they can throw NPE (null element, or null function result).  Note that these can also throw NPE on a null parameter to the method, but that is not documented per convention since the package has @ParametersAreNonnullByDefault.
+
+Finally, I updated Multimaps.index() and Ordering.immutableSortedCopy() to adopt this convention as well (since they're passed through to by the FluentIterable methods), and I tidied up some wording choices (e.g. consistently using "{@code null}", and using "element of this iterable" instead of just "element" when the method takes parameters).
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=152552349

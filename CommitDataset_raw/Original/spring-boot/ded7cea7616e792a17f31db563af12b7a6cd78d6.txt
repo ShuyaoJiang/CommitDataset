@@ -1,0 +1,16 @@
+Prevent webapp class loader from finding resources
+
+Previously, TomcatEmbeddedWebappClassLoader would find resources
+in WEB-INF/classes. However, unlike standalone Tomcat, we know that in
+a Boot app WEB-INF/classes is on the class path of the parent class
+loader so the resources will be found when the parent is queried
+(which happens as part of the normal search algortithm for both
+getResource(String) and getResources(String)).
+
+This commit overrides findResource(String) and findResources(String)
+to return null and an empty enumeration respectively. This prevents
+TomcatEmbeddedWebappClassLoader from finding resources in
+WEB-INF/classes and returning war: URLs for them that duplicate the
+jar: URLs that will be found when the parent is queried.
+
+Closes gh-9014

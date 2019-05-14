@@ -1,0 +1,10 @@
+Improve connection reuse.
+
+Instead of trying to read the last bytes of a content body
+when the input stream is read, do it when the connection is
+closed. This approach is less elegant, since it requires
+a connection to do work on behalf of a potentially nonexistent
+follow up connection. But it should result in more reuse in
+practice.
+
+http://code.google.com/p/android/issues/detail?id=38817

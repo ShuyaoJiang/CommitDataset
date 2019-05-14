@@ -1,0 +1,16 @@
+Update MetricFilter to treat an unsuccessful call to doFilter as a 500
+
+Previously, if a call to doFilter in MetricFilter failed (i.e. it threw
+an exception), it would be handled as if it had a response status of
+200. This is because the servlet container was yet to handle the
+exception and set the response status to 500.
+
+This commit updates MetricFilter to assume that an exception thrown from
+doFilter will result in a response with a status of 500. Strictly
+speaking, even though the filter has highest precedence and will
+therefore run last on the way back out, this may not always be the case.
+For example, a custom Tomcat Valve could handle the exception and result
+in a 200 response but that’s an edge case that’s into shooting yourself
+in the foot territory.
+
+Closes gh-2818

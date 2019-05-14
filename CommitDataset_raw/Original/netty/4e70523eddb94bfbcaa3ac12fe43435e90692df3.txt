@@ -1,0 +1,19 @@
+The "null" ClassLoader is the bootstrap ClassLoader
+
+Motivation:
+Class.forName() documents that null will use bootstrap loader:
+http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#forName-java.lang.String-boolean-java.lang.ClassLoader-
+
+But the link between "null" and bootstrap loader is even more explicit
+in ClassLoader's documentation:
+http://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html#getParent--
+
+The current code is trying to use the bootstrap loader but seems to have
+not been aware of the meaning of null.
+
+Modifications:
+Use "null" as the class loader when we want to load classes in the
+bootstrap loader.
+
+Result:
+More reliable ALPN/NPN loading and simpler code.

@@ -1,0 +1,28 @@
+Do not try to be unsafe when told not to be unsafe
+
+Motivation:
+
+Netty has a flag (io.netty.noUnsafe) for specifying to Netty to not be
+unsafe. Yet, when initializing PlatformDependent0, Netty still tries to
+be unsafe. For application that specify to Netty to not be unsafe and
+run under a security manager, this can lead to an obnoxious (debug
+level) stack trace. Since Netty was told not to be unsafe, Netty should
+not try to be unsafe.
+
+Modifications:
+
+The initialization logic in PlatformDependent0 should take into account
+that Netty was told not to be unsafe. This means that we need to
+initialize PlatformDependent#IS_EXPLICIT_NO_UNSAFE as soon as possible,
+before the static initializer for PlatformDependent0 has a chance to
+run. Thus the following modifications are made:
+ - initialize PlatformDependent#IS_EXPLICIT_NO_UNSAFE before any other
+   code in PlatformDependent causes PlatformDependent0 to initialize
+ - expose the value of PlatformDependent#IS_EXPLICIT_NO_UNSAFE for
+   reading in PlatformDependent0
+ - take the value of PlatformDependent#IS_EXPLICIT_NO_UNSAFE into
+   account in PlatformDependent0
+
+Result:
+
+Netty does not try to be unsafe when told not to be unsafe.

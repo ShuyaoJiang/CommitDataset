@@ -1,0 +1,5 @@
+Use non-lenient constructor resolution mode for @Bean methods
+
+Since @Bean methods are never used with externally specified constructor argument values but rather just with autowiring, the non-lenient constructor resolution mode is appropriate in case of an overloaded @Bean method, not performing any type difference weight checks. This change includes a refinement of Spring's existing non-lenient constructor resolution (which needs to be explicitly turned on and is therefore not well tested), narrowing the conditions for the ambiguity check (only in case of the same number of arguments and not for overridden methods).
+
+Issue: SPR-10988

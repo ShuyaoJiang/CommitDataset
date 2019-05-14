@@ -1,0 +1,11 @@
+Move Streams.copy into elasticsearch-core and make a multi-release jar (#29322)
+
+* Move Streams.copy into elasticsearch-core and make a multi-release jar
+
+This moves the method `Streams.copy(InputStream in, OutputStream out)` into the
+`elasticsearch-core` project (inside the `o.e.core.internal.io` package). It
+also makes this class into a multi-release class where the Java 9 equivalent
+uses `InputStream#transferTo`.
+
+This is a followup from
+https://github.com/elastic/elasticsearch/pull/29300#discussion_r178147495

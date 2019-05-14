@@ -1,0 +1,9 @@
+[ML] Refactor [Bucket|Record]QueryBuilder classes (elastic/x-pack-elasticsearch#2684)
+
+Those classes used to be elasticsearch-agnostic wrappers
+of the query parameters. However, we now do not need that
+layer of abstraction. Instead we can make those builders
+own the building of the SearchSourceBuilder, which
+simplifies the JobProvider and makes them reusable.
+
+Original commit: elastic/x-pack-elasticsearch@b079cce1d6bb0d8aeb2a952d6863dc929a5e6149

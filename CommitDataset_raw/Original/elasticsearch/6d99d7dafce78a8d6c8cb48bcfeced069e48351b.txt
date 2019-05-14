@@ -1,0 +1,7 @@
+ListenableFuture should preserve ThreadContext (#34394)
+
+ListenableFuture may run a listener on the same thread that called the
+addListener method or it may execute on another thread after the future
+has completed. Whenever the ListenableFuture stores the listener for
+execution later, it should preserve the thread context which is what
+this change does.

@@ -1,0 +1,19 @@
+Add temporary directory cleanup workarounds (#32615)
+
+On some Linux distributions tmpfiles.d cleans files and
+directories under /tmp if they haven't been accessed for
+10 days.
+
+This can cause problems for ML as ML is currently the only
+component that uses the temp directory more than a few
+seconds after startup. If you didn't open an ML job for
+10 days and then tried to open one then the temp directory
+would have been deleted.
+
+This commit prevents the problem occurring in the case of
+Elasticsearch being managed by systemd, as systemd private
+temp directories are not subject to periodic cleanup (by
+default).
+
+Additionally there are now some docs to warn people about
+the risk and suggest a manual mitigation for .tar.gz users.

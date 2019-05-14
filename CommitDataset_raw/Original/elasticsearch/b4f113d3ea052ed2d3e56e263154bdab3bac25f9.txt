@@ -1,0 +1,10 @@
+Don't block on peer recovery on the target side (#37076)
+
+Today we block using the generic thread-pool on the target side
+until the source side has fully executed the recovery. We still
+block on the source side executing the recovery in a blocking fashion
+but there is no reason to block on the target side. This will
+release generic threads early if there are many concurrent recoveries
+happen.
+
+Relates to #36195

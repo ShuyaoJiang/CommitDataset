@@ -1,0 +1,14 @@
+Efficiently handle writing ( wrap(...) ) of CompositeByteBuf when using SslHandler
+
+Motivation:
+
+SslHandler.wrap(...) does a poor job when handling CompositeByteBuf as it always call ByteBuf.nioBuffer() which will do a memory copy when a CompositeByteBuf is used that is backed by multiple ByteBuf.
+
+Modifications:
+
+- Use SslEngine.wrap(ByteBuffer[]...) to allow wrap CompositeByteBuf in an efficient manner
+- Reduce object allocation in unwrapNonAppData(...)
+
+Result:
+
+Performance improvement when a CompositeByteBuf is written and the SslHandler is in the ChannelPipeline.

@@ -1,0 +1,9 @@
+Run Third party audit with forbidden APIs CLI  (part3/3) (#33052)
+
+The new implementation is functional equivalent with the old, ant based one.
+It parses task standard error to get the missing classes and violations in the same way.
+I considered re-using ForbiddenApisCliTask but Gradle makes it hard to build inheritance with tasks that have task actions , since the order of the task actions can't be controlled.
+This inheritance isn't dully desired either as the third party audit task is much more opinionated and we don't want to expose some of the configuration.
+We could probably extract a common base class without any task actions, but probably more trouble than it's worth.
+
+Closes #31715

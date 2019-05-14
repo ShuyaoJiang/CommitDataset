@@ -1,0 +1,17 @@
+Improve support for alternative Log4j 2 configuration file formats
+
+This commit adds support for configuring Log4j 2 with YAML. It also
+improves the existing support for configuring Log4j 2 with JSON.
+
+Previously, Log4J2LoggingSystem returned a hard-coded list of standard
+config locations that includes both JSON and XML file suffixes. Log4j 
+2’s support for JSON configuration files requires Jackson’s ObjectMapper
+to be on the classpath so, in its absence, the standard config locations
+were incorrect.
+
+This commit updates Log4J2LoggingSystem to return an array of standard
+config locations based on what’s on the classpath. It also updates the
+documentation to describe the additional dependencies that are required
+to enable YAML or JSON-based configuration.
+
+Closes gh-2239

@@ -1,0 +1,13 @@
+Fix client-library-url ignored in MVC namespace
+
+Prior to this commit, the `client-library-url` XML attribute was not
+effective in the MVC namespace, leaving the default value configured:
+
+```xml
+<websocket:sockjs client-library-url="/js/sockjs.js" />
+```
+
+This commit fixes the sockjs namespace handler and makes sure that this
+attribute is configured on the `SockJsService` Bean to be created.
+
+Issue: SPR-12874

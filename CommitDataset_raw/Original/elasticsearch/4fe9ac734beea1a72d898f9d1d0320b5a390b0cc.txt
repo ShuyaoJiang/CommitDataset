@@ -1,0 +1,26 @@
+Watcher: Store thread context headers in watch (elastic/x-pack-elasticsearch#2808)
+
+In order to be able to execute a watch as the user, who stored the
+watch, this commit stores certain headers of the thread context, that
+was used when the watch was stored.
+
+Upon loading the watch the headers are loaded and applied for the
+following watcher execution features
+
+* search transform
+* search input
+* index action
+
+A special case is the execute watch API, which overrides the headers loaded
+from the watch with the one of the current request, so that a user
+cannot execute this watch with other privileges of the user who stored it.
+
+Only the headers "es-security-runas-user", "_xpack_security_authentication" are
+copied for now, as those are needed for our security features.
+
+The headers are stored in watch status in the watch and are not returned by default,
+when the GET Watch API is used. A search reveals those of course.
+
+relates elastic/x-pack-elasticsearch#2201
+
+Original commit: elastic/x-pack-elasticsearch@9803bd51c25100d7f4ed4ce8eb48d6d6eff7fbc2

@@ -1,0 +1,30 @@
+Isolate class loading for launched CLI apps
+
+Rework classloading for launched applications so that CLI classes and
+dependencies are not visible. This change allows many of the previous
+hacks and workarounds to be removed.
+
+With the exception of the 'org.springframework.boot.groovy' package
+and 'groovy-all' all user required depndencies are now pulled in
+via @Grab annotations.
+
+The updated classloading algorithm has enabled the following changes:
+
+- AetherGrapeEngine is now back in the cli project and the
+  spring-boot-cli-grape project has been removed. The AetherGrapeEngine
+  has also been simplified.
+
+- The TestCommand now launches a TestRunner (similar in design to the
+  SpringApplicationRunner) and report test failures directly using
+  the junit TextListener. Adding custom 'testers' source to the users
+  project is no longer required. The previous 'double compile' for
+  tests has also been removed.
+
+- Utility classes have been removed in favor of using versions from
+  spring-core.
+
+- The CLI jar is now packaged using the 'boot-loader' rather than using
+  the maven shade plugin.
+
+This commit also applied minor polish refactoring to a number of
+classes.

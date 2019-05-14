@@ -1,0 +1,10 @@
+Liberalize StreamOutput#writeStringList (#37768)
+
+In some cases we only have a string collection instead of a string list
+that we want to serialize out. We have a convenience method for writing
+a list of strings, but no such method for writing a collection of
+strings. Yet, a list of strings is a collection of strings, so we can
+simply liberalize StreamOutput#writeStringList to be more generous in
+the collections that it accepts and write out collections of strings
+too. On the other side, we do not have a convenience method for reading
+a list of strings. This commit addresses both of these issues.

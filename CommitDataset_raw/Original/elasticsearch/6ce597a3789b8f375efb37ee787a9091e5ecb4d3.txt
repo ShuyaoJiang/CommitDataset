@@ -1,0 +1,7 @@
+Scripts: Convert template script engines to return String instead of BytesReference (#24447)
+
+Template script engines (mustache, the only one) currently return a
+BytesReference that users must know is utf8 encoded. This commit
+modifies all callers and mustache to have the template engine return
+String. This is much simpler, and does not require decoding in order to
+use (for example, in ingest).

@@ -1,0 +1,7 @@
+Cross-cluster search: preserve cluster alias in shard failures (#32608)
+
+When some remote clusters return shard failures as part of a cross-cluster search request, the cluster alias currently gets lost. As a result, if the shard failures are all caused by the same error, and against indices belonging to different clusters, but with the same index name, only one failure gets returned as part of the search response, meaning that failures are grouped by index name, ignoring the cluster alias.
+
+With this commit we make sure that `ShardSearchFailure` returns the cluster alias as part of the index name. Also, we set the fully qualfied index name when creating a `QueryShardException`. That way shard failures are grouped by cluster:index. Such fixes should cover at least most of the cases where either 1) the shard target is set but we don't have the index in the cause (we were previously reading it only from the cause that did not have the cluster alias) 2) the shard target is missing but if the cause is a `QueryShardException` the cluster alias does not get lost.
+
+We also prevent NPE in case the failure cause is not set and test such scenario.

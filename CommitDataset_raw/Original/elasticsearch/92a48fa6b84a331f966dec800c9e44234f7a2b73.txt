@@ -1,0 +1,11 @@
+Add script to cache dependencies (#33726)
+
+With the introduction of immutable workers into our CI, we now have a
+problem where we would have to download dependencies on every single
+build. To this end our infrastructure team has introduced the
+possibility to download dependencies one time and then bake these into
+the base immutable worker image. For this, we introduce our version of
+this special script which runs a task that downloads all dependencies of
+all configurations. With this script, our infrastructure team will be
+rebuilding these images on an at-least daily basis. This helps us avoid
+having to download the dependencies for every single build.

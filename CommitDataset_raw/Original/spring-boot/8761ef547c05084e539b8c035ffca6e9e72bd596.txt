@@ -1,0 +1,14 @@
+Log single message per jar with faulty Class-Path manifest attribute
+
+Previously, when DevTools encountered a jar with a Class-Path manifest
+attribute that referenced non-existent files, it would log one
+message per entry in the attribute that did not exist. While useful
+information, this has proven to be too verbose.
+
+This commit aims to strike a better balances by logging a single
+message for an entire jar. The message is a single line that
+includes the path to the jar with the faulty Class-Path manifest
+attribute and the paths of all of the files that do not exist that are
+referenced by the attribute.
+
+Closes gh-10111

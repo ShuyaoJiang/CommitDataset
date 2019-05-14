@@ -1,0 +1,8 @@
+Use alternative UUID strategy in MessageHeaders
+
+This change adds an alternative UUID generation strategy to use by
+default in MessageHeaders. Instead of using SecureRandom for each
+new UUID, SecureRandom is used only for the initial seed to be
+provided java.util.Random. Thereafter the same Random instance is
+used instead. This provides improved performance while id's are
+still random but less securely so.

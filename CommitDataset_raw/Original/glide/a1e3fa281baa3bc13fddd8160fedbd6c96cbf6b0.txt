@@ -1,0 +1,13 @@
+Only restart full request when restarting requests with thumbnails.
+
+When thumbnail requests finish after full requests complete, we discard
+the thumbnail's resource to decrease memory usage and we set the
+thumbnails status to complete. When requests are restarted after they
+complete, we just call onLoadComplete with whatever resource they had
+previously. As a result, thumbnail requests that completed after full
+requests were calling onLoadComplete(null), causing spammy error logs
+and potentially undesireable calls to onLoadFailed.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=177489960

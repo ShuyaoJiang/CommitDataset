@@ -1,0 +1,11 @@
+Use shaded dependency on JCTools instead of copy and paste
+
+Motivation:
+JCTools supports both non-unsafe, unsafe versions of queues and JDK6 which allows us to shade the library in netty-common allowing it to stay "zero dependency".
+
+Modifications:
+- Remove copy paste JCTools code and shade the library (dependencies that are shaded should be removed from the <dependencies> section of the generated POM).
+- Remove usage of OneTimeTask and remove it all together.
+
+Result:
+Less code to maintain and easier to update JCTools and less GC pressure as the queue implementation nt creates so much garbage

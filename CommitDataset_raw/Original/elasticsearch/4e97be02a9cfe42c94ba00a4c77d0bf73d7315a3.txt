@@ -1,0 +1,13 @@
+Export HOSTNAME environment variable
+
+We previously explicitly set the HOSTNAME environment variable so that
+${HOSTNAME} could be used a placeholder for defining the node.name in
+elasticsearch.yml. We removed explicitly setting this because bash
+defines HOSTNAME. The problem is that bash defines HOSTNAME as a bash
+variable, not as an environment variable. Therefore, to restore the
+previous behavior, we export the bash value for HOSTNAME as an
+environment variable named HOSTNAME. For consistency between Windows and
+the Unix-like systems, we also define HOSTNAME with a value equal to the
+environment variable COMPUTERNAME on Windows.
+
+Relates #26262

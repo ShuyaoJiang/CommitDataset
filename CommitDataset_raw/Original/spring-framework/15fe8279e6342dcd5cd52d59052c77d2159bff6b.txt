@@ -1,0 +1,14 @@
+Reset Expires HTTP header when caching configured
+
+Just like SPR-13252 addressed this issue for the "Pragma" header, this
+issue resets the HTTP 1.0 "Expires" header.
+When such a header has been set (by a filter, for example) and HTTP
+caching has been configured at the WebContentGenerator, this header
+value is reset to "". In this case, "Cache-Control" and "Expires" might
+have inconsistent values and we consider that the HTTP caching
+configuration should take precedence.
+
+Depending on the servlet container chosen to deploy the application,
+this might result in empty "" header values or no header set at all.
+
+Issue: SPR-14053

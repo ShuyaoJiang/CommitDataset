@@ -1,0 +1,7 @@
+Remove concurrency in testFailLeaderReplicaShard (#36607)
+
+testFailLeaderReplicaShard periodically fails because we concurrently
+index to the leader group and close one of its replicas. If a
+replication request hits a closing shard, we will fail that shard;
+however, failing a shard is supported by the test framework - this makes
+the test fail.

@@ -1,0 +1,22 @@
+Add scrolling support to jdbc (elastic/x-pack-elasticsearch#2524)
+
+* Switch `ResultSet#getFetchSize` from returning the *requested*
+fetch size to returning the size of the current page of results.
+For scrolling searches without parent/child this'll match the
+requested fetch size but for other things it won't. The nice thing
+about this is that it lets us tell users a thing to look at if
+they are wondering why they are using a bunch of memory.
+* Remove all the entire JDBC action and implement it on the REST
+layer instead.
+* Create some code that can be shared between the cli and jdbc
+actions to properly handle errors and request deserialization so
+there isn't as much copy and paste between the two. This helps
+because it calls out explicitly the places where they are different.
+  * I have not moved the CLI REST handle to shared code because
+I think it'd be clearer to make that change in a followup PR.
+* There is now no more need for constructs that allow iterating
+all of the results in the same request. I have not removed these
+because I feel that that cleanup is big enough to deserve its own
+PR.
+
+Original commit: elastic/x-pack-elasticsearch@3b12afd11cc5c8ff8464b84ed4601a451c77a5a2

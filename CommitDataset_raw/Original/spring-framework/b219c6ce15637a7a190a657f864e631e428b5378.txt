@@ -1,0 +1,13 @@
+Adjust UriComponentsBuilder#toUriString behavior
+
+Commit #93b7a4 added support for pre-configuring URI variables at the
+UriComponentsBuilder level, and also changed toUriString to encode
+template and URI variables separately. However this went a bit too far
+causing side effects for URLs with curly braces that don't represent
+URI variables.
+
+This commit restores the original toUriString behavior which is to
+encode template and URI variables sepraately only if URI variables have
+been pre-configured.
+
+Issue: SPR-17630

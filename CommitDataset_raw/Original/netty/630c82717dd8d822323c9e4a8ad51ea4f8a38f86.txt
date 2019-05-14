@@ -1,0 +1,17 @@
+Lazy initialize NativeDatagramPacketArray and IovArray in EpollEventLoop (#8160)
+
+Motivation:
+
+Avoid unnecessary native memory allocation if UDP / TCP isn't being
+used.
+
+Modifications:
+
+Create the reused NativeDatagramPacketArray and IovArray upon first use
+instead of EpollEventLoop construction.
+
+Also correct related comment in NativeDatagramPacketArray.
+
+Result:
+
+Reduced native memory use when using epoll in many cases

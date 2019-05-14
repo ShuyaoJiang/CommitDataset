@@ -1,0 +1,18 @@
+Improve client SNI in testSniWithApnHandler
+
+Motivations
+The test SniHandlerTest#testSniWithApnHandler() does not actually
+involve SNI: given the client setup, the ClientHello in the form of hex
+strings is not actually written to the wire, so the server never receives that.
+We may need to write in somewhere else (e.g., channelActive()) instead of in
+initChannel() in order for the hex strings to reach the server. So here
+what's actually going on is an ordinary TLS C/S communication without SNI.
+
+Modifications
+The client part is modified to enable SNI by using an SslHandler with an
+SSLEngine created by io.netty.handler.ssl.SslContext#newEngine(), where
+the server hostname is specified. Also, more clauses are added to verify that
+the SNI is indeed successful.
+
+Results
+Now the test verifies that both SNI and APN actually happen and succeed.

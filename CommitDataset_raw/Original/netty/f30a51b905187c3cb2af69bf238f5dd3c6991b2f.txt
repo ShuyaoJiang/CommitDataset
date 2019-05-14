@@ -1,0 +1,14 @@
+Correctly handle byte shifting if system does not support unaligned access.
+
+Motivation:
+
+We had a bug in our implemention which double "reversed" bytes on systems which not support unaligned access.
+
+Modifications:
+
+- Correctly only reverse bytes if needed.
+- Share code between unsafe implementations.
+
+Result:
+
+No more data-corruption on sytems without unaligned access.

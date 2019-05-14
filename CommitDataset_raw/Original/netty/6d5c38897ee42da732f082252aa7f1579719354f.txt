@@ -1,0 +1,19 @@
+Fix header and initial line length counting
+
+Related: #3445
+
+Motivation:
+
+HttpObjectDecoder.HeaderParser does not reset its counter (the size
+field) when it failed to find the end of line.  If a header is split
+into multiple fragments, the counter is increased as many times as the
+number of fragments, resulting an unexpected TooLongFrameException.
+
+Modifications:
+
+- Add test cases that reproduces the problem
+- Reset the HeaderParser.size field when no EOL is found.
+
+Result:
+
+One less bug

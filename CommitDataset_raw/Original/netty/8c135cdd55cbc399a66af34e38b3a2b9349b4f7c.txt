@@ -1,0 +1,23 @@
+Add a new constructor without handler parameter to TrafficCounter
+
+Related: #3476
+
+Motivation:
+
+Some users use TrafficCounter for other uses than we originally
+intended, such as implementing their own traffic shaper.  In such a
+case, a user does not want to specify an AbstractTrafficShapingHandler.
+
+Modifications:
+
+- Add a new constructor that does not require an
+  AbstractTrafficShapingHandler, so that a user can use it without it.
+- Simplify TrafficMonitoringTask
+- Javadoc cleanup
+
+Result:
+
+We open the possibility of using TrafficCounter for other purposes than
+just using it with AbstractTrafficShapingHandler.  Eventually, we could
+generalize it a little bit more, so that we can potentially use it for
+other uses.

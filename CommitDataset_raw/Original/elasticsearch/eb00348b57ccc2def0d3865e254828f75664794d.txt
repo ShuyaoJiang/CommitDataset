@@ -1,0 +1,9 @@
+[CCR] Adjust list retryable errors (#33985)
+
+The following changes were made:
+* Added ElasticsearchSecurityException. For in the case the current user has insufficient privileges while an index is being followed. Prior to following ccr checks whether the current user has sufficient privileges and if not the follow api fails with an error.
+* Added Index block exception. If the leader index gets closed, this exception is returned.
+* Added ClusterBlockException service unavailable. In case for example the leader cluster is without elected master.
+* Removed IndexNotFoundException. If the leader / follower index has been deleted, ccr will need to stop the shard follow tasks with an error.
+
+Closes #33954

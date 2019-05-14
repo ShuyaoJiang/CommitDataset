@@ -1,0 +1,14 @@
+Security: IndexLifecycleManager provides a consistent view of index state (elastic/x-pack-elasticsearch#3008)
+
+This commit changes the IndexLifecycleManager's handling of variables about an index to only update
+all of the values at a single time. Previously, all of the index state variables were volatile
+members of the IndexLifecycleManager, which meant we could get an inconsistent view of the index
+state. Although rare, this is still incorrect so this change adds a single volatile variable that
+holds the state as of the last processed cluster state update.
+
+Additionally, the IndexLifecycleManagerIntegTests were updated to have more concurrency and further
+stress this portion of the code and its checks.
+
+relates elastic/x-pack-elasticsearch#2973
+
+Original commit: elastic/x-pack-elasticsearch@5f1552b298ad25ccc9fe39da3b110bada6064c3e

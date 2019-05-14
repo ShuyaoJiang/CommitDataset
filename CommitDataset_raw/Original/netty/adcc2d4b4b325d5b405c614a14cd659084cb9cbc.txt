@@ -1,0 +1,12 @@
+Remove condition in ChannelHandlerAdapter.isSharable() by caching the result of the annotation lookup.
+
+Motivation:
+Remove the synchronization bottleneck and so speed up things
+
+Modifications:
+Introduce a ThreadLocal cache that holds mappings between classes of ChannelHandlerAdapater implementations and the result of checking if the @Sharable annotation is present.
+This way we only will need to do the real check one time and server the other calls via the cache. A ThreadLocal and WeakHashMap combo is used to implement the cache
+as this way we can minimize the conditions while still be sure we not leak class instances in containers.
+
+Result:
+Less conditions during adding ChannelHandlerAdapter to the ChannelPipeline

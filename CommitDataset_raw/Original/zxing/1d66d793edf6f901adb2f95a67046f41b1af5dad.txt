@@ -1,0 +1,11 @@
+asterisk isn't a valid character and should not be encoded as content with Code 39. (#872)
+
+* asterisk isn't a valid character which can be encoded with Code 39.
+the following sample content results in an unreadable barcode: *123456789
+because the asterisk is the start-stop character (special meaning, not valid in content)
+the really encoded value is **123456789*. The barcode reader stops after reading the second asterisk
+and throw the content away.
+
+* remove wrong private modifier for ALPHABET_STRING
+
+* cleanup comments

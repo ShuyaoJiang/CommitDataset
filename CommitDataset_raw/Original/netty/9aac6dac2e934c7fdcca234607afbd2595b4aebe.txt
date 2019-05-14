@@ -1,0 +1,14 @@
+[#4386] ByteToMessage.decodeLast(...) should not call decode(...) if buffer is empty.
+
+Motivation:
+
+If the input buffer is empty we should not have decodeLast(...) call decode(...) as the user may not expect this.
+
+Modifications:
+
+- Not call decode(...) in decodeLast(...) if the input buffer is empty.
+- Add testcases.
+
+Result:
+
+decodeLast(...) will not call decode(...) if input buffer is empty.

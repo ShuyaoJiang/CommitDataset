@@ -1,0 +1,10 @@
+Clean up commits when global checkpoint advanced (#28140)
+
+Today we keep multiple index commits based on the current global 
+checkpoint, but only clean up unneeded index commits when we have a new 
+index commit. However, we can release the old index commits earlier once
+the global checkpoint has advanced enough. This commit makes an engine
+revisit the index deletion policy whenever a new global checkpoint value
+is persisted and advanced enough.
+
+Relates #10708

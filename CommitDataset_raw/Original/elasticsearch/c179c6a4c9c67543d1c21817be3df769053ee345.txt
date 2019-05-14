@@ -1,0 +1,21 @@
+Add assertions enabled helper
+
+Today in the code base we have lots of ugly code blocks like:
+
+  boolean assertionsEnabled = false;
+  assert assertionsEnabled = true;
+  if (assertionsEnabled) {
+    // something
+  }
+
+These are a nuisance. Instead, we can do this in exactly one place and
+replace these blocks with
+
+  if (Assertions.ENABLED) {
+    // something
+  }
+
+The cool thing here is that since this is a static final field, the JIT
+can optimize away the check at runtime if assertions are disabled.
+
+Relates #24834

@@ -1,0 +1,23 @@
+Refine hamcrest dependency in spring-test-mvc project
+
+1) removed the hamcrest-all dependency requirement and replaced it with
+the more focused hamcrest-library dependency
+
+2) added MatcherAssertionErrors as a replacement of
+org.hamcrest.MatcherAssert, which in hamcrest 1.1 is only available
+through the hamcrest-all dependency (and not in hamcrest-core nor in
+the hamcrest embedded in JUnit 4.4 through 4.8)
+
+3) changed the required hamcrest version from 1.1 to 1.3 and made sure
+the spring-test-mvc project does not rely on newer hamcrest
+functionality without checking if it is available first
+
+Applications that already depend on older versions of hamcrest
+(in particular 1.1) via hamcrest-library, hamcrest-all or as part of
+junit 4.4 through 4.8 should not be disrupted if they add spring-test
+but may wish to exclude the hamcrest-library transitive dependency
+from spring-test in order to avoid extra jars in the classpath
+
+Applications that depend on hamcrest 1.3 should not have to do anything
+
+Issue: SPR-9940

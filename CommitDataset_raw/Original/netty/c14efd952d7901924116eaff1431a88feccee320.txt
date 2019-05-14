@@ -1,0 +1,13 @@
+Directly init refCnt to 1 (#8274)
+
+Motivation:
+
+We should just directly init the refCnt to 1 and not use the AtomicIntegerFieldUpdater.
+
+Modifications:
+
+Just assing directly to 1.
+
+Result:
+
+Cleaner code and possible a bit faster as the JVM / JIT may be able to optimize the first store easily.

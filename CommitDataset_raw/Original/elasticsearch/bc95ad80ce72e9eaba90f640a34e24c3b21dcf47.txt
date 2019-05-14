@@ -1,0 +1,13 @@
+Add beats_system user to security (elastic/x-pack-elasticsearch#4103)
+
+This creates a new "beats_system" user and role with the same
+privileges as the existing "logstash_system" user/role.
+
+The "beat_system" user is also added as a managed user within
+the "setup-passwords" command.
+
+Users who upgrade from an earlier version of Elasticsearch/X-Pack
+will need to manually set a password for the beats_system user via
+the change password API (or Kibana UI)
+
+Original commit: elastic/x-pack-elasticsearch@6087d3a18e0f708af5d5baafc969aa634dfadeec

@@ -1,0 +1,9 @@
+Fix deadlock when calling LiveReloadServer.stop()
+
+Update LiveReloadServer so that different synchronization blocks are
+used for the sockets and connection lists. Prior to this commit calling
+`LiveReloadServer.stop()` would always result in a 60 second delay since
+`stop()` owned the monitor add `removeConnection()` (called from a
+different thread) needs it to remove the active connection.
+
+Fixes gh-7749

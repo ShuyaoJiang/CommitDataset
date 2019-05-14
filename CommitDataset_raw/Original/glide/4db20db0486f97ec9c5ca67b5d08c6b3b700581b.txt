@@ -1,0 +1,9 @@
+Remove intermediate work buffer.
+
+It adds complication and data copying and doesn’t seem to make much
+of a difference in multiple low/high end devices or emulators. If it
+seems like I/O might be a blocking issue, we can try just copying the
+file into a byte[] in the ByteBufferGifDecoder the same as we do for the
+stream decoder and wrapping it in ByteBuffer.
+
+Progress towards #2471.

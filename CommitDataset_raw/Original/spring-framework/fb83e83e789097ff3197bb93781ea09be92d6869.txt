@@ -1,0 +1,19 @@
+Honor contract of @Repeatable in AnnotationUtils
+
+Prior to this commit, the implementation of getRepeatableAnnotation()
+in Spring's AnnotationUtils complied neither with the contract of
+getAnnotationsByType() nor with the contract of
+getDeclaredAnnotationsByType() as defined in AnnotatedElement in Java 8.
+
+Specifically, unexpected results can be encountered when using Spring's
+support for @Repeatable annotations: either annotations show up in the
+returned set in the wrong order, or annotations are returned in the set
+that should not even be found based on the semantics of @Repeatable.
+
+This commit remedies this problem by deprecating the existing
+getRepeatableAnnotation() methods and replacing them with new
+getRepeatableAnnotations() and getDeclaredRepeatableAnnotations()
+methods that comply with the contracts of Java's getAnnotationsByType()
+and getDeclaredAnnotationsByType(), respectively.
+
+Issue: SPR-13068

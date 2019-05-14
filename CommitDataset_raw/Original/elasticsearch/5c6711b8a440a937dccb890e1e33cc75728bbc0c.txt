@@ -1,0 +1,12 @@
+Use a `_recovery_source` if source is omitted or modified (#31106)
+
+Today if a user omits the `_source` entirely or modifies the source
+on indexing we have no chance to re-create the document after it has
+been added. This is an issue for CCR and recovery based on soft deletes
+which we are going to make the default. This change adds an additional
+recovery source if the source is disabled or modified that is only kept
+around until the document leaves the retention policy window.
+
+This change adds a merge policy that efficiently removes this extra source
+on merge for all document that are live and not in the retention policy window
+anymore.

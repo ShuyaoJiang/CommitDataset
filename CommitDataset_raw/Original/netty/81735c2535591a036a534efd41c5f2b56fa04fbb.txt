@@ -1,0 +1,13 @@
+Check if Epoll is avaible when construct EpollEventLoopGroup
+
+Motivation:
+
+We should call Epoll.ensureAvailability() when init EpollEventLoopGroup to fail fast and with a proper exception.
+
+Modifications:
+
+Call Epoll.ensureAvailability() during EpollEventLoopGroup init.
+
+Result:
+
+Fail fast if epoll is not availability (for whatever reason).

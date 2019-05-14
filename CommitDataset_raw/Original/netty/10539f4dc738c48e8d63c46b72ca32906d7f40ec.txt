@@ -1,0 +1,51 @@
+Streamline CompositeByteBuf internals (#8437)
+
+Motivation:
+
+CompositeByteBuf is a powerful and versatile abstraction, allowing for
+manipulation of large data without copying bytes. There is still a
+non-negligible cost to reading/writing however relative to "singular"
+ByteBufs, and this can be mostly eliminated with some rework of the
+internals.
+
+My use case is message modification/transformation while zero-copy
+proxying. For example replacing a string within a large message with one
+of a different length
+
+Modifications:
+
+- No longer slice added buffers and unwrap added slices
+   - Components store target buf offset relative to position in
+composite buf
+   - Less allocations, object footprint, pointer indirection, offset
+arithmetic
+- Use Component[] rather than ArrayList<Component>
+   - Avoid pointer indirection and duplicate bounds check, more
+efficient backing array growth
+   - Facilitates optimization when doing bulk-inserts - inserting n
+ByteBufs behind m is now O(m + n) instead of O(mn)
+- Avoid unnecessary casting and method call indirection via superclass
+- Eliminate some duplicate range/ref checks via non-checking versions of
+toComponentIndex and findComponent
+- Add simple fast-path for toComponentIndex(0); add racy cache of
+last-accessed Component to findComponent(int)
+- Override forEachByte0(...) and forEachByteDesc0(...) methods
+- Make use of RecyclableArrayList in nioBuffers(int, int) (in line with
+FasterCompositeByteBuf impl)
+- Modify addComponents0(boolean,int,Iterable) to use the Iterable
+directly rather than copy to an array first (and possibly to an
+ArrayList before that)
+- Optimize addComponents0(boolean,int,ByteBuf[],int) to not perform
+repeated array insertions and avoid second loop for offset updates
+- Simplify other logic in various places, in particular the general
+pattern used where a sub-range is iterated over
+- Add benchmarks to demonstrate some improvements
+
+While refactoring I also came across a couple of clear bugs. They are
+fixed in these changes but I will open another PR with unit tests and
+fixes to the current version.
+
+Result:
+
+Much faster creation, manipulation, and access; many fewer allocations
+and smaller footprint. Benchmark results to follow.

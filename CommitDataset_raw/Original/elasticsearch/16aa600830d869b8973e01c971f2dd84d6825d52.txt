@@ -1,0 +1,8 @@
+Fix http request round trip tests
+
+I broke this by adding more randomization to core's randomTimeValue
+method. Now it produces valid time values that don't round trip
+properly over the XContent API. This change causes the test to skip
+trying to round trip time these sorts of time values.
+
+Original commit: elastic/x-pack-elasticsearch@dcdd588bdb021781466c4981edd1e13a4314c6b7

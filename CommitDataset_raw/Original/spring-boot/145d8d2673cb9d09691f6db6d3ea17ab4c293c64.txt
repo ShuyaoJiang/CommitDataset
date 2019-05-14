@@ -1,0 +1,20 @@
+Defer removal of Connectors until after ServletContext initialization
+
+Previously, we removed the Connectors from Tomcat's Service before
+the Context was started. The removal of the Connectors is required as
+it prevents Tomcat from accepting requests before we're ready to
+handle them.
+
+Part of starting the Context is creating and initializing the
+ServletContext. ServerProperties uses a ServletContextInitializer to
+set the session tracking modes and Tomcat rejects the SSL tracking
+mode if there is no SSL-enabled connector available. With the previous
+arrangement this led to a failure as the Connectors had been removed
+so the SSL-enabled connector could not be found.
+
+This commit updates the embedded Tomcat container to defer the
+removal of the Connectors until after the context has been started
+but still at a point that is before the Connectors themselves would
+have been started.
+
+Closes gh-12058

@@ -1,0 +1,17 @@
+Allows IP_TRANSPARENT to be set on a redirecting socket
+
+Motivation:
+
+IP_TRANSPARENT support is not complete, the option can currently only be set on EpollServerSocket. Setting the option on an EpollSocket is also requires so as to be able to bind a socket to a non-local address as described in ip(7)
+http://man7.org/linux/man-pages/man7/ip.7.html
+
+"TProxy redirection with the iptables TPROXY target also
+requires that this option be set on the redirected socket."
+
+Modifications:
+
+Added IP_TRANSPARENT socket option to EpollSocketChannelConfig
+
+Result:
+
+A redirecting socket can be created with a non-local IP address as required for TPROXY

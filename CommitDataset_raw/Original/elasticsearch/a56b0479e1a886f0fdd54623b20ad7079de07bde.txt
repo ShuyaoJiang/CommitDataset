@@ -1,0 +1,22 @@
+Changed the chunk coordinator to process the chunks concurrently. (#3256)
+
+The shard follow task executor determines the range of translog operations
+between the leader shard's global checkpoint and the last know processed
+seqno by the current shard follow task that are missing.
+
+Then the chunks coordinator can then chunk this range up in smaller ranges
+if the requested range is above the configured max chunk size. If it is
+smaller than the entire range then the chunk coordinator has just one
+chuck to coordinate.
+
+Each chunk is added to a queue and is processed by the ChunkProcessor,
+that reads the translog ops from the leader shard and then indexes
+these translog ops into the follow shard. After that a new chuck is polled
+from the queue and the ChunkProcessor performs the same actions until
+there are no more chunks in the queue to process. After that the shard
+follow task executor will determine a new range of translog operations
+to process.
+
+This change changes the chunk coordinator to start polling from the chunk
+queue with multiple threads at the same time to handle dealing with a higher
+indexing load on the leader side better.

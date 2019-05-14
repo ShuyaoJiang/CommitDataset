@@ -1,0 +1,13 @@
+Allow customization of LocalChannel instances that are being created by LocalServerChannel.
+
+Motivation
+
+It's possible to extend LocalChannel as well as LocalServerChannel but the LocalServerChannel's serve(peer) method is hardcoded to create only instances of LocalChannel.
+
+Modifications
+
+Add a protected factory method that returns by default new LocalChannel(...) but users may override it to customize it.
+
+Result
+
+It's possible to customize the LocalChannel instance on either end of the virtual connection.

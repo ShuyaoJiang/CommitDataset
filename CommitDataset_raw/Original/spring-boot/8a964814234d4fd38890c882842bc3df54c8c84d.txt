@@ -1,0 +1,10 @@
+Properly guard customization of application context class
+
+SpringApplication wrongly expects spring-web to be on the classpath to
+figure out whether or not the web environment should be enabled for a
+custom context class.
+
+We now properly guard this check so that the web environment is not
+enabled (read: not checked) if `spring-web` is not available.
+
+Closes gh-3856

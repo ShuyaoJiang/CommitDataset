@@ -1,0 +1,8 @@
+Fix Watcher NotificationService's secure settings (#35610)
+
+The NotificationService (base class for SlackService, HipchatService ...) has both dynamic
+cluster settings and SecureSettings and builds the clients (Account) that are used to comm
+with external services. This commit fixes an important bug about updating/reloading any
+of these settings (both Secure and dynamic cluster). Briefly the bug is due to the fact that
+both the secure settings as well as the dynamic node scoped ones can be updated
+independently, but when constructing the clients some of the settings might not be visible. 

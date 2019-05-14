@@ -1,0 +1,10 @@
+[#2405] Add support for SO_REUSEPORT to EpollDatagramChannel
+
+Motivation:
+With SO_REUSEPORT it is possible to bind multiple sockets to the same port and so handle the processing of packets via multiple threads. This allows to handle DatagramPackets with more then one thread on the same port and so gives better performance.
+
+Modifications:
+Expose EpollDatagramChannelConfig.setReusePort(..) and isReusePort()
+
+Result:
+Allow to bind multiple times to the same local address and so archive better performance.

@@ -1,0 +1,8 @@
+Discard streams once they're no longer open.
+
+This avoids a memory leak; we don't hold onto the input stream
+and it's large 64 KiB buffer long after that stream is done.
+
+It also allows SpdyConnection to track how many streams are
+currently active. This will allow a follow up change to shut
+down connections that don't host any streams.

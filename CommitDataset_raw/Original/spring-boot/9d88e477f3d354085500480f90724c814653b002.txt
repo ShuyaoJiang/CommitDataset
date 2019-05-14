@@ -1,0 +1,12 @@
+Fix Solr health indicator
+
+This commit changes the solr health indicator to request the status of
+all available cores, rather than invoking a generic ping on the admin
+handler.
+
+Recent versions of Solr now have a ping handler per core and the general
+admin handler is gone, leading to incorrect health status. For backward
+compatible reason the `solrStatus` attribute is kept to `OK` if all cores
+are running properly (that's actually `0` behind the scenes).
+
+Closes gh-8463

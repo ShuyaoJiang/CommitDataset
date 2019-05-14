@@ -1,0 +1,18 @@
+Change AggregatedFullHttpMessage to contain a content ByteBuf
+
+Motivation:
+
+Other implementations of FullHttpMessage allow .toString to be called after the Message has been released
+This brings AggregatedFullHttpMessage into line with those impls.
+
+Modifications:
+
+- Changed AggregatedFullHttpMessage to no longer be a sub-class of DefaultByteBufHolder
+- Changes AggregatedFullHttpMessage to implement ByteBufHolder
+- Hold the content buffer internally to AggregatedFullHttpMessage
+- Implement the required content() and release() methods that were missing
+- Do not check refcnt when accessing content() (similar to DefaultFullHttpMessage)
+
+Result:
+
+A released AggregatedFullHttpMessage can have .toString called without throwing an exception

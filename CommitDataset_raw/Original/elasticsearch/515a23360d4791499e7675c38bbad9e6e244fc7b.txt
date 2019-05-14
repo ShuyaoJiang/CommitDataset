@@ -1,0 +1,11 @@
+Do not check for S3 blob to exist before writing (#31128)
+
+In #19749 an extra check was added before writing each blob to ensure that we would not be
+overriding an existing blob. Due to S3's weak consistency model, this check was best effort. To
+make matters worse, however, this resulted in a HEAD request to be done before every PUT, in
+particular also when PUTTING a new object. The approach taken in #19749 worsened our
+consistency guarantees for follow-up snapshot actions, as it made it less likely for new files that
+had been written to be available for reads.
+
+This commit therefore removes this extra check. Due to the weak consistency model, this check
+was a best effort thing anyway, and there's currently no way to prevent accidental overrides on S3.

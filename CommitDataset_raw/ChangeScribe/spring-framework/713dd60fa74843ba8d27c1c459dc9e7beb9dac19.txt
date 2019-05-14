@@ -1,0 +1,299 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (annotation-driven-custom-container-factory.xml, annotation-driven-custom-handler-method-factory.xml, annotation-driven-custom-registry.xml, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.springframework.context.annotation:  
+
+1. Changes to package org.springframework.jms:  
+
+1.1. Add a class for stub text message. It allows to:
+
+	Instantiate stub text message;
+	Get text;
+	Set text;
+	Acknowledge stub text message;
+	Handle clear body;
+	Handle clear properties;
+	Get boolean property;
+	Get byte property;
+	Get double property;
+	Get float property;
+	Get int property;
+	Get JMS correlation ID;
+	Get JMS correlation ID  as bytes;
+	Get JMS delivery mode;
+	Get JMS destination;
+	Get JMS expiration;
+	Get JMS message ID;
+	Get JMS priority;
+	Get JMS redelivered;
+	Get JMS reply  to;
+	Get JMS timestamp;
+	Get JMS type;
+	Get JMS delivery time;
+	Get stub text message long property;
+	Get object property;
+	Get property names;
+	Get short property;
+	Get string property;
+	Handle property exists;
+	Set boolean property;
+	Set byte property;
+	Set double property;
+	Set float property;
+	Set int property;
+	Set JMS correlation ID;
+	Set JMS correlation ID  as bytes;
+	Set JMS delivery mode;
+	Set JMS destination;
+	Set JMS expiration;
+	Set JMS message ID;
+	Set JMS priority;
+	Set JMS redelivered;
+	Set JMS reply  to reply to destination;
+	Set JMS timestamp;
+	Set JMS type;
+	Set JMS delivery time;
+	Set long property;
+	Set object property;
+	Set short property;
+	Set string property;
+	Get body;
+	Check if stub text message is body assignable to
+
+2. Changes to package org.springframework.jms.annotation:  
+
+2.1. Add an object creator class for jms bootstrap configuration. It allows to:
+
+	Get jms listener annotation processor;
+	Get default jms listener endpoint registry
+
+2.2. Add an interface declaration  for jms listener configurer. It allows to:
+
+	Configure jms listeners
+
+3. Changes to package org.springframework.jms.config:  
+
+3.1. Add a class for abstract jms listener container factory. It allows to:
+
+	Set connection factory;
+	Set destination resolver;
+	Set error handler;
+	Set message converter;
+	Set session transacted;
+	Set session acknowledge mode;
+	Set pub sub domain;
+	Set reply pub sub domain;
+	Set reply qos settings;
+	Set subscription durable;
+	Set subscription shared;
+	Set client id;
+	Set phase;
+	Set auto startup;
+	Create listener container;
+	Create container instance;
+	Initialize container
+
+3.2. Add a class for annotation driven jms bean definition parser. It allows to:
+
+	Parse element;
+	Register default endpoint registry;
+	Register infrastructure bean
+
+3.3. Add a class for default jca listener container factory. It allows to:
+
+	Set resource adapter;
+	Set activation spec factory;
+	Set destination resolver;
+	Set transaction manager;
+	Set phase;
+	Create listener container;
+	Create container instance
+
+3.4. Add a class for default jms listener container factory. It allows to:
+
+	Set task executor;
+	Set transaction manager;
+	Set cache level;
+	Set cache level name;
+	Set concurrency;
+	Set max messages  per task;
+	Set receive timeout;
+	Set recovery interval;
+	Set back off;
+	Create container instance;
+	Initialize container
+
+3.5. Add an interface declaration  for jms listener container factory. It allows to:
+
+	Create listener container
+
+3.6. Add a class for jms listener container factory tests. It allows to:
+
+	Create simple container;
+	Create jms container full config;
+	Create jca container full config;
+	Handle jca exclusive properties;
+	Back jms listener container factory tests off overrides recovery interval;
+	Handle endpoint concurrency takes precedence;
+	Set default jms config;
+	Assert default jms config;
+	Set default jca config;
+	Assert default jca config
+
+3.7. Add a class for jms listener container test factory. It allows to:
+
+	Set auto startup;
+	Get listener containers;
+	Get listener container;
+	Create listener container
+
+3.8. Add an interface declaration  for jms listener endpoint. It allows to:
+
+	Get id;
+	Handle setup listener container
+
+3.9. Add a class for jms listener endpoint registrar tests. It allows to:
+
+	Handle setup;
+	Register null endpoint;
+	Register null endpoint id;
+	Register empty endpoint id;
+	Register null container factory is allowed;
+	Register null container factory  with no default;
+	Register container  without factory
+
+3.10. Add a class for jms listener endpoint registry tests. It allows to:
+
+	Create jms listener endpoint registry tests with null endpoint;
+	Create jms listener endpoint registry tests with null endpoint id;
+	Create jms listener endpoint registry tests with null container factory;
+	Create jms listener endpoint registry tests with duplicate endpoint id;
+	Create endpoint
+
+3.11. Add a class for jms listener endpoint tests. It allows to:
+
+	Handle setup jms message container full config;
+	Handle setup jca message container full config;
+	Handle setup concurrency simple container;
+	Handle setup message container no listener;
+	Handle setup message container unsupported container
+
+3.12. Add a class for message listener test container. It allows to:
+
+	Instantiate message listener test container  with jms listener endpoint;
+	Set auto startup;
+	Get endpoint;
+	Check if message listener test container is started;
+	Check if message listener test container is stopped;
+	Start message listener test container;
+	Stop message listener test container;
+	Check if message listener test container is running;
+	Get phase;
+	Check if message listener test container is auto startup;
+	Stop callback runnable;
+	Handle setup message listener;
+	Get message converter;
+	Get destination resolver;
+	Check if message listener test container is pub sub domain;
+	Check if message listener test container is reply pub sub domain;
+	Get reply qos settings;
+	Handle after properties set;
+	Destroy message listener test container;
+	Convert message listener test container to string
+
+3.13. Add a class for method jms listener endpoint. It allows to:
+
+	Set bean;
+	Get bean;
+	Set method;
+	Get method;
+	Set most specific method most specific method;
+	Get method jms listener endpoint most specific method;
+	Set message handler method factory;
+	Set embedded value resolver;
+	Set bean factory;
+	Create message listener;
+	Create message listener instance;
+	Get default response destination;
+	Get send  to specific method;
+	Resolve method jms listener endpoint;
+	Get endpoint description
+
+3.14. Add an object creator class for simple jms listener container factory. It allows to:
+
+	Create container instance
+
+3.15. Add a class for simple jms listener endpoint. It allows to:
+
+	Set message listener;
+	Get message listener;
+	Create message listener;
+	Get endpoint description
+
+3.16. Add a class for simple jms listener endpoint tests. It allows to:
+
+	Create listener
+
+4. Changes to package org.springframework.jms.listener:  
+
+4.1. Add an interface declaration  for message listener container. It allows to:
+
+	Handle setup message listener;
+	Get message converter;
+	Get destination resolver;
+	Check if message listener container is pub sub domain;
+	Check if message listener container is reply pub sub domain;
+	Get reply qos settings
+
+5. Changes to package org.springframework.jms.listener.adapter:  
+
+5.1. Add a class for messaging message listener adapter. It allows to:
+
+	Set handler method;
+	Get handler method;
+	Process messaging message listener adapter messaging message listener adapter on message;
+	Pre process response;
+	Convert messaging message listener adapter to messaging message;
+	Invoke handler;
+	Create messaging error message
+
+6. Changes to package org.springframework.jms.listener.endpoint:  
+
+6. Changes to package org.springframework.jms.support:  
+
+6.1. Add a class for jms message header accessor. It allows to:
+
+	Instantiate jms message header accessor  with native headers map;
+	Instantiate jms message header accessor  with message;
+	Get correlation id;
+	Get destination;
+	Get delivery mode;
+	Get expiration;
+	Get message id;
+	Get priority;
+	Get reply  to;
+	Redelivered jms message header accessor;
+	Get type;
+	Get timestamp;
+	Wrap message
+
+6.2. Add a class for jms message header accessor tests. It allows to:
+
+	Validate jms headers
+
+7. Changes to package org.springframework.messaging.converter:  
+
+7.1. Add a class for generic message converter. It allows to:
+
+	Instantiate generic message converter;
+	Instantiate generic message converter  with conversion service;
+	Process generic message converter generic message converter from message
+
+7.2. Add a class for generic message converter tests. It allows to:
+
+	Process generic message converter tests generic message converter tests from message with conversion;
+	Process generic message converter tests generic message converter tests from message no converter;
+	Process generic message converter tests generic message converter tests from message with failed conversion
+

@@ -1,0 +1,13 @@
+[#3377] Faster overflow guard when generate nextId in EpollEventLoop
+
+Motivation:
+
+The current way how the guard against overflow when generating the nextId() is pretty slow once an overflow happened.
+
+Modifications:
+
+Once a possible overflow is detected all ids used by the EpollEventLoop are scrubed and re-assigned to the registered Channels. This way we only need to do extra work each time an overflow is detected.
+
+Result:
+
+More consistent performance even after the first overflow was detected.

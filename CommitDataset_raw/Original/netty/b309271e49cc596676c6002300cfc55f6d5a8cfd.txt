@@ -1,0 +1,21 @@
+HttpServerUpgradeHandler shouldn't wait for flush to reshape pipeline
+
+Motivation:
+
+There is a race between both flushing the upgrade response and receiving
+more data before the flush ChannelPromise can fire and reshape the
+pipeline. Since We have already committed to an upgrade by writing the
+upgrade response, we need to be immediately prepared for handling the
+next protocol.
+
+Modifications:
+
+The pipeline reshaping logic in HttpServerUpgradeHandler has been moved
+out of the ChannelFutureListener attached to the write of the upgrade
+response and happens immediately after the writeAndFlush call, but
+before the method returns.
+
+Result:
+
+The pipeline is no longer subject to receiving more data before the
+pipeline has been reformed.

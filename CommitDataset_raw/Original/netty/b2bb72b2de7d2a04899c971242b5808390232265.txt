@@ -1,0 +1,13 @@
+[#5171] Ensure NioDatagramChannelConfig can be instanced on android
+
+Motivation:
+
+NioDatagramChannelConfig currently uses NetworkChannel in its static { } block and so fails to init on android which not has this class.
+
+Modifications:
+
+Use reflection to load the NetworkChannel.class
+
+Result:
+
+Be able to use NIO Datagram on android as well.

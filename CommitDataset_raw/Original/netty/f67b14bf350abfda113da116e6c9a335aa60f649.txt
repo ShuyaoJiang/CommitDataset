@@ -1,0 +1,13 @@
+[#3680] Enabled SecurityManager results in ClassNotFoundError during io.netty.util.NetUtil initialization
+
+Motivation:
+
+When a SecurityManager is in place that preven reading the somaxconn file trying to bootstrap a channel later will result in a ClassNotFoundError.
+
+Modifications:
+
+- Reading the file in a privileged block.
+
+Result:
+
+No more ClassNotFoundError when a SecurityManager is in place.

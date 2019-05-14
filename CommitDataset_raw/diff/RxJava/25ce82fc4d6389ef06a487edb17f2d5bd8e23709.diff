@@ -1,0 +1,1 @@
+[+++ b/language-adaptors/rxjava-scala/src/main/scala/rx/lang/scala/Observable.scala, +  def create[T](func: Observer[T] => Subscription): Observable[T] = {, +    Observable[T](rx.Observable.create(new OnSubscribeFunc[T] {, +      def onSubscribe(t1: rx.Observer[_ >: T]): rx.Subscription = {, +        func(Observer(t1)), +      }, +    })), +  }, +]

@@ -1,0 +1,18 @@
+Optimize the order of bytes in uuids for better compression. (#24615)
+
+Flake ids organize bytes in such a way that ids are ordered. However, we do not
+need that property and could reorganize bytes in an order that would better suit
+Lucene's terms dict instead.
+
+Some synthetic tests suggest that this change decreases the disk footprint of
+the `_id` field by about 50% in many cases (see `UUIDTests.testCompression`).
+For instance, when simulating the indexing of 10M docs at a rate of 10k docs
+per second, the current uid generator used 20.2 bytes per document on average,
+while this new generator which only puts bytes in a different order uses 9.6
+bytes per document on average.
+
+We had already explored this idea in #18209 but the attempt to share long common
+prefixes had had a bad impact on indexing speed. This time I have been more
+careful about putting discriminant bytes early in the `_id` in a way that
+preserves indexing speed on par with today, while still allowing for better
+compression.

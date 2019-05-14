@@ -1,0 +1,15 @@
+Fix NPE while decoding authority section of a DNS response
+
+Motivation:
+
+NullPointerException is raised when a DNS response conrains a resource
+record whose NAME is empty, which is the case for the authority section.
+
+Modification:
+
+Allow an empty name for DnsEntry. Only disallow an empty name for
+DnsQuestion.
+
+Result:
+
+Fixes #2686

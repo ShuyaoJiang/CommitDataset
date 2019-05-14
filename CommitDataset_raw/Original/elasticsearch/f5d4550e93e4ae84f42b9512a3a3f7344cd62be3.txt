@@ -1,0 +1,15 @@
+Fold EngineDiskUtils into Store, for better lock semantics (#29156)
+
+#28245 has introduced the utility class`EngineDiskUtils` with a set of methods to prepare/change
+translog and lucene commit points. That util class bundled everything that's needed to create and
+empty shard, bootstrap a shard from a lucene index that was just restored etc. 
+
+In order to safely do these manipulations, the util methods acquired the IndexWriter's lock. That
+would sometime fail due to concurrent shard store fetching or other short activities that require the
+files not to be changed while they read from them. 
+
+Since there is no way to wait on the index writer lock, the `Store` class has other locks to make
+sure that once we try to acquire the IW lock, it will succeed. To side step this waiting problem, this
+PR folds `EngineDiskUtils` into `Store`. Sadly this comes with a price - the store class doesn't and
+shouldn't know about the translog. As such the logic is slightly less tight and callers have to do the
+translog manipulations on their own.

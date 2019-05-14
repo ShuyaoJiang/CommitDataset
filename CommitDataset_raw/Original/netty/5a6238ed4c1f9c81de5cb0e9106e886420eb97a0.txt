@@ -1,0 +1,15 @@
+Minimize reference count checks in SlicedByteBuf
+
+Motivation:
+
+SlicedByteBuf did double reference count checking for various bulk operations, which affects performance.
+
+Modifications:
+
+- Add package private method to AbstractByteBuf that can be used to check indexes without check the reference count
+- Use this new method in the bulk operation os SlicedByteBuf as the reference count checks take place on the wrapped buffer anyway
+- Fix test-case to not try to read data that is out of the bounds of the buffer.
+
+Result:
+
+Better performance on bulk operations when using SlicedByteBuf (and sub-classes)

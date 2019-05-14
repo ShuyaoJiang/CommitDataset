@@ -1,0 +1,24 @@
+[ML] More advanced post-test cleanup of ML indices (#39049)
+
+The .ml-annotations index is created asynchronously when
+some other ML index exists.  This can interfere with the
+post-test index deletion, as the .ml-annotations index
+can be created after all other indices have been deleted.
+
+This change adds an ML specific post-test cleanup step
+that runs before the main cleanup and:
+
+1. Checks if any ML indices exist
+2. If so, waits for the .ml-annotations index to exist
+3. Deletes the other ML indices found in step 1.
+4. Calls the super class cleanup
+
+This means that by the time the main post-test index
+cleanup code runs:
+
+1. The only ML index it has to delete will be the
+   .ml-annotations index
+2. No other ML indices will exist that could trigger
+   recreation of the .ml-annotations index
+
+Fixes #38952

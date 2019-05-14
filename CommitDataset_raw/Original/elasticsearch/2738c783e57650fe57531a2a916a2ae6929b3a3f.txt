@@ -1,0 +1,7 @@
+Fix Gradle >=4.2 compatibility (#27591)
+
+Gradle 4.2 introduced a feature for safer handling of stale output files. Unfortunately, due to the way some of our tasks are written, this broke execution of our REST tests tasks. The reason for this is that the extract task (which extracts the ES distribution) would clean its output directory, and thereby also remove the empty cwd subdirectory which was created by the clean task. The reason why Gradle would remove the directory is that the earlier running clean task would programmatically create the empty cwd directory, but not make Gradle aware of this fact, which would result in Gradle believing that it could just safely clean the directory.
+
+This commit explicitly defines a task to create the cwd subdirectory, and marks the directory as output of the task, so that the subsequent extract task won't eagerly clean it. It thereby restores full compatibility of the build with Gradle 4.2 and above.
+
+This commit also removes the @Input annotation on the waitCondition closure of AntFixture, which conflicted with the extended input/output validation of Gradle 4.3.

@@ -1,0 +1,7 @@
+Correctly reset persistent settings in teardown
+
+In the refresh REST tests we setup some persistent settings for debug
+logging. In the teardown, we try to restore the logging level back to
+info via another persistent setting but this is a mistake because other
+tests check if there are no persistent settings. To fix this, we remove
+the persistent setting that we added.

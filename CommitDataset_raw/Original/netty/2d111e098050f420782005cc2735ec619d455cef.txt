@@ -1,0 +1,14 @@
+Ensure SslHandler.close(...) will not throw exception if flush of pending messages fails
+
+Motivation:
+
+When SslHandler.close(...) is called (as part of Channel.close()). it will also try to flush pending messages. This may fail for various reasons, but we still should propergate the close operation
+
+Modifications:
+
+- Ensure flush(...) itself will not throw an Exception if we was able to at least fail one pending promise (which should always be the case).
+- If flush(...) fails as part of close ensure we still close the channel and then rethrow.
+
+Result:
+
+No more lost close operations possible if an exception is thrown during close

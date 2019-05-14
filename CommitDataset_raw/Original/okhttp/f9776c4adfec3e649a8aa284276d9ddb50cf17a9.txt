@@ -1,0 +1,10 @@
+Drop Request.uri(). Just use Request.url().uri().
+
+There's a mostly-academic corner case on URLs like http://host/%xx that
+have a malformed escape sequence. This changes the exceptions on those
+URLs from checked to unchecked.
+
+I think we may want a separate change to HttpUrl to fix those URLs to
+be encoded as http://host/%25xx which avoids the problem altogether.
+
+Closes: https://github.com/square/okhttp/issues/2106

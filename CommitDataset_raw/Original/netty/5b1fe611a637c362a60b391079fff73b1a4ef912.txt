@@ -1,0 +1,14 @@
+Remove usage of ObjectCleaner (#8064)
+
+Motivation:
+
+ObjectCleaner does start a Thread to handle the cleaning of resources which leaks into the users application. We should not use it in netty itself to make things more predictable.
+
+Modifications:
+
+- Remove usage of ObjectCleaner and use finalize as a replacement when possible.
+- Clarify javadocs for FastThreadLocal.onRemoval(...) to ensure its clear that remove() is not guaranteed to be called when the Thread completees and so this method is not enough to guarantee cleanup for this case.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8017.

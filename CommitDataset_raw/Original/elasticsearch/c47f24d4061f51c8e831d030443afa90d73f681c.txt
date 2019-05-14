@@ -1,0 +1,8 @@
+BulkProcessor flush runnable preserves the thread context from creation time (#26718)
+
+When using a bulk processor, the thread context was not preserved for the flush runnable which is
+executed in another thread in the thread pool. This change wraps the flush runnable in a context
+preserving runnable so that the headers and transients from the creation time of the bulk processor
+are available during the execution of the flush.
+
+Closes #26596

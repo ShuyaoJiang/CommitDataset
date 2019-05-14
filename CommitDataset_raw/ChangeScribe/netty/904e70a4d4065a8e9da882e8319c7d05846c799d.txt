@@ -1,0 +1,58 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml). 
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.handler.codec.http2:  
+
+1.1. Add a class for weighted fair queue byte distributor test. It allows to:
+
+	Handle setup;
+	Write weighted fair queue byte distributor test with non active stream should not dobule add to priority queue;
+	Handle bytes unassigned after processing;
+	Handle connection error for writer exception;
+	Handle min chunk should be allocated per stream;
+	Handle empty frame at head is written;
+	Get blocked stream no data should spread data to children;
+	Get blocked stream with data and not allowed to send should spread data to children;
+	Handle stream with zero flow control window and data should write only once;
+	Get blocked stream should spread data to children;
+	Handle children should not send data until parent blocked;
+	Convert parent should water fall data;
+	Reprioritize should adjust outbound flow;
+	Handle unstreamable parents should feed hungry children;
+	Write should prefer highest weight;
+	Write should favor priority;
+	Handle same priority should distribute based on data;
+	Zero distribute should write all zero frames;
+	Non zero distribute should write all zero frames  if all eligible data is written;
+	Handle bytes distributed with restructure should be correct;
+	Handle bytes distributed with addition should be correct;
+	Handle bytes distributed should be correct with internal stream close;
+	Handle bytes distributed should be correct with leaf stream close;
+	Handle active stream dependent on new non active stream gets quantum;
+	Handle stream window larger than int does not infinite loop;
+	Write weighted fair queue byte distributor test;
+	Write verification mode;
+	Verify weighted fair queue byte distributor test;
+	Verify weighted fair queue byte distributor test never write;
+	Verify http 2 stream never write;
+	Writes weighted fair queue byte distributor test;
+	Writes http 2 stream
+
+2. Changes to package io.netty.microbench.util:  
+
+2. Changes to package io.netty.util.internal:  
+
+2.1. Add an interface declaration  for priority queue. It allows to:
+
+	Typed node;
+	Check if priority queue contains typed;
+	Handle priority changed;
+	Handle clear ignoring indexes
+
+2.2. Add an interface declaration  for priority queue node. It allows to:
+
+	Get priority queue index;
+	Handle priority queue index
+

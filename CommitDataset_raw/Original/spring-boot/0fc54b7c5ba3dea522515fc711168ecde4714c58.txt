@@ -1,0 +1,16 @@
+Add ConditionalOnSingleCandidate
+
+Add a new ConditionalOnSingleCandidate condition that determines if the
+condition should match only if autowiring by type is guaranteed to
+succeed. Used by auto-configuration that relies on a single candidate of
+a given type (for instance, the JdbcTemplate auto-configuration relies on
+the presence of a DataSource).
+
+Such wiring by type will succeed if only one bean of that type is present
+or if one matching instance is flagged "primary" amongst the candidates.
+
+ConditionalOnSingleCandidate is a basic version of ConditionalOnBean that
+only accepts a single type and does not determine a defaut based on its
+presence on a bean definition.
+
+Closes gh-1702

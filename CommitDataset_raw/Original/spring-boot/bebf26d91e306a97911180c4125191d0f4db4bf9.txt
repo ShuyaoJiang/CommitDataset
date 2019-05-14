@@ -1,0 +1,16 @@
+Restore compatibility with Jetty 8 when SSL is being used
+
+ServerConnector is in different packages in Jetty 8 and Jetty 9 which
+was leading to a NoClassDefFounderError when SSL was used with
+Jetty 8.
+
+This commit updates SslServerConnectorFactory to return an
+AbstractConnector, a super class of ServerConnector, that is in the
+same package in both Jetty 8 and Jetty 9. This class does not provide
+a setPort method so the setting of the port has been pushed down into
+the SslServerConnectorFactory implementation.
+
+SSL samples for both Jetty 8 and Jetty 9 have been added to verify
+SSL with both supported versions of Jetty.
+
+Closes gh-1925

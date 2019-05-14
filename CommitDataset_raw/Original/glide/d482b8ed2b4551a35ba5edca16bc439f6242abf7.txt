@@ -1,0 +1,9 @@
+Clean up DataFetchers even if DecodeJobs are cancelled prior to run().
+
+Previously some of the logic in run() might null out the data fetcher
+instance variable, even if it had been set when run() was first called.
+As a result, the data fetcher would not be cleared. Now the initial 
+data fetcher is held on to as a local variable so the instance variable
+can be freed without affecting the behavior of cleanup().
+
+Progress towards #1996, #2352

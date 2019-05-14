@@ -1,0 +1,7 @@
+Scripting: Conditionally use java time api in scripting (#31441)
+
+This commit adds a boolean system property, `es.scripting.use_java_time`,
+which controls the concrete return type used by doc values within
+scripts. The return type of accessing doc values for a date field is
+changed to Object, essentially duck typing the type to allow
+co-existence during the transition from joda time to java time.

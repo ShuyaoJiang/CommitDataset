@@ -1,0 +1,11 @@
+* Throw the actual exception objects, rather than pointers to them, i.e.:
+  - replace |throw new FooException()| with |throw FooException()|
+  - replace |catch (FooException *ex)| with |catch (FooExceptio ex)|
+  - update all uses of caught exceptions appropriately:
+    . replace |ex->foo| with |ex.foo|
+    . remove all attempts to delete the caught exception(s)
+* Add 'const' to the 'char *' declarations for character encoding names
+
+
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@1002 59b500cc-1b3d-0410-9834-0bbf25fbcc57

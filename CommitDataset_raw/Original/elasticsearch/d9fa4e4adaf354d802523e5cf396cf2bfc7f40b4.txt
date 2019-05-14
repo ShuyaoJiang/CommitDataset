@@ -1,0 +1,6 @@
+Fix testRelocateWhileContinuouslyIndexingAndWaitingForRefresh (#37560)
+
+This test failed because the refresh at the end of the test is not guaranteed to run before the
+indexing is completed, and therefore there's no guarantee that the refresh will free all operations.
+This triggers an assertion failure in the test clean-up, which asserts that there are no more pending
+operations.

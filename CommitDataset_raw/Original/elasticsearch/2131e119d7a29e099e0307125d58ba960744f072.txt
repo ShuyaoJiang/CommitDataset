@@ -1,0 +1,9 @@
+Apply `ignore_throttled` also to concrete indices (#35335)
+
+Today we only apply `ingore_throttled` to expansions from wildcards,
+date math expressions and aliases. Yet, this is tricky since we might
+have resolved certain expressions in pre-filter steps like security.
+It's more consistent to apply this logic to all expressions including
+concrete indices.
+
+Relates to #34354

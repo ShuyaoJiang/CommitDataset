@@ -1,0 +1,9 @@
+Open node connections asynchronously (#35144)
+
+This is related to #29023. Additionally at other points we have
+discussed a preference for removing the need to unnecessarily block
+threads for opening new node connections. This commit lays the groudwork
+for this by opening connections asynchronously at the transport level.
+We still block, however, this work will make it possible to eventually
+remove all blocking on new connections out of the TransportService
+and Transport.

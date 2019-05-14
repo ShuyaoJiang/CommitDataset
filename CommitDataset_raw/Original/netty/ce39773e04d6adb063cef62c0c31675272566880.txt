@@ -1,0 +1,16 @@
+Add support for boringssl and TLSv1.3 (#8412)
+
+Motivation:
+
+0ddc62cec0b4715ae37cef0e6a9f8c79d42d74e9 added support for TLSv1.3 when using openssl 1.1.1. Now that BoringSSL chromium-stable branch supports it as well we can also support it with netty-tcnative-boringssl-static.
+During this some unit tests failed with BoringSSL which was caused by not correctly handling flush() while the handshake is still in progress.
+
+Modification:
+
+- Upgrade netty-tcnative version which also supports TLSv1.3 when using BoringSSL
+- Correctly handle flush() when done while the handshake is still in progress in all cases.
+
+Result:
+
+Easier for people to enable TLSv1.3 when using native SSL impl.
+Ensure flush() while handshake is in progress will always be honored.

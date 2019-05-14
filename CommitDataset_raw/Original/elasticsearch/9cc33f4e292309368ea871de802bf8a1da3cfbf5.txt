@@ -1,0 +1,46 @@
+[Rollup] Select best jobs then execute msearch-per-job (elastic/x-pack-elasticsearch#4152)
+
+If there are multiple jobs that are all the "best" (e.g. share the
+best interval) we have no way of knowing which is actually the best.
+Unfortunately, we cannot just filter for all the jobs in a single
+search because their doc_counts can potentially overlap.
+
+To solve this, we execute an msearch-per-job so that the results
+stay isolated.  When rewriting the response, we iteratively
+unroll and reduce the independent msearch responses into a single
+"working tree".  This allows us to intervene if there are
+overlapping buckets and manually choose a doc_count.
+
+Job selection is found by recursively descending through the aggregation
+tree and independently pruning the list of valid job caps in each branch.
+When a leaf node is reached in the branch, the remaining jobs are
+sorted by "best'ness" (see comparator in RollupJobIdentifierUtils for the
+implementation) and added to a global set of "best jobs". Once
+all branches have been evaluated, the final set is returned to the
+calling code.
+
+Job "best'ness" is, briefly, the job(s) that have
+ - The largest compatible date interval
+ - Fewer and larger interval histograms
+ - Fewer terms groups
+
+Note: the final set of "best" jobs is not guaranteed to be minimal,
+there may be redundant effort due to independent branches choosing
+jobs that are subsets of other branches.
+
+Related changes:
+- We have to include the job's ID in the rollup doc's
+hash, so that different jobs don't overwrite the same summary
+document.
+- Now that we iteratively reduce the agg tree, the agg framework
+injects empty buckets while we're working.  In most cases this
+is harmless, but for `avg` aggs the empty bucket is a SumAgg while
+any unrolled versions are converted into AvgAggs... causing a cast
+exception.  To get around this, avg's are renamed to
+`{source_name}.value` to prevent a conflict
+- The job filtering has been pushed up into a query filter, since it
+applies to the entire msearch rather than just individual agg components
+- We no longer add a filter agg clause about the date_histo's interval, because 
+that is handled by the job validation and pruning.
+
+Original commit: elastic/x-pack-elasticsearch@995be2a039912ba55ee4b5d21f25eaae54b76b68

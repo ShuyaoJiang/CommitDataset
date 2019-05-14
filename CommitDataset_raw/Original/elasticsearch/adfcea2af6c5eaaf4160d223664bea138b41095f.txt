@@ -1,0 +1,9 @@
+Add package pre-install check for java binary (#31343)
+
+The package installation relies on java being in the path. If java is
+not in the path, the tests fail at post-install time. This commit adds a
+pre-install check to validate that java exists, and if it fails, the
+package is never installed, and thus keeps a system clean, rather than
+aborting at post-install and leaving behind a mess.
+
+Closes #29665

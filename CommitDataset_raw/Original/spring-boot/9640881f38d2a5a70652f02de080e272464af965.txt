@@ -1,0 +1,12 @@
+Fix BuildInfo up-to-date check when group, name, or version changes
+
+Previously, if the project's group, name, or version changed the
+BuildInfo task would still be considered up-to-date as the values of
+the project's properties were not reflected in the fields of the
+BuildInfo instance.
+
+This commit updates BuildInfo to copy the value of the project's
+property to the corresponding BuildInfo field when the property is
+read using its getter method on BuildInfo.
+
+Closes gh-12266

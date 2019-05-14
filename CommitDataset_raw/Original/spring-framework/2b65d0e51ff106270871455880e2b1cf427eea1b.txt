@@ -1,0 +1,9 @@
+Fix error when writing empty String to DataBuffer
+
+Prior to this commit, `DataBuffer.write` would throw an
+`IllegalStateException` when called with an empty `String`, since the
+`CharsetEncoder` would be flushed on an incorrent state.
+
+This commit skips entirely the encoding phase for empty `String`.
+
+Fixes #22262

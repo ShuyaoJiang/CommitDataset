@@ -1,0 +1,7 @@
+[TEST] Fix testConcurrentTermIncreaseOnReplicaShard
+
+This test has a bug that got introduced during the refactoring of #32442. With 2 concurrent term increments,
+we can only assert under the operation permit that we are in the correct operation term, not that there is
+not already another term bump pending.
+
+Closes #34862

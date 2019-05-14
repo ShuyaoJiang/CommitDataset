@@ -1,0 +1,9 @@
+Only run retention lease actions on active primary (#40386)
+
+In some cases, a request to perform a retention lease action can arrive
+on a primary shard before it is active. In this case, the primary shard
+would not yet be in primary mode, tripping an assertion in the
+replication tracker. Instead, we should not attempt to perform such
+actions on an initializing shard. This commit addresses this by not
+returning the primary shard in the single shard iterator if the primary
+shard is not yet active.

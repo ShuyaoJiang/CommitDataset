@@ -1,0 +1,16 @@
+[Rollup] Proactively resolve index patterns in RollupSearch endoint (#34930)
+
+This changes the RollupSearch endpoint to proactively resolve index
+patterns.  If the index pattern(s) match more than one rollup index,
+an exception is throw as before.  But if the pattern only matches one
+rollup index, execution is allowed to continue (unlike before where
+it would assume all patterns were for raw data).
+
+This also allows the search endpoint to resolve aliases that point to
+a rollup index.
+
+Also tweaks the documentation to make this clear.
+
+Closes #34828
+
+

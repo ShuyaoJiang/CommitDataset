@@ -1,0 +1,6 @@
+Polish gh-11514
+
+As pointed out by Rossen in gh-11514 comments, a handler might commit
+the response and then send an error signal in the pipeline. In this
+case, adding a callback to `beforeCommit` is useless because it won't be
+triggered. In those cases, we need to collect metrics right away.

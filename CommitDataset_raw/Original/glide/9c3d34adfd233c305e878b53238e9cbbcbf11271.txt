@@ -1,0 +1,10 @@
+Fix extra allocations when marklimit > buffer size
+
+BufferedInputStream would double the buffer size
+each time it read from the input stream if
+mark limit > buffer size, including the first time
+before any data is read. This change prevents the
+buffer size from being increased until after at
+least one buffer worth of data is read. In turn
+this reduces gcs with a large mark limit relative
+to the buffer size.

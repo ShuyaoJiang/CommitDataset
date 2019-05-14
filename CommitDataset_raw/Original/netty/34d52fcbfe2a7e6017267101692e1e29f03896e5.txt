@@ -1,0 +1,13 @@
+Implemented ExtendedOpenSslSession.getStatusResponses() so it not throws an UnsupportedOperationException. (#8290)
+
+Motivation:
+
+6ed7c6c75d458047adc37470697f215e9d7436ea added support for ExtendedOpenSslSession but we did not override getStatusResponses(). This lead to test failures on java9.
+
+Modifications:
+
+Implement ExtendedOpenSslSession.getStatusResponses() so it just returns an empty list.
+
+Result:
+
+Test pass again on Java9.

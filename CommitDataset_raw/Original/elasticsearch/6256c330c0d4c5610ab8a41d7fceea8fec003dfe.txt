@@ -1,0 +1,9 @@
+[Test] Wait for no relocating shards in indices.stats/13_fields tests
+
+MixedClusterClientYamlTestSuiteIT sometimes fails when executing the
+indices.stats/13_fields/* REST tests. It does not reproduce locally
+but the execution logs show that it failed when a shard is relocating
+during the set up execution. This commit change the set up so that it
+now waits for all shards to be active before executing the tests.
+
+closes #26732, #27146

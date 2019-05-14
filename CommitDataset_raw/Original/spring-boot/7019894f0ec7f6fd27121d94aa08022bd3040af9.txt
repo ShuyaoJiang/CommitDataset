@@ -1,0 +1,17 @@
+Clarify the role of spring-boot-starter-cache
+
+The cache abstraction is a core feature of the Spring Framework. Basic
+features such as `@EnableCaching` are therefore available by default with
+no extra dependencies necessary.
+
+However, the actual cache adapters for JCache, Ehcache 2.x, Caffeine and
+Guava are located in a separated module, `spring-context-support`. Spring
+Boot provides that artifact via the `spring-boot-starter-cache` starter.
+
+It is quite easy to "only" add the cache library dependencies and forget
+about this extra dependencies since `@EnableCaching` is available by
+default. This commit clarifies the role of the starer in each section so
+that it is more obvious. We're already explaining this at the beginning
+of the section but it seems that's not enough.
+
+Closes gh-7071

@@ -1,0 +1,21 @@
+Further enhancements to Gradle repackaging logic
+
+This commit refines the changes made under 4be688aa. 4be688aa made the
+default jar task a special case which broke repackaging of the archive
+produced by the default war task.
+
+This commit refines RepackageTask’s logic so that, when it’s enabled,
+it will repackage a jar task’s archive if:
+
+- The jar task is equal to RepackageTask.withJarTask
+- The name of the jar task is equal to RepackageTask.withJarTask
+- RepackageTask.withJarTask is null, the jar task is not referenced
+  by another RepackageTask’s withJarTask, and the jar task has an
+  empty classifier
+
+The last of these three is the default case and ensures the, when the
+Spring Boot plugin is applied, default jar and war artifacts are
+repackaged. The classifier check is required to prevent default source
+and javadoc artifacts from being repackaged.
+
+Fixes #1204

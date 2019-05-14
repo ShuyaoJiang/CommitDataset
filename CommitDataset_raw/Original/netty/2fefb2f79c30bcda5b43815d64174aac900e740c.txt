@@ -1,0 +1,17 @@
+Make DnsNameResolverGroup non-final and overridable
+
+Motivation:
+
+There's no way to override the default settings of the DnsNameResolvers
+created by DnsNameResolverGroup because DnsNameResolverGroup is final.
+
+Modifications:
+
+- Make DnsNameResolverGroup non-final
+- Add a new overridable protected method 'newResolver()' so that a user
+  can override it to create an alternative DnsNameResolver instance or
+  set the non-default properties
+
+Result:
+
+A user can configure the DnsNameResolver.

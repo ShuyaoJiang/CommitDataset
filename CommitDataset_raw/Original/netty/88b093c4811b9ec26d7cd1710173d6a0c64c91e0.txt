@@ -1,0 +1,14 @@
+PoolChunkList not correctly move PoolChunks when these are moved.
+
+Motivation:
+
+When a PoolChunk needs to get moved to the previous PoolChunkList because of the minUsage / maxUsage constraints we always just moved it one level which is incorrect and so could lead to have PoolChunks in the wrong PoolChunkList (in respect to their minUsage / maxUsage settings). This then could have the effect that PoolChunks are not released / freed in a timely fashion and so.
+
+Modifications:
+
+- Correctly move PoolChunks between PoolChunkLists, which includes moving it multiple "levels".
+- Add unit test
+
+Result:
+
+Correctlty move the PoolChunk to PoolChunkList when it is freed, even if its multiple layers.

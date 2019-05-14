@@ -1,0 +1,19 @@
+Fix SelectableChannel support in NioEventLoop (#8344)
+
+Motivation:
+
+Unless the 'io.netty.noKeySetOptimization' system property is set,
+registering a SelectableChannel instance to a NioEventLoop results
+in a ClassCastException:
+
+    io.netty.channel.nio.SelectedSelectionKeySetSelector cannot be cast
+        to java.nio.channels.spi.AbstractSelector
+
+Modifications:
+
+Instead of 'selector', pass 'unwrappedSelector' to SelectableChannel.
+
+Result:
+
+It is possible to register a SelectableChannel instance without
+setting the 'io.netty.noKeySetOptimization' system property.

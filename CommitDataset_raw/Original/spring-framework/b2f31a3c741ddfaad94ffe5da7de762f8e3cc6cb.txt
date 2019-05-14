@@ -1,0 +1,14 @@
+Improve handling of send failures
+
+Prior to this commit, a failure to send a heartbeat was ignored and a
+failure to forward a message to the broker would result in an error
+frame being sent but nothing more.
+
+Following this commit, a failure to send a heartbeat to the broker
+is treated as a TCP client failure. Furthermore, if the system relay
+session fails to forward a message to the broker an exception is
+thrown. Typically, the system relay session will be forwarding
+messages on behalf of local application code, rather than a remote
+WebSocket client. Throwing an exception allows the application code
+to be notified of the problem directly, rather than via a broker
+availability event.

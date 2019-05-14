@@ -1,0 +1,23 @@
+Build: Rework shadow plugin configuration (#32409)
+
+This reworks how we configure the `shadow` plugin in the build. The major
+change is that we no longer bundle dependencies in the `compile` configuration,
+instead we bundle dependencies in the new `bundle` configuration. This feels
+more right because it is a little more "opt in" rather than "opt out" and the
+name of the `bundle` configuration is a little more obvious.
+
+As an neat side effect of this, the `runtimeElements` configuration used when
+one project depends on another now contains exactly the dependencies needed
+to run the project so you no longer need to reference projects that use the
+shadow plugin like this:
+
+```
+testCompile project(path: ':client:rest-high-level', configuration: 'shadow')
+```
+
+You can instead use the much more normal:
+
+```
+testCompile "org.elasticsearch.client:elasticsearch-rest-high-level-client:${version}"
+```
+

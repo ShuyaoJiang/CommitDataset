@@ -1,0 +1,7 @@
+[Close Index API] Propagate tasks ids between Freeze, Close and Verify Shard actions (#36630)
+
+This pull request changes the Freeze Index and Close Index actions so 
+that these actions always requires a Task. The task's id is then propagated 
+from the Freeze action to the Close action, and then to the Verify shard action. 
+This way it is possible to track which Freeze task initiates the closing of an index, 
+and which consecutive verifiy shard are executed for the index closing.

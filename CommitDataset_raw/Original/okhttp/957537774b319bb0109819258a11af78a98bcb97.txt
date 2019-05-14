@@ -1,0 +1,9 @@
+Clean up around HttpEngine.sendRequest().
+
+Move gateway timeout failures to CacheStrategy, and inline
+methods nearby for a strict top-to-bottom flow in this method.
+
+It becomes more obvious that the end of sendRequest has two
+cases: we need a connection (opening if necessary) or we don't
+need a connection (closing if necessary). Previously this was
+true but not as explicit.

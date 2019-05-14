@@ -1,0 +1,8 @@
+Fix Artemis embedded mode condition
+
+This commit prevents the Artemis embedded mode to kick-in if the
+`EmbeddedJMS` class it not in the classpath. The previous condition would
+match if only `artemis-server` was on the classpath while
+`artemis-jms-server` is actually required.
+
+Closes gh-5452

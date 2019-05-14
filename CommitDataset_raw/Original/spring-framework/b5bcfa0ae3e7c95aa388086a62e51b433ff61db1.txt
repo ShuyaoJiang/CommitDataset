@@ -1,0 +1,9 @@
+SPR-8858 Fix in AntPathMatcher.combine(..)
+
+Currently the combine method consolidates "/*" and "/hotel" 
+into "/hotel". However if the first pattern contains URI template 
+variables, the consolidation seems wrong. The fix is to prevent
+the consolidation if the first pattern contains "{". 
+
+
+

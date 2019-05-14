@@ -1,0 +1,22 @@
+Support EOF as statement separator in SQL scripts
+
+Prior to Spring Framework 4.0.3, it was possible to supply a bogus
+statement separator (i.e., a separator string that does not exist in
+the configured SQL scripts) to ResourceDatabasePopulator with the side
+effect that the entire contents of a script file would be interpreted
+as a single SQL statement.
+
+This undocumented feature was never intentional; however, some
+developers came to rely on it. Unfortunately, changes made in
+conjunction with SPR-9531 and SPR-11560 caused such scenarios to no
+longer work.
+
+This commit introduces first-class support for executing scripts which
+contain a single statement that spans multiple lines but is not
+followed by an explicit statement separator.
+
+Specifically, ScriptUtils.EOF_STATEMENT_SEPARATOR may now be specified
+as a 'virtual' statement separator to denote that a script contains a
+single statement and no actual separator.
+
+Issue: SPR-11687

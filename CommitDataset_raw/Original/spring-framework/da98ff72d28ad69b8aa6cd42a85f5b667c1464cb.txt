@@ -1,0 +1,13 @@
+Use StringDecoder to split SSE stream
+
+ServerSentEventHttpMessageReader had logic to split on new lines
+and buffer until an empty new line (start of a new event). To account
+for random data chunking, it later re-assembled the lines for each
+event and split again on new lines. However bufferUntil was still
+unreliable a chunk may contain nothing but a newline, which doesn't
+necessarily mean an empty newline in the overall SSE stream.
+
+This commit simplifies the above by delegating the splitting of the
+stream along newlines to StringDecoder.
+
+Issue: SPR-16744

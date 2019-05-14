@@ -1,0 +1,13 @@
+[Security] Correct DN matches in role-mapping rules (elastic/x-pack-elasticsearch#3704)
+
+Changes the behaviour of the role mapping API to perform a "DistinguishedNameMatch"
+when the field is a DN. This is achieved by moving the responsibility for defining
+the matching rules from the expression to the data (ExpressionModel)
+
+Because the role mapping API is used within the SAML realm, which may or may not be
+using DNs, this implementation assumes that the "dn" and "groups" should be
+compared as DNs if they parse as a DN.
+For SAML this behaviour will generally do the right thing, as members of the "groups"
+field might be DNs (if the data is sourced from an LDAP directory) but often will not be.
+
+Original commit: elastic/x-pack-elasticsearch@3a4dfbba79c6a6d6d13b90b1d22fedd5efbe1fad

@@ -1,0 +1,10 @@
+Fix broken test in EnableSchedulingTests
+
+Commit 65d163e changed the textual message of an exception thrown by
+ScheduledAnnotationBeanPostProcessor.afterSingletonsInstantiated(), and
+this in turn caused the withAmbiguousTaskSchedulers_andSingleTask()
+method in EnableSchedulingTests to start failing (albeit only during
+'Performance' builds).
+
+This commit updates the assertion to match the current implementation of
+ScheduledAnnotationBeanPostProcessor.

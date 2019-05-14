@@ -1,0 +1,16 @@
+Watcher: Improve cluster state listener behaviour (elastic/x-pack-elasticsearch#3538)
+
+The cluster state listener used by watch now have two additional checks.
+First, when no master node exists in the cluster state, watcher will
+stop and the indexing listener will not try to trigger any new watch.
+Second, when there is a global cluster write level block, it would not
+be possible to update the watches index or write into the watcher
+history, so the listener can bail at that case as well.
+
+In addition this also changes the log level from debug to info when
+watcher is stopped. It turned out that there are zero insights when or
+if watcher is stopped when normal logging is activated. This makes it
+super hard for support to know when watcher is stopped or started at all
+due to shards being moved around.
+
+Original commit: elastic/x-pack-elasticsearch@5e9ce24380086e5a7a629cc0d2bb01bcf6a02b29

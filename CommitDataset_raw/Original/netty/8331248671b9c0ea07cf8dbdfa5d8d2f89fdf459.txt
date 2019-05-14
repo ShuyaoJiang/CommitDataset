@@ -1,0 +1,15 @@
+ChannelInitializer may be invoked multiple times when used with custom EventExecutor. (#8620)
+
+Motivation:
+
+The ChannelInitializer may be invoked multipled times when used with a custom EventExecutor as removal operation may be done asynchronously. We need to guard against this.
+
+Modifications:
+
+- Change Map to Set which is more correct in terms of how we use it.
+- Ensure we only modify the internal Set when the handler was removed yet
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8616.

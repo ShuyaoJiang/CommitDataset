@@ -1,0 +1,16 @@
+Fix issue with finishing handshake in ssl driver (#30580)
+
+This is fixing an issue that has come up in some builds. In some
+scenarios I see an assertion failure that we are trying to move to
+application mode when we are not in handshake mode. What I think is
+happening is that we are in handshake mode and have received the
+completed handshake message AND an application message. While reading in
+handshake mode we switch to application mode. However, there is still
+data to be consumed so we attempt to continue to read in handshake mode.
+This leads to us attempting to move to application mode again throwing
+an assertion.
+
+This commit fixes this by immediatly exiting the handshake mode read
+method if we are not longer in handshake mode. Additionally if we swap
+modes during a read we attempt to read with the new mode to see if there
+is data that needs to be handled.

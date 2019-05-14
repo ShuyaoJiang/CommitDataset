@@ -1,0 +1,16 @@
+Security: IndexAuditTrail updates mappings when indexing locally (elastic/x-pack-elasticsearch#3944)
+
+This change makes the IndexAuditTrail update mappings for the current
+index even when indexing locally. This is needed in a couple of
+scenarios; the first being upgrades from 5x to 6x where the document
+type was changed and the second is when upgrading minor versions and
+a new field has been introduced. A new field was introduced in 6.2.
+
+Additionally, writing tests for the rolling upgrade revealed a bug
+where the actual node name was never being set as it was using the name
+key instead of the node.name key.
+
+relates elastic/x-pack-elasticsearch#3901
+relates elastic/x-pack-elasticsearch#3718
+
+Original commit: elastic/x-pack-elasticsearch@7374a62ff1b0e7d9795c7a5744df9f8f3d0df2dd

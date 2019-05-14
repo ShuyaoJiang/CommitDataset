@@ -1,0 +1,22 @@
+[ML] Avoid timeout if ML persistent task assignment fails on master node (elastic/x-pack-elasticsearch#4236)
+
+The ML open_job and start_datafeed endpoints start persistent tasks and
+wait for these to be successfully assigned before returning.  Since the
+setup sequence is complex they do a "fast fail" validation step on the
+coordinating node before the setup sequence.  However, this leads to the
+possibility of the "fast fail" validation succeeding and the eventual
+persistent task assignment failing due to other changes during the setup
+sequence.  Previously when this happened the endpoints would time out,
+which in the case of the open_job action takes 30 minutes by default.
+The start_datafeed endpoint has a shorter default timeout of 20 seconds,
+but in both cases the result of a timeout is an unfriendly HTTP 500
+status.
+
+This change adjusts the criteria used to wait for the persistent tasks to
+be assigned to account for the possibility of assignment failure and, if
+this happens, return an error identical to what the "fast fail"
+validation would have returned.  Additionally in this case the unassigned
+persistent task is cancelled, leaving the system in the same state as if
+the "fast fail" validation had failed.
+
+Original commit: elastic/x-pack-elasticsearch@16916cbc13077169f9fe788a224eb3f958baa805

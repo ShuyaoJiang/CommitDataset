@@ -1,0 +1,8 @@
+Fix timezone fallback in ingest processor (#38407)
+
+If no timezone was specified in the date processor, then the conversion
+would lead to wrong time, as UTC was assumed by default, leading to
+incorrectly parsed dates.
+
+This commit does not assume a default timezone and will thus not format
+the dates in a wrong way.

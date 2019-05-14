@@ -1,0 +1,13 @@
+Flush OutputStream-based appenders in Log4J 2 Tests
+
+CI has been failing intermittently with failures in
+Log4J2LoggingSystemTests. A possible cause of the failures is that
+log entries are being buffered in an output stream. This may cause
+an expected log entry to be absent (the entry is buffered) or an
+unexpected entry to be present (the previously buffered entry has
+now been flushed).
+
+This commit attempts to address the test failures by ensuring that
+all OutputStream-based appenders are flushed at the end of every test.
+
+Closes gh-1864

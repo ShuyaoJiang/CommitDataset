@@ -1,0 +1,10 @@
+Observable API reduction
+
+- remove static methods that are not entry points (creators or combinatorial)
+- remove deprecated methods
+
+This change was done to:
+
+- Reduce the footprint of the API
+- Clarify the API so instance methods are preferred unless the static method is appropriate as an entry point
+- Remove duplicate method signatures (such as a buffer method) where the only difference was one was static. This actually causes issues at the bytecode level with dynamic languages since the only difference between them is a modifier making one of them static. Some dynamic languages have a hard time choosing between the two methods when both have the same signature.

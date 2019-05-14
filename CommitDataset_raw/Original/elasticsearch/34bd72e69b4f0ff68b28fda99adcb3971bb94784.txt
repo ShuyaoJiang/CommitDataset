@@ -1,0 +1,29 @@
+[Monitoring] Remove monitoring resolvers (elastic/x-pack-elasticsearch#2566)
+
+Now all monitoring documents are indexed in timestamped indices dedicated 
+to each product, the old monitoring's resolvers and all the associated plumbing 
+can be removed from the Elasticsearch monitoring plugin.
+
+This pull request merges the feature branch feature/monitoring-summer-cleanup 
+into master. All commits have been independently reviewed as part of elastic/x-pack-elasticsearch#2226:
+
+* [Monitoring] Clean up monitoring doc (elastic/x-pack-elasticsearch#2208)
+* [Monitoring] Remove ClusterStatsResolver (elastic/x-pack-elasticsearch#2209)
+* [Monitoring] Remove IndexRecoveryResolver (elastic/x-pack-elasticsearch#2229)
+* [Monitoring] Remove JobStatsResolver (elastic/x-pack-elasticsearch#2230)
+* [Monitoring] Remove ShardsResolver (elastic/x-pack-elasticsearch#2233)
+* [Monitoring] Fix missing instanceof in exporter bulks
+* [Monitoring] Remove NodeStatsResolver (elastic/x-pack-elasticsearch#2244)
+* [Monitoring] Remove IndexStatsResolver & IndicesStatsResolver  (elastic/x-pack-elasticsearch#2247)
+* [Monitoring] Remove source node attributes and add timestamp (elastic/x-pack-elasticsearch#2285)
+* [Monitoring] Remove last resolver (elastic/x-pack-elasticsearch#2330)
+* [Monitoring] Make MonitoringDoc an abstract class (elastic/x-pack-elasticsearch#2451)
+* [Monitoring] Fix TransportMonitoringBulkActionTests
+* [Monitoring] Remove old resolver tests and add a single integration test (elastic/x-pack-elasticsearch#2453)
+
+It does not introduce any new feature, so it could also go in 6.0.
+
+relates elastic/x-pack-elasticsearch#2226
+
+
+Original commit: elastic/x-pack-elasticsearch@e3d5cec28ce11eb64c9659a52b47630ab88f62d5

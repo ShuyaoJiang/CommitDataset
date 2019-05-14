@@ -1,0 +1,16 @@
+Fix exception clearing after onDestroy in a second RequestManager.
+
+Sequence is either:
+1. Obtain a RequestManager for a Fragment
+2. Wait for Fragment to be destroyed
+3. Start a new load with the RequestManager for the destroyed Fragment
+4. Clear the new load with the application RequestManager (or any
+RequestManager other than the one the load was started with).
+
+Or:
+1. Obtain a RequestManager for a Fragment
+2. Obtain a RequestBuilder from the Fragment RequestManager
+3. Pass the RequestBuilder to a background thread
+4. Wait for the Fragment to be destroyed
+5. Start a load with the RequestBuilder on the background thread
+6. Clear the target returned from submit using the application manager.

@@ -1,0 +1,21 @@
+SQL: Remove reflection from constructing Functions (elastic/x-pack-elasticsearch#3442)
+
+This replaces the marker interfaces and reflection that we once used to
+construct functions with method references to constructors. It uses a
+few overloaded methods to build the `FunctionDefinition`s from the
+method references that adapt the various forms of `Function`
+constructors that we have into
+`BiFunction<UnresolvedFunction, DateTimeZone, Function>` so that the
+compiler can do the complex task of picking the appropriate adapter. It
+is good at that sort of thing.
+
+Many of these overloaded functions have `@SuppressWarnings("overloads")`
+because they are ambiguous if you wrote one as a lambda without type
+parameters. Since we always use constructor references this isn't a
+problem.
+
+It does not remove the reflection from function naming or from function
+type derivation. This is big enough and these seemed significantly less
+fraught.
+
+Original commit: elastic/x-pack-elasticsearch@528d05754b50803eb5809231b793fe99dbb9ab76

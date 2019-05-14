@@ -1,0 +1,3 @@
+Avoid potential NPE when onError throws. (#4398)
+
+t2 was only initialized if canceling threw an exception. In the happy path it would have never been initialized so when onError threw the call to suppress() would NPE.

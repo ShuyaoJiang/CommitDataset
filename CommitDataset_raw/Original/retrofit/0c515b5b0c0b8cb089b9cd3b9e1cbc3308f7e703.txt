@@ -1,0 +1,3 @@
+Do not bring the converter along into the response.
+
+We used to do this with RetrofitError and it was always very strange. We cannot guarantee the contents of the error body let alone the serialization mechanism. The semantics of conversion only make sense for successful responses. If you want to deserialize the error body, bring your converter instance which access the ResponseBody that Response already has.

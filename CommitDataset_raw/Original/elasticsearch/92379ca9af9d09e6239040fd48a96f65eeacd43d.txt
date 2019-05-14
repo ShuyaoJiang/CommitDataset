@@ -1,0 +1,14 @@
+Watcher: Ensure usage stats work properly in distributed environment (elastic/x-pack-elasticsearch#4094)
+
+This adds back usage stats by pickybacking on the watcher stats, which
+are already running distributed in order to collect and merge watcher
+statistics.
+
+In order to be able to track statistics, we need to add information for
+each watch in an in-memory data structure that is processed whenever a
+usage request is coming in. This processing creates a number of counters
+for each node, which then are merged together in the usage stats.
+
+relates elastic/x-pack-elasticsearch#4071
+
+Original commit: elastic/x-pack-elasticsearch@c8bfed288f2432ddea39b49df17e5ff007f5074e

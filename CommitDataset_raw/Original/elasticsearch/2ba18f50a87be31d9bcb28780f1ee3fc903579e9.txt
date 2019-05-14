@@ -1,0 +1,10 @@
+SQL: Remove more ANTLR4 grammar ambiguities (#34074)
+
+The `-` and `+` as a number literal prefix are already
+parsed by the rule in `valueExpression`. To accommodate
+this, there are some code changes that enables the
+`ExpressionBuilder` to parse Literal integers and decimals
+together with the `-/+` prefix sign (if exists) and validate
+them (wrong format, large numbers, etc.).
+
+Follows: #33854

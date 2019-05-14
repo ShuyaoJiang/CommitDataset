@@ -1,0 +1,11 @@
+Fix a bug in AbstractFuture.setFuture
+
+If the future being assigned was cancelled then there could be slightly different behavior based on whether or not the wasInterrupted bit is set and whether or not it was a TrustedFuture.  The fix is to never propagate the wasInterrupted bit from setFuture.
+
+This also fixes the potentially confusing behavior where wasInterrupted could be true but interruptTask() would never be called.
+
+For all these reasons, it remains the case that setFuture can never cause interruptTask to be invoked.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=162767529

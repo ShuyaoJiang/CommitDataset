@@ -1,0 +1,11 @@
+HTTP/2 Priority tree circular link
+
+Motivation:
+If an exclusive dependency change stream B should be an exclusive dependency of stream A is requested and stream B is already a child of stream A...then we will add B to B's own children map and create a circular link in the priority tree. This leads to an infinite recursive loop and a stack overflow exception.
+
+Modifications:
+-when removeAllChildren is called it should not remove the exclusive dependency.
+-unit test to ensure this case is covered.
+
+Result:
+No more circular link in the priority tree.

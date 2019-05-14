@@ -1,0 +1,13 @@
+Make validation tools more happy by not have TrustManager impl just accept (#9041)
+
+Motivation:
+
+Seems like some analyzer / validation tools scan code to detect if it may produce some security risk because of just blindly accept certificates. Such a tool did tag our code because we have such an implementation (which then is actually never be used). We should just change the impl to not do this as it does not matter for us and it makes such tools happier.
+
+Modifications:
+
+Throw CertificateException
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/9032

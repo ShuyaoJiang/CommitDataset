@@ -1,0 +1,14 @@
+Correctly test for non-auto-read correctness in testsuite
+
+Motiviation:
+
+Our tests for non-auto-read did actually not test this correctly as auto-read was never disabled on the Bootstrap and ServerBootstrap.
+
+Modifications:
+
+- Correctly disable auto-read on Bootstrap and ServerBootstrap
+- Fix tests to call ChannelHandlerContext.read() once a Channel becomes active.
+
+Result:
+
+Correctly test that non-auto-read works.

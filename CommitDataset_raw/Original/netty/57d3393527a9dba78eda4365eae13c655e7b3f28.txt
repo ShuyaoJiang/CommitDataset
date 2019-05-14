@@ -1,0 +1,18 @@
+Ability to extend SniHandler and configure it with arbitrary runtime data
+
+Motivation
+
+SniHandler is "hardcoded" to use hostname -> SslContext mappings but there are use-cases where it's desireable and necessary to return more information than a SslContext. The only option so far has been to use a delegation pattern
+
+Modifications
+
+Extract parts of the existing SniHandler into an abstract base class and extend SniHandler from it. Users can do the same by extending the new abstract base class and implement custom behavior that is possibly very different from the common/default SniHandler.
+
+Touches
+
+- https://github.com/netty/netty/commit/f97866dbc6e7edc987de9bf7d31f563ce726833e
+- https://github.com/netty/netty/commit/b604a22395f64bca52d155127e2453aa3178af6c
+
+Result
+
+Fixes #6603

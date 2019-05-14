@@ -1,0 +1,14 @@
+Log connection URL for embedded databases
+
+Prior to this commit, EmbeddedDatabaseFactory logged the name of an
+embedded database just before it was created; however, the name alone
+is not sufficient for connecting to the database via external tools
+such as the H2 Web Console.
+
+This commit updates EmbeddedDatabaseFactory to make it easier to
+connect to embedded databases via external tools by logging the
+complete connection URL for an embedded database as it's being created.
+In addition, EmbeddedDatabaseFactory now logs when an embedded database
+is being shut down.
+
+Issue: SPR-13370

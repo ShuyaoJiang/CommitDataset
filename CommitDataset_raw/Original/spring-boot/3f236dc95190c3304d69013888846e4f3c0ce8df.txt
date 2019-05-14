@@ -1,0 +1,26 @@
+Support Qualifiers on MockBean and SpyBean
+
+Previously, if an injection point used a qualifier, `MockBean` and
+`SpyBean` couldn't be used to mock/spy it as there was no way to
+specify that qualifier information.
+
+This commit now detects qualifier information on the injection point
+and associate it with the created `BeanDefintion`. If one wants to
+mock a bean that is qualified with `@Qualifier("foo")`, the definition
+of the mock should be as follows:
+
+```
+public class MyTest {
+
+	@MockBean
+	@Qualifier("foo")
+	private ExampleService service;
+}
+```
+
+As a side effect, it is now possible to mock a service by type even if
+there are multiple instances of that type in the application context. The
+provided qualifier information is used to determine the right candidate
+and the proper bean definition is replaced accordingly.
+
+Closes gh-6753

@@ -1,0 +1,7 @@
+Upgraded to Hibernate 4.2.0
+
+HibernateJpaDialect's HibernateConnectionHandle does not call close() for Hibernate 4.x anymore, since on 4.2, the exposed Connection handle isn't a "borrowed connection" wrapper but rather the actual underlying Connection - with a close() call immediately returning the Connection to the pool and making the local handle invalid for further use within the transaction.
+
+Also using JPA 2.0's EntityManager unwrap method now for retrieving the underlying Hibernate Session.
+
+Issue: SPR-10395

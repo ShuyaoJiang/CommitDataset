@@ -1,0 +1,13 @@
+Correctly handle responses with status 205 and payload. (#7891)
+
+Motivation:
+
+HTTP responses with status of 205 should not contain a payload. We should enforce this.
+
+Modifications:
+
+Correctly handle responses with status 205 and payload by set Content-Length: 0 header and stripping out the content.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7888

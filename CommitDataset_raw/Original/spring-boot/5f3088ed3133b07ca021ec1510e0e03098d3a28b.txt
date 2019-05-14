@@ -1,0 +1,30 @@
+Ensure that Jetty fails to start when its thread pool is misconfigured
+
+Previously, if Jetty's thread pool was misconfigured, the Server would
+still start successfully.
+
+When it is started, the Server examines its Connectors to determine
+how many threads are required. If its thread pool does not meet the
+Connectors' requirements, an IllegalStateException is thrown and the
+Server fails to start. However, JettyEmbeddedServletContainer
+temporarily removes the Server's Connectors while it is being started
+so that requests will not be accepted until the application is ready.
+This has the unwanted side-effect of causing a misconfigured thread
+pool to go undetected as the Connectors' thread requirements are not
+taken into consideration.
+
+The verification of the thread pool configuration and the starting of
+the Connectors is done in the Server's doStart() method which has
+three steps that are of interest:
+
+1. Verify the Server's thread pool configuration
+2. Start any managed beans that have been added to the Server
+3. Start the Server's Connectors.
+
+To allow the thread pool configuration to be verified while still
+preventing the Connectors from being started, the Connectors need to
+be removed in step 2. This is achieved by registering a managed bean
+with the Server that nulls out the Server's Connectors as part of its
+doStart() method.
+
+Closes gh-8917

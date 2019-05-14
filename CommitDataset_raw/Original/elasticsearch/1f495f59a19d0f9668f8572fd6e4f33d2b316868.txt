@@ -1,0 +1,9 @@
+[CCR] Add an internal api to read translog operations between a sequence number range (#2563)
+
+* xdcr: Add an internal api to read translog operations between a sequence number range.
+
+This api will be used later by the persistent task for the following index to pull data from the leader index.
+
+The persistent task can fetch the global checkpoint from the shard stats for each primary shard of the leader index.
+Based on the global checkpoint of the primary shards of the following index, the persistent task can send several
+calls to the internal api added in this commit to replicate changes from follow index to leader index in a batched manner.

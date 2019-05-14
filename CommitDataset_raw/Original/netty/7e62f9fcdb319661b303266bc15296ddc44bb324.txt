@@ -1,0 +1,10 @@
+SocketSslEchoTest failure
+
+Motivation:
+8ba5b5f740d0d87eebd2aedacff8bd196d6da795 removed some ciphers from the default list, and SocketSslEchoTest had one of these ciphers hard coded in the test. The test will fail if the cihper is not supported by default.
+
+Modifications:
+SocketSslEchoTest should ensure a cipher is used which will be supported by the peer
+
+Result:
+Test result no longer depends upon default cipher list.

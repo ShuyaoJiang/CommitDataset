@@ -1,0 +1,11 @@
+SslHandler benchmark and SslEngine multiple packets benchmark
+
+Motivation:
+We currently don't have a benchmark which includes SslHandler. The SslEngine benchmarks also always include a single TLS packet when encoding/decoding. In practice when reading data from the network there may be multiple TLS packets present and we should expand the benchmarks to understand this use case.
+
+Modifications:
+- SslEngine benchmarks should include wrapping/unwrapping of multiple TLS packets
+- Introduce SslHandler benchmarks which can also account for wrapping/unwrapping of multiple TLS packets
+
+Result:
+SslHandler and SslEngine benchmarks are more comprehensive.

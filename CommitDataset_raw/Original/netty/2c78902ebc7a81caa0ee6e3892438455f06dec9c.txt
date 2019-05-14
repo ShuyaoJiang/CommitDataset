@@ -1,0 +1,10 @@
+LzmaFrameEncoderTest leak due to LzmaInputStream close behavior
+
+Motivation:
+c1932a8537b742aaf15a7cfacf9f76ad8239f3c7 made an assumption that the LzmaInputStream which wraps a ByteBufInputStream would delegate the close operation to the wrapped stream. This assumption is not true and thus we still had a leak. An issue has been logged with our LZMA dependency https://github.com/jponge/lzma-java/issues/14.
+
+Modifications:
+- Force a close on the wrapped stream
+
+Result:
+No more leak.

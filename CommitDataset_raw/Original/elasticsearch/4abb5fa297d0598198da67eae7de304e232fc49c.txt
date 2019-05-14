@@ -1,0 +1,5 @@
+ Remove optimisations to reuse objects when applying a new `ClusterState` (#27317)
+
+In order to avoid churn when applying a new `ClusterState`, there are some checks that compare parts of the old and new states and, if equal, the new object is discarded and the old one reused. Since `ClusterState` updates are now largely diff-based, this code is unnecessary: applying a diff also reuses any old objects if unchanged. Moreover, the code compares the parts of the `ClusterState` using their `version()` values which is not guaranteed to be correct, because of a lack of consensus.
+
+This change removes this optimisation, and tests that objects are still reused as expected via the diff mechanism.

@@ -1,0 +1,13 @@
+Ensure we null out cumulation buffer before fire through the pipeline in handlerRemoved(...)
+
+Motivation:
+
+We should ensure we null out the cumulation buffer before we fire it through the pipleine in handlerRemoved(...) as in theory it could be possible that another method is triggered as result of the fireChannelRead(...) or fireChannelReadComplete() that will try to access the cumulation.
+
+Modifications:
+
+Null out cumulation buffer early in handlerRemoved(...)
+
+Result:
+
+No possible to access the cumulation buffer that was already handed over.

@@ -1,0 +1,13 @@
+Add RedirectView to Spring Web Reactive
+
+Main differences with the Spring MVC original implementation:
+ - Default redirect HTTP code is 303 See Other since we can assume
+   all HTTP clients support HTTP 1.1 in 2016
+ - No more http10Compatible property, use statusCode instead
+ - By default the redirect is relative to the context path
+ - A builder allow to set various properties if needed
+ - In UrlBasedViewResolver, a Function<String, RedirectView>
+   redirectViewProvider property allows to customize RedirectView
+   instances in a flexible way
+
+Issue: SPR-14534

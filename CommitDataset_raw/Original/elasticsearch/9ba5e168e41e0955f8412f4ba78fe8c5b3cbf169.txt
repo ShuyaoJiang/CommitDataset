@@ -1,0 +1,23 @@
+Don't use create static storage service
+
+Even though you annotate the Test class with `@ThirdParty` the static
+code is initialized.
+
+In that case it fails with:
+
+```
+==> Test Info: seed=529C3C6977F695FC; jvms=3; suites=6
+Suite: org.elasticsearch.repositories.azure.AzureSnapshotRestoreTests
+ERROR   0.00s J2 | AzureSnapshotRestoreTests (suite) <<< FAILURES!
+   > Throwable #1: java.lang.IllegalStateException: to run integration tests, you need to set -Dtests.thirdparty=true and -Dtests.azure.account=azure-account -Dtests.azure.key=azure-key
+   >    at org.elasticsearch.cloud.azure.AzureTestUtils.generateMockSecureSettings(AzureTestUtils.java:37)
+   >    at org.elasticsearch.repositories.azure.AzureSnapshotRestoreTests.generateMockSettings(AzureSnapshotRestoreTests.java:81)
+   >    at org.elasticsearch.repositories.azure.AzureSnapshotRestoreTests.<clinit>(AzureSnapshotRestoreTests.java:84)
+   >    at java.lang.Class.forName0(Native Method)
+   >    at java.lang.Class.forName(Class.java:348)
+Completed [1/6] on J2 in 2.21s, 0 tests, 1 error <<< FAILURES!
+```
+
+Closes #26812.
+
+(cherry picked from commit eb6d714 for master branch)

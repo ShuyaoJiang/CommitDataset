@@ -1,0 +1,10 @@
+Refine UriTemplate match pattern
+
+The match/matches methods of UriTemplate use a regex with (.*) in place
+of URI variables, which work fine except in the end where such a
+pattern can match greedily more than one segment.
+
+This commit updates the regex to use ([^/]*) instead since URI
+variables are only meant to be used within a single path segment.
+
+Issue: SPR-16169

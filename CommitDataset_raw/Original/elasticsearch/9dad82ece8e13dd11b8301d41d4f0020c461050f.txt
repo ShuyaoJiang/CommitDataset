@@ -1,0 +1,7 @@
+TEST: Skip assertSeqNos for closed shards (#33130)
+
+If a shard was closed, we return null for SeqNoStats. Therefore the
+assertion assertSeqNos will hit NPE when it verifies a closed shard.
+
+This commit skips closed shards in assertSeqNos and enables this
+assertion in AbstractDisruptionTestCase.

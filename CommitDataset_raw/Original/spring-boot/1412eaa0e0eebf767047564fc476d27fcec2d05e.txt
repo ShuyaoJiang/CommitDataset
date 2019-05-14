@@ -1,0 +1,14 @@
+Handle relative URLs in jar's Class-Path when getting changeable URLs
+
+5e0ba6ea added support for reading a jar manifest's Class-Path
+attribute when resolving changeable URLs from a URLClassLoader,
+however it did not handle relative URLs, i.e. URLs without a protocol,
+correctly.
+
+This commit updates ChangeableUrls so that it uses the URL of the
+JAR that contains the manifest as the base for any new URLs that
+are created. When the Class-Path entry is relative, this base will
+be used. When the Class-Path entry is absolutee, URL's constructor
+will ignore the supplied base.
+
+Closes gh-5665

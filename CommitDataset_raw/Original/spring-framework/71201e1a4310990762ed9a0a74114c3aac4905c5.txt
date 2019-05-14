@@ -1,0 +1,13 @@
+Relax generic type detection for ResponseEntity
+
+Before this change the getHttpEntityType method in
+HttpEntityMethodProcessor raised an ISE if the generic type cannot be
+detected. That made sense for resolving a controller method argument
+where the target body type is crucial. However for a return value
+the generic type should not be required since we either have an
+actual body or no body at all in which case it doesn't even matter.
+
+This change relaxes the checks and defaults to Object.class for the
+ResponseEntity generic type on the return value side.
+
+Issue: SPR-14799

@@ -1,0 +1,21 @@
+SQL: Add remaining matrix aggregations (elastic/x-pack-elasticsearch#3330)
+
+* Add remaining matrix aggregations
+
+This adds the remaining [matrix aggregations](https://www.elastic.co/guide/en/elasticsearch/reference/6.1/search-aggregations-matrix-stats-aggregation.html).
+
+These aggregations aren't currently implemented due to the inter-plugin
+communication not being set up, so they return "innerkey/matrix stats not
+handled (yet)".
+
+For matrix aggs that share a name with an existing aggregation (like 'count'),
+they have be prefixed with "matrix_", so, "matrix_count", "matrix_mean", and
+"matrix_variance".
+
+Relates to elastic/x-pack-elasticsearch#2885
+
+* Return HTTP 400 for innerkey/matrix stats aggs
+
+* Add integration test for unimplemented matrix aggs
+
+Original commit: elastic/x-pack-elasticsearch@34459c59aa4bc303f3d2623e8f70151cee28962c

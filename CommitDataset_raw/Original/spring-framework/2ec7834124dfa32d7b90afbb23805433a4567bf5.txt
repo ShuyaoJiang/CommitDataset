@@ -1,0 +1,27 @@
+Resolve nested placeholders via PropertyResolver
+
+Prior to this change, PropertySourcesPropertyResolver (and therefore
+all AbstractEnvironment) implementations failed to resolve nested
+placeholders as in the following example:
+
+    p1=v1
+    p2=v2
+    p3=${v1}:{$v2}
+
+Calls to PropertySource#getProperty for keys 'p1' and 'v1' would
+successfully return their respective values, but for 'p3' the return
+value would be the unresolved placeholders. This behavior is
+inconsistent with that of PropertyPlaceholderConfigurer.
+
+PropertySourcesPropertyResolver #getProperty variants now resolve any
+nested placeholders recursively, throwing IllegalArgumentException for
+any unresolvable placeholders (as is the default behavior for
+PropertyPlaceholderConfigurer). See SPR-9569 for an enhancement that
+will intoduce an 'ignoreUnresolvablePlaceholders' switch to make this
+behavior configurable.
+
+This commit also improves error output in
+PropertyPlaceholderHelper#parseStringValue by including the original
+string in which an unresolvable placeholder was found.
+
+Issue: SPR-9473, SPR-9569

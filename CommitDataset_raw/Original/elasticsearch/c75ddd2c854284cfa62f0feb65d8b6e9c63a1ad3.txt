@@ -1,0 +1,12 @@
+Fix scaling thread pool test bug
+
+This commit adjusts the expectation for the max number of threads in the
+scaling thread pool configuration test. The reason that this expectation
+is incorrect is because we removed the limitation that the number of
+processors maxes out at 32, instead letting it be the true number of
+logical processors on the machine. However, when we removed this
+limitation, this test was never adjusted to reflect the new reality yet
+it never arose since our tests were not running on machines with
+incredibly high core counts.
+
+Relates #20874

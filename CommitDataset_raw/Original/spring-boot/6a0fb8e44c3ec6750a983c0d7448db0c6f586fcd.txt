@@ -1,0 +1,15 @@
+Update DevTools' ResourceLoader to delegate to user's custom loader
+
+Previously, when DevTools' was used it would set the application
+context's ResourceLoader and overwrite any custom ResourceLoader that
+had been configured. On the rare occasion when the user had customized
+the ResourceLoader this meant that the customization was lost and
+certain resources would become unavailable.
+
+This commit updates DevTools' ResourceLoader to delegate a custom
+ResourceLoader if one has been configured. If one has not been
+configured it delegates as before, i.e. to
+WebApplicationContextResourceLoader for web applications and to
+DefaultResourceLoader for all others apps.
+
+Closes gh-8010

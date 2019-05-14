@@ -1,0 +1,14 @@
+Install SLF4JBridgeHandler when Log4J2LoggingSystem is initialized
+
+Previously, Log4J2LoggingSystem did not install SLF4JBridgeHandler.
+SLF4JBridgeHandler is used to route logging calls made using
+java.util.logging into SLF4J. This resulted in entries being written
+to System.err instead.
+
+This commit updates Log4J2LoggingSystem to register the bridge handler
+thereby ensuring the logging that originates into java.util.logging is
+routed into SLF4J. This change has been made by extracting a new
+abstract superclass that performs the registration. This super class is
+extended by all SLF4J-based LoggingSystem implementations.
+
+Fixes gh-1737

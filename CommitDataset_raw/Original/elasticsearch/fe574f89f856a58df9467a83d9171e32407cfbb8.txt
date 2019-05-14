@@ -1,0 +1,13 @@
+CCR: Translog op on primary should have versionType
+
+Normally translog operations will not be replayed on the primary.
+Following engine is an exception where we replay translog on both
+primary and replica as a non-primary strategy.  Even though we won't use
+the version_type in the following engine, we still need to pass a valid
+value for the primary operation in order not to trip assertions in an
+engine.
+
+This commit passes version_type EXTERNAL for translog operation if its
+origin is primary.
+
+Relates #31945

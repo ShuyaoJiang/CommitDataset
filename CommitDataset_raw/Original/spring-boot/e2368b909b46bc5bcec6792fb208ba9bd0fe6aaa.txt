@@ -1,0 +1,15 @@
+Reduce memory consumption of fat/exploded jars
+
+Refactor `spring-boot-loader` to reduce the amount of memory required
+to load fat & exploded jars. Jar files now no longer store a full list
+of entry data records, but instead use an array of entry name hashes.
+
+Since ClassLoaders often ask each JAR if they contain a particular
+entry (and mostly they do not), the hash array provides a quick way to
+deal with misses. Only when a hash does exist is data actually loaded
+from the underlying file.
+
+In addition to the JarFile changes, the Archive abstraction has also
+been updated to reduce memory consumption.
+
+See gh-4882

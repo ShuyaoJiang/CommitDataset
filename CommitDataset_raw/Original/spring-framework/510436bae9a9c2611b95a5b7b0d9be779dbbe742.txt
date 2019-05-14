@@ -1,0 +1,8 @@
+Copy header values instead of header lists in DefaultClientRequestBuilder
+
+This commit changes the `headers(HttpHeaders)` method in
+DefaultClientRequestBuilder so that it copies the individual header
+values instead of using the `List<String>` value directly. The reason
+for this change is that the list of values can be immutable, and adding
+additional values after that could result in
+UnsupportedOperationExceptions.

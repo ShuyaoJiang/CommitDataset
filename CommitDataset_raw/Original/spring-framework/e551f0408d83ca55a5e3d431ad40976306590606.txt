@@ -1,0 +1,14 @@
+Protect against NPE in Tiles 3 Views
+
+Change the org.apache.tiles.request.servlet.ServletRequest created
+in TileView.checkResource to include the HttpServletRequest. This
+is required when using a TilesConfigurer with useMutableTilesContainer
+set to true. Without a HttpServletRequest the getRequestScope() method
+will always return null causing exceptions in the CachingTilesContainer
+class.
+
+Unfortunately the checkResource method does not provide access to the
+HttpServletRequest so it must be obtained via the RequestContextHolder
+thread-local.
+
+Issue: SPR-10223

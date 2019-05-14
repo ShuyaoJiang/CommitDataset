@@ -1,0 +1,12 @@
+Trigger log4j loading prior to context classloader (elastic/x-pack-elasticsearch#4355)
+
+OpenSAML requires that the context classloader be set to the
+classloader that contains the opensaml jar files in order to
+initialise itself. However, sometimesrthis seems to cause the
+classloading for slf4j/log4j to take place while that context
+classloader is set, which fails.
+
+This change forces slf4j/log4j to be initialised prior to setting
+the context classloader.
+
+Original commit: elastic/x-pack-elasticsearch@85ed8eb4882b660fe98e7e2ba6e0ffe768ed1f91

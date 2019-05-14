@@ -1,0 +1,8 @@
+Handle OnSubscribeFuncs correctly in JRuby interop logic
+
+OnSubscribeFunc#onSubscribe expects to return a Subscription. I am
+unable to successfully cast the return value of a RubyProc, even if
+that value _is_ an object that implements the Subscription interface,
+into a Subscription in Java-land (Java reports that ConcreteJavaProxy
+cannot be cast). Instead I allow JRuby to handle OnSubscribeFunc
+arguments through its default proxy logic, which works correctly.

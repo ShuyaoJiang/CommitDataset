@@ -1,0 +1,22 @@
+Remove duplicate test classes
+
+Prior to this commit many test utility classes and sample beans were
+duplicated across projects. This was previously necessary due to the
+fact that dependent test sources were not shared during a gradle
+build. Since the introduction of the 'test-source-set-dependencies'
+gradle plugin this is no longer the case.
+
+This commit attempts to remove as much duplicate code as possible,
+co-locating test utilities and beans in the most suitable project.
+For example, test beans are now located in the 'spring-beans'
+project.
+
+Some of the duplicated code had started to drift apart when
+modifications made in one project where not ported to others. All
+changes have now been consolidated and when necessary existing tests
+have been refactored to account for the differences.
+
+Conflicts:
+	spring-beans/src/test/java/org/springframework/beans/factory/ConcurrentBeanFactoryTests.java
+	spring-beans/src/test/java/org/springframework/beans/factory/support/BeanFactoryGenericsTests.java
+	spring-beans/src/test/java/org/springframework/beans/support/PagedListHolderTests.java

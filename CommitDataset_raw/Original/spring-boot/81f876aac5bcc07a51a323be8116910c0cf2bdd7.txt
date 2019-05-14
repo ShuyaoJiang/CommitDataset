@@ -1,0 +1,14 @@
+Exclude bean-validator from jersey-spring3 to avoid classpath pollution
+
+jersey-spring3 has a transtive dependencies on HK2’s bean-validator
+module that embeds JBoss Logging, Hibernate Validator, and Classmate
+without repackaging them. This makes it impossible to control the
+version of those three libraries that will be used without relying on
+classpath ordering.
+
+This commit excludes the bean-validator dependency from jersey-spring3.
+The Jersey starter already depends on our Validation starter which
+pulls in the proper, and controllable, version of the three
+dependencies listed above so users of our starters will be unaffected.
+
+Closes gh-4186

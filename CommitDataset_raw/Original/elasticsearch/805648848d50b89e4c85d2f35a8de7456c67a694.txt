@@ -1,0 +1,10 @@
+Add check for feature aware implementations (#31081)
+
+This commit adds a check that any class in X-Pack that is a feature
+aware custom also implements the appropriate mix-in interface in
+X-Pack. These interfaces provide a default implementation of
+FeatureAware#getRequiredFeature that returns that x-pack is the required
+feature. By implementing this interface, this gives a consistent way for
+X-Pack feature aware customs to return the appopriate required feature
+and this check enforces that all such feature aware customs return the
+appropriate required feature.

@@ -1,0 +1,11 @@
+Opportunity for lazy initialization in Headers interface
+
+Motivation:
+The Headers interface had two member variables (addAllVisitor, setAllVisitor) which are not necessarily always needed but are always instantiated.  This may result in excess memory being used.
+
+Modifications:
+ - addAllVisitor will be accessed via a method addAllVisitor() which will use lazy initialization.
+ - setAllVisitor will be accessed via a method addAllVisitor() which will use lazy initialization.
+
+Result:
+Potential memory savings by using lazy initialization.

@@ -1,0 +1,9 @@
+Add check for minimum required Docker version (#36497)
+
+Our Docker build uses a multi-stage Docker build. This requires Docker
+version 17.05 or greater. Without an explicit check here, the build
+fails in a mysterious way such as "invalid reference format" that is
+hard to track down (Google searches for "Docker invalid reference
+format" do not turn up anything useful). This commit refactors our
+existing Docker checks, and adds a new one for the minimum Docker
+version.

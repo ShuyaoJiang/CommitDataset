@@ -1,0 +1,4 @@
+Cache underlying ByteBuffers and count in ChannelOutboundBuffer.Entry to reduce object creation and so GC pressure
+
+Beside this it also helps to reduce CPU usage as nioBufferCount() is quite expensive when used on CompositeByteBuf which are
+nested and contains a lot of components

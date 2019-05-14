@@ -1,0 +1,7 @@
+Settings: Reimplement keystore format to use FIPS compliant algorithms (#28255)
+
+This commit switches the internal format of the elasticsearch keystore
+to no longer use java's KeyStore class, but instead encrypt the binary
+data of the secrets using AES-GCM. The cipher key is generated using
+PBKDF2WithHmacSHA512. Tests are also added for backcompat reading the v1
+and v2 formats.

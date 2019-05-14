@@ -1,0 +1,17 @@
+Remove synchronized keywords from SockJsSession impls
+
+Before this change SockJsSession implementations of WebSocketSession
+used synchronization around its method implementations protecting
+internal state and ensuring only a single thread is sending messages
+at a time.
+
+A WebSocketSession is generally expected to be used from one thread
+at a time and now that application messages are sent through
+ConcurrentWebSocketSessionDecorator, there is no concern about
+application messages sent from the different threads.
+
+While there are some remaining concerns, those can be addressed
+without using the synchronized keyword. This change removes it from
+the methods of all SockJS session implementations.
+
+Issue: SPR-11450

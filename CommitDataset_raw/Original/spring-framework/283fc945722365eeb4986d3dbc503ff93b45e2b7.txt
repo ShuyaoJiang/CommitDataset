@@ -1,0 +1,12 @@
+Support null query param values in HtmlUnitRequestBuilder
+
+Prior to this commit, HtmlUnitRequestBuilder would incorrectly attempt
+to decode null values for query parameters (i.e., query parameters such
+as 'error' in 'http://example.com/login?error') which resulted in a
+NullPointerException since URLDecoder.decode() does not support null
+values.
+
+This commit fixes this issue by ensuring that HtmlUnitRequestBuilder
+only attempts to decode non-null query parameter values.
+
+Issue: SPR-13524

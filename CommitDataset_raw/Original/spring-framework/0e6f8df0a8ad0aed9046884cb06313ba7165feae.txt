@@ -1,0 +1,5 @@
+ServletServerHttpRequest.getURI() ignores malformed query string
+
+The resolved URI instance is also being cached now. This should not make a difference in a real Servlet environment but does affect tests which assumed they could modify an HttpServletRequest path behind a pre-created ServletServerHttpRequest instance. Our WebSocket test base class has been revised accordingly, re-creating the ServletServerHttpRequest in such a case.
+
+Issue: SPR-16414

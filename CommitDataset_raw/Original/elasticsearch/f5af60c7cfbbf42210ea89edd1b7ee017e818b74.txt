@@ -1,0 +1,20 @@
+SQL: Fix error message on bad index (elastic/x-pack-elasticsearch#3312)
+
+Fixes the error message that SQL produces when it sees unsupported
+indexes. It was always returning all broken indexes as "unknown" even
+though we have much better error messages. It was just throwing them
+away.
+
+I caught this originally when backporting to 6.x where we had a test
+that we produced a useful error message when the user attempted to run
+SQL on an index with more than one type. We couldn't run that in the
+feature/sql branch because it is inside the full cluster restart tests
+and the "old" version of Elasticsearch used in those tests in
+feature/sql is 6.x which doesn't allow indexes with multiple types. When
+I backported to 6.x the test failed because it hadn't been run before.
+
+In addition to fixing that test and the problem, this adds another test
+that will reveal the problem when run in the feature/sql and master
+branch.
+
+Original commit: elastic/x-pack-elasticsearch@c7b787baeef1abce832383c36a2c4b8c00ef350a

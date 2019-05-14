@@ -1,0 +1,11 @@
+Remove LocalCheckpointTracker#resetCheckpoint (#34667)
+
+In #34474, we added a new assertion to ensure that the
+LocalCheckpointTracker is always consistent with Lucene index. However,
+we reset LocalCheckpoinTracker in testDedupByPrimaryTerm cause this
+assertion to be violated.
+
+This commit removes resetCheckpoint from LocalCheckpointTracker and
+rewrites testDedupByPrimaryTerm without resetting the local checkpoint.
+
+Relates #34474

@@ -1,0 +1,13 @@
+Use transactional connection during db population
+
+Previously, DatabasePopulatorUtils#execute looked up a Connection from
+the given DataSource directly which resulted in the executed statements
+not being executed against a transactional connection (if any) which in
+turn resulted in the statements executed by the populator potentially
+not being rolled back.
+
+Now DataSourceUtils#getConnection is used to transparently take part in
+any active transaction and #releaseConnection is used to ensure the
+connection is closed if appropriate.
+
+Issue: SPR-9457

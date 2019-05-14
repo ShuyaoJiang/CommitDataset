@@ -1,0 +1,7 @@
+Don't register shutdown hook from embedded context
+
+Change `EmbeddedWebApplicationContext` to no longer automatically call
+`registerShutdownHook()`. Shutdown hooks must now be registered by the
+caller (for users of SpringApplication this will happen automatically).
+
+Fixes gh-314

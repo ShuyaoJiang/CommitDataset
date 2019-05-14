@@ -1,0 +1,5 @@
+Explicitly clear manually registered singleton names after destroySingletons call
+
+As indicated by our recent Spring Integration test failure, autowiring attempts after context closing did not fail before. After the introduction of the separately managed manualSingletonNames set, the algorithm could run into a situation where a singleton name is still in the manualSingletonNames set but not in the singletonObjects map anymore. As a remedy, destroySingletons needs to explicitly clear the manualSingletonNames set in order to remove references to non-disposable singleton beans as well (which are otherwise left in the set since individual destroySingleton calls only come in for disposable beans with destroy methods).
+
+Issue: SPR-12404

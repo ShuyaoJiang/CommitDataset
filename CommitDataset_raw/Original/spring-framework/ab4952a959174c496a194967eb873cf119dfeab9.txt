@@ -1,0 +1,9 @@
+Raise RestClientException for unknown status codes
+
+HttpStatus cannot be created with an unknown status code. If a server
+returns a status code that's not in the HttpStatus enum values, an
+IllegalArgumentException is raised. Rather than allowing it to
+propagate as such, this change ensures the actual exception raised is
+a RestClientException.
+
+Issue: SPR-9406

@@ -1,0 +1,6 @@
+Add early termination support for min/max aggregations (#33375)
+
+This commit adds the support to early terminate the collection of a leaf
+in the min/max aggregator. If the query matches all documents the min and max value
+for a numeric field can be retrieved efficiently in the points reader.
+This change applies this optimization when possible.

@@ -1,0 +1,9 @@
+Don't get stuck waiting on the connection window.
+
+We weren't applying the stream's timeout to writes to the underlying
+connection. This was just a dumb bug.
+
+When the stream does time out waiting on a write that's blocked inside
+the connection awaiting write window, we need to break out.
+
+Closes https://github.com/square/okhttp/issues/1560

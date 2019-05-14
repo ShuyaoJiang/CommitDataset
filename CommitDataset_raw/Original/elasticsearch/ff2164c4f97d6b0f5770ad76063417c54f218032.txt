@@ -1,0 +1,10 @@
+Revisit deletion policy after release the last snapshot (#28627)
+
+We currently revisit the index deletion policy whenever the global
+checkpoint has advanced enough. We should also revisit the deletion
+policy after releasing the last snapshot of a snapshotting commit. With 
+this change, the old index commits will be cleaned up as soon as
+possible.
+
+Follow-up of #28140
+https://github.com/elastic/elasticsearch/pull/28140#discussion_r162458207

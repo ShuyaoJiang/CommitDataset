@@ -1,0 +1,36 @@
+Do not wait for advancement of checkpoint in recovery (#39006)
+
+With this change, we won't wait for the local checkpoint to advance to
+the max_seq_no before starting phase2 of peer-recovery. We also remove
+the sequence number range check in peer-recovery. We can safely do these
+thanks to Yannick's finding.
+
+The replication group to be used is currently sampled after indexing
+into the primary (see `ReplicationOperation` class). This means that
+when initiating tracking of a new replica, we have to consider the
+following two cases:
+
+- There are operations for which the replication group has not been
+sampled yet. As we initiated the new replica as tracking, we know that
+those operations will be replicated to the new replica and follow the
+typical replication group semantics (e.g. marked as stale when
+unavailable).
+
+- There are operations for which the replication group has already been
+sampled. These operations will not be sent to the new replica.  However,
+we know that those operations are already indexed into Lucene and the
+translog on the primary, as the sampling is happening after that. This
+means that by taking a snapshot of Lucene or the translog, we will be
+getting those ops as well. What we cannot guarantee anymore is that all
+ops up to `endingSeqNo` are available in the snapshot (i.e.  also see
+comment in `RecoverySourceHandler` saying `We need to wait for all
+operations up to the current max to complete, otherwise we can not
+guarantee that all operations in the required range will be available
+for replaying from the translog of the source.`). This is not needed,
+though, as we can no longer guarantee that max seq no == local
+checkpoint.
+
+Relates #39000
+Closes #38949
+
+Co-authored-by: Yannick Welsch <yannick@welsch.lu>

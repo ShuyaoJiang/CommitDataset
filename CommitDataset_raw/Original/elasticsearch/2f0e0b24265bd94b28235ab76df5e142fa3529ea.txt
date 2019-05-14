@@ -1,0 +1,9 @@
+Allow indices.get_mapping response parsing without types (#37492)
+
+This change adds deprecation warning to the indices.get_mapping API in case the
+"inlcude_type_name" parameter is set to "true" and changes the parsing code in
+GetMappingsResponse to parse the type-less response instead of the one
+containing types. As a consequence the HLRC client doesn't need to force
+"include_type_name=true" any more and the GetMappingsResponseTests can be
+adapted to the new format as well. Also removing some "include_type_name"
+parameters in yaml test and docs where not necessary.

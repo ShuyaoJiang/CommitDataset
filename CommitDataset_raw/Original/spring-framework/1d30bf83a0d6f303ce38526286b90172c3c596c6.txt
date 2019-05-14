@@ -1,0 +1,22 @@
+Favor 'local' annotations over inherited ones
+
+Prior to this commit, the implementations of findAnnotation() in
+AnnotationUtils and getAnnotationAttributes() in AnnotatedElementUtils
+favored inherited annotations and inherited composed annotations over
+composed annotations that are declared closer to the starting class
+passed to these methods.
+
+This commit addresses this issue as follows:
+
+- Refactored AnnotationUtils to use getDeclaredAnnotation() and
+  getDeclaredAnnotations() instead of getAnnotation() and
+  getAnnotations() where appropriate.
+
+- AnnotatedElementUtils.doProcess() supports a traverseClassHierarchy
+  flag to control whether the class hierarchy should be traversed,
+  using getDeclaredAnnotations() instead of getAnnotations() if the
+  flag is true.
+
+- Overhauled Javadoc in AnnotatedElementUtils.
+
+Issue: SPR-11475

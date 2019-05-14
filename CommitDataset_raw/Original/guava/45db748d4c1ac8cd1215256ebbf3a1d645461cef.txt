@@ -1,0 +1,9 @@
+Make ExecutionList smaller and faster by using a manual queue instead of a LinkedList.
+
+With these changes:
+* An empty/executed ExecutionList is now half the size (20 vs. 40 bytes), it is also smaller after execution as well.
+* The new ExecutionList takes 16 fewer bytes per listener added also there is only 1 object allocated instead of 2.  Also, if the list has already been executed there is no longer any allocation in add.
+* There were also performance gains between 0 and 20% across the 4 benchmarks I wrote.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=42915090

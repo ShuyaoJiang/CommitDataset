@@ -1,0 +1,14 @@
+Customize Thymeleaf default template resolver order
+
+Currently, the default TemplateResolver had no specific order. Thymeleaf
+handles that with a "always first" strategy (that can be confusing if
+several TemplateResolver have a "null" order.
+
+While it is a fine default (and changing it could lead to weird side
+effects), it has to be changed as soon as another TemplateResolver bean
+is defined in the project.
+
+The `spring.thymeleaf.template-resolver-order` property has been added to
+control  the order of the default TemplateResolver.
+
+Closes gh-3575

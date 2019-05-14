@@ -1,0 +1,11 @@
+Fixes shrink action to remove single ndoe allocation (#33091)
+
+This change fixes the shrink action so when the shrink is performed we
+remove the single node allocation fromt eh shard allocation filtering
+settings. Without this fix replicas cannot be allocated after we have
+performed the shrink and we cannot make progress with the rest of the
+shink aciton.
+
+This change also fixes a bug in the explain API where the maste node
+timeout was being set to null if it wasn't provided instead of using
+its default value causing a NPE

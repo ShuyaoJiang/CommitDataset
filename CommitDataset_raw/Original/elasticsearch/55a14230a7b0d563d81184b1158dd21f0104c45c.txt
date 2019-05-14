@@ -1,0 +1,12 @@
+Do not keep 5.x commits once having 6.x commits (#28188)
+
+Currently we keep a 5.x index commit as a safe commit until we have a
+6.x safe commit. During that time, if peer-recovery happens, a primary
+will send a 5.x commit in file-based sync and the recovery will even
+fail as the snapshotted commit does not have sequence number tags.
+
+This commit updates the combined deletion policy to delete legacy
+commits if there are 6.x commits.
+
+Relates #27606
+Relates #28038

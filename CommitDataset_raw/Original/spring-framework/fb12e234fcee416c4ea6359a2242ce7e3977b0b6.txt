@@ -1,0 +1,18 @@
+Handle NoClassDefFoundError consistently for TELs
+
+Prior to this commit, a NoClassDefFoundError caught in
+TestContextManager's retrieveTestExecutionListeners() method would be
+handled differently for implicit default listeners (i.e., listeners not
+declared via @TestExecutionListeners) and listeners explicitly declared
+via @TestExecutionListeners. Specifically, a NoClassDefFoundError would
+cause a test to fail for an explicitly declared TestExecutionListener
+but not for an implicitly declared one.
+
+This commit addresses this issue by:
+
+ - Always swallowing a NoClassDefFoundError for both implicitly and
+   explicitly declared TestExecutionListeners.
+ - Changing the log level from DEBUG to INFO to make such situations
+   more visible to the average end user.
+
+Issue: SPR-11347

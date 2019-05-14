@@ -1,0 +1,10 @@
+Add additional ViewResolver configuration
+
+The DispatcherServlet adds a default InternalViewResolver
+which was used by some apps, but when the actuator was
+available it added an "/error" bean and effectively
+switched off the default view resolver. The net fix was
+to add an InternalViewResolver at the same time as
+adding any other ViewResolvers.
+
+[Fixes #55357516] [bs-290] Actuator UI app cannot serve static index.html

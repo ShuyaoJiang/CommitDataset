@@ -1,0 +1,15 @@
+Correctly propagate channelInactive even if cleanup throws
+
+Motivation:
+
+Its possible that cleanup() will throw if invalid data is passed into the wrapped EmbeddedChannel. We need to ensure we still call channelInactive(...) in this case.
+
+Modifications:
+
+- Correctly forward Exceptions caused by cleanup()
+- Ensure all content is released when cleanup() throws
+- Add unit tests
+
+Result:
+
+Correctly handle the case when cleanup() throws.

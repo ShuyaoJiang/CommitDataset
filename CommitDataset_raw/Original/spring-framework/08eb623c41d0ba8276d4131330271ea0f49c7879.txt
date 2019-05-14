@@ -1,0 +1,12 @@
+Fix regression introduced in 4.3 snapshot
+
+Commit ccd17d introduced a regression where a custom HTTP method
+would no longer match for an empty @RequestMapping condition.
+
+The previous behavior should now be restored. Effectively
+RequestMethodRequestCondition as before will now match to any HTTP
+method (even unknown/custom ones) if the methods condition is empty.
+The only exception is HTTP OPTIONS for which we provide default
+handling as a fallback (i.e. when not mapped explicitly).
+
+Issue: SPR-13130

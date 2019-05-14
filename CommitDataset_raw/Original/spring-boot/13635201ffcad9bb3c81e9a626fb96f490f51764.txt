@@ -1,0 +1,28 @@
+Prevent JVM from exiting with 1 when main thread is only non-daemon
+
+DevTools deliberately throws an uncaught exception on the main thread
+as a safe way of causing it to stop processing. This exception is
+caught and swallowed by an uncaught exception handler. Unfortunately,
+this has the unwanted side-effect of causing the JVM to exit with 1
+once all running threads are daemons.
+
+Normally, this isn't a problem. Non-daemon threads, such as those
+started by an embedded servlet container, will keep the JVM alive and
+restarts of the application context will occur when the user makes to
+their application. However, if the user adds DevTools to an
+application that doesn't start any non-daemon threads, i.e. it starts,
+runs, and then exits, it will exit with 1. This causes both
+bootRun in Gradle and spring-boot:run in Maven to report that the
+build has failed. While there's no benefit to using DevTools with an
+application that behaves in this way, the side-effect of causing the
+JVM to exit with 1 is unwanted.
+
+This commit address the problem by updating the uncaught exception
+handler to call System.exit(0) if the JVM is going to exit as a
+result of the uncaught exception causing the main thread to die. In
+other words, if the main thread was the only non-daemon thread, its
+death as a result of the uncaught exception will now cause the JVM
+to exit with 1 rather than 0. If there are other non-daemon threads
+that will keep the JVM alive, the behaviour is unchanged.
+
+Closes gh-5968

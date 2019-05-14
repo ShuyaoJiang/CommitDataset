@@ -1,0 +1,12 @@
+Make HazelcastJpaDependencyAutoConfiguration public
+
+If Both Hazelcast and Hibernate are available, Spring Boot takes the
+opinion that Hazelcast can be used for 2nd level caching and therefore
+need to start before Hibernate.
+
+Unfortunately, some users require Hibernate in some of their hazelcast
+use case so the link is actually reversed. One way for such user is to
+disable the auto-configuration that deals with this link. This class is
+now public so that users can locate them and exclude them if necessary.
+
+Closes gh-4960

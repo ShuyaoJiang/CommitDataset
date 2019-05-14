@@ -1,0 +1,13 @@
+[#4284] Forward decoded messages more frequently
+
+Motivation:
+
+At the moment we only forward decoded messages that were added the out List once the full decode loop was completed. This has the affect that resources may not be released as fast as possible and as an application may incounter higher latency if the user triggeres a writeAndFlush(...) as a result of the decoded messages.
+
+Modifications:
+
+- forward decoded messages after each decode call
+
+Result:
+
+Forwarding decoded messages through the pipeline in a more eager fashion.

@@ -1,0 +1,19 @@
+SQL: Fix SSL for JDBC and CLI for real this time (elastic/x-pack-elasticsearch#3277)
+
+Previously I'd added tests for JDBC and CLI that I *thought* used SSL but they didn't! I wasn't careful...
+
+Testing changes:
+* Actually enable SSL/HTTPS in the `qa:sql:security:ssl` subproject.
+* Rework how `RemoteCli` handles security. This allows us to configure SSL, the keystore, and the username and password in a much less error prone way.
+* Fix up JDBC tests to properly use SSL.
+* Allow the `CliFixture` to specify the keystore location.
+* Switch `CliFixture` and `RemoteCli` from sending the password in the connection string to filling out the prompt for it.
+* Have `CliFixture` also send the keystore password when a keystore is configured.
+
+This makes the following production code changes:
+* Allow the CLI to configure the keystore location with the `-k`/`-keystore_location` parameters.
+* If the keystore location is configured then the CLI will prompt for the password.
+* Allow the configuration of urls starting with `https`.
+* Improve the exception thrown when the URL doesn't parse by adding a suppressed exception with the original parse error, before we tried to add `http://` to the front of it.
+
+Original commit: elastic/x-pack-elasticsearch@97fac4a3b411e990b91a345ef4626958897405df

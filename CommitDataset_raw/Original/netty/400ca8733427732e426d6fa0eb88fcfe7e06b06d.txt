@@ -1,0 +1,23 @@
+Provide an API for controlling and h2c upgrade response stream in Http2MultiplexCodec (#7968)
+
+Motivation:
+
+Http2MultiplexCodec doesn't currently have an API for using the response
+of a h2c upgrade request.
+
+Modifications:
+
+Add a new API to the Http2MultiplexCodecBuilder which allows for setting
+an upgrade handler and wire it into the Http2MultiplexCodec
+implementation.
+
+Result:
+
+When using the Http2MultiplexCodec with h2c upgrades the upgrade handler
+will get added to the Http2StreamChannel which represents the
+half-closed (local) response of stream 1. It is then up to the user to
+manage the transition from the IO channel pipeline configuration
+necessary for making the h2c upgrade request to a form where it can read
+the response from the new stream channel.
+
+Fixes #7947.

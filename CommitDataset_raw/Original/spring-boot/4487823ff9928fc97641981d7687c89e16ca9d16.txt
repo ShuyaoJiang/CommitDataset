@@ -1,0 +1,23 @@
+Improve thread-safety of MetricRegistryMetricReader
+
+ee567fa boldy claimed that it had made MetricRegistryMetricReader
+thread-safe. It had not. This commit should actually make it thread
+safe. I hope.
+
+One notable improvement is that MetricRegistryMetricReader.findAll()
+will no longer contain null values if a metric is removed on another
+thread during iteration.
+
+names is now a ConcurrentHashMap to allow it to be safely read and
+written without holding a lock.
+
+reverse is a LinkedMultiValueMap  which is not thread-safe. This could
+lead to values being lost when concurrent add calls were made. Access
+to reverse is now protected by synchronizing on an internal monitor
+object.
+
+Calls to containsKey(key) followed by get(key) have been reworked to
+only call get(key), this avoids the possibility of the key being
+removed after the contains check but before the get.
+
+Closes gh-2590

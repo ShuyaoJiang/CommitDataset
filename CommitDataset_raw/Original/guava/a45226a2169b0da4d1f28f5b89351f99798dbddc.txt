@@ -1,0 +1,10 @@
+Reimplement legacy RateLimiter as a passthrough to its reimplementation under the new RateLimiter API.
+I've mostly attempted to leave the behavior untouched, but there are a few changes:
+- Fixed a bug that would arise with a negative nanoTime() (probably unlikely, but it could happen).
+- Removed logging.
+- Stop swallowing interrupts.
+
+(Retry of CL 65383672, which was rolled back in CL 65402625 because of breakages in mocks, fixed by lazily initializing the mutex field.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=65446945

@@ -1,0 +1,17 @@
+Limit size of context cache in the TestContext framework
+
+Prior to this commit, the size of the ApplicationContext cache in the
+Spring TestContext Framework could grow without bound, leading to
+issues with memory and performance in large test suites.
+
+This commit addresses this issue by introducing support for setting the
+maximum cache size via a JVM system property or Spring property called
+"spring.test.context.cache.maxSize". If no such property is set, a
+default value of 32 will be used.
+
+Furthermore, the DefaultContextCache has been refactored to use a
+synchronized LRU cache internally instead of a ConcurrentHashMap. The
+LRU cache is a simple bounded cache with a "least recently used" (LRU)
+eviction policy.
+
+Issue: SPR-8055

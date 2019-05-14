@@ -1,0 +1,20 @@
+Core: Pick inner most parse exception as root cause (#30270)
+
+Just like `ElasticsearchException`, the inner most
+`XContentParseException` tends to contain the root cause of the
+exception and show be show to the user in the `root_cause` field.
+
+The effectively undoes most of the changes that #29373 made to the
+`root_cause` for parsing exceptions. The `type` field still changes from
+`parse_exception` to `x_content_parse_exception`, but this seems like a
+fairly safe change.
+
+`ElasticsearchWrapperException` *looks* tempting to implement this but
+the behavior isn't quite right. `ElasticsearchWrapperExceptions` are
+entirely unwrapped until the cause no longer
+`implements ElasticsearchWrapperException` but `XContentParseException`
+should be unwrapped until its cause is no longer an
+`XContentParseException` but no further. In other words,
+`ElasticsearchWrapperException` are unwrapped one step too far.
+
+Closes #30261

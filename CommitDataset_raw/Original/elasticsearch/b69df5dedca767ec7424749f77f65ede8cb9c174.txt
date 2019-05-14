@@ -1,0 +1,7 @@
+Change ShardFollowTask to reuse common serialization logic (#39094)
+
+Initially in #38910, ShardFollowTask was reusing ImmutableFollowParameters'
+serialization logic. After merging, bwc tests failed sometimes and
+the binary serialization that ShardFollowTask was originally was using
+was added back. ImmutableFollowParameters is using optional fields (optional vint)
+while ShardFollowTask was not (vint).

@@ -1,0 +1,13 @@
+Allow to lazy create a DefaultFileRegion from a File
+
+Motivation:
+
+We only provided a constructor in DefaultFileRegion that takes a FileChannel which means the File itself needs to get opened on construction. This has the problem that if you want to write a lot of Files very fast you may end up with may open FD's even if they are not needed yet. This can lead to hit the open FD limit of the OS.
+
+Modifications:
+
+Add a new constructor to DefaultFileRegion which allows to construct it from a File. The FileChannel will only be obtained when transferTo(...) is called or the DefaultFileRegion is explicit open'ed via open() (this is needed for the native epoll transport)
+
+Result:
+
+Less resource usage when writing a lot of DefaultFileRegion.

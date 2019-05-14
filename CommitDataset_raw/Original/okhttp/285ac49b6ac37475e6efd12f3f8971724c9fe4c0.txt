@@ -1,0 +1,21 @@
+TLSv1 supports TLS extensions so they should be enabled
+
+Follow up to:
+https://github.com/square/okhttp/pull/1196.
+
+Combined with an NPN bug (18705877) on Android this is the
+reason why fallback connections started failing on Android
+after the COMPATIBLE_TLS was changed to be TLSv1.
+
+[The NPN bug means that once enabled on a socket from an
+SSLContext then NPN must be configured for every subsequent
+socket otherwise some of the NPN state will still be set,
+but some will be missing, leading to negotiation issues].
+
+The implication of this change is that the follow up request
+after a handshake failure may now be HTTP/2 or SPDY
+(or HTTP/1.1). Previous to this change they would always
+have been HTTP/1.1.
+
+Previous to pull 1196 they would also have been
+HTTP/1.1 because COMPATIBLE_TLS was SSLv3.

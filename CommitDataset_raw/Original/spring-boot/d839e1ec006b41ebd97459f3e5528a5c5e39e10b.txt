@@ -1,0 +1,15 @@
+Remove redundant restart-compatible Redis serializer
+
+Previously, Spring Data Redis assumed that the class loader that loaded
+its classes would also be able to load the application’s classes. This
+assumption is faulty when there are multiple class loaders involved
+such as when using dev tools or when Spring Data Redis is installed as
+a shared library in a servlet container.
+
+DATAREDIS-427 and DATAREDIS-501 removed this assumption by making the
+default serialiser use the bean class loader. DevTools configures this
+class loader to be the restart class loader which can load the
+application’s classes. As a result of moving to Hopper SR2 snapshots,
+these fixes are now available and we can remove our custom serialised.
+
+Closes gh-5760

@@ -1,0 +1,13 @@
+Use NIO methods when using Java7+ in the NIO transport
+
+Motivation:
+
+We use often javachannel().socket().* in NIO as these methods exists in java6. The problem is that these will throw often very general Exceptions (Like SocketException) while it is more expected to throw the Exceptions listed in the nio interfaces. When possible we should use the new methods available in java7+ which throw the correct exceptions.
+
+Modifications:
+
+Check for java version and depending on it using the socket or the javachannel.
+
+Result:
+
+Throw expected Exceptions.

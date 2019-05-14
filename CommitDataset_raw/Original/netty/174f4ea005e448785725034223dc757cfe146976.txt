@@ -1,0 +1,13 @@
+HttpServerKeepAliveHandler doesn't correctly handle VoidChannelPromise
+
+Motivation:
+
+HttpServerKeepAliveHandler throws unexpected error when I do ctx.writeAndFlush(msg, ctx.voidPromise()); where msg is with header "Connection:close".
+
+Modification:
+
+HttpServerKeepAliveHandler does promise.unvoid() before adding close listener.
+
+Result:
+
+No error for VoidChannelPromise with HttpServerKeepAliveHandler. Fixes [#6698].

@@ -1,0 +1,13 @@
+Prevent non public bean to be exposed to JMX
+
+Previously, a package private `@ManagedResource` annotated bean was
+registered to the JMX domain even if any attempt to invoke an operation
+on it will fail since it has to be public.
+
+This commit validates that any `@ManagedResource` annotated bean is
+public and throws an InvalidMetadataException otherwise. Note that the
+actual bean type does not have to be public as long as the class
+annotated with `@ManagedResource` in the hierarchy is pubic and no extra
+operations or attributes are defined on the child.
+
+Issue: SPR-14042

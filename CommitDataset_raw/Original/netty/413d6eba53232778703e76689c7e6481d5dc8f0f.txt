@@ -1,0 +1,11 @@
+EPOLL include error description and cause in exceptions
+
+Motivation:
+EPOLL annotates some exceptions to provide the remote address, but the original exception is not preserved. This may make determining a root cause more difficult. The static EPOLL exceptions references the native method that failed, but does not provide a description of the actual error number. Without the description users have to know intimate details about the native calls and how they may fail to debug issues.
+
+Modifications:
+- annotated exceptions should preserve the original exception
+- static exceptions should include the string description of the expected errno
+
+Result:
+EPOLL exceptions provide more context and are more useful to end users.

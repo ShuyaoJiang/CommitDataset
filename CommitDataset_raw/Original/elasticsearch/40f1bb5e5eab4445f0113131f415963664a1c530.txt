@@ -1,0 +1,11 @@
+Trim translog when safe commit advanced (#32967)
+
+Since #28140 when the global checkpoint is advanced, we try to move the
+safe commit forward, and clean up old index commits if possible. However,
+we forget to trim unreferenced translog.
+
+This change makes sure that we prune both old translog and index commits
+when the safe commit advanced.
+
+Relates #28140
+Closes #32089

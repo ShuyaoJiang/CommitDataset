@@ -1,0 +1,10 @@
+Fix LocalChannel close sequence
+
+Motivation:
+LocalChannel attempts to close its peer socket when ever it is closed. However if the channels are on different EventLoops we may attempt to process events for the peer channel on the wrong EventLoop.
+
+Modifications:
+- Ensure the close process ensures we are on the correct thread before accessing data
+
+Result:
+More correct LocalChannel close code.

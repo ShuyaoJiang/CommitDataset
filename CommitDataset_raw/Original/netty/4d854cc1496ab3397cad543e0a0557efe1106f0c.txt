@@ -1,0 +1,13 @@
+Allow to change if EmbeddedChannel should handle close() and disconnect() different.
+
+Motivation:
+
+At the moment EmbeddedChannel always handle close() and disconnect() the same way which also means that ChannelOutboundHandler.disconnect(...) will never called. We should allow to specify if these are handle different or not to make the use of EmbeddedChannel more flexible.
+
+Modifications:
+
+Add 2 other constructors which allow to specify if disconnect / close are handled the same way or differently.
+
+Result:
+
+More flexible usage of EmbeddedChannel possible.

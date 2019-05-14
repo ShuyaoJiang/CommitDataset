@@ -1,0 +1,10 @@
+Http2ConnectionHandler channelInactive sequencing
+
+Motivation:
+ByteToMessageDecoder may call decode after channelInactive is called. This will lead to a NPE.
+
+Modifications:
+- Call super.channelInactive() before we process the event in Http2ConnectionHandler
+
+Result:
+No more NPE in decode.

@@ -1,0 +1,16 @@
+Remove inconsistent synchronization from EmbeddedWebApplicationContext
+
+Previously, EmbeddedWebApplicationContext used synchronized, but did
+not do so consistently. It also synchronized on this so its lock was
+exposed outside of the class, creating a risk of deadlock if a caller
+synchronized incorrectly. Furthermore, not all fields on the class
+were sychronized so the class wasn't truly thread-safe.
+
+This commit attempts to rectify some of the problems above. The use
+of synchronized has been dropped in favour of using a volatile field
+for the embedded servlet container. Whenever this field is accessed,
+a local variable is used to "cache" the value thereby preventing a
+change on another thread from causing unwanted behaviour such as an
+NPE.
+
+Closes gh-4593

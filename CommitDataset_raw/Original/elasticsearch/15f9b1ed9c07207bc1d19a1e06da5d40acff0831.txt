@@ -1,0 +1,26 @@
+[ML] Impove mechanism for ignoring maintenance windows (elastic/x-pack-elasticsearch#1914)
+
+Currently, the autodetect process has an `ignoreDowntime`
+parameter which, when set to true, results to time being
+skipped over to the end of the bucket of the first data
+point received. After that, skipping time requires closing
+and opening the job. With regard to datafeeds, this does not
+work well with real-time requests which use the advance-time
+API in order to ensure results are created for data gaps.
+
+This commit improves this functionality by making it more
+flexible and less ambiguous.
+
+- flush API now supports skip_time parameter which
+sends a control message to the autodetect process
+telling it to skip time to a given value
+- the flush API now also returns the last_finalized_bucket_end
+time which allows clients to resume data searches correctly
+- the datafeed start API issues a skip_time request when the
+given start time is after the resume point. It then resumes
+the search from the last_finalized_bucket_end time.
+
+relates elastic/x-pack-elasticsearch#1913
+
+
+Original commit: elastic/x-pack-elasticsearch@caa5fe801621a8bf628e9a0cffadebcbdd145c98

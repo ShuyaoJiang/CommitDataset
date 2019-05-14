@@ -1,0 +1,10 @@
+Use ConcurrentHashMaps in DefaultContextCache
+
+The changes made in 0cb22fc8f34a29c42313056671a947444b60050b would
+result in contexts not being properly closed if evicted from the
+ConcurrentReferenceHashMap by the Garbage Collector.
+
+This commit reverts those changes and returns to using standard
+ConcurrentHashMaps for the time being.
+
+Issue: SPR-7687

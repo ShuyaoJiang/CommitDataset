@@ -1,0 +1,22 @@
+Remove print writer wrapping for users tools
+
+When writing the users and users_roles files, we wrap a custom writer in
+a print writer. There is a problem with this though: when print writer
+closes it closes our underlying custom writer and the close
+implementation for our custom writer is not trivial, it executes code
+that can throw an I/O exception. When print writer invokes this close
+and an I/O exception is thrown, it swallows that exception and sets the
+status on the print writer to error. One would think that we could
+simply check this status but alas print writer is broken here. The act
+of checking the status causes print writer to try to flush the
+underyling stream which is going to be completely undefined because the
+underlying stream might or might not be closed. This might cause another
+exception to be thrown, losing the original. Print writer screwed the
+pooch here, there is no good reason to try to do any I/O after the
+underlying writer entered a failed state. To address this we remove the
+use of print writer, we use our custom writer directly. This allows any
+thrown exceptions to bubble up.
+
+Relates elastic/x-pack-elasticsearch#2288
+
+Original commit: elastic/x-pack-elasticsearch@11b8dd56412c22bd0906f890bbb9b0b122620ead

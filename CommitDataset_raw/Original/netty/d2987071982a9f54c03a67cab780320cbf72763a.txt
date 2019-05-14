@@ -1,0 +1,10 @@
+[#502] Split EventLoop/EventExecutor into parent and children
+
+- Add EventExecutorGroup and EventLoopGroup
+- EventExecutor and EventLoop extends EventExecutorGroup and
+  EventLoopGroup
+  - They form their own group so that .next() returns itself.
+- Rename Bootstrap.eventLoop() to group()
+- Rename parameter names such as executor to group
+- Rename *EventLoop/Executor to *EventLoop/ExecutorGroup
+- Rename *ChildEventLoop/Executor to *EventLoop/Executor

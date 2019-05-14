@@ -1,0 +1,18 @@
+Watcher: Stop swallowing exceptions, always return them instead of message (elastic/x-pack-elasticsearch#1933)
+
+It is really hard to debug some issues with watcher, when only the
+e.getMessage() is returned as failure reasons instead of the whole
+stack trace.
+
+This commit gets rid of ExceptionsHelper.detailedMessage(e) and always
+returns the whole exception.
+
+This commit also extends the watch history to have all fields named
+error be treated like an object to be sure they do not get
+indexed. No matter where it's placed in the hierarchy
+
+In addition a few Field interface classes were removed, that only contained parse fields.
+
+relates elastic/x-pack-elasticsearch#1816
+
+Original commit: elastic/x-pack-elasticsearch@b2ce680139d1e21ed887f7d113f4c253ab70c6d1

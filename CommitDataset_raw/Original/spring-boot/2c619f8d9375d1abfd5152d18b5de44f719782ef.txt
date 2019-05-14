@@ -1,0 +1,13 @@
+Make launch script integration tests compatible with Spring Framework 4.3
+
+Previously, the launch script integration tests used Jackson 2.1 to
+align with the requirements of docker-java 2.x. This stopped working
+when we upgraded to Spring Framework 4.3 which requires Jackson 2.6+.
+
+This commit updates the launch script integration tests to use
+docker-java 3.0.0-RC1 which is compatible with Jackson 2.6.x. An added
+benefit is that 3.0 also adds support for copying an archive to a
+container, allowing the custom command that performs this function to
+be removed.
+
+Closes gh-5278

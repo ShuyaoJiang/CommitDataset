@@ -1,0 +1,17 @@
+Make Comparators Serializable
+
+Motivation:
+
+Objects of java.util.TreeMap or java.util.TreeSet will become
+non-Serializable if instantiated with Comparators, which are not also
+ Serializable. This can result in unexpected and difficult-to-diagnose
+ bugs.
+
+Modifications:
+
+Implements Serializable for all classes, which implements Comparator.
+
+Result:
+
+Proper Comparators which will not force collections to
+non-Serializable mode.

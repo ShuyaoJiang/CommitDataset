@@ -1,0 +1,19 @@
+Treat URLs for same file in nested archive and from jar root as equal
+
+Consider the following two URLs:
+
+jar:file:/test.jar!/BOOT-INF/classes!/foo.txt
+jar:file:/test.jar!/BOOT-INF/classes/foo.txt
+
+They both reference the same foo.txt file in the BOOT-INF/classes
+directory of test.jar, however the first URL does so via the
+nested BOOT-INF/classes archive. Previously, this difference in the
+URLs would lead to PathMatchingResourcePatternResolver returning two
+resources for foo.txt when asked to find all resources matching the
+pattern classpath*:/**/*.txt.
+
+This commit updates our Handler that is used for jar: URLs to consider
+the two URLs above to be equivalent such that url1 is equal to url2
+and the two urls will produce the same hash code.
+
+Closes gh-7449

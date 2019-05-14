@@ -1,0 +1,41 @@
+Fix a race condition where handler is removed before unregistration
+
+Related: #3156
+
+Motivation:
+
+Let's say we have a channel with the following pipeline configuration:
+
+  HEAD --> [E1] H1 --> [E2] H2 --> TAIL
+
+when the channel is deregistered, the channelUnregistered() methods of
+H1 and H2 will be invoked from the executor thread of E1 and E2
+respectively. To ensure that the channelUnregistered() methods are
+invoked from the correct thread, new one-time tasks will be created
+accordingly and be scheduled via Executor.execute(Runnable).
+
+As soon as the one-time tasks are scheduled,
+DefaultChannelPipeline.fireChannelUnregistered() will start to remove
+all handlers from the pipeline via teardownAll(). This process is
+performed in reversed order of event propagation. i.e. H2 is removed
+first, and then H1 is removed.
+
+If the channelUnregistered() event has been passed to H2 before H2 is
+removed, a user does not see any problem.
+
+If H2 has been removed before channelUnregistered() event is passed to
+H2, a user will often see the following confusing warning message:
+
+  An exceptionCaught() event was fired, and it reached at the tail of
+  the pipeline. It usually means the last handler in the pipeline did
+  not handle the exception.
+
+Modifications:
+
+To ensure that the handlers are removed *after* all events are
+propagated, traverse the pipeline in ascending order before performing
+the actual removal.
+
+Result:
+
+A user does not get the confusing warning message anymore.

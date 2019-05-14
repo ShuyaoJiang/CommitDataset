@@ -1,0 +1,13 @@
+http2: Http2StreamChannel now shares options of its parent channel
+
+Motivation
+
+Http2StreamChannel ignores options of its parent channel when being created. That leads to surprising results when, for example, unpooled allocator could be silently replaced with pooled allocator (default setting).
+
+Modification
+
+Copy parent channel's options over to the Http2StreamChannel.
+
+Result
+
+Channel options are now consistent between Http2StreamChannel and its parent channel. Newly added test passes on this branch and fails on master. Fixes #6551.

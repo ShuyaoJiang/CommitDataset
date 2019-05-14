@@ -1,0 +1,14 @@
+[#4275] Discard bytes after X reads to guard against OOME.
+
+Motivation:
+
+If a remote peer writes fast enough it may take a long time to have fireChannelReadComplete(...) triggered. Because of this we need to take special care and ensure we try to discard some bytes if channelRead(...) is called to often in ByteToMessageDecoder.
+
+Modifications:
+
+- Add ByteToMessageDecoder.setDiscardAfterReads(...) which allows to set the number of reads after which we try to discard the read bytes
+- Use default value of 16 for max reads.
+
+Result:
+
+No risk of OOME.

@@ -1,0 +1,7 @@
+Mute full cluster restart test recovery test
+
+This test is failing because of an addition of a call to GET
+/_cluster/health with the parameter wait_for_no_initializing_shards set
+to true. As older versions of Elasticsearch do not understand this
+parameter, this request fails and the test fails. This commit marks this
+test as awaiting a fix.

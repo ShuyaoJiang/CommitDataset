@@ -1,0 +1,15 @@
+Elasticsearch support to JSON logging  (#36833)
+
+In order to support JSON log format, a custom pattern layout was used and its configuration is enclosed in ESJsonLayout. Users are free to use their own patterns, but if smooth Beats integration is needed, they should use ESJsonLayout. EvilLoggerTests are left intact to make sure user's custom log patterns work fine.
+
+To populate additional fields node.id and cluster.uuid which are not available at start time, 
+a cluster state update will have to be received and the values passed to log4j pattern converter.
+A ClusterStateObserver.Listener is used to receive only one ClusteStateUpdate. Once update is received the nodeId and clusterUUid are set in a static field in a NodeAndClusterIdConverter. 
+
+Following fields are expected in JSON log lines: type, tiemstamp, level, component, cluster.name, node.name, node.id, cluster.uuid, message, stacktrace
+see ESJsonLayout.java for more details and field descriptions
+
+Docker log4j2 configuration is now almost the same as the one use for ES binary. 
+The only difference is that docker is using console appenders, whereas ES is using file appenders.
+
+relates: #32850

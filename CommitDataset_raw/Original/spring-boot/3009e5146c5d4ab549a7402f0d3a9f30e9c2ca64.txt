@@ -1,0 +1,11 @@
+Disable Jetty's default Server header
+
+Following the upgrade to Tomcat 8.5, Jetty became the only container
+that sends a Server header by default. This commit updates the factory
+for Jetty to disable the default Server header bringing it into line
+with Tomcat and Undertow.
+
+All three containers continue to support server.server-header which
+can be used to configure a custom server header.
+
+Closes gh-4730

@@ -1,0 +1,6 @@
+build: Fix setting the incorrect bwc version in mixed cluster qa module
+
+Prior to this change if the `bwcTest` task is run then it would create
+task for each version, but each task in reality would use wireCompatVersions - 1
+ES version. So we were not actually testing against 5.6.x versions in the
+6.x and 6.0 branches.

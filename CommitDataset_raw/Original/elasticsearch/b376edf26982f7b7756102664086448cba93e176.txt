@@ -1,0 +1,12 @@
+SQL: Move internals from TimeZone to ZoneId (#36651)
+
+As the internals have moved to java.time, the usage of TimeZone itself
+ should be minimized as it creates issues when being converted to ZoneId
+Protocol wise the two are mostly identical so consumer should not see
+ any difference.
+Note that terminology wise, inside the docs, the public API and inside
+ the protocol timeZone will continue to be used as it's more widely
+ understood as oppose to zoneId which is an implementation detail
+ specific to the JVM
+
+Fix #36535

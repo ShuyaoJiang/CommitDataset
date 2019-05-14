@@ -1,0 +1,11 @@
+Wait for server port to be written in a more robust manner
+
+Previously, we just waited for the file to exist before trying to read
+the port from it. This left a window where the file existed but its
+contents had not be written which could result in a
+NumberFormatException.
+
+This commit now waits for the file to have a length that is greater
+than zero.
+
+See gh-7379

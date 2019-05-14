@@ -1,0 +1,14 @@
+Rework health response structure to eliminate chance of key clashes
+
+Previously, if a health's details contained a key named status (either
+because an indicator bean was named statusHealthIndicator or an
+indicator added an entry named status to its details) this would
+clash with the health's own status as the details were serialized as
+siblings of the status field.
+
+This commit updates Health to remove @JsonAnyGetter from getDetails().
+This means that all of a Health's details will now be nested within
+a separate details field, thereby preventing a possible clash with
+the status field.
+
+Closes gh-10249

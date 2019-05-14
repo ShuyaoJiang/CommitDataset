@@ -1,0 +1,12 @@
+Convert SpEL plus operands using reg'd converters
+
+Prior to this commit, SpEL's OpPlus ('+' operator) would convert its
+left and right operands to String directly via #toString calls.
+
+This change ensures that operand values are delegated to any registered
+converters, allowing for customization of the stringified output.
+
+Note that the OpPlus constructor now throws IllegalArgumentException if
+zero operands are supplied.
+
+Issue: SPR-8308

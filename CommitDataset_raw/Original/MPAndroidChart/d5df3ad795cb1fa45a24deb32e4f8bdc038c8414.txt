@@ -1,0 +1,3 @@
+Crash fix - Create small clip paths (#1895)
+
+With large data sets, the Path object created was sufficiently large as to cause an OutOfMemory error.  This is resolved by only pathing a limited number of points on the chart at a time, then clearing the path and resuming.  Stress testing with 1500 entries.

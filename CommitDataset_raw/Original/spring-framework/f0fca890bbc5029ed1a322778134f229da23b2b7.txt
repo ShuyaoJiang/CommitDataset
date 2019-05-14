@@ -1,0 +1,35 @@
+Annotation-based event listeners
+
+Add support for annotation-based event listeners. Enabled automatically
+when using Java configuration or can be enabled explicitly via the
+regular <context:annotation-driven/> XML element. Detect methods of
+managed beans annotated with @EventListener, either directly or through
+a meta-annotation.
+
+Annotated methods must define the event type they listen to as a single
+parameter argument. Events are automatically filtered out according to
+the method signature. When additional runtime filtering is required, one
+can specify the `condition` attribute of the annotation that defines a
+SpEL expression that should match to actually invoke the method for a
+particular event. The root context exposes the actual `event`
+(`#root.event`) and method arguments (`#root.args`). Individual method
+arguments are also exposed via either the `a` or `p` alias (`#a0` refers
+to the first method argument). Finally, methods arguments are exposed via
+their names if that information can be discovered.
+
+Events can be either an ApplicationEvent or any arbitrary payload. Such
+payload is wrapped automatically in a PayloadApplicationEvent and managed
+explicitly internally. As a result, users can now publish and listen
+for arbitrary objects.
+
+If an annotated method has a return value, an non null result is actually
+published as a new event, something like:
+
+@EventListener
+public FooEvent handle(BarEvent event) { ... }
+
+Events can be handled in an aynchronous manner by adding `@Async` to the
+event method declaration and enabling such infrastructure. Events can
+also be ordered by adding an `@Order` annotation to the event method.
+
+Issue: SPR-11622

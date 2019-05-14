@@ -1,0 +1,19 @@
+Improve MetricsFilter’s handling of async requests
+
+Previously, MetricsFilter would treat async requests the same as
+sync requests and would record their response status as soon as the
+request had been processed by the filter chain. This would result in a
+200 response being recorded and the actual response status produced by
+the async processing being ignored. Furthermore, the time that was
+recorded for the request would not include the time take for any async processing.
+
+This commit updates MetricsFilter to check whether or not an async
+request has been started before it records the metrics for the request.
+In the event of an async request having been started no metrics are
+recorded. Instead, the StopWatch is stored in a request attribute that
+is then retrieved during the filtering of the request’s async
+dispatch(es). Once the async processing has completed (isAsyncStarted()
+returns false), the StopWatch is stopped, removed from the request’s
+attributes and the metrics for the request are recorded.
+
+Closes gh-4098

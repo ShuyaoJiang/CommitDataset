@@ -1,0 +1,8 @@
+Handle AlreadyClosedException when bumping primary term
+
+If the shard is already closed while bumping the primary term, this can result in an
+AlreadyClosedException to be thrown. As we use asyncBlockOperations, the exception
+will be thrown on a thread from the generic thread pool and end up in the uncaught
+exception handler, failing our tests.
+
+Relates to #32442

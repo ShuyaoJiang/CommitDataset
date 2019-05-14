@@ -1,0 +1,13 @@
+Ensure OpenSslSession informations can be retrieved even after shutdown
+
+Motivation:
+
+If a user tries to access various informations on the OpenSslSession after the SSLEngine was closed it will not work if these were not accessed before as we lazy init most of them.
+
+Modifications:
+
+Directly populate the whole OpenSslSession once the handshake is complete and before the user is notified about it.
+
+Result:
+
+OpenSslSession informations are avaible until it is GC'ed.

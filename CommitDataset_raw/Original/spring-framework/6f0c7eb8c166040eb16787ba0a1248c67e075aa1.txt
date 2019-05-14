@@ -1,0 +1,28 @@
+Update test source and target JDK compatibility
+
+"test" source and target compatibility has been upgraded to 1.7 except
+where noted, allowing us to use 1.7 language features such as
+diamond-style (<>) generics declarations, automatic resource management
+and multi-catch. More importantly, we will be able to upgrade to 1.8
+once it is available in order to make use of lambda expressions, etc in
+our test cases.
+
+IDE configurations must be relaxed to allow 1.7 across the board, as
+neither Eclipse nor IDEA are clever enough to allow for different
+language levels across production and test resources. See [1] for a
+feature request on that front.
+
+spring-oxm is a special case here, and has been pinned at 1.6
+compatibility even for its test sources in order to avoid a class
+verification error that JibX throws when encountering 1.7-level
+bytecode [2].
+
+Likewise with spring-orm, toplink encounters a similar class
+verification error, so has been pinned to 1.6 for the time being.
+When we remove the (already deprecated since 3.2) Toplink support
+we can restore compatibility to 1.7.
+
+[1]: http://youtrack.jetbrains.com/issue/IDEA-97814
+[2]: http://jira.codehaus.org/browse/JIBX-465
+
+Issue: SPR-10129

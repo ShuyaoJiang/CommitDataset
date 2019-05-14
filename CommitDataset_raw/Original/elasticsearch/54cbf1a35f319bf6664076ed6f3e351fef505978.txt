@@ -1,0 +1,6 @@
+Never block on scheduled refresh if a refresh is running (#39462)
+
+Today we block on the ReferenceManager in the case of a scheduled refresh.
+Yet if there is a refresh happening concurrently we might block and create
+very smallish segments. Instead we should just move on to the next shard
+and free up the refresh thread instead.

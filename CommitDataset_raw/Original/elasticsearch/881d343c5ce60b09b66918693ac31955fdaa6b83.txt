@@ -1,0 +1,6 @@
+Change zone formatting for all printers (#39568)
+
+After the joda-java time migration we were formatting zone ids with zoneOrOffsetId method. This when a date was provided with a ZoneRegion for instance America/Edmonton it was appending this zone identifier instead of zone formatted as +HH:MM.
+This fix is changing the format of zone suffix for all printers and also always wrapping a Temporal into a ZonedDateTime when formatting.
+
+closes #38471

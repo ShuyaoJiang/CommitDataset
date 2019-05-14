@@ -1,0 +1,10 @@
+FlushConsolidationHandler remove conditional
+
+Motivation:
+FlushConsolidationHandler#flushIfNeeded has a conditional which is fixed based upon code path. This conditional can be removed and instead just manually set in each fixed code path.
+
+Modifications:
+- Remove boolean parameter on FlushConsolidationHandler#flushIfNeeded and set readInprogess to false manually when necessary
+
+Result:
+Less conditionals in FlushConsolidationHandler

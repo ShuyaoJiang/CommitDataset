@@ -1,0 +1,14 @@
+Fix some query extraction bugs. (#29283)
+
+While playing with the percolator I found two bugs:
+ - Sometimes we set a min_should_match that is greater than the number of
+   extractions. While this doesn't cause direct trouble, it does when the query
+   is nested into a boolean query and the boolean query tries to compute the
+   min_should_match for the entire query based on its own min_should_match and
+   those of the sub queries. So I changed the code to throw an exception when
+   min_should_match is greater than the number of extractions.
+ - Boolean queries claim matches are verified when in fact they shouldn't. This
+   is due to the fact that boolean queries assume that they are verified if all
+   sub clauses are verified but things are more complex than that, eg.
+   conjunctions that are nested in a disjunction or disjunctions that are nested
+   in a conjunction can generally not be verified without running the query.

@@ -1,0 +1,10 @@
+EPOLL Cached ECONNREFUSED Exception
+
+Motivation:
+ECONNREFUSED can be a common type of exception when attempting to finish the connection process. Generating a new exception each time can be costly and quickly bloat memory usage.
+
+Modifications:
+- Expose ECONNREFUSED from JNI and cache this exception in Socket.finishConnect
+
+Result:
+ECONNREFUSED during finish connect doesn't create a new exception each time.

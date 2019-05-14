@@ -1,0 +1,11 @@
+Clean up utility code for submission to AOSP.
+
+This moves methods that will have Android-specific implementations
+to Platform.java; all other utility methods are in a junk drawer
+class called Utils.java.
+
+This also moves method names (like "GET") to compare with .equals
+instead of '=='. The old code took advantage of a hidden agreement
+between HttpURLConnection and HttpEngine; with these in separate
+projects that behavior isn't as obvious and shouldn't be relied
+upon.

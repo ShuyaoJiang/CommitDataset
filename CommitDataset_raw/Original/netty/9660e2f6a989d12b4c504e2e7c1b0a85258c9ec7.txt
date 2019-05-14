@@ -1,0 +1,13 @@
+Better handling of BUFFER_OVERFLOW when unwrap data.
+
+Motivation:
+
+When we detect a BUFFER_OVERFLOW we should just forward the already produced data and allocate a new buffer and NOT do any extra memory copies while trying to expand the buffer.
+
+Modifications:
+
+When a BUFFER_OVERFLOW is returned and some data was produced just fire this data through the pipeline and allocate a new buffer to read again.
+
+Result:
+
+Less memorycopies and so better performance.

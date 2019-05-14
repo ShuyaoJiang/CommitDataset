@@ -1,0 +1,35 @@
+Initial cut of Servlet 3.0 based async support
+
+From a programming model perspective, @RequestMapping methods now
+support two new return value types:
+
+* java.util.concurrent.Callable - used by Spring MVC to obtain the
+return value asynchronously in a separate thread managed transparently
+by Spring MVC on behalf of the application.
+* org.springframework.web.context.request.async.DeferredResult - used
+by the application to produce the return value asynchronously in a
+separate thread of its own choosing.
+
+The high-level idea is that whatever value a controller normally
+returns, it can now provide it asynchronously, through a Callable or
+through a DeferredResult, with all remaining processing --
+@ResponseBody, view resolution, etc, working just the same but
+completed outside the main request thread.
+
+From an SPI perspective, there are several new types:
+
+* AsyncExecutionChain - the central class for managing async request
+processing through a sequence of Callable instances each representing
+work required to complete request processing asynchronously.
+* AsyncWebRequest - provides methods for starting, completing, and
+configuring async request processing.
+* StandardServletAsyncWebRequest - Servlet 3 based implementation.
+* AsyncExecutionChainRunnable - the Runnable used for async request
+execution.
+
+All spring-web and spring-webmvc Filter implementations have been
+updated to participate in async request execution.
+The open-session-in-view Filter and interceptors implementations in
+spring-orm will be updated in a separate pull request.
+
+Issue: SPR-8517

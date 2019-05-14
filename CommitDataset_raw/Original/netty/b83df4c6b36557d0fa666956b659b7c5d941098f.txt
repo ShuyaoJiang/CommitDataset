@@ -1,0 +1,34 @@
+Fix NPE problems
+
+Motivation:
+
+Now Netty has a few problems with null values.
+
+Modifications:
+
+- Check HAProxyProxiedProtocol in HAProxyMessage constructor and throw NPE if it is null.
+If HAProxyProxiedProtocol is null we will set AddressFamily as null. So we will get NPE inside checkAddress(String, AddressFamily) and it won't be easy to understand why addrFamily is null.
+- Check File in DiskFileUpload.toString().
+If File is null we will get NPE when calling toString() method.
+- Check Result<String> in MqttDecoder.decodeConnectionPayload(...).
+If !mqttConnectVariableHeader.isWillFlag() || !mqttConnectVariableHeader.hasUserName() || !mqttConnectVariableHeader.hasPassword() we will get NPE when we will try to create new instance of MqttConnectPayload.
+- Check Unsafe before calling unsafe.getClass() in PlatformDependent0 static block.
+- Removed unnecessary null check in WebSocket08FrameEncoder.encode(...).
+Because msg.content() can not return null.
+- Removed unnecessary null check in DefaultStompFrame(StompCommand) constructor.
+Because we have this check in the super class.
+- Removed unnecessary null checks in ConcurrentHashMapV8.removeTreeNode(TreeNode<K,V>).
+- Removed unnecessary null check in OioDatagramChannel.doReadMessages(List<Object>).
+Because tmpPacket.getSocketAddress() always returns new SocketAddress instance.
+- Removed unnecessary null check in OioServerSocketChannel.doReadMessages(List<Object>).
+Because socket.accept() always returns new Socket instance.
+- Pass Unpooled.buffer(0) instead of null inside CloseWebSocketFrame(boolean, int) constructor.
+If we will pass null we will get NPE in super class constructor.
+- Added throw new IllegalStateException in GlobalEventExecutor.awaitInactivity(long, TimeUnit) if it will be called before GlobalEventExecutor.execute(Runnable).
+Because now we will get NPE. IllegalStateException will be better in this case.
+- Fixed null check in OpenSslServerContext.setTicketKeys(byte[]).
+Now we throw new NPE if byte[] is not null.
+
+Result:
+
+Added new null checks when it is necessary, removed unnecessary null checks and fixed some NPE problems.

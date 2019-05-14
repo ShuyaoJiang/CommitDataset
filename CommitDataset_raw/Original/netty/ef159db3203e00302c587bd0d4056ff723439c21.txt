@@ -1,0 +1,13 @@
+Delete temporary .so file after loading
+
+Motivation:
+
+Our current strategy in NativeLibraryLoader is to mark the temporary .so file to be deleted on JVM exit. This has the drawback to not delete the file in the case the JVM dies or is killed.
+
+Modification:
+
+Just directly try to delete the file one we loaded the native library and if this fails mark the file to be removed once the JVM exits.
+
+Result:
+
+Less likely to have temporary files still on the system in case of JVM kills.

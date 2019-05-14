@@ -1,0 +1,10 @@
+Maybe die before trying to log cause
+
+This commit reorders a maybe die check and a logging statement for the
+following reasons:
+ - we should die as quickly as possible if the cause is fatal
+ - we do not want the JVM to be so broken that when we try to log
+   another exception is thrown (maybe another out of memory exception)
+   and then the maybe die is never invoked
+ - maybe die will log the cause anyway if the cause is fatal so we only
+   need to log if the cause is not fatal

@@ -1,0 +1,8 @@
+Fixed byte buffer leak in Netty4 request handler
+
+If creating the REST request throws an exception (for example, because
+of invalid headers), we leak the request due to failure to release the
+buffer (which would otherwise happen after replying on the
+channel). This commit addresses this leak by handling the failure case.
+
+Relates #27222

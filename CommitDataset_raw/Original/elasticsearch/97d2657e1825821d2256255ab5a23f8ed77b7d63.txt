@@ -1,0 +1,14 @@
+Remove script access to term statistics (#19462)
+
+In scripts (at least some of the languages), the terms dictionary and
+postings can be access with the special _index variable. This is for
+very advanced use cases which want to do their own scoring. The problem
+is segment level statistics must be recomputed for every document.
+Additionally, this is not friendly to the terms index caching as the
+order of looking up terms should be controlled by lucene.
+
+This change removes _index from scripts. Anyone using it can and should
+instead write a Similarity plugin, which is explicitly designed to allow
+doing the calculations needed for a relevance score.
+
+closes #19359

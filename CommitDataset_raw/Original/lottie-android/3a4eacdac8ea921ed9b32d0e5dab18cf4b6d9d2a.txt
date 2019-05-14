@@ -1,0 +1,4 @@
+Prevent setMaxFrame from truncating the last frame. (#1126)
+
+Lottie should render the max frame. However, setting the max frame truncated it to an int so the frame itself would never render.
+I can confirm that this fixes #1034. Calling `getProgress()` from `onAninmationEnd()` yielded 0.996 before and 1.0 now. The animation attached in #1034 also fully disappears by the end of the animation.

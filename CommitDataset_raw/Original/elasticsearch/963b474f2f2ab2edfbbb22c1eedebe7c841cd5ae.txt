@@ -1,0 +1,8 @@
+Fix the clock resolution to millis in GetWatchResponseTests (#38405)
+
+the clock resolution changed from jdk8->jdk10, hence the test is passing
+in jdk8 but failing in jdk10. The Watcher's objects are serialised and
+deserialised with milliseconds precision, making test to fail in jdk 10
+and higher
+
+closes #38400

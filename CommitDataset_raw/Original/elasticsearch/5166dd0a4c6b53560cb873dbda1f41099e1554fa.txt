@@ -1,0 +1,11 @@
+Replicate max seq_no of updates to replicas (#33967)
+
+We start tracking max seq_no_of_updates on the primary in #33842. This
+commit replicates that value from a primary to its replicas in replication 
+requests or the translog phase of peer-recovery.
+
+With this change, we guarantee that the value of max seq_no_of_updates
+on a replica when any index/delete operation is performed at least the
+max_seq_no_of_updates on the primary when that operation was executed.
+
+Relates #33656

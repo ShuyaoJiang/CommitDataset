@@ -1,0 +1,14 @@
+[#2572] Correctly calculate length of output buffer before inflate to fix IndexOutOfBoundException
+
+Motivation:
+
+JdkZlibDecoder fails to decode because the length of the output buffer is not calculated correctly.
+This can cause an IndexOutOfBoundsException or data-corruption when the PooledByteBuffAllocator is used.
+
+Modifications:
+
+Correctly calculate the length
+
+Result:
+
+No more IndexOutOfBoundsException or data-corruption.

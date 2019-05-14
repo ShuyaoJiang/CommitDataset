@@ -1,0 +1,27 @@
+Move TLS retries / fallback into Connection.
+
+API changes:
+1) Added: Address.getCertificatePinner()
+2) Incompatible API change: Address constructor no longer
+includes ConnectionSpecs. Removed getConnectionSpecs().
+3) Added: ConnectionSpec.isCompatible(SSLSocket)
+4) Added: TlsVersion.javaName()
+
+Implicit / semantic / internal changes:
+
+1) Connection now handles all attempts to connect via a route
+(effectively a {proxy, socket address} pair), rather than just
+one attempt. i.e. Connection now handles all the TLS negotiation
+fallbacks internally.
+
+2) Route no longer deals with TLS versions. Individual TLS
+failures are not counted against a Route. If no connection
+attempts to a route were successful the failure is counted
+against the route.
+
+3) The code makes a distinction between when various
+IOExceptions occur, with the intention making retries a bit
+smarter. It is now more obvious which exceptions happen during
+setup (RequestException), connection (RouteException),
+HTTP communication and thus which can be retried and whether
+the request might have been sent.

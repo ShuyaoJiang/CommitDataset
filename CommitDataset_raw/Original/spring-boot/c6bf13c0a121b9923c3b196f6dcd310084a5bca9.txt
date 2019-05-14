@@ -1,0 +1,21 @@
+Support multi-profile YAML in application-* files
+
+Update ConfigFileEnvironmentPostProcessor to load profile specific
+sections for all previously processed profiles. Prior to this commit
+multi-profile YAML files were only loaded from the root
+`application.yml` file.
+
+With the updated logic, an `application-test.yml` file containing the
+following:
+
+	someTestProperty: xyz
+	---
+	spring:
+	  profiles: profile1
+	  specificProperty: one
+
+Can have the profile sub-document loaded using:
+
+	-Dspring.profiles.active=test,profile1
+
+Fixes gh-4132

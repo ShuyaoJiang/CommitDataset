@@ -1,0 +1,36 @@
+InvocableHandlerMethod and arg resolution updates
+
+General improvements e.g. make use of Java 8 Stream. The main reason
+for the refactoring however to tighten error handling. To that extent:
+
+InvocableHandlerMethod turns all exceptions into Reactive Streams
+error signals, in effect never allowing any Exceptions to bubble up.
+
+HandlerMethodArgumentResolver may throw an Exception for sync resolution
+or produce an error signal via the returned Publisher. Either way the
+exception is consistently wrapped with helpful method argument details.
+For the latter case using a custom mapError operator.
+
+HandlerMethodArgumentResolver no longer needs to return Optional for
+nullable argument values. Instead (for now) the defaultIfEmpty operator
+of reactor.rx.Stream operator is used to ensure a default constant value
+(called "NO_VALUE") is produced. That way an argument resolver may
+produce 0..1 values where 0 means it did not resolve to any value and
+that results in null passed as the argument value.
+
+If a HandlerMethodArgumentResolver produces more than one value, all
+additional values beyond the first one will be ignored with the help
+of a custom "first" operator.
+
+As HandlerMethod is invoked within the map operator, checked exceptions
+are not allowed but instead of wrapping it in a runtime exception what
+we really need is to unwrap the target exception for exception
+resolution purposes. To this end concatMap is used to produce a nested
+Publisher or an error Publisher with the unwrapped target exception.
+
+Related to that InvocableHandlerMethod now returns
+Publisher<HandlerResult> instead of Publisher<Object> so that no longer
+needs to be externally mapped from Object to HandlerResult.
+
+InvocableHandlerMethodTests provides tests for the above scenarios and
+verifies the details of resulting error signals.

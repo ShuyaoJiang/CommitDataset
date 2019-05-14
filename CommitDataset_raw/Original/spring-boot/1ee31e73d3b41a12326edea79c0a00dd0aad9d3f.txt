@@ -1,0 +1,12 @@
+Avoid NPE if @ConfigurationProperties is not present
+
+The annotation processor detects `@ConfigurationProperties` bean or
+method definition and merges manual meta-data. The former step will fail
+with a NPE if the annotation is not present on the classpath. This could
+happen if the annotation processor is added to a module that is not
+actually using Spring Boot.
+
+We now have a defensive check that skips that steps but still attempts to
+merge manual meta-data if present.
+
+Closes gh-3720

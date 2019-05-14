@@ -1,0 +1,46 @@
+Add a new query type - ScriptScoreQuery (#34533)
+
+* Add a new query type - ScriptScoreQuery
+
+script_score query uses script to calculate document scores.
+Added as a substitute for function_score with an intentation
+to deprecate function_scoreq query.
+
+```http
+GET /_search
+{
+    "query": {
+        "script_score" : {
+            "query": {
+                "match": { "message": "elasticsearch" }
+            },
+            "script" : {
+              "source": "Math.log(2 + doc['likes'].value)"
+            },
+            "min_score" : 2
+        }
+    }
+}
+```
+
+Add several functions to painless to be used inside script_score:
+
+double rational(double, double)
+double sigmoid(double, double, double)
+double randomNotReproducible() 
+double randomReproducible(String, int) 
+
+double decayGeoLinear(String, String, String, double, GeoPoint)
+double decayGeoExp(String, String, String, double, GeoPoint)
+double decayGeoGauss(String, String, String, double, GeoPoint)
+
+double decayNumericLinear(String, String, String, double, double)
+double decayNumericExp(String, String, String, double, double)
+double decayNumericGauss(String, String, String, double, double)
+
+double decayDateLinear(String, String, String, double, JodaCompatibleZonedDateTime)
+double decayDateExp(String, String, String, double, JodaCompatibleZonedDateTime)
+double decayDateGauss(String, String, String, double, JodaCompatibleZonedDateTime)
+
+Date functions only works on dates in  the default format and default time zone
+

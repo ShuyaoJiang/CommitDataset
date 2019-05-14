@@ -1,0 +1,8 @@
+Avoid exception from dropping non-existent constraint in Data REST sample
+
+Hibernate 5.1 logs an ugly but benign exception when using an in-memory
+HSQL database when it tries to drop a non-existent constraint.
+
+This commit changes the Spring Data REST sample to use H2 rather than
+HSQL. This prevents the unwanted exception from occurring as Hibernate's
+H2 dialect returns false from dropConstraints.

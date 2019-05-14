@@ -1,0 +1,13 @@
+Ensure we null out the previous set InetAddress on java.net.DatagramPacket when using OioDatagramChannel.
+
+Motivation:
+
+We need to ensure we always null out (or set) the address on the java.net.DatagramPacket when doing read or write operation as the same instance is used across different calls.
+
+Modifications:
+
+Null out the address if needed.
+
+Result:
+
+Ensure the correct remote address is used when connect / disconnect between calls and also mix these with calls that directly specify the remote address for adatagram packets.

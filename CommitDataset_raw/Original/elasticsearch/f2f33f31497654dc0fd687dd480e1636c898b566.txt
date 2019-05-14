@@ -1,0 +1,14 @@
+Use hostname instead of IP with SPNEGO test (#32514)
+
+This change updates KerberosAuthenticationIT to resolve the host used
+to connect to the test cluster. This is needed because the host could
+be an IP address but SPNEGO requires a hostname to work properly. This
+is done by adding a hook in ESRestTestCase for building the HttpHost
+from the host and port.
+
+Additionally, the project now specifies the IPv4 loopback address as
+the http host. This is done because we need to be able to resolve the
+address used for the HTTP transport before the node starts up, but the
+http.ports file is not written until the node is started.
+
+Closes #32498

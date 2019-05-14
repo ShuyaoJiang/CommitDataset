@@ -1,0 +1,8 @@
+Scripting: Remove unnecessary generic type from ScriptContext (#24877)
+
+When developing the new ScriptContext, the compiled type was original
+generic, so that the instance type was also necessary. However, since
+CompiledType is all that is used by the compile method signature, we
+actually don't need the instance type to be generic. This commit removes
+the InstanceType, and finds the Class for it through reflection on the
+CompiledType method.

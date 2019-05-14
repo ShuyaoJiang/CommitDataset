@@ -1,0 +1,3 @@
+Disallow multiple concurrent recovery attempts for same target shard (#25428)
+
+The primary shard uses the GlobalCheckPointTracker to track local checkpoint information of recovering and started replicas in order to calculate the global checkpoint. As the tracker is updated through recoveries as well, it is easier to reason about the tracker if we can ensure that there are no concurrent recovery attempts for the same target shard (which can happen in case of network disconnects).

@@ -1,0 +1,12 @@
+Start building against Spring Data Kay SR4 snapshots
+
+The fix in Spring Data Redis for sentinel configuration means that
+two Jedis sentinel tests now attempt to connect to a Sentinel. As a
+result the tests fail. Running a Redis Sentinel in a Docker container
+appears to be non-trivial. As an alternative, this commit updates the
+tests to capture the JedisConnectionFactory prior to its
+initialization (which is the failure trigger) and then assert that its
+configuration is as expected.
+
+See gh-11884
+Closes gh-11855

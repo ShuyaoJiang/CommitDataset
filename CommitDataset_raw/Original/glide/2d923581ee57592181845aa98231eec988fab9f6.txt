@@ -1,0 +1,12 @@
+Gracefully allow Volley to be optionally excluded
+
+Uses new factories to manage Volley singleton to
+reduce Glide's dependence on Volley. New package
+means we can easily exclude not just Volley, but
+also our classes that depend on it when Volley is
+being excluded. We also can check to see if Volley
+is present at runtime and register a factory that
+simply throws an exception if we try to fetch a
+url, instead of throwing an exceptionw henever we
+tried to fetch a model that optionally might try
+to fetch a url (like a string or uri).

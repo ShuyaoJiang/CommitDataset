@@ -1,0 +1,12 @@
+Improve Jaxb2Decoder
+
+- Introcuces XmlEventDecoder which decodes from DataBuffer to
+  javax.xml.stream.events.XMLEvent. It uses the Aalto async XML API if
+  available, but falls back to a blocking default if not.
+
+- Refacors Jaxb2Decoder to use said XmlEventDecoder, and split the
+  stream of events into separate substreams by using the JAXB annotation
+  value, one stream for each part of the tree that can be unmarshaled to
+  the given type.
+
+- Various improvements in the JAXB code.

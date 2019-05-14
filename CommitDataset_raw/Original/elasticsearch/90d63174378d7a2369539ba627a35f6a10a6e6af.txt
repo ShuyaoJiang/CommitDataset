@@ -1,0 +1,10 @@
+Remove checkpoint tracker bit sets setting
+
+We added an index-level setting for controlling the size of the bit sets
+used to back the local checkpoint tracker. This setting is really only
+needed to control the memory footprint of the bit sets but we do not
+think this setting is going to be needed. This commit removes this
+setting before it is released to the wild after which we would have to
+worry about BWC implications.
+
+Relates #27191

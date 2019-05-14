@@ -1,0 +1,14 @@
+Do the same extended checks as the JDK when a X509TrustManager is used with the OpenSSL provider. (#8307)
+
+Motivation:
+
+When a X509TrustManager is used while configure the SslContext the JDK automatically does some extra checks during validation of provided certs by the remote peer. We should do the same when our native implementation is used.
+
+Modification:
+
+- Automatically wrap a X509TrustManager and so do the same validations as the JDK does.
+- Add unit tests.
+
+Result:
+
+More consistent behaviour. Fixes https://github.com/netty/netty/issues/6664.

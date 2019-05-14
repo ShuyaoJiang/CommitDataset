@@ -1,0 +1,12 @@
+Upgrade to Spring Integration 5.1.0.M2
+
+Upgrade to M2 broke a test that was looking for a particular bean that
+is configured by Spring Integration (`HeaderChannelRegistry`).
+
+It looks like INT-4517 is related to the regression as it registers the
+bean too late for the auto-configuration to see it.
+
+This commit changes the condition to a more central bean that is created
+very early on.
+
+Closes gh-14142

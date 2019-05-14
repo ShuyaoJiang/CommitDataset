@@ -1,0 +1,14 @@
+Allow skipping JSON prefix in MockMvc result matchers
+
+JSON payloads are sometimes prepended with a static string prefix
+to prevent Cross Site Scripting Inclusion attacks (XSSI).
+Prior to this commit, doing so would fail the MockMvc
+`JsonPathResultMatchers` since they're considering the whole response as
+the JSON payload.
+
+This commit adds a new `JsonPathResultMatchers.prefix` method that
+configures the matchers to check for the presence of that string (i.e.
+fail if it's not there) and only consider the rest of the response body
+as the JSON payload for other assertions.
+
+Issue: SPR-13577

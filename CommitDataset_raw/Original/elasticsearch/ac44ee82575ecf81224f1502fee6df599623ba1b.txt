@@ -1,0 +1,10 @@
+Build: Move test files from plugin/src to appropriate other projects (elastic/x-pack-elasticsearch#3653)
+
+This commit moves mostly security tests that were left in plugin/src. It
+also moves the CompositeTestingXPackPlugin into tribe license tests qa
+project, which was the only remaining use. This class needs to be
+removed, as it has unavoidable problems with dependency conflicts (ie
+guava) between security and watcher, which it pulls in both into the
+test classpath.
+
+Original commit: elastic/x-pack-elasticsearch@756209e010f054e4c522d5a5b95cbeb8fc200bd4

@@ -1,0 +1,11 @@
+Use ContentNegotiationManager for static resources
+
+The ResourceHttpRequestHandler now relies on the conifgured
+ContentNegotiationManager to determine the content type for resource
+requests rather than implementing that internally.
+
+First we check against the matched resource based on the resource file
+extension. Then we expand the check against the request with any
+configured content negotiation strategy.
+
+Issue: SPR-13658

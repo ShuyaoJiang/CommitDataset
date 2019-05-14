@@ -1,0 +1,60 @@
+Revamp the core API to reduce memory footprint and consumption
+
+The API changes made so far turned out to increase the memory footprint
+and consumption while our intention was actually decreasing them.
+
+Memory consumption issue:
+
+When there are many connections which does not exchange data frequently,
+the old Netty 4 API spent a lot more memory than 3 because it always
+allocates per-handler buffer for each connection unless otherwise
+explicitly stated by a user.  In a usual real world load, a client
+doesn't always send requests without pausing, so the idea of having a
+buffer whose life cycle if bound to the life cycle of a connection
+didn't work as expected.
+
+Memory footprint issue:
+
+The old Netty 4 API decreased overall memory footprint by a great deal
+in many cases.  It was mainly because the old Netty 4 API did not
+allocate a new buffer and event object for each read.  Instead, it
+created a new buffer for each handler in a pipeline.  This works pretty
+well as long as the number of handlers in a pipeline is only a few.
+However, for a highly modular application with many handlers which
+handles connections which lasts for relatively short period, it actually
+makes the memory footprint issue much worse.
+
+Changes:
+
+All in all, this is about retaining all the good changes we made in 4 so
+far such as better thread model and going back to the way how we dealt
+with message events in 3.
+
+To fix the memory consumption/footprint issue mentioned above, we made a
+hard decision to break the backward compatibility again with the
+following changes:
+
+- Remove MessageBuf
+- Merge Buf into ByteBuf
+- Merge ChannelInboundByte/MessageHandler and ChannelStateHandler into ChannelInboundHandler
+  - Similar changes were made to the adapter classes
+- Merge ChannelOutboundByte/MessageHandler and ChannelOperationHandler into ChannelOutboundHandler
+  - Similar changes were made to the adapter classes
+- Introduce MessageList which is similar to `MessageEvent` in Netty 3
+- Replace inboundBufferUpdated(ctx) with messageReceived(ctx, MessageList)
+- Replace flush(ctx, promise) with write(ctx, MessageList, promise)
+- Remove ByteToByteEncoder/Decoder/Codec
+  - Replaced by MessageToByteEncoder<ByteBuf>, ByteToMessageDecoder<ByteBuf>, and ByteMessageCodec<ByteBuf>
+- Merge EmbeddedByteChannel and EmbeddedMessageChannel into EmbeddedChannel
+- Add SimpleChannelInboundHandler which is sometimes more useful than
+  ChannelInboundHandlerAdapter
+- Bring back Channel.isWritable() from Netty 3
+- Add ChannelInboundHandler.channelWritabilityChanges() event
+- Add RecvByteBufAllocator configuration property
+  - Similar to ReceiveBufferSizePredictor in Netty 3
+  - Some existing configuration properties such as
+    DatagramChannelConfig.receivePacketSize is gone now.
+- Remove suspend/resumeIntermediaryDeallocation() in ByteBuf
+
+This change would have been impossible without @normanmaurer's help. He
+fixed, ported, and improved many parts of the changes.

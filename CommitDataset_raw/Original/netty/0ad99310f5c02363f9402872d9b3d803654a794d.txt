@@ -1,0 +1,10 @@
+Record release when enable detailed leak detection
+
+Motivation:
+It would be easier to find where is missing release call in several retain release calls on a ByteBuf
+
+Modifications:
+Remove final modifier on SimpleLeakAwareByteBuf and SimpleLeakAwareByteBuf release function and override it to record release in AdvancedLeakAwareByteBuf and AdvancedLeakAwareCompositeByteBuf
+
+Result:
+Release will be recorded when enable detailed leak detection

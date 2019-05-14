@@ -1,0 +1,17 @@
+Register an AuthenticationManager in security autoconfig
+
+This is quite a big step, but I think it helps a lot. Since Spring
+Boot always creates an AuthenticationManager if it doesn't find one
+already registered, it makes sense to also make it into a @Bean.
+Spring Security does not register its AuthenticationManager by
+default though, so we have to do that for it if the user has created
+one with an @Autowired AuthenticationManagerBuilder, but not registered
+it as a @Bean.
+
+Having the @Bean (marked @Primary to prevent issues with @Autowired)
+makes it easier to reason about what Spring Boot has done for you, and
+easier to default in simple use cases to the boot-created
+AuthenticationManager. For example, if I want an OAuth2 Authorization
+Server with password grant, it makes total sense for the
+AuthenticationManager for users to be the same as the @Primary one.
+Now it is easy to set that up (just @Autowire it).

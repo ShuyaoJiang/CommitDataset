@@ -1,0 +1,10 @@
+Ensure that contexts loaded by the TCF are active
+
+This commit adds an assertion to DefaultTestContext's
+getApplicationContext() method to ensure that a context loaded by the
+Spring TestContext Framework (TCF) or retrieved from the ContextCache
+is still active. This extra check helps to avoid situations where
+developers manually close a cached context instead of relying on the
+@DirtiesContext support.
+
+Issue: SPR-12932

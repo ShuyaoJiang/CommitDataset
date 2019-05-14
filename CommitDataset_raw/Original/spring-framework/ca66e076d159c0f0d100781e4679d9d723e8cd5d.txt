@@ -1,0 +1,74 @@
+Support annotation attribute aliases and overrides via @AliasFor
+
+This commit introduces first-class support for aliases for annotation
+attributes. Specifically, this commit introduces a new @AliasFor
+annotation that can be used to declare a pair of aliased attributes
+within a single annotation or an alias from an attribute in a custom
+composed annotation to an attribute in a meta-annotation.
+
+To support @AliasFor within annotation instances, AnnotationUtils has
+been overhauled to "synthesize" any annotations returned by "get" and
+"find" searches. A SynthesizedAnnotation is an annotation that is
+wrapped in a JDK dynamic proxy which provides run-time support for
+@AliasFor semantics. SynthesizedAnnotationInvocationHandler is the
+actual handler behind the proxy.
+
+In addition, the contract for @AliasFor is fully validated, and an
+AnnotationConfigurationException is thrown in case invalid
+configuration is detected.
+
+For example, @ContextConfiguration from the spring-test module is now
+declared as follows:
+
+    public @interface ContextConfiguration {
+
+        @AliasFor(attribute = "locations")
+        String[] value() default {};
+
+        @AliasFor(attribute = "value")
+        String[] locations() default {};
+
+        // ...
+    }
+
+The following annotations and their related support classes have been
+modified to use @AliasFor.
+
+- @ManagedResource
+- @ContextConfiguration
+- @ActiveProfiles
+- @TestExecutionListeners
+- @TestPropertySource
+- @Sql
+- @ControllerAdvice
+- @RequestMapping
+
+Similarly, support for AnnotationAttributes has been reworked to
+support @AliasFor as well. This allows for fine-grained control over
+exactly which attributes are overridden within an annotation hierarchy.
+In fact, it is now possible to declare an alias for the 'value'
+attribute of a meta-annotation.
+
+For example, given the revised declaration of @ContextConfiguration
+above, one can now develop a composed annotation with a custom
+attribute override as follows.
+
+    @ContextConfiguration
+    public @interface MyTestConfig {
+
+        @AliasFor(
+           annotation = ContextConfiguration.class,
+           attribute = "locations"
+        )
+        String[] xmlFiles();
+
+        // ...
+    }
+
+Consequently, the following are functionally equivalent.
+
+- @MyTestConfig(xmlFiles = "test.xml")
+- @ContextConfiguration("test.xml")
+- @ContextConfiguration(locations = "test.xml").
+
+Issue: SPR-11512, SPR-11513

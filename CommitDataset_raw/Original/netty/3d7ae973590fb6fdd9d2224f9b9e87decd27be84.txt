@@ -1,0 +1,11 @@
+Make Epoll ChannelMetadata more consistent with NIO
+
+Motivation:
+In 4.0 AbstractNioByteChannel has a default of 16 max messages per read. However in 4.1 that constraint was applied at the NioSocketChannel which is not equivalent. In 4.1 AbstractEpollStreamChannel also did not have the default of 16 max messages per read applied.
+
+Modifications:
+- Make Nio consistent with 4.0
+- Make Epoll consistent with Nio
+
+Result:
+Nio and Epoll both have consistent ChannelMetadata and are consistent with 4.0.

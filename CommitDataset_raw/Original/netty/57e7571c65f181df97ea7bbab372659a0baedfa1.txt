@@ -1,0 +1,13 @@
+Not trigger channelWritabilityChanged if fail messages before close Channel.
+
+Motivation:
+
+We should not trigger channelWritabilityChanged during failing message when we are about to close the Channel as otherwise the use may try again writing even if the Channel is about to get closed.
+
+Modifications:
+
+Add new boolean param to ChannelOutboundBuffer.failFlushed(...) which allows to specify if we should notify or not.
+
+Result:
+
+channelWritabilityChanged is not triggered anymore if we cloe the Channel because of an IOException during write.

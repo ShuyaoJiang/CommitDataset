@@ -1,0 +1,7 @@
+DateHistogram: Fix 'extended_bounds' with 'offset' (#23789)
+
+This fixes a bug in the 'date_histogram' aggregation that can happen when using 'extended_bounds'
+together with some 'offset' parameter. Offsets should be applied after rounding the extended bounds 
+and also be applied when adding empty buckets during the reduce phase in InternalDateHistogram.
+
+Closes #23776

@@ -1,0 +1,12 @@
+Introduce analyze thread pool (#29541)
+
+We want to remove the index thread pool as it is no longer needed since
+single-document indexing requests are executed as bulk requests
+now. Analyze requests are also executed on the index thread pool though
+and they need a thread pool to execute on. The bulk thread does not seem
+like the right thread pool, let us keep that thread pool conceptually
+for bulk requests and free for bulk requests. None of the existing
+thread pools make sense for analyze requests either. The generic thread
+pool would be a terrible choice since it has an unbounded queue and that
+is a bad idea for user-facing APIs. This commit introduces a small by
+default (size=1, queue_size=16) thread pool for analyze requests.

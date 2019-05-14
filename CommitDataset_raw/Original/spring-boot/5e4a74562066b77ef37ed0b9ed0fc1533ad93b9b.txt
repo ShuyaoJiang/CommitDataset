@@ -1,0 +1,17 @@
+Don’t register Jackson Module beans with all ObjectMappers
+
+Previously, JacksonAutoConfiguration would register any Jackson Module
+beans with every ObjectMapper found in the application context. This
+was not consistent with the rest of the Jackson auto-configuration,
+which is only applied to ObjectMappers that are created or configured
+via the auto-configured Jackson2ObjectMapperBuilder.
+
+This commit removes the code that registers Jackson Module beans with
+every ObjectMapper. Such beans will still be registered with
+ObjectMappers created or configured using the auto-configured
+Jackson2ObjectMapperBuilder. This aligns the configuration of Module
+with the rest of the ObjectMapper configuration and makes it possible
+for users to create an ObjectMapper bean and still have complete control
+over the modules that are registered with it.
+
+Closes gh-2489

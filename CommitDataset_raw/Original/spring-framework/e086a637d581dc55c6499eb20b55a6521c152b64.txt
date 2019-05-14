@@ -1,0 +1,19 @@
+Introduce BEFORE METHOD/CLASS modes in @DirtiesContext
+
+Prior to this commit, @DirtiesContext could only be used to close a
+test ApplicationContext after an entire test class or after a test
+method; however, there are some use cases for which it would be
+beneficial to close a test ApplicationContext before a given test class
+or test method -- for example, if some rogue (i.e., yet to be
+determined) test within a large test suite has corrupted the original
+configuration for the ApplicationContext.
+
+This commit provides a solution to such testing challenges by
+introducing the following modes for @DirtiesContext.
+
+ - MethodMode.BEFORE_METHOD: configured via the new methodMode attribute
+
+ - ClassMode.BEFORE_CLASS and ClassMode.BEFORE_EACH_TEST_METHOD: both
+   configured via the existing classMode attribute
+
+Issue: SPR-12429

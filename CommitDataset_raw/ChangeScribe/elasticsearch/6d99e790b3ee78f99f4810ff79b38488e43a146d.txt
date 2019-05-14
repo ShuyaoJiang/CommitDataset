@@ -1,0 +1,274 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (README.txt). 
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.common.ssl:  
+
+1.1. Add a class for default jdk trust config. It allows to:
+
+	Instantiate default jdk trust config;
+	Instantiate default jdk trust config  with system properties bi function;
+	Create trust manager;
+	Get system trust store;
+	Check if default jdk trust config is pkcs 11 truststore;
+	Get system trust store password;
+	Get dependent files;
+	Convert default jdk trust config to string;
+	Check if default jdk trust config equals;
+	Hash code
+
+1.2. Add a class for default jdk trust config tests. It allows to:
+
+	Handle test get system trust store with no system properties;
+	Handle test get non PKCS 11 trust store with password set;
+	Assert standard issuers;
+	Assert has trusted issuer
+
+1.3. Add a class for empty key config. It allows to:
+
+	Instantiate empty key config;
+	Get dependent files;
+	Create key manager;
+	Convert empty key config to string
+
+1.4. Add a class for key store util. It allows to:
+
+	Instantiate key store util;
+	Infer key store type;
+	Read key store;
+	Build key store;
+	Build trust store;
+	Build new key store;
+	Create key manager;
+	Create trust manager
+
+1.5. Add a class for pem key config. It allows to:
+
+	Instantiate pem key config  with certificate path, key path and key path;
+	Get dependent files;
+	Create key manager;
+	Get private key;
+	Get certificates;
+	Convert pem key config to string;
+	Check if pem key config equals;
+	Hash code
+
+1.6. Add a class for pem key config tests. It allows to:
+
+	Handle test build key config from pem files without password;
+	Handle test build key config from pem files with password;
+	Handle test key manager fails with incorrect password;
+	Handle test missing certificate fails with meaningful message;
+	Handle test missing key fails with meaningful message;
+	Handle test key config reloads file contents;
+	Assert certificate and key;
+	Assert password is incorrect;
+	Assert file  not found
+
+1.7. Add a class for pem trust config. It allows to:
+
+	Instantiate pem trust config  with certificate authorities list;
+	Get dependent files;
+	Create trust manager;
+	Load certificates;
+	Convert pem trust config to string;
+	Check if pem trust config equals;
+	Hash code;
+	Ca paths  as string
+
+1.8. Add a class for pem trust config tests. It allows to:
+
+	Handle test build trust config from single pem file;
+	Handle test build trust config from multiple pem files;
+	Handle test bad file format fails;
+	Handle test empty file fails;
+	Handle test missing file fails with meaningful message;
+	Handle test one missing file fails with meaningful message even if other file exist;
+	Test trust config reloads file contents;
+	Assert certificate chain;
+	Assert empty file;
+	Assert invalid file format;
+	Assert file  not found
+
+1.9. Add a class for pem utils. It allows to:
+
+	Instantiate pem utils;
+	Read private key;
+	Remove EC headers;
+	Remove dsa headers;
+	Parse PKCS 8;
+	Parse open ssl EC;
+	Parse PKCS 1 rsa;
+	Parse open ssl dsa;
+	Parse PKCS 8 encrypted;
+	Possibly decrypt PKCS 1 key;
+	Get cipher  from parameters;
+	Generate open ssl key;
+	Hex string  to byte array;
+	Parse ec der;
+	Parse rsa der;
+	Parse dsa der;
+	Get key algorithm identifier;
+	Read certificates;
+	Get message digest
+
+1.10. Add a class for pem utils tests. It allows to:
+
+	Handle test read PKCS 8 rsa key;
+	Handle test read PKCS 8 rsa key with bag attrs;
+	Handle test read PKCS 8 dsa key;
+	Handle test read PKCS 8 ec key;
+	Handle test read encrypted PKCS 8 key;
+	Handle test read DES encrypted PKCS 1 key;
+	Handle test read AES encrypted PKCS 1 key;
+	Handle test read PKCS 1 rsa key;
+	Handle test read open ssl dsa key;
+	Handle test read open ssl dsa key with params;
+	Handle test read encrypted open ssl dsa key;
+	Handle test read open ssl ec key;
+	Handle test read open ssl ec key with params;
+	Handle test read encrypted open ssl ec key;
+	Handle test read unsupported key;
+	Handle test read pem certificate as key;
+	Handle test read corrupted key;
+	Handle test read empty file;
+	Get key  from keystore
+
+1.11. Add a class for ssl config exception. It allows to:
+
+	Instantiate ssl config exception  with cause exception;
+	Instantiate ssl config exception
+
+1.12. Add a class for ssl configuration. It allows to:
+
+	Instantiate ssl configuration  with ssl trust config, ssl key config, ssl verification mode, ssl client authentication mode, ciphers list, supported protocols list and supported protocols list;
+	Get trust config;
+	Get key config;
+	Get verification mode;
+	Get client  auth;
+	Get cipher suites;
+	Get supported protocols;
+	Get dependent files;
+	Create ssl context;
+	Get context protocol;
+	Convert ssl configuration to string;
+	Check if ssl configuration equals;
+	Hash code
+
+1.13. Add a class for ssl configuration keys. It allows to:
+
+	Instantiate ssl configuration keys;
+	Get string keys;
+	Get list keys;
+	Get secure string keys;
+	Check if ssl configuration keys is deprecated
+
+1.14. Add a class for ssl configuration loader. It allows to:
+
+	Instantiate ssl configuration loader;
+	Set default trust config;
+	Set default key config;
+	Set default verification mode;
+	Set default client auth;
+	Set default ciphers;
+	Set default protocols;
+	Get setting  as string;
+	Get secure setting;
+	Get setting  as list;
+	Get load;
+	Build trust config;
+	Build key config;
+	Resolve password setting;
+	Setting parser function;
+	Resolve secure setting;
+	Resolve list setting;
+	Load default ciphers;
+	Check if ssl configuration loader has 256 bit AES
+
+1.15. Add a class for ssl configuration loader tests. It allows to:
+
+	Get setting  as string;
+	Get secure setting;
+	Get setting  as list;
+	Handle test basic configuration options;
+	Handle test load trust from pem C as;
+	Handle test load trust from pkcs 12;
+	Handle test load trust from JKS;
+	Handle test load keys from pem files;
+	Handle test load keys from PKCS 12;
+	Handle test load keys from JKS
+
+1.16. Add a class for ssl configuration tests. It allows to:
+
+	Handle test basic construction;
+	Handle test equals and hash code;
+	Handle test dependent files;
+	Handle test build ssl context
+
+1.17. Add an interface declaration  for ssl key config. It allows to:
+
+	Get dependent files;
+	Create key manager
+
+1.18. Add an interface declaration  for ssl trust config. It allows to:
+
+	Get dependent files;
+	Create trust manager
+
+1.19. Add a class for store key config. It allows to:
+
+	Instantiate store key config  with path;
+	Get dependent files;
+	Create key manager;
+	Check key store
+
+1.20. Add a class for store key config tests. It allows to:
+
+	Handle test load single key PKCS 12;
+	Handle test load multiple key PKCS 12;
+	Handle test load multiple key jks with separate key password;
+	Handle test key manager fails with incorrect store password;
+	Handle test key manager fails with incorrect key password;
+	Handle test key manager fails with missing keystore file;
+	Handle test missing key entries fails with meaningful message;
+	Handle test key config reloads file contents;
+	Assert keys loaded;
+	Assert keys  not loaded;
+	Assert password is incorrect;
+	Assert bad key store;
+	Assert file  not found;
+	Assert no private key entries
+
+1.21. Add a class for store trust config. It allows to:
+
+	Instantiate store trust config  with path;
+	Get dependent files;
+	Create trust manager;
+	Check trust store
+
+1.22. Add a class for store trust config tests. It allows to:
+
+	Handle test build trust config from PKCS 12;
+	Handle test build trust config from JKS;
+	Handle test bad key store format fails;
+	Handle test missing key store fails with meaningful message;
+	Handle test incorrect password fails with meaningful message;
+	Handle test missing trust entries fails with meaningful message;
+	Test trust config reloads keys store contents;
+	Assert certificate chain;
+	Assert invalid file format;
+	Assert file  not found;
+	Assert password is incorrect;
+	Assert no certificate entries
+
+1.23. Add a class for trust everything config. It allows to:
+
+	Instantiate trust everything config;
+	Check client trusted;
+	Check server trusted;
+	Get accepted issuers;
+	Get dependent files;
+	Create trust manager;
+	Convert trust everything config to string
+

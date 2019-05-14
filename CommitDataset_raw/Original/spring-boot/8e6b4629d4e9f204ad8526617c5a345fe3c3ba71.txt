@@ -1,0 +1,12 @@
+Tolerate AuthenticationSwitchUserEvent with null target user
+
+When Spring Security is misconfigured it's possible to switch from an anonymous user
+to a normal user. When switching back again, the corresponding
+AuthenticationSwitchUserEvent will have a null target user. Previously, Actuator's
+AuthenticationAuditListener would throw a NullPointerException when it received such an
+event.
+
+This commit updates the audit listener to defensively handled events with a null target
+user.
+
+Closes gh-15767

@@ -1,0 +1,7 @@
+Move IndexShard#getWritingBytes() under InternalEngine (#27209)
+
+We do some accounting in IndexShard that is not necessarily correct since
+we maintain two different index readers. This change moves the accounting under
+the engine which knows what reader we are refreshing.
+
+Relates to #26972

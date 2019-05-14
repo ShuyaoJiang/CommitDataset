@@ -1,0 +1,12 @@
+Clarify docs on effect RANDOM_PORT or DEFINED_PORT has on transactions
+
+Previously, when read too quickly, the current note may lead a user to
+think that RANDOM_PORT or DEFINED_PORT directly affect transaction
+management. This is not the case.
+
+This commit attempts to clarify that the difference in transaction
+behaviour is due to transactions being bound to a particular thread
+and separate threads being used for the client and server when
+tests are making HTTP requests.
+
+Closes gh-9965

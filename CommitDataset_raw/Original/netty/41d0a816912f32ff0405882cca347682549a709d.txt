@@ -1,0 +1,7 @@
+Use ByteBufAllocator to allocate ByteBuf for FullHttpMessage Motivation: When converting SPDY or HTTP/2 frames to HTTP/1.x, netty always used an unpooled heap ByteBuf.
+
+Modifications:
+When constructing the FullHttpMessage pass in the ByteBuf to use via the ByteBufAllocator assigned via the context.
+
+Result:
+The ByteBuf assigned to the FullHttpMessage can now be configured as a pooled/unpooled, direct/heap based ByteBuf via the ByteBufAllocator used.

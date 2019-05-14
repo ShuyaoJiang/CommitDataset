@@ -1,0 +1,25 @@
+Adding codeAsText to HttpResponseStatus.
+
+Motivation:
+
+I found myself writing AsciiString constants in my code for
+response statuses and thought that perhaps it might be nice to have
+them defined by Netty instead.
+
+Modifications:
+
+Adding codeAsText to HttpResponseStatus that returns the status code as
+AsciiText.
+
+In addition, added the 421 Misdirected Request response code from
+https://tools.ietf.org/html/draft-ietf-httpbis-http2-15#section-9.1.2
+
+This response header was renamed in draft 15:
+https://tools.ietf.org/html/draft-ietf-httpbis-http2-15#appendix-A.1
+But the code itself was not changed, and I thought using the latest would
+be better.
+
+Result:
+
+It is now possible to specify a status like this:
+new DefaultHttp2Headers().status(HttpResponseStatus.OK.codeAsText());

@@ -1,0 +1,11 @@
+Expand `/_cat/nodes` to return information about hard drive (#21775)
+
+Expand `/_cat/nodes` with already present information about available disk space `diskAvail` (alias: `d`, `disk`) by:
+
+    * `diskTotal` (alias `dt`): total disk space
+    * `diskUsed` (alias `du`): used disk space (`diskTotal - diskAvail`)
+    * `diskUsedPercent` (alias `dup`): used disk space percentage
+
+Note: The available disk space is the number of bytes available to the node's Java virtual machine. The size might be smaller than the real one. That means the used disk space (percentage) is larger.
+
+Closes #21679

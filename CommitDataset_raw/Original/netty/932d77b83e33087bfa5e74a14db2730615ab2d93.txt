@@ -1,0 +1,13 @@
+Verify error stack is empty after each operation when using ReferenceCountedOpenSslEngine. (#7943)
+
+Motivation:
+
+https://github.com/netty/netty/pull/7941 proved that its easy to not correctly clear the error stack sometimes. We should do carefully test this.
+
+Modifications:
+
+Add a new SSLEngine wrapper that is used during tests, which verifies that the error stack is empty after each method call.
+
+Result:
+
+Better testing.

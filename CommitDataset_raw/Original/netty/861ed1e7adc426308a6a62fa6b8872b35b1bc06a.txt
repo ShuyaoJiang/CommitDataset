@@ -1,0 +1,23 @@
+Add unified NextProtoNego extension support to SslContext
+
+Motivation:
+
+- OpenSslEngine and JDK SSLEngine (+ Jetty NPN) have different APIs to
+  support NextProtoNego extension.
+  - It is impossible to configure NPN with SslContext when the provider
+    type is JDK.
+
+Modification:
+
+- Implement NextProtoNego extension by overriding the behavior of
+  SSLSession.getProtocol() for both OpenSSLEngine and JDK SSLEngine.
+  - SSLEngine.getProtocol() returns a string delimited by a colon (':')
+    where the first component is the transport protosol (e.g. TLSv1.2)
+    and the second component is the name of the application protocol
+- Remove the direct reference of Jetty NPN classes from the examples
+- Add SslContext.newApplicationProtocolSelector
+
+Result:
+
+- A user can now use both JDK SSLEngine and OpenSslEngine for NPN-based
+  protocols such as HTTP2 and SPDY

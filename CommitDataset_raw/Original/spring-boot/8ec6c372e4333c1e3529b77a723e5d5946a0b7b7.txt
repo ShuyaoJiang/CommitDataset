@@ -1,0 +1,14 @@
+Do not expand ElementsParser until size equals storage length
+
+Previously, ElementsParser would expand its internal storage when the
+size of the storage was <= the end index of the element being parsed,
+irrespective of how many elements had been stored. This led to
+expansion of the storage, even for a source that contains a single
+element, if the end of the element was at an index greater than the
+size of the storage.
+
+This commit updates ElementsParser to resize its storage when the size
+(the number of elements that have been stored) is equal to the size of
+the storage.
+
+See gh-15760

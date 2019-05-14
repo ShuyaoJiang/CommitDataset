@@ -1,0 +1,9 @@
+TESTS: Stabilize Renegotiation Test (#33943)
+
+* TESTS: Stabilize Renegotiation Test
+
+* The second `startHandshake` is not synchronous and a read of only
+50ms may fail to trigger it entirely (the failure can be reproduced reliably by setting the socket timeout to `1`)
+=> fixed by retrying the read until the handshake finishes (a longer timeout would've worked too,
+but retrying  seemed more stable)
+* Closes #33772

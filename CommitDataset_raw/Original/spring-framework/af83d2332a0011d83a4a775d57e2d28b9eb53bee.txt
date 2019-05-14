@@ -1,0 +1,14 @@
+Fix regression in HttpPutFormContentFilter
+
+Re-arrange the checks so that if there is no form parameter, then
+immediately and unconditionally delegate to super.getParameterValues().
+Or reversely if there is no super.getParameterValues() then return the
+form parameter.
+
+So the only remaining case is when combining values present in both.
+In that case we'll take both only if a queryString exists.
+
+One extra fix is to not even wrap the request if we did not parse any
+form parameters at all which can happen with HttpHiddenMethodFilter.
+
+Issue: SPR-15828, 15835

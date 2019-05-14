@@ -1,0 +1,14 @@
+Fix incorrect code in javadocs of ChannelHandler. (#8115)
+
+Motivation:
+
+Some code that was shown as part of the ChannelHandler javadoc was not 100 % correct and used some constructs that we used in netty 3. Also we never called flush() in the code which is a bad example for users.
+
+Modifications:
+
+- Remove netty 3 code references
+- Replace channel.write(...) with ctx.writeAndFlush(...)
+
+Result:
+
+More correct code in the javadocs.

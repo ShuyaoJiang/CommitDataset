@@ -1,0 +1,5 @@
+Avoid Scope.registerDestructionCallback for inner beans in case of scope mismatch
+
+This commit refines getMergedBeanDefinition's scope adaptation algorithm for inner beans, never leaving a custom scope within a containing bean of a different scope. The inner bean's scope will either be aligned with the containing bean's scope (matching the effective state) or be switched to prototype in case of an outer singleton (indicating that no singleton state management is desired).
+
+Issue: SPR-13739

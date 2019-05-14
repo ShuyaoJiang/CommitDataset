@@ -1,0 +1,14 @@
+Factor out less common code-path into own method to allow inlining. (#8590)
+
+
+Motivation:
+
+During benchmarks two methods showed up as "hot method too big". We can easily make these smaller by factor out some less common code-path to an extra method and so allow inlining.
+
+Modifications:
+
+Factor out less common code path to an extra method.
+
+Result:
+
+Hot methods can be inlined.

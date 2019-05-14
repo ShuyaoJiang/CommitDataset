@@ -1,0 +1,8 @@
+Add cache cleaning task for ML snapshot (#37505)
+
+The ML subproject of xpack has a cache for the cpp artifact snapshots
+which is checked on each build. The cache is outside of the build dir so
+that it is not wiped on a typical clean, as the artifacts can be large
+and do not change often. This commit adds a cleanCache task which will
+wipe the cache dir, as over time the size of the directory can become
+bloated.

@@ -1,0 +1,10 @@
+Ignore GIT_COMMIT when calculating commit hash
+
+When finding the commit hash for the build to place in the JAR manifest
+(which is used to identity the build), the scm-info plugin assumes that
+GIT_COMMIT is the commit for this build. That assumption is wrong, this
+build could be a sub-build of another build that GIT_COMMIT belongs
+to. If GIT_COMMIT is set, we ignore the commit hash calculated by
+scm-info and calculate the hash ourselves.
+
+Relates #28082

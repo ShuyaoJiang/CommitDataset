@@ -1,0 +1,12 @@
+[Zen2] Fix test failures in diff-based publishing (#35684)
+
+`testIncompatibleDiffResendsFullState` sometimes makes a 2-node cluster and
+then partitions one of the nodes from the leader, which makes the leader stand
+down.  Then when the partition is removed the cluster re-forms but does so by
+sending full cluster states, not diffs, causing the test to fail.
+
+Additionally `testDiffBasedPublishing` sometimes fails if a publication is
+delivered out-of-order, wiping out a fresher last-received cluster state with a
+less-fresh one. This is fixed here by passing the received cluster state to the
+coordinator before recording it as the last-received one, relying on the
+coordinator's freshness checks.

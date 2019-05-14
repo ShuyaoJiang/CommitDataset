@@ -1,0 +1,13 @@
+Add workaround for bug in older linux kernels handling epoll_wait(...)
+
+Motivation:
+
+Older linux kernels have problems handling a large value for epoll_wait(...) and so wait for ever.
+
+Modifications:
+
+Adjust timeout on the fly if a too big value is passed in.
+
+Result:
+
+Correctly works also on older kernels.

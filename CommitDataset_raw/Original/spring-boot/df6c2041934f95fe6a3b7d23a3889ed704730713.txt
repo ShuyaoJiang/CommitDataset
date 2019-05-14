@@ -1,0 +1,25 @@
+Provide better diagnostics when an application fails to start
+
+This commit introduces a new failure analysis mechanism that can be
+used to provide diagnostics to a user when their application fails
+to start.
+
+When application context refresh fails. FailureAnalyzer
+implementations are loaded via spring.factories. The analyzers are
+called in order, with the first non-null analysis of the failure
+being used. The analysis is reported to the use by
+FailureAnalysisReporters which are also loaded via spring.factories.
+
+A single FailureAnalysisReporter is provided out of the box. It logs
+an error message with details of the analysis, providing the user
+with a description of the failure and, if available, some actions
+that they may be able to take to resolve the problem without also
+displaying a stack trace that is of little value.
+
+Two analysers are provided initially. One for an embedded servlet
+container port clash and another for BeanCurrentlyInCreationExceptions.
+More analysers are planned (for UnsatisfiedDependencyException and for
+NoUniqueBeanDefinitionException) once some updates have been made
+to Spring Framework to make those failures more amenable to analysis.
+
+Closes gh-4907

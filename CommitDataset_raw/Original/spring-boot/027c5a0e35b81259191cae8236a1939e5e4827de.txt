@@ -1,0 +1,19 @@
+Remove usage of Mockito's internals
+
+Previously, we relied on Mockito's internals to bypass any Spring AOP
+proxy during verification of a spy. Thanks to a new API in Mockito,
+we can replace the use of Mockito's internals with a
+VerificationStartedListener. This listener changes Mockito's view of
+the mock to be the ultimate target of the AOP proxy, i.e. to be the
+actual Mockito-created spy, allowing Mockito's verification of the
+spy to proceed successfully.
+
+This above-described change will mean that we require a very
+up-to-date version of Mockito so the tests that verify our
+compatibility with 2.5 have been removed as we will no longer support
+it when using @MockBean or @SpyBean.
+
+Lastly, two tests have been updated to replace their usage of the
+internal MockUtil class with the equivalent public API calls.
+
+Closes gh-10352

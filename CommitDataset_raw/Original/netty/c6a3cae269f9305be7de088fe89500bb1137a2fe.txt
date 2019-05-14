@@ -1,0 +1,13 @@
+UnorderedThreadPoolEventExecutor consumes 100% CPU when idle
+
+Motivation:
+
+When UnorderedThreadPoolEventExecutor.execute / submit etc is called it will consume up to 100 % CPU even after the task was executed.
+
+Modifications:
+
+Add a special wrapper which we will be used in execute(...) to wrap the submitted Runnable. This is needed as  ScheduledThreadPoolExecutor.execute(...) will delegate to submit(...) which will then use decorateTask(...). The problem with this is that decorateTask(...) needs to ensure we only do our own decoration if we not call from execute(...) as otherwise we may end up creating an endless loop because DefaultPromise will call  EventExecutor.execute(...) when notify the listeners of the promise.
+
+Result:
+
+Fixes [#6507].

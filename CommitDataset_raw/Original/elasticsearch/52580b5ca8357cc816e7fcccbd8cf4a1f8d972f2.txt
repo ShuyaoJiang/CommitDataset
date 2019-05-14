@@ -1,0 +1,8 @@
+SQL: Fix parsing of dates with milliseconds (#30419)
+
+Dates internally contain milliseconds (which appear when converting them
+to Strings) however parsing does not accept them (and is being strict).
+The parser has been changed so that Date is mandatory but the time
+(including its fractions such as millis) are optional.
+
+Fix #30002

@@ -1,0 +1,8 @@
+[CCR] Handle leader index with no mapping correctly (#33770)
+
+When a leader index is created, it may not have a mapping yet.
+Currently if you follow such an index the shard follow tasks fail with
+NoSuchElementException, because they expect a single mapping.
+
+This commit fixes that, by allowing that a leader index does not yet have
+a mapping.

@@ -1,0 +1,8 @@
+Revive build Javadocs on JDK 10 and workaround bug (#29173)
+
+This commit reenables the Javadoc tasks on JDK 10. To reenable these
+tasks, we have to workaround a bug in JDK 10 which trips on some deeply
+nested anonymous classes that we have in the codebase (and are fine
+as-is, this is not a problem with this code). The workaround is to
+remove the compiled classes from the classpath. This has been reported
+upstream and the workaround was suggested there (see the code comment).

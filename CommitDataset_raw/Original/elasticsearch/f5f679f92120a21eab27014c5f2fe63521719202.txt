@@ -1,0 +1,7 @@
+testTranslogReplayWithFailure: do not assume engine is recoverable when disk errors stop
+
+The test currently makes the assumption that if underlying directory stops throwing exceptions, we can always open the engine. This is not the case as some errors can cause a corruption marker to be placed in the store.
+
+This commit refactors the test to only check that everything is OK if the engine was successfully opened. On top of that, there is no point in checking replay with no errors as we have another test for that.
+
+Closes #28426

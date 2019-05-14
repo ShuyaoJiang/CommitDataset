@@ -1,0 +1,12 @@
+Relax TranslogWriter#assertNoSeqNumberConflict (#31569)
+
+If the recovery and indexing are concurrently happening, it's possible
+for a replica to receive the same operation twice: one from the
+replication, and the other from the recovery. However, these operations
+are not identical because we don't store the versionType of operations
+in the Lucene index.
+
+The TranslogWriter#assertNoSeqNumberConflict assertion has been tripped
+several times in the CCR branch since we use Lucene in peer-recovery.
+This commit relaxes that assertion by excluding the versionType from the
+check.

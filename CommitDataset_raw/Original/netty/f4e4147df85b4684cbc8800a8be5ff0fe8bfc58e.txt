@@ -1,0 +1,15 @@
+LocationAwareSlf4jLogger does not correctly format log message. (#8595)
+
+Motivation:
+
+We did miss to use MessageFormatter inside LocationAwareSlf4jLogger and so {} was not correctly replaced in log messages when using slf4j.
+This regression was introduced by afe0767e9c150369cd6ea150b5cc1a9021fd5c3c.
+
+Modifications:
+
+- Make use of MessageFormatter
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8483.

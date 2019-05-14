@@ -1,0 +1,25 @@
+Watcher: Add execution state to watch status (elastic/x-pack-elasticsearch#2699)
+
+The execution state is kind of a global indicator if a watch has been
+running successfully and is used by the watcher UI.
+
+However this field is only stored in the watch history but not part of
+the watch status, thus it is not available everywhere. In order to
+simplify the watcher UI this commit also adds the field to the
+watch status which is stored together with the watch.
+
+It is stored under the `status.execution_state` field as `status.state`
+is already taken. This is also reflects with the name of the java class.
+
+The WatchStatus class does not contain serialization checks, as this is
+intended to be backported to 6.x, where those checks will be added.
+
+Once the backport is done, the old execution state field can be fully
+deleted from the master branch in another commit (syncing with Kibana
+folks required).
+
+relates elastic/x-pack-elasticsearch#2385
+
+* fix doc tests
+
+Original commit: elastic/x-pack-elasticsearch@26e8f995717b1216c61fd1a2563c23bc919a37bf

@@ -1,0 +1,25 @@
+Include empty mappings in GET /{index}/_mappings requests (#25118)
+
+Previously this would output:
+
+```
+GET /test-1/_mappings
+
+{ }
+```
+
+And after this change:
+
+```
+GET /test-1/_mappings
+
+{
+  "test-1": {
+    "mappings": {}
+  }
+}
+```
+
+To bring parity back to the REST output after #24723.
+
+Relates to #25090

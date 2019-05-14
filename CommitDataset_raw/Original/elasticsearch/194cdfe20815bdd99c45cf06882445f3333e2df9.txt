@@ -1,0 +1,9 @@
+Sync retention leases on expiration (#37902)
+
+This commit introduces a sync of retention leases when a retention lease
+expires. As expiration of retention leases is lazy, their expiration is
+managed only when getting the current retention leases from the
+replication tracker. At this point, we callback to our full retention
+lease sync to sync and flush these on all shard copies. With this
+change, replicas do not locally manage expiration of retention leases;
+instead, that is done only on the primary.

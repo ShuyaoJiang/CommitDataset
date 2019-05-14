@@ -1,0 +1,18 @@
+Use predefined HttpResponseStatus constant instead of hardcoded 101 code
+
+Motivation:
+
+#7269 removed an unnecessary instanciation for verifying WebSocket
+handshake status code.
+But it uses a hardcoded status code value for 101 instead of using the
+intended `HttpResponseStatus#SWITCHING_PROTOCOLS` constant.
+
+Modidication:
+
+Compare actual `HttpResponseStatus` against predefined constant. Note
+that `HttpResponseStatus#equals` is implemented in respect with the RFC
+(only honor code, not text) so it’s intended to be used this way.
+
+Result:
+
+Cleaner code, use intended constant instead of hard coded value.

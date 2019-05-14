@@ -1,0 +1,24 @@
+Fix incorrect null value check in TrafficCounter
+
+In TrafficCounter, a recent change makes the contract of the API (the
+constructor) wrong and lead to issue with GlobalChannelTrafficCounter
+where executor must be null.
+
+Motivation:
+TrafficCounter executor argument in constructor might be null, as
+explained in the API, for some particular cases where no executor are
+needed (relevant tasks being taken by the caller as in
+GlobalChannelTrafficCounter).
+A null pointer exception is raised while it should not since it is
+legal.
+
+Modifications:
+Remove the 2 null checking for this particular attribute.
+Note that when null, the attribute is not reached nor used (a null
+checking condition later on is applied).
+
+Result:
+No more null exception raized while it should not.
+
+This shall be made also to 4.0, 4.1 (present) and master. 3.10 is not
+concerned.

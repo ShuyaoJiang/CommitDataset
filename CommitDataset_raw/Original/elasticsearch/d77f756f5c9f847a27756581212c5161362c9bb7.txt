@@ -1,0 +1,10 @@
+ccr: use indices stats api to fetch global checkpoint of the follower shards and
+keep track of shard follow stats inside shard follow stats' node task instead of persistent task status.
+
+By maintaining the shard follow stats inside its node task the stats update is quicker as
+no cluster state update is required. The stats are now transient; meaning if the task
+is going to run a different node then the stats are gone too. Currently only the processed
+global checkpoint is being tracked and this is being restored when a shard follow node task
+starts via the indices stats api (the reason of the first change of this change). Other stats
+that we may add in the future (like fetch_time, see: https://gist.github.com/s1monw/dba13daf8493bf48431b72365e110717)
+it is ok if we start from zero in case a shard follow task moves to another node.

@@ -1,0 +1,13 @@
+Update test to cope with asynchronous writing of the access log
+
+Previously, the test that verified that Undertow's access log could be
+enabled and was written to the correct file expected the log to be
+available as soon as the request to the server had completed. Undertow
+writes the access log asynchronously so the test failed intermittently
+due to a race between the access log being written and the test
+asserting that it exists.
+
+This commit updates the test to wait for up to 10 seconds for the
+access log to be available.
+
+See gh-4670

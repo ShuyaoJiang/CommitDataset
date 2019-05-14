@@ -1,0 +1,16 @@
+Speed up converting of temporal accessor to zoned date time (#37915)
+
+The existing implementation was slow due to exceptions being thrown if
+an accessor did not have a time zone. This implementation queries for
+having a timezone, local time and local date and also checks for an
+instant preventing to throw an exception and thus speeding up the conversion.
+
+This removes the existing method and create a new one named
+DateFormatters.from(TemporalAccessor accessor) to resemble the naming of
+the java time ones.
+
+Before this change an epoch millis parser using the toZonedDateTime
+method took approximately 50x longer.
+
+Relates #37826
+

@@ -1,0 +1,5 @@
+Remove XContentHelper#toString(ToXContent) in favour of Strings#toString(ToXContent) (#25866)
+
+These two methods do do the same thing. The subtle difference between the two is that the former prints out pretty printed content by default while the latter doesn't. There are way more usages of the latter throughout the codebase hence I kept that variant although I do think that it would be much better to print out prettified content by default from a `toString`. That breaks quite some tests so I didn't make that change yet.
+
+Also XContentHelper#toString was outdated as it didn't check the ToXContent#isFragment method to decide whether a new anonymous object has to be created or not. It would simply fail with any ToXContentObject.

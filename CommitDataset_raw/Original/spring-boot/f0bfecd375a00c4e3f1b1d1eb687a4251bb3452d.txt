@@ -1,0 +1,19 @@
+Refactor PropertySource support
+
+Locate PropertySourcesLoaders using SpringFactoriesLoader and refactor
+the interface to expose file extensions and support 'profiles' within
+documents.
+
+Rework ConfigFileApplicationListener for consistent profile loading.
+Profiles are now loaded in a consistent order for both profile specific
+files, and contained profile documents (i.e. YAML sub-sections).
+
+Also update ConfigFileApplicationListener so that it no longer directly
+processes @ProperySource annotations. Instead the standard Spring
+ConfigurationClassPostProcessor will insert @PropertySource items with
+ConfigFileApplicationListener later re-ordering them.
+
+The SpringApplication can no longer be configured using @ProperySource
+annotations, however, application.properties may still be used.
+
+Fixes gh-322

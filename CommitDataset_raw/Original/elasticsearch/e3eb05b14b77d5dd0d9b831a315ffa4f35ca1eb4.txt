@@ -1,0 +1,3 @@
+[TEST] Increase InternalDateHistogramTests coverage (#36064)
+
+In this test we were randomizing different values but minDocCount was hardcoded to 1. It's important to test other values, especially `0` as it's the default. The test needed some adapting in the way buckets are randomly generated: all aggs need to share the same interval, minDocCount and emptyBucketInfo. Also assertions need to take into account that more (or less) buckets are expected depending on minDocCount.

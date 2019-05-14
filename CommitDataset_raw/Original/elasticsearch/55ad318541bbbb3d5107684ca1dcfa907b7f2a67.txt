@@ -1,0 +1,10 @@
+Reduce the overhead of timeouts and low-level search cancellation. (#25776)
+
+Setting a timeout or enforcing low-level search cancellation used to make us
+wrap the collector and check either the current time or whether the search
+task was cancelled for every collected document. This can be significant
+overhead on cheap queries that match many documents.
+
+This commit changes the approach to wrap the bulk scorer rather than the
+collector and exponentially increase the interval between two consecutive
+checks in order to reduce the overhead of those checks.

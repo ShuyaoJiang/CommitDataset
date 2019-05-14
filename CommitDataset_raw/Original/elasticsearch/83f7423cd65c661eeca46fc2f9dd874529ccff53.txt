@@ -1,0 +1,9 @@
+SQL: Fix bug regarding alias fields with dots (#37279)
+
+Field of types aliases that have dots in name are returned without a
+hierarchy by field_caps, as oppose to the mapping api or field with
+concrete types, which in turn breaks IndexResolver.
+This commit fixes this by creating the backing hierarchy similar to the
+mapping api.
+
+Close #37224 

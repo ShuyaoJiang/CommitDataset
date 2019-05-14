@@ -1,0 +1,14 @@
+Eclipse project deps come after third-party libs
+
+Prior to this commit, the ordering of classpath entries in the
+generated Eclipse .classpath files did not align with the intended
+dependency management configured in the Gradle build. Specifically,
+project dependencies often came before dependencies on third-party
+libraries required for the given project, causing the project not to
+compile in Eclipse.
+
+This commit fixes this issue by introducing new functionality in the
+ide.gradle script that moves all project dependencies to the end of the
+generated classpath.
+
+Issue: SPR-11836

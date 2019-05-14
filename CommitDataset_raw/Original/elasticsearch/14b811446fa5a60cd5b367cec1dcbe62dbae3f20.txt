@@ -1,0 +1,9 @@
+Preserve `date_histogram` format when aggregating on unmapped fields (#35254)
+
+Currently when aggregating on an unmapped date field (e.g. using a
+date_histogram) we don't preserve the aggregations `format` setting but instead
+use the default format. This can lead to loosing the aggregations `format` when
+aggregating over several indices where some of them contain unmapped date fields
+and are encountered first in the reduce phase.
+
+Related to #31760

@@ -1,0 +1,8 @@
+Rework Hikari metrics registration
+
+This commits move the Hikari metrics registration to a BeanPostProcessor
+as the Hikari datasource cannot be modified once its configuration has
+been sealed (usually happens when `getConnection` is invoked on the
+pool).
+
+Closes gh-12129

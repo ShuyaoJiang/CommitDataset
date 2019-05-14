@@ -1,0 +1,22 @@
+extract self() method to avoid too many unchecked @SuppressWarnings
+
+Motivation:
+
+There are many @SuppressWarnings("unchecked") in the code for the same purpose that we want to do this return:
+
+@SuppressWarnings("unchecked")
+public B someMethod() {
+    ......
+    return (B) this;
+}
+Modification:
+
+Add a method self() and reuse in all these return lines:
+
+@SuppressWarnings("unchecked")
+    private B self() {
+        return (B) this;
+    }
+Result:
+
+Then only one @SuppressWarnings("unchecked") left in the code.

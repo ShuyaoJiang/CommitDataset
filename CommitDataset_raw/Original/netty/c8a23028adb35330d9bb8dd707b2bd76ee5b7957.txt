@@ -1,0 +1,19 @@
+fix UnixChannelUtil#isBufferCopyNeededForWrite
+fix not execute unit test in transport-native-unix-common-tests module
+
+Motivation:
+
+- Commit 047da11 introduced an bug for still copy byteBuf for composed of n(n <= IOV_MAX) NIO direct buffers
+- Commit 3c4dfed add UnixChannelUtilTest in transport-native-unix-common-tests module, but not execute in maven compile
+
+as issue #6825, #6870
+
+Modifications:
+
+- modified UnixChannelUtil#isBufferCopyNeededForWrite(ByteBuf), and UnixChannelUtilTest
+- move UnixChannelUtilTest into transport-native-unix-common module, and add packet scope method UnixChannelUtil#isBufferCopyNeededForWrite(ByteBuf, int)
+
+Result:
+
+- no copy byteBuf for composed of n(n <= IOV_MAX) NIO direct buffers
+- auto execute unit tests in UnixChannelUtilTest and it is easier to mock IOV_MAX

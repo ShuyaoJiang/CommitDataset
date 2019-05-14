@@ -1,0 +1,8 @@
+Enforce cluster UUIDs (#37775)
+
+This commit adds join validation around cluster UUIDs, preventing a node to join a cluster if it was
+previously part of another cluster. The commit introduces a new flag to the cluster state,
+clusterUUIDCommitted, which denotes whether the node has locked into a cluster with the given
+uuid. When a cluster is committed, this flag will turn to true, and subsequent cluster state updates
+will keep the information about committal. Note that coordinating-only nodes are still free to switch
+clusters at will (after restart), as they don't carry any persistent state.

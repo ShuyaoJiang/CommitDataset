@@ -1,0 +1,10 @@
+deprecate own ConcurrentSet for removal (#8340)
+
+Motivation:
+
+Java since version 6 has the wrapper for the ConcurrentHashMap that could be created via Collections.newSetFromMap(map). So no need to create own ConcurrentSet class. Also, since netty plans to switch to Java 8 soon there is another method for that - ConcurrentHashMap.newKeySet().
+For now, marking this class @deprecated would be enough, just to warn users who use netty's ConcurrentSet. After switching to Java 8 ConcurrentSet should be removed and replaced with ConcurrentHashMap.newKeySet().
+
+Modification:
+
+ConcurrentSet deprecated.

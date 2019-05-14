@@ -1,0 +1,11 @@
+To generate random hashable things, use Random instead of Object hash codes.
+
+Apparently Object hash codes are not particularly random on Gingerbread, under which we run our tests (though they're better by Marshmallow).
+Perhaps the "best" hash functions can deal with this, but we've seen a few hash functions that sometimes generate more collisions than our tests permit.
+
+This made their tests flaky.
+
+I couldn't identify any particular reason for the use of hash codes over Random.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=110171885

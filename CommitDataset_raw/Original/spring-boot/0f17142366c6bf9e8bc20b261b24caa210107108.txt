@@ -1,0 +1,14 @@
+Make GroovyWebConfiguration conditional on spring-webmvc's availability
+
+GroovyWebConfiguration creates a GroovyTemplateViewResolver which is
+a UrlBasedViewResolver sub-class. UrlBasedViewResolver is provided
+by spring-webmvc. Previously, if a user configured a web application
+but did not have spring-webmvc on the classpath, the application
+would fail to start with a NoClassDefFoundError for
+UrlBasedViewResolver.
+
+This commit makes GroovyWebConfiguration conditional on
+UrlBasedViewResolver being on the classpath so that it backs of in
+the absence of spring-webmvc.
+
+Fixes gh-1793

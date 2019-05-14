@@ -1,0 +1,10 @@
+Make DevTools DataSource auto-config back off without DataSourceProperties
+
+Previously, if DataSourceAutoConfiguration had been explicitly excluded,
+DevToolsDataSourceAutoConfiguration would cause refresh to fail due to
+a missing DataSourceProperties bean. This commit corrects the condition
+so that the auto-configuration is conditional on a DataSource bean and
+a DataSourceProperties bean rather than only being conditional on one or
+the other.
+
+Closes gh-5269

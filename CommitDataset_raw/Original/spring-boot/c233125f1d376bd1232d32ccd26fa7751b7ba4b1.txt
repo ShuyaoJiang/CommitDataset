@@ -1,0 +1,9 @@
+Don't render error view if response is committed
+
+This commit prevents the default error view from rendering itself if the
+response has been committed already. In this case, it is impossible to
+change the HTTP response status and write a proper response - trying to
+do so often results in a `IllegalStateException` since the response body
+has already been written to.
+
+Fixes gh-11580

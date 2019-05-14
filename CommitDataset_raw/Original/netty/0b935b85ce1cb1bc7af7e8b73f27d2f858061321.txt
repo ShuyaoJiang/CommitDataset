@@ -1,0 +1,14 @@
+Fix an incorrect use of ByteBuf.array() in Socks5CmdRequestDecoder
+
+Motivation:
+
+Socks5CmdRequestDecoder uses ByteBuf.array() naively assuming that the
+array's base offset is always 0, which is not the case.
+
+Modification:
+
+- Allocate a new byte array and copy the content there instead
+
+Result:
+
+Another bug fixed

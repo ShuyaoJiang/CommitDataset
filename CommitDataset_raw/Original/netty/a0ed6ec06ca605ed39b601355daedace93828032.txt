@@ -1,0 +1,13 @@
+Fix the error message in ReferenceCounted.release (#7921)
+
+Motivation:
+
+When a buffer is over-released, the current error message of `IllegalReferenceCountException` is `refCnt: XXX, increment: XXX`, which is confusing. The correct message should be `refCnt: XXX, decrement: XXX`.
+
+Modifications:
+
+Pass `-decrement` to create `IllegalReferenceCountException`.
+
+Result:
+
+The error message will be `refCnt: XXX, decrement: XXX` when a buffer is over-released.

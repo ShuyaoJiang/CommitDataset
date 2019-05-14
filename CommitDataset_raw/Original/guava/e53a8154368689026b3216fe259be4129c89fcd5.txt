@@ -1,0 +1,12 @@
+Make a couple of optimizations to UnsignedLongs.toString(x, radix):
+
+* If x > 0, use Long.toString. The JDK code is essentially the same for radices other than 10, and is much faster for 10.
+
+* If radix is a power of two, use shifting and masking instead of division and remainder.
+
+* If radix is even, simplify the initial division that extracts the last digit.
+
+See also https://github.com/google/guava/issues/2478.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=123940513

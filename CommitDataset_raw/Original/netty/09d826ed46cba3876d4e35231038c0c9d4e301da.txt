@@ -1,0 +1,11 @@
+Channel writable bytes feature
+
+Motivation:
+To avoid buffering too much it would be useful to get an estimate of how many bytes can be written to a Channel before it becomes unwritable.
+
+Modifications:
+- Update the Channel interface to support 2 new methods. 1 to give how many bytes before unwritable. 1 to give how many bytes before writable.
+- Update the AbstractChannel implementation to delegate to the ChannelOutboundBuffer.
+
+Result:
+The Channel interface supports 2 new methods which provide more visibility into writability.

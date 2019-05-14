@@ -1,0 +1,15 @@
+Gracefully disable Solr auto-configuration when Solr 5 is on classpath
+
+Previously, if Solr 5 was on the classpath, SolrAutoConfiguration
+would fail with a rather cryptic error message due to a change in the
+inheritance hierarchy of CloudSolrServer between Solr 4 and Solr 5.
+
+This commit updates SolrAutoConfiguration to be conditional on a
+class that exists in Solr 4 but was removed in Solr 5. This has the
+effect of switching off the auto-configuration when Solr 5 is on
+the classpath, allowing the auto-configuration report to be used to
+identify why the configuration was disabled. The documentation has
+also been updated to state that Spring Boot does not currently support
+Solr 5.0.
+
+Closes gh-2795

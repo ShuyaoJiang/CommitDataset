@@ -1,0 +1,16 @@
+Transform absolute links in ResourceTransformers
+
+Prior to this change, ResourceTransformers that transformed resources by
+updating the links to other resources, worked only if links were
+relative to the resource being transformed.
+For example, when the CssLinkResourceTransformer rewrote links within
+a "main.css" resource, only links such as "../css/other.css" were
+rewritten.
+
+Using relative links is a recommended approach, because it's totally
+independent from the application servlet path, context path, mappings...
+
+This change allows absolute links to be rewritten by those Transformers,
+provided those links are accurate and point to existing resources.
+
+Issue: SPR-12137

@@ -1,0 +1,18 @@
+[DOCS] Improve docs for "--pass" option in certutil (elastic/x-pack-elasticsearch#4352)
+
+The handling of the "--pass" option has complex rules due to the
+different requirements of different output formats, and the way
+joptsimple handles specs with optional arguments.
+
+A standard unix shell will parse
+    certutil --pass=""
+as being identical to
+    certutil --pass=
+and joptsimple treats that as being "no argument", i.e. the same as
+    certutil --pass
+
+The only way to pass a blank password is
+    certutil --pass ""
+(though this is shell dependent)
+
+Original commit: elastic/x-pack-elasticsearch@bc09d0f298a0d13fcfc2f05c5da02a7789996a19

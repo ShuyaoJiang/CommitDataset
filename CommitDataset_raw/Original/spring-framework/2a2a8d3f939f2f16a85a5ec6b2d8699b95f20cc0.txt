@@ -1,0 +1,12 @@
+Allow null values to be cached with `@CacheResult`
+
+Even though the JSR-107 spec forbids to store null values, our cache
+abstraction allows that behaviour with a special handled (and this is
+the default behaviour).
+
+While this was working fine with our own set of annotations, the
+JSR-107 interceptor counterpart was interpreting the spec sensu strictu.
+
+We now allow for that special case as well.
+
+Issue: SPR-13641

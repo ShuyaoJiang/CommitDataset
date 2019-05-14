@@ -1,0 +1,19 @@
+Add support for matrix variables
+
+A new @MatrixVariable annotation allows injecting matrix variables
+into @RequestMapping methods. The matrix variables may appear in any
+path segment and should be wrapped in a URI template for request
+mapping purposes to ensure request matching is not affected by the
+order or the presence/absence of such variables. The @MatrixVariable
+annotation has an optional "pathVar" attribute that can be used to
+refer to the URI template where a matrix variable is located.
+
+Previously, ";" (semicolon) delimited content was removed from the
+path used for request mapping purposes. To preserve backwards
+compatibility that continues to be the case (except for the MVC
+namespace and Java config) and may be changed by setting the
+"removeSemicolonContent" property of RequestMappingHandlerMapping to
+"false". Applications using the  MVC namespace and Java config do not
+need to do anything further to extract and use matrix variables.
+
+Issue: SPR-5499, SPR-7818

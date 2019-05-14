@@ -1,0 +1,18 @@
+Fix HTTP/2 dependency tree corruption
+
+Motivation:
+
+Chrome was randomly getting stuck loading the tiles examples.
+Investigation showed that the Netty flow controller thought it had
+nothing to send for the connection even though some streams has queued
+data and window available.
+
+Modifications:
+
+Fixed an accounting error where an implicitly created parent was not
+being added to the dependency tree, thus it and all of its children were
+orphaned from the connection's tree and would never have data written.
+
+Result:
+
+Fixes #6621

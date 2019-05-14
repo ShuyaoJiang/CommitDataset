@@ -1,0 +1,16 @@
+Auto-detect fork value in stop goal
+
+So far, one has to set the "fork" value to both the start and stop
+goals. Since they have the same name, sharing them in a global
+configuration element does the trick. However, the plugin also supports
+auto-detection of the fork value according to other parameters:
+typically if an agent or jvm arguments are set, forking will be
+automatically enabled. This is a problem since the stop goal is not aware
+of that.
+
+This commit transmits the value in a property attached to the
+`MavenProject`. That way, the stop goal can retrieve that value and
+apply the same defaults. This has the side effect that specifying the
+fork value isn't necessary anymore.
+
+Closes gh-6747

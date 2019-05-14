@@ -1,0 +1,10 @@
+Http2ConnectionHandler and Http2FrameListener cyclic dependency
+
+Motivation:
+It is often the case that implementations of Http2FrameListener will want to send responses when data is read. The Http2FrameListener needs access to the Http2ConnectionHandler (or the encoder contained within) to be able to send responses. However the Http2ConnectionHandler requires a Http2FrameListener instance to be passed in during construction time. This creates a cyclic dependency which can make it difficult to cleanly accomplish this relationship.
+
+Modifications:
+- Add Http2ConnectionDecoder.frameListener(..) method to set the frame listener. This will allow the listener to be set after construction.
+
+Result:
+Classes which inherit from Http2ConnectionHandler can more cleanly set the Http2FrameListener.

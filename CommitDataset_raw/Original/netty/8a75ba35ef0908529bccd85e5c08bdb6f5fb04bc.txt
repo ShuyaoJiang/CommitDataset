@@ -1,0 +1,12 @@
+[#2599] Not use sun.nio.ch.DirectBuffer as it not exists on android
+
+Motivation:
+
+During some refactoring we changed PlatformDependend0 to use sun.nio.ch.DirectBuffer for release direct buffers. This broke support for android as the class does not exist there and so an exception is thrown.
+
+Modification:
+
+Use again the fieldoffset to get access to Cleaner for release direct buffers.
+
+Result:
+Netty can be used on android again

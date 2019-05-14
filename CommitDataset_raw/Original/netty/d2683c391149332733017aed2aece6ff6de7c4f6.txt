@@ -1,0 +1,10 @@
+EPOLLRDHUP infinite loop
+
+Motivation:
+If  is enabled and a channel is half closed it is possible for the EPOLL event loop to get into an infinite loop by continuously being woken up on the EPOLLRDHUP event.
+
+Modifications:
+- Ensure that the EPOLLRDHUP event is unregistered for to prevent infinite loop.
+
+Result:
+1 less infinite loop.

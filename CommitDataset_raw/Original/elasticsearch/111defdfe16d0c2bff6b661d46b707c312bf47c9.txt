@@ -1,0 +1,9 @@
+Allow double aborts on bulk item requests
+
+In some cases a request can already be aborted and retried. This means
+the condition that aborting a request should only happen when an item
+has not been processed yet is too strict. This commit allows for a
+double abort. If we attempt to abort an operation that was previously
+processed but not aborted, we treat that as a hard failure.
+
+Relates #26434

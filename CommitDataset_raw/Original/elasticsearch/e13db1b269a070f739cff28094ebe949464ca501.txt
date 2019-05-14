@@ -1,0 +1,11 @@
+Validates updated settings on closed indices (#24487)
+
+We allow non-dynamic settings to be updated on closed indices but we don't
+check if the updated settings can be used to open/create the index.
+This can lead to unrecoverable state where the settings are updated but the index
+cannot be reopened since the settings are not valid. Trying to update the invalid settings
+is also not possible since the update will fail to validate the current settings.
+This change adds the validation of the updated settings for closed indices and make sure that the new settings
+do not prevent the reopen of the index.
+
+Fixes #23787

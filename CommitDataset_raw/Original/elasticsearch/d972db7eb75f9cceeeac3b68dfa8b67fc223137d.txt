@@ -1,0 +1,8 @@
+Build: Fix ability to ignore when no tests are run (#28930)
+
+Running any randomized testing task within Elasticsearch currently fails
+if a project has zero tests. This was supposed to be overrideable, but
+it was always set to 'fail', and the system property to override was
+passed down to the test runner, but never read there. This commit
+changes the value of the ifNoTests setting to randomized runner to be
+read from system properties and continue to default to 'fail'.

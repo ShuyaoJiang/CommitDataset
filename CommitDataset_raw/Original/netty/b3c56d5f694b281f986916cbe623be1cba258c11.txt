@@ -1,0 +1,10 @@
+DefaultPromise StackOverflowError protection
+
+Motivation:
+f2ed3e6ce8039d142e4c047fcc9cf09409105243 removed the previous mechanism for StackOverflowError because it didn't work in all cases (i.e. ImmediateExecutor). However if a chain of listeners which complete other promises is formed there is still a possibility of a StackOverflowError.
+
+Modifications:
+- Use a ThreadLocal to save any DefaultPromises which could not be notified due to the stack being too large. After the first DefaultPromise on the stack completes notification this ThreadLocal should be used to notify any DefaultPromises which have not yet been notified.
+
+Result:
+DefaultPromise has StackOverflowError protection that works with all EventExecutor types.

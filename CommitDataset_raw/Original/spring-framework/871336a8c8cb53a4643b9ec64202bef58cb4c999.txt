@@ -1,0 +1,11 @@
+Better support for @SessionAttributes in clustered environments
+
+A list of "known" session attributes (listed in @SessionAttributes)
+was gradually built as attributes get added to the model. In a
+failover scenario that knowledge is lost causing session attributes
+to be potentially re-initialized via @ModelAttribute methods.
+
+With this change @SessionAttributes listed by name are immediately
+added to he list of "known" session attributes thus this knowledge
+is not lost after a failover. Attributes listed by type however
+still must be discovered as they get added to the model.

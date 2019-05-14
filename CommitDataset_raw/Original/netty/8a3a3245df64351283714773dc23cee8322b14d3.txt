@@ -1,0 +1,14 @@
+Ensure Unsafe buffer implementations are used when sun.misc.Unsafe is present
+
+Motivation:
+
+When sun.misc.Unsafe is present we want to use *Unsafe*ByteBuf implementations. We missed to do so in PooledByteBufAllocator when the heapArena is null.
+
+Modifications:
+
+- Correctly use UnpooledUnsafeHeapByteBuf
+- Add unit tests
+
+Result:
+
+Use most optimal ByteBuf implementation.

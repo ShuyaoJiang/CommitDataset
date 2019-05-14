@@ -1,0 +1,17 @@
+Allow other delimiters in profile XML attribute
+
+Previously, only commas could delimit <beans profile="p1,p2"/>.  Now, as
+with <bean alias="..."/>, the profile attribute allows for delimiting
+by comma, space and/or semicolon.
+
+BeanDefinitionParserDelegate.MULTI_VALUE_ATTRIBUTE_DELIMITERS has been
+added as a constant to reflect the fact this set of delimiters is used
+in multiple locations throughout the framework.
+BDPD.BEAN_NAME_DELIMITERS now refers to the above and has been has been
+preserved but deprecated for backward compat (though use outside the
+framework is unlikely).
+
+Changes originally based on user comment at
+http://blog.springsource.com/2011/02/11/spring-framework-3-1-m1-released/comment-page-1/#comment-184455
+
+Issue: SPR-8033

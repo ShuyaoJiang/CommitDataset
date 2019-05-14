@@ -1,0 +1,13 @@
+Prevent unnecessary allocations in the `StringUtil#escapeCsv`
+
+Motivation:
+
+A `StringUtil#escapeCsv` creates new `StringBuilder` on each value even if the same string is returned in the end.
+
+Modifications:
+
+Create new `StringBuilder` only if it really needed. Otherwise, return the original string (or just trimmed substring).
+
+Result:
+
+Less GC load. Up to 4x faster work for not changed strings.

@@ -1,0 +1,8 @@
+SQL: Fix build on Java 10
+
+Due to a runtime classpath clash, featureAware task was failing on JVMs
+higher than 1.8 (since the ASM version from Painless was used instead
+which does not recognized Java 9 or 10 bytecode) causing the task to
+fail.
+This commit excludes the ASM dependency (since it's not used by SQL
+itself).

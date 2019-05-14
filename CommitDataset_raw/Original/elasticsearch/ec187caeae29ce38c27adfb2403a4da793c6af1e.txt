@@ -1,0 +1,11 @@
+[Test] Fix CRUDDocumentationIT (#28457)
+
+Similarly to other documentation tests in the high level client, the
+asynchronous operation like update, index or delete can make the test
+fail if it sneak in between the middle of another operation.
+
+This commit moves the async doc tests to be the last ones executed and
+adds assert busy loops to ensure that the asynchronous operations are
+correctly terminated.
+
+closes #28446

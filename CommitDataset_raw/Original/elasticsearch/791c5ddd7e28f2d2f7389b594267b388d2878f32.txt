@@ -1,0 +1,7 @@
+aggs: Add a method that is invoked before the `getLeafCollector(...)` of children aggregators is invoked.
+
+In the case of nested aggregator this allows it to push down buffered child docs down to children aggregator.
+Before this was done as part of the `NestedAggregator#getLeafCollector(...)`, but by then the children aggregators
+have already moved on to the next segment and this causes incorrect results to be produced.
+
+Closes #27912

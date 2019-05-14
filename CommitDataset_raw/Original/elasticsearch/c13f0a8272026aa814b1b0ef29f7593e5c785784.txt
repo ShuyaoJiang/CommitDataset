@@ -1,0 +1,15 @@
+Rename SQL's net-client project to shared-client (elastic/x-pack-elasticsearch#2756)
+
+The `net-client` project contained more then just the `net-client`.
+It contains stuff like `SuppressForbidden` and `Strings` and `IOUtil`
+and other things shared between the CLI and JDBC. It also does contain
+the http client. Anyway, it makes more sense to call it `shared-client`,
+I think.
+
+Alos updated the copywrite dates on the files that I touched because
+they are all 2017 files.
+
+Removed some uses of `String.EMPTY` because they don't buy us anything
+and require an extra import. `""` is just one less step.
+
+Original commit: elastic/x-pack-elasticsearch@465c6445c4a7c7800e3e4ce1353883bde4e3df5b

@@ -1,0 +1,21 @@
+Introduce ThreadDeathWatcher
+
+Motivation:
+
+PooledByteBufAllocator's thread local cache and
+ReferenceCountUtil.releaseLater() are in need of a way to run an
+arbitrary logic when a certain thread is terminated.
+
+Modifications:
+
+- Add ThreadDeathWatcher, which spawns a low-priority daemon thread
+  that watches a list of threads periodically (every second) and
+  invokes the specified tasks when the associated threads are not alive
+  anymore
+  - Start-stop logic based on CAS operation proposed by @tea-dragon
+- Add debug-level log messages to see if ThreadDeathWatcher works
+
+Result:
+
+- Fixes #2519 because we don't use GlobalEventExecutor anymore
+- Cleaner code

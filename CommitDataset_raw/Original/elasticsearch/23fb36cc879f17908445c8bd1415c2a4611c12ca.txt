@@ -1,0 +1,8 @@
+Adjust available and free bytes to be non-negative on huge FSes
+
+In #23093 we made a change so that total bytes for a filesystem would not be a
+negative value when the total bytes were > Long.MAX_VALUE.
+
+This fixes #24453 which had a related issue where `available` and `free` bytes
+could also be so large that they were negative. These will now return
+`Long.MAX_VALUE` for the bytes if the JDK returns a negative value.

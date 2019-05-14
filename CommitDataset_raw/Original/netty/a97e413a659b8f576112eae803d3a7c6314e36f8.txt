@@ -1,0 +1,20 @@
+Ensure server preference order in ALPN
+
+Motivation:
+With the current implementation the client protocol preference list
+takes precedence over the one of the server, since the select method
+will return the first item, in the client list, that matches any of the
+protocols supported by the server. This violates the recommendation of
+http://tools.ietf.org/html/rfc7301#section-3.2.
+
+It will also fail with the current implementation of Chrome, which
+sends back Extension application_layer_protocol_negotiation, protocols:
+[http/1.1, spdy/3.1, h2-14]
+
+Modifications:
+Changed the protocol negotiator to prefer server’s list. Added a test
+case that demonstrates the issue and that is fixed with the
+modifications of this commit.
+
+Result:
+Server’s preference list is used.

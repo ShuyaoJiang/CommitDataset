@@ -1,0 +1,19 @@
+Support @Configuration as meta-annotation in the TCF
+
+Spring Framework 4.0 introduced support for using test-related
+annotations as meta-annotations in the Spring TestContext Framework
+(TCF) in order to create custom composed annotations within a test
+suite; however, the detection of default @Configuration classes in test
+classes was not updated to search for @Configuration declared as a
+meta-annotation. Specifically, AnnotationConfigContextLoaderUtils
+invokes Class.isAnnotated() which only searches for annotations
+declared directly on the class in question.
+
+This commit addresses this issue by refactoring the
+isDefaultConfigurationClassCandidate() method in
+AnnotationConfigContextLoaderUtils so that it uses
+AnnotationUtils.findAnnotation() instead of Class.isAnnotated() for
+detecting the presence of the @Configuration annotation, either
+directly or as a meta-annotation.
+
+Issue: SPR-12659

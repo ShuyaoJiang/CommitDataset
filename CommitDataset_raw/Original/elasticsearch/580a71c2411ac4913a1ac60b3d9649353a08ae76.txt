@@ -1,0 +1,12 @@
+Don't close caches while there might still be in-flight requests. (#38958)
+
+Many of our index components use ref-counting so that in the event that a shard
+is closed while there are still ongoing requests, then the index reader and the
+store only effectively get closed when ongoing requests have finished. However
+we don't apply the same principle to the request and query caches, which might
+get closed while there are still in-flight requests.
+
+This commit adds ref-counting to `IndicesService` so that the caches and other
+components it maintains only get closed when all shards are effectively closed.
+
+Closes #37117

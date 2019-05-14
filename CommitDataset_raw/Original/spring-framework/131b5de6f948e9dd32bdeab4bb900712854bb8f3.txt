@@ -1,0 +1,20 @@
+Add reconnect logic to the relay's system session
+
+Upgrade to Reactor snapshot builds to take advantage of TcpClient's
+reconnect support that was added post-M1. Now, the system relay session
+will try every 5 seconds to establish a connection with the broker, both
+when first connecting and in the event of subsequently becoming
+disconnected.
+
+A more sophisticated reconnection policy, including back off and
+failover to different brokers, is possible with the Reactor API. We may
+want to enhance the relay's reconnection policy in the future.
+
+Typically, a broken connection is identified by the failure to forward
+a message to the broker. As things stand, the message id then discarded.
+Any further messages that are forwarded before the connection's been
+re-established are queued for forwarding once the CONNECTED frame's been
+received. We may want to consider also queueing the message that failed
+to send, however we would then need to consider the possibility of the
+message itself being what caused the broker to close the connection
+and resending it would simply cause the connection to be closed again.

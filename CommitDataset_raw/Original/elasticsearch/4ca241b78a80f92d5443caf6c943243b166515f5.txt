@@ -1,0 +1,25 @@
+Clean GatewayAllocator when stepping down as master (#38885)
+
+This fixes an issue where a messy master election might prevent shard allocation to properly
+proceed. I've encountered this in failing CI tests when we were bootstrapping multiple nodes. Tests
+would sometimes time out on an `ensureGreen` after an unclean master election. The reason for
+this is how the async shard information fetching works and how the clean-up logic in
+GatewayAllocator is integrated with the rest of the system. When a node becomes master, it will, as
+part of the first cluster state update where it becomes master, already try allocating shards (see
+`JoinTaskExecutor`, in particular the call to `reroute`). This process, which runs on the
+MasterService thread, will trigger async shard fetching. If the node is still processing an earlier
+election failure in ClusterApplierService (e.g. due to a messy election), that will possibly trigger the
+clean-up logic in GatewayAllocator after the shard fetching has been initiated by MasterService,
+thereby cancelling the fetching, which means that no subsequent reroute (allocation) is triggered
+after the shard fetching results return. This means that no shard allocation will happen unless the
+user triggers an explicit reroute command. The bug imo is that GatewayAllocator is called from both
+MasterService and ClusterApplierService threads, with no clear happens-before relation. The fix
+here makes it so that the clean-up logic is also run on the MasterService thread instead of the
+ClusterApplierService thread, reestablishing a clear happens-before relation. Note that testing this
+is tricky. With the newly added test, I can quite often reproduce this by adding `Thread.sleep(10);`
+in ClusterApplierService (to make sure it does not go too quickly) and adding `Thread.sleep(50);` in
+`TransportNodesListGatewayStartedShards` to make sure that shard state fetching does not go too
+quickly either.
+
+Note that older versions of Zen discovery are affected by this as well, but did not exhibit this issue
+as often because master elections are much slower there.

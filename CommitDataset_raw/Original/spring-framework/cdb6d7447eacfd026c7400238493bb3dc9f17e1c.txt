@@ -1,0 +1,16 @@
+Optimize memory usage in factory *Metadata classes
+
+InjectionMetadata and LifecycleMetadata can end up having mostly empty
+instance variables. In such cases memory usage can be improved a little
+bit.
+
+This patch addresses this in two ways:
+
+ - Creating a LinkedHashSet of the "right" size, the default capacity
+   is 16 but the exact capacity needed is known in advance.
+
+ - If the argument is empty then use Collections#emptySet which is a
+   constant so no additional memory is used. Since it's immutable there
+   is no need for the Collections#synchronizedSet wrapper.
+
+Issue: SPR-9264

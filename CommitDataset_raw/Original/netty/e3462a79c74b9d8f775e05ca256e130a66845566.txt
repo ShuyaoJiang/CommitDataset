@@ -1,0 +1,12 @@
+MessageAggregator Potential Leak
+
+Motivation:
+MessageAggregator has a potential to leak if a new message is received before the existing message has completed, and if a HttpContent is received but maxContentLength has been exceeded, or the content length is too long.
+
+Modifications:
+
+- Make the HttpObjectAggregator more robust to leaks
+- Reduce dependance on handlingOversizedMessage but instead rely on the more general check of a null currentMessage
+
+Result:
+More robust MessageAggregator with less chance of leaks

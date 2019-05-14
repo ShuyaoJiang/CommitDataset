@@ -1,0 +1,5 @@
+recovery from snapshot should fill gaps (#27850)
+
+When snapshotting the primary we capture a lucene commit at an arbitrary moment from a sequence number perspective. This means that it is possible that the commit misses operations and that there is a gap between the local checkpoint in the commit and the maximum sequence number.
+
+When we restore, this will create a primary that "misses" operations and currently will mean that the sequence number system is stuck (i.e., the local checkpoint will be stuck). To fix this we should fill in gaps when we restore, in a similar fashion to normal store recovery.

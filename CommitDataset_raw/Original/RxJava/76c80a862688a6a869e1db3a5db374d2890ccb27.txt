@@ -1,0 +1,7 @@
+Revert Behavior Change in TestSubscriber.awaitTerminalEvent
+
+Reverts change made at https://github.com/ReactiveX/RxJava/pull/2332/files#diff-fbed6a16f49022fd2b10f45fd6dd015bR230
+
+See discussion at https://github.com/ReactiveX/RxJava/issues/2549#issuecomment-72783738
+
+The Javadoc for this method clearly states that it will wait until completion or timeout. It does not say it will throw an exception on timeout, so we can not start throwing as that is a behavioral change.

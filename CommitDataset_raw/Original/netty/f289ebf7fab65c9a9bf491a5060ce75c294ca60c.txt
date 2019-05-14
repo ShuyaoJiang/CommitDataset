@@ -1,0 +1,15 @@
+Ensure alert is send when SSLException happens during calling SslHandler.unwrap(...)
+
+Motivation:
+
+When the SslHandler.unwrap(...) (which is called via decode(...)) method did produce an SSLException it was possible that the produced alert was not send to the remote peer. This could lead to staling connections if the remote peer did wait for such an alert and the connection was not closed.
+
+Modifications:
+
+- Ensure we try to flush any pending data when a SSLException is thrown during unwrapping.
+- Fix SniHandlerTest to correct test this
+- Add explicit new test in SslHandlerTest to verify behaviour with all SslProviders.
+
+Result:
+
+The alert is correctly send to the remote peer in all cases.

@@ -1,0 +1,15 @@
+Fix TestRestTemplate request factory management
+
+This commit fixes two issues in `TestRestTemplate`:
+
+* it improves the detection of the underlying request factory, using
+reflection to look inside the intercepting request factory if
+interceptors were configured
+
+* it avoids reusing the same request factory when creating a new
+`TestRestTemplate` with `withBasicAuth`. Sharing the same instance would
+result in sharing authentication state (HTTP cookies). Since the
+original request factory can't be detected consistently, a new one is
+selected automatically
+
+See gh-8697

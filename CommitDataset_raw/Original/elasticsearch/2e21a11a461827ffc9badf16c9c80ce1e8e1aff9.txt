@@ -1,0 +1,10 @@
+Short-circuit rebalancing when disabled (#40966)
+
+Today if `cluster.routing.rebalance.enable: none` then rebalancing is disabled,
+but we still execute `balanceByWeights()` and perform some rather expensive
+calculations before discovering that we cannot rebalance any shards. In a large
+cluster this can make cluster state updates occur rather slowly. With this
+change we check earlier whether rebalancing is globally disabled and, if so,
+avoid the rebalancing process entirely.
+
+Relates #40942 which was reverted because of egregiously faulty tests.

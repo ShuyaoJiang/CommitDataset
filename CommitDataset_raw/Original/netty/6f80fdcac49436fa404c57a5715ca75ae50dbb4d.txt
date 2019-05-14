@@ -1,0 +1,20 @@
+SPDY: add support for pushed resources in SpdyHttpDecoder
+
+Motivation:
+
+The SPDY/3.1 spec does not adequate describe how to push resources
+from the server. This was solidified in the HTTP/2 drafts by dividing
+the push into two frames, a PushPromise containing the request,
+followed by a Headers frame containing the response.
+
+Modifications:
+
+This commit modifies the SpdyHttpDecoder to support pushed resources
+that are divided into multiple frames. The decoder will accept a
+pushed SpdySynStreamFrame containing the request headers, followed by
+a SpdyHeadersFrame containing the response headers.
+
+Result:
+
+The SpdyHttpDecoder will create an HttpRequest object followed by an
+HttpResponse object when receiving pushed resources.

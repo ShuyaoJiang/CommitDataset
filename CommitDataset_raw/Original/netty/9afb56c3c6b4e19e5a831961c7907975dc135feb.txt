@@ -1,0 +1,10 @@
+[#2414] Fix IllegalStateException when try to configure AbstractEpollChannel once it is deregistered
+
+Motivation:
+AbstractEpollChannel.clearEpollIn() throws an IllegalStateException if a user tries to change the autoRead configuration for the Channel and the Channel is not registered on an EventLoop yet. This makes it for example impossible to set AUTO_READ to false via the ServerBootstrap as the configuration is modifed before the Channel is registered.
+
+Modification:
+Check if the Channel is registered and if not just modify the flags directly so they are respected once the Channel is registered
+
+Result:
+It is possible now to configure AUTO_READ via the ServerBootstrap

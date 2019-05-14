@@ -1,0 +1,9 @@
+Side-step pending deletes check (#30571)
+
+When we split/shrink an index we open several IndexWriter instances
+causeing file-deletes to be pending on windows. This subsequently fails
+when we open an IW to bootstrap the index history due to pending deletes.
+This change sidesteps the check since we know our history goes forward
+in terms of files and segments.
+
+Closes #30416

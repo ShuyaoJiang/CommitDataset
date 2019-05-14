@@ -1,0 +1,9 @@
+Ignore script fields when size is 0 (#31917)
+
+This change adds a check so that when parsing the search source, script fields are 
+ignored when the requested search result size is 0. This helps with e.g. clients like 
+Kibana that sends a list of script fields that they may need for convenience, but they
+don't require any hits. Before this change, user sometimes ran into confusing behaviour, 
+e.g. the script compilation limit to breaking although no hits were requested.
+
+Closes #31824

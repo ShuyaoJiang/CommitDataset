@@ -1,0 +1,16 @@
+SQL: Fix constant folding of datetime functions (elastic/x-pack-elasticsearch#3637)
+
+I went to write some docs for datetime functions that look like:
+```
+SELECT YEAR(CAST('2018-01-19T10:23:27Z' AS TIMESTAMP)) as year;
+
+  year
+2018
+
+```
+because I figured they'd be pretty easy to read because they didn't
+require any knowledge of a data set. But it turns out that constant
+folding doesn't work properly for date time functions because they don't
+actually apply the extraction.
+
+Original commit: elastic/x-pack-elasticsearch@aa9c66b2c747c34525c8340daf3c9613620de9cf

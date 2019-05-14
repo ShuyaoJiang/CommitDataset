@@ -1,0 +1,13 @@
+Remove -Xlint exclusions in all plugins. (#40721)
+
+The xlint exclusions of the following plugins were removed:
+* ingest-attachment.
+* mapper-size.
+* transport-nio. Removing the -try exclusion required some work, because
+  the NettyAdaptor implements AutoCloseable and NettyAdaptor#close() method
+  could throw an InterruptedException (ChannelFuture#await() and a generic
+  Exception is re-thrown, which maybe an ChannelFuture). The easiest way
+  around this to me seemed that NettyAdaptor should not implement AutoCloseable,
+  because it is not directly used in a try-with-resources statement.
+
+Relates to #40366

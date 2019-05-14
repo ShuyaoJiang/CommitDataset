@@ -1,0 +1,16 @@
+Replace custom reloadable Key/TrustManager (#30509)
+
+Make SSLContext reloadable
+
+This commit replaces all customKeyManagers and TrustManagers 
+(ReloadableKeyManager,ReloadableTrustManager, 
+EmptyKeyManager, EmptyTrustManager) with instances of 
+X509ExtendedKeyManager and X509ExtendedTrustManager. 
+This change was triggered by the effort to allow Elasticsearch to 
+run in a FIPS-140 environment. In JVMs running in FIPS approved 
+mode, only SunJSSE TrustManagers and KeyManagers can be used. 
+Reloadability is now ensured by a volatile instance of SSLContext
+in SSLContectHolder.
+SSLConfigurationReloaderTests use the reloadable SSLContext to
+initialize HTTP Clients and Servers and use these for testing the
+key material and trust relations.

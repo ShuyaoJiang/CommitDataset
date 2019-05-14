@@ -1,0 +1,17 @@
+Add full JdkSslContext public constructor, close #8384 (#8389)
+
+Motivation:
+
+JdkSslContext provides public constructors to wrap an existing `javax.net.ssl.SSLContext`.
+
+Sadly, some options combinations are not possible with the existing constructors, eg:
+*  protocols is not exposed and always forced to null, so default protocols are always enforced
+* startTls is not exposed and always forced to false
+
+Modification:
+
+Add full constructor that take protocols and startTls parameters.
+
+Result:
+
+It's possible to create a JdkSslContext from an existing SSLContext and still have control over protocols and startTls

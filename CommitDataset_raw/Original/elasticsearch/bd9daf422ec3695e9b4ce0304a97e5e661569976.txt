@@ -1,0 +1,17 @@
+Do not start snapshots that are deleted during initialization (#27931)
+
+When a new snapshot is created it is added to the cluster state as a
+snapshot-in-progress in INIT state, and the initialization is kicked
+off in a new runnable task by SnapshotService.beginSnapshot(). The
+initialization writes multiple files before updating the cluster state
+to change the snapshot-in-progress to STARTED state. This leaves a
+short window in which the snapshot could be deleted (let's say, because
+the snapshot is stuck in INIT or because it takes too much time to
+upload all the initialization files for all snapshotted indices). If
+the INIT snapshot is deleted, the snapshot-in-progress becomes ABORTED
+but once the initialization in SnapshotService.beginSnapshot() finished
+it is change back to STARTED state again.
+
+This commit avoids an ABORTED snapshot to be started if it has been
+deleted during initialization. It also adds a test that would have failed
+with the previous behavior, and changes few method names here and there.

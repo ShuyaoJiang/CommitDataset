@@ -1,0 +1,14 @@
+Handle `NoClassDefFoundError` in `OnBeanCondition`
+
+If `OnBeanCondition` is used with a `String` literal representing the
+fully qualified name of a bean and such type does not exist, it
+gracefully manages it as if it was not found. Prior to this commit, an
+exception would be thrown if any related class such as the parent
+class does not exist.
+
+This commit handles this additional case, catching `NoClassDefFoundError`
+the same way it did handle `ClassNotFoundException`. That way, a
+missing type will now be considered as absent if it's not on the
+classpath.
+
+Closes gh-7459

@@ -1,0 +1,14 @@
+Provide dependency management for Antlr 2
+
+Hibernate depends on antlr:antlr:2.7.7 (the latest version on Antlr 2)
+and fails with earlier 2.7.x versions due to a missing method. This
+can cause problems for Maven users if they also depend on something that
+pulls in an earlier version of Antlr, such as
+spring-boot-starter-velocity. Gradle users are unaffected as, when
+multiple versions of a dependency are found in the graph, Gradle will
+choose the latest version.
+
+This commit adds dependency management for antlr:antlr:2.7.7 to ensure
+that the latest, and Hibernate compatible, version of Antlr 2 is used.
+
+Closes gh-2814

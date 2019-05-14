@@ -1,0 +1,13 @@
+DefaultDnsCache should expire all records per hostname when one TTL is reached.
+
+Motivation:
+
+At the moment DefaultDnsCache will expire each record dependong on its own TTL. This may result in unexpected results for the end-user especially if the user for example uses IPV4_PREFERED but the cached AAAA records has a higher TTL then the A records and so the A record was removed. In this case we would only return the AAAA record and not even try to refresh.
+
+Modifications:
+
+Always expire all records for a hostname when one TTL is reached.
+
+Result:
+
+Fixes [#7329]

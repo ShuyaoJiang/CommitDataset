@@ -1,0 +1,9 @@
+Change ScriptException status to 400 (bad request) (#30861)
+
+Currently failures to compile a script usually lead to a ScriptException, which
+inherits the 500 INTERNAL_SERVER_ERROR from ElasticsearchException if it does
+not contain another root cause. Instead, this should be a 400 Bad Request error.
+This PR changes this more generally for script compilation errors by changing 
+ScriptException to return 400 (bad request) as status code.
+
+Closes #12315

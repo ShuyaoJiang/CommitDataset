@@ -1,0 +1,15 @@
+Avoid ClassCastExceptions in DevTools when using Spring HATEOAS
+
+Spring HATEOAS’s DummyInvocationUtils, that is used by
+ControllerLinkBuilder, uses Objenesis. By default, Objenesis caches
+the instances that it creates and uses the class name as the cache key.
+This is problematic when DevTools’ restart support is enabled as the
+class loader changes with each restart and ClassCastExceptions occur
+due to Objenesis returning a cached instance that was created by an
+old restart class loader.
+
+This commit works around the problem described above by auto-configuring
+a bean that uses reflection to replace DummyInvocationUtils’ default
+Objenesis instance with one that has caching disabled.
+
+Closes gh-3784

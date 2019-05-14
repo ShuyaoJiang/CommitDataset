@@ -1,0 +1,14 @@
+Only call ctx.fireChannelReadComplete() if ByteToMessageDecoder decoded at least one message.
+
+Motivation:
+
+Its wasteful and also confusing that channelReadComplete() is called even if there was no message forwarded to the next handler.
+
+Modifications:
+
+- Only call ctx.fireChannelReadComplete() if at least one message was decoded
+- Add unit test
+
+Result:
+
+Less confusing behavior. Fixes [#4312].

@@ -1,0 +1,39 @@
+Register nested @Configuration classes automatically
+
+The following is now possible:
+
+@Configuration
+public class AppConfig {
+    @Inject DataSource dataSource;
+
+    @Bean
+    public MyBean myBean() {
+        return new MyBean(dataSource);
+    }
+
+    @Configuration
+    static class DatabaseConfig {
+        @Bean
+        DataSource dataSource() {
+            return new EmbeddedDatabaseBuilder().build();
+        }
+    }
+}
+
+public static void main(String... args) {
+    AnnotationConfigApplicationContext ctx =
+        new AnnotationConfigApplicationContext(AppConfig.class);
+    ctx.getBean(MyBean.class);     // works
+    ctx.getBean(DataSource.class); // works
+}
+
+Notice that the @Import annotation was not used and that only AppConfig
+was registered against the context. By virtue of the fact that
+DatabaseConfig is a member class of AppConfig, it is automatically
+registered when AppConfig is registered. This avoids an awkward and
+redundant @Import annotation when the relationship is already implicitly
+clear.
+
+See @Configuration Javadoc for details.
+
+Issue: SPR-8186

@@ -1,0 +1,12 @@
+Re-write of path parsing pieces of RelaxedDataBinder
+
+Keys with explicit indexes (e.g. foo[bar]) were handled only
+partially before this change and in quite a crude way. The main
+new feature (or fixed bug if you prefer) is that map keys with
+periods were not identified correctly, so foo[bar.spam] came out
+wrong. By scanning the key for indexes "[]" first, we can split
+the logic better to make sure that all keys can be explicitly
+indexed if desired. I believe this would work in YAML as well
+but it definitely works for properties file inputs.
+
+Fixes gh-2387 (I believe)

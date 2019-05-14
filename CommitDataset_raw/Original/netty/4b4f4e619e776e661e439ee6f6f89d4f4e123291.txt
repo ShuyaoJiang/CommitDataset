@@ -1,0 +1,13 @@
+Fix integer overflow in HttpObjectEncoder when handling chunked encoding and FileRegion > Integer.MAX_VALUE
+
+Motivation:
+
+Due to integer overflow bug, writes of FileRegions to http server pipeline (eg like one from HttpStaticFileServer example) with length greater than Integer.MAX_VALUE are ignored in 1/2 of cases (ie no data gets sent to client)
+
+Modification:
+
+Correctly handle chunk sized > Integer.MAX_VALUE
+
+Result:
+
+Be able to use FileRegion > Integer.MAX_VALUE when using chunked encoding.

@@ -1,0 +1,19 @@
+Fix @RequestBody argument processing for null Content-Type
+
+Since the changes introduced in SPR-12778, some `@RequestBody` args
+would not be properly processed in some cases:
+
+* requests with an empty body
+* no Content-Type header defined
+
+This typically happens when GET requests are mapped on a handler dealing
+with POST requests and HTTP bodies.
+
+This change makes sure that the `RequestResponseBodyMethodProcessor` is
+only involved for requests that:
+
+* have a Content-Type defined
+* OR are HTTP requests eligible for an HTTP body (PUT, POST, PATCH)
+
+Issue: SPR-13176
+Fixes spring-projects/spring-boot#3313

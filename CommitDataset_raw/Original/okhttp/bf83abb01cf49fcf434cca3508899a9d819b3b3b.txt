@@ -1,0 +1,9 @@
+Forbid null for a handshake's TLS version.
+
+This value is almost always non-null. The only exception is when it was
+persisted by a version of OkHttp prior to 3.0.
+
+Rather than accepting null, and forcing clients to handle that value,
+I'm changing the API to reject null. I'm forcing a default of SSL_3_0
+for responses that we don't have a version for. I don't anticipate this
+causing problems in practice.

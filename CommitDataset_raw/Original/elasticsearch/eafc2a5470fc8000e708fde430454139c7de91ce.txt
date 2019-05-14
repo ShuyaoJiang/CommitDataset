@@ -1,0 +1,14 @@
+Don't count metadata fields towards index.mapping.total_fields.limit (#33386)
+
+The maximum number of fields per index is limited to 1000 by default by the
+`index.mapping.total_fields.limit` setting to prevent accidental mapping
+explosions due to too many fields. Currently all metadata fields also count
+towards this limit, which can lead to some confusion when using lower limits.
+It is not obvious for users that they cannot actually add as many fields as
+are specified by the limit in this case.
+
+This change takes the number of metadata fields out of the field count that we
+check against the field limit. It also adds tests that check that we can add
+fields up to the specified limit, but throw an exception for any additional field added.
+
+Closes #24096

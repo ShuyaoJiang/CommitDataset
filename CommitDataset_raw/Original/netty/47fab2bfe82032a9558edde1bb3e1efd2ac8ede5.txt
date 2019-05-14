@@ -1,0 +1,6 @@
+Directly use memory addresses for gathering writes to reduce gc pressure. Part of [#2239]
+
+This also does factor out some logic of ChannelOutboundBuffer. Mainly we not need nioBuffers() for many
+transports and also not need to copy from heap to direct buffer. So this functionality was moved to
+NioSocketChannelOutboundBuffer. Also introduce a EpollChannelOutboundBuffer which makes use of
+memory addresses for all the writes to reduce GC pressure

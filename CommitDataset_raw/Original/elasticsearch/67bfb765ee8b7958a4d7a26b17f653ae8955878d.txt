@@ -1,0 +1,10 @@
+Refactor Netty4Utils#maybeDie (#33021)
+
+In our Netty layer we have had to take extra precautions against Netty
+catching throwables which prevents them from reaching the uncaught
+exception handler. This code has taken on additional uses in NIO layer
+and now in the scheduler engine because there are other components in
+stack traces that could catch throwables and suppress them from reaching
+the uncaught exception handler. This commit is a simple cleanup of the
+iterative evolution of this code to refactor all uses into a single
+method in ExceptionsHelper.

@@ -1,0 +1,16 @@
+Add @GwtIncompatible annotations to top-level classes.
+Our previous policy was: "Look for a @GwtCompatible annotation. If it doesn't have one, then it's not GWT-compatible."
+
+But maybe it's better to be explicit in both cases?
+If nothing else, it might let us write tests that everything is annotated one way or the other, so we would have to actively annotate something wrongly to get the wrong outcome.
+But the real motivation is that this gets us a step closer to relying on the GWT compiler's @GwtIncompatible stripping internally (as we already do externally) instead of our own.
+
+Do note, though, that I haven't fully annotated everything:
+- I've skipped c.g.c.base.internal.Finalizer, where I'm not sure it's safe to depend on @GwtIncompatible or even to declare a special copy. (It has a test that forbids nested classes, but maybe I could put a copy in the internal package as a top-level class?)
+- I might have just missed stuff that was added since I first created the first version of this CL back in, like, 2013. (This is actually part of my motivation for submitting it: I keep having to do enormous syncs with annoying merges. I want to stop carrying these changes around in a client.)
+
+I've left all of the reasons (that is, the annotation values) blank.
+We decided that this was OK in API Review.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=110542265

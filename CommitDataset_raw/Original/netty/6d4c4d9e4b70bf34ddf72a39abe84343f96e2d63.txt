@@ -1,0 +1,13 @@
+Correct the return type of MultithreadEventLoopGroup.newChild()
+
+Motivation:
+
+MultithreadEventLoopGroup.newChild() does not override MultithreadEventExecutorGroup.newChild() which returns EventExecutor.  MultithreadEventLoopGroup.newChild() should never return an EventExecutor, so this is incorrect.
+
+Modifications:
+
+Override MultithreadEventLoopGroup.newChild() so that it returns EventLoop
+
+Result:
+
+Correct API

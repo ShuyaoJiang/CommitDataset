@@ -1,0 +1,12 @@
+Add support for advanced customization of Hibernate settings
+
+As HibernateJpaConfiguration is package private, it is no longer
+possible to extend the default Spring Boot configuration to apply
+advanced settings. The most notable use case for this is the
+customization of Hibernate properties using instance value vs. string
+value that can be set using the "spring.jpa.properties" namespace.
+
+This commit adds a HibernatePropertiesCustomizer callback interface that
+can be implemented to tune Hibernate properties at will.
+
+Closes gh-11211

@@ -1,0 +1,12 @@
+Add CompressibleBytesOutputStream for compression (#24927)
+
+This is a follow-up to #23941. Currently there are a number of
+complexities related to compression. The raw DeflaterOutputStream must
+be closed prior to sending bytes to ensure that EOS bytes are written.
+But the underlying ReleasableBytesStreamOutput cannot be closed until
+the bytes are sent to ensure that the bytes are not reused.
+
+Right now we have three different stream references hanging around in
+TCPTransport to handle this complexity. This commit introduces
+CompressibleBytesOutputStream to be one stream implemenation that will
+behave properly with or without compression enabled.

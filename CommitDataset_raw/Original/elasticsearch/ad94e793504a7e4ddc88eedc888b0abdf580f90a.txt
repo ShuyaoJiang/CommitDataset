@@ -1,0 +1,20 @@
+ingest: processor stats (#34724)
+
+This change introduces stats per processors. Total, time, failed,
+current are currently supported. All pipelines will now show all
+top level processors that belong to it. Failure processors are not
+displayed, however, the time taken to execute the failure chain is part
+of the stats for the top level processor.
+
+The processor name is the type of the processor, ordered as defined in
+the pipeline. If a tag for the processor is found, then the tag is
+appended to the type.
+
+Pipeline processors will have the pipeline name appended to the name of
+the name of the processors (before the tag if one exists). If more
+then one pipeline is used to process the document, then each pipeline
+will carry its own stats. The outer most pipeline will also include the
+inner most pipeline stats.
+
+Conditional processors will only included in the stats if the condition evaluates
+to true.

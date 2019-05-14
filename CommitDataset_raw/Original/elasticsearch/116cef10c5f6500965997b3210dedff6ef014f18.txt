@@ -1,0 +1,21 @@
+Docs: Pin two IDs in the rest client (#40785)
+
+We generate two pages with "funny" names:
+* _changing_the_client_8217_s_initialization_code.html
+* _changing_the_application_8217_s_code.html
+
+The leading `_` comes from us not specifying the name of the page. The
+`8217` comes about because of the single quote character. This is a
+funny name, but it is the name that we have so we shouldn't change it
+without putting in a redirect.
+
+We're looking at switching these docs from being built with the
+no-longer-maintained AsciiDoc project to being built with the
+actively-maintained Asciidoctor project. Asciidoctor Doesn't include the
+`8217`s in the generated ids. That is *better*, but we don't really want
+to change the pages. Ultimately we'd prefer none of our pages start with
+`_`, but that is a problem for a different time.
+
+Anyway, this pins the ids to their "funny" id so it won't change when we
+switch to Asciidoctor. We'll remove it later, when we have more fine
+control of our redirects.

@@ -1,0 +1,9 @@
+Ensure relocation occur in testRelocationWithConcurrentIndexing (#40801)
+
+If the relocation is throttled, the subsequent search request on the
+target node (i.e., with preference _only_nodes=target_node) will fail
+because some shards have not moved to that node yet. With this change,
+we will wait for the relocation happens by busily checking the routing
+table of the testing index on the target node.
+
+Closes #34950

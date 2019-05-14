@@ -1,0 +1,13 @@
+Prevent incorrect ImportAware metdata injection
+
+Update ImportRegistry to track all import registrations that occur
+against an importing class (rather than just keeping the last). In
+addition, prune imported classes from the registry when a configuration
+class is removed during the REGISTER_BEAN ConfigurationPhase.
+
+This update prevents incorrect metadata from being injected into an
+ImportAware class which is imported twice by different configurations
+classes (when one of the configuration classes will be ultimately skipped
+due to a @Condition).
+
+Issue: SPR-12128

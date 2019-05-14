@@ -1,0 +1,16 @@
+React to dependency management plugin rather than always applying it
+
+Previously, the Spring Boot plugin would automatically apply the
+dependency management plugin and import the spring-boot-dependencies
+bom. This made it very difficult to use Spring Boot's plugin without
+also using its dependency management. It also made it difficult to
+see where the dependency management was coming from.
+
+This commit updates the Spring Boot plugin so that it no longer
+automatically applies the dependency management plugin. Instead, the
+plugin now reacts to the dependency management plugin being applied
+by importing the spring-boot-dependencies bom. Users that do not
+wish to use Spring Boot's dependency management capabilities can now
+do so by not applying the dependency management plugin.
+
+Closes gh-3164

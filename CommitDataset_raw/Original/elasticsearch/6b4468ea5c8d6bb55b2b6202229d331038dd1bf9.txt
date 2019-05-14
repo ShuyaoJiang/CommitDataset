@@ -1,0 +1,11 @@
+Clear security caches on security index health changes (elastic/x-pack-elasticsearch#1957)
+
+This change clears the caches in the native realm and the composite roles store when there is a
+a change in the health of the security index that necessitates this. When the security index goes
+to a red state, the caches are left in tact as this allows for management operations to be
+performed for a limited amount of time. When the index transitions out of the red state or exists
+when it didn't exist before, the caches will be cleared so that we remove any stale values.
+
+relates elastic/x-pack-elasticsearch#1789
+
+Original commit: elastic/x-pack-elasticsearch@914959ea6bc5e350575e793e75e88498251932f7

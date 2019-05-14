@@ -1,0 +1,10 @@
+Add condition on MongoClientFactoryBean
+
+This commit makes sure that the condition that links a `MongoClient` to
+the embedded mongo server kicks in only if `MongoClientFactoryBean` is
+also on the classpath.
+
+Previously, only a condition on the mongo driver existed, leading to
+`ClassNotFoundException` if Spring Data MongoDB wasn't available.
+
+See gh-6203

@@ -1,0 +1,15 @@
+Allow to parse hosts file which is stored in a different encoding then the default system encoding. (#8211)
+
+Motivation:
+
+We should support to parse and read a hosts file which is stored in a different encoding then the system default. Beside this when we are on windows we should just try to parse it with multiple different charset before giving up as there is no real standard what charset to use.
+
+Modifications:
+
+- Add more method overloads to HostsFileParser that take a Charset.
+- Try to parse with multiple Charsets in DefaultHostsFileEntriesResolver when windows is used.
+- Add unit test
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8208.

@@ -1,0 +1,18 @@
+Engine.newChangesSnapshot may cause unneeded refreshes if called concurrently (#35169)
+
+When the engine is asked for historical operations, we check if some of the requested operations
+are not yet refreshed and if so we refresh before returning the operations. The refresh check is
+based on capturing the local checkpoint before each refresh and comparing that value to the one
+requested when `newChangesSnapshot` was called. If the requested range is above the captured
+local checkpoint we issue a refresh.
+
+This can currently cause unneeded extra refreshes if the method is called concurrently which may cause unwanted degradation in indexing performance. This is especially relevant for CCR where we always ask for a range below the global checkpoint. That range is guaranteed to be below the local
+checkpoint of the shard and one refresh is enough to serve multiple changes requests.
+
+This commit fixes this by introducing a dedicated mutex to make sure the test for whether a refresh
+is needed actually wait for concurrents for concurrent refreshes that were caused by another
+change refresh. 
+
+Note that this is not a big change in semantics as refreshes are serialized by lucene anyway. I also
+opted not to keep the synchronization to the changes snapshot request only even if in theory we
+can apply it to all refreshes, not matter where they come from. 

@@ -1,0 +1,15 @@
+[Zen2] Calculate optimal cluster configuration (#33924)
+
+We wish to commit a cluster state update after having received a response from
+more than half of the master-eligible nodes in the cluster.  This is optimal:
+requiring either more or fewer votes than half harms resilience. For instance
+if we have three master nodes then, we want to be able to commit a cluster
+state after receiving responses from any two nodes; requiring responses from
+all three is clearly not resilient to the failure of any node, and if we could
+commit an update after a response from just one node then that node would be
+required for every commit, which is also not resilient.
+
+However, this means we must adjust the configuration (the set of voting nodes
+in the cluster) whenever a master-eligible node joins or leaves. The
+calculation of the best configuration for the cluster is the job of the
+Reconfigurator, introduced here.

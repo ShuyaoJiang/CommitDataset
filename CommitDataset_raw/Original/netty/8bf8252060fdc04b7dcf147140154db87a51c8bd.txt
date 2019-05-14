@@ -1,0 +1,13 @@
+[#2615] Correctly update SelectionKey after selector rebuild
+
+Motivation:
+
+When a select rebuild was triggered the reference to the SelectionKey is not updated in AbstractNioChannel. This will cause a CancelledKeyException later.
+
+Modification:
+
+Correctly update SelectionKey reference after rebuild
+
+Result:
+
+Fix exception

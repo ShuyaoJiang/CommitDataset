@@ -1,0 +1,12 @@
+Support 'required properties' precondition
+
+Users may now call #setRequiredProperties(String...) against the
+Environment (via its ConfigurablePropertyResolver interface) in order
+to indicate which properties must be present.
+
+Environment#validateRequiredProperties() is invoked by
+AbstractApplicationContext during the refresh() lifecycle to perform
+the actual check and a MissingRequiredPropertiesException is thrown
+if the precondition is not satisfied.
+
+Issue: SPR-8323

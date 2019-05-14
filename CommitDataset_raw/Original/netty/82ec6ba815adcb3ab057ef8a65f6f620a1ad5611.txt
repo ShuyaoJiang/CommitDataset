@@ -1,0 +1,15 @@
+Correctly detect and handle CNAME loops. (#8691)
+
+Motivation:
+
+We do not correctly detect loops when follow CNAMEs and so may try to follow it without any success.
+
+Modifications:
+
+- Correctly detect CNAME loops
+- Do not cache CNAME entries which point to itself
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8687.

@@ -1,0 +1,6 @@
+Core: Remove ThreadPool from base TransportAction (#31492)
+
+Most transport actions don't need the node ThreadPool. This commit
+removes the ThreadPool as a super constructor parameter for
+TransportAction. The actions that do need the thread pool then have a
+member added to keep it from their own constructor.

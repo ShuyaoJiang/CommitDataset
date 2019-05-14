@@ -1,0 +1,13 @@
+Tolerate Gauges with non-Number values
+
+Spring Boot's metrics infrastructure requires a Metric to have a
+Number value. Coda Hale's ThreadStatesGaugeSet includes a Gauge
+named deadlocks with a Set<String> value (each entry in the set is a
+description, including stacktrace, of a deadlocked thread). There's
+no obvious way to coerce this to a Number, and there's already a
+deadlocks.count metric in the set.
+
+This commit updates MetricRegistryMetricReader to ignore the addition
+of any Gauge with a non-Number value.
+
+Fixes gh-2593

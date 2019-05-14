@@ -1,0 +1,9 @@
+Skip Rollover step if next index already exists (#35168)
+
+If the Rollover step would fail due to the next index in sequence
+already existing, just skip to the next step instead of going to the
+Error step.
+
+This prevents spurious `ResourceAlreadyExistsException`s created by
+simultaneous RolloverStep executions from causing ILM to error out
+unnecessarily.

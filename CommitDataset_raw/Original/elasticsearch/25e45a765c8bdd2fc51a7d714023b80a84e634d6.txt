@@ -1,0 +1,16 @@
+Fix byte size value equals/hash code test (#29643)
+
+This commit fixes two issues with the byte size value equals/hash code
+test.
+
+The first problem is due to a test failure when the original instance is
+zero bytes and we pick the mutation branch where we preserve the size
+but change the unit. The mutation should result in a different byte size
+value but changing the unit on zero bytes still leaves us with zero
+bytes.
+
+During the course of fixing this test I discovered another problem. When
+we need to randomize size, we could randomly select a size that would
+lead to an overflow of Long.MAX_VALUE.
+
+This commit fixes both of these issues.

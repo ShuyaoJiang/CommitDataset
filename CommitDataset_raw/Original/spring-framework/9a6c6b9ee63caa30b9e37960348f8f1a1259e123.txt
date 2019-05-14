@@ -1,0 +1,17 @@
+StringToEnumConverterFactory class from enum value
+
+Update StringToEnumConverterFactory to search superclasses until
+Class.isEnum() returns true. This allows conversion when the
+enum class is obtained from the enum value:
+
+    public static enum SubFoo {
+        BAR { String s() { return "x"; } };
+        abstract String s();
+    }
+
+    conversionService.convert("BAR", SubFoo.BAR.getClass())
+
+This fix is particularly important when converting collections of
+enums.
+
+Issue: SPR-10329

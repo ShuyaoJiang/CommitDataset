@@ -1,0 +1,8 @@
+Optimize @Configuration class parsing a little
+
+Update `ConfigurationClassParser` to skip `java.lang.annotation` types
+which were often processed but would never provide useful results. Also
+use a single shared immutable `SourceClass` instance to represent
+`Object.class`.
+
+Closes gh-22563

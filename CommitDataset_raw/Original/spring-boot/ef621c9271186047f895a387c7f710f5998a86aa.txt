@@ -1,0 +1,11 @@
+Protect against NoClassDefFoundError on WAS
+
+Update HibernateJpaAutoConfiguration to catch NoClassDefFoundError when
+setting the JTA_PLATFORM. The exception can occur when running on WAS
+since it ships with Hibernate 4.2 and SpringJtaPlatform extends from
+AbstractJtaPlatform which is not present.
+
+The exception is now ignored if a JDNI environment is available,
+otherwise it is re-thrown.
+
+Fixes gh-2218

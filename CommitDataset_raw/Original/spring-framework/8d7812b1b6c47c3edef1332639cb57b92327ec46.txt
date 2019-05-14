@@ -1,0 +1,10 @@
+Raise IAE when no converter matches return type
+
+Before this change the AbstractMessageConverterMethodProcessor always
+raised a 406 if it couldn't find a converter. However if the reason
+for not finding it is because there is simply no converter for the
+return value type (i.e. programming error) and doesn't have anything to
+do with content negotiation, then we should raise a 500 instead and
+make it easier to figure out what's wrong.
+
+Issue: SPR-13135

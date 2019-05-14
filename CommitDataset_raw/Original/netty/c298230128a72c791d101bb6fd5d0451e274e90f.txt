@@ -1,0 +1,50 @@
+RFC6265 cookies support
+
+Motivation:
+
+Currently Netty supports a weird implementation of RFC 2965.
+First, this RFC has been deprecated by RFC 6265 and nobody on the
+internet use this format.
+
+Then, there's a confusion between client side and server side encoding
+and decoding.
+
+Typically, clients should only send name=value pairs.
+
+This PR introduces RFC 6265 support, but keeps on supporting RFC 2965 in
+the sense that old unused fields are simply ignored, and Cookie fields
+won't be populated. Deprecated fields are comment, commentUrl, version,
+discard and ports.
+
+It also provides a mechanism for safe server-client-server roundtrip, as
+User-Agents are not supposed to interpret cookie values but return them
+as-is (e.g. if Set-Cookie contained a quoted value, it should be sent
+back in the Cookie header in quoted form too).
+
+Also, there are performance gains to be obtained by not allocating the
+attribute name Strings, as we only want to match them to find which POJO
+field to populate.
+
+Modifications:
+
+- New RFC6265ClientCookieEncoder/Decoder and
+  RFC6265ServerCookieEncoder/Decoder pairs that live alongside old
+  CookieEncoder/Decoder pair to not break backward compatibility.
+- New Cookie.rawValue field, used for lossless server-client-server
+  roundtrip.
+
+Result:
+
+RFC 6265 support.
+Clean separation of client and server side.
+
+Decoder performance gain:
+
+Benchmark                     Mode  Samples        Score        Error
+Units
+parseOldClientDecoder        thrpt       20  2070169,228 ± 105044,970
+ops/s
+parseRFC6265ClientDecoder    thrpt       20  2954015,476 ± 126670,633
+ops/s
+
+This commit closes #3221 and #1406.

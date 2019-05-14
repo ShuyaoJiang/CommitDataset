@@ -1,0 +1,20 @@
+Protect against a race condition when defining packages
+
+LaunchedURLClassLoader preemptively defines the package for any
+classes that it attempts to load so that the manifest from a nested
+jar is correctly associated with the package. This can lead to a race
+where the package is defined on two threads in parallel, resulting
+in an IllegalArgumentException being thrown.
+
+This problem was manifesting itself as a NoClassDefFoundError.
+If the initialization of a class failed due to the above-described
+IllegalArgumentException, subsequent attempts to use that class
+would then fail with a NoClassDefFoundError.
+
+This commit updates LaunchedURLClassLoader to catch the
+IllegalArgumentException and then double-check that the package has
+already been defined. This approach, including thrown an
+AssertionError when the second check fails, is modelled on the
+approach taken by URLClassLoader.
+
+Closes gh-5464

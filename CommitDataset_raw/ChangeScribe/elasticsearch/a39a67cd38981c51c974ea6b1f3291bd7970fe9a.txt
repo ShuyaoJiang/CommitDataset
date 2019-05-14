@@ -1,0 +1,109 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.xpack.core.ml.job.config:  
+
+1. Changes to package org.elasticsearch.xpack.core.ml.process.writer:  
+
+1.1. Rename type RecordWriter with RecordWriter
+
+2. Changes to package org.elasticsearch.xpack.ml:  
+
+2. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect:  
+
+2. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.output:  
+
+2.1. Add a class for autodetect state processor. It allows to:
+
+	Instantiate autodetect state processor  with client;
+	Handle process;
+	Split bytes reference;
+	Persist bytes reference;
+	Find next zero byte
+
+2.2. Add a class for autodetect state processor tests. It allows to:
+
+	Initialize autodetect state processor tests;
+	Verify no more client interactions;
+	Handle test state read;
+	Handle test state read given consecutive zero bytes;
+	Handle test state read given consecutive spaces followed by zero byte;
+	Test large state read
+
+3. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.writer:  
+
+3. Changes to package org.elasticsearch.xpack.ml.job.process.normalizer:  
+
+3. Changes to package org.elasticsearch.xpack.ml.job.process.normalizer.output:  
+
+3. Changes to package org.elasticsearch.xpack.ml.process:  
+
+3.1. Add a class for abstract native process. It allows to:
+
+	Instantiate abstract native process  with log stream, process in stream, process out stream, process restore stream, files to delete list, on process crash consumer and on process crash consumer;
+	Get name;
+	Start executor service;
+	Check if abstract native process is ready;
+	Set ready;
+	Write record;
+	Handle flush stream;
+	Close abstract native process;
+	Kill abstract native process;
+	Delete associated files;
+	Get process start time;
+	Check if abstract native process is process alive;
+	Check if abstract native process is process alive after waiting;
+	Read error;
+	Get job id;
+	Process out stream;
+	Get process restore stream;
+	Get number of fields;
+	Record writer;
+	Check if abstract native process is process killed
+
+3.2. Rename type NativeController with NativeController
+
+3.3. Rename type NativeControllerHolder with NativeControllerHolder
+
+3.4. Rename type NativeControllerTests with NativeControllerTests
+
+3.5. Add an interface declaration  for native process. It allows to:
+
+	Check if native process is ready;
+	Write record;
+	Persist state;
+	Handle flush stream;
+	Kill native process;
+	Get process start time;
+	Check if native process is process alive;
+	Check if native process is process alive after waiting;
+	Read error
+
+3.6. Rename type NativeStorageProvider with NativeStorageProvider
+
+3.7. Rename type NativeStorageProviderTests with NativeStorageProviderTests
+
+3.8. Rename type ProcessPipes with ProcessPipes
+
+3.9. Rename type ProcessPipesTests with ProcessPipesTests
+
+3.10. Add an interface declaration  for state processor. It allows to:
+
+	Handle process
+
+4. Changes to package org.elasticsearch.xpack.ml.process.logging:  
+
+4.1. Rename type CppLogMessage with CppLogMessage
+
+4.2. Rename type CppLogMessageHandlerTests with CppLogMessageHandlerTests
+
+4.3. Rename type CppLogMessageTests with CppLogMessageTests
+
+5. Changes to package org.elasticsearch.xpack.ml.process.writer:  
+
+5.1. Rename type LengthEncodedWriter with LengthEncodedWriter
+
+5.2. Rename type LengthEncodedWriterTests with LengthEncodedWriterTests
+

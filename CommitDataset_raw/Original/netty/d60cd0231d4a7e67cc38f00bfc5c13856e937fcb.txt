@@ -1,0 +1,28 @@
+HttpProxyHandler generates invalid CONNECT url and Host header when address is resolved
+
+Motivation:
+
+HttpProxyHandler uses `NetUtil#toSocketAddressString` to compute
+CONNECT url and Host header.
+
+The url is correct when the address is unresolved, as
+`NetUtil#toSocketAddressString` will then use
+`getHoststring`/`getHostname`. If the address is already resolved, the
+url will be based on the IP instead of the hostname.
+
+There’s an additional minor issue with the Host header: default port
+443 should be omitted.
+
+Modifications:
+
+* Introduce NetUtil#getHostname
+* Introduce HttpUtil#formatHostnameForHttp to format an
+InetSocketAddress to
+HTTP format
+* Change url computation to favor hostname instead of IP
+* Introduce HttpProxyHandler ignoreDefaultPortsInConnectHostHeader
+parameter to ignore 80 and 443 ports in Host header
+
+Result:
+
+HttpProxyHandler performs properly when connecting to a resolved address

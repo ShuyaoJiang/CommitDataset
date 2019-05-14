@@ -1,0 +1,15 @@
+Let OkResponseHandler extend SimpleChannelInboundHandler
+
+Motivation:
+
+OkResponseHandler is the last handler in the pipeline of the HTTP CORS
+example.  It is responsible for releasing all messages it handled.
+
+Modification:
+
+Extend SimpleChannelInboundHandler instead of
+ChannelInboundHandlerAdapter
+
+Result:
+
+Fixed a leak

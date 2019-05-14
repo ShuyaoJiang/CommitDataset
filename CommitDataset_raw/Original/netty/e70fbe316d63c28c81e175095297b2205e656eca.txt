@@ -1,0 +1,18 @@
+Fire exceptionCaught before exception-caused close for WebSockets.
+
+Motivation:
+
+WebSocket decoding throws exceptions on failure that should cause the
+pipline to close.  These are currently ignored in the
+`WebSocketProtocolHandler` and `WebSocketServerProtocolHandler`.  In
+particular, this means that messages exceding the max message size will
+cause the channel to close with no reported failure.
+
+Modifications:
+
+Re-fire the event just before closing the socket to allow it to be
+handled appropriately.
+
+Result:
+
+Closes [#3063].

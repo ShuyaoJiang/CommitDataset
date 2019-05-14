@@ -1,0 +1,31 @@
+Use byte[]/short[]/int[] for hashtable depending on size
+
+The hashtable is stored as an Object and cast to the correct type using
+instanceof checks.
+
+Memory:
+byte[] sizes (2-89): 12-41% better (average: 32% better)
+short[] sizes (90-22937): 20-29% better (average: 24% better)
+int[] sizes (22938+): unchanged
+
+Runtime on a Pixel 2:
+createAndPopulate: 9% better to 6% worse (average: 4.3% better)
+get: 1% better to 8% worse (average: 3.5% worse)
+iterateWithKeySetAndGet: 9% better to 13% worse (average: 3.2% worse)
+iterateWithEntrySet: unchanged (doesn't use hashtable)
+
+Effects on ImmutableMapProGuard:
+59105 bytes => 60369 bytes (+2.1%)
+21 classes => 21 classes (0%)
+200 methods => 201 methods (+0.5%)
+
+Effects on ImmutableBiMapProGuard:
+68893 bytes => 70235 bytes (+1.9%)
+25 classes => 25 classes (0%)
+232 methods => 233 methods (+0.4%)
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=239644823

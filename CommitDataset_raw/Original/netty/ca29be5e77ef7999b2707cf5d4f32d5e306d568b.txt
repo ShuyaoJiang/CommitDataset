@@ -1,0 +1,26 @@
+Allow ChunkedInput to provide the progress of its transfer
+
+Related issue: #2741 and #2151
+
+Motivation:
+
+There is no way for ChunkedWriteHandler to know the progress of the
+transfer of a ChannelInput. Therefore, ChannelProgressiveFutureListener
+cannot get exact information about the progress of the transfer.
+
+If you add a few methods that optionally provides the transfer progress
+to ChannelInput, it becomes possible for ChunkedWriteHandler to notify
+ChannelProgressiveFutureListeners.
+
+If the input has no definite length, we can still use the progress so
+far, and consider the length of the input as 'undefined'.
+
+Modifications:
+
+- Add ChunkedInput.progress() and ChunkedInput.length()
+- Modify ChunkedWriteHandler to use progress() and length() to notify
+  the transfer progress
+
+Result:
+
+ChunkedWriteHandler now notifies ChannelProgressiveFutureListener.

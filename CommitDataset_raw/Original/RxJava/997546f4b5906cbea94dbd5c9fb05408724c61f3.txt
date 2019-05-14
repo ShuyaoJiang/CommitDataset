@@ -1,0 +1,10 @@
+Fix behavior of BlockingObservable.last
+
+It now throws an IllegalArgumentException instead of returning null if no elements are emitted.
+
+This is based on feedback from @headinthebox confirming this expected behavior:
+
+var xs = Observable.Range(1,0);                       		// empty sequence
+int x = xs.Last().Dump();                             		// throws “sequence contains no elements”       RxJava => BlockingObservable.last()
+IObservable<int> ys = xs.TakeLast(1).Dump();          // OnCompleted()                                                RxJava => Observable.takeLast(1)
+IObservable<int> zs = xs.LastAsync().Dump();          // OnError(“sequence contains no elements”)    RxJava => Observable.last()

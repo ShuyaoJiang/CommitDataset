@@ -1,0 +1,46 @@
+Redesign of MapMakerInternalMap with the motivation of saving a lot of memory by not wastefully having stuff that's unneeded. The algorithm (the j.u.concurrent.ConcurrentHashMap-inspired segments of hash tables) is untouched.
+
+Memory usage of MapMakerInternalMap is important because it's used under the covers by Interners#newWeakInterner.
+
+The problems the new design fixes
+---------------------------------
+
+There are four relevant cases of MapMakerInternalMap, one for each combination of weak/strong keys and weak/strong values. The old code implemented all of these exactly the same, from a memory layout perspective. For example, in the worst-case of strong-keys-strong-values, there's the following waste (all numbers assume 64-bit jvm with Xmx < 32G), in decreasing order of severity:
+
+* per-entry: 16 bytes for the StrongReference object
+* per-segment: 32 bytes for the ReferenceQueue object for the values, 32 bytes for the ReferenceQueue for keys, 8 bytes for the storing the references to both of those).
+* per-map: 8 bytes for storing the references to keyStrength and valueStrength, 4 bytes for storing the reference to valueEquivalence (just comes from valueStrength).
+
+For maps with strong values, there's also the minor issue that a new StrongReference wrapper is created whenever the value of a key is changed. This puts unnecessary, albeit probably not that much, pressure on the GC.
+
+The approach
+------------
+
+We want to get rid of the above waste but we don't want to sacrifice any type safetey. Here's how we do this:
+
+* We introduce four different entry implementations and four corresponding Segment implementations (for each key & value strength pair). These implementations have optimal memory usage wrt the waste discussed above.
+* We introduce a base InternalEntry interface, parameterized on its own implementation (i.e. CRTP - https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern). This is so the Segment implementation can be generic in the actual Entry type and still be type safe).
+* We introduce a base Segment class, parameterized on its own subclass (CRTP) as well as on the type of the InternalEntry implementation. The latter is so that the Segment implementations know how to safely efficiently handle the corresponding InternalEntry implementations.
+* And, tying it all together, we introduce a InternalEntryHelper class, parameterized on the InternalEntry implementation type. Specific InternalEntryHelper implementations know how to safely and efficiently deal with the corresponding InternalEntry and Segment implementations.
+* Each of the four InternalEntryHelper implementation classes are singletons (they have no state!). The MapMakerInternalMap has a reference to the specific InternalEntryHelper implementation it needs - this is the _only_ overhead of our approach.
+
+The existing MapMakerInternalMap tests unfortunately poke around into the internals in a hacky and unsafe manner. To continue to support this, we have XXXForTesting methods that do casts and call into the type-safe methods alluded to above.
+
+Results
+-------
+
+Guava's memory benchmark
+tl;dr:
+StrongKeysStrongVals (size = 1M) -> 28.3% memory savings
+WeakKeysStrongVals (size = 1M) -> 24.8% memory savings
+StrongKeysWeakVals (size = any) -> 48 bytes per-map memory savings
+WeakKeysWeakVals (size = any) -> no change
+
+Future Work
+-----------
+
+The same design optimization could be applied to LocalCache.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=128986019

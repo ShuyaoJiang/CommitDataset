@@ -1,0 +1,13 @@
+Set default CONTENT_TYPE when it is absent in multipart request body
+
+Motivation:
+
+I am use netty as a http server, it fail to decode some POST request when the request absent Content-Type in the multipart/form-data body.
+
+Modifications:
+
+Set content_type with default application/octet-stream to parse the uploaded file data when the Content-Type is absent in multipart request body
+
+Result:
+
+Can decode the http request as normal.

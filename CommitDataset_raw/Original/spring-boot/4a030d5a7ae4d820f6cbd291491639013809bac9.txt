@@ -1,0 +1,15 @@
+Drop support for auto-configuring an embedded Elasticsearch node
+
+Elastic have announced [1] that embedded Elasticsearch is no longer
+supported. This commit brings us into line with that announcement by
+removing the auto-configuration that would create an Elasticsearch
+Node and NodeClient.
+
+To use the Elasticsearch auto-configuration, a user must now provide
+the address of one or more cluster nodes
+(via the spring.elastisearch.cluster-nodes property) which will then
+be used to create a TransportClient.
+
+See gh-9374
+
+[1] https://www.elastic.co/blog/elasticsearch-the-server

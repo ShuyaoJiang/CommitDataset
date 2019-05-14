@@ -1,0 +1,17 @@
+Do not call inbound event methods directly
+
+- Fixes #831
+
+This commit ensures the following events are never triggered as a direct
+invocation if they are triggered via ChannelPipeline.fire*():
+
+- channelInactive
+- channelUnregistered
+- exceptionCaught
+
+This commit also fixes the following issues surfaced by this fix:
+
+- Embedded channel implementations run scheduled tasks too early
+- SpdySessionHandlerTest tries to generate inbound data even after the
+  channel is closed.
+- AioSocketChannel enters into an infinite loop on I/O error.

@@ -1,0 +1,11 @@
+Tighten which classes can exit
+
+Today a SecureSM security manager allows defining a list of packages
+that can exit the VM. However, today there are no restrictions on
+defining a package inside another JAR. This commit strengthens the
+ability to prevent exit by allowing construction of SecureSM to be done
+with a list of regular expressions (instead of a list of prefix names)
+that classes will be tested against. With this, a security manager can
+be installed that permits only exiting from an exact list of classes.
+
+Relates #5

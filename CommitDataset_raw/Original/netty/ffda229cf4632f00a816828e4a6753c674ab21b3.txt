@@ -1,0 +1,21 @@
+Send a websocket close frame with status code when receiving invalid frames
+
+Motivation:
+
+According to the websocket specification peers may send a close frame when
+they detect a protocol violation (with status code 1002). The current
+implementation simply closes the connection. This update should add this
+functionality. The functionality is optional - but it might help other
+implementations with debugging when they receive such a frame.
+
+Modification:
+
+When a protocol violation in the decoder is detected and a close was not
+already initiated by the remote peer a close frame is
+sent.
+
+Result:
+
+Remotes which will send an invalid frame will now get a close frame that
+indicates the protocol violation instead of only seeing a closed
+connection.

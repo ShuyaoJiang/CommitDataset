@@ -1,0 +1,18 @@
+Allow InputStreams for key/trust managers in SslContextBuilder
+
+Motivation:
+
+Sometimes it's easier to get keys/certificates as `InputStream`s than it is to
+get an actual `File`. This is especially true when operating in a container
+environment and `getResourceAsInputStream` is the best way to load resources
+packaged with an application.
+
+Modifications:
+
+- Add read-from-`InputStream` methods to `PemReader`
+- Allow `SslContext` to get keys/certificates from `InputStreams`
+- Add `InputStream`-based setters for key/trust managers to `SslContextBuilder`
+
+Result:
+
+Callers may pass an `InputStream` instead of a `File` to `SslContextBuilder`.

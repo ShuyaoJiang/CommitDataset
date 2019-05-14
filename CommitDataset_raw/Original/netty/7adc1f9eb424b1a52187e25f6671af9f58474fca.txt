@@ -1,0 +1,11 @@
+STOMP Headers Name Comparator
+
+Motivation:
+The HashingStrategy for DefaultStompHeaders was using the java .equals() method which would fail to compare String, AsciiString, and other CharSequence objects as equal.
+
+Modification:
+- Use AsciiString.CASE_SENSITIVE_HASHER for DefaultStompHeaders
+
+Result:
+DefaultStompHeaders work with all CharSequence objects.
+Fixes https://github.com/netty/netty/issues/4247

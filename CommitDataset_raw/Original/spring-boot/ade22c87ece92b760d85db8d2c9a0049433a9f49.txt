@@ -1,0 +1,14 @@
+Update WarLauncher to remove the root of the war from the classpath
+
+Previously, WarLauncher included its root on the classpath. It also used
+a filtered version of its root archive to hide both the WEB-INF and
+META-INF directories. This meant that files in WEB-INF and META-INF
+could be found by the classloader (as they were on the classpath) but
+could not be read as the filtered archive was hiding them.
+
+This commit updates WarLauncher to remove the root of the war file from
+the classpath. It also removes the filtering of the archive, thereby
+allowing files in META-INF and WEB-INF to be accessed via the
+ServletContext.
+
+Closes gh-1792

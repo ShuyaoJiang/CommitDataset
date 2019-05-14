@@ -1,0 +1,12 @@
+[ML] Update ML results mappings on process start (#37706)
+
+This change moves the update to the results index mappings
+from the open job action to the code that starts the
+autodetect process.
+
+When a rolling upgrade is performed we need to update the
+mappings for already-open jobs that are reassigned from an
+old version node to a new version node, but the open job
+action is not called in this case.
+
+Closes #37607

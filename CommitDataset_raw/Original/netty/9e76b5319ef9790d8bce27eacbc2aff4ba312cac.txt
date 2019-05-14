@@ -1,0 +1,13 @@
+Fix testResolveIp to make it work in some special environment
+
+Motivation:
+
+As "getHostName" may do a reverse name lookup and return a host name based on the system configured name lookup service, testResolveIp may fail in some special environment. See #4720
+
+Modifications:
+
+Use getHostAddress instead of getHostName
+
+Result:
+
+testResolveIp works in all environments

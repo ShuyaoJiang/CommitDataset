@@ -1,0 +1,8 @@
+Allow affix settings to specify dependencies (#27161)
+
+We use affix settings to group settings / values under a certain namespace.
+In some cases like login information for instance a setting is only valid if
+one or more other settings are present. For instance `x.test.user` is only valid
+if there is an `x.test.passwd` present and vice versa. This change allows to specify
+such a dependency to prevent settings updates that leave settings in an inconsistent
+state.

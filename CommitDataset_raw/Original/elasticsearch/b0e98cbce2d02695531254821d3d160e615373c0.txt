@@ -1,0 +1,8 @@
+Pass the host name on as `server_name` if proxy mode is on (#34559)
+
+In remote cluster setup if we see a configured proxy we should set
+the seed nodes host name as the `server_name` to trigger SNI based
+routing even for seed nodes. Since remote cluster connections are
+plain TCP connections we have to set the host manually since the other
+side can't take it from the request URL like in the HTTP case.
+This also adds some more informative logging to remote cluster connection.

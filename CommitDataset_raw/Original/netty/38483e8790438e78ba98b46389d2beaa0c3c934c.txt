@@ -1,0 +1,14 @@
+Correctly manage buffer life-cycle in http2 multiplex example
+
+Motivation:
+
+We not correctly managed the life-cycle of the buffer / frames in our http2 multiplex example which lead to a memory leak.
+
+Modifications:
+
+- Correctly release frame if not echo'ed back the remote peer.
+- Not retain content before echo back to remote peer.
+
+Result:
+
+No more leak in the example, fixes [#6636].

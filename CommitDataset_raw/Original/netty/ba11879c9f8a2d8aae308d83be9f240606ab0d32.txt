@@ -1,0 +1,10 @@
+HTTP/2 codec heap buffer usage
+
+Motivation:
+The HTTP/2 codec has a few static buffers sent over the network which are allocated on the heap. This results in a copy operation when the buffer is sent out on the network.
+
+Modifications:
+- Ensure these static buffers are allocated using direct memory.
+
+Result:
+No copy operation necessary when writing static buffers to network.

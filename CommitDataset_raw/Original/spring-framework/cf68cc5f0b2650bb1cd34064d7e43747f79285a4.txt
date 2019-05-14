@@ -1,0 +1,16 @@
+Eliminate AJ @Async warning in test case
+
+Prior to this commit, ClassWithAsyncAnnotation#return5 forced an
+unsuppressable warning in Eclipse, making it virtually impossible to
+get to a zero-warnings state in the codebase.
+
+The 'solution' here is simply to comment out the method and it's
+associated test case. The 'declare warnings' functionality around
+@Async is well-understood and has long been stable.
+
+Also, the entire AnnotationAsyncExecutionAspectTests class has been
+added to TestGroup#PERFORMANCE (SPR-9984), as opposed to just
+asyncMethodGetsRoutedAsynchronously as it was previously, the
+rationale being that all tests are actually timing dependent.
+
+Issue: SPR-9431, SPR-9984

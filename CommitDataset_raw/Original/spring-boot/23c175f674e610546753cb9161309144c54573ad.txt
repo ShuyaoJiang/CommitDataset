@@ -1,0 +1,14 @@
+Polish metadata annotation processor’s incremental build support
+
+The main change in this commit is to introduce a new BuildHandler
+abstraction. A BuildHandler is responsible for producing the metadata
+for a build. Two implementations are provided; one for standard builds
+and one for incremental builds. This change means that the annotation
+processor is no longer concerned with the two different build types
+and can use the same logic in each case.
+
+The code for reading and writing metadata files has also been moved
+out into a separate class, MetadataStore, to allow it to be easily
+utilised from multiple places.
+
+Closes gh-2313

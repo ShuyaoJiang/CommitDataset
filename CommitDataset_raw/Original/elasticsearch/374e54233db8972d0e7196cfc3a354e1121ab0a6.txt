@@ -1,0 +1,8 @@
+[TEST] Ensure a well-defined cleanup order for YAML tests (elastic/x-pack-elasticsearch#1585)
+
+Previously there were two @After methods in the XPackRestIT class, and
+there is no guarantee about the order in which these run.  This commit
+replaces these with a single @After method that calls the cleanup methods
+in a well-defined order.
+
+Original commit: elastic/x-pack-elasticsearch@d3ab366591534a3190e774b2fd30d9988ef12418

@@ -1,0 +1,11 @@
+Fixes DocStats to not report index size < -1 (#27863)
+
+Previously to this change when DocStats are added together (for example when adding the index size of all primary shards for an index)  we naively added the `totalSizeInBytes` together. This worked most of the time but not when the index size on one or multiple shards was reported to be `-1` (no value).
+
+This change improves the logic by considering if the current value or the value to be added is `-1`:
+* If the current and new value are both `-1` the value remains at `-1`
+* If the current value is `-1` and the new value is not `-1`, current value is changed to be equal to the new value
+* If the current value is not `-1` and the new value is `-1` the new value is ignored and the current value is not changed
+* If both the current and new values are not `-1` the current value is changed to be equal to the sum of the current and new values.
+
+The change also re-enables the failing rollover YAML test that was failing due to this bug.

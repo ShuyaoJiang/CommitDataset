@@ -1,0 +1,13 @@
+Make sure Caching is initialized before JPA support
+
+The second level cache of Hibernate can be configured with dedicated
+factories that look up for the presence of a cache infrastructure. As
+Hibernate shouldn't have to know about Spring, that lookup is done
+against the respective proprietary APIs.
+
+We now make sure that caching (and the general purpose Hazelcast
+auto-configuration) is fully processed before JPA kicks in. In particular
+an explicit `dependsOn` attribute on those beans is added when they are
+processed.
+
+Closes gh-4158

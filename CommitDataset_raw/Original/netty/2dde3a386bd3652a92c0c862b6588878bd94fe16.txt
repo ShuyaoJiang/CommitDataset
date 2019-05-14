@@ -1,0 +1,13 @@
+[#3687] Correctly store WebSocketServerHandshaker in Channel attributes
+
+Motivation:
+
+As we stored the WebSocketServerHandshaker in the ChannelHandlerContext it was always null and so no close frame was send if WebSocketServerProtocolHandler was used.
+
+Modifications:
+
+Store WebSocketServerHAndshaker in the Channel attributes and so make it visibile between different handlers.
+
+Result:
+
+Correctly send close frame.

@@ -1,0 +1,20 @@
+Reduce direct memory overhead per EpollEventLoop when using EpollDatagramChannel (#8825)
+
+Motivation:
+
+When using a linux distribution that supports sendmmsg(...) we allocated enough direct memory per EpollEventLoop to be able to write IOV_MAX number of iovecs per message that can be written per sendmmsg.
+The number of messages that can be written per sendmmsg(...) call is limited by UIO_MAX_IOV.
+
+In practice this resulted in an allocation of 16MB direct memory per EpollEventLoop instance that stayed allocated until the EpollEventLoop was shutdown which happens as part of the shutdown of the enclosing EpollEVentLoopGroup.
+
+This resulted in quite some heavy direct memory usage in practice even when in practice we have very slim changes to ever need all of the memory.
+
+Modification:
+
+Adjust NativeDatagramPacketArray to share one IovArray instance across all NativeDatagramPacket instances it holds. This limits the max number of iovecs we can write across all messages to IOV_MAX per sendmmsg(...) call.
+This in practice will still be enough to allow us to write multiple messages with one syscall while keep the memory overhead to a minimum.
+
+Result:
+
+Smaller direct memory footprint per EpollEventLoop when using EpollDatagramChannel on distributions that support sendmmsg(...).
+Fixes https://github.com/netty/netty/issues/8814

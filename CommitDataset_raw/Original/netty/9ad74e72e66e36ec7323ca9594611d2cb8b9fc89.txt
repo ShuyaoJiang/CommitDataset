@@ -1,0 +1,19 @@
+Remove content-length header leniency
+
+Motivation:
+
+If the content-length does not parse as a number, leniency causes this
+to instead be parsed as the default value. This leads to bodies being
+silently ignored on requests which can be incredibly dangerous. Instead,
+if the content-length header is invalid, an exception should be thrown
+for upstream handling.
+
+Modifications:
+
+This commit removes the leniency in parsing the content-length header by
+allowing a number format exception, if thrown, to escape from the method
+rather than falling back to the default value.
+
+Result:
+
+In invalid content-length header will not be silently ignored.

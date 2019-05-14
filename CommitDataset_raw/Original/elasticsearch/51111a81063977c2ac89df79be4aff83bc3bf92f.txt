@@ -1,0 +1,7 @@
+CCR: Stop FollowExistingIndexAction after report failure (#4111)
+
+We check for the existence of both leader and follower index, then properly 
+report to the caller. However, we do not return after reporting failure. This
+causes the caller receive exception twice: IllegalArgumentException then
+NullPointerException. This commit makes sure to stop the action after reporting
+failure.

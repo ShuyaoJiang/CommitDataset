@@ -1,0 +1,11 @@
+Tolerate removal of JacksonJodaFormat in Jackson 2.5
+
+We currently officially support Jackson 2.4, but some users wish to
+use Jackson 2.5. This causes a failure as JacksonAutoConfiguration
+depends on JacksonJodaFormat which exists in 2.4 but not in 2.5. This
+commit updates JodaDataTimeJacksonConfiguration to make it conditional
+on JacksonJodaFormat being on the classpath. This means that Jackson
+2.5 users will not have configurable DateTime formatting
+(added in 201fb5e5) but things will generally work once again.
+
+Closes gh-2573

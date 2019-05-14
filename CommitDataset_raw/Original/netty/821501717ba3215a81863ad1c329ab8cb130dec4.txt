@@ -1,0 +1,14 @@
+Fix possible IOOBE when calling ReferenceCountedSslEngine.unwrap(...) with heap buffers.
+
+Motivation:
+
+fc3c9c9523150190760801dd0fbf014909519942 introduced a bug which will have ReferenceCountedSslEngine.unwrap(...) produce an IOOBE when be called with an BŷteBuffer as src that contains multiple SSLRecords and has a position != 0.
+
+Modification:
+
+- Correctly set the limit on the ByteBuffer and so fix the IOOBE.
+- Add test-case to verify the fix
+
+Result:
+
+Correctly handle heap buffers as well.

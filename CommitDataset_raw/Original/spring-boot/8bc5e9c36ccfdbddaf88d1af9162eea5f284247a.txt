@@ -1,0 +1,14 @@
+Refine semantics of server.port=0
+
+If the server port is 0 it doesn't mean you don't want *any* container
+because there might still be servlet context aware components in the
+classpath. Better to try and stop the server from actually starting.
+
+This change is a step in the right direction: it prevents the server
+from starting in the start() method (even though for technical reasons
+it may have already been started and stopped in initialize()).
+
+N.B. Tomcat at least uses port=0 as a signal it should pick a random
+port. Pertty useful feature that we may want to capitalize on at some
+point (on the other hand having our own port scanner would be useful
+generally too).

@@ -1,0 +1,14 @@
+Add a workaround for DATACMNS-776
+
+Spring Data’s web support includes a handler method argument resolver,
+ProxyingHandlerMethodArgumentResolver, that inaccurately claims that it
+can handle all interface handler method arguments. This causes problems
+for handler methods that take Spring Mobile’s Device as an argument as
+the proxied Device instance does not behave correctly.
+
+This commit works around the problem by assigning an order to the 
+WebMvcConfigurerAdapter that registers Spring Mobile’s argument resolver
+with Spring MVC. This ordering ensures that Spring Mobile’s resolver
+takes precedence over Spring Data’s for Device arguments.
+
+Closes gh-4163

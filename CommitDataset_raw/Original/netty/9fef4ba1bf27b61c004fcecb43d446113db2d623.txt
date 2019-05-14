@@ -1,0 +1,31 @@
+Disable IPv6 address lookups when -Djava.net.preferIPv4Stack=true
+
+Motivation:
+
+According to the Oracle documentation:
+
+> java.net.preferIPv4Stack (default: false)
+>
+> If IPv6 is available on the operating system, the underlying native
+> socket will be an IPv6 socket. This allows Java applications to connect
+> to, and accept connections from, both IPv4 and IPv6 hosts.
+>
+> If an application has a preference to only use IPv4 sockets, then this
+> property can be set to true. The implication is that the application
+> will not be able to communicate with IPv6 hosts.
+
+which means, if DnsNameResolver returns an IPv6 address, a user (or
+Netty) will not be able to connect to it.
+
+Modifications:
+
+- Move the code that retrieves java.net.prefer* properties from
+  DnsNameResolver to NetUtil
+- Add NetUtil.isIpV6AddressesPreferred()
+- Revise the API documentation of NetUtil.isIpV*Preferred()
+- Set the default resolveAddressTypes to IPv4 only when
+  NetUtil.isIpv4StackPreferred() returns true
+
+Result:
+
+- Fixes #5657

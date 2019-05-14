@@ -1,0 +1,17 @@
+Minor ClientCookieDecoder improvements
+
+Motivation:
+
+* Path attribute should be null, not empty String, if it's passed as "Path=".
+* Only extract attribute value when the name is recognized.
+* Only extract Expires attribute value String if MaxAge is undefined as it has precedence.
+
+Modification:
+
+Modify ClientCookieDecoder.
+Add "testIgnoreEmptyPath" test in ClientCookieDecoderTest.
+
+Result:
+
+More idyomatic Path behavior (like Domain).
+Minor performance improvement in some corner cases.

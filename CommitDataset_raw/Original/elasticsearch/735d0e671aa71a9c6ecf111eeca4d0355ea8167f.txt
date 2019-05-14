@@ -1,0 +1,12 @@
+Make PreBuiltAnalyzerProviderFactory plugable via AnalysisPlugin and
+
+move `finger_print`, `pattern` and `standard_html_strip` analyzers
+to analysis-common module. (both AnalysisProvider and PreBuiltAnalyzerProvider)
+
+Changed PreBuiltAnalyzerProviderFactory to extend from PreConfiguredAnalysisComponent and
+changed to make sure that predefined analyzers are always instantiated with the current
+ES version and if an instance is requested for a different version then delegate to PreBuiltCache.
+This is similar to the behaviour that exists today in AnalysisRegistry.PreBuiltAnalysis and
+PreBuiltAnalyzerProviderFactory. (#31095)
+
+Relates to #23658

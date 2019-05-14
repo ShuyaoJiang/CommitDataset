@@ -1,0 +1,16 @@
+Request streaming for Apache HttpClient
+
+- Added org.springframework.http.StreamingHttpOutputMessage, which
+  allows for a settable request body (as opposed to an output stream).
+
+- Added http.client.HttpComponentsStreamingClientHttpRequest, which
+  implements the above mentioned interface, mapping setBody() to a
+  setEntity() call on the Apache HttpClient HttpEntityEnclosingRequest.
+
+- Added a 'bufferRequestBody' property to the
+  HttpComponentsClientHttpRequestFactory. When this property is set to
+  false (default is true), we return a
+  HttpComponentsStreamingClientHttpRequest instead of a (request
+  buffering) HttpComponentsClientHttpRequest.
+
+Issue: SPR-10728

@@ -1,0 +1,14 @@
+Only increment metric for huge / normal allocations after the allocation was really done.
+
+Motivation:
+
+We should only increment the metric for the huge / normal allocation after it is done. Also we should only decrement once deallocate.
+
+Modifications:
+
+- Move increment after the allocation.
+- Fix deallocation metric and move it after deallocation
+
+Result:
+
+More correct metrics.

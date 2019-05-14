@@ -1,0 +1,17 @@
+Compress the heap dump after tests are finished
+
+Motivation:
+
+Tests sometimes time out because it took too long to compress the
+generated heap dump.
+
+Modifications:
+
+- Move the compression logic to a new method 'compressHeapDumps()'
+- Call TestUtils.compressHeapDumps() at the end of the tests, so that
+  the tests do not fail because of timeout
+
+Result:
+
+JUnit reports the real cause of the test failure instead of timeout
+exception.

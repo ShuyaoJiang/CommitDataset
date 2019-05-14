@@ -1,0 +1,31 @@
+2.x: Add scheduler creation factories (#5002)
+
+* Add scheduler creation factories
+
+Resolves #4993
+
+This is a pretty vanilla copy from RxJava 1's implementation. Note that I had to tune NewThread scheduler to not be a singleton to support this.
+
+We had talked about borrowing from project reactor's APIs for different overloads, let me know if you think we should add more fine-grained controls through these.
+
+* Add `@since` info
+
+* Change failure string to "is null"
+
+* Move to RxJavaPlugins
+
+* Remove no-arg overloads
+
+* Rename to make it clearer about creation
+
+Added scheduler because we're not in Scheduler anymore. Changed to "create" because "newNewThread" was weird
+
+* Add tests (WIP)
+
+* Remove unnecessary nullcheck
+
+* Remove double try
+
+* Fix tests, make them more robust with integration flow
+
+* Shut down custom schedulers when done

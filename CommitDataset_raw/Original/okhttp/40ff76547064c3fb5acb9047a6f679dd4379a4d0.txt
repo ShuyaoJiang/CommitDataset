@@ -1,0 +1,12 @@
+Make HttpConnection.connect return full working connections.
+
+Previously the returned connections required the caller to
+do extra work: setting up tunnels (which could require auth)
+and performing an SSL handshake. With this change we make a
+complete working connection in HttpConnection.connect().
+
+This will make it easier to fix fallback when a single domain
+has multiple IP addresses and some of those addresses are not
+reachable.
+
+This will also make it easier to do SPDY through HTTP proxies.

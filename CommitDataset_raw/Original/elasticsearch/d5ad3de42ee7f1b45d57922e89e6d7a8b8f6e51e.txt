@@ -1,0 +1,13 @@
+[test] Introduce strict deprecation mode for REST tests (#34338)
+
+#33708 introduced a strict deprecation mode that makes a REST request
+fail if there is a warning header in the response returned by
+Elasticsearch (usually a deprecation message signaling that a feature
+or a field has been deprecated).
+
+This change adds the strict deprecation mode into the REST integration
+tests, and makes the tests fail if a deprecated feature is used. Also
+any test using a deprecated feature has been modified to pass the build.
+
+The YAML integration tests already analyzed HTTP warnings so they do
+not use this mode, keeping their "expected vs actual" behavior.

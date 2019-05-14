@@ -1,0 +1,17 @@
+Configure Hibernate with a WAS-specific JtaPlatform when running on WAS
+
+At the time of writing WAS only supports JPA 2.0 which means that
+Hibernate 4.2 is the latest version that can be used. SpringJtaPlatform
+is Hibernate 4.3-specific as JtaPlatform’s package changed between
+Hibernate 4.2 and 4.3. This means that SpringJtaPlatform can’t be used
+on current versions of WAS. Futhermore, SpringJtaPlatform won’t work on
+WAS even if we could use Hibernate 4.3 as WAS doesn’t make its
+TransactionManager available to application code (it’s considered too
+dangerous for general consumption) and SpringJtaPlatform
+requires a TransactionManager.
+
+This commit updates HibernateJpaAutoConfiguration to always treat WAS as
+a special case and configure Hibernate with one of its WAS-specific
+JtaPlatform implementations. 
+
+Closes gh-2326

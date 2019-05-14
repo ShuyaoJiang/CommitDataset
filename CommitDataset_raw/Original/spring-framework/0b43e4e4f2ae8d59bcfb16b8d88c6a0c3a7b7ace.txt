@@ -1,0 +1,9 @@
+Add concurrent test and fix potential NPE
+
+After SPR-12884 (4.2 RC1) introduced support for a selector header
+expression on SUBSCRIBE frames, messages from the destination cache
+are further filtered based on the selector expression. While adding a
+test to find subscriptions at the same time as unsubscribing, a
+potential NPE was exposed. This commit fixes the NPE.
+
+Issue: SPR-13204

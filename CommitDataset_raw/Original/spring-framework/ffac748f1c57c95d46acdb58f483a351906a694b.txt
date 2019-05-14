@@ -1,0 +1,17 @@
+Improve ConcurrentWebSocketSessionDecorator
+
+Before this change the decorator ensured that for a specific WebSocket
+session only one thread at a time can send a message. Other threads
+attempting to send would have their messages buffered and each time
+that occurs, a check is also made to see if the buffer limit has been
+reached or the send time limit has been exceeded and if so the session
+is closed.
+
+This change adds further protection to ensure only one thread at a time
+can perform the session limit checks and attempt to close the session.
+Furthermore if the session has timed out and become unresponsive,
+attempts to close it may block yet another thread. Taking this into
+consideration this change also ensures that state associated with the
+session is cleaned first before an attempt is made to close the session.
+
+Issue: SPR-11450

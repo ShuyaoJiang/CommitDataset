@@ -1,0 +1,14 @@
+Eliminate noisy logging when using sun.misc.Unsafe and running on pre Java9
+
+Motivation:
+
+We should only try to load jdk.internal.misc.Unsafe if we run on Java9+ to eliminate noise in the log.
+
+Modifications:
+
+- Move javaVersion() and related methods to PlatformDependent0 to be able to use these in the static initializer without creating a cycle.
+- Only try to load jdk.internal.misc.Unsafe when running in Java9+
+
+Result:
+
+Less noise in the log when running pre java9.

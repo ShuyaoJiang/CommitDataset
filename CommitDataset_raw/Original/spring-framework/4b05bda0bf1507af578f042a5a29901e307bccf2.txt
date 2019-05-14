@@ -1,0 +1,11 @@
+Missing path variable is now a 500 error
+
+Before this change a missing path variable value resulted in a 400
+error where in fact the error is due to a mismatch between the
+declared @PathVariable and the URI template, i.e. a 500 error.
+
+This change introduced a MissingPathVariableException as a sub-class
+of ServletRequestBindingException (the exception previously thrown)
+and results in a response status code of 500 by default.
+
+Issue: SPR-13121

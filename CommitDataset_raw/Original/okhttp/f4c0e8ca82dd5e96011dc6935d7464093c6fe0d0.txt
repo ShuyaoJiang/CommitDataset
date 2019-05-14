@@ -1,0 +1,10 @@
+Adjust CircleCI caching (#4866)
+
+Master compile cache is built once a day by master compile job or each commit on master.
+Each Test build uses a previous run on the same branch, or the Master compile cache.
+
+Experience should generally be
+
+PR: check and test jobs start immediately using the master build cache (or previous good run).
+Master commit: Runs 3 test jobs which use master build cache. Compile updates the cache without growing.
+Daily: All jobs run and Master compile cache is updated.

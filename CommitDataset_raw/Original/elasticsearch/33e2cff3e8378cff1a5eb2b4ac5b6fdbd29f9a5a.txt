@@ -1,0 +1,7 @@
+Fix CoordinatorTests.testIncompatibleDiffResendsFullState (#39345)
+
+This test started failing since decreasing the leader and follower check timeouts (#38298). The
+reason is that the test was relying on the default publication timeout to come into effect before
+leader / follower check timeouts, which is now not always true anymore.
+
+Closes #38867

@@ -1,0 +1,12 @@
+Ensure test fails for the correct reason
+
+Prior to this commit, a dynamic test in
+FailingBeforeAndAfterMethodsSpringExtensionTestCase was failing but for
+the wrong reason. Namely, the @Configuration class was private which
+resulted in an IllegalStateException being thrown, when in fact
+an AssertionFailedError was expected.
+
+This commit addresses this by introducing an explicit check for an
+AssertionFailedError.
+
+Issue: SPR-4365

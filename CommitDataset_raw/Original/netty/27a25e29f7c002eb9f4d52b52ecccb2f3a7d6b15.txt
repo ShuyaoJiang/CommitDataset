@@ -1,0 +1,22 @@
+Ensure channelReadComplete() is called only when necessary
+
+Motivation:
+
+Even if a handler called ctx.fireChannelReadComplete(), the next handler
+should not get its channelReadComplete() invoked if fireChannelRead()
+was not invoked before.
+
+Modifications:
+
+- Ensure channelReadComplete() is invoked only when the handler of the
+  current context actually produced a message, because otherwise there's
+  no point of triggering channelReadComplete().
+  i.e. channelReadComplete() must follow channelRead().
+- Fix a bug where ctx.read() was not called if the handler of the
+  current context did not produce any message, making the connection
+  stall. Read the new comment for more information.
+
+Result:
+
+- channelReadComplete() is invoked only when it makes sense.
+- No stale connection

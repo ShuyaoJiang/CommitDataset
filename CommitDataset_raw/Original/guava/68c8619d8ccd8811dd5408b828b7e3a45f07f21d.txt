@@ -1,0 +1,9 @@
+Shutdown the original executor in getExitingScheduledExecutorService.
+
+The shutdown hook thread names itself after the executor, presumably to aid in debugging.  If the original executor does NOT shutdown quickly, looking at the thread dump shows an executor never created by application code.
+
+Instead, give up a little of the wrapping safety of unconfigurableScheduledExecutorService  to make debugging easier.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=161869256

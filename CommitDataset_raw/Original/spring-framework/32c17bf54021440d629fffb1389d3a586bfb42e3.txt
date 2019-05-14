@@ -1,0 +1,21 @@
+Revise method and parameter names in annotation support
+
+In AnnotatedElementUtils, all methods pertaining to merging annotation
+attributes have been renamed to "getMerged*()" and "findMerged*()"
+accordingly. Existing methods such as getAnnotationAttributes(..) have
+been deprecated in favor of the more descriptive "merged" variants.
+This aligns the naming conventions in AnnotatedElementUtils with those
+already present in AnnotationReadingVisitorUtils.
+
+The use of "annotationType" as a variable name for the fully qualified
+class name of an annotation type has been replaced with
+"annotationName" in order to improve the readability and intent of the
+code base.
+
+In MetaAnnotationUtils.AnnotationDescriptor, getMergedAnnotation() has
+been renamed to synthesizeAnnotation(), and the method is now
+overridden in UntypedAnnotationDescriptor to always throw an
+UnsupportedOperationException in order to avoid potential run-time
+ClassCastExceptions.
+
+Issue: SPR-11511

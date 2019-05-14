@@ -1,0 +1,19 @@
+Add ClientRequest attributes
+
+This commit introduces client-side request attributes, similar to those
+found on the server-side. The attributes can be used, for instance, for
+passing on request-specific information to a globally registered
+ExchangeFilterFunction.
+
+The client request builder, as well as WebClient.RequestHeadersSpec and
+WebTestClient.RequestHeaderSpec, add methods for adding a single
+attribute, as well as manipulating the entire attributes map.
+
+The client request itself adds a accessor for the (immutable) attributes
+map.
+
+This commit also introduces a new variant of the basic authentication
+filter in ExchangeFilterFunctions. This variant takes the username and
+password from well-known attributes.
+
+Issue: SPR-15691

@@ -1,0 +1,8 @@
+ Ensure local addresses aren't null (#31440)
+
+Currently we set local addresses on the creation time of a NioChannel.
+However, this may return null as the local address may not have been
+set yet. An example is the local address has not been set on a client
+channel as the connection process is not yet complete.
+
+This PR modifies the getter to set the local field if it is currently null.

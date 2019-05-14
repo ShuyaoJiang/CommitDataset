@@ -1,0 +1,10 @@
+Never leave stale delete tombstones in version map (#29619)
+
+Today the VersionMap does not clean up a stale delete tombstone if it
+does not require safe access. However, in a very rare situation due to
+concurrent refreshes, the safe-access flag may be flipped over then an
+engine accidentally consult that stale delete tombstone.
+
+This commit ensures to never leave stale delete tombstones in a version
+map by always pruning delete tombstones when putting a new index entry
+regardless of the value of the safe-access flag.

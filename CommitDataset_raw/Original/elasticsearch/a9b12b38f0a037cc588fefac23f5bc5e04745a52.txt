@@ -1,0 +1,9 @@
+Push primary term to replication tracker (#38044)
+
+This commit pushes the primary term into the replication tracker. This
+is a precursor to using the primary term to resolving ordering problems
+for retention leases. Namely, it can be that out-of-order retention
+lease sync requests arrive on a replica. To resolve this, we need a
+tuple of (primary term, version). For this to be, the primary term needs
+to be accessible in the replication tracker. As the primary term is part
+of the replication group anyway, this change conceptually makes sense.

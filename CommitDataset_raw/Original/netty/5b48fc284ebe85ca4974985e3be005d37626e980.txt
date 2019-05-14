@@ -1,0 +1,13 @@
+Make OIO/NIO/EPOLL autoReadClear consistent
+
+Motivation:
+OIO/NIO use a volatile variable to track if a read is pending. EPOLL does not use a volatile an executes a Runnable on the event loop thread to set readPending to false. These mechansims should be consistent, and not using a volatile variable is preferable because the variable is written to frequently in the event loop thread.
+OIO also does not set readPending to false before each fireChannelRead operation and may result in reading more data than the user desires.
+
+Modifications:
+- OIO/NIO should not use a volatile variable for readPending
+- OIO should set readPending to false before each fireChannelRead
+
+Result:
+OIO/NIO/EPOLL are more consistent w.r.t. readPending and volatile variable operations are reduced
+Fixes https://github.com/netty/netty/issues/5069

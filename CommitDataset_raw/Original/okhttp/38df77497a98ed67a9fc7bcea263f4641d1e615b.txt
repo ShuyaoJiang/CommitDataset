@@ -1,0 +1,3 @@
+Break apart close states. Try to send close on IOE.
+
+This breaks apart the states used to track sending a close message and whether or not the connection has been closed. Prior to this, certain threading orders would allow multiple calls to close() which would attempt to remove ownership of the connection, the second of which would fail.

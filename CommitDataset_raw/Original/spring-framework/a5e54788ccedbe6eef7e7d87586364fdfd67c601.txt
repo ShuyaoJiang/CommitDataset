@@ -1,0 +1,10 @@
+Remove PathPatternComparator
+
+Direct comparison of a pattern (as a String) to the path does not make
+much sense now that we deal with URL encoding through PathContainer
+which exposes (safely) decoded path segments.
+
+Removing the PathPatternComparator also means we can keep patterns
+pre-sorted instead of sorting them all the time. That probably offsets
+any benefits from comparing to the lookup path for direct matches and
+patterns are still sorted according to specificity.

@@ -1,0 +1,14 @@
+Throw ReadOnlyBufferException if unsafe buffer is used and dst is direct
+
+Motivation:
+
+We missed to check if the dst is ready only before using unsafe to copy data into it which lead to data-corruption. We need to ensure we respect ready only ByteBuffer.
+
+Modifications:
+
+- Correctly check if the dst is ready only before copy data into it in UnsafeByteBufUtil
+- Also make it work for buffers that are not direct and not have an array
+
+Result:
+
+No more data corruption possible if the dst buffer is readonly and unsafe buffer implementation is used.

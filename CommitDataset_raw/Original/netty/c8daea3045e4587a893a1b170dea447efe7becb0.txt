@@ -1,0 +1,29 @@
+Fix HttpUtil.isKeepAlive to behave correctly when Connection is a comma separated list (#8924)
+
+Motivation:
+
+According to the specification, the "Connection" header's syntax is:
+
+"
+The Connection header field's value has the following grammar:
+
+     Connection        = 1#connection-option
+     connection-option = token
+
+Connection options are case-insensitive.
+"
+https://tools.ietf.org/html/rfc7230#section-6.1
+
+This means that Connection's value can have at least one element or
+a comma separated list with elements
+When calculating whether the connection can remain open,
+HttpUtil.isKeepAlive(HttpMessage) should take this into account.
+
+Modifications:
+
+- Check for "close" and "keep-alive" in a comma separated list
+- Add unit test
+
+Result:
+
+HttpUtil.isKeepAlive(HttpMessage) works correctly when "Connection: Upgrade, close"

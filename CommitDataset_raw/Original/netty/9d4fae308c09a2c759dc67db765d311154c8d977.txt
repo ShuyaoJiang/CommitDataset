@@ -1,0 +1,18 @@
+ChannelInitializer: change propagation of channelRegistered event
+
+Motivation:
+
+If a handler is added to the pipeline within ChannelInitializer::initChannel via
+addFirst(...) then it will not receive the channelRegistered event.  The same
+handler added via addLast(...) will receive the event.  This different behavior
+is unlikely to be expected by users and can cause confusion.
+
+Modifications:
+
+Let ChannelInitializer::channelRegistered propagate the event by passing it to
+the pipeline instead of firing it on the ChannelHandlerContext.
+
+Result:
+
+The channelRegistered event is propagated to handlers regardless of the method
+used to add it to the pipeline (addFirst/addLast).

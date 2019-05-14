@@ -1,0 +1,9 @@
+Ensure async Callables are in sync with the call stack
+
+After this change each call stack level pushes and pops an async
+Callable to ensure the AsyncExecutionChain is in sync with the
+call stack. Before this change, a controller returning a "forward:"
+prefixed string caused the AsyncExecutionChain to contain a
+extra Callables that did not match the actual call stack.
+
+Issue: SPR-9611

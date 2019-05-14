@@ -1,0 +1,12 @@
+Rework security request matchers
+
+Update the security request matchers so that a bean is no longer needed
+when the matcher is used. Matchers can now be build by starting from
+the `EndpointRequest` or `StaticResourceRequest` classes. For example:
+
+http.authorizeRequests()
+  .requestMatchers(EndpointRequest.to("status", "info")).permitAll()
+  .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
+  .requestMatchers(StaticResourceRequest.toCommonLocations()).permitAll()
+
+Closes gh-7958

@@ -1,0 +1,8 @@
+Merge FunctionScoreQuery and FiltersFunctionScoreQuery (#25889)
+
+This change merges the functionality of the FiltersFunctionScoreQuery in the FunctionScoreQuery.
+It also ensures that an exception is thrown when the computed score is equals to Float.NaN or Float.NEGATIVE_INFINITY.
+These scores are invalid for TopDocsCollectors that relies on score comparison.
+
+Fixes #15709
+Fixes #23628

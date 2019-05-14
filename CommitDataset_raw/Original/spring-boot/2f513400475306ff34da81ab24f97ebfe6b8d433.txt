@@ -1,0 +1,9 @@
+Restore WebServerInitializedEvent listener registration
+
+This commit fixes ServerPortInfoApplicationContextInitializer so that
+is registers a listener against `WebServerInitializedEvent`.
+
+A former polish to use a lambda actually introduced a regression as the
+listener was registered as `ApplicationListener<?>`.
+
+Closes gh-10047

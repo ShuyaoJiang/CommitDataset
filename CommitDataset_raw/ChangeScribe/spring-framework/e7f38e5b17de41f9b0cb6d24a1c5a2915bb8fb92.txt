@@ -1,0 +1,535 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (customConfigurer.xml, ConcreteTransactionalJUnit38SpringContextTests-context.xml, FailingBeforeAndAfterMethodsTests-context.xml, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.springframework.aop.config:  
+
+1. Changes to package org.springframework.asm:  
+
+1.1. Add a class for annotation visitor. It allows to:
+
+	Instantiate annotation visitor;
+	Instantiate annotation visitor  with annotation visitor;
+	Handle visit;
+	Visit enum;
+	Visit annotation;
+	Visit array;
+	Visit end
+
+1.2. Add a class for annotation writer. It allows to:
+
+	Instantiate annotation writer  with symbol table, annotation byte vector, previous annotation writer and previous annotation writer;
+	Create symbol table;
+	Handle visit;
+	Visit enum;
+	Visit annotation;
+	Visit array;
+	Visit end;
+	Compute annotations size;
+	Put annotations;
+	Compute parameter annotations size;
+	Put parameter annotations
+
+1.3. Add a class for byte vector. It allows to:
+
+	Instantiate byte vector;
+	Put byte;
+	Put byte vector;
+	Put short;
+	Put int;
+	Put byte vector long;
+	Put UTF 8;
+	Encode utf 8;
+	Put byte array;
+	Enlarge byte vector
+
+1.4. Add a class for class reader. It allows to:
+
+	Instantiate class reader;
+	Instantiate class reader  with input stream;
+	Read stream;
+	Get access;
+	Get class name;
+	Get super name;
+	Get interfaces;
+	Accept class visitor;
+	Read module attributes;
+	Read field;
+	Read method;
+	Read code;
+	Read label;
+	Create label;
+	Create debug label;
+	Read type annotations;
+	Get type annotation bytecode offset;
+	Read type annotation target;
+	Read parameter annotations;
+	Read element values;
+	Read element value;
+	Compute implicit frame;
+	Read stack map frame;
+	Read verification type info;
+	Get first attribute offset;
+	Read bootstrap methods attribute;
+	Read attribute;
+	Get item count;
+	Get item;
+	Get max string length;
+	Read byte;
+	Read unsigned short;
+	Read short;
+	Read int;
+	Read class reader long;
+	Read UTF 8;
+	Read utf;
+	Read stringish;
+	Read class;
+	Read module;
+	Read package;
+	Read constant dynamic;
+	Read const
+
+1.5. Add a class for class visitor. It allows to:
+
+	Instantiate class visitor;
+	Instantiate class visitor  with class visitor;
+	Handle visit;
+	Visit source;
+	Visit module;
+	Visit nest host;
+	Visit outer class;
+	Visit annotation;
+	Visit type annotation;
+	Visit attribute;
+	Visit nest member;
+	Visit inner class;
+	Visit field;
+	Visit method;
+	Visit end
+
+1.6. Add a class for class writer. It allows to:
+
+	Instantiate class writer;
+	Instantiate class writer  with class reader;
+	Handle visit;
+	Visit source;
+	Visit module;
+	Visit nest host;
+	Visit outer class;
+	Visit annotation;
+	Visit type annotation;
+	Visit attribute;
+	Visit nest member;
+	Visit inner class;
+	Visit field;
+	Visit method;
+	Visit end;
+	Convert class writer to byte array;
+	Replace asm instructions;
+	Get attribute prototypes;
+	Handle new const;
+	Handle new UTF 8;
+	Handle new class;
+	Handle new method type;
+	Handle new module;
+	Handle new package;
+	Handle new handle;
+	Handle new constant dynamic;
+	Handle new invoke dynamic;
+	Handle new field;
+	Handle new method;
+	Handle new name type;
+	Get common super class;
+	Get class loader
+
+1.7. Add a class for context
+
+1.8. Add a class for edge. It allows to:
+
+	Instantiate edge  with successor label, next edge and next edge
+
+1.9. Add a class for field visitor. It allows to:
+
+	Instantiate field visitor;
+	Instantiate field visitor  with field visitor;
+	Visit annotation;
+	Visit type annotation;
+	Visit attribute;
+	Visit end
+
+1.10. Add a class for field writer. It allows to:
+
+	Instantiate field writer  with symbol table;
+	Visit annotation;
+	Visit type annotation;
+	Visit attribute;
+	Visit end;
+	Compute field info size;
+	Put field info;
+	Collect attribute prototypes
+
+1.11. Add a class for frame. It allows to:
+
+	Instantiate frame  with owner label;
+	Copy  from frame;
+	Get abstract type  from api format;
+	Get abstract type  from internal name;
+	Get abstract type  from descriptor;
+	Set input frame  from descriptor;
+	Set input frame  from api format;
+	Get input stack size;
+	Get local;
+	Set local;
+	Push frame;
+	Push symbol table;
+	Get pop;
+	Handle pop;
+	Add initialized type;
+	Get initialized type;
+	Execute arg symbol;
+	Get concrete output type;
+	Merge symbol table;
+	Accept method writer;
+	Put abstract type
+
+1.12. Add a class for handle. It allows to:
+
+	Instantiate handle;
+	Get tag;
+	Get owner;
+	Get name;
+	Get desc;
+	Check if handle is interface;
+	Check if handle equals;
+	Hash code;
+	Convert handle to string
+
+1.13. Add a class for handler. It allows to:
+
+	Instantiate handler  with start pc label, end pc label, handler pc label and handler pc label;
+	Instantiate handler  with handler, start pc label, end pc label and end pc label;
+	Remove range;
+	Get exception table length;
+	Get exception table size;
+	Put exception table
+
+1.14. Add a class for label. It allows to:
+
+	Instantiate label;
+	Offset label;
+	Get canonical instance;
+	Add line number;
+	Accept method visitor;
+	Put code byte vector;
+	Add label forward reference;
+	Resolve label;
+	Handle mark subroutine;
+	Add subroutine ret successors;
+	Push successors;
+	Convert label to string
+
+1.15. Add a class for method visitor. It allows to:
+
+	Instantiate method visitor;
+	Instantiate method visitor  with method visitor;
+	Visit parameter;
+	Visit annotation default;
+	Visit annotation;
+	Visit type annotation;
+	Visit annotable parameter count;
+	Visit parameter annotation;
+	Visit attribute;
+	Visit code;
+	Visit frame;
+	Visit insn;
+	Visit int insn;
+	Visit var insn;
+	Visit type insn;
+	Visit field insn;
+	Visit method insn;
+	Visit invoke dynamic insn;
+	Visit jump insn;
+	Visit label;
+	Visit ldc insn;
+	Visit iinc insn;
+	Visit table switch insn;
+	Visit lookup switch insn;
+	Visit multi A new array insn;
+	Visit insn annotation;
+	Visit try catch block;
+	Visit try catch annotation;
+	Visit local variable;
+	Visit local variable annotation;
+	Visit line number;
+	Visit maxs;
+	Visit end
+
+1.16. Add a class for method writer. It allows to:
+
+	Instantiate method writer  with symbol table;
+	Check if method writer has frames;
+	Check if method writer has asm instructions;
+	Visit parameter;
+	Visit annotation default;
+	Visit annotation;
+	Visit type annotation;
+	Visit annotable parameter count;
+	Visit parameter annotation;
+	Visit attribute;
+	Visit code;
+	Visit frame;
+	Visit insn;
+	Visit int insn;
+	Visit var insn;
+	Visit type insn;
+	Visit field insn;
+	Visit method insn;
+	Visit invoke dynamic insn;
+	Visit jump insn;
+	Visit label;
+	Visit ldc insn;
+	Visit iinc insn;
+	Visit table switch insn;
+	Visit lookup switch insn;
+	Visit switch insn;
+	Visit multi A new array insn;
+	Visit insn annotation;
+	Visit try catch block;
+	Visit try catch annotation;
+	Visit local variable;
+	Visit local variable annotation;
+	Visit line number;
+	Visit maxs;
+	Compute all frames;
+	Compute max stack and local;
+	Visit end;
+	Add successor  to current basic block;
+	End current basic block  with no successor;
+	Visit frame start;
+	Visit abstract type;
+	Visit frame end;
+	Put frame;
+	Put abstract types;
+	Put frame type;
+	Can copy method attributes;
+	Set method attributes source;
+	Compute method info size;
+	Put method info;
+	Collect attribute prototypes
+
+1.17. Add an interface declaration  for opcodes
+
+1.18. Add a class for type. It allows to:
+
+	Instantiate type;
+	Get type;
+	Get element type;
+	Get object type;
+	Get method type;
+	Get argument types;
+	Get return type;
+	Get return type offset;
+	Get type internal;
+	Get class name;
+	Get internal name;
+	Get descriptor;
+	Get constructor descriptor;
+	Get method descriptor;
+	Append descriptor;
+	Get sort;
+	Get dimensions;
+	Get size;
+	Get arguments and return sizes;
+	Get opcode;
+	Check if type equals;
+	Hash code;
+	Convert type to string
+
+2. Changes to package org.springframework.beans:  
+
+2. Changes to package org.springframework.beans.factory.annotation:  
+
+2. Changes to package org.springframework.beans.factory.config:  
+
+2. Changes to package org.springframework.beans.factory.support:  
+
+2. Changes to package org.springframework.beans.factory.xml:  
+
+2. Changes to package org.springframework.context.support:  
+
+2. Changes to package org.springframework.core:  
+
+2.1. Add a class for standard reflection parameter name discoverer. It allows to:
+
+	Get parameter names;
+
+3. Changes to package org.springframework.core.type:  
+
+3. Changes to package org.springframework.core.type.classreading:  
+
+3. Changes to package org.springframework.format.datetime:  
+
+3. Changes to package org.springframework.format.datetime.joda:  
+
+3. Changes to package org.springframework.format.datetime.standard:  
+
+3.1. Add a class for date time context. It allows to:
+
+	Set chronology;
+	Get chronology;
+	Set time zone;
+	Get time zone;
+	Get formatter
+
+3.2. Add a class for date time context holder. It allows to:
+
+	Instantiate date time context holder;
+	Reset date time context;
+	Set date time context;
+	Get date time context;
+	Get formatter
+
+3.3. Add a class for date time formatter factory. It allows to:
+
+	Instantiate date time formatter factory;
+	Set pattern;
+	Set iso;
+	Set date style;
+	Set time style;
+	Set date time style;
+	Set style pattern;
+	Convert style character;
+	Set time zone;
+	Create date time formatter;
+
+3.4. Add a class for date time formatter factory bean. It allows to:
+
+	Handle after properties set;
+	Get object;
+	Get object type;
+	Check if date time formatter factory bean is singleton
+
+3.5. Add a class for date time formatter factory bean tests. It allows to:
+
+	Check if date time formatter factory bean tests is singleton;
+	Get object type;
+	Get object;
+	Get object is  always singleton
+
+3.6. Add a class for date time formatter factory tests. It allows to:
+
+	Create date time formatter;
+	Create date time formatter  with pattern;
+	Create date time formatter  with null fallback;
+	Create date time formatter  with fallback;
+	Create date time formatter  in order of property priority;
+	Create date time formatter  with time zone;
+	Apply locale
+
+3.7. Add a class for date time formatter registrar. It allows to:
+
+	Instantiate date time formatter registrar;
+	Get set use iso format;
+	Set date style;
+	Set time style;
+	Set date time style;
+	Set date formatter;
+	Set time formatter;
+	Set date time formatter;
+	Register formatters;
+	Get formatter;
+	Get fallback formatter
+
+3.8. Add a class for instant formatter. It allows to:
+
+	Parse locale;
+	Get print
+
+3.9. Add a class for jsr 310 date time format annotation formatter factory. It allows to:
+
+	Get field types;
+	Get printer;
+	Get parser;
+	Get formatter;
+	Check if jsr 310 date time format annotation formatter factory is local
+
+3.10. Add a class for temporal accessor parser. It allows to:
+
+	Instantiate temporal accessor parser  with temporal accessor type class, date time formatter and date time formatter;
+	Parse locale
+
+3.11. Add a class for temporal accessor printer. It allows to:
+
+	Instantiate temporal accessor printer  with date time formatter;
+	Get print
+
+4. Changes to package org.springframework.format.support:  
+
+4. Changes to package org.springframework.http.converter.json:  
+
+4. Changes to package org.springframework.jdbc:  
+
+4. Changes to package org.springframework.jdbc.core.simple:  
+
+4. Changes to package org.springframework.jdbc.datasource:  
+
+4. Changes to package org.springframework.jmx.export:  
+
+4.1. Add a class for custom date editor registrar. It allows to:
+
+	Register custom editors
+
+5. Changes to package org.springframework.oxm.jaxb:  
+
+5. Changes to package org.springframework.remoting.caucho:  
+
+5. Changes to package org.springframework.remoting.rmi:  
+
+5. Changes to package org.springframework.scheduling.concurrent:  
+
+5. Changes to package org.springframework.test.context.junit4:  
+
+5. Changes to package org.springframework.test.context.testng:  
+
+5. Changes to package org.springframework.test.context.transaction:  
+
+5. Changes to package org.springframework.test.jdbc:  
+
+5. Changes to package org.springframework.ui:  
+
+5. Changes to package org.springframework.ui.freemarker:  
+
+5. Changes to package org.springframework.util:  
+
+5. Changes to package org.springframework.validation:  
+
+5. Changes to package org.springframework.validation.beanvalidation:  
+
+5.1. Add an object creator class for message source resource bundle locator. It allows to:
+
+	Instantiate message source resource bundle locator  with message source;
+	Get resource bundle
+
+6. Changes to package org.springframework.web:  
+
+6. Changes to package org.springframework.web.bind:  
+
+6. Changes to package org.springframework.web.context:  
+
+6. Changes to package org.springframework.web.context.support:  
+
+6. Changes to package org.springframework.web.servlet:  
+
+6. Changes to package org.springframework.web.servlet.handler:  
+
+6. Changes to package org.springframework.web.servlet.tags.form:  
+
+6. Changes to package org.springframework.web.servlet.view:  
+
+6. Changes to package org.springframework.web.servlet.view.freemarker:  
+
+6. Changes to package org.springframework.web.servlet.view.json:  
+
+6. Changes to package org.springframework.web.util:  
+

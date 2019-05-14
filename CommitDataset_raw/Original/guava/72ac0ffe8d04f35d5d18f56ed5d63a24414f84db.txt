@@ -1,0 +1,16 @@
+
+Add ImmutableSet.copyOf(Collection), following lead of ImmutableList, to make it safe with copyOf(synchronizedConcurrentList).
+
+Also had to add ImmutableSortedSet.copyOf(Collection), to make Java overloading happy.
+
+I guess another alternative, is to hide the copyOf(Collection) overload and make sure copyOf(Iterable) is safe when the iterable is actually a Collection. (But why is ImmutableList.copyOf(Collection) needed?)
+
+I also added ImmutableSortedSet.copyOf(Comparator, Collection), for sake(excuse) of consistency.
+
+(Ben Yu)
+
+Revision created by MOE tool push_codebase.
+MOE_MIGRATION=163006
+
+
+git-svn-id: https://guava-libraries.googlecode.com/svn/trunk@88 8138a162-5c33-11de-8abc-d1c337b90d21

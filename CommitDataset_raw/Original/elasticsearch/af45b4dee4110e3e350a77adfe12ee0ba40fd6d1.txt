@@ -1,0 +1,7 @@
+Cancelling a peer recovery on the source can leak a primary permit (#30318)
+
+The code in `SourceRecoveryHandler` runs under a `CancellableThreads` instance in order to allow long running operations to be interrupted when the recovery is cancelled. Sadly if this happens at just the wrong moment while acquiring a permit from the primary, that primary can be leaked and never be freed.
+
+Note that this is slightly better than it sounds - we only cancel recoveries on the source side if the primary shard itself is closed.
+
+Relates to https://github.com/elastic/elasticsearch/pull/30316

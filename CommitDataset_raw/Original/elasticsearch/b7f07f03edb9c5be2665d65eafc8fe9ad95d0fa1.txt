@@ -1,0 +1,19 @@
+[Rollup] Use composite's missing_bucket (#31402)
+
+We can leverage the composite agg's new `missing_bucket` feature on
+terms groupings.  This means the aggregation criteria used in the indexer
+will now return null buckets for missing keys.  
+
+Because all buckets are now returned (even if a key is null),
+we can guarantee correct doc counts with
+"combined" jobs (where a job rolls up multiple schemas).  This was
+previously impossible since composite would ignore documents that
+didn't have _all_ the keys, meaning non-overlapping schemas would
+cause composite to return no buckets.
+
+Note: date_histo does not use `missing_bucket`, since a timestamp is
+always required.
+
+The docs have been adjusted to recommend a single, combined job.  It
+also makes reference to the previous issue to help users that are upgrading
+(rather than just deleting the sections).

@@ -1,0 +1,14 @@
+EpollSocketChannelConfig.getOptions() must not throw if TCP_FASTOPEN_CONNECT is not supported
+
+Motivation:
+
+If a user calls EpollSocketChannelConfig.getOptions() and TCP_FASTOPEN_CONNECT is not supported we throw an exception.
+
+Modifications:
+
+- Just return 0 if ENOPROTOOPT is set.
+- Add testcase
+
+Result:
+
+getOptions() works as epxected.

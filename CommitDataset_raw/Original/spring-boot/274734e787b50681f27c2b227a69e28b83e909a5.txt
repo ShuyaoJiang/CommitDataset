@@ -1,0 +1,16 @@
+Add `spring.thymeleaf.check-template` property
+
+This commit adds a new `spring.thymeleaf.check-template` property which
+is only used for Thymeleaf 3.0+.
+
+Since thymeleaf/thymeleaf#419, the Thymeleaf template resolver
+implementations can implement the `setCheckExistence` method - this
+enables the template existence verification at **resolution** time,
+which means the resolver can return null as a `TemplateResolution`
+and let other template resolvers in the chain try.
+
+This new property is set to `true` by default and can be disabled if the
+application only has a single resolver and the template existence check
+is considered as a performance penalty with the configured resolver.
+
+Fixes gh-6500

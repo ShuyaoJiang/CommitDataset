@@ -1,0 +1,17 @@
+Rewrite HttpObjectDecoder to make use of proper state machine
+
+Motivation:
+
+HttpObjectDecoder extended ReplayDecoder which is slightly slower then ByteToMessageDecoder.
+
+Modifications:
+
+- Changed super class of HttpObjectDecoder from ReplayDecoder to ByteToMessageDecoder.
+- Rewrote decode() method of HttpObjectDecoder to use proper state machine.
+- Changed private methods HeaderParser.parse(ByteBuf), readHeaders(ByteBuf) and readTrailingHeaders(ByteBuf), skipControlCharacters(ByteBuf) to consider available bytes.
+- Set HeaderParser and LineParser as static inner classes.
+- Replaced not safe actualReadableBytes() with buffer.readableBytes().
+
+Result:
+
+Improved performance of HttpObjectDecoder by approximately 177%.

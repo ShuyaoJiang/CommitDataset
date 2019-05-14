@@ -1,0 +1,38 @@
+Modify bad CONNECT handling
+
+Changing the way that OkHttp handles CONNECT responses
+from proxies.
+
+Before the change:
+If a proxy returns a body and some of the body bytes have
+already been buffered then an IOException is thrown.
+If the body bytes have not been buffered then the handshake will
+fail due to the presence of bytes where the Server HELLO is
+expected, typically with some kind of SSLHandshakeException.
+
+After the change:
+The body bytes are consumed to ensure consistent behavior. The
+handshake will then take place.
+
+History:
+This is an unusual case that would occasionally cause failures
+on Android when a ResponseCache was installed. Android introduced
+a patch to prevent CONNECT responses being cached. Since then,
+OkHttp has changed the code and probably fixed the issue via
+other means. The Android test remained and would sometimes
+experience one exception, sometimes another, depending on the
+state of the buffer.
+
+If the presence of a body is a possibility it would be nice
+to deal with it consistently and deterministically.
+
+The motivation for this change is to make
+URLConnectionTest#connectViaHttpProxyToHttpsUsingBadProxyAndHttpResponseCache
+behave consistently and in a way that doesn't involve connection
+fallback.
+
+The only risk with this change is if a proxy is incorrectly
+reporting the content length: this might lead to blocking on
+the body read/skip (as OkHttp would probably do elsewhere if a
+server mis-reports a content-length). This change may make
+connections to "bad" proxies slightly more reliable.

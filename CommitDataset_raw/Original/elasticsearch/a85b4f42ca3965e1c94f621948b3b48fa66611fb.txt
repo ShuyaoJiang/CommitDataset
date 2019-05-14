@@ -1,0 +1,9 @@
+[ILM] change remove-policy-from-index http method from DELETE to POST (#35268)
+
+The remove-ilm-from-index API was using the DELETE http method
+to signify that something is being removed. Although, metadata
+about ILM for the index is being deleted, no entity/resource
+is being deleted during this operation. POST is more in line with
+what this API is actually doing, it is modifying the metadata for
+an index. As part of this change, `remove` is also appended to the path 
+to be more explicit about its actions.

@@ -1,0 +1,13 @@
+Reduce object creation for for unwrap/wrap if no ByteBuffer[] is used.
+
+Motivation:
+
+Often unwrap(...), wrap(...) is used with a single ByteBuffer and not with a ByteBuffer[]. We should reduce the array creations in this case.
+
+Modifications:
+
+Reuse ByteBuffer[1] for dst/src ByteBuffer.
+
+Result:
+
+Less object creation and so less GC

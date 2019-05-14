@@ -1,0 +1,13 @@
+[#4170] Shutdown socket before close fd when using epoll transport
+
+Motivation:
+
+We should call shutdown(...) on the socket before closing the filedescriptor to ensure it is closed gracefully.
+
+Modifications:
+
+Call shutdown(...) before close.
+
+Result:
+
+Sockets are gracefully shutdown when using native transport.

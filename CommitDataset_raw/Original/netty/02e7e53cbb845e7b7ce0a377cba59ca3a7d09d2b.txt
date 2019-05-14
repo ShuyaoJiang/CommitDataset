@@ -1,0 +1,14 @@
+[#2752] Add PendingWriteQueue for queue up writes
+
+Motivation:
+
+Sometimes ChannelHandler need to queue writes to some point and then process these. We currently have no datastructure for this so the user will use an Queue or something like this. The problem is with this Channel.isWritable() will not work as expected and so the user risk to write to fast. That's exactly what happened in our SslHandler. For this purpose we need to add a special datastructure which will also take care of update the Channel and so be sure that Channel.isWritable() works as expected.
+
+Modifications:
+
+- Add PendingWriteQueue which can be used for this purpose
+- Make use of PendingWriteQueue in SslHandler
+
+Result:
+
+It is now possible to queue writes in a ChannelHandler and still have Channel.isWritable() working as expected. This also fixes #2752.

@@ -1,0 +1,15 @@
+Consolidate view resolution under result.view
+
+While View and ViewResolver play the same role as in spring-webmvc they
+are now abstracted behind the HandlerResultHandler abstraction so that
+top-level contracts don't reference them and the DispatcherHandler is
+also unaware of their existence.
+
+Furthermore view resolution and response body handling which are now at
+the same level of abstraction (each is a HandlerResultHandler) will
+also share code for content negotiation, so it makes sense for them to
+be side by side.
+
+This commit moves the reactive.view package to reactive.result.view
+with the View and ViewResolver contracts (previously in the top-level
+reactive package) also moving there.

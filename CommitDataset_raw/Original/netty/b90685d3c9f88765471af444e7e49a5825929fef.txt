@@ -1,0 +1,13 @@
+Not share FixedRecvByteBufAllocator.HandleImpl
+
+Motivation:
+
+As MaxMessageHandle is stateful we can not share the same HandleImpl instance as otherwise we will see race conditions.
+
+Modifications:
+
+Create a new HandleImpl instance on each newHandle() call.
+
+Result:
+
+No more races.

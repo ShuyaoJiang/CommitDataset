@@ -1,0 +1,18 @@
+Fix packaging tests
+
+Since elastic/elasticsearch#26878, array and list of settings are
+internally represented as actual lists. This makes filtering works
+as expected when it comes to filter out arrays/lists.
+
+The packaging tests used to check the presence of the XPack SSL
+certificated_authorities setting which should have always been filtered.
+
+By fixing the filtering of settings, elastic/elasticsearch#26878 broke
+this packaging test.
+
+This commit changes this test so that it does not expect certificated_authorities
+setting to exist in the Nodes Info response.
+
+relates elastic/x-pack-elasticsearch#2688
+
+Original commit: elastic/x-pack-elasticsearch@cb299186b8e6ca03608259b4c9ae4c26fb5e3374

@@ -1,0 +1,17 @@
+HttpHeaders valuesIterator and contains improvements
+
+Motivation:
+In order to determine if a header contains a value we currently rely
+upon getAll(..) and regular expressions. This operation is commonly used
+during the encode and decode stage to determine the transfer encoding
+(e.g. HttpUtil#isTransferEncodingChunked). This operation requires an
+intermediate collection and possibly regular expressions for the
+CombinedHttpHeaders use case which can be expensive.
+
+Modifications:
+- Add a valuesIterator to HttpHeaders and specializations of this method
+for DefaultHttpHeaders, ReadOnlyHttpHeaders, and CombinedHttpHeaders.
+
+Result:
+Less intermediate collections and allocation overhead when determining
+if HttpHeaders contains a name/value pair.

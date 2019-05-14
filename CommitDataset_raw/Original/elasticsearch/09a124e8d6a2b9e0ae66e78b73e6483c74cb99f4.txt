@@ -1,0 +1,18 @@
+Native roles store uses mget to retrieve roles (#33531)
+
+The native roles store previously would issue a search if attempting to
+retrieve more than a single role. This is fine when we are attempting
+to retrieve all of the roles to list them in the api, but could cause
+issues when attempting to find roles for a user. The search is not
+prioritized over other search requests, so heavy aggregations/searches
+or overloaded nodes could cause roles to be cached as missing if the
+search is rejected.
+
+When attempting to load specific roles, we know the document id for the
+role that we are trying to load, which allows us to use the multi-get
+api for loading these roles. This change makes use of the multi-get api
+when attempting to load more than one role by name. This api is also
+constrained by a threadpool but the tasks in the GET threadpool should
+be quicker than searches.
+
+See #33205 

@@ -1,0 +1,12 @@
+Add merged RequestPostProcessor to front on merge
+
+Previously MockHttpServletRequestBuilder merge method would append the
+parent's (default) RequestPostProcessor implementations to the end. This
+means that the default RequestPostProcessor implementations would override
+values set by previous RequestPostProcessor implementations.
+
+This commit ensures that the default RequestPostProcessor are preformed
+first so that additional RequestPostProcessor implementations override
+the defaults.
+
+Issue: SPR-12945

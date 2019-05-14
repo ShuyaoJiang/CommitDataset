@@ -1,0 +1,12 @@
+Fix global aggregation that requires breadth first and scores (#27942)
+
+* Fix global aggregation that requires breadth first and scores
+
+This change fixes the deferring collector when it is executed in a global context
+with a sub collector thats requires to access scores (e.g. top_hits aggregation).
+The deferring collector replays the best buckets for each document and re-executes the original query
+if scores are needed. When executed in a global context, the query to replay is a simple match_all
+ query and not the original query.
+
+Closes #22321
+Closes #27928

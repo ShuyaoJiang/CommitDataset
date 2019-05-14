@@ -1,0 +1,16 @@
+Include response headers in RestTemplate exceptions
+
+Default HTTP error exceptions thrown from RestTemplate now include
+response headers in addition to the response body. In particular, this
+enables inspection of the Content-Type header allowing manual
+deserialization of the response body without guessing as to the content
+type.
+
+ - introduce HttpStatusCodeException#getResponseHeaders
+ - add constructor with headers param for HttpStatusCodeException,
+   HttpClientErrorException and HttpServerErrorException
+ - preserve exsisting constructor signatures
+ - mark HttpHeaders as Serializable
+ - generate new serialVersionUID where needed
+
+Issue: SPR-7938

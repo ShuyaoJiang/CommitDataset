@@ -1,0 +1,7 @@
+DnsNameResolver should not bind locally. Fixes #5457 Motivation: Dns resolution failures happen when using the DnsNameResolver and the JVM is not authorized to bind datagram channels. The current DnsNameResolver binds locally a DatagramChannel which is not necessary (and not always permitted).
+
+Modifications:
+The DnsNameResolver Bootstrap does not bind anymore, instead it registers and use the channel directly. The localAddress has also been removed from the DnsAddressResolverGroup, DnsNameResolver and DnsNameResolverBuilder as it is not necessary anymore and the API is marked as @UnstableApi.
+
+Result:
+Dns resolution does not require anymore to bind locally.

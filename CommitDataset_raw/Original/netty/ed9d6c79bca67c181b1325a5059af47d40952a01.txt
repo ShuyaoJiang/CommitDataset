@@ -1,0 +1,13 @@
+[#4972] Remove misleading argument from HttpServerUpgradeHandler.UpgradeCodec.upgradeTo
+
+Motivation:
+
+upgradeTo(...) takes the response as paramater, but the respone itself was already written to the Channel. This gives the user the impression the response can be changed or even act on it which may not be safe anymore once it was written and has been released.
+
+Modifications:
+
+Remove the response param from the method.
+
+Result:
+
+Less confusion and safer usage.

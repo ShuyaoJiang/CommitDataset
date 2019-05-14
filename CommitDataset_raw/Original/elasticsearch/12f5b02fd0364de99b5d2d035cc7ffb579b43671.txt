@@ -1,0 +1,6 @@
+Streamline skip_unavailable handling (#37672)
+
+This commit moves the collectSearchShards method out of RemoteClusterService into TransportSearchAction that currently calls it. RemoteClusterService used to be used only for cross-cluster search but is now also used in cross-cluster replication where different API are called through the RemoteClusterAwareClient. There is no reason for the collectSearchShards and fetchShards methods to be respectively in RemoteClusterService and RemoteClusterConnection. The search shards API can be called through the RemoteClusterAwareClient too, the only missing bit is a way to handle failures based on the skip_unavailable setting for each cluster (currently only supported in RemoteClusterConnection#fetchShards) which is achieved by adding a isSkipUnavailable(String clusterAlias) method to RemoteClusterService.
+This change is useful for #32125 as we will very soon need to also call the search API against remote clusters, which will be done through RemoteClusterAwareClient. In that case we will also need to support skip_unavailable when calling the search API so we need some way to handle the skip_unavailable setting like we currently do for the search_shards call.
+
+Relates to #32125

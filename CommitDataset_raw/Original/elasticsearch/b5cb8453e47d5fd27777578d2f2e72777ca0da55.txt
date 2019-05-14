@@ -1,0 +1,27 @@
+Remove types from internal monitoring templates and bump to api 7 (#39888)
+
+This commit removes the "doc" type from monitoring internal indexes.
+The template still carries the "_doc" type since that is needed for
+the internal representation.
+
+This change impacts the following templates:
+monitoring-alerts.json
+monitoring-beats.json
+monitoring-es.json
+monitoring-kibana.json
+monitoring-logstash.json
+
+As part of the required changes, the system_api_version has been
+bumped from "6" to "7" and support for version "2" has been dropped.
+
+A new empty pipeline is now introduced for the version "7", and
+the formerly empty "6" pipeline will now remove the type and re-direct
+the request to the "7" index.
+
+Additionally, to due to a difference in the internal representation
+(which requires the inclusion of "_doc" type) and external representation
+(which requires the exclusion of any type) a helper method is introduced
+to help convert internal to external representation, and used by the
+monitoring HTTP template exporter.
+
+Relates #38637

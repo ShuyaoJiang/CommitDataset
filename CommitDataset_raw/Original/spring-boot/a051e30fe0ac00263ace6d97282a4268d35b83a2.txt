@@ -1,0 +1,19 @@
+Publish an event after refresh but before runners are called
+
+This commit partially reverts the changes made in ec470fbe. While
+the started message continues to be logged before any application and
+command line runners are called, the publishing of
+ApplicationReadyEvent now happens after the runners have been called.
+Additionally, a new event, named ApplicationStartedEvent, has been
+introduced. This new event is published after the context has been
+refreshed but before any application and command line runners are
+called.
+
+Closes gh-11484
+
+The reworking of the events described above also means that either
+an ApplicationReadyEvent or an ApplicationFailedEvent will be
+published and the latter should never be published once the former
+has been published.
+
+Closes gh-11485

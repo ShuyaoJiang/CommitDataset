@@ -1,0 +1,13 @@
+Fix for ByteString#hashCode()
+
+Motivation:
+
+ByteString#hashCode() trashes its own hash code if it's being accessed concurrently
+
+Modifications:
+
+Pull the ByteString#hash into a local variable and calculate it locally.
+
+Result:
+
+ByteString#hashCode() is no longer returning a junk value.

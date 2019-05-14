@@ -1,0 +1,14 @@
+Fix reference count issue when using Http2FrameCodec / Http2MultiplexCodec with HttpServerUpgradeHandler
+
+Motivation:
+
+When using  Http2FrameCodec / Http2MultiplexCodec with HttpServerUpgradeHandler reference count exception will be triggered.
+
+Modifications:
+
+- Correctly retain before calling InboundHttpToHttp2Adapter.handle
+- Add unit test
+
+Result:
+
+Fixes [#7172].

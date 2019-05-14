@@ -1,0 +1,11 @@
+Tests: don't wait for completion while trying to get completed task
+
+Nodes are reusing task ids after restart. So in some rare circumstances
+the same task id might be assigned to the reindexing task stored by the
+old cluster and the new task that is trying to retrieve the task
+results. As a result, the get task request can timeout waiting on
+itself. Since we already waited for the task to finish before restarting
+the cluster, waiting for the task here doesn't make any sense to start
+with.
+
+Fixes #28732

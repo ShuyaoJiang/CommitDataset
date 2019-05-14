@@ -1,0 +1,22 @@
+Add grab command to collect script's dependencies
+
+Previously, run --local could be used to collect a script's
+dependencies in ./repository. However, with this mechanism it wasn't
+possible to collect the dependencies without running the application.
+
+This commit adds a new command, grab, that can be used to collect
+a script's dependencies in ./repository without having to run it.
+run is configured with ./repository as a location in which it can find
+its dependencies so that the previously collected dependencies
+can be used when subsequently running the app.
+
+As part of this work RunCommand and TestCommand have been refactored
+to use common code for their common options:
+
+	--no-guess-imports
+	--no-guess-dependencies
+	--classpath
+
+Previously, the declaration and handling of the options was duplicated
+in the two classes. GrabCommand also has these three options and uses
+the same common code.

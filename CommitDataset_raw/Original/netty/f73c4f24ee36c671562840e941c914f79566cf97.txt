@@ -1,0 +1,10 @@
+HTTP/2 HPACK Bounds Check Fix
+
+Motivation:
+21e8d84b7961c36435714cdb16eec31ad08213bc changed the way bounds checking was done, but however a bounds check in the case of READ_LITERAL_HEADER_NAME_LENGTH_PREFIX was using an old value. This would delay when the bounds check would actually be done and potentially allow more allocation than necessary.
+
+Modifications:
+- Use the new length (index) in the bounds check instead of an old length (nameLength) which had not yet been assigned to the new value.
+
+Result:
+More correct bounds checking.

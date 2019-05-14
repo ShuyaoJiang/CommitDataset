@@ -1,0 +1,13 @@
+Recognizing TLS Extension "HeartBeat" as Valid TLS Packet
+
+Motivation:
+
+The widely used SSL Implementation, OpenSSL, already supports Heartbeat Extension; both sending and responding to Heartbeat Messages. But, since Netty is not recognizing that extension as valid packet, peers won't be able to use this extension.
+
+Modification:
+
+Update SslUtils.java to recognize Heartbeat Extension as valid tls packet.
+
+Result:
+
+With this change, softwares using Netty + OpenSSL will be able to respond for TLS Heartbeat requests (actually taken care by OpenSSL - no need of any extra implementation from Clients)

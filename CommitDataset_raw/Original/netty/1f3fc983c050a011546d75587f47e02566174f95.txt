@@ -1,0 +1,10 @@
+DefaultPromise LateListener notification order
+
+Motivation:
+There is a notification ordering issue in DefaultPromise when the lateListener collection is in use. The ordering issue can be observed in situations where a late listener is added to a Future returned from a write operation. It is possible that this future will run after a read operation scheduled on the I/O thread, even if the late listener is added on the I/O thread. This can lead to unexpected ordering where a listener for a write operation which must complete in order for the read operation to happen is notified after the read operation is done.
+
+Modifications:
+- If the lateListener collection becomes empty, it should be treated as though it was null when checking if lateListeners can be notified immediatley (instead of executing a task on the executor)
+
+Result:
+Ordering is more natural and will not be perceived as being out of order relative to other tasks on the same executor.

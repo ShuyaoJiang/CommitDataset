@@ -1,0 +1,35 @@
+Prevent GC pressure from causing an NPE in SimpleInMemoryRepository
+
+Previously, SimpleInMemoryRepository used a ConcurrentReferenceHashMap
+to store its locks. The type of map will discard its entries when the
+JVM comes under GC pressure. With the code in its previous form, this
+could lead to a NullPointerException when the following occurred:
+
+1. putIfAbsent returned null indicating that a new entry has been added
+   to the map
+2. GC pressure caused the map to discard the new entry
+3. get returned null as the entry has been discard
+
+There are two problems with the existing code:
+
+1. Its usage of a ConcurrentMap is incorrect. The correct usage is:
+   a. Call get to see if the map already contains a lock
+   b. If the lock is null, create a new one
+   c. Call putIfAbsent to add the new lock
+   d. If the return value is non-null, another thread has created the
+      lock and it should be used. If the return value is null, use the
+      new lock created in b.
+2. Once the use of ConcurrentMap has been corrected, the fact that it is
+   a ConcurrentReferenceHashMap means that different threads could
+   access the same value using different locks. This would occur if one
+   thread has retrieved a lock from the map and is using it, while GC
+   causes the lock to be removed from the map. Another thread then
+   attempts to get the lock and, as GC pressure has remove it, a new
+   lock is created allowing concurrent access to the same value.
+
+This commit updates the code to use the ConcurrentMap correctly and also
+replaces the ConcurrentReferenceHashMap with a ConcurrentHashMap. This
+means that the repository will now use slightly more memory but this is
+outweighed by the benefits of thread-safe updates and no risk of an NPE.
+
+Closes gh-6115

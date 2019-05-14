@@ -1,0 +1,14 @@
+TEST: Corrupt some translog files used in recovery (#27887)
+
+Currently, method corruptTranslogFiles corrupts some translog files
+whose translog_gen are at least the min_required_translog_gen from the
+translog checkpoint. However this condition is not enough for
+recoverFromTranslog to be always failed.  If we corrupt only translog
+operations from only translog files whose translog_gen are smaller than
+the min_translog_gen of a recovering index commit, recoverFromTranslog
+will be ok as we won't read translog operations from those files.
+
+This commit makes sure corruptTranslogFiles to corrupt some translog 
+files that will be used in recoverFromTranslog.
+
+Closes #27538

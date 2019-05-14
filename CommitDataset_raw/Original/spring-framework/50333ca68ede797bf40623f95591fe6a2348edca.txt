@@ -1,0 +1,16 @@
+Add Java 7 instrumentation manifest attributes
+
+Update META-INF/MANIFEST.MF for spring-instrument to include
+necessary attributes for running under Java 7:
+
+    Can-Redefine-Classes : true
+    Can-Retransform-Classes: true
+    Can-Set-Native-Method-Prefix : false
+
+(see http://docs.oracle.com/javase/7/docs/api/java/lang/instrument/
+package-summary.html)
+
+Prior to this commit `InstrumentationSavingAgent.getInstrumentation().
+addTransformer(t, true);` would fail under Java 7.
+
+Issue: SPR-10731

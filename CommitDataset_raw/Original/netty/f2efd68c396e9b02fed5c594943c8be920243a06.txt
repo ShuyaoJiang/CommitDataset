@@ -1,0 +1,14 @@
+Correctly support SSLSession.getId() when using OpenSslEngine
+
+Motivation:
+
+At the moment SSLSession.getId() may always return an empty byte array when OpenSSLEngine is used. This is as we not set SSL_OP_NO_TICKET on the SSLContext and so SSL_SESSION_get_id(...) will return an session id with length of 0 if tickets are not used.
+
+Modifications:
+
+- Set SSL_OP_NO_TICKET by default and only clear it if the user requests the usage of session tickets.
+- Add unit test
+
+Result:
+
+Ensure consistent behavior between different SSLEngine implementations.

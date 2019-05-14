@@ -1,0 +1,14 @@
+Always handle quoted arguments correctly in the launch script
+
+Previously, arguments passed to the script were handled in one way
+if a service was being started using start-stop-daemon and in another
+way if start-stop-daemon wasn’t available or the application is being
+launched in run mode. This meant that quoted arguments were only 
+handled correctly when the application was being started using
+start-stop-daemon.
+
+This commit updates the launch script so that argument handling is
+the same across all three different way that the application can be
+launched.
+
+Closes gh-5942

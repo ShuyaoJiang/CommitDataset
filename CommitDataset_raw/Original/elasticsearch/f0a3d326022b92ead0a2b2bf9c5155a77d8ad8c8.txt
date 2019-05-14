@@ -1,0 +1,20 @@
+SQL: Introduce INTERVAL support (#35521)
+
+Introduce INTERVAL as a DataType
+Add INTERVAL to the grammar which supports the standard SQL declaration
+ (without precision):
+ > INTERVAL '1 23:45:01.123456789' DAY TO SECOND
+ but also number for single unit intervals:
+ > INTERVAL 1 YEAR
+ as well as the plurals of the units:
+ > INTERVAL 2 YEARS
+Interval are internally supported as just another Literal being backed
+ by java.time.Period and java.time.Duration
+Move JDBC away from JDBCType enum to SQLType interface
+Refactor DataType by moving it into server core and adding dedicated (and
+ much simpler) JDBC driver type
+Improve internal JDBC conversion by normalizing on the DataType
+Rename JDBC columnInfo to JdbcColumnInfo to differentiate between it and
+ the SQL ColumnInfo
+
+Fix #29990

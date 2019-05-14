@@ -1,0 +1,10 @@
+Fix WebSocketHttpTest.throwingOnMessageClosesImmediatelyAndFails().
+
+The server will receive an EOFException when the client errors out.
+But because that didn't usually happen immediately our test got away
+with confirming there were no further events.
+
+Also fix WebSocketHttpTest.readTimeoutAppliesToHttpRequest().
+
+Closes: https://github.com/square/okhttp/issues/3228
+Closes: https://github.com/square/okhttp/issues/3090

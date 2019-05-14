@@ -1,0 +1,15 @@
+Fix leak in SniClientTest. (#8324)
+
+Motivation:
+
+We need to release the ReferenceCountedSslContext to eliminate resource leaks.
+
+Reported in https://garage.netty.io/teamcity/viewLog.html?buildId=33353&buildTypeId=netty_build_oraclejdk8&tab=buildLog#_focus=157264.
+
+Modifications:
+
+Call release on the SslContext instances.
+
+Result:
+
+No more leaks in tests.

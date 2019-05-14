@@ -1,0 +1,12 @@
+Allow null params as advertised in Constants#toCode*
+
+Even though the Javadoc for Constants#toCode and #toCodeForSuffix
+specifies that a null value for the 'namePrefix' and 'nameSuffix'
+parameters are respectively allowed, before this change passing a null
+to either would result in a NullPointerException.
+
+This change fixes constant name lookup for null values of these params
+as if an empty string had been passed instead. This way of handling a
+null value is consistent with the rest of Constants class API.
+
+Issue: SPR-8278

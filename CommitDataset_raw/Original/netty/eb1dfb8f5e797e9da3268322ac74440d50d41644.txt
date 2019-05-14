@@ -1,0 +1,10 @@
+SingleThreadEventLoopTest failures
+
+Motivation:
+Some unit tests in SingleThreadEventLoopTest rely upon Thread.sleep for sequencing events between threads. This can be unreliable and result in spurious test failures if thread scheduling does not occur in a fair predictable manner.
+
+Modifications:
+- Reduce the reliance on Thread.sleep in SingleThreadEventLoopTest
+
+Result:
+Fixes https://github.com/netty/netty/issues/5851

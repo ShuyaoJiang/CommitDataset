@@ -1,0 +1,16 @@
+Refine check for multiple subscribers
+
+Commit #c187cb2 introduced proactive rejection of multiple subscribers
+in ReactorClientHttpResponse, instead of hanging indefinitely as per
+https://github.com/reactor/reactor-netty/issues/503.
+
+However FluxReceive also rejects subsequent subscribers if the response
+is consumed fully, as opposed to being canceled, e.g. as with
+bodyToMono(Void.class). In that case, a subsequent subscriber causes
+two competing error signals to be sent, and one gets dropped and
+logged by reactor-core.
+
+This fix ensures that a rejection is raised in
+ReactorClientHttpResponse only after a cancel() was detected.
+
+Issue: SPR-17564

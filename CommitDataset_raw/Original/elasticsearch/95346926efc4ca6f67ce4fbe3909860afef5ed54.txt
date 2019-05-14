@@ -1,0 +1,10 @@
+SQL: Lock down JDBC driver (#35798)
+
+Move classes under the same package to avoid internal classes being
+ exposed to the outside. Remove public visibility outside 3 classes:
+ EsDriver, EsDataSource and EsTypes.
+The driver only has one package, namely org.elasticsearch.xpack.sql.jdbc
+Use Es prefix for classes to ease name conflict and indicate their
+ destination
+
+Fix #35437

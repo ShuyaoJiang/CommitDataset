@@ -1,0 +1,10 @@
+HTTP/2 InboundHttp2ToHttpAdapterTest race condition
+
+Motivation:
+The latches in InboundHttp2ToHttpAdapterTest were volatile and reset during the tests. This resulted in race conditions and sometimes the tests would be waiting on old latches that were not the same latches being counted down when messages were received.
+
+Modifications:
+- Remove volatile latches from tests
+
+Result:
+More reliable tests with less race conditions.

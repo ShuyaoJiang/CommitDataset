@@ -1,0 +1,10 @@
+Checkstyle: Catch wide snippets (#34163)
+
+We use wrap code in `// tag` and `//end` to include it in our docs. Our
+current docs style wraps code snippets in a box that is only wide enough
+for 76 characters and adds a horizontal scroll bar for wider snippets
+which makes the snippet much harder to read. This adds a checkstyle check
+that looks for java code that is included in the docs and is wider than
+that 76 characters so all snippets fit into the box. It solves many of
+the failures that this catches but suppresses many more. I will clean
+those up in a follow up change.

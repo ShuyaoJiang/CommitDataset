@@ -1,0 +1,12 @@
+Fix test which still uses default type (#39997)
+
+org.elasticsearch.xpack.monitoring.action.MonitoringBulkRequestTests#testAddRequestContent
+can still randomly use a defaultType for monitoring. The defaultType
+support has been removed as of PR #39888. Prior to its's removal it
+would default the type if one is not specified. The _type on the monitoring
+bulk end point is currently required, though it is not used as the final index type
+(which defaultType would have).
+
+Closes #39980
+
+

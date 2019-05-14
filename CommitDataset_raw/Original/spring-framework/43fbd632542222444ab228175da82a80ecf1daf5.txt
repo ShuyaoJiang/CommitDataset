@@ -1,0 +1,13 @@
+Add maxSessions, getSessions, removeExpiredSessions
+
+This commit removes the session threshold check added recently which
+is not effective since maxIdleTime is usually much longer than the
+frequency of checks. The lazy triggering of expiration checks during
+create or retreive are simple and the most effective
+
+This commit also adds a maxSessions limit on the total number of
+sessions that can be created at any one time, a getSessions method
+for management purposes, and a removeExpiredSessions public API
+for manual triggering of expiration checks.
+
+Issue: SPR-17020, SPR-16713

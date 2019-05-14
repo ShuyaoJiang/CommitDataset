@@ -1,0 +1,8 @@
+Tie break on cluster alias when merging shard search failures (#38715)
+
+A recent test failure triggered an edge case scenario where failures may be coming back with the same shard id, yet from different clusters.
+This commit adapts the failures comparator to take the cluster alias into account when merging failures as part of CCS requests execution.
+Also the corresponding test has been split in two: with and without
+search shard target set to the failure.
+
+Closes #38672

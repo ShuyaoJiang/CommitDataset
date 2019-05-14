@@ -1,0 +1,22 @@
+Fix package cycle in @EnableSpringConfigured
+
+@EnableSpringConfigured and its @Import'ed
+SpringConfiguredConfiguration @Configuration class inadvertently
+established a package cycle between beans.factory.aspectj and
+context.annotation due to SpringConfiguredConfiguration's
+dependency on annotations such as @Configuration, @Bean and @Role.
+
+This commit fixes this architecture bug by moving
+@EnableSpringConfigured and SpringConfiguredConfiguration from the
+beans.factory.aspectj package to the context.annotation package where
+they belong.
+
+This change is assumed to be very low impact as @EnableSpringConfigured
+was introduced in 3.1.0 and relocation is happening as quickly as
+possible in 3.1.2. @EnableSpringConfigured is assumed to be infrequently
+used at this point, and for those that are the migration path
+is straightforward. When upgrading from Spring 3.1.0 or 3.1.1, update
+import statements in any affected @Configuration classes to reflect the
+new packaging.
+
+Issue: SPR-9441

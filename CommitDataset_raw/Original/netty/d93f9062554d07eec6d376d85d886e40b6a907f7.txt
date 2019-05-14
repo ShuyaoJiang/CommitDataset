@@ -1,0 +1,13 @@
+[#4198] Fix race-condition when allocate from multiple-thread.
+
+Motivation:
+
+Fix a race condition that was introduced by f18990a8a507d52fc40416d169db340105b10ec0 that could lead to a NPE when allocate from the PooledByteBufAllocator concurrently by many threads.
+
+Modifications:
+
+Correctly synchronize on the PoolSubPage head.
+
+Result:
+
+No more race.

@@ -1,0 +1,13 @@
+Do not ignore request analysis/similarity on resize (#30216)
+
+Today when a resize operation is performed, we copy the analysis,
+similarity, and sort settings from the source index. It is possible for
+the resize request to include additional index settings including
+analysis, similarity, and sort settings. We reject sort settings when
+validating the request. However, we silently ignore analysis and
+similarity settings on the request that are already set on the source
+index. Since it is possible to change the analysis and similarity
+settings on an existing index, this should be considered a bug and the
+sort of leniency that we abhor. This commit addresses this bug by
+allowing the request analysis/similarity settings to override the
+existing analysis/similarity settings on the target.

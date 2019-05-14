@@ -1,0 +1,16 @@
+Improve semantics writing currentData
+
+Before this commit, the return value from write was interpreted as the
+data being fully written and ready to be released via releaseData().
+
+This is not true for WebSocketSession implementations where a true
+return value simply means the message was sent with the full payload
+but releas is not appropriate until a send confirmation.
+
+Technically not an issue since WebSocketSession's extending this do
+not use pooled buffers. Nevertheless this commit refines the semantics
+of write, removes the releaseData() method, and makes sub-classes
+responsible for releasing the buffer when fully written (and they
+know best when that is). As a bonus currentData is now private.
+
+Issue: SPR-16207

@@ -1,0 +1,12 @@
+Fix regression with covariant property return types
+
+Prior to this change, the Property class introduced in 3.1 M2 validated
+read/write property method pairs based on whether their parameter/return
+types were equal to one another.  This precluded the valid possibility
+of read method that returns a subtype of the write method's parameter
+type, and represented a regression against 3.1 M1 and earlier versions.
+
+The implementation now uses isAssignableFrom rather than a straight
+equals check against the types.
+
+Issue: SPR-8432

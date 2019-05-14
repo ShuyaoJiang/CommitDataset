@@ -1,0 +1,14 @@
+Fix timestamp parsing in HttpHeaderDateFormatter
+
+Motivation:
+code assumes a numeric value of 0 means no digits were read between separators, which fails for timestamps like 00:00:00.
+also code accepts invalid timestamps like 0:0:000
+
+Modifications:
+explicitly check for number of digits between separators instead of relying on the numeric value.
+also add tests.
+
+Result:
+timestamps with 00 successfully parse, timestamps with 000 no longer
+
+Signed-off-by: radai-rosenblatt <radai.rosenblatt@gmail.com>

@@ -1,0 +1,22 @@
+Adding support for echoing the request origin for CORS.
+
+Motivation:
+When CORS has been configured to allow "*" origin, and at the same time
+is allowing credentials/cookies, this causes an error from the browser
+because when the response 'Access-Control-Allow-Credentials' header
+is true, the 'Access-Control-Allow-Origin' must be an actual origin.
+
+Modifications:
+Changed CorsHandler setOrigin method to check for the combination of "*"
+origin and allowCredentials, and if the check matches echo the CORS
+request's 'Origin' value.
+
+Result:
+This addition enables the echoing of the request 'Origin' value as the
+'Access-Control-Allow-Origin' value when the server has been configured
+to allow any origin in combination with allowCredentials.
+
+This allows client requests to succeed when expecting the server to
+be able to handle "*" origin and at the same time be able to send cookies
+by setting 'xhr.withCredentials=true'. A concrete example of this is
+the SockJS protocol which expects behaviour.

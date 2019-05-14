@@ -1,0 +1,8 @@
+Fix RareClusterStateIT on MacOS (#40203)
+
+Today RareClusterStateIT#testAssignmentWithJustAddedNodes fails on my Mac
+because it waits for the default connection timeout of 30 seconds to connect to
+a fake node with IP address 0.0.0.0. This connection attempt fails much more
+quickly on Linux so the test passes.
+
+This commit fixes this by reducing the connection timeout for this test.

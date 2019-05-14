@@ -1,0 +1,16 @@
+Support byte ranges in ResourceHttpRequestHandler
+
+This commit introduces support for HTTP byte ranges in the
+ResourceHttpRequestHandler. This support consists of a number of
+changes:
+
+- Parsing of HTTP Range headers in HttpHeaders, using a new HttpRange
+  class and inner ByteRange/SuffixByteRange subclasses.
+- MIME boundary generation moved from FormHttpMessageConverter to
+  MimeTypeUtils.
+- writePartialContent() method introduced in ResourceHttpRequestHandler,
+  handling the byte range logic
+- Additional partial content tests added to
+  ResourceHttpRequestHandlerTests.
+
+Issue: SPR-10805

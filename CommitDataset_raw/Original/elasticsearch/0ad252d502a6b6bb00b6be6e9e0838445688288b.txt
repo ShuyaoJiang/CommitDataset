@@ -1,0 +1,10 @@
+change default indices.lifecycle.poll_interval to something sane (#32521)
+
+This was originally set to a few seconds while prototyping things.
+This interval is for the scheduled trigger of policies. Policies
+have this extra trigger beyond just on cluster-state changes because
+cluster-state changes may not be happeneing in a cluster for
+whatever reason, and we need to continue making progress. Updating
+this value to be larger is reasonable since not all operations
+are expected to be completed in the span of seconds, but instead in
+minutes and hours. 10 minutes is sane.

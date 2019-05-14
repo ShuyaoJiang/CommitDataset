@@ -1,0 +1,11 @@
+Resolve native header values with @Header
+
+The @Header annotation in spring-messaging now resolves values from the
+nested "nativeHeaders" map as well as top-level header map values.
+
+In case of ambiguity (a value that exists in both), the top-level map
+value is used and a warning message is printed. This is unlikly in most
+cases but can be resolved by prefixing the header value with
+"nativeHeadres.myHeader".
+
+Issue: SPR-11326

@@ -1,0 +1,10 @@
+[Zen2] Support rolling upgrades from Zen1 (#35737)
+
+We support rolling upgrades from Zen1 by keeping the master as a Zen1 node
+until there are no more Zen1 nodes in the cluster, using the following
+principles:
+
+- Zen1 nodes will never vote for Zen2 nodes
+- Zen2 nodes will, while not bootstrapped, vote for Zen1 nodes
+- Zen2 nodes that were previously part of a mixed cluster will automatically
+  (and unsafely) bootstrap themselves when the last Zen1 node leaves.

@@ -1,0 +1,48 @@
+Support HARDWARE Bitmaps in Android O+ in Glide.
+
+From adb shell dumpsys meminfo com.google.android.apps.photos on a 2016
+Pixel on OPM1.170816.001:
+
+Before:
+App Summary
+                       Pss(KB)
+                        ------
+           Java Heap:    20360
+         Native Heap:    66032
+                Code:    93336
+               Stack:     1192
+            Graphics:    85892
+       Private Other:     8956
+              System:    19944
+
+               TOTAL:   295712       TOTAL SWAP PSS:       82
+
+After:
+App Summary
+                       Pss(KB)
+                        ------
+           Java Heap:    20456
+         Native Heap:    39756
+                Code:    93384
+               Stack:     1220
+            Graphics:    81460
+       Private Other:     9024
+              System:    11662
+
+               TOTAL:   256962       TOTAL SWAP PSS:       81
+
+These numbers aren't super solid. Some extra invalidations can dump more
+Bitmaps into our Bitmap pool which will make it look like the steady
+state memory usage is increasing even though the maximum amount remains
+the same. That said, I see between a 33% and 50% improvement in native
+heap usage after this change. This was tested by flinging back and forth
+in the All grid in Photos.
+
+This change is limited to HARDWARE Bitmap support. We ought to also be
+able to reduce the bitmap pool size in O+ now that we only care about
+re-using Bitmaps for very small images or while generating thumbnails
+for the first time.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=165717498

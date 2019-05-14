@@ -1,0 +1,10 @@
+[TEST] QA resources should not need vagrant provision (elastic/x-pack-elasticsearch#3851)
+
+For the idp-fixture (OpenLDAP + SAML), we have been generating the CA as part of the provisioning steps for the VM and then adding it to the test resources for the gradle project.
+
+This meant that test-resources were dependent on vagrant provision, and as a consequence vagrant would download and provision the box during precommit. A bad thing (TM)
+
+This change introduces a pre-generated CA, which is supplied to the VM instead so the tests only depend on fixed resources.
+(The SAML integration test still uses the generated IdP Metadata file, but it copies it as part integ-test cluster setup, and doesn't treat it as a gradle "test resource")
+
+Original commit: elastic/x-pack-elasticsearch@a352bf2a1fe0389d80ea53e279e0d47412bdc15a

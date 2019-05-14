@@ -1,0 +1,19 @@
+Fix Connection sharing across equivalent OkHttpClients
+
+Fixes https://github.com/square/okhttp/issues/2757
+
+The OkHttpClient(Builder) constructor and both overloads of
+OkHttpClient.Builder.sslSocketFactory() set a new CertificateChainCleaner
+instance on the OkHttpClient.
+
+Before this CL, CertificateChainCleaner, CertificatePinner and
+TrustRootIndex used object rather than value identity semantics. This
+caused Address.equals() to not recognize when addresses were equivalent,
+which broke connection pooling across OkHttpClient instances.
+
+This CL changes CertificateChainClaner, CertificatePinner and
+TrustRootIndex to use value equality by overriding equals() and hashCode().
+
+CertificatePinner.pins and BasicTrustRootIndex.subjectToCaCerts's values
+have changed from List to Set because their order shouldn't matter.
+This CL uses LinkedHashSet, although HashSet should also work.

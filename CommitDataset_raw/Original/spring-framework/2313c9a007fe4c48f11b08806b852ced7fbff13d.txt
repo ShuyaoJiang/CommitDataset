@@ -1,0 +1,18 @@
+Introduce java.nio.file.Path based Resource
+
+Develop new org.springframework.core.io.Resource implementation
+backed by java.nio.file.Path. Primarily developed to allow custom
+file system implementations to be used with Spring.
+
+Since the minimum requirement for Spring is still Java 6 the
+existing FileSystemResource can't be retrofitted (and no #getPath
+method can be added to the Resource interface).
+
+Unlike FileSystemResource, PathResource delegates to the underlying
+file system instead of StringUtils. It has therefore slightly
+different semantics. First, when building relative resources via
+createRelative the relative path will apply to this path (like URL or
+Unix). Second, equality is delegated to the underlying file system
+provider so it's case-insensitive on Windows.
+
+Issue: SPR-10608

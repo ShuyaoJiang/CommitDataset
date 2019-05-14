@@ -1,0 +1,19 @@
+Checks the circuit breaker before allocating bytes for a new big array (#25010)
+
+Previously, when allocating bytes for a BigArray, the array was created
+(or attempted to be created) and only then would the array be checked
+for the amount of RAM used to see if the circuit breaker should trip.
+
+This is problematic because for very large arrays, if creating or
+resizing the array, it is possible to attempt to create/resize and get
+an OOM error before the circuit breaker trips, because the allocation
+happens before checking with the circuit breaker.
+
+This commit ensures that the circuit breaker is checked before all big
+array allocations (note, this does not effect the array allocations that
+are less than 16kb which use the [Type]ArrayWrapper classes found in
+BigArrays.java).  If such an allocation or resizing would cause the
+circuit breaker to trip, then the breaker trips before attempting to
+allocate and potentially running into an OOM error from the JVM.
+
+Closes #24790

@@ -1,0 +1,9 @@
+Clear the error request in ErrorRequestCoordinator if it’s running.
+
+Previously we’d never clear the error request which could lead to a
+StateVerifier exception or an object pooling error because 
+primary.isLoadFailed() would always return false because the state would
+be reset from failed to cleared in the call to primarly.clear() on the 
+line immediately above the check.
+
+Fixes #2767.

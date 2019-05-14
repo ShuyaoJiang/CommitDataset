@@ -1,0 +1,803 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml). 
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.example.http2:  
+
+1.1. Add a class for http 2 example util. It allows to:
+
+	Instantiate http 2 example util;
+	Convert http 2 example util to int;
+	Convert http 2 example util to byte buf;
+	Handle first value
+
+2. Changes to package io.netty.handler.codec.http:  
+
+2. Changes to package io.netty.handler.codec.http2:  
+
+2.1. Add a class for compressor http 2 connection encoder. It allows to:
+
+	Instantiate compressor http 2 connection encoder  with delegate http connection encoder;
+	Handle on stream removed;
+	Write data;
+	Write headers;
+	Handle new content compressor;
+	Get target content encoding;
+	Handle new compression channel;
+	Handle new compressor;
+	Convert bind compressor;
+	Handle cleanup;
+	Handle next readable buf
+
+2.2. Add a class for data compression http 2 test. It allows to:
+
+	Handle setup;
+	Answer invocation on mock;
+	Handle cleanup;
+	Handle teardown;
+	Just headers no data;
+	Run;
+	Gzip encoding single empty message;
+	Gzip encoding single message;
+	Gzip encoding multiple messages;
+	Deflate encoding write large message;
+	Bootstrap env;
+	Handle on stream closed;
+	Handle init channel;
+	Handle user event triggered;
+	Await server;
+	Ctx client;
+	Handle new promise client
+
+2.3. Add a class for default http 2 connection decoder test. It allows to:
+
+	Handle setup;
+	Answer invocation on mock;
+	Handle data read after go away sent should apply flow control;
+	Handle data read after go away sent should allow frames for stream created by local endpoint;
+	Handle data read for unknown stream should apply flow control and fail;
+	Handle data read for unknown stream should apply flow control;
+	Handle empty data frame should apply flow control;
+	Handle data read for stream in invalid state should throw;
+	Handle data read after go away sent for stream in invalid state should ignore;
+	Handle data read after go away sent on unknown stream should ignore;
+	Handle data read after rst stream for stream in invalid state should ignore;
+	Handle data read with end of stream shouldclose stream remote;
+	Handle error during delivery should return correct number of bytes;
+	Handle headers read for unknown stream should throw;
+	Handle headers read for stream that already sent reset should be ignored;
+	Handle headers read for unknown stream after go away should be ignored;
+	Handle headers read for unknown stream should create stream;
+	Handle headers read for unknown stream should create half closed stream;
+	Handle headers read for promised stream should half open stream;
+	Handle trailers do not end stream throws;
+	Too many headers EOS throws;
+	Too many headers no EOS throws;
+	Too many header throws;
+	Handle informational headers;
+	Info headers and trailers allowed;
+	Handle multiple info headers and trailers allowed;
+	Info headers and trailers no EOS throws;
+	Handle multiple info headers and trailers no EOS throws;
+	Handle headers read for promised stream should close stream;
+	Handle headers dependency not created should create and succeed;
+	Push promise read  after go away sent should be ignored;
+	Push promise read  after go away should allow frames for stream created by local endpoint;
+	Push promise read  for unknown stream should throw;
+	Push promise read should succeed;
+	Handle priority read after go away sent should allow frames for stream created by local endpoint;
+	Handle priority read for unknown stream should not be ignored;
+	Handle priority read should not create new stream;
+	Handle window update read after go away sent should be ignored;
+	Handle window update read after go away sent should allow frames for stream created by local endpoint;
+	Handle window update read for unknown stream should throw;
+	Handle window update read for unknown stream should be ignored;
+	Handle window update read should succeed;
+	Handle rst stream read after go away should succeed;
+	Handle rst stream read for unknown stream should throw;
+	Handle rst stream read for unknown stream should be ignored;
+	Handle rst stream read should close stream;
+	Handle rst stream on idle stream should throw;
+	Ping read  with ack should notify listener;
+	Ping read should reply  with ack;
+	Handle settings read with ack should notify listener;
+	Handle settings read should set values;
+	Go default http 2 connection decoder test away should read should update connection state;
+	Handle dummy data;
+	Decode default http 2 connection decoder test;
+	Handle mock flow control;
+	Handle mock go away sent;
+	Handle mock go away sent should allow frames for stream created by local endpoint
+
+2.4. Add a class for default http 2 connection encoder test. It allows to:
+
+	Handle setup;
+	Answer invocation on mock;
+	Handle data with end of stream write should signal that frame was consumed on error;
+	Handle data write should signal that frame was consumed on error;
+	Handle data write should signal that frame was consumed on error 0;
+	Handle data write should succeed;
+	Handle data frames should merge;
+	Handle data frames should merge use void promise;
+	Handle data frames dont merge with headers;
+	Handle empty frame should split padding;
+	Write headers using void promise;
+	Assert split padding  on empty buffer;
+	Handle headers write for unknown stream should create stream;
+	Handle headers write should open stream for push;
+	Handle trailers do not end stream throws;
+	Handle trailers do not end stream with data throws;
+	Too many headers no EOS throws;
+	Too many headers EOS throws;
+	Too many headers throws;
+	Info headers and trailers allowed;
+	Handle multiple info headers and trailers allowed;
+	Info headers and trailers no EOS throws;
+	Handle multiple info headers and trailers no EOS throws;
+	Info headers and trailers;
+	Handle informational headers;
+	Too many headers  with data no EOS throws;
+	Too many headers  with data EOS throws;
+	Too many headers  with data throws;
+	Info headers and trailers  with data allowed;
+	Handle multiple info headers and trailers with data allowed;
+	Info headers and trailers  with data no EOS throws;
+	Handle multiple info headers and trailers with data no EOS throws;
+	Info headers and trailers  with data;
+	Push promise write  after go away received should fail;
+	Push promise write should reserve stream;
+	Handle priority write after go away should succeed;
+	Handle priority write should set priority for stream;
+	Handle priority write on previously existing stream should succeed;
+	Handle priority write on previously existing parent stream should succeed;
+	Handle rst stream write for unknown stream should ignore;
+	Handle rst stream should close stream;
+	Handle ping write after go away should succeed;
+	Handle ping write should succeed;
+	Handle settings write after go away should succeed;
+	Handle settings write should not update settings;
+	Handle data write should create half closed stream;
+	Handle headers write should half close stream;
+	Handle headers write should half close push stream;
+	Handle headers write should half close after on error for pre created stream;
+	Handle headers write should half close after on error for implicitly created stream;
+	Convert encoder delegates go away;
+	Convert data write;
+	Handle can write data frame after go away sent;
+	Handle can write header frame after go away sent;
+	Handle can write data frame after go away received;
+	Handle can write header frame after go away received;
+	Write all flow controlled frames;
+	Create stream;
+	Get reserve push stream;
+	Get stream;
+	Go default http 2 connection encoder test away received;
+	Go default http 2 connection encoder test away sent;
+	Handle new promise;
+	Handle new succeeded future;
+	Handle dummy data
+
+2.5. Add a class for default http 2 frame writer. It allows to:
+
+	Instantiate default http 2 frame writer;
+	Instantiate default http 2 frame writer  with headers sensitivity detector;
+	Instantiate default http 2 frame writer  with http 2 headers encoder;
+	Get configuration;
+	Get headers configuration;
+	Frame size policy;
+	Max frame size;
+	Close default http 2 frame writer;
+	Write data;
+	Write headers;
+	Write priority;
+	Write rst stream;
+	Write settings;
+	Write settings  ack ctx channel handler context;
+	Write ping;
+	Write push promise;
+	Write go  away ctx channel handler context;
+	Write window update;
+	Write frame;
+	Write headers internal;
+	Write continuation frames;
+	Get padding bytes;
+	Write padding length;
+	Verify stream id;
+	Verify stream or connection id;
+	Verify weight;
+	Verify error code;
+	Verify window size increment;
+	Verify ping payload
+
+2.6. Add a class for default http 2 headers decoder. It allows to:
+
+	Instantiate default http 2 headers decoder;
+	Instantiate default http 2 headers decoder  with hpack decoder;
+	Max header table size;
+	Max header list size;
+	Max header list size go  away;
+	Get configuration;
+	Decode headers;
+	Get number of headers guess;
+	Validate headers;
+	Handle new headers
+
+2.7. Add a class for default http 2 headers decoder test. It allows to:
+
+	Handle setup;
+	Decode default http 2 headers decoder test;
+	Handle test exceed header size;
+	Decode larger  than header list size but less than go away;
+	Decode larger  than header list size but less than go away with initial decoder settings;
+	Decode larger  than header list size go away;
+	Get b;
+	Encode default http 2 headers decoder test
+
+2.8. Add a class for default http 2 headers encoder. It allows to:
+
+	Instantiate default http 2 headers encoder;
+	Instantiate default http 2 headers encoder  with sensitivity detector;
+	Instantiate default http 2 headers encoder  with sensitivity detector, hpack encoder and hpack encoder;
+	Encode headers;
+	Max header table size;
+	Max header list size;
+	Get configuration
+
+2.9. Add a class for default http 2 headers encoder test. It allows to:
+
+	Handle setup;
+	Encode default http 2 headers encoder test;
+	Handle headers exceed max set size should fail;
+	Get headers
+
+2.10. Add a class for default http 2 headers test. It allows to:
+
+	Handle null header name not allowed;
+	Handle empty header name not allowed;
+	Handle test pseudo headers must come first when iterating;
+	Handle test pseudo headers with remove preserves pseudo iteration order;
+	Handle test pseudo headers with clear does not leak;
+	Handle test set headers orders pseudo headers correctly;
+	Handle test set all orders pseudo headers correctly;
+	Handle test header name validation;
+	Handle test clear resets pseudo header division;
+	Handle test contains name and value;
+	Verify all pseudo headers present;
+	Verify pseudo headers  first http 2 headers;
+	Handle new headers
+
+2.11. Add a class for default http 2 local flow controller test. It allows to:
+
+	Handle setup;
+	Handle data frame should be accepted;
+	Handle window update should send once bytes returned;
+	Handle connection window should auto refill when data received;
+	Handle connection flow control exceeded should throw;
+	Handle window update should not be sent after end of stream;
+	Half window remaining should update all windows;
+	Handle initial window update should allow more frames;
+	Handle connection window should adjust with multiple streams;
+	Close should consume bytes;
+	Handle close should not consume connection window when auto refilled;
+	Handle data received for closed stream should immediately consume bytes;
+	Handle data received for null stream should immediately consume bytes;
+	Consume bytes  for null stream should ignore;
+	Handle global ratio should impact streams;
+	Handle streaml ratio should impact streams;
+	Consume bytes  for zero num bytes should ignore;
+	Consume bytes  for negative num bytes should fail;
+	Handle test ratio;
+	Get window delta;
+	Receive flow controlled frame;
+	Handle dummy data;
+	Consume bytes;
+	Verify window update sent;
+	Verify window update  not sent;
+	Get window;
+	Get stream;
+	Handle init controller
+
+2.12. Add a class for empty http 2 headers. It allows to:
+
+	Instantiate empty http 2 headers;
+	Get method;
+	Get scheme;
+	Get authority;
+	Get path;
+	Get status;
+	Check if empty http 2 headers contains
+
+2.13. Add a class for http 2 client upgrade codec. It allows to:
+
+	Instantiate http 2 client upgrade codec  with http 2 frame codec, upgrade to handler and upgrade to handler;
+	Instantiate http 2 client upgrade codec  with http 2 connection handler;
+	Instantiate http 2 client upgrade codec  with http 2 connection handler, upgrade to handler and upgrade to handler;
+	Get protocol;
+	Set upgrade headers;
+	Upgrade  to ctx channel handler context;
+	Get settings header value
+
+2.14. Add a class for http 2 connection adapter. It allows to:
+
+	Handle on stream added;
+	Process http 2 connection adapter http 2 connection adapter on stream active;
+	Handle on stream half closed;
+	Handle on stream closed;
+	Handle on stream removed;
+	Handle on go away sent;
+	Handle on go away received
+
+2.15. Add an interface declaration  for http 2 connection decoder. It allows to:
+
+	Handle lifecycle manager;
+	Get connection;
+	Flow controller;
+	Frame listener;
+	Decode frame;
+	Handle local settings;
+	Handle preface received;
+	Close http 2 connection decoder
+
+2.16. Add an interface declaration  for http 2 connection encoder. It allows to:
+
+	Handle lifecycle manager;
+	Get connection;
+	Flow controller;
+	Frame writer;
+	Get poll sent settings;
+	Handle remote settings;
+	Write frame
+
+2.17. Add a class for http 2 connection handler test. It allows to:
+
+	Handle setup;
+	Answer invocation on mock;
+	Handle new handler;
+	Tear http 2 connection handler test;
+	Handle on http server upgrade without handler added;
+	Handle on http client upgrade without handler added;
+	Handle client shouldve sent preface and settings frame when user event is triggered;
+	Handle client should send client preface string when active;
+	Handle server should not send client preface string when active;
+	Handle server receiving invalid client preface string should handle exception;
+	Handle server receiving http 1 client preface string should include preface;
+	Handle server receiving client preface string followed by non settings should handle exception;
+	Handle server receiving valid client preface string should continue reading frames;
+	Verify channel handler can be reused  in pipeline;
+	Channel inactive should close streams;
+	Handle connection error should start shutdown;
+	Handle server should send 431 on header size error when decoding initial headers;
+	Handle server should never send 431 header size error when encoding;
+	Handle client should never send 431 when headers are too large;
+	Handle preface user event processed;
+	Handle user event triggered;
+	Handle server should never send 431 if headers already sent;
+	Handle server should create stream if needed before sending 431;
+	Handle encoder and decoder are closed on channel inactive;
+	Write rst  on non existant stream should succeed;
+	Write rst  on closed stream should succeed;
+	Write rst  on idle stream should not write but still succeed;
+	Close listener should be notified  only one time;
+	Can send go  away frame;
+	Can send go  away frames with decreasing last stream ids;
+	Can http 2 connection handler test not send go away frame with increasing last stream ids;
+	Can send go  away using void promise;
+	Handle channel read complete triggers flush;
+	Handle channel read complete calls read when auto read false;
+	Handle channel closed does not throw preface exception;
+	Write rst stream  for unknown stream using void promise;
+	Write rst stream  for known stream using void promise;
+	Handle graceful shutdown timeout test;
+	Handle graceful shutdown indefinite timeout test;
+	Write rst stream using void promise;
+	Handle dummy data;
+	Add settings header
+
+2.18. Add a class for http 2 connection roundtrip test. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Handle inflight frame after stream reset should not make connection unusable;
+	Answer invocation on mock;
+	Run;
+	Handle headers with end stream should not send error;
+	Encode violates max header list size can  still use connection;
+	Handle operation complete;
+	Handle test settings ack is sent before using flow control;
+	Handle priority using higher valued stream id does not prevent using lower stream id;
+	Handle headers using higher valued stream id prevents using lower stream id;
+	Handle headers write for peer stream which was reset should not go away;
+	Http 2 exception  in pipeline should close connection;
+	Handle handler added;
+	Handle listener exception should close connection;
+	Write http 2 connection roundtrip test of empty released buffer single buffer queued in flow controller should fail;
+	Write http 2 connection roundtrip test of empty released buffer single buffer trailers queued in flow controller should fail;
+	Write http 2 connection roundtrip test of empty released buffer multiple buffers queued in flow controller should fail;
+	Write http 2 connection roundtrip test of empty released buffer multiple buffers trailers queued in flow controller should fail;
+	Write write empty buffer mode of empty released buffer queued in flow controller should fail;
+	Write failure flow controller remove frame;
+	Write ctx channel handler context;
+	Non http 2 exception  in pipeline should not close connection;
+	No more stream ids should send go  away;
+	Create stream  after receive go away should not send go away;
+	Create stream  synchronously after go away received should fail locally;
+	Flow control  properly chunks large message;
+	Handle stress test;
+	Bootstrap env;
+	Handle init channel;
+	Handle user event triggered;
+	Get ctx;
+	Get server ctx;
+	Handle new promise;
+	Server new promise;
+	Handle dummy headers;
+	Handle mock flow control;
+	Set client graceful shutdown time;
+	Set server graceful shutdown time;
+	Set graceful shutdown time;
+	Handle random bytes
+
+2.19. Add an interface declaration  for http 2 data writer. It allows to:
+
+	Write data
+
+2.20. Add a class for http 2 event adapter. It allows to:
+
+	Handle on data read;
+	Process http 2 event adapter http 2 event adapter on headers read;
+	Process http 2 event adapter http 2 event adapter on priority read;
+	Handle on rst stream read;
+	Process http 2 event adapter http 2 event adapter on settings ack read;
+	Process http 2 event adapter http 2 event adapter on settings read;
+	Process http 2 event adapter http 2 event adapter on ping read;
+	Handle on ping ack read;
+	Handle on push promise read;
+	Handle on go away read;
+	Process http 2 event adapter http 2 event adapter on window update read;
+	Process http 2 event adapter http 2 event adapter on unknown frame;
+	Handle on stream added;
+	Process http 2 event adapter http 2 event adapter on stream active;
+	Handle on stream half closed;
+	Handle on stream closed;
+	Handle on stream removed;
+	Handle on go away sent;
+	Handle on go away received
+
+2.21. Add a class for http 2 flags. It allows to:
+
+	Instantiate http 2 flags;
+	Get value;
+	Handle end of stream;
+	Handle end of headers;
+	Handle priority present;
+	Handle ack;
+	Handle padding present;
+	Get num priority bytes;
+	Get padding presence field length;
+	Get end of stream;
+	Get end of headers;
+	Get priority present;
+	Get padding present;
+	Get ack;
+	Set flag;
+	Check if http 2 flags is flag set;
+	Hash code;
+	Check if http 2 flags equals;
+	Convert http 2 flags to string
+
+2.22. Add an interface declaration  for http 2 flow controller. It allows to:
+
+	Channel handler context;
+	Handle initial window size;
+	Get window size;
+	Handle increment window size
+
+2.23. Add a class for http 2 frame adapter. It allows to:
+
+	Handle on data read;
+	Process http 2 frame adapter http 2 frame adapter on headers read;
+	Process http 2 frame adapter http 2 frame adapter on priority read;
+	Handle on rst stream read;
+	Process http 2 frame adapter http 2 frame adapter on settings ack read;
+	Process http 2 frame adapter http 2 frame adapter on settings read;
+	Process http 2 frame adapter http 2 frame adapter on ping read;
+	Handle on ping ack read;
+	Handle on push promise read;
+	Handle on go away read;
+	Process http 2 frame adapter http 2 frame adapter on window update read;
+	Process http 2 frame adapter http 2 frame adapter on unknown frame
+
+2.24. Add an interface declaration  for http 2 frame listener. It allows to:
+
+	Handle on data read;
+	Process http 2 frame listener http 2 frame listener on headers read;
+	Process http 2 frame listener http 2 frame listener on priority read;
+	Handle on rst stream read;
+	Process http 2 frame listener http 2 frame listener on settings ack read;
+	Process http 2 frame listener http 2 frame listener on settings read;
+	Process http 2 frame listener http 2 frame listener on ping read;
+	Handle on ping ack read;
+	Handle on push promise read;
+	Handle on go away read;
+	Process http 2 frame listener http 2 frame listener on window update read;
+	Process http 2 frame listener http 2 frame listener on unknown frame
+
+2.25. Add a class for http 2 frame listener decorator. It allows to:
+
+	Instantiate http 2 frame listener decorator  with http 2 frame listener;
+	Handle on data read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on headers read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on priority read;
+	Handle on rst stream read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on settings ack read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on settings read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on ping read;
+	Handle on ping ack read;
+	Handle on push promise read;
+	Handle on go away read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on window update read;
+	Process http 2 frame listener decorator http 2 frame listener decorator on unknown frame
+
+2.26. Add a class for http 2 frame logger. It allows to:
+
+	Instantiate http 2 frame logger  with log level;
+	Instantiate http 2 frame logger  with log level, clazz class and clazz class;
+	Instantiate http 2 frame logger  with internal log level, internal logger and internal logger;
+	Check if http 2 frame logger is enabled;
+	Log data;
+	Log headers;
+	Log priority;
+	Log rst stream;
+	Log settings  ack direction;
+	Log settings;
+	Log ping;
+	Log ping ack;
+	Log push promise;
+	Log go  away direction;
+	Log windows update;
+	Log unknown frame;
+	Convert http 2 frame logger to string
+
+2.27. Add a class for http 2 frame roundtrip test. It allows to:
+
+	Handle setup;
+	Answer invocation on mock;
+	Handle teardown;
+	Handle empty data should match;
+	Handle data should match;
+	Handle data with padding should match;
+	Handle large data frame should match;
+	Handle empty headers should match;
+	Handle empty headers with padding should match;
+	Handle binary headers without priority should match;
+	Handle headers frame without priority should match;
+	Handle headers frame with priority should match;
+	Handle headers with padding without priority should match;
+	Handle headers with padding with priority should match;
+	Get continued headers should match;
+	Get continued headers with padding should match;
+	Handle headers that are too big should fail;
+	Handle empty push promise should match;
+	Push promise frame should match;
+	Push promise  with padding should match;
+	Get continued push promise should match;
+	Get continued push promise with padding should match;
+	Go http 2 frame roundtrip test away frame should match;
+	Ping frame should match;
+	Ping ack frame should match;
+	Handle priority frame should match;
+	Handle rst stream frame should match;
+	Handle empty settings frame should match;
+	Handle settings should strip should match;
+	Handle settings ack should match;
+	Handle window update frame should match;
+	Read frames;
+	Get data;
+	Get buf;
+	Get release later;
+	Writes http 2 frame roundtrip test;
+	Get headers;
+	Handle large headers;
+	Get headers of size;
+	Handle binary headers
+
+2.28. Add an interface declaration  for http 2 frame size policy. It allows to:
+
+	Max frame size;
+
+2.29. Add a class for http 2 frame types. It allows to:
+
+	Instantiate http 2 frame types
+
+2.30. Add a class for http 2 header block IO test. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Handle roundtrip should be successful;
+	Handle successive calls should succeed;
+	Set max header size should be successful;
+	Assert roundtrip successful;
+	Get headers
+
+2.31. Add an interface declaration  for http 2 headers. It allows to:
+
+	Handle pseudo header name;
+	Get value;
+	Check if http 2 headers has pseudo header format;
+	Check if http 2 headers is pseudo header;
+	Get pseudo header;
+	Check if http 2 headers is request only;
+	Get iterator;
+	Get value iterator;
+	Get method;
+	Get scheme;
+	Get authority;
+	Get path;
+	Get status;
+	Check if http 2 headers contains
+
+2.32. Add a class for http 2 inbound frame logger. It allows to:
+
+	Instantiate http 2 inbound frame logger  with http 2 frame reader, http 2 frame logger and http 2 frame logger;
+	Read frame;
+	Handle on data read;
+	Process  on headers read;
+	Process  on priority read;
+	Handle on rst stream read;
+	Process  on settings ack read;
+	Process  on settings read;
+	Process  on ping read;
+	Handle on ping ack read;
+	Handle on push promise read;
+	Handle on go away read;
+	Process  on window update read;
+	Process  on unknown frame;
+	Close http 2 inbound frame logger;
+	Get configuration
+
+2.33. Add an interface declaration  for http 2 lifecycle manager. It allows to:
+
+	Handle close stream local;
+	Handle close stream remote;
+	Close stream;
+	Reset stream;
+	Go  away ctx channel handler context;
+	Process http 2 lifecycle manager http 2 lifecycle manager on error
+
+2.34. Add an interface declaration  for http 2 local flow controller. It allows to:
+
+	Frame writer;
+	Receive flow controlled frame;
+	Consume bytes;
+	Handle unconsumed bytes;
+	Handle initial window size
+
+2.35. Add a class for http 2 no more stream ids exception. It allows to:
+
+	Instantiate http 2 no more stream ids exception;
+	Instantiate http 2 no more stream ids exception  with cause throwable
+
+2.36. Add a class for http 2 outbound frame logger. It allows to:
+
+	Instantiate http 2 outbound frame logger  with http 2 frame writer, http 2 frame logger and http 2 frame logger;
+	Write data;
+	Write headers;
+	Write priority;
+	Write rst stream;
+	Write settings;
+	Write settings  ack ctx channel handler context;
+	Write ping;
+	Write push promise;
+	Write go  away ctx channel handler context;
+	Write window update;
+	Write frame;
+	Close http 2 outbound frame logger;
+	Get configuration
+
+2.37. Add a class for http 2 security util. It allows to:
+
+	Instantiate http 2 security util
+
+2.38. Add a class for http 2 server upgrade codec. It allows to:
+
+	Instantiate http 2 server upgrade codec  with http 2 connection handler;
+	Instantiate http 2 server upgrade codec  with http 2 multiplex codec;
+	Instantiate http 2 server upgrade codec  with http 2 frame codec, handlers and handlers;
+	Instantiate http 2 server upgrade codec  with http 2 connection handler, handlers and handlers;
+	Get required upgrade headers;
+	Prepare upgrade response;
+	Upgrade  to ctx channel handler context;
+	Decode settings header;
+	Decode settings;
+	Process  on settings read;
+	Create settings frame
+
+2.39. Add a class for http 2 settings. It allows to:
+
+	Instantiate http 2 settings;
+	Put http 2 settings;
+	Handle header table size;
+	Enabled http 2 settings;
+	Max concurrent streams;
+	Handle initial window size;
+	Max frame size;
+	Max header list size;
+	Copy  from http 2 settings;
+	Get int value;
+	Verify standard setting;
+	Handle key to string;
+	Get default settings
+
+2.40. Add a class for http 2 settings test. It allows to:
+
+	Handle setup;
+	Handle standard settings should be not set;
+	Handle standard settings should be set;
+	Non standard settings should be set;
+	Handle settings should support unsigned short;
+	Handle header list size unsigned int;
+	Handle header list size bound check;
+	Handle header table size unsigned int;
+	Handle header table size bound check;
+	Handle header table size bound check 2
+
+2.41. Add an interface declaration  for http 2 stream. It allows to:
+
+	Get state;
+	Handle local side open;
+	Handle remote side open;
+	I http 2 stream;
+	Handle open;
+	Close http 2 stream;
+	Close local side;
+	Close remote side;
+	Check if http 2 stream is reset sent;
+	Sent http 2 stream;
+	Set property;
+	Get property;
+	Remove property;
+	Handle headers sent;
+	Check if http 2 stream is headers sent;
+	Check if http 2 stream is trailers sent;
+	Handle headers received;
+	Check if http 2 stream is headers received;
+	Check if http 2 stream is trailers received;
+	Push promise sent;
+	Check if http 2 stream is push promise sent
+
+2.42. Add a class for http to http 2 connection handler. It allows to:
+
+	Instantiate http to http 2 connection handler  with http 2 connection decoder, http 2 connection encoder, initial settings and initial settings;
+	Get stream id;
+	Write ctx channel handler context;
+	Write headers
+
+2.43. Add a class for http to http 2 connection handler test. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Handle test headers only request;
+	Handle test multiple cookie entries are combined;
+	Handle test origin form request target handled;
+	Handle test origin form request target handled from urlencoded uri;
+	Handle test absolute form request target handled from headers;
+	Handle test absolute form request target handled from request target uri;
+	Handle test authority form request target handled;
+	Handle test asterik form request target handled;
+	Handle test host I pv 6 form request target handled;
+	Handle test host form request target handled;
+	Handle test host I pv 4 form request target handled;
+	Handle test no scheme request target handled;
+	Handle test request with body;
+	Answer invocation on mock;
+	Handle test request with body and trailing headers;
+	Handle test chunked request with body and trailing headers;
+	Bootstrap env;
+	Handle init channel;
+	Handle user event triggered;
+	Verify headers  only expected http headers;
+	Await requests;
+	Get ctx;
+	Handle new promise
+

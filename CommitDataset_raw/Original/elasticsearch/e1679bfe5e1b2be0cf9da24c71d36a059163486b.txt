@@ -1,0 +1,5 @@
+Create weights lazily in filter and filters aggregation (#26983)
+
+Previous to this change the weights for the filter and filters aggregation were created in the `Filter(s)AggregatorFactory` which meant that they were created regardless of whether the aggregator actually collects any documents. This meant that for filters that are expensive to initialise, requests would not be quick when the query of the request was (or effectively was) a `match_none` query.
+
+This change maintains a single Weight instance for each filter across parent buckets but passes a weight supplier to the aggregator instances which will create the weight on first call and then return that instance for subsequent calls.

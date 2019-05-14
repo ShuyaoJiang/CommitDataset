@@ -1,0 +1,15 @@
+Refactor Token Service (#39808)
+
+This refactoring is in the context of the work related to moving security
+tokens to a new index. In that regard, the Token Service has to work with
+token documents stored in any of the two indices, albeit only as a transient
+situation. I reckoned the added complexity as unmanageable,
+hence this refactoring.
+
+This is incomplete, as it fails to address the goal of minimizing .security accesses,
+but I have stopped because otherwise it would've become a full blown rewrite
+(if not already). I will follow-up with more targeted PRs.
+
+In addition to being a true refactoring, some 400 errors moved to 500. Furthermore,
+more stringed validation of various return result, has been implemented, notably the
+one of the token document creation.

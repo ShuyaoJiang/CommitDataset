@@ -1,0 +1,62 @@
+Invalid value in the docs for transport.profiles...client_authentication (elastic/x-pack-elasticsearch#3091)
+
+The 6.x and 6.0 versions of the documentation show
+
+```yml
+transport.profiles.client.xpack.security.ssl.client_authentication: no
+```
+
+Which results in 
+```
+2017-11-22T11:13:33,225][ERROR][org.elasticsearch.bootstrap.Bootstrap] Exception
+java.lang.IllegalStateException: failed to load plugin class [org.elasticsearch.xpack.XPackPlugin]
+	at org.elasticsearch.plugins.PluginsService.loadPlugin(PluginsService.java:452) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.plugins.PluginsService.loadBundles(PluginsService.java:392) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.plugins.PluginsService.<init>(PluginsService.java:142) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.node.Node.<init>(Node.java:302) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.node.Node.<init>(Node.java:245) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Bootstrap$5.<init>(Bootstrap.java:212) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Bootstrap.setup(Bootstrap.java:212) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Bootstrap.init(Bootstrap.java:322) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Elasticsearch.init(Elasticsearch.java:130) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Elasticsearch.execute(Elasticsearch.java:121) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.cli.EnvironmentAwareCommand.execute(EnvironmentAwareCommand.java:69) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.cli.Command.mainWithoutErrorHandling(Command.java:134) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.cli.Command.main(Command.java:90) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:92) [elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.bootstrap.Elasticsearch.main(Elasticsearch.java:85) [elasticsearch-6.0.0.jar:6.0.0]
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[?:1.8.0_144]
+	at org.elasticsearch.plugins.PluginsService.loadPlugin(PluginsService.java:443) ~[elasticsearch-6.0.0.jar:6.0.0]
+	... 14 more
+Caused by: java.lang.IllegalArgumentException: could not resolve ssl client auth. unknown value [no]
+	at org.elasticsearch.xpack.ssl.SSLClientAuth.parse(SSLClientAuth.java:78) ~[?:?]
+	at org.elasticsearch.xpack.ssl.SSLConfigurationSettings.lambda$null$27(SSLConfigurationSettings.java:183) ~[?:?]
+	at org.elasticsearch.common.settings.Setting.get(Setting.java:352) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.common.settings.Setting.get(Setting.java:346) ~[elasticsearch-6.0.0.jar:6.0.0]
+	at org.elasticsearch.xpack.ssl.SSLConfiguration.<init>(SSLConfiguration.java:80) ~[?:?]
+	at org.elasticsearch.xpack.ssl.SSLService.lambda$loadSSLConfigurations$1(SSLService.java:462) ~[?:?]
+	at java.util.ArrayList.forEach(ArrayList.java:1249) ~[?:1.8.0_144]
+	at org.elasticsearch.xpack.ssl.SSLService.loadSSLConfigurations(SSLService.java:461) ~[?:?]
+	at org.elasticsearch.xpack.ssl.SSLService.<init>(SSLService.java:87) ~[?:?]
+	at org.elasticsearch.xpack.XPackPlugin.<init>(XPackPlugin.java:237) ~[?:?]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[?:1.8.0_144]
+	at org.elasticsearch.plugins.PluginsService.loadPlugin(PluginsService.java:443) ~[elasticsearch-6.0.0.jar:6.0.0]
+	... 14 more
+```
+
+I think the valid value there is `none`, so
+
+```yml
+transport.profiles.client.xpack.security.ssl.client_authentication: none
+```
+
+The tests seem to confirm that https://github.com/elastic/x-pack-elasticsearch/blob/elastic/x-pack-elasticsearch@4860e92d906e046a23aa07b39ee6ef637f011dc1/plugin/src/test/java/org/elasticsearch/xpack/ssl/SSLServiceTests.java#L269
+
+Original commit: elastic/x-pack-elasticsearch@a35b3ac8c9bce8141da24a289ce73ba876d6d898

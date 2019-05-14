@@ -1,0 +1,7 @@
+rolling upgrade should use a replica to prevent relocations while running a scroll
+
+A scroll holds a reference to the shard store. If the cluster is moving shards
+around that reference can prevent a shard from relocating back to node it used
+to be on, causing test failures.
+
+Closes #31827

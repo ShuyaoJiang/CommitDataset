@@ -1,0 +1,8 @@
+Remove the public equal/hashCode/toString methods from Graphs. There are a variety of reasons for doing this:
+
+1) No other class in Guava does this. For example, there's no Sets.hashCode() or Multimaps.equals().
+2) The instanceof checks and casting is annoying, and would only get substantially worse if we introduced an additional core interface. Yes, this is hidden from the user, but might as well take advantage of polymorphism and avoid it entirely.
+3) Reduced API surface area. I don't like exposing multiple ways to do the exact same thing. The user shouldn't have to wonder "hmm... is Graphs.equal(foo, bar) always going to give me the same result as foo.equals(bar)?".
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=127507834

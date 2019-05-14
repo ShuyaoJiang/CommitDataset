@@ -1,0 +1,7 @@
+SQL: rewrite ROUND and TRUNCATE functions with a different optional parameter handling method (#40242)
+
+* Rewrite Round and Truncate functions to have a slightly different
+approach to handling the optional parameter in the constructor. Until now
+the optional parameter was considered 0 if the value was missing and the
+constructor was filling in this value. The current solution is to have
+the optional parameter as null right until the actual calculation is done.

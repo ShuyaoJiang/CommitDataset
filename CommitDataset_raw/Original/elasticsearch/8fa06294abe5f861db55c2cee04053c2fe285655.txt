@@ -1,0 +1,13 @@
+Do not check for object existence when deleting repository index files (#31680)
+
+Before deleting a repository index generation file, BlobStoreRepository
+checks for the existence of the file and then deletes it. We can save
+a request here by using BlobContainer.deleteBlobIgnoringIfNotExists()
+ which ignores error when deleting a file that does not exist.
+
+Since there is no way with S3 to know if a non versioned file existed
+before being deleted, this pull request also changes S3BlobContainer so
+that it now implements deleteBlobIgnoringIfNotExists(). It will now save
+ one more request (blobExist?) when appropriate. The tests and fixture
+ have been modified to conform the S3 API that always returns a 204/NO
+ CONTENT HTTP response on deletions.

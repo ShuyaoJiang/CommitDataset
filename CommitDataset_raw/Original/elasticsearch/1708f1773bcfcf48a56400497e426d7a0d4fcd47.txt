@@ -1,0 +1,15 @@
+Mark Log4j API dependency as non-optional
+
+The Log4j dependency is separated into two artifacts, the API and the
+core implementation. This is to enable replacing Log4j on the backend
+through the SLF4J bridge with another logging implementation. For this
+reason, the dependencies are marked as optional. This causes confusion
+amongst users as to use the bridge, the API should be non-optional since
+it is needed for the bridge to function correctly. While they could pull
+it into their application directly, it would be clearer if we simply
+marked this depdendency as non-optional. Note that this does not mean
+that users have to use Log4j for logging in their application, so we are
+not marking core as required, it only clarifies what they need to be
+able to plug in a different logging implementation.
+
+Relates #25136

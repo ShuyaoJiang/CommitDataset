@@ -1,0 +1,13 @@
+Fix race-condition when using DnsCache in DnsNameResolver
+
+Motivation:
+
+The usage of DnsCache in DnsNameResolver was racy in general. First of the isEmpty() was not called in a synchronized block while we depended on synchronized. The other problem was that this whole synchronization only worked if the DefaultDnsCache was used and the returned List was not wrapped by the user.
+
+Modifications:
+
+- Rewrite DefaultDnsCache to not depend on synchronization on the returned List by using a CoW approach.
+
+Result:
+
+Fixes [#7583] and other races.

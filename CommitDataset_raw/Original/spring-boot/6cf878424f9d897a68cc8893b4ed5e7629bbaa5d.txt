@@ -1,0 +1,10 @@
+Fix SSL cipher configuration with Jetty 9.3
+
+Previously, if a list of ciphers were configured, the default excludes
+were still applied. Prior to Jetty 9.3, there were no default exclude but
+Jetty 9.3 introduced some and they override the includes.
+
+This commit makes sure that the exclude ciphers are cleared if at least
+one cipher is explicitly configured.
+
+Closes gh-6041

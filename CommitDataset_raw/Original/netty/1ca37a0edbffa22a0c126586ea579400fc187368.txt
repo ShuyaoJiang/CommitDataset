@@ -1,0 +1,13 @@
+Correctly detect exeception cause when using BoringSSL in SslErrorTest (#8970)
+
+Motivation:
+
+e9ce5048dfdfed32df28e46fae6e766d8fd6d734 added a testcase to ensure we correctly send the alert in all cases but did use a too strict message matching which did not work for BoringSSL as it not uses whitespaces but underscores.
+
+Modifications:
+
+Make the message matching less strict.
+
+Result:
+
+Test pass also when using BoringSSL.

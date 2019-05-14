@@ -1,0 +1,13 @@
+Correctly handle unsigned int values returned from TCP_INFO
+
+Motivation:
+
+We used an int[] to store all values that are returned in the struct for TCP_INFO which is not good enough as it uses usigned int values.
+
+Modifications:
+
+- Change int[] to long[] and correctly cast values.
+
+Result:
+
+No more truncated values.

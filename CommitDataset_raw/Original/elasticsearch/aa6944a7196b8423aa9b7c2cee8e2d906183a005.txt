@@ -1,0 +1,8 @@
+render non-ElasticsearchException in ILM (#31284)
+
+ILM was rendering exceptions using the exception helper that
+basically ignores simply rendering non-elasticsearch exceptions when
+no details are desired. This commit updates the method used to still be
+a rather simple rendering of the exception. The rendering lacks
+all the causes, but does a sufficient job in rendering the top-level
+message for one of our most expected exceptions... IllegalArgumentException

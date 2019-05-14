@@ -1,0 +1,14 @@
+Use standard file name for Maven dependencies
+
+This commit uses standard files for libraries managed by the repackage
+goal of the Maven plugin. Previously, only the name of the file was used
+which could lead to duplicate libraries if the name of the target file
+deviates from the default. This typically happens when the
+`build.finalName` property is specified on a dependent module.
+
+Note that the `maven-war-plugin` has an additional mechanism to customize
+the file name structure of dependencies. This feature isn't supported by
+the repackage goal so an explicit mention has been added in the
+documentation.
+
+Closes gh-7389

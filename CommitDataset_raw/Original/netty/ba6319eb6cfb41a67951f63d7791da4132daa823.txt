@@ -1,0 +1,14 @@
+Fix FixedCompositeByteBuf handling when copying to direct buffers and streams
+
+Motivation:
+
+FixedCompositeByteBuf does not properly implement a number of methods for
+copying its content to direct buffers and output streams
+
+Modifications:
+
+Replace improper use of capacity() with readableBytes() when computing offesets during writes
+
+Result:
+
+Copying works correctly

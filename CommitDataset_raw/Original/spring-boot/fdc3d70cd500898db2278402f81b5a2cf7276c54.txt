@@ -1,0 +1,12 @@
+Ensure that spring-boot-starter-ws pulls in the right version of Spring
+
+Prior to this commit, when used with Gradle, spring-boot-starter-ws was
+pulling in the versions of spring-jms, spring-oxm, and spring-tx that
+Spring WS depends upon, rather than using the Boot’s Spring version.
+It’s ok at the moment as both Boot and Spring WS depend on Spring 4.0.5
+but will cause problems if we upgrade to 4.0.6 before Spring WS does.
+
+This commit adds explicit dependencies on spring-jms and spring-oxm so
+that Gradle pulls in the correct version (as long as a transitive
+dependency doesn’t pull in a version that’s greater than the version
+Boot’s using).

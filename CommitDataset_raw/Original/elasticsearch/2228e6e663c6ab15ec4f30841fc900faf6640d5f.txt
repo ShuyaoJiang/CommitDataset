@@ -1,0 +1,5 @@
+BulkProcessor to retry based on status code (#29329)
+
+Previously `BulkProcessor` retry logic was based on the exception type of the failed response (`EsRejectedExecutionException`). This commit changes it to be based on the returned status code. This allows us to reproduce the same retry behaviour when the `BulkProcessor` is used from the high-level REST client, which was previously not the case as we cannot rebuild the same exception type when parsing back the response. This change has no effect on the transport client.
+
+Closes #28885

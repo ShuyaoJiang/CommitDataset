@@ -1,0 +1,6 @@
+Add a new cluster setting to limit the total number of buckets returned by a request (#27581)
+
+This commit adds a new dynamic cluster setting named `search.max_buckets` that can be used to limit the number of buckets created per shard or by the reduce phase. Each multi bucket aggregator can consume buckets during the final build of the aggregation at the shard level or during the reduce phase (final or not) in the coordinating node. When an aggregator consumes a bucket, a global count for the request is incremented and if this number is greater than the limit an exception is thrown (TooManyBuckets exception).
+This change adds the ability for multi bucket aggregator to "consume" buckets in the global limit, the default is 10,000. It's an opt-in consumer so each multi-bucket aggregator must explicitly call the consumer when a bucket is added in the response.
+
+Closes #27452 #26012

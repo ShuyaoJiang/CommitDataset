@@ -1,0 +1,9 @@
+Fix possible GenericMsgTemplate race condition
+
+Fix a potential race condition with GenericMessagingTemplate's inner
+TemporaryReplyChannel class.
+
+Prior to this commit the `hasReceived` member variable was read after
+calling `replyLatch.countDown()`.
+
+Issue: SPR-11206

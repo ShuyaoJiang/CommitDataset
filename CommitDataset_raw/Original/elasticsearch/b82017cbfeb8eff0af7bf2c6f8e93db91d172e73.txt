@@ -1,0 +1,8 @@
+Fix daitch_mokotoff phonetic filter to use the dedicated Lucene filter (#28225)
+
+This commit changes the phonetic filter factory to use a DaitchMokotoffSoundexFilter
+instead of a PhoneticFilter with a daitch_mokotoff encoder when daitch_mokotoff is selected.
+The latter does not hanlde branching when computing the soundex and fails to encode multiple
+variations when possible.
+
+Closes #28211

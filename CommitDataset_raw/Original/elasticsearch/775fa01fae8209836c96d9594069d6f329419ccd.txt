@@ -1,0 +1,8 @@
+Safe publication of AutoFollowCoordinator (#40153)
+
+We were leaking a reference to an AutoFollowCoordinator during
+construction, violating safe publication according to the JLS
+specification. This commit addresses this by waiting to register
+AutoFollowCoordinator with the ClusterApplierService after the
+AutoFollowCoordinator is fully constructed. We also remove ourselves as
+a listener when stopping.

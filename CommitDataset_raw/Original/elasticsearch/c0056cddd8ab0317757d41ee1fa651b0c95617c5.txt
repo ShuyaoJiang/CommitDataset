@@ -1,0 +1,7 @@
+ingest: Introduction of a bytes processor (#31733)
+
+ingest: Introduction of a bytes processor
+
+This processor allows for human readable byte values (e.g. 1kb) to be converted to value in bytes (e.g. 1024). Internally this processor re-uses "ByteSizeValue.parseBytesSizeValue" which supports conversions up to Long.MAX_VALUE and the following units: "b", "kb", "mb", "gb", "tb", pb".
+
+This change also introduces a generic return type for the AbstractStringProcessor to allow for code reuse while supporting a String -> T conversion. (String -> Long in this case).

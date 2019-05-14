@@ -1,0 +1,15 @@
+Remove Frame class from DefaultHttp2RemoteFlowController. Fixes #3488
+
+Motivation:
+
+For every write of a flow controlled frame (HEADERS, DATA) we are allocating
+a Frame object that is not necessary anymore as it does not maintain any
+state, besides the payload.
+
+Modifications:
+
+Remove the Frame class and directly add the payload to the pending write queue.
+
+Result:
+
+One few object allocation per write of a flow controlled frame.

@@ -1,0 +1,18 @@
+Introduce the dissect library (#32297)
+
+The dissect library will be used for the ingest node as an alternative
+to Grok to split a string based on a pattern. Dissect differs from
+Grok such that regular expressions are not used to split the string.
+Note - Regular expressions are used during construction of the
+objects, but not in the hot path.
+
+A dissect pattern takes the form of: '%{a} %{b},%{c}' which is
+composed of 3 keys (a,b,c) and two delimiters (space and comma).
+This dissect pattern will match a string of the form: 'foo bar,baz'
+and will result a key/value pairing of 'a=foo, b=bar, and c=baz'.
+See the comments in DissectParser for a full explanation.
+
+This commit does not include the ingest node processor that will consume
+it. However, the consumption should be a trivial mapping between the
+key/value pairing returned by the parser and the key/value pairing
+needed for the IngestDocument.

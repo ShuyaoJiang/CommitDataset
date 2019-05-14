@@ -1,0 +1,18 @@
+Try to monkey-patch library id when shading is used and we are on Mac… (#8210)
+
+* Try to monkey-patch library id when shading is used and we are on MacOS / OSX.
+
+Motivation:
+
+https://github.com/netty/netty/commit/ea4c315b45bf1bfa82cd75a7d3f38bff684e2ebc did ensure we support using multiple versions of the same shaded native library but the user still needed to run install_name_tool -id on MacOS to ensure the ID is unique.
+This is kind of error prone and also means that the shading itself would need to be done on MacOS / OSX.
+
+This is related to https://github.com/netty/netty/issues/7272.
+
+Modifications:
+
+- Monkey patch the shaded native lib on MacOS to ensure the id is unique while unpacking it to the tempory location.
+
+Result:
+
+Easier way of using shaded native libs in netty.

@@ -1,0 +1,13 @@
+In the FinalizableReferenceQueue code, remove the unnecessary nested exception
+class Finalizer.ShutDown, which could cause problems if the URL for the
+classfile of Finalizer was not related in the obvious way to the URL for the
+classfile of Finalizer.ShutDown. This is Guava issue 1505
+<https://code.google.com/p/guava-libraries/issues/detail?id=1505> reported by
+Jesse Glick <jglick@cloudbees.com>, and the fix is based on the patch he linked
+to there.
+
+Also add a test to ensure that Finalizer doesn't acquire other nested classes
+in the future.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=51090847

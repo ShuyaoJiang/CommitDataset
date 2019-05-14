@@ -1,0 +1,14 @@
+Support JDK9-native ALPN
+
+Motivation:
+
+Netty is unable to use Java9s ALPN support atm.
+
+Modifications:
+
+When running on Java9+ we invoke the correct methods that are exposed on the Java9+ implementation of SSLEngine and so be able to support ALPN.
+This patch is based on the work of @rschmitt and so https://github.com/netty/netty/pull/6992.
+
+Result:
+
+Fixes #6933.

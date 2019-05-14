@@ -1,0 +1,13 @@
+Correct fail write with NotYetConnectedException when OioDatagramChannel is not connected yet.
+
+Motivation:
+
+NioDatagramChannel fails a write with NotYetConnectedException when the DatagramChannel was not yet connected and a ByteBuf is written. The same should be done for OioDatagramChannel as well.
+
+Modifications:
+
+Make OioDatagramChannel consistent with NioDatagramChannel
+
+Result:
+
+Correct and consistent implementations of DatagramChannel

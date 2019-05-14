@@ -1,0 +1,12 @@
+Whole operation timeouts
+
+Strictly-speaking this change is backwards-incompatible because it adds
+a new method to the Call interface. The method returns the call's timeout.
+
+The trickiest part of this is signaling the end of the call, which
+occurs after the last byte is consumed of the last follow up request,
+or when the call fails. Fortunately this is made easier by borrowing
+the sites used by EventListener, which already plots out where calls
+end.
+
+https://github.com/square/okhttp/issues/2840

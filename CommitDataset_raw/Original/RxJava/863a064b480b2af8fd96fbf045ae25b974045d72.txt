@@ -1,0 +1,6 @@
+Better handling of map function errors
+
+- Stop catching the error and passing to onError and instead let the SafeObserver handle it which will then prevent subsequent onNext calls and/or unsubscribe when a failure occurs.
+- This also solves the OnErrorResumeNext issue fixed in https://github.com/Netflix/RxJava/pull/312 but those changes still seem valid so I'll leave them.
+
+Related to https://github.com/Netflix/RxJava/issues/216 and https://github.com/Netflix/RxJava/pull/312

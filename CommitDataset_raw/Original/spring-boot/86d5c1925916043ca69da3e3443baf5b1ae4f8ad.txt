@@ -1,0 +1,18 @@
+Don't mix collection values from different sources
+
+Update PropertySourcesPropertyValues so that collection values are only
+added from a single PropertySource. Prior to this commit, given the
+following:
+
+    PropertySource-A
+     list[0]=x
+
+    PropertySource-B
+     list[0]=y
+     list[1]=z
+
+PropertySourcesPropertyValues would take `x` from A and `z` from B,
+resulting in a binding of `[x,z]`. The updated code now returns the
+more logical `[x]`.
+
+Fixes gh-2611

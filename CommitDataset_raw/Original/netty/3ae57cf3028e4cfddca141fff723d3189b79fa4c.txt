@@ -1,0 +1,13 @@
+ByteBuf.toString(Charset) is not thread-safe
+
+Motivation:
+
+Calling ByteBuf.toString(Charset) on the same buffer from multiple threads at the same time produces unexpected results, such as various exceptions and/or corrupted output. This is because ByteBufUtil.decodeString(...) is taking the source ByteBuffer for CharsetDecoder.decode() from ByteBuf.internalNioBuffer(int, int), which is not thread-safe.
+
+Modification:
+
+Call ByteBuf.nioBuffer() instead of ByteBuf.internalNioBuffer() to get the source buffer to pass to CharsetDecoder.decode().
+
+Result:
+
+Fixes the possible race condition.

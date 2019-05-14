@@ -1,0 +1,8 @@
+ Fix binary doc values fetching in _search (#29567)
+
+Binary doc values are retrieved during the DocValueFetchSubPhase through an instance of ScriptDocValues.
+Since 6.0 ScriptDocValues instances are not allowed to reuse the object that they return (https://github.com/elastic/elasticsearch/issues/26775) but BinaryScriptDocValues doesn't follow this restriction and reuses instances of BytesRefBuilder among different documents.
+This results in `field` values assigned to the wrong document in the response.
+This commit fixes this issue by recreating the BytesRef for each value that needs to be returned.
+
+ Fixes #29565

@@ -1,0 +1,30 @@
+Fixes ByteSizeValue to serialise correctly (#27702)
+
+* Fixes ByteSizeValue to serialise correctly
+
+This fix makes a few fixes to ByteSizeValue to make it possible to perform round-trip serialisation:
+* Changes wire serialisation to use Zlong methods instead of VLong methods. This is needed because the value `-1` is accepted but previously if `-1` is supplied it cannot be serialised using the wire protocol.
+* Limits the supplied size to be no more than Long.MAX_VALUE when converted to bytes. Previously values greater than Long.MAX_VALUE bytes were accepted but would be silently interpreted as Long.MAX_VALUE bytes rather than erroring so the user had no idea the value was not being used the way they had intended. I consider this a bug and so fine to include this bug fix in a minor version but I am open to other points of view.
+* Adds a `getStringRep()` method that can be used when serialising the value to JSON. This will print the bytes value if the size is positive, `”0”` if the size is `0` and `”-1”` if the size is `-1`.
+* Adds logic to detect fractional values when parsing from a String and emits a deprecation warning in this case.
+* Modifies hashCode and equals methods to work with long values rather than doubles so they don’t run into precision problems when dealing with large values. Previous to this change the equals method would not detect small differences in the values (e.g. 1-1000 bytes ranges) if the actual values where very large (e.g. PBs). This was due to the values being in the order of 10^18 but doubles only maintaining a precision of ~10^15.
+
+Closes #27568
+
+* Fix bytes settings default value to not use fractional values
+
+* Fixes test
+
+* Addresses review comments
+
+* Modifies parsing to preserve unit
+
+This should be bwc since in the case that the input is fractional it reverts back to the old method of parsing it to the bytes value.
+
+* Addresses more review comments
+
+* Fixes tests
+
+* Temporarily changes version check to 7.0.0
+
+This will be changed to 6.2 when the fix has been backported

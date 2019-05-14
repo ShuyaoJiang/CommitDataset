@@ -1,0 +1,14 @@
+Use a different approach to disable HATEOAS Objenesis instance's cache
+
+Previously, reflection was used to set the OBJENESIS field of
+DummyInvocationUtils with an Objenesis instance that does not use
+caching. This has stopped working as the field is now declared final.
+
+This commit updates the approach take by HateoasObjenesisCacheDisabler
+to disable Objenesis's cache. Rather than changing the value of the
+OBJENESIS field on DummyInvocationUtils, the cache field on the
+ObjenesisStd instance is set to null instead. This has the desired
+effect of disabling Objenesis's caching.
+
+See gh-3784
+Closes gh-8335

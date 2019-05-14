@@ -1,0 +1,20 @@
+Ensure no java.lang.UnsupportedClassVersionError are thrown if running on Java7 and try to check if conscrypt is available.
+
+Motivation:
+
+We need to ensure we not try to load any conscrypt classes directly (which means without using reflection) in the same class that is used to check if conscrypt is available. This is needed as otherwise we will have the following problem when try to use netty on java7:
+
+java.lang.UnsupportedClassVersionError: org/conscrypt/BufferAllocator : Unsupported major.minor version 52.0
+	at io.netty.handler.ssl.ConscryptJdkSslEngineInteropTest.checkConscrypt(ConscryptJdkSslEngineInteropTest.java:49)
+
+This regression was introduced by 4448b8f42f599e79db1744cd8f5fdfee702c195e and detected on the CI when using:
+
+mvn clean package -DtestJavaHome=$JAVA7_HOME
+
+Modifications:
+
+Move the detection code in an extra class and use it.
+
+Result:
+
+Works correctly also when using Java7.

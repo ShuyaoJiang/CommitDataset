@@ -1,0 +1,14 @@
+Support delegating task when using ReferenceCountedOpenSslEngine. (#8859)
+
+Motivation:
+
+SSLEngine API has a notion of tasks that may be expensive and offload these to another thread. We did not support this when using our native implementation but can now for various operations during the handshake.
+
+Modifications:
+
+- Support offloading tasks during the handshake when using our native SSLEngine implementation
+- Correctly handle the case when NEED_TASK is returned and nothing was consumed / produced yet
+
+Result:
+
+Be able to offload long running tasks from the EventLoop when using SslHandler with our native SSLEngine.

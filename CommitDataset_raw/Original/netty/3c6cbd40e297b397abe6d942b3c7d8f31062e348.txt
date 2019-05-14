@@ -1,0 +1,22 @@
+Fix an sporadic failure in ServerCookieEncoderTest
+
+In testEncodingSingleCookieV0():
+
+Let's assume we encoded a cookie with MaxAge=50 when currentTimeMillis
+is 10999.
+
+Because the encoder will not encode the millisecond part for Expires,
+the timeMillis value of the encoded Expires field will be 60000. (If we
+did not dropped the millisecond part, it would be 60999.)
+
+Encoding a cookie will take some time, so currentTimeMillis will
+increase slightly, such as to 11001.
+
+  diff = (60000 - 11001) / 1000 = 48999 / 1000 = 48
+  maxAge - diff = 50 - 48 = 2
+
+Due to losing millisecond part twice, we end up with the precision
+problem illustrated above, and thus we should increase the tolerance
+from 1 second to 2 seconds.
+
+/cc @slandelle

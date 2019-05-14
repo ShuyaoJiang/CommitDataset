@@ -1,0 +1,15 @@
+Implement internal memory access methods of CompositeByteBuf correctly
+
+Motivation:
+
+When a CompositeByteBuf is empty (i.e. has no component), its internal
+memory access operations do not always behave as expected.
+
+Modifications:
+
+Check if the nunmber of components is zero. If so, return an empty
+array or an empty NIO buffer, etc.
+
+Result:
+
+More robustness

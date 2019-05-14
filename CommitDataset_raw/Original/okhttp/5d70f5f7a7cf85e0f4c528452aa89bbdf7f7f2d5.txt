@@ -1,0 +1,10 @@
+Make HTTP/2's DISCONNECT_AT_END more graceful.
+
+Rather than immediately and violently closing the HTTP/2 stream,
+we initiate the shutdown sequence for a graceful disconnect.
+
+This fixes StreamAllocation to avoid creating new streams on
+shutdown connections. That behavior is not well tested, however.
+That will come by integrating dave-r12's PR:
+
+See https://github.com/square/okhttp/pull/2889

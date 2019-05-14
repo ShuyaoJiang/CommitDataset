@@ -1,0 +1,3 @@
+Use simpler write-once semantics for HDFS repository (#30439)
+
+There's no need for an extra `blobExists()` call when writing a blob to the HDFS service. The writeBlob implementation for the HDFS repository already uses the `CreateFlag.CREATE` option on the file creation, which ensures that the blob that's uploaded does not already exist. This saves one network roundtrip.

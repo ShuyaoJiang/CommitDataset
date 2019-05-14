@@ -1,0 +1,13 @@
+First call channelReadComplete(...) before flush(...) for better performance
+
+Motivation:
+
+In Http2ConnectionHandler we call flush(...) in channelReadComplete(...) to ensure we update the flow-controller and write stuff to the remote peer. We should better flip the order and so may be able to pick up more bytes.
+
+Modifications:
+
+Change order of calls.
+
+Result:
+
+Better performance

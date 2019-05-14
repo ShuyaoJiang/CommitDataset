@@ -1,0 +1,11 @@
+Avoid passing null configs to Bitmap.createBitmap in LruBitmapPool.
+
+We already handle null configs for our various strategies because some 
+types of Bitmaps (GIFs mostly) on some API levels will have special 
+native configs that have a null Java equivalent. As a result, 
+LruBitmapPool does not throw as long as there is a matching Bitmap in 
+the pool even if the config we’re asked for is null. 
+
+This change fixes the inconsistent behavior where we would throw if
+the pool happened to not have a matching Bitmap when the given config
+is null. Now we universally handle null configs in get() and getDirty().

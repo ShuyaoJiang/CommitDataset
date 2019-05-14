@@ -1,0 +1,8 @@
+Fix nested _source retrieval with includes/excludes (#33180)
+
+If an exclude or an include clause removes an entry to a nested field in the original source at query time,
+the creation of nested hits fails with an NPE. This change fixes this exception and replaces the nested document
+source with an empty map.
+
+Closes #33163
+Closes #33170

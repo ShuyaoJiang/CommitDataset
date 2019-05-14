@@ -1,0 +1,13 @@
+Force lazy-init to false when parsing scheduled:task
+
+A <scheduled:task> element declared within a
+<beans default-lazy-init="true"> element represents a contradiction in
+terms: such a task will never be executed.
+
+For this reason, we now override any inherited lazy-init settings
+when parsing <scheduled:task> elements, forcing lazy-init to false
+for the underlying ScheduledTaskRegistrar bean.
+
+Thanks to Mike Youngstrom for contributing an initial patch.
+
+Issue: SPR-8498

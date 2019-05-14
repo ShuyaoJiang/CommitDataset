@@ -1,0 +1,9 @@
+Do not mutate RecoveryResponse (#37204)
+
+Today we create a global instance of RecoveryResponse then mutate it
+when executing each recovery step. This is okay for the current
+sequential recovery flow but  not suitable for an asynchronous recovery
+which we are targeting. With this commit, we return the result of each
+step separately, then construct a RecoveryResponse at the end.
+
+Relates #37174

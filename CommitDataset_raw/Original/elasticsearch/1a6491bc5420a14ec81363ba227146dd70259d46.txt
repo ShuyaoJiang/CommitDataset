@@ -1,0 +1,7 @@
+Test: do not copy secure settings when creating random directory service (#25297)
+
+In tests, we sometimes create a random directory service and as part of that the IndexSettings get
+built again. When we build them again, we need to make sure we do not set the secure settings on
+the new IndexMetaData object that gets created as the node settings already have the secure
+settings and the index settings and node settings will be combined. If both have secure settings,
+the settings builder will throw an AlreadySetException.

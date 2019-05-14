@@ -1,0 +1,13 @@
+Cleanup split strings by comma method
+
+We have some methods Strings#splitStringByCommaToArray and
+Strings#splitStringByCommaToSet. It is not obvious that the former
+leaves whitespace and the latter trims it. We also have
+Strings#tokenizeToStringArray which tokenizes a string to an array, and
+trims whitespace. It seems the right thing to do here is to rename
+Strings#splitStringByCommaToSet to Strings#tokenizeByCommaToSet so that
+its name is aligned with another method that tokenizes by a delimiter
+and trims whitespace. We also cleanup the code here, removing an
+unneeded splitting by delimiter to set method.
+
+Relates #27715

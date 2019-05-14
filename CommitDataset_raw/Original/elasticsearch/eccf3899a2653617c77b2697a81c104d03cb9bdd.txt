@@ -1,0 +1,17 @@
+Tie zip output to command line options in certutil  (elastic/x-pack-elasticsearch#4354)
+
+Previously "certutil" would generate a zip file if there were multiple
+certificates.
+However, this means that if the user specified "-multiple" or "-in"
+then the output format will vary based on whether they entered
+multiple instance names (-multiple) or whether the input file
+contained multiple instance records (-in).
+It is better if the output format is predictable based on the command
+line options, so this change forces zip output whenever any of the
+following command line options are supplied:
+    -pem
+    -keep-ca-key
+    -multiple
+    -in
+
+Original commit: elastic/x-pack-elasticsearch@344baa5f171e7d9a1d472637c5913c762f0fbec2

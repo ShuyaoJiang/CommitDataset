@@ -1,0 +1,18 @@
+Fixed the check whether Log4j2 is available on the classpath
+
+In Spring Boot 1.3.1 the class 'org.apache.logging.log4j.LogManager'
+is used to check which logging backend is in use. But this class is
+part of the log4j-api.jar and not part of the log4j-core.jar.
+That means the check is invalid, as it does not detect the actual
+core implementation of Log4j2 correctly.
+
+When you want to redirect Log4j2 logging via SLF4J, a NPE occurs
+each time the application is reloaded by the devtools, because the
+class Log4j2RestartListener tries to shutdown Log4j2 resources.
+This is done by accessing some internal shutdown method via
+reflection. The method that is being looked for does not exist
+when the log4j-api.jar is available only on the classpath,
+resulting in a NPE. This causes the application to stop,
+disappearing from the Spring Boot Dashboard in Eclipse
+
+Closes gh-4831

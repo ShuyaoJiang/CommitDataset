@@ -1,0 +1,14 @@
+Only handle NXDOMAIN as failure when nameserver is authoritive or no other nameservers are left. (#8731)
+
+Motivation:
+
+When using multiple nameservers and a nameserver respond with NXDOMAIN we should only fail the query if the nameserver in question is authoritive or no nameservers are left to try.
+
+Modifications:
+
+- Try next nameserver if NXDOMAIN was returned but the nameserver is not authoritive
+- Adjust testcase to respect correct behaviour.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8261

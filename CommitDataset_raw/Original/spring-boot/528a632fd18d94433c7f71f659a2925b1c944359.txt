@@ -1,0 +1,20 @@
+Allow XA DataSource and ConnFactory pools to be configured via the env
+
+This commit adds support for configuring the XA DataSource and
+ConnectionFactory pools created by Atomikos and Bitronix via the
+environment. The property prefixes vary depending on the transaction
+manager that’s in use. They are:
+
+Bitronix:
+ - spring.jta.bitronix.datasource
+ - spring.jta.bitronix.connectionfactory
+
+Atomikos:
+ - spring.jta.atomikos.datasource
+ - spring.jta.atomikos.connectionfactory
+
+The configuration processor has been updated to ignore
+javax.jms.XAConnectionFactory and javax.sql.XADataSource as neither of
+these types can be created via property binding.
+
+Closes gh-2027

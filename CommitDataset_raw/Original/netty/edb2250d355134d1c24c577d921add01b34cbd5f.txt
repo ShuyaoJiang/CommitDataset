@@ -1,0 +1,14 @@
+Store reference to IovArray in the EpollEventLoop to reduce thread local access.
+
+Motivation:
+
+If we have a lot of writes going on we currently need to lookup the IovArray for each Channel that does writes. This can have quite some perf overhead. We should not need to do this and just store a reference of the IovArray on the EpollEventLoop itself.
+
+Modifications:
+
+- Remove IoArrayThreadLocal
+- Store the IoArray in the EventLoop itself
+
+Result:
+
+Less FastThreadLocal lookups

@@ -1,0 +1,21 @@
+Support composite buffer creation without array alloc and copy
+
+Motivation:
+
+Unpooled.unmodifiableBuffer() is currently used to efficiently write
+arrays of ByteBufs via FixedCompositeByteBuf, but involves an allocation
+and content-copy of the provided ByteBuf array which in many (most?)
+cases shouldn't be necessary.
+
+Modifications:
+
+Modify the internal FixedCompositeByteBuf class to support wrapping the
+provided ByteBuf array directly. Control this behaviour with a
+constructor flag and expose the "unsafe" version via a new
+Unpooled.wrappedUnmodifiableBuffer(ByteBuf...) method.
+
+Result:
+
+Less garbage on IO paths. I would guess pretty much all existing usage
+of unmodifiableBuffer() could use the copy-free version but assume it's
+not safe to change its default behaviour.

@@ -1,0 +1,16 @@
+Instead of just tracking our state via 2 integers in ServiceManager.State track all current service states via a Multimap<State, Service>.
+
+This enables some features.
+
+1. servicesByState() returns a consistent snapshot
+2. TimeoutExceptions report on the services that caused the timeout
+3. IllegalStateExceptions from awaitHealthy report on the services that are not running
+
+Also, this slightly simplifies the relationships between our 3 objects (ServiceListener, ServiceManager.State and ServiceManager) since ServiceManager no longer holds a reference to the Listeners directly.
+
+This should also fix b/10734437 because it simplifies the way that the stopwatches are handled and we also use a weak reference between the Listeners and ServiceManagerState to ensure that if the service manager is only partially constructed the listeners will become no-ops.
+
+I am not super tied to using the weak reference to solve this problem but it seems weird to keep updating this state object when there are no references to it.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=54239479

@@ -1,0 +1,28 @@
+Make sure to reject mappings with type _doc when include_type_name is false. (#38270)
+
+`CreateIndexRequest#source(Map<String, Object>, ... )`, which is used when
+deserializing index creation requests, accidentally accepts mappings that are
+nested twice under the type key (as described in the bug report #38266).
+
+This in turn causes us to be too lenient in parsing typeless mappings. In
+particular, we accept the following index creation request, even though it
+should not contain the type key `_doc`:
+
+```
+PUT index?include_type_name=false
+{
+  "mappings": {
+    "_doc": {
+      "properties": { ... }
+    }
+  }
+}
+```
+
+There is a similar issue for both 'put templates' and 'put mappings' requests
+as well.
+
+This PR makes the minimal changes to detect and reject these typed mappings in
+requests. It does not address #38266 generally, or attempt a larger refactor
+around types in these server-side requests, as I think this should be done at a
+later time. 

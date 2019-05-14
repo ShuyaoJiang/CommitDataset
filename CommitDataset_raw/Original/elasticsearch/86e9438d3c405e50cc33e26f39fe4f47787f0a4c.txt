@@ -1,0 +1,11 @@
+Prevent excessive disk consumption by log files
+
+This commit enables management of the main Elasticsearch log files
+out-of-the-box by the following changes:
+ - compress rolled logs
+ - roll logs every 128 MB
+ - maintain a sliding window of logs
+ - remove the oldest logs maintaining no more than 2 GB of compressed
+   logs on disk
+
+Relates #25660

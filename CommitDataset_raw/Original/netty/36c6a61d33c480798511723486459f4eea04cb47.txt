@@ -1,0 +1,10 @@
+HTTP/2 remove unnecessary buffer operations
+
+Motivation:
+codec-http2 has some helper methods to write to ByteBuf in a big endian fashion. This is the default memory structure for ByteBuf so these helper methods are not necessary.
+
+Modifications:
+- remove writeUnsignedInt and writeUnsignedShort
+
+Result:
+codec-http2 has less ByteBuf helper methods which are not necessary.

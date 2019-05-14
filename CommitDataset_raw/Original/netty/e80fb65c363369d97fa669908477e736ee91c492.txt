@@ -1,0 +1,6 @@
+Clean up the pipeline implementation / Ensure Embedded*Channel does not run pending tasks immediately
+
+- Replace ugly 'prev != null' check with explicit event scheduling
+- Fix an incorrect flag operation in freeHandlerBuffersAfterRemoval()
+- Fix a bug in AbstractEmbeddedChannel.doRegister where it makes pending tasks immediately, where the pending tasks actually triggers inbound events
+- Remove unnecessary suppression of inboundBufferUpdated() event in DefaultChannelPipeline, which potentially hides an event ordering bug. Unfortunately, I don't remember why I added it in cca35454d214611792067c89b78f7477aae3a323.

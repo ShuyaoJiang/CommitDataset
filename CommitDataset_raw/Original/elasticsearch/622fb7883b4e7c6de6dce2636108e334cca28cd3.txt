@@ -1,0 +1,7 @@
+Introduce ability to minimize round-trips in CCS (#37828)
+
+With #37566 we have introduced the ability to merge multiple search responses into one. That makes it possible to expose a new way of executing cross-cluster search requests, that makes CCS much faster whenever there is network latency between the CCS coordinating node and the remote clusters. The coordinating node can now send a single search request to each remote cluster, which gets reduced by each one of them. from + size results are requested to each cluster, and the reduce phase in each cluster is non final (meaning that buckets are not pruned and pipeline aggs are not executed). The CCS coordinating node performs an additional, final reduction, which produces one search response out of the multiple responses received from the different clusters.
+
+This new execution path will be activated by default for any CCS request unless a scroll is provided or inner hits are requested as part of field collapsing. The search API accepts now a new parameter called ccs_minimize_roundtrips that allows to opt-out of the default behaviour.
+
+Relates to #32125

@@ -1,0 +1,14 @@
+Restore add(Promise) and addAll(Promise...) methods to PromiseCombiner.
+
+Motivation:
+
+A testing goof in 7c630fe introduced a binary incompatibility when the old Promise-specific `add` and `addAll` methods in PromiseCombiner were generalized to accept `Futures`.
+
+Modification:
+
+- Restore (but mark as `@Deprecated`) old PromiseCombiner methods.
+- Fixed a couple minor documentation typos because sure why not.
+
+Result:
+
+`PromiseCombiner` is binary-compatible with previous versions of Netty.

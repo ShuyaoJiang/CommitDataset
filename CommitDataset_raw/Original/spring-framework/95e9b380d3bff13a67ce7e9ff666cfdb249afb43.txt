@@ -1,0 +1,16 @@
+Update ResourceHandlerReg. API for Resource handling
+
+This change adds new methods in the ResourceHandlerRegistration API
+for registering ResourceResolvers and ResourceTransformers, allowing
+to better handle server-side resources in web applications.i
+
+Here is an example of configuration for an HTML5 web application
+that uses JavaScript and HTML5 appcache manifests:
+
+    registry.addResourceHandler("/**")
+      .addResourceLocations("classpath:static/")
+      .addTransformer(new AppCacheManifestTransfomer())
+      .addVersion("v1", "/**/*.js")
+      .addVersionHash("/**");
+
+Issue: SPR-11982

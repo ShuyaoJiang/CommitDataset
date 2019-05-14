@@ -1,0 +1,12 @@
+Add @ConditionalOnMissingBean(MongoDbFactory)
+
+Update MongoAutoConfiguration to be conditional on a missing
+MongoDbFactory bean. The assumption is that if the user has declared
+a MongoDbFactory they will either use it directly, or they will also
+register a Mongo bean.
+
+If the MongoDbFactory class cannot be found the existing Mongo
+auto-configuration still applies. This ensures that users that do
+not have Spring Data can still access a Mongo bean.
+
+Fixes gh-1341

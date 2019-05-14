@@ -1,0 +1,8 @@
+Update FilteredClassPathRunner so that JUnit rules work
+
+Previously, the tests class and any JUnit annotations it contained were
+loaded by a different class loader to JUnit. This meant that the JUnit
+annotations were loaded twice and @Rule-annotated fields were not found.
+This commit updates FitleredClassPathRunner to use a custom class loader
+that ensures that any org.junit.* classes are only loaded by a single
+class loader.

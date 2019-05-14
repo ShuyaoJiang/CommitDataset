@@ -1,0 +1,74 @@
+Support loading WebApplicationContexts in the TCF
+
+Prior to this commit, the Spring TestContext Framework only supported
+loading an ApplicationContext in integration tests from either XML or
+Java Properties files (since Spring 2.5), and Spring 3.1 introduced
+support for loading an ApplicationContext in integration tests from
+annotated classes (e.g., @Configuration classes). All of the
+ContextLoader implementations used to provide this support load a
+GenericApplicationContext. However, a GenericApplicationContext is not
+suitable for testing a web application since a web application relies on
+an implementation of WebApplicationContext (WAC).
+
+This commit makes it possible to integration test Spring-powered web
+applications by adding the following functionality to the Spring
+TestContext Framework.
+
+ - Introduced AbstractGenericWebContextLoader and two concrete
+   subclasses:
+   - XmlWebContextLoader
+   - AnnotationConfigWebContextLoader
+
+ - Pulled up prepareContext(context, mergedConfig) from
+   AbstractGenericContextLoader into AbstractContextLoader to allow it
+   to be shared across web and non-web context loaders.
+
+ - Introduced AnnotationConfigContextLoaderUtils and refactored
+   AnnotationConfigContextLoader accordingly. These utils are also used
+   by AnnotationConfigWebContextLoader.
+
+ - Introduced a new @WebAppConfiguration annotation to denote that the
+   ApplicationContext loaded for a test should be a WAC and to configure
+   the base resource path for the root directory of a web application.
+
+ - Introduced WebMergedContextConfiguration which extends
+   MergedContextConfiguration with support for a baseResourcePath for
+   the root directory of a web application.
+
+ - ContextLoaderUtils.buildMergedContextConfiguration() now builds a
+   WebMergedContextConfiguration instead of a standard
+   MergedContextConfiguration if @WebAppConfiguration is present on the
+   test class.
+
+ - Introduced a configureWebResources() method in
+   AbstractGenericWebContextLoader that is responsible for creating a
+   MockServletContext with a proper ResourceLoader for the
+   resourceBasePath configured in the WebMergedContextConfiguration. The
+   resulting mock ServletContext is set in the WAC, and the WAC is
+   stored as the Root WAC in the ServletContext.
+
+ - Introduced a WebTestExecutionListener that sets up default thread
+   local state via RequestContextHolder before each test method by using
+   the MockServletContext already present in the WAC and by creating a
+   MockHttpServletRequest, MockHttpServletResponse, and
+   ServletWebRequest that is set in the RequestContextHolder. WTEL also
+   ensures that the MockHttpServletResponse and ServletWebRequest can be
+   injected into the test instance (e.g., via @Autowired) and cleans up
+   thread locals after each test method.
+
+ - WebTestExecutionListener is configured as a default
+   TestExecutionListener before DependencyInjectionTestExecutionListener
+
+ - Extracted AbstractDelegatingSmartContextLoader from
+   DelegatingSmartContextLoader and introduced a new
+   WebDelegatingSmartContextLoader.
+
+ - ContextLoaderUtils now selects the default delegating ContextLoader
+   class name based on the presence of @WebAppConfiguration on the test
+   class.
+
+ - Tests in the spring-test-mvc module no longer use a custom
+   ContextLoader to load a WebApplicationContext. Instead, they now
+   rely on new core functionality provided in this commit.
+
+Issue: SPR-5243

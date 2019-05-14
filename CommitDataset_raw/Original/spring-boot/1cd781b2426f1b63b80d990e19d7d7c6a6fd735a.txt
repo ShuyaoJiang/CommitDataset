@@ -1,0 +1,17 @@
+Make spring-boot-test compatible with Mockito 2.1 and 2.2
+
+We use some internal Mockito classes and some  breaking API changes
+have been made to them in Mockito 2. This commit introduces a utility
+class, SpringBootMockUtil, to shield our code from these differences.
+Mockito 1 is called directly and Mockito 2 is called via reflection.
+
+To allow these changes to be tested, FilteredClassPathRunner has been
+enhanced to also support overriding a dependency on the class path.
+As a result it has been renamed to ModifiedClassPathRunner. The new
+ClassPathOverrides annotation can be used to provide the Maven
+coordinates of one or more dependencies that should be resolved and
+added to the class path. Such additions are added to the start of
+the class path so that they override any existing dependency that
+contains the same classes.
+
+Closes gh-6520

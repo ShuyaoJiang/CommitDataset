@@ -1,0 +1,11 @@
+[TEST] Wait for CS to be fully applied in testDeleteCreateInOneBulk
+
+The test has an issue that exhibits only super rarely. The test sets the publish
+timeout to 0, then proceeds to block cluster state processing on a data node,
+then deletes an index and recreates it, and finally removes the cluster state
+processing block. Finally, it calls ensureGreen, which might now return before
+the data node has fully applied the cluster state that removed and readded the
+shard, due to the publish timeout of 0. This commit waits for the cluster state
+to be fully processed on the data node before doing the search.
+
+Closes #30718

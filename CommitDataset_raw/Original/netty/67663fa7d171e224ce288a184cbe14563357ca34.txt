@@ -1,0 +1,15 @@
+HttpContentDecoder must continue read when it did not produce any mes… (#8922)
+
+Motivation:
+
+When HttpContentDecoder (and so HttpContentDecompressor) does not produce any message we need to make sure it calls ctx.read() if auto read is false to not stale.
+
+Modifications:
+
+- Keep track if we need to call ctx.read() or not
+- Add unit test
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8915.
+

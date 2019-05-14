@@ -1,0 +1,9 @@
+Fix occasional SearchServiceTests failure (#39697)
+
+Currently SearchServiceTests.testCloseSearchContextOnRewriteException can fail
+if a refresh happens while we test for the SearchPhaseExecutionException that is
+thrown later in the test. The test takes the current Store#refCount and expects
+it to be the same after the exception is thrown. If a refresh happens in that
+interval however, the refCound will be different, causing the test to fail. This
+can be provoked e.g. by running this section in a tight loop.
+Switching of refresh for this tests solves the issue.

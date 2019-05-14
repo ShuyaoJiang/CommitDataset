@@ -1,0 +1,14 @@
+[ML] Stop datafeeds running when their jobs are stale (#37227)
+
+We already had logic to stop datafeeds running against
+jobs that were OPENING, but a job that relocates from
+one node to another while OPENED stays OPENED, and this
+could cause the datafeed to fail when it sent data to
+the OPENED job on its new node before it had a
+corresponding autodetect process.
+
+This change extends the check to stop datafeeds running
+when their job is OPENING _or_ stale (i.e. has not had
+its status reset since relocating to a different node).
+
+Relates #36810

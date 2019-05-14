@@ -1,0 +1,22 @@
+Restore support for empty persistence unit with fat jars
+
+Due to the layout format change in 1.4, Spring Framework is no longer
+able to compute a default persistence unit root URL. If a Spring Boot 1.4
+application has JPA but does not have any entity, the application started
+from a fat jar now fails with a quite cryptic exception.
+
+This commit introduces `ApplicationInfo` as a general replacement for
+the `ApplicationArguments` and `Banner` singleton beans that
+`SpringApplication` registers on startup. `ApplicationInfo` also defines
+the detected "main" `Class` that can be used to compute a last resort
+URL that makes sense.
+
+If such bean is available, `EntityManagerFactoryBuilder` now sets the
+default persistence unit root location, preventing Spring Framework to
+attempt to resolve an unknown location. Note that in our case the
+persistence unit root location is actually useless: given the way the
+persistence unit is created, nothing actually uses it but Hibernate, as a
+compliant JPA provider, has to make sure this setting is set to a valid
+URL nevertheless.
+
+Closes gh-6635

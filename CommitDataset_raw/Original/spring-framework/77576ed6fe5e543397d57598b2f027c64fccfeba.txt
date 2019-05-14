@@ -1,0 +1,14 @@
+Fix PathPattern comparator result for wildcard suffix usage
+
+Without this change the comparator thinks "/{foo}"
+is more specific than "/{foo}.*". The minimal fix here
+to address it is to copy what the AntPathMatcher
+comparator does which is to consider '.*' as *not*
+a usage of a wildcard. See PatternInfo#initCounters()
+for the AntPathMatcher handling of this.
+
+This change ensures the PathPattern comparator now produces
+the expected result but suffix usage in general needs more
+thought at some point.
+
+Issue: SPR-15597

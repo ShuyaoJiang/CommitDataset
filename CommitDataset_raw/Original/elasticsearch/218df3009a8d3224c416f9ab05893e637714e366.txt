@@ -1,0 +1,7 @@
+Move update and delete by query to use seq# for optimistic concurrency control (#37857)
+
+The delete and update by query APIs both offer protection against overriding concurrent user changes to the documents they touch. They currently are using internal versioning. This PR changes that to rely on sequences numbers and primary terms.
+
+Relates #37639 
+Relates #36148 
+Relates #10708

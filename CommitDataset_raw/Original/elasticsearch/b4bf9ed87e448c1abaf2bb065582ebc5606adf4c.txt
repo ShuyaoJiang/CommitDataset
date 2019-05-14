@@ -1,0 +1,14 @@
+Security: minimize automatons as they are combined (elastic/x-pack-elasticsearch#4300)
+
+This commit changes the combination of multiple automatons representing
+a pattern so that the result of each step is minimal. Previously, the
+code unioned the automata and performed the minimization operation
+after all of the automata had been combined. This resulted in patterns
+with lots of overlap causing a TooComplexToDeterminizeException even
+though the end result could be a automaton that is total. Minimizing
+the automata as we go, allows us to build an automata that could not
+previously be built at the cost of additional operations. Automata are
+typically cached in the security code, so the net performance impact
+should be minimal.
+
+Original commit: elastic/x-pack-elasticsearch@b59fe8d690719113e555b6946bb04c8faba1b3b2

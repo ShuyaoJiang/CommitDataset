@@ -1,0 +1,8 @@
+Fix STOMP connect failure related memory leak
+
+Normally heartbeats keep connections from hanging. However in some
+cases a connection may hang before a CONNECTED frame is received
+and heartbeats are put in place. This commit adds a change to enforce
+a 60 limit on receiving the CONNECTED frame.
+
+Issue: SPR-14266

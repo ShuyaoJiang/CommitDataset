@@ -1,0 +1,13 @@
+Allow to access memoryAddress of wrapped ByteBuf for ReadOnlyByteBuf
+
+Motivation:
+
+We should allow to access the memoryAddress of the wrapped ByteBuf when using ReadOnlyByteBuf for peformance reasons. If a user act on a memoryAddress its his responsible anyway to do nothing "stupid".
+
+Modifications:
+
+Delegate to wrapped ByteBuf.
+
+Result:
+
+Less performance overhead for various operations and also when writing to a native transport (which needs the memoryAddress).

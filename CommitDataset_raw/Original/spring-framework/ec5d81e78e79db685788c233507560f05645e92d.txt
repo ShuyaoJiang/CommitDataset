@@ -1,0 +1,9 @@
+Ensure method & requestURI are non-null in MHSR
+
+Prior to this commit it was possible for the method and requestURI
+fields in MockHttpServletRequest to be set to null.
+
+This commit ensures that the method and requestURI fields are internally
+stored as empty strings if the user sets them to a null value.
+
+Issue: SPR-10643

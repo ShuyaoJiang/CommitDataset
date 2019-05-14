@@ -1,0 +1,16 @@
+Support using an Executor to offload blocking / long-running tasks wh… (#8847)
+
+Motivation:
+
+The SSLEngine does provide a way to signal to the caller that it may need to execute a blocking / long-running task which then can be offloaded to an Executor to ensure the I/O thread is not blocked. Currently how we handle this in SslHandler is not really optimal as while we offload to the Executor we still block the I/O Thread.
+
+Modifications:
+
+- Correctly support offloading the task to the Executor while suspending processing of SSL in the I/O Thread
+- Add new methods to SslContext to specify the Executor when creating a SslHandler
+- Remove @deprecated annotations from SslHandler constructor that takes an Executor
+- Adjust tests to also run with the Executor to ensure all works as expected.
+
+Result:
+
+Be able to offload long running tasks to an Executor when using SslHandler. Partly fixes https://github.com/netty/netty/issues/7862 and https://github.com/netty/netty/issues/7020.

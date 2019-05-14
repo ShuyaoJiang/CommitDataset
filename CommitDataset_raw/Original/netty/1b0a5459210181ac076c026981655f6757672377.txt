@@ -1,0 +1,28 @@
+Do not send Content-Length: 0 on 101 responses.
+
+Motivation:
+
+During code read of the Netty codebase I noticed that the Netty
+HttpServerUpgradeHandler unconditionally sets a Content-Length: 0
+header on 101 Switching Protocols responses. This explicitly
+contravenes RFC 7230 Section 3.3.2 (Content-Length), which notes
+that:
+
+    A server MUST NOT send a Content-Length header field in any
+    response with a status code of 1xx (Informational) or 204
+    (No Content).
+
+While it is unlikely that any client will ever be confused by
+this behaviour, there is no reason to contravene this part of the
+specification.
+
+Modifications:
+
+Removed the line of code setting the header field and changed the
+only test that expected it to be there.
+
+Result:
+
+When performing the server portion of HTTP upgrade, the 101
+Switching Protocols response will no longer contain a
+Content-Length: 0 header field.

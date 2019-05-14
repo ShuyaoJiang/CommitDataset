@@ -1,0 +1,27 @@
+Proper support for Root WAC in Spring MVC Test
+
+The modifications to DefaultMockMvcBuilder performed in conjunction
+with SPR-12553 introduced a breaking change: the WebApplicationContext
+supplied to DefaultMockMvcBuilder's constructor was *always* stored in
+the ServletContext as the root WebApplicationContext, overwriting a
+root WebApplicationContext that had been set by the user or by the
+Spring TestContext Framework (TCF) -- for example, in
+AbstractGenericWebContextLoader. Consequently, the changes in SPR-12553
+cause tests that use @ContextHierarchy to fail if web components rely
+on the correct WebApplicationContext being stored under the
+WebApplicationContext#ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE key.
+
+This commit reverts the breaking changes introduced in SPR-12553: if
+the root WebApplicationContext has already been set in the
+ServletContext of the WebApplicationContext supplied to
+DefaultMockMvcBuilder, no action is taken.
+
+Furthermore, this commit introduces new code to address the initial
+intent of SPR-12553. Specifically, if the root WebApplicationContext
+has NOT been set in the ServletContext of the WebApplicationContext
+supplied to DefaultMockMvcBuilder, the application context hierarchy
+will be traversed in search of the root WebApplicationContext, and the
+root WebApplicationContext will then be stored under the
+ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE key.
+
+Issue: SPR-13075, SPR-12553

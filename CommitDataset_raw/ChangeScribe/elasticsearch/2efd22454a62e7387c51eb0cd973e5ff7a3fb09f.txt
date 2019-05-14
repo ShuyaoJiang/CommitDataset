@@ -1,0 +1,4445 @@
+BUG - FEATURE: <type-ID> 
+
+This commit  includes changes to internationalization, properties or configuration files (java-versions.properties, .dir-locals.el, .gitignore, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.action:  
+
+1.1. Rename type MockIndicesRequest with MockIndicesRequest
+
+2. Changes to package org.elasticsearch.common.network:  
+
+2.1. Rename type InetAddressHelper with InetAddressHelper
+
+3. Changes to package org.elasticsearch.example:  
+
+3.1. Rename type ExampleSecurityExtension with ExampleSecurityExtension
+
+3.2. Rename type SpiExtensionPlugin with SpiExtensionPlugin
+
+4. Changes to package org.elasticsearch.example.realm:  
+
+4.1. Rename type CustomAuthenticationFailureHandler with CustomAuthenticationFailureHandler
+
+4.2. Rename type CustomRealm with CustomRealm
+
+4.3. Rename type CustomRealmIT with CustomRealmIT
+
+4.4. Rename type CustomRealmTests with CustomRealmTests
+
+5. Changes to package org.elasticsearch.example.role:  
+
+5.1. Rename type CustomInMemoryRolesProvider with CustomInMemoryRolesProvider
+
+5.2. Rename type CustomRolesProviderIT with CustomRolesProviderIT
+
+6. Changes to package org.elasticsearch.integration:  
+
+6.1. Rename type AbstractPrivilegeTestCase with AbstractPrivilegeTestCase
+
+6.2. Rename type BulkUpdateTests with BulkUpdateTests
+
+6.3. Rename type ClearRealmsCacheTests with ClearRealmsCacheTests
+
+6.4. Rename type ClearRolesCacheTests with ClearRolesCacheTests
+
+6.5. Rename type ClusterPrivilegeTests with ClusterPrivilegeTests
+
+6.6. Rename type DateMathExpressionIntegTests with DateMathExpressionIntegTests
+
+6.7. Rename type DocumentAndFieldLevelSecurityTests with DocumentAndFieldLevelSecurityTests
+
+6.8. Rename type DocumentLevelSecurityRandomTests with DocumentLevelSecurityRandomTests
+
+6.9. Rename type DocumentLevelSecurityTests with DocumentLevelSecurityTests
+
+6.10. Rename type FieldLevelSecurityRandomTests with FieldLevelSecurityRandomTests
+
+6.11. Rename type FieldLevelSecurityTests with FieldLevelSecurityTests
+
+6.12. Rename type IndexPrivilegeTests with IndexPrivilegeTests
+
+6.13. Rename type IndicesPermissionsWithAliasesWildcardsAndRegexsTests with IndicesPermissionsWithAliasesWildcardsAndRegexsTests
+
+6.14. Rename type KibanaUserRoleIntegTests with KibanaUserRoleIntegTests
+
+6.15. Rename type MultipleIndicesPermissionsTests with MultipleIndicesPermissionsTests
+
+6.16. Rename type PermissionPrecedenceTests with PermissionPrecedenceTests
+
+6.17. Rename type SecurityCachePermissionTests with SecurityCachePermissionTests
+
+6.18. Rename type SecurityClearScrollTests with SecurityClearScrollTests
+
+6.19. Rename type ShrinkIndexWithSecurityTests with ShrinkIndexWithSecurityTests
+
+7. Changes to package org.elasticsearch.license:  
+
+7.1. Rename type AbstractLicenseServiceTestCase with AbstractLicenseServiceTestCase
+
+7.2. Rename type AbstractLicensesIntegrationTestCase with AbstractLicensesIntegrationTestCase
+
+7.3. Rename type CryptUtils with CryptUtils
+
+7.4. Rename type DateUtils with DateUtils
+
+7.5. Rename type DeleteLicenseAction with DeleteLicenseAction
+
+7.6. Rename type DeleteLicenseRequestBuilder with DeleteLicenseRequestBuilder
+
+7.7. Rename type GetBasicStatusAction with GetBasicStatusAction
+
+7.8. Rename type GetBasicStatusRequest with GetBasicStatusRequest
+
+7.9. Rename type GetBasicStatusRequestBuilder with GetBasicStatusRequestBuilder
+
+7.10. Rename type GetBasicStatusResponse with GetBasicStatusResponse
+
+7.11. Rename type GetLicenseAction with GetLicenseAction
+
+7.12. Rename type GetLicenseRequestBuilder with GetLicenseRequestBuilder
+
+7.13. Rename type GetLicenseResponse with GetLicenseResponse
+
+7.14. Rename type GetTrialStatusAction with GetTrialStatusAction
+
+7.15. Rename type GetTrialStatusRequest with GetTrialStatusRequest
+
+7.16. Rename type GetTrialStatusRequestBuilder with GetTrialStatusRequestBuilder
+
+7.17. Rename type GetTrialStatusResponse with GetTrialStatusResponse
+
+7.18. Rename type LicenseClusterChangeTests with LicenseClusterChangeTests
+
+7.19. Rename type LicenseOperationModeTests with LicenseOperationModeTests
+
+7.20. Rename type LicenseOperationModeUpdateTests with LicenseOperationModeUpdateTests
+
+7.21. Rename type LicenseRegistrationTests with LicenseRegistrationTests
+
+7.22. Rename type LicenseScheduleTests with LicenseScheduleTests
+
+7.23. Rename type LicenseSerializationTests with LicenseSerializationTests
+
+7.24. Rename type LicenseService with LicenseService
+
+7.25. Rename type LicenseServiceClusterTests with LicenseServiceClusterTests
+
+7.26. Rename type LicenseTLSTests with LicenseTLSTests
+
+7.27. Rename type LicenseUtils with LicenseUtils
+
+7.28. Rename type LicenseUtilsTests with LicenseUtilsTests
+
+7.29. Rename type LicenseVerifier with LicenseVerifier
+
+7.30. Rename type LicensesManagerServiceTests with LicensesManagerServiceTests
+
+7.31. Rename type LicensesMetaDataSerializationTests with LicensesMetaDataSerializationTests
+
+7.32. Rename type LicensesTransportTests with LicensesTransportTests
+
+7.33. Rename type Licensing with Licensing
+
+7.34. Rename type LicensingClient with LicensingClient
+
+7.35. Rename type LicensingTests with LicensingTests
+
+7.36. Rename type MachineLearningLicensingTests with MachineLearningLicensingTests
+
+7.37. Rename type OperationModeFileWatcher with OperationModeFileWatcher
+
+7.38. Rename type OperationModeFileWatcherTests with OperationModeFileWatcherTests
+
+7.39. Rename type PostStartBasicAction with PostStartBasicAction
+
+7.40. Rename type PostStartBasicRequest with PostStartBasicRequest
+
+7.41. Rename type PostStartBasicRequestBuilder with PostStartBasicRequestBuilder
+
+7.42. Rename type PostStartBasicResponse with PostStartBasicResponse
+
+7.43. Rename type PostStartTrialAction with PostStartTrialAction
+
+7.44. Rename type PostStartTrialRequest with PostStartTrialRequest
+
+7.45. Rename type PostStartTrialRequestBuilder with PostStartTrialRequestBuilder
+
+7.46. Rename type PostStartTrialResponse with PostStartTrialResponse
+
+7.47. Rename type PutLicenseAction with PutLicenseAction
+
+7.48. Rename type PutLicenseRequest with PutLicenseRequest
+
+7.49. Rename type PutLicenseRequestBuilder with PutLicenseRequestBuilder
+
+7.50. Rename type RestDeleteLicenseAction with RestDeleteLicenseAction
+
+7.51. Rename type RestGetBasicStatus with RestGetBasicStatus
+
+7.52. Rename type RestGetLicenseAction with RestGetLicenseAction
+
+7.53. Rename type RestGetTrialStatus with RestGetTrialStatus
+
+7.54. Rename type RestPostStartBasicLicense with RestPostStartBasicLicense
+
+7.55. Rename type RestPostStartTrialLicense with RestPostStartTrialLicense
+
+7.56. Rename type RestPutLicenseAction with RestPutLicenseAction
+
+7.57. Rename type SelfGeneratedLicense with SelfGeneratedLicense
+
+7.58. Rename type SelfGeneratedLicenseTests with SelfGeneratedLicenseTests
+
+7.59. Rename type StartBasicClusterTask with StartBasicClusterTask
+
+7.60. Rename type StartBasicLicenseTests with StartBasicLicenseTests
+
+7.61. Rename type StartTrialClusterTask with StartTrialClusterTask
+
+7.62. Rename type StartTrialLicenseTests with StartTrialLicenseTests
+
+7.63. Rename type StartupSelfGeneratedLicenseTask with StartupSelfGeneratedLicenseTask
+
+7.64. Rename type TransportDeleteLicenseAction with TransportDeleteLicenseAction
+
+7.65. Rename type TransportGetBasicStatusAction with TransportGetBasicStatusAction
+
+7.66. Rename type TransportGetLicenseAction with TransportGetLicenseAction
+
+7.67. Rename type TransportGetTrialStatusAction with TransportGetTrialStatusAction
+
+7.68. Rename type TransportPostStartBasicAction with TransportPostStartBasicAction
+
+7.69. Rename type TransportPostStartTrialAction with TransportPostStartTrialAction
+
+7.70. Rename type TransportPutLicenseAction with TransportPutLicenseAction
+
+7.71. Rename type XPackLicenseStateTests with XPackLicenseStateTests
+
+8. Changes to package org.elasticsearch.license.licensor:  
+
+8.1. Rename type LicenseSigner with LicenseSigner
+
+8.2. Rename type LicenseVerificationTests with LicenseVerificationTests
+
+9. Changes to package org.elasticsearch.license.licensor.tools:  
+
+9.1. Rename type KeyPairGenerationToolTests with KeyPairGenerationToolTests
+
+9.2. Rename type KeyPairGeneratorTool with KeyPairGeneratorTool
+
+9.3. Rename type LicenseGenerationToolTests with LicenseGenerationToolTests
+
+9.4. Rename type LicenseGeneratorTool with LicenseGeneratorTool
+
+9.5. Rename type LicenseVerificationTool with LicenseVerificationTool
+
+9.6. Rename type LicenseVerificationToolTests with LicenseVerificationToolTests
+
+10. Changes to package org.elasticsearch.multi_node:  
+
+10.1. Rename type GlobalCheckpointSyncActionIT with GlobalCheckpointSyncActionIT
+
+11. Changes to package org.elasticsearch.smoketest:  
+
+11.1. Rename type MonitoringWithWatcherRestIT with MonitoringWithWatcherRestIT
+
+11.2. Rename type PreventFailingBuildIT with PreventFailingBuildIT
+
+11.3. Rename type SmokeTestMonitoringWithSecurityIT with SmokeTestMonitoringWithSecurityIT
+
+11.4. Rename type SmokeTestPluginsSslClientYamlTestSuiteIT with SmokeTestPluginsSslClientYamlTestSuiteIT
+
+11.5. Rename type SmokeTestSecurityWithMustacheClientYamlTestSuiteIT with SmokeTestSecurityWithMustacheClientYamlTestSuiteIT
+
+11.6. Rename type SmokeTestWatcherTestSuiteIT with SmokeTestWatcherTestSuiteIT
+
+11.7. Rename type SmokeTestWatcherWithSecurityClientYamlTestSuiteIT with SmokeTestWatcherWithSecurityClientYamlTestSuiteIT
+
+11.8. Rename type SmokeTestWatcherWithSecurityIT with SmokeTestWatcherWithSecurityIT
+
+11.9. Rename type WatcherJiraYamlTestSuiteIT with WatcherJiraYamlTestSuiteIT
+
+11.10. Rename type WatcherPagerDutyYamlTestSuiteIT with WatcherPagerDutyYamlTestSuiteIT
+
+11.11. Rename type WatcherSlackYamlTestSuiteIT with WatcherSlackYamlTestSuiteIT
+
+11.12. Rename type XDocsClientYamlTestSuiteIT with XDocsClientYamlTestSuiteIT
+
+11.13. Rename type XSmokeTestPluginsClientYamlTestSuiteIT with XSmokeTestPluginsClientYamlTestSuiteIT
+
+12. Changes to package org.elasticsearch.test:  
+
+12.1. Rename type NativeRealmIntegTestCase with NativeRealmIntegTestCase
+
+12.2. Rename type OpenLdapTests with OpenLdapTests
+
+12.3. Rename type SecuritySettingsSource with SecuritySettingsSource
+
+12.4. Rename type SecuritySettingsSourceField with SecuritySettingsSourceField
+
+12.5. Rename type SecurityTestsUtils with SecurityTestsUtils
+
+12.6. Rename type SettingsFilterTests with SettingsFilterTests
+
+12.7. Rename type TestMatchers with TestMatchers
+
+13. Changes to package org.elasticsearch.test.http:  
+
+13.1. Rename type Headers with Headers
+
+13.2. Rename type MockRequest with MockRequest
+
+13.3. Rename type MockResponse with MockResponse
+
+14. Changes to package org.elasticsearch.transport:  
+
+14.1. Rename type SecurityServerTransportServiceTests with SecurityServerTransportServiceTests
+
+15. Changes to package org.elasticsearch.upgrades:  
+
+15.1. Rename type AbstractUpgradeTestCase with AbstractUpgradeTestCase
+
+15.2. Rename type BasicLicenseUpgradeIT with BasicLicenseUpgradeIT
+
+15.3. Rename type TokenBackwardsCompatibilityIT with TokenBackwardsCompatibilityIT
+
+15.4. Rename type UpgradeClusterClientYamlTestSuiteIT with UpgradeClusterClientYamlTestSuiteIT
+
+16. Changes to package org.elasticsearch.xpack.client:  
+
+16.1. Rename type PreBuiltXPackTransportClient with PreBuiltXPackTransportClient
+
+16.2. Rename type PreBuiltXPackTransportClientTests with PreBuiltXPackTransportClientTests
+
+17. Changes to package org.elasticsearch.xpack.core:  
+
+17.1. Rename type ClientHelper with ClientHelper
+
+17.2. Rename type ClientHelperTests with ClientHelperTests
+
+17.3. Rename type EmptyXPackFeatureSet with EmptyXPackFeatureSet
+
+17.4. Rename type LocalStateCompositeXPackPlugin with LocalStateCompositeXPackPlugin
+
+17.5. Rename type TestXPackTransportClient with TestXPackTransportClient
+
+17.6. Rename type XPackBuild with XPackBuild
+
+17.7. Rename type XPackClient with XPackClient
+
+17.8. Rename type XPackClientPlugin with XPackClientPlugin
+
+17.9. Rename type XPackField with XPackField
+
+17.10. Rename type XPackSettings with XPackSettings
+
+17.11. Rename type XPackSettingsTests with XPackSettingsTests
+
+18. Changes to package org.elasticsearch.xpack.core.action:  
+
+18.1. Rename type TransportXPackInfoAction with TransportXPackInfoAction
+
+18.2. Rename type TransportXPackInfoActionTests with TransportXPackInfoActionTests
+
+18.3. Rename type TransportXPackUsageAction with TransportXPackUsageAction
+
+18.4. Rename type XPackInfoAction with XPackInfoAction
+
+18.5. Rename type XPackInfoRequestBuilder with XPackInfoRequestBuilder
+
+18.6. Rename type XPackUsageAction with XPackUsageAction
+
+18.7. Rename type XPackUsageRequestBuilder with XPackUsageRequestBuilder
+
+18.8. Rename type XPackUsageResponse with XPackUsageResponse
+
+19. Changes to package org.elasticsearch.xpack.core.common:  
+
+19.1. Rename type IteratingActionListener with IteratingActionListener
+
+19.2. Rename type IteratingActionListenerTests with IteratingActionListenerTests
+
+20. Changes to package org.elasticsearch.xpack.core.common.socket:  
+
+20.1. Rename type SocketAccess with SocketAccess
+
+21. Changes to package org.elasticsearch.xpack.core.deprecation:  
+
+21.1. Rename type DeprecationChecksTests with DeprecationChecksTests
+
+21.2. Rename type DeprecationInfoActionRequestTests with DeprecationInfoActionRequestTests
+
+21.3. Rename type DeprecationInfoActionResponseTests with DeprecationInfoActionResponseTests
+
+21.4. Rename type DeprecationIssue with DeprecationIssue
+
+21.5. Rename type DeprecationIssueTests with DeprecationIssueTests
+
+22. Changes to package org.elasticsearch.xpack.core.graph:  
+
+22.1. Rename type GraphFeatureSetUsage with GraphFeatureSetUsage
+
+23. Changes to package org.elasticsearch.xpack.core.graph.action:  
+
+23.1. Rename type GraphExploreAction with GraphExploreAction
+
+23.2. Rename type GraphExploreRequestBuilder with GraphExploreRequestBuilder
+
+24. Changes to package org.elasticsearch.xpack.core.logstash:  
+
+24.1. Rename type LogstashFeatureSetUsage with LogstashFeatureSetUsage
+
+25. Changes to package org.elasticsearch.xpack.core.ml:  
+
+25.1. Rename type MachineLearningFeatureSetUsage with MachineLearningFeatureSetUsage
+
+25.2. Rename type MachineLearningField with MachineLearningField
+
+25.3. Rename type MlMetaIndex with MlMetaIndex
+
+26. Changes to package org.elasticsearch.xpack.core.ml.action:  
+
+26.1. Rename type CloseJobActionRequestTests with CloseJobActionRequestTests
+
+26.2. Rename type CloseJobActionResponseTests with CloseJobActionResponseTests
+
+26.3. Rename type DeleteCalendarEventActionRequestTests with DeleteCalendarEventActionRequestTests
+
+26.4. Rename type DeleteDatafeedRequestTests with DeleteDatafeedRequestTests
+
+26.5. Rename type DeleteExpiredDataActionResponseTests with DeleteExpiredDataActionResponseTests
+
+26.6. Rename type DeleteJobRequestTests with DeleteJobRequestTests
+
+26.7. Rename type ForecastJobActionRequestTests with ForecastJobActionRequestTests
+
+26.8. Rename type ForecastJobActionResponseTests with ForecastJobActionResponseTests
+
+26.9. Rename type GetBucketActionRequestTests with GetBucketActionRequestTests
+
+26.10. Rename type GetBucketActionResponseTests with GetBucketActionResponseTests
+
+26.11. Rename type GetCalendarEventsActionRequestTests with GetCalendarEventsActionRequestTests
+
+26.12. Rename type GetCalendarsActionRequestTests with GetCalendarsActionRequestTests
+
+26.13. Rename type GetCategoriesRequestTests with GetCategoriesRequestTests
+
+26.14. Rename type GetCategoriesResponseTests with GetCategoriesResponseTests
+
+26.15. Rename type GetDatafeedStatsActionRequestTests with GetDatafeedStatsActionRequestTests
+
+26.16. Rename type GetDatafeedStatsActionResponseTests with GetDatafeedStatsActionResponseTests
+
+26.17. Rename type GetDatafeedsActionRequestTests with GetDatafeedsActionRequestTests
+
+26.18. Rename type GetDatafeedsActionResponseTests with GetDatafeedsActionResponseTests
+
+26.19. Rename type GetFiltersActionRequestTests with GetFiltersActionRequestTests
+
+26.20. Rename type GetFiltersActionResponseTests with GetFiltersActionResponseTests
+
+26.21. Rename type GetInfluencersActionRequestTests with GetInfluencersActionRequestTests
+
+26.22. Rename type GetInfluencersActionResponseTests with GetInfluencersActionResponseTests
+
+26.23. Rename type GetJobStatsActionRequestTests with GetJobStatsActionRequestTests
+
+26.24. Rename type GetJobStatsActionResponseTests with GetJobStatsActionResponseTests
+
+26.25. Rename type GetJobsActionRequestTests with GetJobsActionRequestTests
+
+26.26. Rename type GetJobsActionResponseTests with GetJobsActionResponseTests
+
+26.27. Rename type GetModelSnapshotsActionRequestTests with GetModelSnapshotsActionRequestTests
+
+26.28. Rename type GetModelSnapshotsActionResponseTests with GetModelSnapshotsActionResponseTests
+
+26.29. Rename type GetOverallBucketsActionRequestTests with GetOverallBucketsActionRequestTests
+
+26.30. Rename type GetOverallBucketsActionResponseTests with GetOverallBucketsActionResponseTests
+
+26.31. Rename type GetRecordsActionRequestTests with GetRecordsActionRequestTests
+
+26.32. Rename type GetRecordsActionResponseTests with GetRecordsActionResponseTests
+
+26.33. Rename type JobTaskRequest with JobTaskRequest
+
+26.34. Rename type MlInfoActionResponseTests with MlInfoActionResponseTests
+
+26.35. Rename type OpenJobActionRequestTests with OpenJobActionRequestTests
+
+26.36. Rename type PersistJobActionRequestTests with PersistJobActionRequestTests
+
+26.37. Rename type PersistJobActionResponseTests with PersistJobActionResponseTests
+
+26.38. Rename type PostCalendarEventActionRequestTests with PostCalendarEventActionRequestTests
+
+26.39. Rename type PostDataActionRequestTests with PostDataActionRequestTests
+
+26.40. Rename type PostDataActionResponseTests with PostDataActionResponseTests
+
+26.41. Rename type PostDataFlushRequestTests with PostDataFlushRequestTests
+
+26.42. Rename type PostDataFlushResponseTests with PostDataFlushResponseTests
+
+26.43. Rename type PreviewDatafeedActionRequestTests with PreviewDatafeedActionRequestTests
+
+26.44. Rename type PutCalendarActionRequestTests with PutCalendarActionRequestTests
+
+26.45. Rename type PutCalendarActionResponseTests with PutCalendarActionResponseTests
+
+26.46. Rename type PutDatafeedActionRequestTests with PutDatafeedActionRequestTests
+
+26.47. Rename type PutDatafeedActionResponseTests with PutDatafeedActionResponseTests
+
+26.48. Rename type PutFilterActionRequestTests with PutFilterActionRequestTests
+
+26.49. Rename type PutJobActionRequestTests with PutJobActionRequestTests
+
+26.50. Rename type PutJobActionResponseTests with PutJobActionResponseTests
+
+26.51. Rename type RevertModelSnapshotActionRequestTests with RevertModelSnapshotActionRequestTests
+
+26.52. Rename type RevertModelSnapshotActionResponseTests with RevertModelSnapshotActionResponseTests
+
+26.53. Rename type StartDatafeedActionRequestTests with StartDatafeedActionRequestTests
+
+26.54. Rename type StopDatafeedActionRequestTests with StopDatafeedActionRequestTests
+
+26.55. Rename type UpdateCalendarJobActionResquestTests with UpdateCalendarJobActionResquestTests
+
+26.56. Rename type UpdateDatafeedActionRequestTests with UpdateDatafeedActionRequestTests
+
+26.57. Rename type UpdateJobActionRequestTests with UpdateJobActionRequestTests
+
+26.58. Rename type UpdateModelSnapshotActionRequestTests with UpdateModelSnapshotActionRequestTests
+
+26.59. Rename type UpdateModelSnapshotActionResponseTests with UpdateModelSnapshotActionResponseTests
+
+26.60. Rename type UpdateProcessActionRequestTests with UpdateProcessActionRequestTests
+
+26.61. Rename type ValidateDetectorActionRequestTests with ValidateDetectorActionRequestTests
+
+26.62. Rename type ValidateJobConfigActionRequestTests with ValidateJobConfigActionRequestTests
+
+27. Changes to package org.elasticsearch.xpack.core.ml.calendars:  
+
+27.1. Rename type CalendarTests with CalendarTests
+
+27.2. Rename type ScheduledEventTests with ScheduledEventTests
+
+28. Changes to package org.elasticsearch.xpack.core.ml.client:  
+
+28.1. Rename type MachineLearningClient with MachineLearningClient
+
+29. Changes to package org.elasticsearch.xpack.core.ml.datafeed:  
+
+29.1. Rename type ChunkingConfig with ChunkingConfig
+
+29.2. Rename type ChunkingConfigTests with ChunkingConfigTests
+
+29.3. Rename type DatafeedConfigTests with DatafeedConfigTests
+
+29.4. Rename type DatafeedJobValidator with DatafeedJobValidator
+
+29.5. Rename type DatafeedUpdateTests with DatafeedUpdateTests
+
+30. Changes to package org.elasticsearch.xpack.core.ml.datafeed.extractor:  
+
+30.1. Rename type DataExtractor with DataExtractor
+
+30.2. Rename type ExtractorUtils with ExtractorUtils
+
+30.3. Rename type ExtractorUtilsTests with ExtractorUtilsTests
+
+31. Changes to package org.elasticsearch.xpack.core.ml.integration:  
+
+31.1. Rename type MlRestTestStateCleaner with MlRestTestStateCleaner
+
+32. Changes to package org.elasticsearch.xpack.core.ml.job.config:  
+
+32.1. Rename type AnalysisConfigTests with AnalysisConfigTests
+
+32.2. Rename type AnalysisLimits with AnalysisLimits
+
+32.3. Rename type AnalysisLimitsTests with AnalysisLimitsTests
+
+32.4. Rename type DataDescriptionTests with DataDescriptionTests
+
+32.5. Rename type DefaultDetectorDescription with DefaultDetectorDescription
+
+32.6. Rename type DetectionRuleTests with DetectionRuleTests
+
+32.7. Rename type DetectorTests with DetectorTests
+
+32.8. Rename type JobTests with JobTests
+
+32.9. Rename type JobUpdateTests with JobUpdateTests
+
+32.10. Rename type MlFilterTests with MlFilterTests
+
+32.11. Rename type ModelPlotConfig with ModelPlotConfig
+
+32.12. Rename type ModelPlotConfigTests with ModelPlotConfigTests
+
+32.13. Rename type RuleCondition with RuleCondition
+
+32.14. Rename type RuleConditionTests with RuleConditionTests
+
+33. Changes to package org.elasticsearch.xpack.core.ml.job.groups:  
+
+33.1. Rename type GroupOrJobLookupTests with GroupOrJobLookupTests
+
+33.2. Rename type GroupOrJobTests with GroupOrJobTests
+
+34. Changes to package org.elasticsearch.xpack.core.ml.job.messages:  
+
+34.1. Rename type Messages with Messages
+
+35. Changes to package org.elasticsearch.xpack.core.ml.job.persistence:  
+
+35.1. Rename type AnomalyDetectorsIndex with AnomalyDetectorsIndex
+
+35.2. Rename type AnomalyDetectorsIndexFields with AnomalyDetectorsIndexFields
+
+35.3. Rename type ElasticsearchMappings with ElasticsearchMappings
+
+35.4. Rename type ElasticsearchMappingsTests with ElasticsearchMappingsTests
+
+36. Changes to package org.elasticsearch.xpack.core.ml.job.process.autodetect.output:  
+
+36.1. Rename type FlushAcknowledgement with FlushAcknowledgement
+
+37. Changes to package org.elasticsearch.xpack.core.ml.job.process.autodetect.state:  
+
+37.1. Rename type CategorizerState with CategorizerState
+
+37.2. Rename type DataCounts with DataCounts
+
+37.3. Rename type DataCountsTests with DataCountsTests
+
+37.4. Rename type ModelSizeStatsTests with ModelSizeStatsTests
+
+37.5. Rename type ModelSnapshotField with ModelSnapshotField
+
+37.6. Rename type ModelSnapshotTests with ModelSnapshotTests
+
+37.7. Rename type ModelState with ModelState
+
+37.8. Rename type Quantiles with Quantiles
+
+37.9. Rename type QuantilesTests with QuantilesTests
+
+38. Changes to package org.elasticsearch.xpack.core.ml.job.results:  
+
+38.1. Rename type AnomalyCause with AnomalyCause
+
+38.2. Rename type AnomalyCauseTests with AnomalyCauseTests
+
+38.3. Rename type AnomalyRecord with AnomalyRecord
+
+38.4. Rename type AnomalyRecordTests with AnomalyRecordTests
+
+38.5. Rename type Bucket with Bucket
+
+38.6. Rename type BucketInfluencer with BucketInfluencer
+
+38.7. Rename type BucketInfluencerTests with BucketInfluencerTests
+
+38.8. Rename type CategoryDefinition with CategoryDefinition
+
+38.9. Rename type Forecast with Forecast
+
+38.10. Rename type ForecastRequestStats with ForecastRequestStats
+
+38.11. Rename type Influence with Influence
+
+38.12. Rename type Influencer with Influencer
+
+38.13. Rename type InfluencerTests with InfluencerTests
+
+38.14. Rename type ModelPlot with ModelPlot
+
+38.15. Rename type ReservedFieldNames with ReservedFieldNames
+
+38.16. Rename type Result with Result
+
+39. Changes to package org.elasticsearch.xpack.core.ml.notifications:  
+
+39.1. Rename type AuditMessage with AuditMessage
+
+39.2. Rename type AuditMessageTests with AuditMessageTests
+
+39.3. Rename type AuditorField with AuditorField
+
+40. Changes to package org.elasticsearch.xpack.core.ml.utils:  
+
+40.1. Rename type ExceptionsHelper with ExceptionsHelper
+
+40.2. Rename type Intervals with Intervals
+
+40.3. Rename type MlStrings with MlStrings
+
+40.4. Rename type NameResolver with NameResolver
+
+40.5. Rename type ToXContentParams with ToXContentParams
+
+41. Changes to package org.elasticsearch.xpack.core.ml.utils.time:  
+
+41.1. Rename type DateTimeFormatterTimestampConverter with DateTimeFormatterTimestampConverter
+
+41.2. Rename type TimeUtils with TimeUtils
+
+41.3. Rename type TimestampConverter with TimestampConverter
+
+42. Changes to package org.elasticsearch.xpack.core.monitoring:  
+
+42.1. Rename type MonitoringFeatureSetUsage with MonitoringFeatureSetUsage
+
+42.2. Rename type MonitoringField with MonitoringField
+
+43. Changes to package org.elasticsearch.xpack.core.monitoring.action:  
+
+43.1. Rename type MonitoringBulkAction with MonitoringBulkAction
+
+43.2. Rename type MonitoringBulkDoc with MonitoringBulkDoc
+
+43.3. Rename type MonitoringBulkRequest with MonitoringBulkRequest
+
+43.4. Rename type MonitoringBulkRequestBuilder with MonitoringBulkRequestBuilder
+
+44. Changes to package org.elasticsearch.xpack.core.monitoring.client:  
+
+44.1. Rename type MonitoringClient with MonitoringClient
+
+45. Changes to package org.elasticsearch.xpack.core.monitoring.exporter:  
+
+45.1. Rename type MonitoringTemplateUtils with MonitoringTemplateUtils
+
+46. Changes to package org.elasticsearch.xpack.core.rest:  
+
+46.1. Rename type XPackRestHandler with XPackRestHandler
+
+47. Changes to package org.elasticsearch.xpack.core.rest.action:  
+
+47.1. Rename type RestXPackInfoAction with RestXPackInfoAction
+
+47.2. Rename type RestXPackUsageAction with RestXPackUsageAction
+
+48. Changes to package org.elasticsearch.xpack.core.rollup:  
+
+48.1. Rename type ConfigTestHelpers with ConfigTestHelpers
+
+48.2. Rename type RollupFeatureSetUsage with RollupFeatureSetUsage
+
+48.3. Rename type RollupField with RollupField
+
+49. Changes to package org.elasticsearch.xpack.core.rollup.action:  
+
+49.1. Rename type RollableIndexCaps with RollableIndexCaps
+
+50. Changes to package org.elasticsearch.xpack.core.rollup.job:  
+
+50.1. Rename type GroupConfig with GroupConfig
+
+50.2. Rename type GroupConfigSerializingTests with GroupConfigSerializingTests
+
+50.3. Rename type JobWrapperSerializingTests with JobWrapperSerializingTests
+
+50.4. Rename type MetricConfig with MetricConfig
+
+50.5. Rename type RollupJob with RollupJob
+
+50.6. Rename type RollupJobConfig with RollupJobConfig
+
+50.7. Rename type RollupJobConfigTests with RollupJobConfigTests
+
+50.8. Rename type RollupJobStatus with RollupJobStatus
+
+50.9. Rename type RollupJobStatusTests with RollupJobStatusTests
+
+50.10. Rename type RollupJobTests with RollupJobTests
+
+50.11. Rename type TermsGroupConfig with TermsGroupConfig
+
+50.12. Rename type TermsGroupConfigSerializingTests with TermsGroupConfigSerializingTests
+
+51. Changes to package org.elasticsearch.xpack.core.security:  
+
+51.1. Rename type ScrollHelper with ScrollHelper
+
+51.2. Rename type SecurityContext with SecurityContext
+
+51.3. Rename type SecurityExtension with SecurityExtension
+
+51.4. Rename type SecurityFeatureSetUsage with SecurityFeatureSetUsage
+
+51.5. Rename type SecurityField with SecurityField
+
+51.6. Rename type SecuritySettings with SecuritySettings
+
+51.7. Rename type UserSettings with UserSettings
+
+52. Changes to package org.elasticsearch.xpack.core.security.action.realm:  
+
+52.1. Rename type ClearRealmCacheAction with ClearRealmCacheAction
+
+52.2. Rename type ClearRealmCacheRequestBuilder with ClearRealmCacheRequestBuilder
+
+53. Changes to package org.elasticsearch.xpack.core.security.action.role:  
+
+53.1. Rename type ClearRolesCacheAction with ClearRolesCacheAction
+
+53.2. Rename type ClearRolesCacheRequestBuilder with ClearRolesCacheRequestBuilder
+
+53.3. Rename type DeleteRoleAction with DeleteRoleAction
+
+53.4. Rename type DeleteRoleRequest with DeleteRoleRequest
+
+53.5. Rename type DeleteRoleRequestBuilder with DeleteRoleRequestBuilder
+
+53.6. Rename type DeleteRoleResponse with DeleteRoleResponse
+
+53.7. Rename type GetRolesAction with GetRolesAction
+
+53.8. Rename type GetRolesRequest with GetRolesRequest
+
+53.9. Rename type GetRolesRequestBuilder with GetRolesRequestBuilder
+
+53.10. Rename type GetRolesResponse with GetRolesResponse
+
+53.11. Rename type PutRoleAction with PutRoleAction
+
+53.12. Rename type PutRoleRequest with PutRoleRequest
+
+53.13. Rename type PutRoleRequestBuilder with PutRoleRequestBuilder
+
+53.14. Rename type PutRoleResponse with PutRoleResponse
+
+54. Changes to package org.elasticsearch.xpack.core.security.action.rolemapping:  
+
+54.1. Rename type DeleteRoleMappingAction with DeleteRoleMappingAction
+
+54.2. Rename type DeleteRoleMappingRequest with DeleteRoleMappingRequest
+
+54.3. Rename type DeleteRoleMappingRequestBuilder with DeleteRoleMappingRequestBuilder
+
+54.4. Rename type DeleteRoleMappingResponse with DeleteRoleMappingResponse
+
+54.5. Rename type GetRoleMappingsAction with GetRoleMappingsAction
+
+54.6. Rename type GetRoleMappingsRequest with GetRoleMappingsRequest
+
+54.7. Rename type GetRoleMappingsRequestBuilder with GetRoleMappingsRequestBuilder
+
+54.8. Rename type GetRoleMappingsResponse with GetRoleMappingsResponse
+
+54.9. Rename type PutRoleMappingAction with PutRoleMappingAction
+
+54.10. Rename type PutRoleMappingRequest with PutRoleMappingRequest
+
+54.11. Rename type PutRoleMappingRequestBuilder with PutRoleMappingRequestBuilder
+
+54.12. Rename type PutRoleMappingResponse with PutRoleMappingResponse
+
+55. Changes to package org.elasticsearch.xpack.core.security.action.saml:  
+
+55.1. Rename type SamlAuthenticateAction with SamlAuthenticateAction
+
+55.2. Rename type SamlAuthenticateRequest with SamlAuthenticateRequest
+
+55.3. Rename type SamlAuthenticateRequestBuilder with SamlAuthenticateRequestBuilder
+
+55.4. Rename type SamlAuthenticateResponse with SamlAuthenticateResponse
+
+55.5. Rename type SamlInvalidateSessionAction with SamlInvalidateSessionAction
+
+55.6. Rename type SamlInvalidateSessionRequest with SamlInvalidateSessionRequest
+
+55.7. Rename type SamlInvalidateSessionRequestBuilder with SamlInvalidateSessionRequestBuilder
+
+55.8. Rename type SamlInvalidateSessionResponse with SamlInvalidateSessionResponse
+
+55.9. Rename type SamlLogoutAction with SamlLogoutAction
+
+55.10. Rename type SamlLogoutRequest with SamlLogoutRequest
+
+55.11. Rename type SamlLogoutRequestBuilder with SamlLogoutRequestBuilder
+
+55.12. Rename type SamlLogoutResponse with SamlLogoutResponse
+
+55.13. Rename type SamlPrepareAuthenticationAction with SamlPrepareAuthenticationAction
+
+55.14. Rename type SamlPrepareAuthenticationRequest with SamlPrepareAuthenticationRequest
+
+55.15. Rename type SamlPrepareAuthenticationRequestBuilder with SamlPrepareAuthenticationRequestBuilder
+
+55.16. Rename type SamlPrepareAuthenticationResponse with SamlPrepareAuthenticationResponse
+
+56. Changes to package org.elasticsearch.xpack.core.security.action.token:  
+
+56.1. Rename type CreateTokenAction with CreateTokenAction
+
+56.2. Rename type CreateTokenRequest with CreateTokenRequest
+
+56.3. Rename type CreateTokenRequestBuilder with CreateTokenRequestBuilder
+
+56.4. Rename type CreateTokenResponse with CreateTokenResponse
+
+56.5. Rename type InvalidateTokenAction with InvalidateTokenAction
+
+56.6. Rename type InvalidateTokenRequest with InvalidateTokenRequest
+
+56.7. Rename type InvalidateTokenRequestBuilder with InvalidateTokenRequestBuilder
+
+56.8. Rename type InvalidateTokenResponse with InvalidateTokenResponse
+
+56.9. Rename type RefreshTokenAction with RefreshTokenAction
+
+57. Changes to package org.elasticsearch.xpack.core.security.action.user:  
+
+57.1. Rename type AuthenticateAction with AuthenticateAction
+
+57.2. Rename type AuthenticateRequest with AuthenticateRequest
+
+57.3. Rename type AuthenticateRequestBuilder with AuthenticateRequestBuilder
+
+57.4. Rename type AuthenticateResponse with AuthenticateResponse
+
+57.5. Rename type ChangePasswordAction with ChangePasswordAction
+
+57.6. Rename type ChangePasswordRequest with ChangePasswordRequest
+
+57.7. Rename type ChangePasswordRequestBuilder with ChangePasswordRequestBuilder
+
+57.8. Rename type ChangePasswordResponse with ChangePasswordResponse
+
+57.9. Rename type DeleteUserAction with DeleteUserAction
+
+57.10. Rename type DeleteUserRequest with DeleteUserRequest
+
+57.11. Rename type DeleteUserRequestBuilder with DeleteUserRequestBuilder
+
+57.12. Rename type DeleteUserResponse with DeleteUserResponse
+
+57.13. Rename type GetUsersAction with GetUsersAction
+
+57.14. Rename type GetUsersRequest with GetUsersRequest
+
+57.15. Rename type GetUsersRequestBuilder with GetUsersRequestBuilder
+
+57.16. Rename type GetUsersResponse with GetUsersResponse
+
+57.17. Rename type HasPrivilegesAction with HasPrivilegesAction
+
+57.18. Rename type HasPrivilegesRequest with HasPrivilegesRequest
+
+57.19. Rename type HasPrivilegesRequestBuilder with HasPrivilegesRequestBuilder
+
+57.20. Rename type HasPrivilegesResponse with HasPrivilegesResponse
+
+57.21. Rename type PutUserAction with PutUserAction
+
+57.22. Rename type PutUserRequest with PutUserRequest
+
+57.23. Rename type PutUserRequestBuilder with PutUserRequestBuilder
+
+57.24. Rename type PutUserResponse with PutUserResponse
+
+57.25. Rename type SetEnabledAction with SetEnabledAction
+
+57.26. Rename type SetEnabledRequest with SetEnabledRequest
+
+57.27. Rename type SetEnabledRequestBuilder with SetEnabledRequestBuilder
+
+57.28. Rename type SetEnabledResponse with SetEnabledResponse
+
+57.29. Rename type UserRequest with UserRequest
+
+58. Changes to package org.elasticsearch.xpack.core.security.authc:  
+
+58.1. Rename type AuthenticationFailureHandler with AuthenticationFailureHandler
+
+58.2. Rename type AuthenticationField with AuthenticationField
+
+58.3. Rename type AuthenticationResult with AuthenticationResult
+
+58.4. Rename type AuthenticationServiceField with AuthenticationServiceField
+
+58.5. Rename type AuthenticationToken with AuthenticationToken
+
+58.6. Rename type DefaultAuthenticationFailureHandler with DefaultAuthenticationFailureHandler
+
+58.7. Rename type InternalRealmsSettings with InternalRealmsSettings
+
+58.8. Rename type KeyAndTimestamp with KeyAndTimestamp
+
+58.9. Rename type RealmSettings with RealmSettings
+
+58.10. Rename type TokenMetaData with TokenMetaData
+
+59. Changes to package org.elasticsearch.xpack.core.security.authc.esnative:  
+
+59.1. Rename type ClientReservedRealm with ClientReservedRealm
+
+59.2. Rename type NativeRealmSettings with NativeRealmSettings
+
+60. Changes to package org.elasticsearch.xpack.core.security.authc.file:  
+
+60.1. Rename type FileRealmSettings with FileRealmSettings
+
+61. Changes to package org.elasticsearch.xpack.core.security.authc.ldap:  
+
+61.1. Rename type ActiveDirectorySessionFactorySettings with ActiveDirectorySessionFactorySettings
+
+61.2. Rename type LdapRealmSettings with LdapRealmSettings
+
+61.3. Rename type LdapSessionFactorySettings with LdapSessionFactorySettings
+
+61.4. Rename type LdapUserSearchSessionFactorySettings with LdapUserSearchSessionFactorySettings
+
+61.5. Rename type PoolingSessionFactorySettings with PoolingSessionFactorySettings
+
+61.6. Rename type SearchGroupsResolverSettings with SearchGroupsResolverSettings
+
+61.7. Rename type UserAttributeGroupsResolverSettings with UserAttributeGroupsResolverSettings
+
+62. Changes to package org.elasticsearch.xpack.core.security.authc.ldap.support:  
+
+62.1. Rename type LdapLoadBalancingSettings with LdapLoadBalancingSettings
+
+62.2. Rename type LdapMetaDataResolverSettings with LdapMetaDataResolverSettings
+
+62.3. Rename type SessionFactorySettings with SessionFactorySettings
+
+63. Changes to package org.elasticsearch.xpack.core.security.authc.pki:  
+
+63.1. Rename type PkiRealmSettings with PkiRealmSettings
+
+64. Changes to package org.elasticsearch.xpack.core.security.authc.support:  
+
+64.1. Rename type BCrypt with BCrypt
+
+64.2. Rename type CachingUsernamePasswordRealmSettings with CachingUsernamePasswordRealmSettings
+
+64.3. Rename type DnRoleMapperSettings with DnRoleMapperSettings
+
+64.4. Rename type UsernamePasswordToken with UsernamePasswordToken
+
+65. Changes to package org.elasticsearch.xpack.core.security.authc.support.mapper:  
+
+65.1. Rename type CompositeRoleMapperSettings with CompositeRoleMapperSettings
+
+65.2. Rename type NativeRoleMappingStoreField with NativeRoleMappingStoreField
+
+66. Changes to package org.elasticsearch.xpack.core.security.authc.support.mapper.expressiondsl:  
+
+66.1. Rename type AllExpression with AllExpression
+
+66.2. Rename type AnyExpression with AnyExpression
+
+66.3. Rename type ExceptExpression with ExceptExpression
+
+66.4. Rename type ExpressionModel with ExpressionModel
+
+66.5. Rename type ExpressionModelPredicateTests with ExpressionModelPredicateTests
+
+66.6. Rename type ExpressionParserTests with ExpressionParserTests
+
+66.7. Rename type RoleMapperExpression with RoleMapperExpression
+
+67. Changes to package org.elasticsearch.xpack.core.security.authz:  
+
+67.1. Rename type AuthorizationServiceField with AuthorizationServiceField
+
+67.2. Rename type IndicesAndAliasesResolverField with IndicesAndAliasesResolverField
+
+68. Changes to package org.elasticsearch.xpack.core.security.authz.accesscontrol:  
+
+68.1. Rename type DocumentSubsetReaderTests with DocumentSubsetReaderTests
+
+68.2. Rename type FieldSubsetReaderTests with FieldSubsetReaderTests
+
+68.3. Rename type SecurityIndexSearcherWrapperIntegrationTests with SecurityIndexSearcherWrapperIntegrationTests
+
+69. Changes to package org.elasticsearch.xpack.core.security.authz.permission:  
+
+69.1. Rename type FieldPermissions with FieldPermissions
+
+69.2. Rename type FieldPermissionsCache with FieldPermissionsCache
+
+69.3. Rename type FieldPermissionsCacheTests with FieldPermissionsCacheTests
+
+69.4. Rename type RunAsPermission with RunAsPermission
+
+70. Changes to package org.elasticsearch.xpack.core.security.authz.privilege:  
+
+70.1. Rename type ClusterPrivilege with ClusterPrivilege
+
+70.2. Rename type HealthAndStatsPrivilege with HealthAndStatsPrivilege
+
+70.3. Rename type IndexPrivilege with IndexPrivilege
+
+70.4. Rename type Privilege with Privilege
+
+70.5. Rename type PrivilegeTests with PrivilegeTests
+
+70.6. Rename type SystemPrivilege with SystemPrivilege
+
+71. Changes to package org.elasticsearch.xpack.core.security.authz.store:  
+
+71.1. Rename type ReservedRolesStore with ReservedRolesStore
+
+71.2. Rename type ReservedRolesStoreTests with ReservedRolesStoreTests
+
+72. Changes to package org.elasticsearch.xpack.core.security.client:  
+
+72.1. Rename type SecurityClient with SecurityClient
+
+73. Changes to package org.elasticsearch.xpack.core.security.index:  
+
+73.1. Rename type IndexAuditTrailField with IndexAuditTrailField
+
+74. Changes to package org.elasticsearch.xpack.core.security.rest:  
+
+74.1. Rename type RestRequestFilter with RestRequestFilter
+
+75. Changes to package org.elasticsearch.xpack.core.security.support:  
+
+75.1. Rename type Automatons with Automatons
+
+75.2. Rename type AutomatonsTests with AutomatonsTests
+
+75.3. Rename type Exceptions with Exceptions
+
+75.4. Rename type MetadataUtils with MetadataUtils
+
+75.5. Rename type NoOpLogger with NoOpLogger
+
+75.6. Rename type ValidationTests with ValidationTests
+
+76. Changes to package org.elasticsearch.xpack.core.security.test:  
+
+76.1. Rename type SecurityAssertions with SecurityAssertions
+
+77. Changes to package org.elasticsearch.xpack.core.security.transport:  
+
+77.1. Rename type SSLExceptionHelper with SSLExceptionHelper
+
+78. Changes to package org.elasticsearch.xpack.core.security.user:  
+
+78.1. Rename type AnonymousUser with AnonymousUser
+
+78.2. Rename type BeatsSystemUser with BeatsSystemUser
+
+78.3. Rename type ElasticUser with ElasticUser
+
+78.4. Rename type InternalUserSerializationHelper with InternalUserSerializationHelper
+
+78.5. Rename type KibanaUser with KibanaUser
+
+78.6. Rename type LogstashSystemUser with LogstashSystemUser
+
+78.7. Rename type SystemUser with SystemUser
+
+78.8. Rename type UsernamesField with UsernamesField
+
+78.9. Rename type XPackSecurityUser with XPackSecurityUser
+
+78.10. Rename type XPackUser with XPackUser
+
+79. Changes to package org.elasticsearch.xpack.core.security.xcontent:  
+
+79.1. Rename type XContentUtils with XContentUtils
+
+80. Changes to package org.elasticsearch.xpack.core.ssl:  
+
+80.1. Rename type CertificateTrustRestrictions with CertificateTrustRestrictions
+
+80.2. Rename type DefaultJDKTrustConfig with DefaultJDKTrustConfig
+
+80.3. Rename type KeyConfig with KeyConfig
+
+80.4. Rename type PEMKeyConfig with PEMKeyConfig
+
+80.5. Rename type PEMTrustConfig with PEMTrustConfig
+
+80.6. Rename type RestrictedTrustConfig with RestrictedTrustConfig
+
+80.7. Rename type RestrictedTrustConfigTests with RestrictedTrustConfigTests
+
+80.8. Rename type RestrictedTrustManager with RestrictedTrustManager
+
+80.9. Rename type RestrictedTrustManagerTests with RestrictedTrustManagerTests
+
+80.10. Rename type SSLConfiguration with SSLConfiguration
+
+80.11. Rename type SSLConfigurationReloaderTests with SSLConfigurationReloaderTests
+
+80.12. Rename type SSLConfigurationSettings with SSLConfigurationSettings
+
+80.13. Rename type SSLConfigurationSettingsTests with SSLConfigurationSettingsTests
+
+80.14. Rename type SSLConfigurationTests with SSLConfigurationTests
+
+80.15. Rename type StoreKeyConfig with StoreKeyConfig
+
+80.16. Rename type StoreKeyConfigTests with StoreKeyConfigTests
+
+80.17. Rename type StoreTrustConfig with StoreTrustConfig
+
+80.18. Rename type TLSLicenseBootstrapCheck with TLSLicenseBootstrapCheck
+
+80.19. Rename type TLSLicenseBootstrapCheckTests with TLSLicenseBootstrapCheckTests
+
+80.20. Rename type TestsSSLService with TestsSSLService
+
+80.21. Rename type TrustAllConfig with TrustAllConfig
+
+81. Changes to package org.elasticsearch.xpack.core.ssl.action:  
+
+81.1. Rename type TransportGetCertificateInfoAction with TransportGetCertificateInfoAction
+
+82. Changes to package org.elasticsearch.xpack.core.ssl.cert:  
+
+82.1. Rename type CertificateInfo with CertificateInfo
+
+82.2. Rename type CertificateInfoTests with CertificateInfoTests
+
+83. Changes to package org.elasticsearch.xpack.core.ssl.rest:  
+
+83.1. Rename type RestGetCertificateInfoAction with RestGetCertificateInfoAction
+
+84. Changes to package org.elasticsearch.xpack.core.template:  
+
+84.1. Rename type TemplateUtils with TemplateUtils
+
+84.2. Rename type TemplateUtilsTests with TemplateUtilsTests
+
+85. Changes to package org.elasticsearch.xpack.core.upgrade:  
+
+85.1. Rename type IndexUpgradeServiceFields with IndexUpgradeServiceFields
+
+85.2. Rename type UpgradeField with UpgradeField
+
+86. Changes to package org.elasticsearch.xpack.core.watcher:  
+
+86.1. Rename type WatcherFeatureSetUsage with WatcherFeatureSetUsage
+
+86.2. Rename type WatcherField with WatcherField
+
+87. Changes to package org.elasticsearch.xpack.core.watcher.actions:  
+
+87.1. Rename type ActionFactory with ActionFactory
+
+87.2. Rename type ActionRegistry with ActionRegistry
+
+87.3. Rename type ActionWrapper with ActionWrapper
+
+87.4. Rename type ActionWrapperField with ActionWrapperField
+
+87.5. Rename type ActionWrapperResult with ActionWrapperResult
+
+87.6. Rename type Action with Action
+
+87.7. Rename type ExecutableAction with ExecutableAction
+
+87.8. Rename type ActionStatus with ActionStatus
+
+88. Changes to package org.elasticsearch.xpack.core.watcher.actions.throttler:  
+
+88.1. Rename type AckThrottler with AckThrottler
+
+88.2. Rename type ActionThrottler with ActionThrottler
+
+88.3. Rename type PeriodThrottler with PeriodThrottler
+
+88.4. Rename type ThrottlerField with ThrottlerField
+
+88.5. Rename type WatchThrottlerTests with WatchThrottlerTests
+
+89. Changes to package org.elasticsearch.xpack.core.watcher.client:  
+
+89.1. Rename type WatcherClient with WatcherClient
+
+90. Changes to package org.elasticsearch.xpack.core.watcher.common.secret:  
+
+90.1. Rename type Secret with Secret
+
+91. Changes to package org.elasticsearch.xpack.core.watcher.common.stats:  
+
+91.1. Rename type Counters with Counters
+
+91.2. Rename type CountersTests with CountersTests
+
+92. Changes to package org.elasticsearch.xpack.core.watcher.condition:  
+
+92.1. Rename type AlwaysCondition with AlwaysCondition
+
+92.2. Rename type ConditionFactory with ConditionFactory
+
+92.3. Rename type ConditionRegistry with ConditionRegistry
+
+92.4. Rename type ExecutableCondition with ExecutableCondition
+
+93. Changes to package org.elasticsearch.xpack.core.watcher.crypto:  
+
+93.1. Rename type CryptoService with CryptoService
+
+93.2. Rename type CryptoServiceTests with CryptoServiceTests
+
+94. Changes to package org.elasticsearch.xpack.core.watcher.execution:  
+
+94.1. Rename type QueuedWatch with QueuedWatch
+
+94.2. Rename type TriggeredWatchStoreField with TriggeredWatchStoreField
+
+94.3. Rename type WatchExecutionContext with WatchExecutionContext
+
+94.4. Rename type WatchExecutionSnapshot with WatchExecutionSnapshot
+
+94.5. Rename type Wid with Wid
+
+95. Changes to package org.elasticsearch.xpack.core.watcher.history:  
+
+95.1. Rename type HistoryStoreField with HistoryStoreField
+
+96. Changes to package org.elasticsearch.xpack.core.watcher.input:  
+
+96.1. Rename type ExecutableInput with ExecutableInput
+
+97. Changes to package org.elasticsearch.xpack.core.watcher.support:  
+
+97.1. Rename type Exceptions with Exceptions
+
+97.2. Rename type WatcherDateTimeUtils with WatcherDateTimeUtils
+
+97.3. Rename type WatcherIndexTemplateRegistryField with WatcherIndexTemplateRegistryField
+
+97.4. Rename type WatcherUtils with WatcherUtils
+
+98. Changes to package org.elasticsearch.xpack.core.watcher.support.xcontent:  
+
+98.1. Rename type WatcherXContentParser with WatcherXContentParser
+
+98.2. Rename type XContentSource with XContentSource
+
+99. Changes to package org.elasticsearch.xpack.core.watcher.transform:  
+
+99.1. Rename type ExecutableTransform with ExecutableTransform
+
+99.2. Rename type TransformFactory with TransformFactory
+
+99.3. Rename type TransformRegistry with TransformRegistry
+
+100. Changes to package org.elasticsearch.xpack.core.watcher.transform.chain:  
+
+100.1. Rename type ChainTransformFactory with ChainTransformFactory
+
+100.2. Rename type ExecutableChainTransform with ExecutableChainTransform
+
+101. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.ack:  
+
+101.1. Rename type AckWatchAction with AckWatchAction
+
+101.2. Rename type AckWatchRequest with AckWatchRequest
+
+101.3. Rename type AckWatchRequestBuilder with AckWatchRequestBuilder
+
+101.4. Rename type AckWatchResponse with AckWatchResponse
+
+102. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.activate:  
+
+102.1. Rename type ActivateWatchAction with ActivateWatchAction
+
+102.2. Rename type ActivateWatchRequest with ActivateWatchRequest
+
+102.3. Rename type ActivateWatchRequestBuilder with ActivateWatchRequestBuilder
+
+102.4. Rename type ActivateWatchResponse with ActivateWatchResponse
+
+103. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.delete:  
+
+103.1. Rename type DeleteWatchAction with DeleteWatchAction
+
+103.2. Rename type DeleteWatchRequestBuilder with DeleteWatchRequestBuilder
+
+104. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.execute:  
+
+104.1. Rename type ExecuteWatchAction with ExecuteWatchAction
+
+104.2. Rename type ExecuteWatchRequest with ExecuteWatchRequest
+
+104.3. Rename type ExecuteWatchRequestBuilder with ExecuteWatchRequestBuilder
+
+104.4. Rename type ExecuteWatchResponse with ExecuteWatchResponse
+
+105. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.get:  
+
+105.1. Rename type GetWatchAction with GetWatchAction
+
+105.2. Rename type GetWatchRequest with GetWatchRequest
+
+105.3. Rename type GetWatchRequestBuilder with GetWatchRequestBuilder
+
+105.4. Rename type GetWatchResponse with GetWatchResponse
+
+106. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.put:  
+
+106.1. Rename type PutWatchAction with PutWatchAction
+
+106.2. Rename type PutWatchRequestBuilder with PutWatchRequestBuilder
+
+107. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.service:  
+
+107.1. Rename type WatcherServiceAction with WatcherServiceAction
+
+107.2. Rename type WatcherServiceRequest with WatcherServiceRequest
+
+107.3. Rename type WatcherServiceRequestBuilder with WatcherServiceRequestBuilder
+
+108. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.stats:  
+
+108.1. Rename type WatcherStatsAction with WatcherStatsAction
+
+108.2. Rename type WatcherStatsRequestBuilder with WatcherStatsRequestBuilder
+
+109. Changes to package org.elasticsearch.xpack.core.watcher.watch:  
+
+109.1. Rename type ClockMock with ClockMock
+
+109.2. Rename type Watch with Watch
+
+109.3. Rename type WatchField with WatchField
+
+110. Changes to package org.elasticsearch.xpack.deprecation:  
+
+110.1. Rename type Deprecation with Deprecation
+
+110.2. Rename type DeprecationChecks with DeprecationChecks
+
+110.3. Rename type IndexDeprecationChecks with IndexDeprecationChecks
+
+110.4. Rename type IndexDeprecationChecksTests with IndexDeprecationChecksTests
+
+110.5. Rename type RestDeprecationInfoAction with RestDeprecationInfoAction
+
+110.6. Rename type TransportDeprecationInfoAction with TransportDeprecationInfoAction
+
+111. Changes to package org.elasticsearch.xpack.graph:  
+
+111.1. Rename type Graph with Graph
+
+111.2. Rename type GraphFeatureSet with GraphFeatureSet
+
+111.3. Rename type GraphFeatureSetTests with GraphFeatureSetTests
+
+112. Changes to package org.elasticsearch.xpack.graph.rest.action:  
+
+112.1. Rename type RestGraphAction with RestGraphAction
+
+113. Changes to package org.elasticsearch.xpack.logstash:  
+
+113.1. Rename type Logstash with Logstash
+
+113.2. Rename type LogstashFeatureSet with LogstashFeatureSet
+
+113.3. Rename type LogstashFeatureSetTests with LogstashFeatureSetTests
+
+114. Changes to package org.elasticsearch.xpack.ml:  
+
+114.1. Rename type InvalidLicenseEnforcer with InvalidLicenseEnforcer
+
+114.2. Rename type MachineLearning with MachineLearning
+
+114.3. Rename type MachineLearningFeatureSetTests with MachineLearningFeatureSetTests
+
+114.4. Rename type MachineLearningTests with MachineLearningTests
+
+114.5. Rename type MlAssignmentNotifier with MlAssignmentNotifier
+
+114.6. Rename type MlAssignmentNotifierTests with MlAssignmentNotifierTests
+
+114.7. Rename type MlDailyMaintenanceService with MlDailyMaintenanceService
+
+114.8. Rename type MlDailyManagementServiceTests with MlDailyManagementServiceTests
+
+114.9. Rename type MlInitializationService with MlInitializationService
+
+114.10. Rename type MlInitializationServiceTests with MlInitializationServiceTests
+
+114.11. Rename type MlLifeCycleService with MlLifeCycleService
+
+114.12. Rename type MlMetadataTests with MlMetadataTests
+
+114.13. Rename type MlSingleNodeTestCase with MlSingleNodeTestCase
+
+115. Changes to package org.elasticsearch.xpack.ml.action:  
+
+115.1. Rename type TransportCloseJobActionTests with TransportCloseJobActionTests
+
+115.2. Rename type TransportDeleteCalendarAction with TransportDeleteCalendarAction
+
+115.3. Rename type TransportDeleteCalendarEventAction with TransportDeleteCalendarEventAction
+
+115.4. Rename type TransportDeleteDatafeedAction with TransportDeleteDatafeedAction
+
+115.5. Rename type TransportDeleteExpiredDataAction with TransportDeleteExpiredDataAction
+
+115.6. Rename type TransportDeleteFilterAction with TransportDeleteFilterAction
+
+115.7. Rename type TransportDeleteJobAction with TransportDeleteJobAction
+
+115.8. Rename type TransportDeleteModelSnapshotAction with TransportDeleteModelSnapshotAction
+
+115.9. Rename type TransportFinalizeJobExecutionAction with TransportFinalizeJobExecutionAction
+
+115.10. Rename type TransportFlushJobAction with TransportFlushJobAction
+
+115.11. Rename type TransportForecastJobAction with TransportForecastJobAction
+
+115.12. Rename type TransportForecastJobActionRequestTests with TransportForecastJobActionRequestTests
+
+115.13. Rename type TransportGetBucketsAction with TransportGetBucketsAction
+
+115.14. Rename type TransportGetCalendarEventsAction with TransportGetCalendarEventsAction
+
+115.15. Rename type TransportGetCalendarsAction with TransportGetCalendarsAction
+
+115.16. Rename type TransportGetCategoriesAction with TransportGetCategoriesAction
+
+115.17. Rename type TransportGetDatafeedsAction with TransportGetDatafeedsAction
+
+115.18. Rename type TransportGetDatafeedsStatsAction with TransportGetDatafeedsStatsAction
+
+115.19. Rename type TransportGetFiltersAction with TransportGetFiltersAction
+
+115.20. Rename type TransportGetInfluencersAction with TransportGetInfluencersAction
+
+115.21. Rename type TransportGetJobsAction with TransportGetJobsAction
+
+115.22. Rename type TransportGetJobsStatsAction with TransportGetJobsStatsAction
+
+115.23. Rename type TransportGetJobsStatsActionTests with TransportGetJobsStatsActionTests
+
+115.24. Rename type TransportGetModelSnapshotsAction with TransportGetModelSnapshotsAction
+
+115.25. Rename type TransportGetRecordsAction with TransportGetRecordsAction
+
+115.26. Rename type TransportIsolateDatafeedAction with TransportIsolateDatafeedAction
+
+115.27. Rename type TransportJobTaskAction with TransportJobTaskAction
+
+115.28. Rename type TransportKillProcessAction with TransportKillProcessAction
+
+115.29. Rename type TransportMlInfoAction with TransportMlInfoAction
+
+115.30. Rename type TransportOpenJobActionTests with TransportOpenJobActionTests
+
+115.31. Rename type TransportPersistJobAction with TransportPersistJobAction
+
+115.32. Rename type TransportPostCalendarEventsAction with TransportPostCalendarEventsAction
+
+115.33. Rename type TransportPostDataAction with TransportPostDataAction
+
+115.34. Rename type TransportPreviewDatafeedAction with TransportPreviewDatafeedAction
+
+115.35. Rename type TransportPreviewDatafeedActionTests with TransportPreviewDatafeedActionTests
+
+115.36. Rename type TransportPutCalendarAction with TransportPutCalendarAction
+
+115.37. Rename type TransportPutDatafeedAction with TransportPutDatafeedAction
+
+115.38. Rename type TransportPutFilterAction with TransportPutFilterAction
+
+115.39. Rename type TransportPutJobAction with TransportPutJobAction
+
+115.40. Rename type TransportRevertModelSnapshotAction with TransportRevertModelSnapshotAction
+
+115.41. Rename type TransportStartDatafeedActionTests with TransportStartDatafeedActionTests
+
+115.42. Rename type TransportStopDatafeedAction with TransportStopDatafeedAction
+
+115.43. Rename type TransportStopDatafeedActionTests with TransportStopDatafeedActionTests
+
+115.44. Rename type TransportUpdateCalendarJobAction with TransportUpdateCalendarJobAction
+
+115.45. Rename type TransportUpdateDatafeedAction with TransportUpdateDatafeedAction
+
+115.46. Rename type TransportUpdateJobAction with TransportUpdateJobAction
+
+115.47. Rename type TransportUpdateModelSnapshotAction with TransportUpdateModelSnapshotAction
+
+115.48. Rename type TransportUpdateProcessAction with TransportUpdateProcessAction
+
+115.49. Rename type TransportValidateDetectorAction with TransportValidateDetectorAction
+
+115.50. Rename type TransportValidateJobConfigAction with TransportValidateJobConfigAction
+
+116. Changes to package org.elasticsearch.xpack.ml.client:  
+
+116.1. Rename type ESXPackSmokeClientTestCase with ESXPackSmokeClientTestCase
+
+116.2. Rename type MLTransportClientIT with MLTransportClientIT
+
+117. Changes to package org.elasticsearch.xpack.ml.datafeed:  
+
+117.1. Rename type DatafeedJobBuilderTests with DatafeedJobBuilderTests
+
+117.2. Rename type DatafeedJobTests with DatafeedJobTests
+
+117.3. Rename type DatafeedJobValidatorTests with DatafeedJobValidatorTests
+
+117.4. Rename type DatafeedManagerTests with DatafeedManagerTests
+
+117.5. Rename type DatafeedNodeSelectorTests with DatafeedNodeSelectorTests
+
+117.6. Rename type DatafeedStateTests with DatafeedStateTests
+
+117.7. Rename type ProblemTracker with ProblemTracker
+
+117.8. Rename type ProblemTrackerTests with ProblemTrackerTests
+
+118. Changes to package org.elasticsearch.xpack.ml.datafeed.extractor:  
+
+118.1. Rename type DataExtractorFactory with DataExtractorFactory
+
+118.2. Rename type DataExtractorFactoryTests with DataExtractorFactoryTests
+
+119. Changes to package org.elasticsearch.xpack.ml.datafeed.extractor.aggregation:  
+
+119.1. Rename type AggregationDataExtractor with AggregationDataExtractor
+
+119.2. Rename type AggregationDataExtractorContext with AggregationDataExtractorContext
+
+119.3. Rename type AggregationDataExtractorFactory with AggregationDataExtractorFactory
+
+119.4. Rename type AggregationDataExtractorFactoryTests with AggregationDataExtractorFactoryTests
+
+119.5. Rename type AggregationToJsonProcessor with AggregationToJsonProcessor
+
+119.6. Rename type AggregationToJsonProcessorTests with AggregationToJsonProcessorTests
+
+120. Changes to package org.elasticsearch.xpack.ml.datafeed.extractor.chunked:  
+
+120.1. Rename type ChunkedDataExtractorFactory with ChunkedDataExtractorFactory
+
+120.2. Rename type ChunkedDataExtractorFactoryTests with ChunkedDataExtractorFactoryTests
+
+121. Changes to package org.elasticsearch.xpack.ml.datafeed.extractor.scroll:  
+
+121.1. Rename type ScrollDataExtractor with ScrollDataExtractor
+
+121.2. Rename type ScrollDataExtractorContext with ScrollDataExtractorContext
+
+121.3. Rename type ScrollDataExtractorFactory with ScrollDataExtractorFactory
+
+121.4. Rename type SearchHitToJsonProcessor with SearchHitToJsonProcessor
+
+121.5. Rename type SearchHitToJsonProcessorTests with SearchHitToJsonProcessorTests
+
+122. Changes to package org.elasticsearch.xpack.ml.integration:  
+
+122.1. Rename type BasicDistributedJobsIT with BasicDistributedJobsIT
+
+122.2. Rename type EstablishedMemUsageIT with EstablishedMemUsageIT
+
+122.3. Rename type JobStorageDeletionTaskIT with JobStorageDeletionTaskIT
+
+122.4. Rename type MlDistributedFailureIT with MlDistributedFailureIT
+
+122.5. Rename type NetworkDisruptionIT with NetworkDisruptionIT
+
+122.6. Rename type TooManyJobsIT with TooManyJobsIT
+
+123. Changes to package org.elasticsearch.xpack.ml.job:  
+
+123.1. Rename type JobManager with JobManager
+
+123.2. Rename type JobManagerTests with JobManagerTests
+
+124. Changes to package org.elasticsearch.xpack.ml.job.categorization:  
+
+124.1. Rename type CategorizationAnalyzer with CategorizationAnalyzer
+
+124.2. Rename type CategorizationAnalyzerTests with CategorizationAnalyzerTests
+
+124.3. Rename type MlClassicTokenizer with MlClassicTokenizer
+
+124.4. Rename type MlClassicTokenizerFactory with MlClassicTokenizerFactory
+
+124.5. Rename type MlClassicTokenizerTests with MlClassicTokenizerTests
+
+125. Changes to package org.elasticsearch.xpack.ml.job.config:  
+
+125.1. Rename type CategorizationAnalyzerConfigTests with CategorizationAnalyzerConfigTests
+
+125.2. Rename type DataFormatTests with DataFormatTests
+
+125.3. Rename type DefaultDetectorDescriptionTests with DefaultDetectorDescriptionTests
+
+125.4. Rename type DetectorFunctionTests with DetectorFunctionTests
+
+125.5. Rename type JobBuilderTests with JobBuilderTests
+
+125.6. Rename type JobStateTests with JobStateTests
+
+125.7. Rename type OperatorTests with OperatorTests
+
+125.8. Rename type RuleActionTests with RuleActionTests
+
+126. Changes to package org.elasticsearch.xpack.ml.job.messages:  
+
+126.1. Rename type MessagesTests with MessagesTests
+
+127. Changes to package org.elasticsearch.xpack.ml.job.persistence:  
+
+127.1. Rename type BatchedBucketsIterator with BatchedBucketsIterator
+
+127.2. Rename type BatchedDocumentsIterator with BatchedDocumentsIterator
+
+127.3. Rename type BatchedInfluencersIterator with BatchedInfluencersIterator
+
+127.4. Rename type BatchedRecordsIterator with BatchedRecordsIterator
+
+127.5. Rename type BatchedResultsIterator with BatchedResultsIterator
+
+127.6. Rename type BucketsQueryBuilder with BucketsQueryBuilder
+
+127.7. Rename type CalendarQueryBuilder with CalendarQueryBuilder
+
+127.8. Rename type InfluencersQueryBuilderTests with InfluencersQueryBuilderTests
+
+127.9. Rename type JobDataCountsPersister with JobDataCountsPersister
+
+127.10. Rename type JobRenormalizedResultsPersister with JobRenormalizedResultsPersister
+
+127.11. Rename type JobRenormalizedResultsPersisterTests with JobRenormalizedResultsPersisterTests
+
+127.12. Rename type JobResultsPersisterTests with JobResultsPersisterTests
+
+127.13. Rename type MockBatchedDocumentsIterator with MockBatchedDocumentsIterator
+
+127.14. Rename type MockClientBuilder with MockClientBuilder
+
+127.15. Rename type RecordsQueryBuilder with RecordsQueryBuilder
+
+127.16. Rename type ResultsFilterBuilder with ResultsFilterBuilder
+
+127.17. Rename type ResultsFilterBuilderTests with ResultsFilterBuilderTests
+
+127.18. Rename type ScheduledEventsQueryBuilder with ScheduledEventsQueryBuilder
+
+127.19. Rename type StateStreamer with StateStreamer
+
+127.20. Rename type StateStreamerTests with StateStreamerTests
+
+128. Changes to package org.elasticsearch.xpack.ml.job.persistence.overallbuckets:  
+
+128.1. Rename type OverallBucketsAggregator with OverallBucketsAggregator
+
+128.2. Rename type OverallBucketsAggregatorTests with OverallBucketsAggregatorTests
+
+128.3. Rename type OverallBucketsCollector with OverallBucketsCollector
+
+128.4. Rename type OverallBucketsCollectorTests with OverallBucketsCollectorTests
+
+128.5. Rename type OverallBucketsProcessor with OverallBucketsProcessor
+
+128.6. Rename type OverallBucketsProviderTests with OverallBucketsProviderTests
+
+129. Changes to package org.elasticsearch.xpack.ml.job.process:  
+
+129.1. Rename type CountingInputStream with CountingInputStream
+
+129.2. Rename type CountingInputStreamTests with CountingInputStreamTests
+
+129.3. Rename type DataCountsReporter with DataCountsReporter
+
+129.4. Rename type DataCountsReporterTests with DataCountsReporterTests
+
+129.5. Rename type DummyDataCountsReporter with DummyDataCountsReporter
+
+130. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect:  
+
+130.1. Rename type AutodetectBuilder with AutodetectBuilder
+
+130.2. Rename type AutodetectCommunicator with AutodetectCommunicator
+
+130.3. Rename type AutodetectCommunicatorTests with AutodetectCommunicatorTests
+
+130.4. Rename type AutodetectProcess with AutodetectProcess
+
+130.5. Rename type AutodetectProcessFactory with AutodetectProcessFactory
+
+130.6. Rename type AutodetectProcessManagerTests with AutodetectProcessManagerTests
+
+130.7. Rename type BlackHoleAutodetectProcess with BlackHoleAutodetectProcess
+
+130.8. Rename type BlackHoleAutodetectProcessTests with BlackHoleAutodetectProcessTests
+
+130.9. Rename type NativeAutodetectProcess with NativeAutodetectProcess
+
+130.10. Rename type NativeAutodetectProcessFactory with NativeAutodetectProcessFactory
+
+131. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.output:  
+
+131.1. Rename type AutoDetectResultProcessorTests with AutoDetectResultProcessorTests
+
+131.2. Rename type AutodetectResultsParserTests with AutodetectResultsParserTests
+
+131.3. Rename type FlushAcknowledgementTests with FlushAcknowledgementTests
+
+131.4. Rename type FlushListenerTests with FlushListenerTests
+
+132. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.params:  
+
+132.1. Rename type DataLoadParams with DataLoadParams
+
+132.2. Rename type DataLoadParamsTests with DataLoadParamsTests
+
+132.3. Rename type FlushJobParamsTests with FlushJobParamsTests
+
+132.4. Rename type ForecastParamsTests with ForecastParamsTests
+
+132.5. Rename type TimeRangeTests with TimeRangeTests
+
+133. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.state:  
+
+133.1. Rename type MemoryStatusTests with MemoryStatusTests
+
+134. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.writer:  
+
+134.1. Rename type AbstractDataToProcessWriterTests with AbstractDataToProcessWriterTests
+
+134.2. Rename type AnalysisLimitsWriter with AnalysisLimitsWriter
+
+134.3. Rename type AnalysisLimitsWriterTests with AnalysisLimitsWriterTests
+
+134.4. Rename type CannotParseTimestampException with CannotParseTimestampException
+
+134.5. Rename type CsvDataToProcessWriter with CsvDataToProcessWriter
+
+134.6. Rename type CsvDataToProcessWriterTests with CsvDataToProcessWriterTests
+
+134.7. Rename type CsvParserTests with CsvParserTests
+
+134.8. Rename type CsvRecordWriter with CsvRecordWriter
+
+134.9. Rename type CsvRecordWriterTests with CsvRecordWriterTests
+
+134.10. Rename type DataToProcessWriter with DataToProcessWriter
+
+134.11. Rename type DataToProcessWriterFactory with DataToProcessWriterFactory
+
+134.12. Rename type DataToProcessWriterFactoryTests with DataToProcessWriterFactoryTests
+
+134.13. Rename type DateFormatDateTransformer with DateFormatDateTransformer
+
+134.14. Rename type DateFormatDateTransformerTests with DateFormatDateTransformerTests
+
+134.15. Rename type DateTransformer with DateTransformer
+
+134.16. Rename type DoubleDateTransformer with DoubleDateTransformer
+
+134.17. Rename type DoubleDateTransformerTests with DoubleDateTransformerTests
+
+134.18. Rename type FieldConfigWriter with FieldConfigWriter
+
+134.19. Rename type FieldConfigWriterTests with FieldConfigWriterTests
+
+134.20. Rename type JsonDataToProcessWriter with JsonDataToProcessWriter
+
+134.21. Rename type JsonDataToProcessWriterTests with JsonDataToProcessWriterTests
+
+134.22. Rename type MlFilterWriter with MlFilterWriter
+
+134.23. Rename type MlFilterWriterTests with MlFilterWriterTests
+
+134.24. Rename type ModelPlotConfigWriter with ModelPlotConfigWriter
+
+134.25. Rename type ModelPlotConfigWriterTests with ModelPlotConfigWriterTests
+
+134.26. Rename type ScheduledEventsWriter with ScheduledEventsWriter
+
+134.27. Rename type ScheduledEventsWriterTests with ScheduledEventsWriterTests
+
+134.28. Rename type WriterConstants with WriterConstants
+
+134.29. Rename type XContentRecordReader with XContentRecordReader
+
+134.30. Rename type XContentRecordReaderTests with XContentRecordReaderTests
+
+135. Changes to package org.elasticsearch.xpack.ml.job.process.normalizer:  
+
+135.1. Rename type AbstractLeafNormalizable with AbstractLeafNormalizable
+
+135.2. Rename type BucketInfluencerNormalizable with BucketInfluencerNormalizable
+
+135.3. Rename type BucketInfluencerNormalizableTests with BucketInfluencerNormalizableTests
+
+135.4. Rename type BucketNormalizable with BucketNormalizable
+
+135.5. Rename type BucketNormalizableTests with BucketNormalizableTests
+
+135.6. Rename type InfluencerNormalizable with InfluencerNormalizable
+
+135.7. Rename type InfluencerNormalizableTests with InfluencerNormalizableTests
+
+135.8. Rename type MultiplyingNormalizerProcess with MultiplyingNormalizerProcess
+
+135.9. Rename type NativeNormalizerProcess with NativeNormalizerProcess
+
+135.10. Rename type NativeNormalizerProcessFactory with NativeNormalizerProcessFactory
+
+135.11. Rename type Normalizable with Normalizable
+
+135.12. Rename type Normalizer with Normalizer
+
+135.13. Rename type NormalizerFactory with NormalizerFactory
+
+135.14. Rename type NormalizerProcess with NormalizerProcess
+
+135.15. Rename type NormalizerProcessFactory with NormalizerProcessFactory
+
+135.16. Rename type NormalizerResult with NormalizerResult
+
+135.17. Rename type NormalizerResultTests with NormalizerResultTests
+
+135.18. Rename type NormalizerTests with NormalizerTests
+
+135.19. Rename type RecordNormalizable with RecordNormalizable
+
+135.20. Rename type Renormalizer with Renormalizer
+
+135.21. Rename type ScoresUpdater with ScoresUpdater
+
+135.22. Rename type ScoresUpdaterTests with ScoresUpdaterTests
+
+135.23. Rename type ShortCircuitingRenormalizerTests with ShortCircuitingRenormalizerTests
+
+136. Changes to package org.elasticsearch.xpack.ml.job.process.normalizer.output:  
+
+136.1. Rename type NormalizerResultHandler with NormalizerResultHandler
+
+136.2. Rename type NormalizerResultHandlerTests with NormalizerResultHandlerTests
+
+137. Changes to package org.elasticsearch.xpack.ml.job.results:  
+
+137.1. Rename type AutodetectResult with AutodetectResult
+
+137.2. Rename type AutodetectResultTests with AutodetectResultTests
+
+137.3. Rename type BucketTests with BucketTests
+
+137.4. Rename type CategoryDefinitionTests with CategoryDefinitionTests
+
+137.5. Rename type ForecastRequestStatsTests with ForecastRequestStatsTests
+
+137.6. Rename type ForecastTests with ForecastTests
+
+137.7. Rename type InfluenceTests with InfluenceTests
+
+137.8. Rename type ModelPlotTests with ModelPlotTests
+
+137.9. Rename type OverallBucketTests with OverallBucketTests
+
+137.10. Rename type ReservedFieldNamesTests with ReservedFieldNamesTests
+
+138. Changes to package org.elasticsearch.xpack.ml.job.retention:  
+
+138.1. Rename type ExpiredForecastsRemover with ExpiredForecastsRemover
+
+138.2. Rename type ExpiredModelSnapshotsRemover with ExpiredModelSnapshotsRemover
+
+138.3. Rename type ExpiredModelSnapshotsRemoverTests with ExpiredModelSnapshotsRemoverTests
+
+138.4. Rename type ExpiredResultsRemover with ExpiredResultsRemover
+
+138.5. Rename type ExpiredResultsRemoverTests with ExpiredResultsRemoverTests
+
+138.6. Rename type MlDataRemover with MlDataRemover
+
+139. Changes to package org.elasticsearch.xpack.ml.modelsnapshots:  
+
+139.1. Rename type GetModelSnapshotsTests with GetModelSnapshotsTests
+
+139.2. Rename type UpdateModelSnapshotActionTests with UpdateModelSnapshotActionTests
+
+140. Changes to package org.elasticsearch.xpack.ml.notifications:  
+
+140.1. Rename type Auditor with Auditor
+
+140.2. Rename type AuditorTests with AuditorTests
+
+140.3. Rename type LevelTests with LevelTests
+
+141. Changes to package org.elasticsearch.xpack.ml.rest:  
+
+141.1. Rename type RestDeleteExpiredDataAction with RestDeleteExpiredDataAction
+
+141.2. Rename type RestMlInfoAction with RestMlInfoAction
+
+142. Changes to package org.elasticsearch.xpack.ml.rest.calendar:  
+
+142.1. Rename type RestDeleteCalendarAction with RestDeleteCalendarAction
+
+142.2. Rename type RestDeleteCalendarEventAction with RestDeleteCalendarEventAction
+
+142.3. Rename type RestDeleteCalendarJobAction with RestDeleteCalendarJobAction
+
+142.4. Rename type RestGetCalendarEventsAction with RestGetCalendarEventsAction
+
+142.5. Rename type RestGetCalendarsAction with RestGetCalendarsAction
+
+142.6. Rename type RestPostCalendarEventAction with RestPostCalendarEventAction
+
+142.7. Rename type RestPutCalendarAction with RestPutCalendarAction
+
+142.8. Rename type RestPutCalendarJobAction with RestPutCalendarJobAction
+
+143. Changes to package org.elasticsearch.xpack.ml.rest.datafeeds:  
+
+143.1. Rename type RestDeleteDatafeedAction with RestDeleteDatafeedAction
+
+143.2. Rename type RestGetDatafeedStatsAction with RestGetDatafeedStatsAction
+
+143.3. Rename type RestGetDatafeedsAction with RestGetDatafeedsAction
+
+143.4. Rename type RestPreviewDatafeedAction with RestPreviewDatafeedAction
+
+143.5. Rename type RestPutDatafeedAction with RestPutDatafeedAction
+
+143.6. Rename type RestStartDatafeedAction with RestStartDatafeedAction
+
+143.7. Rename type RestStartDatafeedActionTests with RestStartDatafeedActionTests
+
+143.8. Rename type RestStopDatafeedAction with RestStopDatafeedAction
+
+143.9. Rename type RestUpdateDatafeedAction with RestUpdateDatafeedAction
+
+144. Changes to package org.elasticsearch.xpack.ml.rest.filter:  
+
+144.1. Rename type RestDeleteFilterAction with RestDeleteFilterAction
+
+144.2. Rename type RestGetFiltersAction with RestGetFiltersAction
+
+144.3. Rename type RestPutFilterAction with RestPutFilterAction
+
+145. Changes to package org.elasticsearch.xpack.ml.rest.job:  
+
+145.1. Rename type RestCloseJobAction with RestCloseJobAction
+
+145.2. Rename type RestDeleteJobAction with RestDeleteJobAction
+
+145.3. Rename type RestFlushJobAction with RestFlushJobAction
+
+145.4. Rename type RestForecastJobAction with RestForecastJobAction
+
+145.5. Rename type RestGetJobStatsAction with RestGetJobStatsAction
+
+145.6. Rename type RestGetJobsAction with RestGetJobsAction
+
+145.7. Rename type RestOpenJobAction with RestOpenJobAction
+
+145.8. Rename type RestPostDataAction with RestPostDataAction
+
+145.9. Rename type RestPostJobUpdateAction with RestPostJobUpdateAction
+
+145.10. Rename type RestPutJobAction with RestPutJobAction
+
+146. Changes to package org.elasticsearch.xpack.ml.rest.modelsnapshots:  
+
+146.1. Rename type RestDeleteModelSnapshotAction with RestDeleteModelSnapshotAction
+
+146.2. Rename type RestGetModelSnapshotsAction with RestGetModelSnapshotsAction
+
+146.3. Rename type RestRevertModelSnapshotAction with RestRevertModelSnapshotAction
+
+146.4. Rename type RestUpdateModelSnapshotAction with RestUpdateModelSnapshotAction
+
+147. Changes to package org.elasticsearch.xpack.ml.rest.results:  
+
+147.1. Rename type RestGetBucketsAction with RestGetBucketsAction
+
+147.2. Rename type RestGetCategoriesAction with RestGetCategoriesAction
+
+147.3. Rename type RestGetInfluencersAction with RestGetInfluencersAction
+
+147.4. Rename type RestGetOverallBucketsAction with RestGetOverallBucketsAction
+
+147.5. Rename type RestGetRecordsAction with RestGetRecordsAction
+
+148. Changes to package org.elasticsearch.xpack.ml.rest.validate:  
+
+148.1. Rename type RestValidateDetectorAction with RestValidateDetectorAction
+
+148.2. Rename type RestValidateJobConfigAction with RestValidateJobConfigAction
+
+149. Changes to package org.elasticsearch.xpack.ml.support:  
+
+149.1. Rename type BaseMlIntegTestCase with BaseMlIntegTestCase
+
+150. Changes to package org.elasticsearch.xpack.ml.test:  
+
+150.1. Rename type SearchHitBuilder with SearchHitBuilder
+
+151. Changes to package org.elasticsearch.xpack.ml.utils:  
+
+151.1. Rename type DomainSplitFunction with DomainSplitFunction
+
+151.2. Rename type IntervalsTests with IntervalsTests
+
+151.3. Rename type MlStringsTests with MlStringsTests
+
+151.4. Rename type NamedPipeHelperTests with NamedPipeHelperTests
+
+151.5. Rename type VolatileCursorIterator with VolatileCursorIterator
+
+152. Changes to package org.elasticsearch.xpack.ml.utils.time:  
+
+152.1. Rename type DateTimeFormatterTimestampConverterTests with DateTimeFormatterTimestampConverterTests
+
+152.2. Rename type TimeUtilsTests with TimeUtilsTests
+
+153. Changes to package org.elasticsearch.xpack.monitoring:  
+
+153.1. Rename type BaseCollectorTestCase with BaseCollectorTestCase
+
+153.2. Rename type LocalStateMonitoring with LocalStateMonitoring
+
+153.3. Rename type MonitoredSystemTests with MonitoredSystemTests
+
+153.4. Rename type Monitoring with Monitoring
+
+153.5. Rename type MonitoringFeatureSet with MonitoringFeatureSet
+
+153.6. Rename type MonitoringFeatureSetTests with MonitoringFeatureSetTests
+
+153.7. Rename type MonitoringHistoryDurationSettingsTests with MonitoringHistoryDurationSettingsTests
+
+153.8. Rename type MonitoringPluginClientTests with MonitoringPluginClientTests
+
+153.9. Rename type MonitoringTestUtils with MonitoringTestUtils
+
+153.10. Rename type MultiNodesStatsTests with MultiNodesStatsTests
+
+154. Changes to package org.elasticsearch.xpack.monitoring.action:  
+
+154.1. Rename type MonitoringBulkDocTests with MonitoringBulkDocTests
+
+154.2. Rename type MonitoringBulkRequestTests with MonitoringBulkRequestTests
+
+154.3. Rename type MonitoringBulkResponseTests with MonitoringBulkResponseTests
+
+154.4. Rename type MonitoringIndexTests with MonitoringIndexTests
+
+154.5. Rename type TransportMonitoringBulkActionTests with TransportMonitoringBulkActionTests
+
+155. Changes to package org.elasticsearch.xpack.monitoring.cleaner:  
+
+155.1. Rename type AbstractIndicesCleanerTestCase with AbstractIndicesCleanerTestCase
+
+156. Changes to package org.elasticsearch.xpack.monitoring.cleaner.local:  
+
+156.1. Rename type LocalIndicesCleanerTests with LocalIndicesCleanerTests
+
+157. Changes to package org.elasticsearch.xpack.monitoring.collector:  
+
+157.1. Rename type Collector with Collector
+
+157.2. Rename type CollectorTests with CollectorTests
+
+158. Changes to package org.elasticsearch.xpack.monitoring.collector.cluster:  
+
+158.1. Rename type ClusterStatsCollector with ClusterStatsCollector
+
+158.2. Rename type ClusterStatsCollectorTests with ClusterStatsCollectorTests
+
+158.3. Rename type ClusterStatsMonitoringDoc with ClusterStatsMonitoringDoc
+
+158.4. Rename type ClusterStatsMonitoringDocTests with ClusterStatsMonitoringDocTests
+
+159. Changes to package org.elasticsearch.xpack.monitoring.collector.indices:  
+
+159.1. Rename type IndexRecoveryCollector with IndexRecoveryCollector
+
+159.2. Rename type IndexRecoveryCollectorTests with IndexRecoveryCollectorTests
+
+159.3. Rename type IndexRecoveryMonitoringDoc with IndexRecoveryMonitoringDoc
+
+159.4. Rename type IndexRecoveryMonitoringDocTests with IndexRecoveryMonitoringDocTests
+
+159.5. Rename type IndexStatsCollector with IndexStatsCollector
+
+159.6. Rename type IndexStatsCollectorTests with IndexStatsCollectorTests
+
+159.7. Rename type IndexStatsMonitoringDoc with IndexStatsMonitoringDoc
+
+159.8. Rename type IndexStatsMonitoringDocTests with IndexStatsMonitoringDocTests
+
+159.9. Rename type IndicesStatsMonitoringDoc with IndicesStatsMonitoringDoc
+
+159.10. Rename type IndicesStatsMonitoringDocTests with IndicesStatsMonitoringDocTests
+
+160. Changes to package org.elasticsearch.xpack.monitoring.collector.ml:  
+
+160.1. Rename type JobStatsCollector with JobStatsCollector
+
+160.2. Rename type JobStatsCollectorTests with JobStatsCollectorTests
+
+160.3. Rename type JobStatsMonitoringDoc with JobStatsMonitoringDoc
+
+160.4. Rename type JobStatsMonitoringDocTests with JobStatsMonitoringDocTests
+
+161. Changes to package org.elasticsearch.xpack.monitoring.collector.node:  
+
+161.1. Rename type NodeStatsCollector with NodeStatsCollector
+
+161.2. Rename type NodeStatsCollectorTests with NodeStatsCollectorTests
+
+161.3. Rename type NodeStatsMonitoringDoc with NodeStatsMonitoringDoc
+
+161.4. Rename type NodeStatsMonitoringDocTests with NodeStatsMonitoringDocTests
+
+162. Changes to package org.elasticsearch.xpack.monitoring.collector.shards:  
+
+162.1. Rename type ShardMonitoringDoc with ShardMonitoringDoc
+
+162.2. Rename type ShardsCollector with ShardsCollector
+
+162.3. Rename type ShardsCollectorTests with ShardsCollectorTests
+
+162.4. Rename type ShardsMonitoringDocTests with ShardsMonitoringDocTests
+
+163. Changes to package org.elasticsearch.xpack.monitoring.exporter:  
+
+163.1. Rename type BaseMonitoringDocTestCase with BaseMonitoringDocTestCase
+
+163.2. Rename type BytesReferenceMonitoringDoc with BytesReferenceMonitoringDoc
+
+163.3. Rename type BytesReferenceMonitoringDocTests with BytesReferenceMonitoringDocTests
+
+163.4. Rename type ClusterAlertsUtil with ClusterAlertsUtil
+
+163.5. Rename type ClusterAlertsUtilTests with ClusterAlertsUtilTests
+
+163.6. Rename type ExportException with ExportException
+
+163.7. Rename type FilteredMonitoringDoc with FilteredMonitoringDoc
+
+163.8. Rename type MonitoringTemplateUtilsTests with MonitoringTemplateUtilsTests
+
+164. Changes to package org.elasticsearch.xpack.monitoring.exporter.http:  
+
+164.1. Rename type AbstractPublishableHttpResourceTestCase with AbstractPublishableHttpResourceTestCase
+
+164.2. Rename type ClusterAlertHttpResource with ClusterAlertHttpResource
+
+164.3. Rename type ClusterAlertHttpResourceTests with ClusterAlertHttpResourceTests
+
+164.4. Rename type HttpExportBulk with HttpExportBulk
+
+164.5. Rename type HttpExportBulkResponseListener with HttpExportBulkResponseListener
+
+164.6. Rename type HttpExporter with HttpExporter
+
+164.7. Rename type HttpExporterIT with HttpExporterIT
+
+164.8. Rename type HttpExporterTests with HttpExporterTests
+
+164.9. Rename type HttpHostBuilder with HttpHostBuilder
+
+164.10. Rename type HttpHostBuilderTests with HttpHostBuilderTests
+
+164.11. Rename type HttpResource with HttpResource
+
+164.12. Rename type HttpResourceTests with HttpResourceTests
+
+164.13. Rename type MockHttpResource with MockHttpResource
+
+164.14. Rename type MultiHttpResource with MultiHttpResource
+
+164.15. Rename type MultiHttpResourceTests with MultiHttpResourceTests
+
+164.16. Rename type NodeFailureListener with NodeFailureListener
+
+164.17. Rename type NodeFailureListenerTests with NodeFailureListenerTests
+
+164.18. Rename type PipelineHttpResource with PipelineHttpResource
+
+164.19. Rename type PipelineHttpResourceTests with PipelineHttpResourceTests
+
+164.20. Rename type PublishableHttpResource with PublishableHttpResource
+
+164.21. Rename type PublishableHttpResourceTests with PublishableHttpResourceTests
+
+164.22. Rename type SchemeTests with SchemeTests
+
+164.23. Rename type SecurityHttpClientConfigCallback with SecurityHttpClientConfigCallback
+
+164.24. Rename type SecurityHttpClientConfigCallbackTests with SecurityHttpClientConfigCallbackTests
+
+164.25. Rename type TemplateHttpResource with TemplateHttpResource
+
+164.26. Rename type TemplateHttpResourceTests with TemplateHttpResourceTests
+
+164.27. Rename type TimeoutRequestConfigCallback with TimeoutRequestConfigCallback
+
+164.28. Rename type TimeoutRequestConfigCallbackTests with TimeoutRequestConfigCallbackTests
+
+164.29. Rename type VersionHttpResource with VersionHttpResource
+
+164.30. Rename type VersionHttpResourceTests with VersionHttpResourceTests
+
+164.31. Rename type WatcherExistsHttpResource with WatcherExistsHttpResource
+
+164.32. Rename type WatcherExistsHttpResourceTests with WatcherExistsHttpResourceTests
+
+165. Changes to package org.elasticsearch.xpack.monitoring.exporter.local:  
+
+165.1. Rename type LocalBulk with LocalBulk
+
+165.2. Rename type LocalExporterIntegTestCase with LocalExporterIntegTestCase
+
+165.3. Rename type LocalExporterIntegTests with LocalExporterIntegTests
+
+165.4. Rename type LocalExporterResourceIntegTests with LocalExporterResourceIntegTests
+
+166. Changes to package org.elasticsearch.xpack.monitoring.integration:  
+
+166.1. Rename type MonitoringIT with MonitoringIT
+
+167. Changes to package org.elasticsearch.xpack.monitoring.rest.action:  
+
+167.1. Rename type RestMonitoringBulkAction with RestMonitoringBulkAction
+
+167.2. Rename type RestMonitoringBulkActionTests with RestMonitoringBulkActionTests
+
+168. Changes to package org.elasticsearch.xpack.monitoring.test:  
+
+168.1. Rename type MonitoringIntegTestCase with MonitoringIntegTestCase
+
+169. Changes to package org.elasticsearch.xpack.restart:  
+
+169.1. Rename type CoreFullClusterRestartIT with CoreFullClusterRestartIT
+
+169.2. Rename type FullClusterRestartIT with FullClusterRestartIT
+
+170. Changes to package org.elasticsearch.xpack.rollup:  
+
+170.1. Rename type LocalStateRollup with LocalStateRollup
+
+170.2. Rename type Rollup with Rollup
+
+170.3. Rename type RollupFeatureSet with RollupFeatureSet
+
+170.4. Rename type RollupFeatureSetTests with RollupFeatureSetTests
+
+170.5. Rename type RollupJobIdentifierUtilTests with RollupJobIdentifierUtilTests
+
+170.6. Rename type RollupJobIdentifierUtils with RollupJobIdentifierUtils
+
+170.7. Rename type RollupRequestTranslationTests with RollupRequestTranslationTests
+
+170.8. Rename type RollupRequestTranslator with RollupRequestTranslator
+
+170.9. Rename type RollupResponseTranslationTests with RollupResponseTranslationTests
+
+170.10. Rename type RollupResponseTranslator with RollupResponseTranslator
+
+171. Changes to package org.elasticsearch.xpack.rollup.action:  
+
+171.1. Rename type DeleteJobActionRequestTests with DeleteJobActionRequestTests
+
+171.2. Rename type GetJobsActionRequestTests with GetJobsActionRequestTests
+
+171.3. Rename type GetRollupCapsActionRequestTests with GetRollupCapsActionRequestTests
+
+171.4. Rename type PutJobActionRequestTests with PutJobActionRequestTests
+
+171.5. Rename type PutJobStateMachineTests with PutJobStateMachineTests
+
+171.6. Rename type RollupIndexCapsTests with RollupIndexCapsTests
+
+171.7. Rename type SearchActionTests with SearchActionTests
+
+171.8. Rename type StartJobActionRequestTests with StartJobActionRequestTests
+
+171.9. Rename type StopJobActionRequestTests with StopJobActionRequestTests
+
+171.10. Rename type TransportDeleteRollupJobAction with TransportDeleteRollupJobAction
+
+171.11. Rename type TransportGetRollupCapsAction with TransportGetRollupCapsAction
+
+171.12. Rename type TransportGetRollupJobAction with TransportGetRollupJobAction
+
+171.13. Rename type TransportPutRollupJobAction with TransportPutRollupJobAction
+
+171.14. Rename type TransportStartRollupAction with TransportStartRollupAction
+
+171.15. Rename type TransportStopRollupAction with TransportStopRollupAction
+
+171.16. Rename type TransportTaskHelper with TransportTaskHelper
+
+172. Changes to package org.elasticsearch.xpack.rollup.config:  
+
+172.1. Rename type ConfigTests with ConfigTests
+
+173. Changes to package org.elasticsearch.xpack.rollup.job:  
+
+173.1. Rename type CronSchedule with CronSchedule
+
+173.2. Rename type IndexerUtils with IndexerUtils
+
+173.3. Rename type RollupIndexer with RollupIndexer
+
+173.4. Rename type RollupJobTaskTests with RollupJobTaskTests
+
+174. Changes to package org.elasticsearch.xpack.rollup.rest:  
+
+174.1. Rename type RestDeleteRollupJobAction with RestDeleteRollupJobAction
+
+174.2. Rename type RestGetRollupCapsAction with RestGetRollupCapsAction
+
+174.3. Rename type RestGetRollupJobsAction with RestGetRollupJobsAction
+
+174.4. Rename type RestPutRollupJobAction with RestPutRollupJobAction
+
+174.5. Rename type RestRollupSearchAction with RestRollupSearchAction
+
+174.6. Rename type RestStartRollupJobAction with RestStartRollupJobAction
+
+174.7. Rename type RestStopRollupJobAction with RestStopRollupJobAction
+
+175. Changes to package org.elasticsearch.xpack.security:  
+
+175.1. Rename type CoreWithSecurityClientYamlTestSuiteIT with CoreWithSecurityClientYamlTestSuiteIT
+
+175.2. Rename type LocalStateSecurity with LocalStateSecurity
+
+175.3. Rename type MigrateToolIT with MigrateToolIT
+
+175.4. Rename type MigrateToolTestCase with MigrateToolTestCase
+
+175.5. Rename type MultiClusterSearchWithSecurityYamlTestSuiteIT with MultiClusterSearchWithSecurityYamlTestSuiteIT
+
+175.6. Rename type PkiRealmBootstrapCheck with PkiRealmBootstrapCheck
+
+175.7. Rename type PkiRealmBootstrapCheckTests with PkiRealmBootstrapCheckTests
+
+175.8. Rename type ReindexWithSecurityClientYamlTestSuiteIT with ReindexWithSecurityClientYamlTestSuiteIT
+
+175.9. Rename type ReindexWithSecurityIT with ReindexWithSecurityIT
+
+175.10. Rename type ScrollHelperIntegTests with ScrollHelperIntegTests
+
+175.11. Rename type SecurityContextTests with SecurityContextTests
+
+175.12. Rename type SecurityFeatureSet with SecurityFeatureSet
+
+175.13. Rename type SecurityFeatureSetTests with SecurityFeatureSetTests
+
+175.14. Rename type SecurityPluginTests with SecurityPluginTests
+
+175.15. Rename type TemplateUpgraderTests with TemplateUpgraderTests
+
+175.16. Rename type TokenSSLBootsrapCheckTests with TokenSSLBootsrapCheckTests
+
+175.17. Rename type TokenSSLBootstrapCheck with TokenSSLBootstrapCheck
+
+176. Changes to package org.elasticsearch.xpack.security.action:  
+
+176.1. Rename type SecurityActionMapper with SecurityActionMapper
+
+176.2. Rename type SecurityActionMapperTests with SecurityActionMapperTests
+
+177. Changes to package org.elasticsearch.xpack.security.action.filter:  
+
+177.1. Rename type DestructiveOperationsTests with DestructiveOperationsTests
+
+177.2. Rename type SecurityActionFilter with SecurityActionFilter
+
+177.3. Rename type SecurityActionFilterTests with SecurityActionFilterTests
+
+178. Changes to package org.elasticsearch.xpack.security.action.realm:  
+
+178.1. Rename type TransportClearRealmCacheAction with TransportClearRealmCacheAction
+
+179. Changes to package org.elasticsearch.xpack.security.action.role:  
+
+179.1. Rename type PutRoleBuilderTests with PutRoleBuilderTests
+
+179.2. Rename type TransportClearRolesCacheAction with TransportClearRolesCacheAction
+
+179.3. Rename type TransportDeleteRoleAction with TransportDeleteRoleAction
+
+179.4. Rename type TransportDeleteRoleActionTests with TransportDeleteRoleActionTests
+
+179.5. Rename type TransportGetRolesAction with TransportGetRolesAction
+
+179.6. Rename type TransportGetRolesActionTests with TransportGetRolesActionTests
+
+179.7. Rename type TransportPutRoleAction with TransportPutRoleAction
+
+179.8. Rename type TransportPutRoleActionTests with TransportPutRoleActionTests
+
+180. Changes to package org.elasticsearch.xpack.security.action.rolemapping:  
+
+180.1. Rename type PutRoleMappingRequestTests with PutRoleMappingRequestTests
+
+180.2. Rename type TransportDeleteRoleMappingAction with TransportDeleteRoleMappingAction
+
+180.3. Rename type TransportGetRoleMappingsAction with TransportGetRoleMappingsAction
+
+180.4. Rename type TransportGetRoleMappingsActionTests with TransportGetRoleMappingsActionTests
+
+180.5. Rename type TransportPutRoleMappingAction with TransportPutRoleMappingAction
+
+180.6. Rename type TransportPutRoleMappingActionTests with TransportPutRoleMappingActionTests
+
+181. Changes to package org.elasticsearch.xpack.security.action.saml:  
+
+181.1. Rename type SamlPrepareAuthenticationRequestTests with SamlPrepareAuthenticationRequestTests
+
+181.2. Rename type TransportSamlAuthenticateAction with TransportSamlAuthenticateAction
+
+181.3. Rename type TransportSamlInvalidateSessionAction with TransportSamlInvalidateSessionAction
+
+181.4. Rename type TransportSamlInvalidateSessionActionTests with TransportSamlInvalidateSessionActionTests
+
+181.5. Rename type TransportSamlLogoutAction with TransportSamlLogoutAction
+
+181.6. Rename type TransportSamlLogoutActionTests with TransportSamlLogoutActionTests
+
+181.7. Rename type TransportSamlPrepareAuthenticationAction with TransportSamlPrepareAuthenticationAction
+
+182. Changes to package org.elasticsearch.xpack.security.action.token:  
+
+182.1. Rename type TransportCreateTokenAction with TransportCreateTokenAction
+
+182.2. Rename type TransportInvalidateTokenAction with TransportInvalidateTokenAction
+
+182.3. Rename type TransportRefreshTokenAction with TransportRefreshTokenAction
+
+183. Changes to package org.elasticsearch.xpack.security.action.user:  
+
+183.1. Rename type HasPrivilegesRequestBuilderTests with HasPrivilegesRequestBuilderTests
+
+183.2. Rename type PutUserRequestBuilderTests with PutUserRequestBuilderTests
+
+183.3. Rename type PutUserRequestTests with PutUserRequestTests
+
+183.4. Rename type TransportAuthenticateAction with TransportAuthenticateAction
+
+183.5. Rename type TransportAuthenticateActionTests with TransportAuthenticateActionTests
+
+183.6. Rename type TransportChangePasswordAction with TransportChangePasswordAction
+
+183.7. Rename type TransportChangePasswordActionTests with TransportChangePasswordActionTests
+
+183.8. Rename type TransportDeleteUserAction with TransportDeleteUserAction
+
+183.9. Rename type TransportDeleteUserActionTests with TransportDeleteUserActionTests
+
+183.10. Rename type TransportGetUsersAction with TransportGetUsersAction
+
+183.11. Rename type TransportGetUsersActionTests with TransportGetUsersActionTests
+
+183.12. Rename type TransportHasPrivilegesAction with TransportHasPrivilegesAction
+
+183.13. Rename type TransportPutUserAction with TransportPutUserAction
+
+183.14. Rename type TransportPutUserActionTests with TransportPutUserActionTests
+
+183.15. Rename type TransportSetEnabledAction with TransportSetEnabledAction
+
+183.16. Rename type TransportSetEnabledActionTests with TransportSetEnabledActionTests
+
+184. Changes to package org.elasticsearch.xpack.security.audit:  
+
+184.1. Rename type AuditLevelTests with AuditLevelTests
+
+184.2. Rename type AuditTrail with AuditTrail
+
+184.3. Rename type AuditTrailService with AuditTrailService
+
+184.4. Rename type AuditTrailServiceTests with AuditTrailServiceTests
+
+184.5. Rename type AuditUtil with AuditUtil
+
+184.6. Rename type AuditUtilTests with AuditUtilTests
+
+185. Changes to package org.elasticsearch.xpack.security.audit.index:  
+
+185.1. Rename type IndexNameResolver with IndexNameResolver
+
+186. Changes to package org.elasticsearch.xpack.security.audit.logfile:  
+
+186.1. Rename type AuditTrailSettingsUpdateTests with AuditTrailSettingsUpdateTests
+
+187. Changes to package org.elasticsearch.xpack.security.authc:  
+
+187.1. Rename type BytesKey with BytesKey
+
+187.2. Rename type ExpiredTokenRemover with ExpiredTokenRemover
+
+187.3. Rename type InternalRealms with InternalRealms
+
+187.4. Rename type InternalRealmsTests with InternalRealmsTests
+
+187.5. Rename type RealmSettingsTests with RealmSettingsTests
+
+187.6. Rename type Realms with Realms
+
+187.7. Rename type RunAsIntegTests with RunAsIntegTests
+
+187.8. Rename type TokenAuthIntegTests with TokenAuthIntegTests
+
+187.9. Rename type TokenServiceTests with TokenServiceTests
+
+187.10. Rename type UserToken with UserToken
+
+187.11. Rename type UserTokenTests with UserTokenTests
+
+188. Changes to package org.elasticsearch.xpack.security.authc.esnative:  
+
+188.1. Rename type ESNativeMigrateToolTests with ESNativeMigrateToolTests
+
+188.2. Rename type ESNativeRealmMigrateToolTests with ESNativeRealmMigrateToolTests
+
+188.3. Rename type NativeRealm with NativeRealm
+
+188.4. Rename type NativeRealmIntegTests with NativeRealmIntegTests
+
+188.5. Rename type NativeRealmTests with NativeRealmTests
+
+188.6. Rename type NativeUsersStoreTests with NativeUsersStoreTests
+
+188.7. Rename type ReservedRealm with ReservedRealm
+
+188.8. Rename type ReservedRealmIntegTests with ReservedRealmIntegTests
+
+188.9. Rename type ReservedRealmTests with ReservedRealmTests
+
+188.10. Rename type UserAndPassword with UserAndPassword
+
+189. Changes to package org.elasticsearch.xpack.security.authc.esnative.tool:  
+
+189.1. Rename type CommandLineHttpClient with CommandLineHttpClient
+
+189.2. Rename type CommandLineHttpClientTests with CommandLineHttpClientTests
+
+189.3. Rename type SetupPasswordToolIT with SetupPasswordToolIT
+
+189.4. Rename type SetupPasswordToolTests with SetupPasswordToolTests
+
+190. Changes to package org.elasticsearch.xpack.security.authc.file:  
+
+190.1. Rename type FileRealm with FileRealm
+
+190.2. Rename type FileUserPasswdStoreTests with FileUserPasswdStoreTests
+
+190.3. Rename type FileUserRolesStoreTests with FileUserRolesStoreTests
+
+191. Changes to package org.elasticsearch.xpack.security.authc.file.tool:  
+
+191.1. Rename type UsersToolTests with UsersToolTests
+
+192. Changes to package org.elasticsearch.xpack.security.authc.ldap:  
+
+192.1. Rename type ADLdapUserSearchSessionFactoryTests with ADLdapUserSearchSessionFactoryTests
+
+192.2. Rename type AbstractActiveDirectoryTestCase with AbstractActiveDirectoryTestCase
+
+192.3. Rename type ActiveDirectoryGroupsResolver with ActiveDirectoryGroupsResolver
+
+192.4. Rename type ActiveDirectoryGroupsResolverTests with ActiveDirectoryGroupsResolverTests
+
+192.5. Rename type ActiveDirectoryRealmTests with ActiveDirectoryRealmTests
+
+192.6. Rename type ActiveDirectoryRunAsIT with ActiveDirectoryRunAsIT
+
+192.7. Rename type ActiveDirectorySIDUtil with ActiveDirectorySIDUtil
+
+192.8. Rename type ActiveDirectorySIDUtilTests with ActiveDirectorySIDUtilTests
+
+192.9. Rename type ActiveDirectorySessionFactoryTests with ActiveDirectorySessionFactoryTests
+
+192.10. Rename type CancellableLdapRunnableTests with CancellableLdapRunnableTests
+
+192.11. Rename type GroupMappingIT with GroupMappingIT
+
+192.12. Rename type GroupsResolverTestCase with GroupsResolverTestCase
+
+192.13. Rename type LdapRealmTests with LdapRealmTests
+
+192.14. Rename type LdapSessionFactory with LdapSessionFactory
+
+192.15. Rename type LdapSessionFactoryTests with LdapSessionFactoryTests
+
+192.16. Rename type LdapTestUtils with LdapTestUtils
+
+192.17. Rename type LdapUserSearchSessionFactory with LdapUserSearchSessionFactory
+
+192.18. Rename type LdapUserSearchSessionFactoryTests with LdapUserSearchSessionFactoryTests
+
+192.19. Rename type MultiGroupMappingIT with MultiGroupMappingIT
+
+192.20. Rename type MultipleAdRealmIT with MultipleAdRealmIT
+
+192.21. Rename type OpenLdapUserSearchSessionFactoryTests with OpenLdapUserSearchSessionFactoryTests
+
+192.22. Rename type PoolingSessionFactory with PoolingSessionFactory
+
+192.23. Rename type SearchGroupsResolver with SearchGroupsResolver
+
+192.24. Rename type SearchGroupsResolverInMemoryTests with SearchGroupsResolverInMemoryTests
+
+192.25. Rename type SearchGroupsResolverTests with SearchGroupsResolverTests
+
+192.26. Rename type UserAttributeGroupsResolver with UserAttributeGroupsResolver
+
+192.27. Rename type UserAttributeGroupsResolverTests with UserAttributeGroupsResolverTests
+
+193. Changes to package org.elasticsearch.xpack.security.authc.ldap.support:  
+
+193.1. Rename type LDAPServersTests with LDAPServersTests
+
+193.2. Rename type LdapLoadBalancingTests with LdapLoadBalancingTests
+
+193.3. Rename type LdapMetaDataResolver with LdapMetaDataResolver
+
+193.4. Rename type LdapMetaDataResolverTests with LdapMetaDataResolverTests
+
+193.5. Rename type LdapTestCase with LdapTestCase
+
+193.6. Rename type SessionFactoryTests with SessionFactoryTests
+
+194. Changes to package org.elasticsearch.xpack.security.authc.pki:  
+
+194.1. Rename type PkiAuthenticationTests with PkiAuthenticationTests
+
+194.2. Rename type PkiOptionalClientAuthTests with PkiOptionalClientAuthTests
+
+194.3. Rename type PkiRealm with PkiRealm
+
+194.4. Rename type PkiRealmTests with PkiRealmTests
+
+194.5. Rename type X509AuthenticationToken with X509AuthenticationToken
+
+195. Changes to package org.elasticsearch.xpack.security.authc.saml:  
+
+195.1. Rename type IdpConfiguration with IdpConfiguration
+
+195.2. Rename type SamlAuthenticationIT with SamlAuthenticationIT
+
+195.3. Rename type SamlAuthenticator with SamlAuthenticator
+
+195.4. Rename type SamlAuthnRequestBuilderTests with SamlAuthnRequestBuilderTests
+
+195.5. Rename type SamlLogoutRequestHandlerTests with SamlLogoutRequestHandlerTests
+
+195.6. Rename type SamlLogoutRequestMessageBuilder with SamlLogoutRequestMessageBuilder
+
+195.7. Rename type SamlLogoutRequestMessageBuilderTests with SamlLogoutRequestMessageBuilderTests
+
+195.8. Rename type SamlLogoutResponseBuilder with SamlLogoutResponseBuilder
+
+195.9. Rename type SamlMessageBuilder with SamlMessageBuilder
+
+195.10. Rename type SamlMetadataCommand with SamlMetadataCommand
+
+195.11. Rename type SamlMetadataCommandTests with SamlMetadataCommandTests
+
+195.12. Rename type SamlNameId with SamlNameId
+
+195.13. Rename type SamlRealmTestHelper with SamlRealmTestHelper
+
+195.14. Rename type SamlRealmTests with SamlRealmTests
+
+195.15. Rename type SamlRedirect with SamlRedirect
+
+195.16. Rename type SamlRedirectTests with SamlRedirectTests
+
+195.17. Rename type SamlRequestHandler with SamlRequestHandler
+
+195.18. Rename type SamlSpMetadataBuilderTests with SamlSpMetadataBuilderTests
+
+195.19. Rename type SamlTestCase with SamlTestCase
+
+195.20. Rename type SamlToken with SamlToken
+
+195.21. Rename type SamlUtilsTests with SamlUtilsTests
+
+195.22. Rename type SigningConfiguration with SigningConfiguration
+
+195.23. Rename type SigningConfigurationTests with SigningConfigurationTests
+
+195.24. Rename type SpConfiguration with SpConfiguration
+
+196. Changes to package org.elasticsearch.xpack.security.authc.support:  
+
+196.1. Rename type CachingRealm with CachingRealm
+
+196.2. Rename type DistinguishedNamePredicateTests with DistinguishedNamePredicateTests
+
+196.3. Rename type DnRoleMapperTests with DnRoleMapperTests
+
+196.4. Rename type HasherTests with HasherTests
+
+196.5. Rename type RoleMappingFileBootstrapCheck with RoleMappingFileBootstrapCheck
+
+196.6. Rename type RoleMappingFileBootstrapCheckTests with RoleMappingFileBootstrapCheckTests
+
+196.7. Rename type UsernamePasswordRealm with UsernamePasswordRealm
+
+196.8. Rename type UsernamePasswordTokenTests with UsernamePasswordTokenTests
+
+197. Changes to package org.elasticsearch.xpack.security.authc.support.mapper:  
+
+197.1. Rename type CompositeRoleMapper with CompositeRoleMapper
+
+197.2. Rename type ExpressionRoleMappingTests with ExpressionRoleMappingTests
+
+197.3. Rename type NativeRoleMappingStore with NativeRoleMappingStore
+
+197.4. Rename type NativeRoleMappingStoreTests with NativeRoleMappingStoreTests
+
+198. Changes to package org.elasticsearch.xpack.security.authz:  
+
+198.1. Rename type AnalyzeTests with AnalyzeTests
+
+198.2. Rename type AuthorizationUtils with AuthorizationUtils
+
+198.3. Rename type AuthorizationUtilsTests with AuthorizationUtilsTests
+
+198.4. Rename type AuthorizedIndicesTests with AuthorizedIndicesTests
+
+198.5. Rename type IndexAliasesTests with IndexAliasesTests
+
+198.6. Rename type IndicesAndAliasesResolverTests with IndicesAndAliasesResolverTests
+
+198.7. Rename type ReadActionsTests with ReadActionsTests
+
+198.8. Rename type RoleDescriptorTests with RoleDescriptorTests
+
+198.9. Rename type SecurityScrollTests with SecurityScrollTests
+
+198.10. Rename type SecuritySearchOperationListener with SecuritySearchOperationListener
+
+198.11. Rename type WriteActionsTests with WriteActionsTests
+
+199. Changes to package org.elasticsearch.xpack.security.authz.accesscontrol:  
+
+199.1. Rename type FieldExtractor with FieldExtractor
+
+199.2. Rename type FieldExtractorTests with FieldExtractorTests
+
+199.3. Rename type IndicesAccessControlTests with IndicesAccessControlTests
+
+199.4. Rename type IndicesPermissionTests with IndicesPermissionTests
+
+199.5. Rename type OptOutQueryCache with OptOutQueryCache
+
+199.6. Rename type OptOutQueryCacheTests with OptOutQueryCacheTests
+
+200. Changes to package org.elasticsearch.xpack.security.authz.permission:  
+
+200.1. Rename type FieldPermissionsTests with FieldPermissionsTests
+
+200.2. Rename type PermissionTests with PermissionTests
+
+201. Changes to package org.elasticsearch.xpack.security.authz.store:  
+
+201.1. Rename type FileRolesStoreTests with FileRolesStoreTests
+
+201.2. Rename type NativeRolesStore with NativeRolesStore
+
+201.3. Rename type NativeRolesStoreTests with NativeRolesStoreTests
+
+202. Changes to package org.elasticsearch.xpack.security.crypto.tool:  
+
+202.1. Rename type SystemKeyTool with SystemKeyTool
+
+202.2. Rename type SystemKeyToolTests with SystemKeyToolTests
+
+203. Changes to package org.elasticsearch.xpack.security.qa:  
+
+203.1. Rename type SecurityTransportClientIT with SecurityTransportClientIT
+
+204. Changes to package org.elasticsearch.xpack.security.rest:  
+
+204.1. Rename type RemoteHostHeader with RemoteHostHeader
+
+204.2. Rename type RestRequestFilterTests with RestRequestFilterTests
+
+204.3. Rename type SecurityRestFilter with SecurityRestFilter
+
+205. Changes to package org.elasticsearch.xpack.security.rest.action:  
+
+205.1. Rename type RestAuthenticateAction with RestAuthenticateAction
+
+205.2. Rename type RestAuthenticateActionTests with RestAuthenticateActionTests
+
+205.3. Rename type SecurityBaseRestHandler with SecurityBaseRestHandler
+
+205.4. Rename type SecurityBaseRestHandlerTests with SecurityBaseRestHandlerTests
+
+206. Changes to package org.elasticsearch.xpack.security.rest.action.oauth2:  
+
+206.1. Rename type RestGetTokenActionTests with RestGetTokenActionTests
+
+206.2. Rename type RestInvalidateTokenAction with RestInvalidateTokenAction
+
+207. Changes to package org.elasticsearch.xpack.security.rest.action.realm:  
+
+207.1. Rename type RestClearRealmCacheAction with RestClearRealmCacheAction
+
+208. Changes to package org.elasticsearch.xpack.security.rest.action.role:  
+
+208.1. Rename type RestClearRolesCacheAction with RestClearRolesCacheAction
+
+208.2. Rename type RestDeleteRoleAction with RestDeleteRoleAction
+
+208.3. Rename type RestGetRolesAction with RestGetRolesAction
+
+208.4. Rename type RestPutRoleAction with RestPutRoleAction
+
+209. Changes to package org.elasticsearch.xpack.security.rest.action.rolemapping:  
+
+209.1. Rename type RestDeleteRoleMappingAction with RestDeleteRoleMappingAction
+
+209.2. Rename type RestGetRoleMappingsAction with RestGetRoleMappingsAction
+
+209.3. Rename type RestPutRoleMappingAction with RestPutRoleMappingAction
+
+210. Changes to package org.elasticsearch.xpack.security.rest.action.saml:  
+
+210.1. Rename type RestSamlInvalidateSessionAction with RestSamlInvalidateSessionAction
+
+210.2. Rename type RestSamlLogoutAction with RestSamlLogoutAction
+
+210.3. Rename type RestSamlPrepareAuthenticationAction with RestSamlPrepareAuthenticationAction
+
+210.4. Rename type SamlBaseRestHandler with SamlBaseRestHandler
+
+210.5. Rename type SamlBaseRestHandlerTests with SamlBaseRestHandlerTests
+
+211. Changes to package org.elasticsearch.xpack.security.rest.action.user:  
+
+211.1. Rename type RestChangePasswordAction with RestChangePasswordAction
+
+211.2. Rename type RestDeleteUserAction with RestDeleteUserAction
+
+211.3. Rename type RestGetUsersAction with RestGetUsersAction
+
+211.4. Rename type RestHasPrivilegesAction with RestHasPrivilegesAction
+
+211.5. Rename type RestPutUserAction with RestPutUserAction
+
+211.6. Rename type RestSetEnabledAction with RestSetEnabledAction
+
+212. Changes to package org.elasticsearch.xpack.security.support:  
+
+212.1. Rename type FileAttributesChecker with FileAttributesChecker
+
+212.2. Rename type FileAttributesCheckerTests with FileAttributesCheckerTests
+
+212.3. Rename type RestorableContextClassLoader with RestorableContextClassLoader
+
+212.4. Rename type SecurityFiles with SecurityFiles
+
+213. Changes to package org.elasticsearch.xpack.security.test:  
+
+213.1. Rename type SecurityTestUtils with SecurityTestUtils
+
+214. Changes to package org.elasticsearch.xpack.security.transport:  
+
+214.1. Rename type SecurityServerTransportInterceptorTests with SecurityServerTransportInterceptorTests
+
+214.2. Rename type ServerTransportFilterIntegrationTests with ServerTransportFilterIntegrationTests
+
+214.3. Rename type ServerTransportFilterTests with ServerTransportFilterTests
+
+215. Changes to package org.elasticsearch.xpack.security.transport.filter:  
+
+215.1. Rename type IPFilter with IPFilter
+
+215.2. Rename type IPFilterTests with IPFilterTests
+
+215.3. Rename type IpFilteringIntegrationTests with IpFilteringIntegrationTests
+
+215.4. Rename type IpFilteringUpdateTests with IpFilteringUpdateTests
+
+215.5. Rename type PatternRule with PatternRule
+
+215.6. Rename type PatternRuleTests with PatternRuleTests
+
+215.7. Rename type SecurityIpFilterRule with SecurityIpFilterRule
+
+215.8. Rename type SecurityIpFilterRuleTests with SecurityIpFilterRuleTests
+
+216. Changes to package org.elasticsearch.xpack.security.transport.netty4:  
+
+216.1. Rename type IPHostnameVerificationTests with IPHostnameVerificationTests
+
+216.2. Rename type IpFilterRemoteAddressFilter with IpFilterRemoteAddressFilter
+
+216.3. Rename type IpFilterRemoteAddressFilterTests with IpFilterRemoteAddressFilterTests
+
+216.4. Rename type SecurityNetty4HttpServerTransportTests with SecurityNetty4HttpServerTransportTests
+
+216.5. Rename type SslHostnameVerificationTests with SslHostnameVerificationTests
+
+217. Changes to package org.elasticsearch.xpack.security.transport.nio:  
+
+217.1. Rename type SSLDriverTests with SSLDriverTests
+
+217.2. Rename type SimpleSecurityNioTransportTests with SimpleSecurityNioTransportTests
+
+218. Changes to package org.elasticsearch.xpack.security.transport.ssl:  
+
+218.1. Rename type EllipticCurveSSLTests with EllipticCurveSSLTests
+
+218.2. Rename type SslIntegrationTests with SslIntegrationTests
+
+218.3. Rename type SslMultiPortTests with SslMultiPortTests
+
+219. Changes to package org.elasticsearch.xpack.security.user:  
+
+219.1. Rename type AnonymousUserIntegTests with AnonymousUserIntegTests
+
+219.2. Rename type AnonymousUserTests with AnonymousUserTests
+
+219.3. Rename type SystemUserTests with SystemUserTests
+
+219.4. Rename type XPackUserTests with XPackUserTests
+
+220. Changes to package org.elasticsearch.xpack.sql:  
+
+220.1. Rename type ClientSqlException with ClientSqlException
+
+220.2. Rename type ServerSqlException with ServerSqlException
+
+220.3. Rename type SqlException with SqlException
+
+220.4. Rename type SqlIllegalArgumentException with SqlIllegalArgumentException
+
+221. Changes to package org.elasticsearch.xpack.sql.action:  
+
+221.1. Rename type AbstractSqlIntegTestCase with AbstractSqlIntegTestCase
+
+221.2. Rename type SqlActionIT with SqlActionIT
+
+221.3. Rename type SqlClearCursorActionIT with SqlClearCursorActionIT
+
+221.4. Rename type SqlDisabledIT with SqlDisabledIT
+
+221.5. Rename type SqlLicenseIT with SqlLicenseIT
+
+221.6. Rename type SqlTranslateActionIT with SqlTranslateActionIT
+
+222. Changes to package org.elasticsearch.xpack.sql.analysis:  
+
+222.1. Rename type AnalysisException with AnalysisException
+
+223. Changes to package org.elasticsearch.xpack.sql.analysis.analyzer:  
+
+223.1. Rename type FieldAttributeTests with FieldAttributeTests
+
+223.2. Rename type PreAnalyzerTests with PreAnalyzerTests
+
+223.3. Rename type VerificationException with VerificationException
+
+223.4. Rename type VerifierErrorMessagesTests with VerifierErrorMessagesTests
+
+224. Changes to package org.elasticsearch.xpack.sql.analysis.index:  
+
+224.1. Rename type EsIndex with EsIndex
+
+224.2. Rename type IndexResolution with IndexResolution
+
+224.3. Rename type IndexResolver with IndexResolver
+
+224.4. Rename type MappingException with MappingException
+
+225. Changes to package org.elasticsearch.xpack.sql.capabilities:  
+
+225.1. Rename type Resolvable with Resolvable
+
+225.2. Rename type Resolvables with Resolvables
+
+225.3. Rename type Unresolvable with Unresolvable
+
+225.4. Rename type UnresolvedException with UnresolvedException
+
+226. Changes to package org.elasticsearch.xpack.sql.cli:  
+
+226.1. Rename type Cli with Cli
+
+226.2. Rename type CliRepl with CliRepl
+
+226.3. Rename type CliReplTests with CliReplTests
+
+226.4. Rename type CliSessionTests with CliSessionTests
+
+226.5. Rename type Completers with Completers
+
+226.6. Rename type ConnectionBuilder with ConnectionBuilder
+
+226.7. Rename type ConnectionBuilderTests with ConnectionBuilderTests
+
+226.8. Rename type FatalCliException with FatalCliException
+
+226.9. Rename type JLineTerminalTests with JLineTerminalTests
+
+226.10. Rename type TestTerminal with TestTerminal
+
+226.11. Rename type VersionTests with VersionTests
+
+227. Changes to package org.elasticsearch.xpack.sql.cli.command:  
+
+227.1. Rename type AbstractCliCommand with AbstractCliCommand
+
+227.2. Rename type AbstractServerCliCommand with AbstractServerCliCommand
+
+227.3. Rename type BuiltinCommandTests with BuiltinCommandTests
+
+227.4. Rename type ClearScreenCliCommand with ClearScreenCliCommand
+
+227.5. Rename type CliCommand with CliCommand
+
+227.6. Rename type CliCommands with CliCommands
+
+227.7. Rename type CliCommandsTests with CliCommandsTests
+
+227.8. Rename type CliSession with CliSession
+
+227.9. Rename type FetchSeparatorCliCommand with FetchSeparatorCliCommand
+
+227.10. Rename type FetchSizeCliCommand with FetchSizeCliCommand
+
+227.11. Rename type PrintLogoCommand with PrintLogoCommand
+
+227.12. Rename type ServerInfoCliCommand with ServerInfoCliCommand
+
+227.13. Rename type ServerInfoCliCommandTests with ServerInfoCliCommandTests
+
+227.14. Rename type ServerQueryCliCommand with ServerQueryCliCommand
+
+227.15. Rename type ServerQueryCliCommandTests with ServerQueryCliCommandTests
+
+228. Changes to package org.elasticsearch.xpack.sql.execution:  
+
+228.1. Rename type PlanExecutor with PlanExecutor
+
+229. Changes to package org.elasticsearch.xpack.sql.execution.search:  
+
+229.1. Rename type AggRef with AggRef
+
+229.2. Rename type CompositeAggregationCursor with CompositeAggregationCursor
+
+229.3. Rename type CompositeAggregationCursorTests with CompositeAggregationCursorTests
+
+229.4. Rename type CompositeAggsRowSet with CompositeAggsRowSet
+
+229.5. Rename type CursorTests with CursorTests
+
+229.6. Rename type FieldExtraction with FieldExtraction
+
+229.7. Rename type SchemaCompositeAggsRowSet with SchemaCompositeAggsRowSet
+
+229.8. Rename type SchemaSearchHitRowSet with SchemaSearchHitRowSet
+
+229.9. Rename type ScrollCursor with ScrollCursor
+
+229.10. Rename type ScrollCursorTests with ScrollCursorTests
+
+229.11. Rename type SearchHitRowSet with SearchHitRowSet
+
+229.12. Rename type SourceGenerator with SourceGenerator
+
+229.13. Rename type SourceGeneratorTests with SourceGeneratorTests
+
+229.14. Rename type SqlSourceBuilder with SqlSourceBuilder
+
+229.15. Rename type SqlSourceBuilderTests with SqlSourceBuilderTests
+
+230. Changes to package org.elasticsearch.xpack.sql.execution.search.extractor:  
+
+230.1. Rename type BucketExtractor with BucketExtractor
+
+230.2. Rename type BucketExtractors with BucketExtractors
+
+230.3. Rename type CompositeKeyExtractor with CompositeKeyExtractor
+
+230.4. Rename type CompositeKeyExtractorTests with CompositeKeyExtractorTests
+
+230.5. Rename type ComputingExtractor with ComputingExtractor
+
+230.6. Rename type ComputingExtractorTests with ComputingExtractorTests
+
+230.7. Rename type ConstantExtractor with ConstantExtractor
+
+230.8. Rename type ConstantExtractorTests with ConstantExtractorTests
+
+230.9. Rename type FieldHitExtractor with FieldHitExtractor
+
+230.10. Rename type FieldHitExtractorTests with FieldHitExtractorTests
+
+230.11. Rename type HitExtractor with HitExtractor
+
+230.12. Rename type HitExtractors with HitExtractors
+
+230.13. Rename type MetricAggExtractor with MetricAggExtractor
+
+230.14. Rename type MetricAggExtractorTests with MetricAggExtractorTests
+
+230.15. Rename type ScoreExtractor with ScoreExtractor
+
+230.16. Rename type ScoreExtractorTests with ScoreExtractorTests
+
+230.17. Rename type TestBucket with TestBucket
+
+230.18. Rename type TestMultiValueAggregation with TestMultiValueAggregation
+
+230.19. Rename type TestSingleValueAggregation with TestSingleValueAggregation
+
+231. Changes to package org.elasticsearch.xpack.sql.expression:  
+
+231.1. Rename type Alias with Alias
+
+231.2. Rename type Attribute with Attribute
+
+231.3. Rename type AttributeMapTests with AttributeMapTests
+
+231.4. Rename type AttributeSet with AttributeSet
+
+231.5. Rename type Exists with Exists
+
+231.6. Rename type ExpressionId with ExpressionId
+
+231.7. Rename type ExpressionIdTests with ExpressionIdTests
+
+231.8. Rename type ExpressionSet with ExpressionSet
+
+231.9. Rename type Expressions with Expressions
+
+231.10. Rename type FieldAttribute with FieldAttribute
+
+231.11. Rename type Foldables with Foldables
+
+231.12. Rename type LeafExpression with LeafExpression
+
+231.13. Rename type Literal with Literal
+
+231.14. Rename type LiteralAttribute with LiteralAttribute
+
+231.15. Rename type NamedExpression with NamedExpression
+
+231.16. Rename type NullIntolerant with NullIntolerant
+
+231.17. Rename type Order with Order
+
+231.18. Rename type ParameterTests with ParameterTests
+
+231.19. Rename type QuotingTests with QuotingTests
+
+231.20. Rename type ScalarSubquery with ScalarSubquery
+
+231.21. Rename type SubQueryExpression with SubQueryExpression
+
+231.22. Rename type TypedAttribute with TypedAttribute
+
+231.23. Rename type UnaryExpression with UnaryExpression
+
+231.24. Rename type UnresolvedAlias with UnresolvedAlias
+
+231.25. Rename type UnresolvedAttribute with UnresolvedAttribute
+
+231.26. Rename type UnresolvedAttributeTests with UnresolvedAttributeTests
+
+231.27. Rename type UnresolvedNamedExpression with UnresolvedNamedExpression
+
+231.28. Rename type UnresolvedStar with UnresolvedStar
+
+232. Changes to package org.elasticsearch.xpack.sql.expression.function:  
+
+232.1. Rename type Function with Function
+
+232.2. Rename type FunctionAttribute with FunctionAttribute
+
+232.3. Rename type Functions with Functions
+
+232.4. Rename type NamedExpressionTests with NamedExpressionTests
+
+232.5. Rename type Score with Score
+
+232.6. Rename type ScoreAttribute with ScoreAttribute
+
+232.7. Rename type UnresolvedFunction with UnresolvedFunction
+
+232.8. Rename type UnresolvedFunctionTests with UnresolvedFunctionTests
+
+233. Changes to package org.elasticsearch.xpack.sql.expression.function.aggregate:  
+
+233.1. Rename type AggregateFunction with AggregateFunction
+
+233.2. Rename type AggregateFunctionAttribute with AggregateFunctionAttribute
+
+233.3. Rename type Avg with Avg
+
+233.4. Rename type CompoundNumericAggregate with CompoundNumericAggregate
+
+233.5. Rename type Count with Count
+
+233.6. Rename type EnclosedAgg with EnclosedAgg
+
+233.7. Rename type ExtendedStats with ExtendedStats
+
+233.8. Rename type ExtendedStatsEnclosed with ExtendedStatsEnclosed
+
+233.9. Rename type InnerAggregate with InnerAggregate
+
+233.10. Rename type Kurtosis with Kurtosis
+
+233.11. Rename type MatrixStats with MatrixStats
+
+233.12. Rename type MatrixStatsEnclosed with MatrixStatsEnclosed
+
+233.13. Rename type Max with Max
+
+233.14. Rename type Min with Min
+
+233.15. Rename type NumericAggregate with NumericAggregate
+
+233.16. Rename type Percentile with Percentile
+
+233.17. Rename type PercentileRank with PercentileRank
+
+233.18. Rename type PercentileRanks with PercentileRanks
+
+233.19. Rename type Percentiles with Percentiles
+
+233.20. Rename type Skewness with Skewness
+
+233.21. Rename type Stats with Stats
+
+233.22. Rename type StatsEnclosed with StatsEnclosed
+
+233.23. Rename type StddevPop with StddevPop
+
+233.24. Rename type Sum with Sum
+
+233.25. Rename type SumOfSquares with SumOfSquares
+
+233.26. Rename type VarPop with VarPop
+
+234. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar:  
+
+234.1. Rename type BinaryScalarFunction with BinaryScalarFunction
+
+234.2. Rename type Cast with Cast
+
+234.3. Rename type CastProcessor with CastProcessor
+
+234.4. Rename type CastProcessorTests with CastProcessorTests
+
+234.5. Rename type Processors with Processors
+
+234.6. Rename type ScalarFunction with ScalarFunction
+
+234.7. Rename type ScalarFunctionAttribute with ScalarFunctionAttribute
+
+234.8. Rename type UnaryScalarFunction with UnaryScalarFunction
+
+235. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.datetime:  
+
+235.1. Rename type DateTimeFunction with DateTimeFunction
+
+235.2. Rename type DateTimeHistogramFunction with DateTimeHistogramFunction
+
+235.3. Rename type DateTimeProcessor with DateTimeProcessor
+
+235.4. Rename type DateTimeProcessorTests with DateTimeProcessorTests
+
+235.5. Rename type DayOfMonth with DayOfMonth
+
+235.6. Rename type DayOfWeek with DayOfWeek
+
+235.7. Rename type DayOfYear with DayOfYear
+
+235.8. Rename type DayOfYearTests with DayOfYearTests
+
+235.9. Rename type HourOfDay with HourOfDay
+
+235.10. Rename type MinuteOfDay with MinuteOfDay
+
+235.11. Rename type MinuteOfHour with MinuteOfHour
+
+235.12. Rename type MonthOfYear with MonthOfYear
+
+235.13. Rename type SecondOfMinute with SecondOfMinute
+
+235.14. Rename type WeekOfYear with WeekOfYear
+
+235.15. Rename type Year with Year
+
+236. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.math:  
+
+236.1. Rename type ACos with ACos
+
+236.2. Rename type ASin with ASin
+
+236.3. Rename type ATan with ATan
+
+236.4. Rename type ATan2 with ATan2
+
+236.5. Rename type Abs with Abs
+
+236.6. Rename type BinaryMathProcessor with BinaryMathProcessor
+
+236.7. Rename type BinaryNumericFunction with BinaryNumericFunction
+
+236.8. Rename type Cbrt with Cbrt
+
+236.9. Rename type Ceil with Ceil
+
+236.10. Rename type Cos with Cos
+
+236.11. Rename type Cosh with Cosh
+
+236.12. Rename type Cot with Cot
+
+236.13. Rename type Degrees with Degrees
+
+236.14. Rename type E with E
+
+236.15. Rename type Exp with Exp
+
+236.16. Rename type Expm1 with Expm1
+
+236.17. Rename type Floor with Floor
+
+236.18. Rename type Log with Log
+
+236.19. Rename type Log10 with Log10
+
+236.20. Rename type MathFunction with MathFunction
+
+236.21. Rename type MathFunctionProcessorTests with MathFunctionProcessorTests
+
+236.22. Rename type MathProcessor with MathProcessor
+
+236.23. Rename type Pi with Pi
+
+236.24. Rename type Power with Power
+
+236.25. Rename type Radians with Radians
+
+236.26. Rename type Random with Random
+
+236.27. Rename type Round with Round
+
+236.28. Rename type Sign with Sign
+
+236.29. Rename type Sin with Sin
+
+236.30. Rename type Sinh with Sinh
+
+236.31. Rename type Sqrt with Sqrt
+
+236.32. Rename type Tan with Tan
+
+237. Changes to package org.elasticsearch.xpack.sql.expression.predicate:  
+
+237.1. Rename type Predicates with Predicates
+
+237.2. Rename type Range with Range
+
+238. Changes to package org.elasticsearch.xpack.sql.expression.predicate.fulltext:  
+
+238.1. Rename type FullTextPredicate with FullTextPredicate
+
+238.2. Rename type FullTextUtils with FullTextUtils
+
+238.3. Rename type MatchQueryPredicate with MatchQueryPredicate
+
+238.4. Rename type MultiMatchQueryPredicate with MultiMatchQueryPredicate
+
+238.5. Rename type StringQueryPredicate with StringQueryPredicate
+
+239. Changes to package org.elasticsearch.xpack.sql.jdbc:  
+
+239.1. Rename type DriverManagerRegistrationTests with DriverManagerRegistrationTests
+
+239.2. Rename type JdbcConfigurationTests with JdbcConfigurationTests
+
+239.3. Rename type JdbcException with JdbcException
+
+239.4. Rename type JdbcSQLException with JdbcSQLException
+
+239.5. Rename type VersionTests with VersionTests
+
+240. Changes to package org.elasticsearch.xpack.sql.parser:  
+
+240.1. Rename type AbstractBuilder with AbstractBuilder
+
+240.2. Rename type AstBuilder with AstBuilder
+
+240.3. Rename type CaseInsensitiveStream with CaseInsensitiveStream
+
+240.4. Rename type CommandBuilder with CommandBuilder
+
+240.5. Rename type ExpressionBuilder with ExpressionBuilder
+
+240.6. Rename type IdentifierBuilder with IdentifierBuilder
+
+240.7. Rename type LikeEscapingParsingTests with LikeEscapingParsingTests
+
+240.8. Rename type LogicalPlanBuilder with LogicalPlanBuilder
+
+240.9. Rename type ParsingException with ParsingException
+
+240.10. Rename type SqlBaseBaseListener with SqlBaseBaseListener
+
+240.11. Rename type SqlBaseBaseVisitor with SqlBaseBaseVisitor
+
+240.12. Rename type SqlBaseLexer with SqlBaseLexer
+
+240.13. Rename type SqlBaseListener with SqlBaseListener
+
+240.14. Rename type SqlBaseVisitor with SqlBaseVisitor
+
+240.15. Rename type SqlParserTests with SqlParserTests
+
+241. Changes to package org.elasticsearch.xpack.sql.plan:  
+
+241.1. Rename type QueryPlan with QueryPlan
+
+241.2. Rename type TableIdentifier with TableIdentifier
+
+242. Changes to package org.elasticsearch.xpack.sql.plan.logical:  
+
+242.1. Rename type Aggregate with Aggregate
+
+242.2. Rename type BinaryPlan with BinaryPlan
+
+242.3. Rename type Distinct with Distinct
+
+242.4. Rename type EsRelation with EsRelation
+
+242.5. Rename type Filter with Filter
+
+242.6. Rename type Join with Join
+
+242.7. Rename type LeafPlan with LeafPlan
+
+242.8. Rename type Limit with Limit
+
+242.9. Rename type LocalRelation with LocalRelation
+
+242.10. Rename type LogicalPlan with LogicalPlan
+
+242.11. Rename type OrderBy with OrderBy
+
+242.12. Rename type Project with Project
+
+242.13. Rename type SubQueryAlias with SubQueryAlias
+
+242.14. Rename type UnaryPlan with UnaryPlan
+
+242.15. Rename type UnresolvedRelation with UnresolvedRelation
+
+242.16. Rename type UnresolvedRelationTests with UnresolvedRelationTests
+
+242.17. Rename type With with With
+
+243. Changes to package org.elasticsearch.xpack.sql.plan.logical.command:  
+
+243.1. Rename type Command with Command
+
+243.2. Rename type Debug with Debug
+
+243.3. Rename type Explain with Explain
+
+243.4. Rename type ShowColumns with ShowColumns
+
+243.5. Rename type ShowFunctions with ShowFunctions
+
+243.6. Rename type ShowSchemas with ShowSchemas
+
+243.7. Rename type ShowTables with ShowTables
+
+244. Changes to package org.elasticsearch.xpack.sql.plan.logical.command.sys:  
+
+244.1. Rename type SysColumns with SysColumns
+
+244.2. Rename type SysColumnsTests with SysColumnsTests
+
+244.3. Rename type SysParserTests with SysParserTests
+
+244.4. Rename type SysTables with SysTables
+
+244.5. Rename type SysTablesTests with SysTablesTests
+
+244.6. Rename type SysTypes with SysTypes
+
+245. Changes to package org.elasticsearch.xpack.sql.plan.physical:  
+
+245.1. Rename type AggregateExec with AggregateExec
+
+245.2. Rename type BinaryExec with BinaryExec
+
+245.3. Rename type CommandExec with CommandExec
+
+245.4. Rename type EsQueryExec with EsQueryExec
+
+245.5. Rename type FilterExec with FilterExec
+
+245.6. Rename type LeafExec with LeafExec
+
+245.7. Rename type LimitExec with LimitExec
+
+245.8. Rename type LocalExec with LocalExec
+
+245.9. Rename type OrderExec with OrderExec
+
+245.10. Rename type PhysicalPlan with PhysicalPlan
+
+245.11. Rename type ProjectExec with ProjectExec
+
+245.12. Rename type UnaryExec with UnaryExec
+
+245.13. Rename type Unexecutable with Unexecutable
+
+245.14. Rename type UnplannedExec with UnplannedExec
+
+246. Changes to package org.elasticsearch.xpack.sql.planner:  
+
+246.1. Rename type FoldingException with FoldingException
+
+246.2. Rename type Planner with Planner
+
+246.3. Rename type PlanningException with PlanningException
+
+246.4. Rename type QueryTranslatorTests with QueryTranslatorTests
+
+247. Changes to package org.elasticsearch.xpack.sql.plugin:  
+
+247.1. Rename type RestSqlClearCursorAction with RestSqlClearCursorAction
+
+247.2. Rename type RestSqlQueryAction with RestSqlQueryAction
+
+247.3. Rename type RestSqlTranslateAction with RestSqlTranslateAction
+
+247.4. Rename type SqlLicenseChecker with SqlLicenseChecker
+
+247.5. Rename type SqlPlugin with SqlPlugin
+
+247.6. Rename type SqlPluginTests with SqlPluginTests
+
+247.7. Rename type TextFormatTests with TextFormatTests
+
+247.8. Rename type TransportSqlClearCursorAction with TransportSqlClearCursorAction
+
+247.9. Rename type TransportSqlQueryAction with TransportSqlQueryAction
+
+247.10. Rename type TransportSqlTranslateAction with TransportSqlTranslateAction
+
+248. Changes to package org.elasticsearch.xpack.sql.querydsl.agg:  
+
+248.1. Rename type Agg with Agg
+
+248.2. Rename type AggFilter with AggFilter
+
+248.3. Rename type Aggs with Aggs
+
+248.4. Rename type AndAggFilter with AndAggFilter
+
+248.5. Rename type AvgAgg with AvgAgg
+
+248.6. Rename type CardinalityAgg with CardinalityAgg
+
+248.7. Rename type ExtendedStatsAgg with ExtendedStatsAgg
+
+248.8. Rename type GroupByKey with GroupByKey
+
+248.9. Rename type LeafAgg with LeafAgg
+
+248.10. Rename type MatrixStatsAgg with MatrixStatsAgg
+
+248.11. Rename type MaxAgg with MaxAgg
+
+248.12. Rename type MinAgg with MinAgg
+
+248.13. Rename type MultiFieldAgg with MultiFieldAgg
+
+248.14. Rename type OrAggFilter with OrAggFilter
+
+248.15. Rename type PercentileRanksAgg with PercentileRanksAgg
+
+248.16. Rename type PercentilesAgg with PercentilesAgg
+
+248.17. Rename type PipelineAgg with PipelineAgg
+
+248.18. Rename type StatsAgg with StatsAgg
+
+248.19. Rename type SumAgg with SumAgg
+
+249. Changes to package org.elasticsearch.xpack.sql.querydsl.container:  
+
+249.1. Rename type AttributeSort with AttributeSort
+
+249.2. Rename type ComputedRef with ComputedRef
+
+249.3. Rename type FieldReference with FieldReference
+
+249.4. Rename type GlobalCountRef with GlobalCountRef
+
+249.5. Rename type GroupByRef with GroupByRef
+
+249.6. Rename type MetricAggRef with MetricAggRef
+
+249.7. Rename type QueryContainer with QueryContainer
+
+249.8. Rename type QueryContainerTests with QueryContainerTests
+
+249.9. Rename type ScoreSort with ScoreSort
+
+249.10. Rename type ScriptFieldRef with ScriptFieldRef
+
+249.11. Rename type ScriptSort with ScriptSort
+
+249.12. Rename type SearchHitFieldRef with SearchHitFieldRef
+
+249.13. Rename type Sort with Sort
+
+250. Changes to package org.elasticsearch.xpack.sql.querydsl.query:  
+
+250.1. Rename type BoolQuery with BoolQuery
+
+250.2. Rename type BoolQueryTests with BoolQueryTests
+
+250.3. Rename type ExistsQuery with ExistsQuery
+
+250.4. Rename type LeafQuery with LeafQuery
+
+250.5. Rename type MatchAll with MatchAll
+
+250.6. Rename type MatchQuery with MatchQuery
+
+250.7. Rename type MatchQueryTests with MatchQueryTests
+
+250.8. Rename type MultiMatchQuery with MultiMatchQuery
+
+250.9. Rename type MultiMatchQueryTests with MultiMatchQueryTests
+
+250.10. Rename type NestedQuery with NestedQuery
+
+250.11. Rename type NestedQueryTests with NestedQueryTests
+
+250.12. Rename type NotQuery with NotQuery
+
+250.13. Rename type Query with Query
+
+250.14. Rename type QueryStringQuery with QueryStringQuery
+
+250.15. Rename type QueryStringQueryTests with QueryStringQueryTests
+
+250.16. Rename type RangeQuery with RangeQuery
+
+250.17. Rename type RegexQuery with RegexQuery
+
+250.18. Rename type ScriptQuery with ScriptQuery
+
+250.19. Rename type TermQuery with TermQuery
+
+250.20. Rename type WildcardQuery with WildcardQuery
+
+251. Changes to package org.elasticsearch.xpack.sql.rule:  
+
+251.1. Rename type Rule with Rule
+
+251.2. Rename type RuleExecutionException with RuleExecutionException
+
+252. Changes to package org.elasticsearch.xpack.sql.session:  
+
+252.1. Rename type AbstractRowSet with AbstractRowSet
+
+252.2. Rename type Configuration with Configuration
+
+252.3. Rename type Cursor with Cursor
+
+252.4. Rename type Cursors with Cursors
+
+252.5. Rename type EmptyCursor with EmptyCursor
+
+252.6. Rename type EmptyExecutable with EmptyExecutable
+
+252.7. Rename type Executable with Executable
+
+252.8. Rename type RowSet with RowSet
+
+252.9. Rename type RowView with RowView
+
+252.10. Rename type Rows with Rows
+
+252.11. Rename type SchemaRowSet with SchemaRowSet
+
+252.12. Rename type SingletonExecutable with SingletonExecutable
+
+252.13. Rename type SingletonRowSet with SingletonRowSet
+
+252.14. Rename type SqlSession with SqlSession
+
+253. Changes to package org.elasticsearch.xpack.sql.tree:  
+
+253.1. Rename type AbstractNodeTestCase with AbstractNodeTestCase
+
+253.2. Rename type Location with Location
+
+253.3. Rename type Node with Node
+
+253.4. Rename type NodeSubclassTests with NodeSubclassTests
+
+253.5. Rename type NodeUtils with NodeUtils
+
+254. Changes to package org.elasticsearch.xpack.sql.type:  
+
+254.1. Rename type DataTypeConversion with DataTypeConversion
+
+254.2. Rename type DataTypeConversionTests with DataTypeConversionTests
+
+254.3. Rename type DataTypes with DataTypes
+
+254.4. Rename type DateEsField with DateEsField
+
+254.5. Rename type KeywordEsField with KeywordEsField
+
+254.6. Rename type TextEsField with TextEsField
+
+254.7. Rename type Types with Types
+
+254.8. Rename type TypesTests with TypesTests
+
+254.9. Rename type UnsupportedEsField with UnsupportedEsField
+
+255. Changes to package org.elasticsearch.xpack.sql.util:  
+
+255.1. Rename type Check with Check
+
+255.2. Rename type CollectionUtils with CollectionUtils
+
+255.3. Rename type Graphviz with Graphviz
+
+255.4. Rename type LikeConversionTests with LikeConversionTests
+
+255.5. Rename type ReflectionUtils with ReflectionUtils
+
+255.6. Rename type StringUtils with StringUtils
+
+256. Changes to package org.elasticsearch.xpack.ssl:  
+
+256.1. Rename type SSLClientAuthTests with SSLClientAuthTests
+
+256.2. Rename type SSLReloadIntegTests with SSLReloadIntegTests
+
+257. Changes to package org.elasticsearch.xpack.test.rest:  
+
+257.1. Rename type XPackRestIT with XPackRestIT
+
+257.2. Rename type XPackRestTestHelper with XPackRestTestHelper
+
+258. Changes to package org.elasticsearch.xpack.watcher:  
+
+258.1. Rename type EncryptSensitiveDataBootstrapCheck with EncryptSensitiveDataBootstrapCheck
+
+258.2. Rename type EncryptSensitiveDataBootstrapCheckTests with EncryptSensitiveDataBootstrapCheckTests
+
+258.3. Rename type Watcher with Watcher
+
+258.4. Rename type WatcherFeatureSet with WatcherFeatureSet
+
+258.5. Rename type WatcherFeatureSetTests with WatcherFeatureSetTests
+
+258.6. Rename type WatcherIndexingListenerTests with WatcherIndexingListenerTests
+
+258.7. Rename type WatcherLifeCycleService with WatcherLifeCycleService
+
+258.8. Rename type WatcherLifeCycleServiceTests with WatcherLifeCycleServiceTests
+
+258.9. Rename type WatcherMetaDataSerializationTests with WatcherMetaDataSerializationTests
+
+258.10. Rename type WatcherService with WatcherService
+
+258.11. Rename type WatcherServiceTests with WatcherServiceTests
+
+258.12. Rename type WatcherXpackUsageStatsTests with WatcherXpackUsageStatsTests
+
+259. Changes to package org.elasticsearch.xpack.watcher.actions:  
+
+259.1. Rename type ActionBuilders with ActionBuilders
+
+259.2. Rename type ActionErrorIntegrationTests with ActionErrorIntegrationTests
+
+259.3. Rename type ActionWrapperTests with ActionWrapperTests
+
+259.4. Rename type TimeThrottleIntegrationTests with TimeThrottleIntegrationTests
+
+260. Changes to package org.elasticsearch.xpack.watcher.actions.email:  
+
+260.1. Rename type EmailActionFactory with EmailActionFactory
+
+260.2. Rename type EmailActionTests with EmailActionTests
+
+260.3. Rename type EmailAttachmentTests with EmailAttachmentTests
+
+260.4. Rename type ExecutableEmailAction with ExecutableEmailAction
+
+261. Changes to package org.elasticsearch.xpack.watcher.actions.index:  
+
+261.1. Rename type ExecutableIndexAction with ExecutableIndexAction
+
+261.2. Rename type IndexActionFactory with IndexActionFactory
+
+261.3. Rename type IndexActionTests with IndexActionTests
+
+262. Changes to package org.elasticsearch.xpack.watcher.actions.jira:  
+
+262.1. Rename type ExecutableJiraAction with ExecutableJiraAction
+
+262.2. Rename type JiraActionFactory with JiraActionFactory
+
+262.3. Rename type JiraActionFactoryTests with JiraActionFactoryTests
+
+263. Changes to package org.elasticsearch.xpack.watcher.actions.logging:  
+
+263.1. Rename type ExecutableLoggingAction with ExecutableLoggingAction
+
+263.2. Rename type LoggingActionFactory with LoggingActionFactory
+
+263.3. Rename type LoggingActionTests with LoggingActionTests
+
+264. Changes to package org.elasticsearch.xpack.watcher.actions.pagerduty:  
+
+264.1. Rename type ExecutablePagerDutyAction with ExecutablePagerDutyAction
+
+264.2. Rename type PagerDutyActionFactory with PagerDutyActionFactory
+
+264.3. Rename type PagerDutyActionFactoryTests with PagerDutyActionFactoryTests
+
+264.4. Rename type PagerDutyActionTests with PagerDutyActionTests
+
+265. Changes to package org.elasticsearch.xpack.watcher.actions.slack:  
+
+265.1. Rename type ExecutableSlackAction with ExecutableSlackAction
+
+265.2. Rename type ExecutableSlackActionTests with ExecutableSlackActionTests
+
+265.3. Rename type SlackActionFactory with SlackActionFactory
+
+265.4. Rename type SlackActionFactoryTests with SlackActionFactoryTests
+
+265.5. Rename type SlackActionTests with SlackActionTests
+
+266. Changes to package org.elasticsearch.xpack.watcher.actions.throttler:  
+
+266.1. Rename type AckThrottlerTests with AckThrottlerTests
+
+266.2. Rename type ActionThrottleTests with ActionThrottleTests
+
+266.3. Rename type PeriodThrottlerTests with PeriodThrottlerTests
+
+267. Changes to package org.elasticsearch.xpack.watcher.actions.webhook:  
+
+267.1. Rename type ExecutableWebhookAction with ExecutableWebhookAction
+
+267.2. Rename type WebhookActionFactory with WebhookActionFactory
+
+267.3. Rename type WebhookActionTests with WebhookActionTests
+
+267.4. Rename type WebhookHttpsIntegrationTests with WebhookHttpsIntegrationTests
+
+267.5. Rename type WebhookIntegrationTests with WebhookIntegrationTests
+
+268. Changes to package org.elasticsearch.xpack.watcher.client:  
+
+268.1. Rename type WatchSourceBuilders with WatchSourceBuilders
+
+269. Changes to package org.elasticsearch.xpack.watcher.common.http:  
+
+269.1. Rename type HttpClientTests with HttpClientTests
+
+269.2. Rename type HttpConnectionTimeoutTests with HttpConnectionTimeoutTests
+
+269.3. Rename type HttpProxy with HttpProxy
+
+269.4. Rename type HttpProxyTests with HttpProxyTests
+
+269.5. Rename type HttpReadTimeoutTests with HttpReadTimeoutTests
+
+269.6. Rename type HttpRequestTemplateTests with HttpRequestTemplateTests
+
+269.7. Rename type HttpRequestTests with HttpRequestTests
+
+269.8. Rename type HttpResponseTests with HttpResponseTests
+
+269.9. Rename type HttpSettings with HttpSettings
+
+269.10. Rename type SizeLimitInputStream with SizeLimitInputStream
+
+269.11. Rename type SizeLimitInputStreamTests with SizeLimitInputStreamTests
+
+270. Changes to package org.elasticsearch.xpack.watcher.common.text:  
+
+270.1. Rename type TextTemplate with TextTemplate
+
+270.2. Rename type TextTemplateEngine with TextTemplateEngine
+
+270.3. Rename type TextTemplateTests with TextTemplateTests
+
+271. Changes to package org.elasticsearch.xpack.watcher.condition:  
+
+271.1. Rename type AbstractCompareCondition with AbstractCompareCondition
+
+271.2. Rename type AlwaysConditionTests with AlwaysConditionTests
+
+271.3. Rename type ArrayCompareCondition with ArrayCompareCondition
+
+271.4. Rename type ArrayCompareConditionSearchTests with ArrayCompareConditionSearchTests
+
+271.5. Rename type ArrayCompareConditionTests with ArrayCompareConditionTests
+
+271.6. Rename type CompareCondition with CompareCondition
+
+271.7. Rename type CompareConditionSearchTests with CompareConditionSearchTests
+
+271.8. Rename type CompareConditionTests with CompareConditionTests
+
+271.9. Rename type InternalAlwaysCondition with InternalAlwaysCondition
+
+271.10. Rename type LenientCompare with LenientCompare
+
+271.11. Rename type NeverCondition with NeverCondition
+
+271.12. Rename type NeverConditionTests with NeverConditionTests
+
+271.13. Rename type ScriptCondition with ScriptCondition
+
+271.14. Rename type ScriptConditionTests with ScriptConditionTests
+
+272. Changes to package org.elasticsearch.xpack.watcher.execution:  
+
+272.1. Rename type AsyncTriggerEventConsumer with AsyncTriggerEventConsumer
+
+272.2. Rename type CurrentExecutions with CurrentExecutions
+
+272.3. Rename type ExecutionServiceTests with ExecutionServiceTests
+
+272.4. Rename type InternalWatchExecutor with InternalWatchExecutor
+
+272.5. Rename type SyncTriggerEventConsumer with SyncTriggerEventConsumer
+
+272.6. Rename type TriggeredExecutionContext with TriggeredExecutionContext
+
+272.7. Rename type TriggeredWatchStore with TriggeredWatchStore
+
+272.8. Rename type TriggeredWatchStoreTests with TriggeredWatchStoreTests
+
+272.9. Rename type WatchExecutor with WatchExecutor
+
+273. Changes to package org.elasticsearch.xpack.watcher.history:  
+
+273.1. Rename type HistoryStore with HistoryStore
+
+273.2. Rename type HistoryStoreTests with HistoryStoreTests
+
+273.3. Rename type HistoryTemplateEmailMappingsTests with HistoryTemplateEmailMappingsTests
+
+273.4. Rename type HistoryTemplateHttpMappingsTests with HistoryTemplateHttpMappingsTests
+
+273.5. Rename type HistoryTemplateIndexActionMappingsTests with HistoryTemplateIndexActionMappingsTests
+
+273.6. Rename type HistoryTemplateSearchInputMappingsTests with HistoryTemplateSearchInputMappingsTests
+
+273.7. Rename type HistoryTemplateTimeMappingsTests with HistoryTemplateTimeMappingsTests
+
+273.8. Rename type HistoryTemplateTransformMappingsTests with HistoryTemplateTransformMappingsTests
+
+274. Changes to package org.elasticsearch.xpack.watcher.input:  
+
+274.1. Rename type InputBuilders with InputBuilders
+
+274.2. Rename type InputFactory with InputFactory
+
+274.3. Rename type InputRegistry with InputRegistry
+
+274.4. Rename type InputRegistryTests with InputRegistryTests
+
+275. Changes to package org.elasticsearch.xpack.watcher.input.chain:  
+
+275.1. Rename type ChainInputFactory with ChainInputFactory
+
+275.2. Rename type ChainInputTests with ChainInputTests
+
+275.3. Rename type ChainIntegrationTests with ChainIntegrationTests
+
+275.4. Rename type ExecutableChainInput with ExecutableChainInput
+
+276. Changes to package org.elasticsearch.xpack.watcher.input.http:  
+
+276.1. Rename type ExecutableHttpInput with ExecutableHttpInput
+
+276.2. Rename type HttpInputFactory with HttpInputFactory
+
+276.3. Rename type HttpInputTests with HttpInputTests
+
+277. Changes to package org.elasticsearch.xpack.watcher.input.none:  
+
+277.1. Rename type ExecutableNoneInput with ExecutableNoneInput
+
+277.2. Rename type NoneInputFactory with NoneInputFactory
+
+278. Changes to package org.elasticsearch.xpack.watcher.input.search:  
+
+278.1. Rename type ExecutableSearchInput with ExecutableSearchInput
+
+278.2. Rename type SearchInputFactory with SearchInputFactory
+
+279. Changes to package org.elasticsearch.xpack.watcher.input.simple:  
+
+279.1. Rename type ExecutableSimpleInput with ExecutableSimpleInput
+
+279.2. Rename type SimpleInputFactory with SimpleInputFactory
+
+279.3. Rename type SimpleInputTests with SimpleInputTests
+
+280. Changes to package org.elasticsearch.xpack.watcher.input.transform:  
+
+280.1. Rename type ExecutableTransformInput with ExecutableTransformInput
+
+280.2. Rename type TransformInputFactory with TransformInputFactory
+
+280.3. Rename type TransformInputTests with TransformInputTests
+
+281. Changes to package org.elasticsearch.xpack.watcher.notification:  
+
+281.1. Rename type NotificationService with NotificationService
+
+282. Changes to package org.elasticsearch.xpack.watcher.notification.email:  
+
+282.1. Rename type AccountTests with AccountTests
+
+282.2. Rename type AccountsTests with AccountsTests
+
+282.3. Rename type Email with Email
+
+282.4. Rename type Authentication with Authentication
+
+282.5. Rename type DataAttachmentTests with DataAttachmentTests
+
+282.6. Rename type EmailSecretsIntegrationTests with EmailSecretsIntegrationTests
+
+282.7. Rename type EmailServiceTests with EmailServiceTests
+
+282.8. Rename type EmailTemplateTests with EmailTemplateTests
+
+282.9. Rename type EmailTests with EmailTests
+
+282.10. Rename type DataAttachment with DataAttachment
+
+282.11. Rename type HtmlSanitizerTests with HtmlSanitizerTests
+
+282.12. Rename type ProfileTests with ProfileTests
+
+283. Changes to package org.elasticsearch.xpack.watcher.notification.email.attachment:  
+
+283.1. Rename type DataAttachmentParserTests with DataAttachmentParserTests
+
+283.2. Rename type EmailAttachmentsParser with EmailAttachmentsParser
+
+283.3. Rename type HttpEmailAttachementParserTests with HttpEmailAttachementParserTests
+
+283.4. Rename type ReportingAttachment with ReportingAttachment
+
+283.5. Rename type ReportingAttachmentParserTests with ReportingAttachmentParserTests
+
+284. Changes to package org.elasticsearch.xpack.watcher.notification.email.support:  
+
+284.1. Rename type BodyPartSource with BodyPartSource
+
+285. Changes to package org.elasticsearch.xpack.watcher.notification.jira:  
+
+285.1. Rename type JiraAccount with JiraAccount
+
+285.2. Rename type JiraAccountTests with JiraAccountTests
+
+285.3. Rename type JiraIssueTests with JiraIssueTests
+
+285.4. Rename type JiraService with JiraService
+
+286. Changes to package org.elasticsearch.xpack.watcher.notification.pagerduty:  
+
+286.1. Rename type IncidentEventDefaultsTests with IncidentEventDefaultsTests
+
+286.2. Rename type PagerDutyAccount with PagerDutyAccount
+
+286.3. Rename type PagerDutyAccountsTests with PagerDutyAccountsTests
+
+286.4. Rename type PagerDutyService with PagerDutyService
+
+286.5. Rename type SentEventTests with SentEventTests
+
+287. Changes to package org.elasticsearch.xpack.watcher.notification.slack:  
+
+287.1. Rename type SlackAccount with SlackAccount
+
+287.2. Rename type SlackService with SlackService
+
+288. Changes to package org.elasticsearch.xpack.watcher.notification.slack.message:  
+
+288.1. Rename type SlackMessageDefaultsTests with SlackMessageDefaultsTests
+
+288.2. Rename type SlackMessageTests with SlackMessageTests
+
+289. Changes to package org.elasticsearch.xpack.watcher.rest:  
+
+289.1. Rename type WatcherRestHandler with WatcherRestHandler
+
+290. Changes to package org.elasticsearch.xpack.watcher.rest.action:  
+
+290.1. Rename type RestAckWatchAction with RestAckWatchAction
+
+290.2. Rename type RestDeleteWatchAction with RestDeleteWatchAction
+
+290.3. Rename type RestExecuteWatchActionTests with RestExecuteWatchActionTests
+
+290.4. Rename type RestGetWatchAction with RestGetWatchAction
+
+290.5. Rename type RestPutWatchAction with RestPutWatchAction
+
+290.6. Rename type RestWatcherStatsAction with RestWatcherStatsAction
+
+291. Changes to package org.elasticsearch.xpack.watcher.support:  
+
+291.1. Rename type FilterXContentTests with FilterXContentTests
+
+291.2. Rename type Strings with Strings
+
+291.3. Rename type Variables with Variables
+
+291.4. Rename type VariablesTests with VariablesTests
+
+291.5. Rename type WatcherDateTimeUtilsTests with WatcherDateTimeUtilsTests
+
+291.6. Rename type WatcherUtilsTests with WatcherUtilsTests
+
+292. Changes to package org.elasticsearch.xpack.watcher.support.search:  
+
+292.1. Rename type WatcherSearchTemplateRequest with WatcherSearchTemplateRequest
+
+292.2. Rename type WatcherSearchTemplateRequestTests with WatcherSearchTemplateRequestTests
+
+292.3. Rename type WatcherSearchTemplateService with WatcherSearchTemplateService
+
+293. Changes to package org.elasticsearch.xpack.watcher.support.xcontent:  
+
+293.1. Rename type WatcherXContentParserTests with WatcherXContentParserTests
+
+293.2. Rename type XContentSourceTests with XContentSourceTests
+
+294. Changes to package org.elasticsearch.xpack.watcher.test:  
+
+294.1. Rename type LocalStateWatcher with LocalStateWatcher
+
+294.2. Rename type MockTextTemplateEngine with MockTextTemplateEngine
+
+294.3. Rename type WatchExecutionContextMockBuilder with WatchExecutionContextMockBuilder
+
+294.4. Rename type WatcherTestUtils with WatcherTestUtils
+
+295. Changes to package org.elasticsearch.xpack.watcher.test.integration:  
+
+295.1. Rename type BasicWatcherTests with BasicWatcherTests
+
+295.2. Rename type BootStrapTests with BootStrapTests
+
+295.3. Rename type HistoryIntegrationTests with HistoryIntegrationTests
+
+295.4. Rename type HttpSecretsIntegrationTests with HttpSecretsIntegrationTests
+
+295.5. Rename type SearchInputTests with SearchInputTests
+
+295.6. Rename type SearchTransformTests with SearchTransformTests
+
+295.7. Rename type WatchAckTests with WatchAckTests
+
+295.8. Rename type WatchMetadataTests with WatchMetadataTests
+
+296. Changes to package org.elasticsearch.xpack.watcher.transform:  
+
+296.1. Rename type TransformBuilders with TransformBuilders
+
+297. Changes to package org.elasticsearch.xpack.watcher.transform.script:  
+
+297.1. Rename type ExecutableScriptTransform with ExecutableScriptTransform
+
+297.2. Rename type ScriptTransformFactory with ScriptTransformFactory
+
+297.3. Rename type ScriptTransformTests with ScriptTransformTests
+
+298. Changes to package org.elasticsearch.xpack.watcher.transform.search:  
+
+298.1. Rename type ExecutableSearchTransform with ExecutableSearchTransform
+
+298.2. Rename type SearchTransformFactory with SearchTransformFactory
+
+299. Changes to package org.elasticsearch.xpack.watcher.transport.action:  
+
+299.1. Rename type WatchRequestValidationTests with WatchRequestValidationTests
+
+300. Changes to package org.elasticsearch.xpack.watcher.transport.action.activate:  
+
+300.1. Rename type ActivateWatchTests with ActivateWatchTests
+
+301. Changes to package org.elasticsearch.xpack.watcher.transport.action.delete:  
+
+301.1. Rename type DeleteWatchTests with DeleteWatchTests
+
+302. Changes to package org.elasticsearch.xpack.watcher.transport.action.execute:  
+
+302.1. Rename type ExecuteWatchRequestTests with ExecuteWatchRequestTests
+
+302.2. Rename type ExecuteWatchTests with ExecuteWatchTests
+
+303. Changes to package org.elasticsearch.xpack.watcher.transport.action.get:  
+
+303.1. Rename type GetWatchTests with GetWatchTests
+
+304. Changes to package org.elasticsearch.xpack.watcher.transport.action.put:  
+
+304.1. Rename type PutWatchSerializationTests with PutWatchSerializationTests
+
+305. Changes to package org.elasticsearch.xpack.watcher.transport.actions:  
+
+305.1. Rename type WatcherTransportAction with WatcherTransportAction
+
+306. Changes to package org.elasticsearch.xpack.watcher.transport.actions.ack:  
+
+306.1. Rename type TransportAckWatchAction with TransportAckWatchAction
+
+306.2. Rename type TransportAckWatchActionTests with TransportAckWatchActionTests
+
+307. Changes to package org.elasticsearch.xpack.watcher.transport.actions.activate:  
+
+307.1. Rename type TransportActivateWatchAction with TransportActivateWatchAction
+
+308. Changes to package org.elasticsearch.xpack.watcher.transport.actions.delete:  
+
+308.1. Rename type TransportDeleteWatchAction with TransportDeleteWatchAction
+
+309. Changes to package org.elasticsearch.xpack.watcher.transport.actions.execute:  
+
+309.1. Rename type TransportExecuteWatchAction with TransportExecuteWatchAction
+
+310. Changes to package org.elasticsearch.xpack.watcher.transport.actions.get:  
+
+310.1. Rename type TransportGetWatchAction with TransportGetWatchAction
+
+311. Changes to package org.elasticsearch.xpack.watcher.transport.actions.put:  
+
+311.1. Rename type TransportPutWatchAction with TransportPutWatchAction
+
+311.2. Rename type TransportPutWatchActionTests with TransportPutWatchActionTests
+
+312. Changes to package org.elasticsearch.xpack.watcher.transport.actions.service:  
+
+312.1. Rename type TransportWatcherServiceAction with TransportWatcherServiceAction
+
+313. Changes to package org.elasticsearch.xpack.watcher.transport.actions.stats:  
+
+313.1. Rename type TransportWatcherStatsAction with TransportWatcherStatsAction
+
+313.2. Rename type TransportWatcherStatsActionTests with TransportWatcherStatsActionTests
+
+314. Changes to package org.elasticsearch.xpack.watcher.trigger:  
+
+314.1. Rename type ScheduleTriggerEngineMock with ScheduleTriggerEngineMock
+
+314.2. Rename type TriggerBuilders with TriggerBuilders
+
+314.3. Rename type TriggerEngine with TriggerEngine
+
+314.4. Rename type TriggerServiceTests with TriggerServiceTests
+
+315. Changes to package org.elasticsearch.xpack.watcher.trigger.manual:  
+
+315.1. Rename type ManualTrigger with ManualTrigger
+
+315.2. Rename type ManualTriggerEngine with ManualTriggerEngine
+
+315.3. Rename type ManualTriggerEvent with ManualTriggerEvent
+
+316. Changes to package org.elasticsearch.xpack.watcher.trigger.schedule:  
+
+316.1. Rename type CronScheduleTests with CronScheduleTests
+
+316.2. Rename type CronnableSchedule with CronnableSchedule
+
+316.3. Rename type DailyScheduleTests with DailyScheduleTests
+
+316.4. Rename type HourlyScheduleTests with HourlyScheduleTests
+
+316.5. Rename type IntervalScheduleTests with IntervalScheduleTests
+
+316.6. Rename type MonthlyScheduleTests with MonthlyScheduleTests
+
+316.7. Rename type ScheduleRegistry with ScheduleRegistry
+
+316.8. Rename type ScheduleRegistryTests with ScheduleRegistryTests
+
+316.9. Rename type ScheduleTriggerEngine with ScheduleTriggerEngine
+
+316.10. Rename type ScheduleTriggerEventTests with ScheduleTriggerEventTests
+
+316.11. Rename type Schedules with Schedules
+
+316.12. Rename type WeeklyScheduleTests with WeeklyScheduleTests
+
+316.13. Rename type YearlyScheduleTests with YearlyScheduleTests
+
+317. Changes to package org.elasticsearch.xpack.watcher.trigger.schedule.engine:  
+
+317.1. Rename type TickerScheduleEngineTests with TickerScheduleEngineTests
+
+318. Changes to package org.elasticsearch.xpack.watcher.trigger.schedule.support:  
+
+318.1. Rename type DayTimes with DayTimes
+
+318.2. Rename type Times with Times
+
+319. Changes to package org.elasticsearch.xpack.watcher.trigger.schedule.tool:  
+
+319.1. Rename type CronEvalTool with CronEvalTool
+
+319.2. Rename type CronEvalToolTests with CronEvalToolTests
+
+320. Changes to package org.elasticsearch.xpack.watcher.watch:  
+
+320.1. Rename type WatchParser with WatchParser
+
+320.2. Rename type WatchStatusIntegrationTests with WatchStatusIntegrationTests
+
+320.3. Rename type WatchStatusTests with WatchStatusTests
+
+320.4. Rename type WatchStoreUtils with WatchStoreUtils
+
+321. Changes to package org.elasticsearch.xpack.watcher.watch.clock:  
+
+321.1. Rename type ClockTests with ClockTests
+

@@ -1,0 +1,13 @@
+First load RuntimeException to prevent segfault on error
+
+Motivation:
+
+When an error happens during loading the native library it may try to generate a new RuntimeException before the RuntimeException is loaded.
+
+Modifications:
+
+- Load RuntimeException as first
+
+Result:
+
+No more segfaults possible

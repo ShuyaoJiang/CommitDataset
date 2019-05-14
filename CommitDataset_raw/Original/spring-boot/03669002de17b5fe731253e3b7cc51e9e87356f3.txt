@@ -1,0 +1,10 @@
+Check for null context when trying to find an exception mapper
+
+If application context refresh fails, SpringApplication will have a 
+null context. Previously, this would result in an NPE when looking for
+an ExitCodeExceptionMapper.
+
+This commit updates SpringApplication to gracefully handle the context
+being null when looking for an ExitCodeExceptionMapper.
+
+Closes gh-4803

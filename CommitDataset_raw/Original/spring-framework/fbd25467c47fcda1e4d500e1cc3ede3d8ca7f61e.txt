@@ -1,0 +1,15 @@
+Introduce SQL script exception hierarchy
+
+This commit continues the work began in SPR-9531 as follows.
+
+ - ScriptException now extends DataAccessException.
+
+ - DatabasePopulator.populate() now explicitly throws ScriptException.
+
+ - Introduced UncategorizedScriptException.
+
+ - DatabasePopulatorUtils.execute() now throws an
+   UncategorizedScriptException instead of a
+   DataAccessResourceFailureException.
+
+Issue: SPR-11564

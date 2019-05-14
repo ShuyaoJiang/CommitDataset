@@ -1,0 +1,10 @@
+Fix Bean Condition on GsonTester FactoryBean
+
+This commit fixes the `@ConditionalOnClass` typo on the GsonTester
+FactoryBean, which was testing for `ObjectMapper` instead of `Gson`.
+
+This means that the next condition `@ConditionalOnBean(Gson.class)`
+throws a `ClassNotFoundException: com.google.gson.Gson` since it's
+trying to load that class to check for an existing Bean of that type.
+
+Fixes gh-6502

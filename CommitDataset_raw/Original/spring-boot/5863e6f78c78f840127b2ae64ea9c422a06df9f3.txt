@@ -1,0 +1,12 @@
+Fix class name in generated meta-data
+
+Previously, the algorithm that computes the String representation of a
+class reference and a property type was shared. This lead to generic
+information for group's `type` and `sourceType` property.
+
+This commit separates that logic in two: `getQualifiedName` is now
+responsible to generate a fully qualified class name while the existing
+`getType` is solely responsible to generate a type representation for the
+property. Only the latter has generic information.
+
+Closes gh-7236

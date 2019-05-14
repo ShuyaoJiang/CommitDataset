@@ -1,0 +1,10 @@
+DnsResolver CNAME redirect bug
+
+Motviation:
+DnsNameResolverContext#followCname attempts to build a query to follow a CNAME, but puts the original hostname in the DnsQuery instead of the CNAME hostname. This will result in not following CNAME redirects correctly.
+
+Result:
+- DnsNameResolverContext#followCname should use the CNAME instead of the original hostname when building the DnsQuery
+
+Result:
+More correct handling of redirect queries.

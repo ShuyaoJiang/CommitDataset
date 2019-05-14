@@ -1,0 +1,10 @@
+Document BeanFactoryPostProcessor implementation constraints (SPR-7466)
+
+JavaDoc and reference docs now warn developers against interacting with
+bean instances within BeanFactoryPostProcessor implementations in order
+to avoid premature bean instantiation.
+
+See SPR-7450 for an example of a third-party BFPP
+(OAuthTokenLifecycleRegistryPostProcessor) prematurely instantiating
+a FactoryBean instance, such that bean post-processing is bypassed
+and autowired injection (via @Inject) never occurs.

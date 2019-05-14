@@ -1,0 +1,18 @@
+Implemented LZ4 compression codec
+
+Motivation:
+
+LZ4 compression codec provides sending and receiving data encoded by very fast LZ4 algorithm.
+
+Modifications:
+
+- Added `lz4` library which implements LZ4 algorithm.
+- Implemented Lz4FramedEncoder which extends MessageToByteEncoder and provides compression of outgoing messages.
+- Added tests to verify the Lz4FramedEncoder and how it can compress data for the next uncompression using the original library.
+- Implemented Lz4FramedDecoder which extends ByteToMessageDecoder and provides uncompression of incoming messages.
+- Added tests to verify the Lz4FramedDecoder and how it can uncompress data after compression using the original library.
+- Added integration tests for Lz4FramedEncoder/Decoder.
+
+Result:
+
+Full LZ4 compression codec which can compress/uncompress data using LZ4 algorithm.

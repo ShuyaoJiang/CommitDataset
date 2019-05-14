@@ -1,0 +1,14 @@
+transport-native-kqueue libraries should not lazy link
+
+Motivation:
+We rely upon the linker being non-lazy to test compatibility the native library compatibility for kqueue, but the default mode of operation is to lazy link.
+
+Modifications:
+- We should modify the build scripts to inform the linker that this library should not be lazy linked
+- Error messages changes
+dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
+
+java.lang.UnsatisfiedLinkError: unsupported JNI version 0xFFFFFFFF required by .../libnetty-transport-native-kqueue.dylib
+
+Result:
+Link errors are detected upon library load time.

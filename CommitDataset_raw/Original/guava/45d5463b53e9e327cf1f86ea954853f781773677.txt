@@ -1,0 +1,18 @@
+Refactored Scanner.onJarEntry() and onResourceFile() to scanJarFile() and scanDirectory().
+
+Advantages discussed sofar:
+
+1. scanJarFile(JarFile) and scanDirectory(File) leaves no room for ambiguity. Questions like "are manifest files, directory resources filtered out?" won't be asked because it's up to subclasses.
+
+2. scanDirectory() can potentially be more efficient when searching for a particular package for example. You wouldn't even need to recurse into c/g/common if you are only interested in c/g/foo.
+
+3. scanJarFile() can use JarFile.entries() and loop over. It's an existing API that we don't need to provide an alternative way to traverse through Jar file entries.
+
+4. scanDirectory() can use either Files.fileTreeTraverser() or java.nio.file.Files.newDirectoryStream(). So we shouldn't expect too much boilerplate duplication.
+
+5. If a client doesn't like to silently ignore unreadable sub directory, it doesn't have to.
+
+Disadvantages include inconvenience for the subclass compared to implementing the bare-bone onJarEntry() and onResourceFile().
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=91324193

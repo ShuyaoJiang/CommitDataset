@@ -1,0 +1,10 @@
+Logging: Configure the node name when we have it (#32983)
+
+Change the logging infrastructure to handle when the node name isn't
+available in `elasticsearch.yml`. In that case the node name is not
+available until long after logging is configured. The biggest change is
+that the node name logging no longer fixed at pattern build time.
+Instead it is read from a `SetOnce` on every print. If it is unset it is
+printed as `unknown` so we have something that fits in the pattern.
+On normal startup we don't log anything until the node name is available
+so we never see the `unknown`s.

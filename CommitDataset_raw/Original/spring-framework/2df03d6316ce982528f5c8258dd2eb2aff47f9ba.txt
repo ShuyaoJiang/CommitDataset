@@ -1,0 +1,13 @@
+Add interceptor to resourceHandlerMapping
+
+The resourceHandlerMapping in the MVC Java config is not configured
+with any interceptors, and in particular those added through the
+InterceptorRegistry, which are otherwise added to all other handler
+mapping beans created by the config. This means that the
+ResourceUrlProviderExposingInterceptor (added in 4.0) is also not
+used for resource requests.
+
+This change ensures the ResourceUrlProviderExposingInterceptor is
+configured on the resourceHandlerMapping.
+
+Issue: SPR-12279

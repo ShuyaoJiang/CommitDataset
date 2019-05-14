@@ -1,0 +1,14 @@
+Do not block in DSInitializedPublisher when EMF is using async bootstrap
+
+Previously, we would retrieve the EntityManagerFactory’s DataSource as
+soon as it was being post-processed. When the native
+EntityManagerFactory is being bootstrapped asynchronously, this
+retrieval would block until bootstrapping had completed. This negated
+some of the benefits of asynchronous bootstrapping.
+
+This commit updates DataSourceInitializedPublisher so that it only
+accesses the EntityManagerFactory’s DataSource once its bootstrapping
+has completed. This is achieved using a decorated JpaVendorAdapter
+that is called one the boostrapping has completed.
+
+Closes gh-14061

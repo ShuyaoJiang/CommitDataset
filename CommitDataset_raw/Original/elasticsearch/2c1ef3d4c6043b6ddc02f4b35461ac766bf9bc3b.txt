@@ -1,0 +1,11 @@
+Do not renew sync-id if all shards are sealed (#29103)
+
+Today the synced-flush always issues a new sync-id even though all
+shards haven't been changed since the last seal. This causes active
+shards to have different a sync-id from offline shards even though all
+were sealed and no writes since then.
+
+This commit adjusts not to renew sync-id if all active shards are sealed
+with the same sync-id.
+
+Closes #27838

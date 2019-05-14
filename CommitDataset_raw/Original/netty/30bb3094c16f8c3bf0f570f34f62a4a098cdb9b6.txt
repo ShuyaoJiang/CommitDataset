@@ -1,0 +1,13 @@
+[#5227] Fix race-condition in PooledByteBufAllocatorTest
+
+Motivation:
+
+PooledByteBufAllocatorTest.testNumThreadCachesWithNoDirrectArenas() had a race as it just used LockSupport.parkNanos(). We should better use a CountdownLatch and so be sure we really have init everything.
+
+Modifications:
+
+Replace LockSupport.parkNanos(...) with CountdownLatch usage
+
+Result:
+
+No more race in test.

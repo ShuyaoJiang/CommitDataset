@@ -1,0 +1,22 @@
+[ML] Automate detection of way to extract fields (elastic/x-pack-elasticsearch#1686)
+
+In 5.4.x, the datafeed attempts to get all fields from
+doc_values by default. It has a `_source` parameter which
+when enabled changes the strategy to instead try to get
+all fields from the source.
+
+This has been the most common issue users have been
+reporting as it means the datafeed will fail to fetch
+any text fields by default.
+
+This change uses the field capabilities API in order
+to automatically detect whether a field is aggregatable.
+It then extracts such fields from doc_values while the
+rest are taken from source. The change also adds
+validation to the start datafeed action so that if
+fields are missing mappings or the time field is not
+aggregatable we respond with an appropriate error.
+
+relates elastic/x-pack-elasticsearch#1649
+
+Original commit: elastic/x-pack-elasticsearch@76e2cc6cb2c40aafc565af926d498b11066499ac

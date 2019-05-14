@@ -1,0 +1,14 @@
+Bind embedded Mongo to configured host or loopback address
+
+Previously, the auto-configuration for embedded Mongo did not specify
+a bind IP so Mongo was started without one. This would lead to Mongo
+binding to all available network interfaces. This caused some friction
+with the Windows firewall as it would ask for permission every time
+embedded Mongo was launched.
+
+This commit updates the auto-configuration to use
+spring.data.mongodb.host to configure the bind IP for embedded Mongo.
+If spring.data.mongodb.host is null, the auto-configuration will use
+the loopback address instead.
+
+Closes gh-4630

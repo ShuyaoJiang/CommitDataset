@@ -1,0 +1,8 @@
+Search: Validate script query is run with a single script (#29304)
+
+The parsing code for script query currently silently skips by any tokens
+it does not know about within its parsing loop. The only token it does
+not catch is an array, which means pasing multiple scripts in via an
+array will cause the last script to be parsed and one, silently dropping
+the others. This commit adds validation that arrays are not seen while
+parsing.

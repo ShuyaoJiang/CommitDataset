@@ -1,0 +1,16 @@
+Reject the first SETTINGS ack on HTTP/2 Preface
+
+Motivation:
+
+Http2ConnectionHandler verifies if the first frame after the preface is
+a SETTINGS frame.  However, it does not reject the SETTING ack frame
+which is not expected actually.
+
+Modifications:
+
+Reject a SETTINGS-ack frame as well
+
+Result:
+
+When the first frame is a SETTINGS-ack frame, connection does not
+proceed to further frame handling. (simplicity)

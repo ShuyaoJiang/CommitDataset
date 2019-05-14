@@ -1,0 +1,13 @@
+Adding UniformStreamByteDistributor
+
+Motivation:
+
+The current priority algorithm can yield poor per-stream goodput when either the number of streams is high or the connection window is small. When all priorities are the same (i.e. priority is disabled), we should be able to do better.
+
+Modifications:
+
+Added a new UniformStreamByteDistributor that ignores priority entirely and manages a queue of streams.  Each stream is allocated a minimum of 1KiB on each iteration.
+
+Result:
+
+Improved goodput when priority is not used.

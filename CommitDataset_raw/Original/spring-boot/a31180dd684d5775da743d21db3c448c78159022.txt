@@ -1,0 +1,18 @@
+Avoid calling URL.getContent() when defining a package
+
+URL.getContent() is shorthand for URL.openConnection().getContent().
+It creates an InputStream that isn't explicitly closed. This means
+that a file handle remains open until the URLConnection is garbage
+collected. This can lead to the process exceeding the limit for open
+files.
+
+Previously, LaunchedURLClassLoader was using getConent() when
+proactively defining a package for a class that is about to be loaded.
+getContent() was used to access nested jar files to check if they
+contained the package and, if so, to retrieve the jar's manifest.
+
+In place of using getContent(), this commit uses JarURLConnection's
+getJarFile() method which provides access to the JarFile without the
+unwanted side-effect of opening an input stream.
+
+Closes gh-7180

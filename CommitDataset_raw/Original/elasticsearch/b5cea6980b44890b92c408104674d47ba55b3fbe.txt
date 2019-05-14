@@ -1,0 +1,7 @@
+Delete index API to work only against concrete indices (#25268)
+
+With #23997 we have introduced a new internal index option that allows to resolve index expressions only against concrete indices while ignoring aliases. Such index option was applied to IndicesAliasesRequest, so that the index part of alias actions would only be resolved against concrete indices.
+
+Same is done in this commit with delete index request. Deleting aliases has always been confusing as some users expect it to only remove the alias from the index (which has its own specific API). Even worse, in case of filtered aliases, deleting an alias may leave users with the expectation that only the documents that match the filter are deleted, which was never the case. To address all this confusion, delete index api works now only against concrete indices. WIldcard expressions will be only resolved against concrete index, as if aliases didn't exist. If one tries to delete against an alias, an IndexNotFoundException will be thrown regardless of whether the alias exists or not, as a concrete index with such a name doesn't exist.
+
+Closes #2318

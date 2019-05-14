@@ -1,0 +1,24 @@
+Fixed isAssignableFrom() for <? super T> wildcard types, as pointed out by Guava issue 1898.
+
+In a nutshell, here's what we have in the current implementation:
+
+List<? super String>.isAssignableFrom(List<Object>) == true // Correct
+<? super CharSequence>.isAssignableFrom(String) == false // Wrong!
+<? super String>.isAssignableFrom(<Object>) == true // Wrong! Not assignable
+
+To show why they are wrong, consider the following three code snippets where the first two compile and the third doesn't compile:
+
+void okay(Receiver<List<? super String>> receiver, List<Object> objects) {
+receiver.accept(objects);
+}
+
+void okay2(Receiver<? super CharSequence> receiver) {
+receiver.accept("1");
+}
+
+void notOkay(Receiver<? super String> receiver, Object obj) {
+receiver.accept(obj);
+}
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=81180102

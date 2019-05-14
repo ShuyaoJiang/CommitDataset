@@ -1,0 +1,10 @@
+[Zen2] Remove duplicate discovered peers (#35505)
+
+Today the `PeerFinder` probes each address it obtains, identifies the node to
+which it just connected, and then returns all such nodes. However, this can
+lead to duplicates if a node manages to connect to another node via two
+distinct addresses.  This causes bootstrapping to fail since
+`BootstrapConfiguration#resolve` forbids duplicates.
+
+This change alters the behaviour of the `PeerFinder` to remove duplicates in
+this situation.

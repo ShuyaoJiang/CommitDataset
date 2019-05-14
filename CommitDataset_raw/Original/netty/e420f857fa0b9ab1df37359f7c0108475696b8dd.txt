@@ -1,0 +1,17 @@
+Optimize DefaultHeaders#toString and implement HttpHeaders#toString
+
+Motivation:
+
+For debugging/logging purpose, it would be convenient to have
+HttpHeaders#toString implemented.
+
+DefaultHeaders does implement toString be the implementation is suboptimal and allocates a Set for the names and Lists for values.
+
+Modification:
+
+* Introduce HeadersUtil#toString that provides a convenient optimized helper to implement toString for various headers implementations
+* Have DefaultHeaders#toString and HttpHeaders#toString delegate their toString implementation to HeadersUtil
+
+Result:
+
+Convenient HttpHeaders#toString. Optimized DefaultHeaders#toString.

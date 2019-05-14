@@ -1,0 +1,12 @@
+Allow `new URL(String)` with nested JARs
+
+Update JarFile to allow the custom registration of a JAR
+`URLStreamHandler` that allows `jar:` URLs to be constructed from
+Strings. This removes the previous requirement that all nested JAR URLs
+be created with a 'context'.
+
+To supported nested JARs the `java.protocol.handler.pkgs` system
+property is changed so that our custom URLHandler is picked for 'jar'
+protocols in preference to the Java default.
+
+Fixes gh-269

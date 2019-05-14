@@ -1,0 +1,16 @@
+Support the usage of SocketOption when nio is used and the java versi… (#8085)
+
+* Support the usage of SocketOption when nio is used and the java version >= 7.
+
+Motivation:
+
+The JDK uses SocketOption since java7 to support configuration options on the underyling Channel. We should allow to create a ChannelOption from a given SocketOption if nio is used. This also allows us to expose the same featureset in terms of configuration as the java nio implementation does without any extra effort.
+
+Modifications:
+
+- Add NioChannelOption which allows to wrap an existing SocketOption which then can be applied to the nio transport.
+- Add test-cases
+
+Result:
+
+Support the same configuration options as the JDK. Also fixes https://github.com/netty/netty/issues/8072.

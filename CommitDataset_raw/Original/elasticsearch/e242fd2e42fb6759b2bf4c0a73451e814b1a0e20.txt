@@ -1,0 +1,12 @@
+CCR: Add TransportService closed to retryable errors (#34722)
+
+Both testFollowIndexAndCloseNode and testFailOverOnFollower failed
+because they responded to the FollowTask a TransportService closed
+exception which is currently considered as a fatal error. This behavior
+is not desirable since a closing node can throw that exception, and we
+should retry in that case.
+
+This change adds TransportService closed error to the list of retryable
+errors.
+
+Closes #34694

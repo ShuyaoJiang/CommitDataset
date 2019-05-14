@@ -1,0 +1,6 @@
+[TEST] Fix RemoteClusterConnectionTests
+
+With PR #31574 we now ensure that connections are established under the proper
+thread context. There is a test in RemoteClusterConnectionTests, however,
+that shuts down the service while connecting. With the above change, a new kind
+of exception can occur that the test is unaware of.

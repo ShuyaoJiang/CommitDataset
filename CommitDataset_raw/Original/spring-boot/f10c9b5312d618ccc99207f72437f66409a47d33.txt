@@ -1,0 +1,15 @@
+Avoid race between file creation and its contents being written
+
+Previously, SampleIntegrationParentApplicationTests assumed that when
+an output file existed on disk its contents would have been written
+in their entirety. This assumption does not hold true and causes the
+test to fail intermittently as it incorrectly determines that the test
+has produced no output.
+
+This commit updates the test to wait for up to 30 seconds for the
+output files to appear on disk and for the expected content to be
+found in one of those files. If the files exist but do not
+contain the expected content the test will keep trying until it does
+or until too much time as elapsed.
+
+Fixes gh-2380

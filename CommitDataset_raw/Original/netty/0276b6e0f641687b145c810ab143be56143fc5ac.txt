@@ -1,0 +1,14 @@
+Ensure Thread can be collected in a timely manner if Recycler.Stack holds a reference to it.
+
+Motivation:
+
+In our Recycler implementation we store a reference to the current Thread in the Stack that is stored in a FastThreadLocal. The Stack itself is referenced in the DefaultHandle itself. A problem can arise if a user stores a Reference to an Object that holds a reference to the DefaultHandle somewhere and either not remove the reference at all or remove it very late. In this case the Thread itself can not be collected as its still referenced in the Stack that is referenced by the DefaultHandle.
+
+Modifications:
+
+- Use a WeakReference to store the reference to the Thread in the Stack
+- Add a test case
+
+Result:
+
+Ensure a Thread can be collected in a timely manner in all cases even if it used the Recycler.

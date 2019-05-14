@@ -1,0 +1,11 @@
+NetUtil.bytesToIpAddress bug
+
+Motivation:
+NetUtil.bytesToIpAddress does not correctly translate IPv4 address to String. Also IPv6 addresses may not follow minimization conventions when converting to a String (see rfc 5952).
+
+Modifications:
+- NetUtil.bytesToIpAddress should correctly handle negative byte values for IPv4
+- NetUtil.bytesToIpAddress should leverage existing to string conversion code in NetUtil
+
+Result:
+Fixes https://github.com/netty/netty/issues/5821

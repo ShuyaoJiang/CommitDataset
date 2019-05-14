@@ -1,0 +1,21 @@
+Prefix zip archives with 'spring-framework'
+
+Prior to this change, zip archives were named
+
+   spring-${version}-${classifier}.zip
+
+e.g.:
+ - spring-3.2.0.RC1-dist.zip
+ - spring-3.2.0.RC1-docs.zip
+ - spring-3.2.0.RC1-schema.zip
+
+This commit updates the Gradle build script to ensure that the fully-
+qualified 'spring-framework' name is used consistently, such that names
+follow the pattern
+
+   spring-framework-${version}-${classifier}.zip
+
+This includes the naming of the root-level directory within the -dist
+zip.
+
+Issue: SPR-9954

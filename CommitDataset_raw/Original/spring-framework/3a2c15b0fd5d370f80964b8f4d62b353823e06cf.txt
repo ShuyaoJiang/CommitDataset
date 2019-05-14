@@ -1,0 +1,7 @@
+Add flush method to ServerHttpResponse
+
+This is useful to make sure response headers are written to the
+underlying response. It is also useful in conjunction with long
+running, async requests and HTTP streaming, to ensure the Servlet
+response buffer is sent to the client without additional delay and
+also causes an IOException to be raised if the client has gone away.

@@ -1,0 +1,15 @@
+Print correct invalid character after unwrapping value in CookieEncoder
+
+Motivation:
+
+If a wrapped cookie value with an invalid charcater is passed to the strict
+encoder, an exception is thrown on validation but the error message contains
+a character at the wrong position.
+
+Modifications:
+
+Print `unwrappedValue.charAt(pos)` instead of `value.charAt(pos)`.
+
+Result:
+
+The exception indicates the correct invalid character in the unwrapped cookie.

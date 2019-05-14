@@ -1,0 +1,9 @@
+Remove PublishSubject Terminal State Behavior
+
+The PublishSubject implementation was performing onError/onCompleted unsubscribe logic that was put in place long ago and I am now pretty sure it was wrong.
+
+This was revealed while playing with `refCount` which intends on allowing a re-subscription to the source once new Observers arrive. PublishSubject was preventing that.
+
+The one use case that I'm still wondering about though is if someone subscribes to a PublishSubject after it has emitted onCompleted and isn't "restarted". That Observer would wait forever if it is a "single-shot" PublishSubject use case. I'm not sure if that's just a bad use and fits into the "don't do that" scenario, or if it's a legit issue that has a solution.
+
+Rightn now this code is "thread-safe" in the visibility sense, but it's not atomic and could have race conditions between adding/removing Observers and event notifications. I don't think that's an issue as if someone is concurrently adding/removing it's always a race, but am not 100% sure if there's a use case I'm missing. This also assumes (as it always did) that someone is not invoking onNext concurrently as that would break the Rx contract.

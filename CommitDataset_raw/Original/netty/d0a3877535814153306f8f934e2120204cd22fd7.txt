@@ -1,0 +1,13 @@
+Ensure trying to recover from exceptionCaught on the ServerChannel works as expected
+
+Motivation:
+
+When "Too many open files" happens,the URLClassLoader cannot do any classloading because URLClassLoader need a FD  for findClass. Because of this the anonymous inner class that is created to re-enable auto read may cause a problem.
+
+Modification:
+
+Pre-create Runnable that is scheduled and so ensure it is not lazy loaded.
+
+Result:
+
+No more problems when try to recover.

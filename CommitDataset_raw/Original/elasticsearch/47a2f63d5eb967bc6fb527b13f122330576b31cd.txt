@@ -1,0 +1,14 @@
+SQL: Be more careful with break and eof (elastic/x-pack-elasticsearch#4092)
+
+The SQL CLI was being a bit cavalier about `null`, `ctrl-c`, and
+`ctrl-d` while reading passwords to the point where it'd halt with
+an exception if the user hit `ctrl-d` while typing a password. This
+changes it so that the CLI will instead shut down if the user
+`ctrl-c`s or `ctrl-d`s while on the password prompt with an
+ENOPERM error code.
+
+This also fixes a packaging test failure I caused by a copy and paste
+error where the CLI was always enforcing things as though it was reading
+a password all the time. This error was causing packaging test failures.
+
+Original commit: elastic/x-pack-elasticsearch@a882c50fc71eab05db7654085befce62a366855f

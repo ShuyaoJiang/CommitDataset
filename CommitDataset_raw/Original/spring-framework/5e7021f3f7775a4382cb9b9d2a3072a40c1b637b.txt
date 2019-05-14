@@ -1,0 +1,75 @@
+Provide meta-annotation support in the TCF
+
+Spring 3.0 already allows component stereotypes to be used in a
+meta-annotation fashion, for example by creating a custom
+@TransactionalService stereotype annotation which combines
+@Transactional and @Service in a single, reusable, application-specific
+annotation. However, the Spring TestContext Framework (TCF) currently
+does not provide any support for test-related annotations to be used as
+meta-annotations.
+
+This commit overhauls the TCF with regard to how annotations are
+retrieved and adds explicit support for the following annotations to be
+used as meta-annotations in conjunction with the TCF.
+
+- @ContextConfiguration
+- @ContextHierarchy
+- @ActiveProfiles
+- @DirtiesContext
+- @IfProfileValue
+- @ProfileValueSourceConfiguration
+- @BeforeTransaction
+- @AfterTransaction
+- @TransactionConfiguration
+- @Rollback
+- @TestExecutionListeners
+- @Repeat
+- @Timed
+- @WebAppConfiguration
+
+Note that meta-annotation support for @Transactional was already
+available prior to this commit.
+
+The following is a summary of the major changes included in this commit.
+
+- Now using AnnotationUtils.getAnnotation() instead of
+  Class.getAnnotation() where appropriate in the TestContext Framework.
+- Now using AnnotationUtils.findAnnotation() instead of
+  Class.isAnnotationPresent() where appropriate in the TestContext
+  Framework.
+- Introduced findAnnotationPrefersInteracesOverLocalMetaAnnotations() in
+  AnnotationUtilsTests in order to verify the status quo.
+- AnnotationUtils.findAnnotationDeclaringClass() and
+  AnnotationUtils.findAnnotationDeclaringClassForTypes() now support
+  meta annotations.
+- Introduced MetaAnnotationUtils and AnnotationDescriptor in the
+  spring-test module.
+- Introduced UntypedAnnotationDescriptor in MetaAnnotationUtils.
+- Introduced findAnnotationDescriptorForTypes() in MetaAnnotationUtils.
+- ContextLoaderUtils now uses MetaAnnotationUtils for looking up
+  @ActiveProfiles as a potential meta-annotation.
+- TestContextManager now uses MetaAnnotationUtils for looking up
+  @TestExecutionListeners as a potential meta-annotation.
+- DirtiesContextTestExecutionListener now uses AnnotationUtils for
+  looking up @DirtiesContext as a potential meta-annotation.
+- Introduced DirtiesContextTestExecutionListenerTests.
+- ProfileValueUtils now uses AnnotationUtils for looking up
+  @IfProfileValue and @ProfileValueSourceConfiguration as potential
+  meta-annotations.
+- @BeforeTransaction and @AfterTransaction now support ANNOTATION_TYPE
+  as a target, allowing them to be used as meta-annotations.
+- TransactionalTestExecutionListener now uses AnnotationUtils for
+  looking up @BeforeTransaction, @AfterTransaction, @Rollback, and
+  @TransactionConfiguration as potential meta-annotations.
+- Introduced TransactionalTestExecutionListenerTests.
+- @Repeat and @Timed now support ANNOTATION_TYPE as a target, allowing
+  them to be used as meta-annotations.
+- SpringJUnit4ClassRunner now uses AnnotationUtils for looking up
+  @Repeat and @Timed as potential meta-annotations.
+- Moved all remaining logic for building the MergedContextConfiguration
+  from the DefaultTestContext constructor to
+  ContextLoaderUtils.buildMergedContextConfiguration().
+- Verified meta-annotation support for @WebAppConfiguration and
+  @ContextConfiguration.
+
+Issue: SPR-7827

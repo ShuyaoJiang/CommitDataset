@@ -1,0 +1,10 @@
+Require a field when a `seed` is provided to the `random_score` function. (#25594)
+
+We currently use fielddata on the `_id` field which is trappy, especially as we
+do it implicitly. This changes the `random_score` function to use doc ids when
+no seed is provided and to suggest a field when a seed is provided.
+
+For now the change only emits a deprecation warning when no field is supplied
+but this should be replaced by a strict check on 7.0.
+
+Closes #25240

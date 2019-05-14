@@ -1,0 +1,10 @@
+Avoid starting identical requests.
+
+If a request is already in progress we should only
+cancel and restart it if the new request differs
+from the in progress request in some way. Prior
+to this change, we always cleared and restarted 
+requests without checking to see if the request
+parameters had changed. 
+
+Progress toward #2194.

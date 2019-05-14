@@ -1,0 +1,12 @@
+OpenSslEngine with no finalizer
+
+Motivation:
+OpenSslEngine and OpenSslContext currently rely on finalizers to ensure that native resources are cleaned up. Finalizers require the GC to do extra work, and this extra work can be avoided if the user instead takes responsibility of releasing the native resources.
+
+Modifications:
+- Make a base class for OpenSslENgine and OpenSslContext which does not have a finalizer but instead implements ReferenceCounted. If this engine is inserted into the pipeline it will be released by the SslHandler
+- Add a new SslProvider which can be used to enable this new feature
+
+Result:
+Users can opt-in to a finalizer free OpenSslEngine and OpenSslContext.
+Fixes https://github.com/netty/netty/issues/4958

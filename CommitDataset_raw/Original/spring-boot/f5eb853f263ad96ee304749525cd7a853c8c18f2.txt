@@ -1,0 +1,13 @@
+Update web starter to depend on validator starter
+
+Previously, the web starter declared direct dependencies on Hibernate Validator
+and the Jakarta EE validation API. This meant that it required two exclusions to
+exclude validation from a web application that did not need it.
+
+This commit updates the web starter to get its validation dependencies via a
+dependency on the validation starter. This allows validation to be excluded
+using a single exclusion. The EL dependency from the validation starter has
+been excluded to allow the EL implementation from the underlying container
+starter (Tomcat, Jetty, or Undertow) to continue to be used instead.
+
+Closes gh-16176

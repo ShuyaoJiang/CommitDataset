@@ -1,0 +1,14 @@
+Optimize DefaultChannelPipeline in terms of memory usage and initialization time
+
+Motivation:
+Each of DefaultChannelPipeline instance creates an head and tail that wraps a handler. These are used to chain together other DefaultChannelHandlerContext that are created once a new ChannelHandler is added. There are a few things here that can be improved in terms of memory usage and initialization time.
+
+Modification:
+- Only generate the name for the tail and head one time as it will never change anyway
+- Rename DefaultChannelHandlerContext to AbstractChannelHandlerContext and make it abstract
+- Create a new DefaultChannelHandlerContext that is used when a ChannelHandler is added to the DefaultChannelPipeline
+- Rename TailHandler to TailContext and HeadHandler to HeadContext and let them extend AbstractChannelHandlerContext. This way we can save 2 object creations per DefaultChannelPipeline
+
+ Result:
+- Less memory usage because we have 2 less objects per DefaultChannelPipeline
+- Faster creation of DefaultChannelPipeline as we not need to generate the name for the head and tail

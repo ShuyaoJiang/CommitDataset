@@ -1,0 +1,22 @@
+Throw exceptions outside the native code
+
+Rebased and cleaned-up based on the work by @normanmaurer
+
+Motivation:
+
+Currently, IOExceptions and ClosedChannelExceptions are thrown from
+inside the JNI methods. Instantiation of Java objects inside JNI code is
+an expensive operation, needless to say about filling stack trace for
+every instantiation of an exception.
+
+Modifications:
+
+Change most JNI methods to return a negative value on failure so that
+the exceptions are instantiated outside the native code.
+
+Also, pre-instantiate some commonly-thrown exceptions for better
+performance.
+
+Result:
+
+Performance gain

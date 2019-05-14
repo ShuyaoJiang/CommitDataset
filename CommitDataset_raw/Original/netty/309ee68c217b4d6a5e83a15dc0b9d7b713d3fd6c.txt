@@ -1,0 +1,25 @@
+Fix a race condition in DefaultPromise
+
+.. which occurs when a user adds a listener from different threads after the promise is done and the notifications for the listeners, that were added before the promise is done, is in progress.  For instance:
+
+   Thread-1: p.addListener(listenerA);
+   Thread-1: p.setSuccess(null);
+   Thread-2: p.addListener(listenerB);
+   Thread-2: p.executor.execute(taskNotifyListenerB);
+   Thread-1: p.executor.execute(taskNotifyListenerA);
+
+taskNotifyListenerB should not really notify listenerB until taskNotifyListenerA is finished.
+
+To fix this issue:
+
+- Change the semantic of (listeners == null) to determine if the early
+  listeners [1] were notified
+- If a late listener is added before the early listeners are notified,
+  the notification of the late listener is deferred until the early
+  listeners are notified (i.e. until listeners == null)
+- The late listeners with deferred notifications are stored in a lazily
+  instantiated queue to preserve ordering, and then are notified once
+  the early listeners are notified.
+
+[1] the listeners that were added before the promise is done
+[2] the listeners that were added after the promise is done

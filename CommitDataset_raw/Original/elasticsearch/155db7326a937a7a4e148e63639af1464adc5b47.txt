@@ -1,0 +1,3 @@
+_reroute's retry_failed flag should reset failure counter (#25888)
+
+To protect against poisonous situations, ES will only try to allocate a shard 5 times (by default). After 5 consecutive failures, ES will stop assigning the shard and wait for an operator to fix the problem. Once the problem is fixed, the operator is expected to call `_reroute` with a `retry_failed` flag to force retrying of those shards. Currently that retry flag is only used for a single allocation run. However, if not all shards can be allocated at once (due to throttling) the operator has to keep on calling the API until all shards are assigned which is cumbersome. This PR changes the behavior of the flag to reset the failed allocations counter and this allowing shards to be assigned again.

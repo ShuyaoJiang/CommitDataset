@@ -1,0 +1,13 @@
+[#4316] Ensure pending tasks are run when EmbeddedChannel.close(...) or disconnect(...) is called.
+
+Motivation:
+
+We missed to run all pending tasks when EmbeddedChannel.close(...) or disconnect(...) was called. Because of this channelInactive(...) / channelUnregistered(...) of the handlers were never called.
+
+Modifications:
+
+Correctly run all pending tasks and cancel all not ready scheduled tasks when close or disconnect was called.
+
+Result:
+
+Correctly run tasks on close / disconnect and have channelInactive(...) / channelUnregistered(...) called.

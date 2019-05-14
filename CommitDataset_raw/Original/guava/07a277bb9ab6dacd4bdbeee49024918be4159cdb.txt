@@ -1,0 +1,22 @@
+Roll back most of the rest of CL 100047098 (the javatests/... parts, since I got java/... in 100850485).
+
+Leave a few tests suppressed:
+- the "relies on assumptions about OpenJDK" Maps tests
+- TreeMultisetTest#testElementSetBridgeMethods
+- ForwardingMultisetTest#testElementSet
+- ImmutableTableTest#testOverflowCondition
+
+*** Reason for rollback ***
+
+Nested test classes now work under Android: []
+*** Original change description ***
+
+Spray @SuppressUnderAndroid on everything related to suite builders and nested test classes.
+Also:
+- Work around Android toArray() bug in UnmodifiableCollectionTests.
+- Stop referring to NavigableMapTestSuiteBuilder / ListTestSuiteBuilder in comments of ForwardingNavigableMapTest.java / ListsTest.java. The reference impedes the import stripper.
+
+***
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=101455645

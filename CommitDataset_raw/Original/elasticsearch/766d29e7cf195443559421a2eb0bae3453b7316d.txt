@@ -1,0 +1,13 @@
+Correctly encode warning headers
+
+The warnings headers have a fairly limited set of valid characters
+(cf. quoted-text in RFC 7230). While we have assertions that we adhere
+to this set of valid characters ensuring that our warning messages do
+not violate the specificaion, we were neglecting the possibility that
+arbitrary user input would trickle into these warning headers. Thus,
+missing here was tests for these situations and encoding of characters
+that appear outside the set of valid characters. This commit addresses
+this by encoding any characters in a deprecation message that are not
+from the set of valid characters.
+
+Relates #27269

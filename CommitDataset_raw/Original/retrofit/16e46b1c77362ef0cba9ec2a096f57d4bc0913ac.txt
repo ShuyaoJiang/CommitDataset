@@ -1,0 +1,13 @@
+Refactorings (#2789)
+
+* Encapsulate ServiceMethod creation inside the type
+
+This will allow subtypes to be returned in the future.
+
+* Rename one-letter type parameters to be more descriptive
+
+Fun fact: this type and its builder were using R and T to mean the opposite things. :facepalm:
+
+* Make the ServiceMethod entirely responsible for invocation
+
+This way a base class can be exposed to the reflection-y bits and subtypes for different styles of requests can be implemented as subtypes.

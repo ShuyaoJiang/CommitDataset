@@ -1,0 +1,9 @@
+SQL: Perform lazy evaluation of mismatched mappings (#35676)
+
+Move away from performing eager, fail-fast validation of mismatched
+ mapping to a lazy evaluation based on the fields actually used in the
+ query. This allows queries to run on the parts of the indices that
+ "work" which is not just convenient but also a necessity for large
+ mappings (like logging) where alignment is hard/impossible to achieve.
+
+Fix #35659

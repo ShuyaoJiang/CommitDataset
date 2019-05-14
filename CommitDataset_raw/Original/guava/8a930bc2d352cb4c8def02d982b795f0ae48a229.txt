@@ -1,0 +1,9 @@
+Allow Funnel<? super T> for BloomFilter.readFrom()
+
+This brings readFrom() in line with create() (as well as the protected constructor that readFrom() delegates to) in accepting Funnel<? super T>.  The existing Funnel<T> requirement is needlessly strict, given that a Funnel<T> is a consumer of T so any Funnel<? super T> should be acceptable.
+
+Relaxing this allows, for example, reconstructing a BloomFilter<String> that uses a Funnel<CharSequence> such as Funnels.unencodedCharsFunnel().
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=148122926

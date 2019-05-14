@@ -1,0 +1,16 @@
+Make Spring Security's filter's order configurable and default to zero
+
+Previously, Spring Security's filter had no configured order. Due to
+the use of AnnotationAwareOrderComparater this meant that its order
+defaulted to LOWEST_PRECEDENCE. This meant that a user had to declare
+a FilterRegistrationBean for the filter and explicitly set its order
+if they want another filter to run after Spring Security's.
+
+This commit updates the security auto-configuration to assign a
+default order of zero to Spring Security's filter, allowing filters
+to be easily configured to run before it or after it. This default
+value can overridden using the server.filter-order property. The
+default order is also exposed as a constant on SecurityProperties,
+allowing it to be referenced from other filter declarations.
+
+Closes gh-1640

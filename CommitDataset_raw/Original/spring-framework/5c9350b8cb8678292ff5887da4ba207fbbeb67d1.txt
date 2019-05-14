@@ -1,0 +1,24 @@
+Support @EnabledIf & @DisabledIf w/o loading ApplicationContext
+
+Prior to this commit, when using @EnabledIf or @DisabledIf in Spring's
+JUnit Jupiter support, the test's ApplicationContext was always eagerly
+loaded, even if the ApplicationContext would never be used (i.e., the
+test was disabled). This behavior can lead to undesirable side effects
+-- for example, attempting to load an application context that requires
+services only available on the CI server when the test is not actually
+running on the CI server.
+
+This commit addresses this issue by introducing new boolean
+`loadContext` flags in @EnabledIf and @DisabledIf. By default these
+flags are set to false which means that the user's test application
+context will not be loaded to evaluate the expression. On the contrary,
+a dummy application context will be loaded instead, and expressions
+will be evaluated against that dummy context. Consequently, if the user
+wishes to interact with properties from the Spring Environment or with
+beans from the test application context, the `loadContext` must be
+explicitly set to true.
+
+In addition, expressions which evaluate to a String must now evaluate
+to exactly "true" or "false" (ignoring case and surrounding whitespace).
+
+Issue: SPR-14649

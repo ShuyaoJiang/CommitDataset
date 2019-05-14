@@ -1,0 +1,3 @@
+Trim down usages of `ShardOperationFailedException` interface (#28312)
+
+In many cases we use the `ShardOperationFailedException` interface to abstract an exception that can only be of one type, namely `DefaultShardOperationException`. There is no need to use the interface in such cases, the concrete type should be used instead. That has the additional advantage of simplifying parsing such exceptions back from rest responses for the high-level REST client

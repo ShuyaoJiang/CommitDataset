@@ -1,0 +1,24 @@
+Address license state update/read thread safety (#33396)
+
+This change addresses some issues regarding thread safety around
+updates and method calls on the XPackLicenseState object. There exists
+a possibility that there could be a concurrent update to the
+XPackLicenseState when there is a scheduled check to see if the license
+is expired and a cluster state update. In order to address this, the
+update method now has a synchronized block where member variables are
+updated. Each method that reads these variables is now also
+synchronized.
+
+Along with the above change, there was a consistency issue around
+security calls to the license state. The majority of security checks
+make two calls to the license state, which could result in incorrect
+behavior due to the checks being made against different license states.
+The majority of this behavior was introduced for 6.3 with the inclusion
+of x-pack in the default distribution. In order to resolve the majority
+of these cases, the `isSecurityEnabled` method is no longer public and
+the logic is also included in individual methods about security such as
+`isAuthAllowed`. There were a few cases where this did not remove
+multiple calls on the license state, so a new method has been added
+which creates a copy of the current license state that will not change.
+Callers can use this copy of the license state to make decisions based
+on a consistent view of the license state.

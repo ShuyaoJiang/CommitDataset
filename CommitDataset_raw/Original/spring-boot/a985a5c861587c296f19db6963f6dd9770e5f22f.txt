@@ -1,0 +1,13 @@
+Update @MockBean to support generics
+
+Update @MockBean and @SpyBean to support field generics. Prior to this
+commit the following fields would fail with a "Duplicate mock
+definition" exception:
+
+  @MockBean
+  private IdentityProvider<PasswordIdentity> passwordIdentityProvider;
+
+  @MockBean
+  private IdentityProvider<Oauth2Identity> oauth2IdentityProvider;
+
+Fixes gh-6602

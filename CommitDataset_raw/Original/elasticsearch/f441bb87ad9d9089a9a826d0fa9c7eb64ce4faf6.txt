@@ -1,0 +1,22 @@
+SQL: Fix result column names for arithmetic functions (#33500)
+
+Previously, when an arithmetic function got applied on a
+table column in the `SELECT` clause, the name of the result
+column contained weird characters used internally when
+processing the SQL statement e.g.:
+
+  SELECT CHAR(emp_no % 10000) FROM "test_emp"
+
+returned:
+
+  CHAR((emp_no{f}#14) % 10000))
+
+as the column name instead of:
+
+  CHAR((emp_no) % 10000))
+
+Also, fix an issue that causes a ClassCastException to be thrown
+when using functions where both arguments are literals.
+
+Closes #31869
+Closes #33461

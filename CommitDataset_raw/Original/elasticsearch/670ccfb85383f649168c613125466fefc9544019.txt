@@ -1,0 +1,11 @@
+Handle missing user in user privilege APIs (#34575)
+
+For user/_has_privileges and user/_privileges, handle the case where
+there is no user in the security context. This is likely to indicate
+that the server is running with a basic license, in which case the
+action will be rejected with a non-compliance exception (provided
+we don't throw a NPE).
+
+The implementation here is based on the _authenticate API.
+
+Resolves: #34567

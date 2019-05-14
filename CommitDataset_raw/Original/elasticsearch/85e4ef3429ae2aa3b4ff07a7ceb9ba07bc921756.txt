@@ -1,0 +1,7 @@
+Scripting: Reflect factory signatures in painless classloader (#34088)
+
+It is sometimes desirable to pass a class into a script constructor that
+will not actually be exposed in the script whitelist. This commit uses
+reflection when creating the compiler to find all the classes of the
+factory method signature, and make the classloader that wraps lookup
+also expose these classes.

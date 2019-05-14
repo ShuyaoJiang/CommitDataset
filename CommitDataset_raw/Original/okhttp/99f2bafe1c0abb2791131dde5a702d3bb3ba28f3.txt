@@ -1,0 +1,10 @@
+Fix isClosed() when a cache has not been initialized
+
+isClosed() now means "has close() been called", after
+commit ea565b2e30e15cd52ddfc2ddc6db4ea8f1c3de88
+it meant "has not been initialized or close() has been
+called".
+
+Introduced explicit closed state. Minor tweak to use
+initialized state to determine whether cleanup will
+do anything. Added a test.

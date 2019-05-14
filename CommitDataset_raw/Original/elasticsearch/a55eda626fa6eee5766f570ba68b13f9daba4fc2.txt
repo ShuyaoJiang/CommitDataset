@@ -1,0 +1,11 @@
+Plugins: Store elasticsearch and java versions in PluginInfo (#28556)
+
+Plugin descriptors currently contain an elasticsearch version,
+which the plugin was built against, and a java version, which the plugin
+was built with. These versions are read and validated, but not stored.
+This commit keeps them in PluginInfo so they can be used later.
+While seeing the elasticsearch version is less interesting (since it is
+enforced to match that of the running elasticsearc node), the java
+version is interesting since we only validate the format, not the actual
+version. This also makes PluginInfo have full parity with the plugin
+properties file.

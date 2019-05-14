@@ -1,0 +1,10 @@
+Limit the number of concurrent requests per node (#31206)
+
+With `max_concurrent_shard_requests` we used to throttle / limit
+the number of concurrent shard requests a high level search request
+can execute per node. This had several problems since it limited the
+number on a global level based on the number of nodes. This change
+now throttles the number of concurrent requests per node while still
+allowing concurrency across multiple nodes.
+
+Closes #31192

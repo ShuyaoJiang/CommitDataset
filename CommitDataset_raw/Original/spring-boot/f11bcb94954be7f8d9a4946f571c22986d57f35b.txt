@@ -1,0 +1,18 @@
+Register Module beans with Jackson2ObjectMapperBuilder
+
+Prior to this commit, Module beans were registered with all
+ObjectMapper beans, but were not registered with the auto-configured
+Jackson2ObjectMapperBuilder. This meant that any ObjectMapper created
+with the builder but not exposed as a bean would not have the Module
+beans registered with it. One such ObjectMapper is the one used by the
+auto-configured MappingJackson2XmlHttpMessageConverter. This caused
+XML (de)serialization to be different to JSON (de)serialization.
+
+This commit updates JacksonAutoConfiguration to register all of the
+application context's Module beans with the auto-configured
+Jackson2ObjectMapperBuilder. This ensures consistent configuration
+of any ObjectMapper that's created using the builder, irrespective of
+whether or not that ObjectMapper is also exposed as a bean, and
+also ensures that (de)serialization of JSON and XML is consistent.
+
+See gh-2327

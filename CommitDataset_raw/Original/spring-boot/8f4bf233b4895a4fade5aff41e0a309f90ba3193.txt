@@ -1,0 +1,13 @@
+Update configuration properties to use Duration
+
+Update appropriate configuration properties to use the `Duration`
+type, rather than an ad-hoc mix of milliseconds or seconds.
+
+Configuration properties can now be defined in a consistent and readable
+way. For example `server.session.timeout=5m`.
+
+Properties that were previously declared using seconds are annotated
+with `@DurationUnit` to ensure a smooth upgrade experience. For example
+`server.session.timeout=20` continues to mean 20 seconds.
+
+Fixes gh-11080

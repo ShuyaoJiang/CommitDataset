@@ -1,0 +1,33 @@
+Introduce Application Privileges with support for Kibana RBAC (#32309)
+
+This commit introduces "Application Privileges" to the X-Pack security
+model.
+
+Application Privileges are managed within Elasticsearch, and can be
+tested with the _has_privileges API, but do not grant access to any
+actions or resources within Elasticsearch. Their purpose is to allow
+applications outside of Elasticsearch to represent and store their own
+privileges model within Elasticsearch roles.
+
+Access to manage application privileges is handled in a new way that
+grants permission to specific application names only. This lays the
+foundation for more OLS on cluster privileges, which is implemented by
+allowing a cluster permission to inspect not just the action being
+executed, but also the request to which the action is applied.
+To support this, a "conditional cluster privilege" is introduced, which
+is like the existing cluster privilege, except that it has a Predicate
+over the request as well as over the action name.
+
+Specifically, this adds
+- GET/PUT/DELETE actions for defining application level privileges
+- application privileges in role definitions
+- application privileges in the has_privileges API
+- changes to the cluster permission class to support checking of request
+  objects
+- a new "global" element on role definition to provide cluster object
+  level security (only for manage application privileges)
+- changes to `kibana_user`, `kibana_dashboard_only_user` and
+  `kibana_system` roles to use and manage application privileges
+
+Closes #29820
+Closes #31559

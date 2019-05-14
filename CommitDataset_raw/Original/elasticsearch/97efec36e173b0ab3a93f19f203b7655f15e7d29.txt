@@ -1,0 +1,11 @@
+fix RethrottleTests retry (#38978)
+
+the RethrottleTests assumed that tasks that were
+unprepared to rethrottle would bubble up into the
+Rethrottle response as an ElasticsearchException
+wrapping an IllegalArgumentException. This seems to
+have changed to potentially involve further levels of
+wrapping.
+
+This change makes the retry logic more resilient to
+arbitrary nesting of the underlying IllegalArgumentException

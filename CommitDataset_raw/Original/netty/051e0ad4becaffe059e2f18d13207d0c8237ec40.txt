@@ -1,0 +1,19 @@
+Add support for IP_TRANSPARENT socket option
+
+Motivation:
+
+This allows netty to operate in 'transparent proxy' mode, intercepting connections
+to other addresses by means of Linux firewalling rules, as per
+
+https://www.kernel.org/doc/Documentation/networking/tproxy.txt
+
+The original destination address can be obtained by referencing
+ch.localAddress().
+
+Modification:
+
+Add methods similar to those for ipFreeBind, to set the IP_TRANSPARENT option.
+
+Result:
+
+Allows setting and getting of the IP_TRANSPARENT option, which allows retrieval of the ultimate socket address originally requested.

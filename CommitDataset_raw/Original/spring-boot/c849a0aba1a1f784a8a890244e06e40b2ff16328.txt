@@ -1,0 +1,11 @@
+Cache /health response irrespective of sensitivity and security
+
+Previously, the response from /health was not cached if the request
+was secure, i.e. the user has authenticated, or the endpoint was
+configured as not being sensitive. 
+
+The commit updates HealthMvcEndpoint to apply the caching logic
+all the time. Users that do not want caching can disable it by 
+configuring the TTL with a value of zero.
+
+Closes gh-2630

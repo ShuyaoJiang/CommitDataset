@@ -1,0 +1,8 @@
+Prevent constructing index template without patterns (#27662)
+
+Today, we prevent the system from storing a broken index template in the
+transport layer, however we don't prevent this in XContent. A broken
+index template can break the whole cluster state.
+
+This commit attempts to prevent the system from constructing an index
+template without a proper index patterns.

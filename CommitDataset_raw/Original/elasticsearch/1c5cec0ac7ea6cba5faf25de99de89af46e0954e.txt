@@ -1,0 +1,7 @@
+Remove http status code maps (#31350)
+
+Currently we maintain a compatibility map of http status codes in both
+the netty4 and nio modules. These maps convert a RestStatus to a netty
+HttpResponseStatus. However, as these fundamentally represent integers,
+we can just use the netty valueOf method to convert a RestStatus to a
+HttpResponseStatus.

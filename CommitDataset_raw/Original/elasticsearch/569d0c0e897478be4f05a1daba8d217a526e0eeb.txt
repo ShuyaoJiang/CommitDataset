@@ -1,0 +1,14 @@
+Improve similarity integration. (#29187)
+
+This improves the way similarities are plugged in in order to:
+ - reject the classic similarity on 7.x indices and emit a deprecation
+   warning otherwise
+ - reject unkwown parameters on 7.x indices and emit a deprecation
+   warning otherwise
+
+Even though this breaks the plugin API, I'd like to backport to 7.x so
+that users can get deprecation warnings when they are doing something
+that will become unsupported in the future.
+
+Closes #23208
+Closes #29035

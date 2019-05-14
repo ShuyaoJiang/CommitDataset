@@ -1,0 +1,16 @@
+Allow repackage maven goal to take a source classifier
+
+Previously, the "classifier" attribute was only used to determine the
+target classifier of the repackaged archive, always using the main
+artifact as the source.
+
+This commit changes the semantic of the attribute so that an existing
+archive matching the "classifier" attribute can be used as source,
+replacing the archive the same way the goal replaces the main archive
+if no classifier is found.
+
+If no artifact with the specified classifier exists, the repackaged
+archive is still processed based on the main archive and attached to
+the lifecycle using the value of the classifier attribute.
+
+See gh-11061

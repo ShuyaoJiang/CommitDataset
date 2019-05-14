@@ -1,0 +1,18 @@
+SslHandler unwrap out of order promise/event notificaiton
+
+Motivation:
+SslHandler#decode methods catch any exceptions and attempt to wrap
+before shutting down the engine. The intention is to write any alerts
+which the engine may have pending. However the wrap process may also
+attempt to write user data, and may also complete the associated
+promises. If this is the case, and a promise listener closes the channel
+then SslHandler may later propagate a SslHandshakeCompletionEvent user
+event through the pipeline. Since the channel has already been closed
+the user may no longer be paying attention to user events.
+
+Modifications:
+- Sslhandler#decode should first fail the associated handshake promise
+and propagate the SslHandshakeCompletionEvent before attempting to wrap
+
+Result:
+Fixes https://github.com/netty/netty/issues/7639

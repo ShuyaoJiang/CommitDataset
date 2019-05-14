@@ -1,0 +1,8 @@
+[Zen2] Reduce cluster scope in NodeDisconnectIT (#36168)
+
+This test suite can stop all the shared master-eligible nodes, which breaks the
+cluster since any non-shared master-eligible nodes are stopped first in the
+reset process between tests.
+
+Since this test suite can leave the cluster in this somewhat broken state, it
+seems best that it uses a new cluster for each test.

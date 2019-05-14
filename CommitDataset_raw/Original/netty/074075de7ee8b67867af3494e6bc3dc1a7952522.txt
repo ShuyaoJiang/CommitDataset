@@ -1,0 +1,13 @@
+Expose channel pool configuration to subclasses.
+
+Motivation:
+
+`SimpleChannelPool` subclasses are likely to override the `connectChannel` method, and are likely to clobber the cloned `Bootstrap` handler in the process. To allow subclasses to properly notify the pool listener of new connections, we should expose (at least) the `handler` property of the pool to subclasses.
+
+Modifications:
+
+Expose `SimpleChannelPool` properties to subclasses via `protected` getters.
+
+Result:
+
+Subclasses can now use the bootstrap, handler, health checker, and health-check-on-release preoperties from their superclass.

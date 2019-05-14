@@ -1,0 +1,13 @@
+Allow to build netty when sun.misc.Unsafe is not avaible or -Dio.netty.noUnsafe=true is used.
+
+Motivation:
+
+We support using Netty without sun.misc.Unsafe, so we should also support building it without it. This way we can also run all tests without sun.misc.Unsafe and so see if it works as expected.
+
+Modifications:
+
+Correctly skip tests that depend on sun.misc.Unsafe if its not present or -Dio.netty.noUnsafe=true is used.
+
+Result:
+
+Be able to build netty without sun.misc.Unsafe

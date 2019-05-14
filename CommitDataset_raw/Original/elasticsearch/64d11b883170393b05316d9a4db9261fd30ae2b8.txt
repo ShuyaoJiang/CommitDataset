@@ -1,0 +1,10 @@
+Fix race condition in RemoteClusterConnection node supplier (#25432)
+
+This commit fixes a race condition in the node supplier used by the RemoteClusterConnection. The
+node supplier stores an iterator over a set backed by a ConcurrentHashMap, but the get operation
+of the supplier uses multiple methods of the iterator and is suceptible to a race between the
+calls to hasNext() and next(). The test in this commit fails under the old implementation with a
+NoSuchElementException. This commit adds a wrapper object over a set and a iterator, with all methods
+being synchronized to avoid races. Modifications to the set result in the iterator being set to null
+and the next retrieval creates a new iterator.
+

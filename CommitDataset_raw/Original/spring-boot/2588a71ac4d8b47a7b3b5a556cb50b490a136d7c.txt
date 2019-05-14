@@ -1,0 +1,13 @@
+Auto-Configure HTTP ResourceFactories on servers
+
+This commit auto-configures HTTP resource factories on both Reactor
+Netty and Jetty server instances. This creates `ReactorResourceFactory`
+and `JettyResourceFactory` beans when necessary - those beans can be
+reused and applied by the client auto-configuration in order to share
+resources between client and server for optimal performance.
+
+The server auto-configuration has the highest precedence, so from now
+on, the auto-configured ResourceFactory bean on the client side will be
+skipped if a reactive server is configured.
+
+Closes gh-14495

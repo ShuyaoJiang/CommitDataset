@@ -1,0 +1,13 @@
+Add a factory implementation for DiskCacheAdapter.
+
+We're trying to keep people from setting DiskCache implementations
+directly on Glide's Builder during initialization because creating
+caches often requires reading from Files and other expensive I/O. The
+method to set a disk cache is deprecated in favor of one that accepts a
+factory. Some people want to disable the disk cache entirely, so they
+use DiskCacheAdapter. Without a Factory, it's less obvious how they're
+supposed to do so if we remove the deprecated method.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=186049317

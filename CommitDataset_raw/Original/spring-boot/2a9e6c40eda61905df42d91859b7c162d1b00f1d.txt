@@ -1,0 +1,19 @@
+Fix logic for disabling plugins in CrshAutoConfiguration
+
+Plugin disabling logic was broken by e009d3e4. Prior to this change,
+a plugin would be disabled if it or any of the implemented interfaces
+in its inheritance hierarchy were configured as being disabled. The
+offending commit inverted the logic so that the plugin would be
+enabled if any part of it was NOT configured as being disabled.
+
+This commit restores the logic such that the early return happens only
+in the negative case.
+
+Previously, the tests were written as though
+PluginContext#getPlugin(Class) would consider the specified class
+against the runtime type of the plugin (not an unreasonable
+assumption); rather this method considers the broader 'plugin type'.
+This commit rewrites the test to seek by plugin type and assert the
+absence of the disabled plugins.
+
+Closes gh-5032

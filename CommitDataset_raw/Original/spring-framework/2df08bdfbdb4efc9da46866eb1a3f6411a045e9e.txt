@@ -1,0 +1,18 @@
+Rework split package detection code
+
+Allow packages to be split across projects which will be merged into a
+single JAR file.
+
+Make split package detection a dependency of the 'check' task. This
+is idiomatic gradle as well as allowing the 'test' task (another
+dependency of 'check') to be executed without split packages being
+detected.
+
+Omit the project spring-instructment-tomcat from the check on the basis
+of SPR-10150.
+
+Issues: SPR-9990, SPR-10150
+
+Conflicts:
+
+	build.gradle

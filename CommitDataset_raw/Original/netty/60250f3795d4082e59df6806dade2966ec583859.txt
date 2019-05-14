@@ -1,0 +1,14 @@
+Make DelegatingChannelPromiseNotifier use Vararg overload
+
+Motivation:
+ErrorProne complains that the array override doesn't match the
+vararg super call.  See http://errorprone.info/bugpattern/Overrides
+
+Additionally, almost every other Future uses the vararg form, so
+it would be stylistically consistent to keep it that way.
+
+Modifications:
+Use vararg override.
+
+Result:
+Cleaner, less naggy code.

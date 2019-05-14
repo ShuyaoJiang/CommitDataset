@@ -1,0 +1,13 @@
+Use SecureRandom.generateSeed() to generate ThreadLocalRandom's initialSeedUniquifier
+
+Motivation:
+
+Previously, we used SecureRandom.nextLong() to generate the initialSeedUniquifier.  This required more entrophy than necessary because it has to 1) generate the seed of SecureRandom first and then 2) generate a random long integer.  Instead, we can use generateSeed() to skip the step (2)
+
+Modifications:
+
+Use generateSeed() instead of nextLong()
+
+Result:
+
+ThreadLocalRandom requires less amount of entrphy to start up

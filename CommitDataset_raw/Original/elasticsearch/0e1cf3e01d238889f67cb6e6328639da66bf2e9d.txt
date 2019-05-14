@@ -1,0 +1,12 @@
+Allow IntegTestClusters to run with FIPS 140 JVMs (#39917)
+
+The changes in #39732 mean that nodes in the IntegTest clusters will
+now run with whichever java version is defined as `runtime.java` and
+not JAVA_HOME anymore.
+This means that these nodes will also run in JVM with fips approved
+mode enabled and as such, need to have access to the password for the
+BCFKS keystore that is used as the default keystore/truststore.
+
+This change sets the two necessary system properties.
+
+Resolves #39855

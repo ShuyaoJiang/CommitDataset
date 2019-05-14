@@ -1,0 +1,6 @@
+2 new tests for OnSubscribeToObservableFuture
+
+1) Creating an Observable from an already-cancelled Future should emit nothing (equivalent to Observable.never())
+   (it currently emits onError(CancellationException)
+2) Creating an Observable from a Future then unsubscribeing immediately before Future.get()
+   unblocks should be an Observable.never().  This test already passes.

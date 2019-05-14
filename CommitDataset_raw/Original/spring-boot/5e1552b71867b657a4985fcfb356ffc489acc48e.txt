@@ -1,0 +1,12 @@
+Retain default order in HttpMessageConverters
+
+The original fix for gh-1293 (commit 05e6af23) caused test failures due
+to the fact that Spring Boot's MappingJackson2HttpMessageConverter was
+added before Spring's default StringHttpMessageConverter.
+
+This commit changes the HttpMessageConverters logic so that additional
+converts are added just before any default converter of the same type.
+This allows additional converters to be added whilst still retaining
+the sensible ordering of the default converters.
+
+Fixes gh-1293

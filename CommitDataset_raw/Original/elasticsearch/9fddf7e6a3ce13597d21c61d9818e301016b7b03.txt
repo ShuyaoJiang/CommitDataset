@@ -1,0 +1,11 @@
+Fix race condition in scheduler engine test
+
+This commit addresses a race condition in the scheduler engine test that
+a listener that throws an exception does not cause other listeners to be
+skipped. The race here is that we were counting down a latch, and then
+throwing an exception yet an assertion that expected the exception to
+have been thrown already could execute after the latch was counted down
+for the final time but before the exception was thrown and acted upon by
+the scheduler engine. This commit addresses this by moving the counting
+down of the latch to definitely be after the exception was acted upon by
+the scheduler engine.

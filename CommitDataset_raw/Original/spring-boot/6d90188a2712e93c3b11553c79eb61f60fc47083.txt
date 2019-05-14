@@ -1,0 +1,13 @@
+Fix Maven/Gradle wrapper executable flag
+
+Spring Initalizr now bundles a wrapper script for the build system. While
+that wrapper has the necessary execute flag in the zip archive, that flag
+is lost as the zip abstraction does not honor those.
+
+The init command now makes sure to restore the execute flag on `mvnw`
+and `gradlew` if necessary.
+
+Unfortunately, this can't be tested as the Windows build would fail to
+assert that the executable flag has been propertly set.
+
+Closes gh-4392

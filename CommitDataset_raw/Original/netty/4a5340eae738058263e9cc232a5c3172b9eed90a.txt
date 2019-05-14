@@ -1,0 +1,13 @@
+Fix IndexOutOfBoundsException in HelloWorldHttp2Handler
+
+Motivation:
+
+We need to duplicate the buffer before passing it to writeBytes(...) as it will increase the readerIndex().
+
+Modifications:
+
+Call duplicate().
+
+Result:
+
+No more IndexOutOfBoundsException when runing the multiplex example.

@@ -1,0 +1,10 @@
+Remove EventExecutor.children
+
+Motivation:
+EventExecutor.children uses generics in such a way that an entire colleciton must be cast to a specific type of object. This interface is not very flexible and is impossible to implement if the EventExecutor type must be wrapped. The current usage of this method also does not have any clear need within Netty. The Iterator interface allows for EventExecutor to be wrapped and forces the caller to make assumptions about types instead of building the assumptions into the interface.
+
+Motivation:
+- Remove EventExecutor.children and undeprecate the iterator() interface
+
+Result:
+EventExecutor interface has one less method and is easier to wrap.

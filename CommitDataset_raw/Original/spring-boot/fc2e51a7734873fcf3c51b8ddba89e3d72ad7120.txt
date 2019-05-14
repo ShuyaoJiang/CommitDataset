@@ -1,0 +1,23 @@
+Preserve ordering when auto-configuring WebSocket MessageConverters
+
+Previously, WebSocketMessagingAutoConfiguration added a single
+additional converter. This was a MappingJackson2MessageConverter
+configured with the auto-configured ObjectMapper.
+AbstractMessageBrokerConfiguration places additional converters before
+any of the default converters. This meant that the auto-configuration
+had the unwanted side-effect of changing the ordering of the
+converters. A MappingJackson2MessageConverter was now first in the
+list, whereas, by default, it's last in the list after a
+StringMessageConverter and a ByteArrayMessageConverter.
+
+This commit updates WebSocketMessagingAutoConfiguration so that it
+switches off the registration of the default converters and registers
+a StringMessageConverter, ByteArrayMessageConverter and
+MappingJackson2MessageConverter in that order. A test has been
+added to verify that the types of these three converters match
+the types of the default converters. A second test that verifies
+that String responses are converted correctly has also been added
+alongside the existing test that verified the behaviour for JSON
+responses.
+
+Closes gh-5123

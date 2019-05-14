@@ -1,0 +1,11 @@
+ApplicationProtocolNegotiationHandler doesn't work with SniHandler
+
+Motivation:
+ApplicationProtocolNegotiationHandler attempts to get a reference to an SslHandler in handlerAdded, but when SNI is in use the actual SslHandler will be added to the pipeline dynamically at some later time. When the handshake completes ApplicationProtocolNegotiationHandler throws an IllegalStateException because its reference to SslHandler is null.
+
+Modifications:
+- Instead of saving a reference to SslHandler in handlerAdded just search the pipeline when the SslHandler is needed
+
+Result:
+ApplicationProtocolNegotiationHandler support SniHandler.
+Fixes https://github.com/netty/netty/issues/5066

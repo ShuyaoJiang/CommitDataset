@@ -1,0 +1,98 @@
+M1 cut of environment, profiles and property work (SPR-7508)
+
+Decomposed Environment interface into PropertySources, PropertyResolver
+objects
+
+    Environment interface and implementations are still present, but
+    simpler.
+
+    PropertySources container aggregates PropertySource objects;
+    PropertyResolver provides search, conversion, placeholder
+    replacement. Single implementation for now is
+    PropertySourcesPlaceholderResolver
+
+Renamed EnvironmentAwarePropertyPlaceholderConfigurer to
+PropertySourcesPlaceholderConfigurer
+
+    <context:property-placeholder/> now registers PSPC by default, else
+    PPC if systemPropertiesMode* settings are involved
+
+Refined configuration and behavior of default profiles
+
+    See Environment interface Javadoc for details
+
+Added Portlet implementations of relevant interfaces:
+
+    * DefaultPortletEnvironment
+    * PortletConfigPropertySource, PortletContextPropertySource
+    * Integrated each appropriately throughout Portlet app contexts
+
+Added protected 'createEnvironment()' method to AbstractApplicationContext
+
+    Subclasses can override at will to supply a custom Environment
+    implementation.  In practice throughout the framework, this is how
+    Web- and Portlet-related ApplicationContexts override use of the
+    DefaultEnvironment and swap in DefaultWebEnvironment or
+    DefaultPortletEnvironment as appropriate.
+
+Introduced "stub-and-replace" behavior for Servlet- and Portlet-based
+PropertySource implementations
+
+    Allows for early registration and ordering of the stub, then
+    replacement with actual backing object at refresh() time.
+
+    Added AbstractApplicationContext.initPropertySources() method to
+    support stub-and-replace behavior. Called from within existing
+    prepareRefresh() method so as to avoid impact with
+    ApplicationContext implementations that copy and modify AAC's
+    refresh() method (e.g.: Spring DM).
+
+    Added methods to WebApplicationContextUtils and
+    PortletApplicationContextUtils to support stub-and-replace behavior
+
+Added comprehensive Javadoc for all new or modified types and members
+
+Added XSD documentation for all new or modified elements and attributes
+
+    Including nested <beans>, <beans profile="..."/>, and changes for
+    certain attributes type from xsd:IDREF to xsd:string
+
+Improved fix for detecting non-file based Resources in
+PropertiesLoaderSupport (SPR-7547, SPR-7552)
+
+    Technically unrelated to environment work, but grouped in with
+    this changeset for convenience.
+
+Deprecated (removed) context:property-placeholder
+'system-properties-mode' attribute from spring-context-3.1.xsd
+
+    Functionality is preserved for those using schemas up to and including
+    spring-context-3.0.  For 3.1, system-properties-mode is no longer
+    supported as it conflicts with the idea of managing a set of property
+    sources within the context's Environment object. See Javadoc in
+    PropertyPlaceholderConfigurer, AbstractPropertyPlaceholderConfigurer
+    and PropertySourcesPlaceholderConfigurer for details.
+
+Introduced CollectionUtils.toArray(Enumeration<E>, A[])
+
+Work items remaining for 3.1 M2:
+
+    Consider repackaging PropertySource* types; eliminate internal use
+    of SystemPropertyUtils and deprecate
+
+    Further work on composition of Environment interface; consider
+    repurposing existing PlaceholderResolver interface to obviate need
+    for resolve[Required]Placeholder() methods currently in Environment.
+
+    Ensure configurability of placeholder prefix, suffix, and value
+    separator when working against an AbstractPropertyResolver
+
+    Add JNDI-based Environment / PropertySource implementatinos
+
+    Consider support for @Profile at the @Bean level
+
+    Provide consistent logging for the entire property resolution
+    lifecycle; consider issuing all such messages against a dedicated
+    logger with a single category.
+
+    Add reference documentation to cover the featureset.

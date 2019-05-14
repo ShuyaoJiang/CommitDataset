@@ -1,0 +1,12 @@
+Store offsets in index prefix fields when stored in the parent field (#29067)
+
+The index prefix field is normally indexed as docs-only, given that it cannot
+be used in phrases.  However, in the case that the parent field has been indexed
+with offsets, or has term-vector offsets, we should also store this in the index
+prefix field for highlighting.
+
+Note that this commit does not implement highlighting on prefix fields, but
+rather ensures that future work can implement this without a backwards-break
+in index data.
+
+Closes #28994

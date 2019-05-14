@@ -1,0 +1,10 @@
+Explicitly reject duplicate data paths
+
+Duplicate data paths already fail to work because we would attempt to
+take out a node lock on the directory a second time which will fail
+after the first lock attempt succeeds. However, how this failure
+manifests is not apparent at all and is quite difficult to
+debug. Instead, we should explicitly reject duplicate data paths to make
+the failure cause more obvious.
+
+Relates #25178

@@ -1,0 +1,13 @@
+Refactor reactive WebSocketClient contract
+
+Switch from returning Mono<WebSocketSession> to take a WebSocketHandler
+and return Mono<Void> for the entire session handling.
+
+The WebSocketHandler callback delimits the stard and end of protocol
+handling and forces the handler to operate within the scope of the
+Reactor operators.
+
+Give the full duplex nature of WebSockets, the symmetry between client
+and server (each now using WebSocketHandler) also seems appropriate.
+
+Issue: SPR-14527

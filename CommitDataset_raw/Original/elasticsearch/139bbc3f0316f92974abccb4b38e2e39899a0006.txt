@@ -1,0 +1,10 @@
+Rollup: Consolidate rollup cleanup for http tests (#34342)
+
+This moves the rollup cleanup code for http tests from the high level rest
+client into the test framework and then entirely removes the rollup cleanup
+code for http tests that lived in x-pack. This is nice because it
+consolidates the cleanup into one spot, automatically invokes the cleanup
+without the test having to know that it is "about rollup", and should allow
+us to run the rollup docs tests.
+
+Part of #34530

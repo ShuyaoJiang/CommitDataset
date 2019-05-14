@@ -1,0 +1,15 @@
+We should be able to use the ByteBuffer cleaner on java8 (and earlier… (#8234)
+
+* We should be able to use the ByteBuffer cleaner on java8 (and earlier versions) even if sun.misc.Unsafe is not present.
+
+Motivation:
+
+At the moment we have a hard dependency on sun.misc.Unsafe to use the Cleaner on Java8 and earlier. This is not really needed as we can still use pure reflection if sun.misc.Unsafe is not present.
+
+Modifications:
+
+Refactor Cleaner6 to fallback to pure reflection if sun.misc.Unsafe is not present on system.
+
+Result:
+
+More timely releasing of direct memory on Java8 and earlier when sun.misc.Unsafe is not present.

@@ -1,0 +1,12 @@
+AbstractChannel should call doClose even after shutdownOutput
+
+Motivation:
+ShutdownOutput now fails all pending writes in the ChannelOutboundBuffer and sets it to null. However the Close code path uses the ChannelOutboundBuffer as an indication that the close operation is in progress and exits early and will not call doClose. This will lead to the Channel not actually being fully closed.
+
+Bug introduced by 237a4da1b76ef7f303eca8f6ec8539efc9fe4d26
+
+Modifications:
+- AbstractChannel#close shouldn't exit early just because outboundBuffer is null, and instead should use additional state closeInitiated to avoid duplicate close operations
+
+Result:
+AbstractChannel#close(..) after AbstractChannel#shutdownOutbound() will still invoke doClose and cleanup Channel state.

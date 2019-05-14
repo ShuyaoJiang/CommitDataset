@@ -1,0 +1,22 @@
+Implement user-defined writability flags
+
+Related: #2945
+
+Motivation:
+
+Some special handlers such as TrafficShapingHandler need to override the
+writability of a Channel to throttle the outbound traffic.
+
+Modifications:
+
+Add a new indexed property called 'user-defined writability flag' to
+ChannelOutboundBuffer so that a handler can override the writability of
+a Channel easily.
+
+Result:
+
+A handler can override the writability of a Channel using an unsafe API.
+For example:
+
+  Channel ch = ...;
+  ch.unsafe().outboundBuffer().setUserDefinedWritability(1, false);

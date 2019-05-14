@@ -1,0 +1,10 @@
+Do not search locally if remote index pattern resolves to no indices (#25436)
+
+This commit changes how we determine if there were any remote indices that a search should have
+been executed against. Previously, we used the list of remote shard iterators but if the remote
+index pattern resolved to no indices there would be no remote shard iterators even though the
+request specified remote indices. The map of remote cluster names to the original indices is used
+instead so that we can determine if there were remote indices even when there are no remote shard
+iterators.
+
+Closes #25426

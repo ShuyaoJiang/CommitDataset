@@ -1,0 +1,20 @@
+Add support for Redis Sentinel configuration
+
+Spring Data Redis 1.4.0 introduced Redis Sentinel support. When
+specified, RedisConnectionFactory uses the Sentinel configuration to
+determine the current master.
+
+Sentinel configuration can be specified using two new properties:
+spring.redis.sentinel.master and spring.redis.sentinel.nodes.
+
+For example:
+
+spring.redis.sentinel.master=mymaster # name of redis server
+spring.redis.sentinel.nodes=127.0.0.1:26379,127.0.0.1:26380
+
+Alternatively, a bean of type RedisSentinelConfiguration can be declared
+and it will be used to configure the connection factory.
+
+Note: At this time, Sentinel support is only available for Jedis
+
+Closes gh-1337

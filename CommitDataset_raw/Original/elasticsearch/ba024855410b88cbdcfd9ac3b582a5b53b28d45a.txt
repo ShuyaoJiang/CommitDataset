@@ -1,0 +1,7 @@
+Make sure SortBuilders rewrite inner nested sorts (#26532)
+
+The three SortBuilders that can have inner NestedSortBuilders currently don't
+rewrite any of the filters contained in them. This change adds a rewrite method
+to NestedSortBuilder and changes rewriting in FieldSortBuilder,
+ScriptSortBuilder and GeoDistanceSortBuilder to make sure inner nested sorts get
+rewritten if they need to.

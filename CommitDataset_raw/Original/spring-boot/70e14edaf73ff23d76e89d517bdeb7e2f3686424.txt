@@ -1,0 +1,16 @@
+Work around incorrect layout of generated epub archive
+
+Previously, the Docbook Maven plugin would generate an epub archive
+with the majority of contents in OEBPS/, including content.opf, while
+the META-INF/container.xml file reference to content.opf in the root
+of the archive.
+
+This commit overrides the epub.oebps.dir variable to move the content
+into the root of the archive where it's expected to be. Implementing
+this override highlighted that our customization stylesheet was not
+being applied as the configuration property was incorrect (it was
+epubCustomnization rather than the required epub3Customization). This
+has been corrected along with a problem with missing images that
+fixing it revealed.
+
+Closes gh-11470

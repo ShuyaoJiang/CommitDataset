@@ -1,0 +1,14 @@
+Add support for HTTP/2 in Jetty with Conscrypt
+
+This commit configures Jetty for HTTP/2 support as soon as the following
+conditions are met:
+
+* `server.http2.enabled=true`
+* Both `org.eclipse.jetty:jetty-alpn-conscrypt-server` and
+`org.eclipse.jetty.http2:http2-server` are on classpath
+
+This will use the Conscrypt library for ALPN and TLS support using
+native libraries shipped within the Conscrypt uber Jar. This does not
+require a JVM agent or patching the JDK classes.
+
+Closes gh-10902

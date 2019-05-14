@@ -1,0 +1,13 @@
+Refine `messages.properties` detection
+
+Update `ResourceBundleCondition` to only enable the messages source
+if `messages.properties` (and not `messages*.properties`) exists. This
+operation is much faster that performing a pattern match since a full
+jar entry scan is not required.
+
+Since adding `messages.properties` is good practice and this change
+allows us to delete the custom `PathMatchingResourcePatternResolver`
+it seems like a fine compromise to make.
+
+Fixes gh-4930
+See gh-4811

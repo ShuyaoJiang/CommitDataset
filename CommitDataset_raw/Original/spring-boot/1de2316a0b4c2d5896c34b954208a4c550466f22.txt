@@ -1,0 +1,24 @@
+Refine validator and MVC validator configuration
+
+This commit ensures that a primary JSR 303 and Spring Validator will be
+exposed if the auto-configuration kicks in. As `LocalValidatorFactoryBean`
+exposes 3 contracts (JSR-303 `Validator` and `ValidatorFactory` as well as
+the `Spring` validator one), this makes sure that those types can be
+injected by type.
+
+`LocalValidatorFactoryBean` exposes 3 contracts and we're only checking
+for the absence of a `javax.validation.Validator` to auto-configure a
+`LocalValidatorFactoryBean`. If no standard JSR validator exists but a
+Spring's `Validator` exists and is primary, we shouldn't flag the
+auto-configured one as `@Primary`. Previous iterations on this feature
+have made sure that we'll auto-configure at most one
+`javax.validation.Validator` so not flagging it `@Primary` is no problem.
+
+This commit also restores and adds tests that validates
+`ValidationAutoConfiguration` will configure a JSR validator even if a
+Spring Validator is present.
+
+This effectively fixes gh-8495 in a different way.
+
+Closes gh-8979
+Closes gh-8976

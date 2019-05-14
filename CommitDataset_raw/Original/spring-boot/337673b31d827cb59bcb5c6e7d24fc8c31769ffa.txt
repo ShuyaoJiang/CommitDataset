@@ -1,0 +1,15 @@
+Support String values for factoryBeanObjectType attribute on bean def
+
+To allow us to determine the type that Spring Integration’s
+GatewayProxyFactoryBean will create, the bean definition created by
+MessagingGatewayRegistrar needs to set the factoryBeanObjectType
+attribute. The current implementation of BeanTypeRegistry requires the
+attribute’s value to be a Class, however this would require Spring
+Integration’s namespace handler to load the class and class loading
+should be avoided in namespace handlers.
+
+This commit updates BeanTypeRegistry so that it supports both Class and
+String values for the factoryBeanObjectType. If the value is a String
+it will interpret it as a class name and attempt to load it.
+
+See gh-2811

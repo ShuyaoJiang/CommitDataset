@@ -1,0 +1,37 @@
+Fix race in SslHandlerTest that could lead to NPE. (#7989)
+
+Motivation:
+
+SslHandlerTest tried to get access to the SslHandler in the pipeline via pipeline.get(...) which may return null if the channel was already closed and so the pipeline was teared down.
+
+This showed up in a test run as:
+
+```
+-------------------------------------------------------------------------------
+Test set: io.netty.handler.ssl.SslHandlerTest
+-------------------------------------------------------------------------------
+Tests run: 17, Failures: 0, Errors: 1, Skipped: 1, Time elapsed: 0.802 sec <<< FAILURE! - in io.netty.handler.ssl.SslHandlerTest
+testCloseOnHandshakeFailure(io.netty.handler.ssl.SslHandlerTest)  Time elapsed: 0.188 sec  <<< ERROR!
+java.lang.NullPointerException
+        at io.netty.handler.ssl.SslHandlerTest.testCloseOnHandshakeFailure(SslHandlerTest.java:640)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+        at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+        at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+        at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+        at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+        at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:298)
+        at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:292)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.lang.Thread.run(Thread.java:844)
+```
+
+Modifications:
+
+Use an AtomicReference to propagate the SslHandler instance to the outer scope.
+
+Result:
+
+No more NPE.

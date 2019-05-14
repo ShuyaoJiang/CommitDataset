@@ -1,0 +1,13 @@
+Add PooledSlicedByteBuf and PooledDuplicatedByteBuf
+
+Motivation:
+
+At the moment when calling slice(...) or duplicate(...) on a Pooled*ByteBuf a new SlicedByteBuf or DuplicatedByteBuf. This can create a lot of GC.
+
+Modifications:
+
+Add PooledSlicedByteBuf and PooledDuplicatedByteBuf which will be used when a PooledByteBuf is used.
+
+Result:
+
+Less GC.

@@ -1,0 +1,23 @@
+Ensure to generate identical NoOp for the same failure (#33141)
+
+We generate slightly different NoOps in InternalEngine and
+TransportShardBulkAction for the same failure.
+
+1. InternalEngine uses Exception#getFailure to generate a message
+without the class name: newOp [NoOp{seqNo=1, primaryTerm=1,
+reason='Contexts are mandatory in context enabled completion field
+[suggest_context]'}].
+
+2. TransportShardBulkAction uses Exception#toString to generate a
+message with the class name: NoOp{seqNo=1, primaryTerm=1,
+reason='java.lang.IllegalArgumentException: Contexts are mandatory in
+context enabled completion field [suggest_context]'}.
+
+If a write operation fails while a replica is recovering, that replica
+will possibly receive two different NoOps: one from recovery and one
+from replication. These two different NoOps will trip
+TranslogWriter#assertNoSeqNumberConflict assertion.
+
+This commit ensures that we generate the same Noop for the same failure.
+
+Closes #32986

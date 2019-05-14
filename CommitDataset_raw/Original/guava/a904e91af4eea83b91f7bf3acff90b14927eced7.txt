@@ -1,0 +1,22 @@
+Fix ClassPath by exposing Scanner for internal clients to customize.
+
+This change slows down CodeInspectionTest. But it exposes Scanner for it to extend and memorize the urls.
+
+Basically, the test should create its own ClassInfo class (name + url).
+
+And subclass ClassPath.Scanner as:
+
+class MemorizingScanner extends ClassPath.Scanner {
+
+  private final ListMultimap<String, ClassInfo> classes = ...;
+
+  @Override void onResourceFile(ClassLoader loader, String packagePath, File file) {
+    if (file.getName().endsWith(".class")) {
+      classUrls.put(packagePath + file.getName(), new ClassInfo(resourceName, url));
+    }
+  }
+  //  same for jar entry
+}
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=90897375

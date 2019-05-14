@@ -1,0 +1,13 @@
+[#4435] Always invoke the actual deregisteration later in the EventLoop.
+
+Motivation:
+
+As a user may call deregister() from within any method while doing processing in the ChannelPipeline,  we need to ensure we do the actual deregister operation later. This is needed as for example,  we may be in the ByteToMessageDecoder.callDecode(...) method and so still try to do processing in the old EventLoop while the user already registered the Channel to a new EventLoop. Without delay, the deregister operation this could lead to have a handler invoked by different EventLoop and so threads.
+
+Modifications:
+
+Ensure the actual deregister will be done later on and not directly when invoked.
+
+Result:
+
+Calling deregister() within ByteToMessageDecoder.decode(..) is safe.

@@ -1,0 +1,26 @@
+Prevent beans created with @MockBean from being post-processed
+
+Post-processing of mocked beans causes a number of problems:
+
+ - The mock may be proxied for asynchronous processing which can cause
+   problems when configuring expectations on a mock (gh-6573)
+ - The mock may be proxied so that its return values can be cached or
+   so that its methods can be transactional. This causes problems with
+   verification of the expected calls to a mock (gh-6573, gh-5837)
+ - If the mock is created from a class that uses field injection, the
+   container will attempt to inject values into its fields. This causes
+   problems if the mock is being created to avoid the use of one of
+   those dependencies (gh-6663)
+ - Proxying a mocked bean can lead to a JDK proxy being created
+   (if proxyTargetClass=false) as the mock implements a Mockito
+   interface. This can then cause injection failures as the types don’t
+   match (gh-6405, gh-6665)
+
+All of these problems can be avoided if a mocked bean is not
+post-processed. Avoiding post-processing prevents proxies from being
+created and autowiring from being performed. This commit avoids
+post-processing by registering mocked beans as singletons as well as
+via a bean definition. The latter is still used by the context for type
+matching purposes.
+
+Closes gh-6573, gh-6663, gh-6664

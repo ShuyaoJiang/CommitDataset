@@ -1,0 +1,14 @@
+Refactor the pipeline API to support stacked codecs
+
+- Previous API did not support the pipeline which contains multiple
+  MessageToStreamEncoders because there was no way to find the closest
+  outbound byte buffer.  Now you always get the correct buffer even if
+  the handler that provides the buffer is placed distantly.
+  For example:
+  
+    Channel -> MsgAEncoder -> MsgBEncoder -> MsgCEncoder
+  
+  Msg(A|B|C)Encoder will all have access to the channel's outbound
+  byte buffer.  Previously, it was simply impossible.
+
+- Improved ChannelBufferHolder.toString()

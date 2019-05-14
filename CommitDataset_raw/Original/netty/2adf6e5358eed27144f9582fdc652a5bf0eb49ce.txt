@@ -1,0 +1,17 @@
+Better parsing for STOMP body with no length.
+
+Motivation:
+
+The STOMP decoder used to fail when parsing a frame with no content-length
+and a body split across multiple packets.
+
+Modifications:
+
+Support contentLength of -1 (indicating indeterminate length) and added a
+check to getContentLength.  Moved the NUL byte searching from the
+readHeaders() method out to the main decoder loop.
+
+Result:
+
+A STOMP frame can be properly parsed even if it's missing the
+content-length header and the NUL byte is in a later packet.

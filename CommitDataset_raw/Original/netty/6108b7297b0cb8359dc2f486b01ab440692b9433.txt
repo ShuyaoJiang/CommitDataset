@@ -1,0 +1,15 @@
+Correctly handle ChannelInputShutdownEvent in ReplayingDecoder
+
+Motivation:
+
+b112673554bafc1eccfd43913a3e8605337dd7fb added ChannelInputShutdownEvent support to ByteToMessageDecoder but missed updating the code for ReplayingDecoder. This has the effect:
+
+- If a ChannelInputShutdownEvent is fired ByteToMessageDecoder (the super-class of ReplayingDecoder) will call the channelInputClosed(...) method which will pass the incorrect buffer to the decode method of ReplayingDecoder.
+
+Modifications:
+
+Share more code between ByteToMessageDEcoder and ReplayingDecoder and so also support ChannelInputShutdownEvent correctly in ReplayingDecoder
+
+Result:
+
+ChannelInputShutdownEvent is corrrectly handle in ReplayingDecoder as well.

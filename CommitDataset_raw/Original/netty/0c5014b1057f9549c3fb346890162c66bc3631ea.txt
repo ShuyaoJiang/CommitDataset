@@ -1,0 +1,13 @@
+Add a hint of ownership transfer when calling EmbeddedChannel.read*() methods.
+
+Motivation:
+
+As shown in issues it is sometimes hard to understand why a leak was reported when the user just calles EmbeddedChannel.readInbound() / EmbeddedChannel.readOutbound() and drop the message on the floor.
+
+Modifications:
+
+Add a hint before handover the message to the user and transfer the ownership.
+
+Result:
+
+Easier debugging of leaks caused by EmbeddedChannel.read*().

@@ -1,0 +1,7 @@
+UndertowServerHttpRequest: suspend reading when no demand
+
+- When there is no demand for reading, the implementation
+should suspend reading otherwise useless events will be
+send by Undertow to the registered read listener.
+- There is not need to wait for an event for reading/writing after calling
+resumeReads/resumeWrites

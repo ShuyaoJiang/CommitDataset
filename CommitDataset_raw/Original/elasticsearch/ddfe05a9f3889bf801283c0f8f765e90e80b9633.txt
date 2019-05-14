@@ -1,0 +1,9 @@
+Fix Fuzziness#asDistance(String) (#39643)
+
+Currently Fuzziness#asDistance(String) doesn't work for custom AUTO values. If
+the fuzziness is AUTO, the method returns the correct edit distance to use,
+depending on the input string, but for custom AUTO values it currently always
+returns an edit distance of 1. Correcting this and adding unit and integration
+tests to catch these cases.
+
+Closes #39614

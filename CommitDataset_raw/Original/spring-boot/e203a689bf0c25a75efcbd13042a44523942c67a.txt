@@ -1,0 +1,20 @@
+Consider relaxed variants of target name when filtering property names
+
+Previously, when ignoreUnknownFields was false and property names were
+being filtered based on whether or not they begin with the target name,
+relaxed variants of the target name were not considered. This resulted
+in different delimiters resulting in a non-match. For example, the
+property ENV_FOO_NAME would be filtered out when the target name
+was env.foo.
+
+This commit updates PropertiesConfigurationFactory to pass all of the
+relaxed variants for the target name to the matcher. For the example
+above one of those variants will be env_foo which matches ENV_FOO_NAME
+due to the matching delimiter.
+
+PropertiesConfigurationFactory was already creating a RelaxedNames
+instance for the target name. The code has been reworked a little to
+allow these relaxed names to be reused, thereby avoiding the cost of
+computing all of the relaxed variants of the target name a second time.
+
+Closes gh-4775

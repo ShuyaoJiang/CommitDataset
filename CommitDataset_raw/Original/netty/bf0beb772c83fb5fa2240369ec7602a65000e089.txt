@@ -1,0 +1,13 @@
+Fix IllegalArgumentException when release a wrapped ByteBuffer on Java9
+
+Motivation:
+
+Unsafe.invokeCleaner(...) checks if the passed in ByteBuffer is a slice or duplicate and if so throws an IllegalArgumentException on Java9. We need to ensure we never try to free a ByteBuffer that was provided by the user directly as we not know if its a slice / duplicate or not.
+
+Modifications:
+
+Never try to free a ByteBuffer that was passed into UnpooledUnsafeDirectByteBuf constructor by an user (via Unpooled.wrappedBuffer(....)).
+
+Result:
+
+Build passes again on Java9

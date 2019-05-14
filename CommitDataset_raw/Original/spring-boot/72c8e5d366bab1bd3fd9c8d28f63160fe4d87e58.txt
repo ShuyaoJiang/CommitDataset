@@ -1,0 +1,19 @@
+Collect HTTP trace at commit time for WebFlux
+
+Prior to this commit, the `HttpTraceWebFilter` would collect the
+response information (status and headers) for tracing purposes, after
+the handling chain is done with the exchange - inside a
+`doAfterSuccessOrError`.
+
+Once the handler has processed the exchange, there is no strong
+guarantee about the HTTP resources being still present. Depending on the
+web server implementation, HTTP resources (including HTTP header maps)
+might be recycled, because pooled in the first place.
+
+This commit moves the collection and processing of the HTTP trace right
+before the response is committed. This removes the need to handle
+special cases with exceptions, since by that time all exception handlers
+have processed the response and the information that we extract is the
+information that's about to be written to the network.
+
+Fixes gh-15819

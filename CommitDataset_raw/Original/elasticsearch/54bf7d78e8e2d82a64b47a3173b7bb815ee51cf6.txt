@@ -1,0 +1,6 @@
+Prevent cluster internal `ClusterState.Custom` impls to leak to a client (#26232)
+
+Today a `ClusterState.Custom` can be fetched by a transport client and
+leaks to the user even if the classes are private etc since the serialized
+bytes can be reconstructed. This change adds an option to customs to mark
+them as private such that our clusterstate action will never leak it.

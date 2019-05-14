@@ -1,0 +1,11 @@
+Refine ApplicationHome detection logic
+
+Update the detection logic used in ApplicationHome to:
+- Deal with `!/` elements in URLs so that `BOOT-INF/classes` packaging
+  works as expected.
+- Use the `start-class` when no explicit source class is provided to
+  prevent accidentally picking a home next to a `spring-boot.jar` that
+  happens to be on the classpath.
+- Ignore search logic when running from a unit test.
+
+Fixes gh-6129

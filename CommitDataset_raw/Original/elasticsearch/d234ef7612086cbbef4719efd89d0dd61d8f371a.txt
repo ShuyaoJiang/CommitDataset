@@ -1,0 +1,8 @@
+Add date and date_nanos conversion to the numeric_type sort option (#40199)
+
+This change adds an option to convert a `date` field to nanoseconds resolution
+ and a `date_nanos` field to millisecond resolution when sorting.
+The resolution of the sort can be set using the `numeric_type` option of the
+field sort builder. The conversion is done at the shard level and is restricted
+to dates from 1970 to 2262 for the nanoseconds resolution in order to avoid
+numeric overflow.

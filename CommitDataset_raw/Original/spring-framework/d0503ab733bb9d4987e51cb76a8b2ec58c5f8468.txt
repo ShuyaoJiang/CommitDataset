@@ -1,0 +1,23 @@
+Relocate web artifacts in the TCF to web package
+
+This commit relocates recently introduced web artifacts in the
+TestContext framework to the ~.test.context.web package and renames some
+classes for consistency with the existing code base.
+
+ - introduced package-info.java in the web package.
+
+ - ServletTestExecutionListener now extends
+   AbstractTestExecutionListener instead of implementing
+   TestExecutionListener.
+
+ - relocated AbstractGenericWebContextLoader,
+   AnnotationConfigWebContextLoader, XmlWebContextLoader, and
+   WebDelegatingSmartContextLoader to the web package.
+
+ - renamed XmlWebContextLoader to GenericXmlWebContextLoader for
+   consistency with GenericXmlContextLoader.
+
+ - changed the visibility of AbstractDelegatingSmartContextLoader and
+   AnnotationConfigContextLoaderUtils to public.
+
+Issue: SPR-10067

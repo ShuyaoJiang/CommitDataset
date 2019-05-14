@@ -1,0 +1,12 @@
+Add auto-configuration support for TaskExecutor
+
+This commit adds support for providing a default ThreadPoolTaskExecutor
+with sensible defaults. A new TaskExecutorBuilder is provided with
+defaults from the `spring.task.*` namespace and can be used to create
+custom instances.
+
+If no custom `Executor` bean is present, `@EnableAsync` now uses the
+auto-configure application task executor. Same goes for the async support
+in Spring MVC.
+
+Closes gh-1563

@@ -1,0 +1,15 @@
+Add exception handling of asynchronous method
+
+Prior to this commit, an exception thrown by an @Async void method
+was not further processed as there is no way to transmit that
+exception to the caller.
+
+The AsyncUncaughtExceptionHandler is a new strategy interface that
+can be implemented to handle unexpected exception thrown during the
+invocation of such asynchronous method.
+
+The handler can be specified using either the XML namespace or by
+implementing the AsyncConfigurer interface with the EnableAsync
+annotation.
+
+Issue: SPR-8995

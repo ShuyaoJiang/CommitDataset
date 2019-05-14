@@ -1,0 +1,12 @@
+Upgrade to lucene-7.0.0-snapshot-ad2cb77. (#25349)
+
+Most notable changes:
+ - better update concurrency: LUCENE-7868
+ - TopDocs.totalHits is now a long: LUCENE-7872
+ - QueryBuilder does not remove the boolean query around multi-term synonyms:
+   LUCENE-7878
+ - removal of Fields: LUCENE-7500
+
+For the `TopDocs.totalHits` change, this PR relies on the fact that the encoding
+of vInts and vLongs are compatible: you can write and read with any of them as
+long as the value can be represented by a positive int.

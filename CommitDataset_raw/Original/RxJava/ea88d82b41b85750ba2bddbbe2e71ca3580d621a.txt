@@ -1,0 +1,14 @@
+Change Scheduler implementations to use primary methods
+
+Work done in https://github.com/Netflix/RxJava/pull/229 added the following methods:
+
+- Subscription schedule(T state, Func2<Scheduler, T, Subscription> action, long delayTime, TimeUnit unit)}
+- Subscription schedule(T state, Func2<Scheduler, T, Subscription> action)}
+
+These are in fact the primary methods from RxNet (http://msdn.microsoft.com/en-us/library/hh211963(v=vs.103).aspx) and the others are just helper overloads.
+
+It seems it is better to set the precedent to use these 2 methods for actual implementation logic while all other methods are just decorating and forwarding from AbstractScheduler to these methods.
+
+I have updated the various implementations to achieve this.
+
+Unit tests are passing … but we don't have enough unit test coverage so I won't be surprised if bugs are found.

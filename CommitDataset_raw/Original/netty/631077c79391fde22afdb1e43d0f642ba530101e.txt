@@ -1,0 +1,10 @@
+EPOLL RDHUP processing
+
+Motivation:
+EpollRecvByteAllocatorHandle will read unconditionally if EPOLLRDHUP has been received. However we can just treat this the same was we do as data maybe pending in ET mode, and let LT mode notify us if we haven't read all data.
+
+Modifications:
+- EpollRecvByteAllocatorHandle should not always force a read just because EPOLLRDHUP has been received, but just treated as an indicator that there maybe more data to read in ET mode
+
+Result:
+Fixes https://github.com/netty/netty/issues/6173.

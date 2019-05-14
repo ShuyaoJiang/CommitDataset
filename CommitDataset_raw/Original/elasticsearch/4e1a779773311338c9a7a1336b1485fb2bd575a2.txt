@@ -1,0 +1,7 @@
+Prepare ShardFollowNodeTask to bootstrap when it fall behind leader shard (#37562)
+
+* Changed `LuceneSnapshot` to throw an `OperationsMissingException` if the requested ops are missing.
+* Changed the shard changes api to handle the `OperationsMissingException` and wrap the exception into `ResourceNotFound` exception and include metadata to indicate the requested range can no longer be retrieved.
+* Changed `ShardFollowNodeTask` to handle this `ResourceNotFound` exception with the included metdata header.
+
+Relates to #35975

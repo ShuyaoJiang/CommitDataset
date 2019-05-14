@@ -1,0 +1,10 @@
+Fixes NPE in Corshandler for unauthorized prefligt requests (#7865)
+
+Motivation:
+NPE in `CorsHandler` if a pre-flight request is done using an Origin header which is not allowed by any `CorsConfig` passed to the handler on creation.
+
+Modifications:
+During the pre-flight, check the `CorsConfig` for `null` and handle it correctly by not returning any access-control header
+
+Result:
+No more NPE for pre-flight requests with unauthorized origins.

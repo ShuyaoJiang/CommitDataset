@@ -1,0 +1,16 @@
+Only apply dependency-management and propdeps-maven to subprojects
+
+Previously, the dependency management and propdeps-maven plugins
+were being applied to all projects. The latter caused a problem with
+publishing to Artifactory as the buildSrc project now had the
+propdeps-maven plugin applied to it.
+
+This commit removes the logic that was applying the propdeps-plugin
+to all projects so that it's only applied to subprojects excluding
+the buildSrc project. The logic that applies the dependency management
+plugin has been moved to the same location. It is applied after the
+propdeps-maven plugin as, otherwise, the pom customization does not
+work correctly and optional dependencies are not included in
+generated poms.
+
+Issue: SPR-15167

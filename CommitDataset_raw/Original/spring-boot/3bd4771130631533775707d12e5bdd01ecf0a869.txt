@@ -1,0 +1,7 @@
+Protect against Math.abs() with Long.MIN_VALUE
+
+Update RandomValuePropertySource to protect against the random source
+returning Long.MIN_VALUE. In such cases the sign bit can't be unset and
+prior to this commit the random value stayed negative.
+
+Closes gh-4672

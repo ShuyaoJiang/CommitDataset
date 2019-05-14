@@ -1,0 +1,6 @@
+Reduce the scope of `QueryRewriteContext` (#25787)
+
+Today we provide a lot of functionality on the `QueryRewriteContext` that
+we potentially don't have ie. if we rewrite on a coordinating node or when
+we percolating. This change moves most of the unnecessary shard level or
+index level services and dependencies to `QueryShardContext` instead.

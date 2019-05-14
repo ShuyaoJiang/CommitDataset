@@ -1,0 +1,12 @@
+Reduce PlatformTransactionManager lookups
+
+Prior to this commit, cache operations mentioning a qualifier led to
+a lookup for the same PlatformTransactionManager over and over again.
+The same applied when a transactionManager bean name was specified on
+the interceptor.
+
+This commit adds a cache to store the reference of such transaction
+managers. As a convenience, the default PlatformTransactionManager is
+also initialized if it has not been through configuration.
+
+Issue: SPR-11954

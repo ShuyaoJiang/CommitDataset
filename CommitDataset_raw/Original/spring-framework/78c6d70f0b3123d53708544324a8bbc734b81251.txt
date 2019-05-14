@@ -1,0 +1,13 @@
+Refute claims made in SPR-9051
+
+It was claimed that when a {@code @ContextConfiguration} test class
+references a config class missing an {@code @Configuration} annotation,
+@Bean dependencies are wired successfully but the bean lifecycle is not
+applied (no init methods are invoked, for example).
+
+AnnotatedConfigClassesWithoutAtConfigurationTests refutes this claim by
+demonstrating that @Bean methods in non-@Configuration classes are
+properly handled as "annotated factory bean methods" and that lifecycle
+callbacks in fact apply to such factory beans.
+
+Issue: SPR-9051

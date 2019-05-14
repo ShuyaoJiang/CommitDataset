@@ -1,0 +1,17 @@
+Ensure that, where appropriate, actuator endpoints always produce JSON
+
+Previously, the Actuator’s endpoints did not specify a produces
+attribute on their request mappings. With Jackson’s XML binding on the
+classpath, this would lead to requests made by a browser receiving
+application/xml responses (due to the Accept header indicating that
+application/xml is preferred). This was problematic as some of the
+response payloads were not legal xml. Problems included XML tags
+beginning with ‘\’ or containing ‘#’.
+
+This commit updates the endpoints to specify that they produce
+application/json. The environment and metrics endpoints have also been
+updated so that always return a JSON object, even when they are
+returning a single entry. This consistency avoids problems where
+clients may not consider a single scalar value to be legal JSON.
+
+Closes gh-2449

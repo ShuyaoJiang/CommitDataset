@@ -1,0 +1,19 @@
+Remove EBR dependencies where possible
+
+Only a select few EBR dependencies now remain, because these
+dependencies cannot be found elsewhere e.g. atinject-tck, or in the case
+of Hibernate 3.3.1.GA, to avoid Gradle classpath confusion with
+Hibernate 4.0.x (because they have different artifactIds).
+
+Future efforts will be made to fully eliminate these dependencies in
+order to ensure we're decoupled completely from EBR.
+
+Important note: these remaining EBR dependencies do not constitute a
+problem when publishing artifacts into Maven Central via
+oss.sonatype.org, because they are each 'optional' dependencies. It
+appears that OSO's restriction around transitive dependencies being
+'self-contained' within Maven Central only applies to mandatory
+dependencies (which is a good thing for cases just such as this).
+
+Add explicit /ebr-maven-external entry to repositories, as EBR
+dependencies are not available via /libs-release.

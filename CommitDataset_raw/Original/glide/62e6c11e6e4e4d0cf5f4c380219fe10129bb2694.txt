@@ -1,0 +1,12 @@
+A couple tweaks to ModelLoaderRegistry to improve potential contention.
+
+1) Synchronize only the inner method that accesses the cache, as the outer call
+that loops and filters the loaders appears to not have threading issues.
+2) Probably less of an impact since I imagine the loops are generally small,
+but only allocate an ArrayList once you find a matching loader, and allocate it
+with size - i which is the max possible remaining in the loop, rather than
+always allocating it to size.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=205877123

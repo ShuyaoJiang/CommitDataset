@@ -1,0 +1,11 @@
+http2.HttpConversionUtil :authority conversion error
+
+Motiviation:
+The http2 spec https://tools.ietf.org/html/rfc7540#section-8.1.2.3 states that the :authority header should be copied into the HOST header when converting from HTTP/2 to HTTP/1.x. We currently have an extension header to preserve the authority.
+
+Modifications:
+- Remove AUTHORITY extension header
+- HTTP/2 :authority should map to HOST header when converting to HTTP/1.x.
+
+Result:
+More spec compliant.

@@ -1,0 +1,12 @@
+Registered shutdown hook to kill JVM forked by spring-boot:run
+
+Previously, a JVM that was forked by spring-boot:run could be orphaned
+when the parent process (the Maven build) was terminated in an IDE. Note
+that this doesn’t happen when spring-boot:run is invoked from a shell.
+
+This commits add a shutdown hook that registered when RunMojo forks the
+JVM. The shutdown hook attempts to kill the forked JVM’s RunProcess
+rather than relying on the death of the parent process being sufficient
+to also kill the child.
+
+Closes gh-5815

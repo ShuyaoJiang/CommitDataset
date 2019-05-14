@@ -1,0 +1,18 @@
+Cache number of live documents with document-level security. (elastic/x-pack-elasticsearch#4255)
+
+Currently numDocs() is computed lazily, but this doesn't help since
+BaseCompositeReader calls numDocs() on its sub readers eagerly. This may cause
+performance issues since every time we wrap a reader with DocumentSubSetReader
+(which means for every query when DLS is enabled) we need to recompute the
+number of live documents, which runs in linear time with the number of matches
+of the role query.
+
+Not computing numDocs() eagerly in DocumentSubSetReader might help, but it
+would also be fragile since callers of this method still usually assume that
+it runs in constant time. So I am proposing that we add a cache of the number
+of live docs in order to decrease the performance hit of document-level
+security. I would expect this cache to be efficient as it will not only reuse
+entries in-between refreshes, but also across refreshes for segments that
+haven't received any new updates.
+
+Original commit: elastic/x-pack-elasticsearch@5a3af1b174d97f95969f2b6c467b811c3643114f

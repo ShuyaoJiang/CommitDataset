@@ -1,0 +1,12 @@
+DefaultWebSessionManager decoupled from DefaultWebSession
+
+DefaultWebSessionManager no longer requires the WebSessionStore
+to use DefaultWebSession.
+
+Removed explicit start() in save(). This seemed unnecessary since at
+that point isStarted is guaranteed to return true. The status can
+be updated through the copy constructor.
+
+DefaultWebSessionTests added.
+
+Issue: SPR-15875

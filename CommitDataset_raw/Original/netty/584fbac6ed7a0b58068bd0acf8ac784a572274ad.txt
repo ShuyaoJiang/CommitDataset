@@ -1,0 +1,13 @@
+[#3419] Only use SecureRandom to generate initialSeed if requested
+
+Motivation:
+
+We tried to always use SecureRandom to generate the initialSeed for our ThreadLocalRandom, this can sometimes give warnings under normal usage. We should better not use SecureRandom as default (just as the implementation in jsr166y does) and only try if the user specified -Djava.util.secureRandomSeed=true .
+
+Modifications:
+
+Only try to use SecureRandom when -Djava.util.secureRandomSeed=true is used.
+
+Result:
+
+Less likely to see entropy warnings.

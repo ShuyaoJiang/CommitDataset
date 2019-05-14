@@ -1,0 +1,14 @@
+Include charset in EncodedResource.equals()
+
+Prior to this commit, the implementation of equals() in EncodedResource
+was based solely on the resource and encoding. Thus, if a Charset were
+specified instead of an encoding, invocations of equals() would not
+work as expected.
+
+This commit addresses this issue by including the charset in the
+implementation of equals() and introducing corresponding tests in a new
+EncodedResourceTests class. Furthermore, this commit makes
+EncodedResource immutable and updates all Javadoc to reflect support
+for the encoding and charset properties.
+
+Issue: SPR-12767

@@ -1,0 +1,17 @@
+Remove `indexing_complete` when removing policy (#36620)
+
+Leaving `index.lifecycle.indexing_complete` in place when removing the
+lifecycle policy from an index can cause confusion, as if a new policy
+is associated with the policy, rollover will be silently skipped.
+Removing that setting when removing the policy from an index makes
+associating a new policy with the index more involved, but allows ILM to
+fail loudly, rather than silently skipping operations which the user may
+assume are being performed.
+
+* Adjust order of checks in WaitForRolloverReadyStep
+
+This allows ILM to error out properly for indices that have a valid
+alias, but are not the write index, while still handling
+`indexing_complete` on old-style aliases and rollover (that is, those
+which only point to a single index at a time with no explicit write
+index)

@@ -1,0 +1,11 @@
+Allow HTAB in header values.
+
+RFC 7230 section 3.2 allows HTAB ('\t', '\u0009') inside header
+values as long as there is not more than one in a row:
+  https://tools.ietf.org/html/rfc7230#section-3.2
+
+Before this CL, OkHttp previously disallowed HTAB in header values.
+This CL changes behavior to allow any number of consecutive HTABs
+inside a header value; this is more permissive than the RFC, but
+is consistent with how OkHttp currently treats space characters
+(' ', '\u0020').

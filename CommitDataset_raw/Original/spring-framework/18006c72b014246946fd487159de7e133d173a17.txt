@@ -1,0 +1,13 @@
+Fix circular placeholder prevention
+
+A set of resolved placeholder references is used for circular
+placeholder prevention. For complex property definitions this mechanism
+would put property values with unresolved inner placeholder references
+in the set, but would try to remove property values with placeholders
+resolved, leaving the set in an invalid state and the mechanism broken.
+
+This fix makes sure that the value that is put in the set is same one
+that is removed from it, and by doing so avoids false positives in
+reporting circular placeholders.
+
+Issue: SPR-5369

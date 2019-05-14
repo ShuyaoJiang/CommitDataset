@@ -1,0 +1,15 @@
+Watcher: Only delete triggered watch if watch was known (elastic/x-pack-elasticsearch#1562)
+
+When a user executes a watch and specifies it as part of the
+execute watch API, no triggered watch is created, as the watch
+cannot be picked up anymore (it only leaves for the duration of
+the request).
+
+However until now the TriggeredWatchStore was invoked and tried
+to delete this non-existing triggered watch, resulting in some
+log cluttering.
+
+This commit removes this try to delete a non-existing triggered
+watch.
+
+Original commit: elastic/x-pack-elasticsearch@3db125cea2f11d82ce9107632506a7373b2b5a14

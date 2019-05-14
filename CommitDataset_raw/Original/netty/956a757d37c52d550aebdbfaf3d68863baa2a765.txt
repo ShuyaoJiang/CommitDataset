@@ -1,0 +1,13 @@
+[#3789] Correctly reset markers for all allocations when using PooledByteBufAllocator
+
+Motivation:
+
+We need to ensure all markers are reset when doing an allocation via the PooledByteBufAllocator. This was not the always the case.
+
+Modifications:
+
+Move all logic that needs to get executed when reuse a PooledByteBuf into one place and call it.
+
+Result:
+
+Correct behavior

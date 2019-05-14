@@ -1,0 +1,13 @@
+ensure getRawQuery is not null before appending
+
+Motivation:
+
+without this check then given a URI with path /path the resulting URL will be /path?null=
+
+Modifications:
+
+check that getRawQuery doesn't return null and only append if not
+
+Result:
+
+urls of the form /path will not have a null?= appended

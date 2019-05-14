@@ -1,0 +1,18 @@
+Fix retention leases sync on recovery test
+
+This test had a bug. We attempt to allow only the primary to be
+allocated, to force all replicas to recovery from the primary after we
+had set the state of the retention leases on the primary. However, in
+building the index settings, we were overwriting the settings that
+exclude the replicas from being allocated. This means that some of the
+replicas would end up assigned and rather than receive retention leases
+during recovery, they would be part of the replication group receiving
+retention leases as they are manipulated. Since retention lease renewals
+are only synced periodically, this means that the replica could be
+lagging a little behind in some cases leading to an assertion tripping
+in the test. This commit addresses this by ensuring that the replicas
+are indeed not allocated until after the retention leases are done being
+manipulated on the replica. We did this by not overwriting the exclude
+settings.
+
+Closes #39105

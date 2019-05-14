@@ -1,0 +1,18 @@
+Fix SpEL JavaBean compliance for setters
+
+Prior to this change, SpEL was capable of handling getter methods for
+property names having a lowercase first letter and uppercase second
+letter such as:
+
+    public String getiD() { ... }
+
+However, setters with the same naming arrangement were not supported,
+e.g.:
+
+    public void setiD() { ... }
+
+This commit ensures that setters and getters are treated by SpEL equally
+in this regard, such that "iD"-style property names may be used anywhere
+within SpEL expressions.
+
+Issue: SPR-10122, SPR-9123

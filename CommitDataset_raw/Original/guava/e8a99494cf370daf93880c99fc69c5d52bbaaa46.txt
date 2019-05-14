@@ -1,0 +1,21 @@
+Automatically add <inherits> for java.* emulations to Guava.
+Remove the manually added <inherits>.
+
+This change applies only to java.* emulations: Normally <inherits> are added automatically as part of the build.
+The problem here was that the java.* <inherits> added were for internal-only modules that only transitively pulled in the public modules.
+This change rewrites the internal-only module names to match the public module names.
+
+The result is mostly a no-op, but, in addition to some theoretically irrelevant reordering, the automation also produces a few <inherit> fixes:
+- Remove net -> util.
+- Remove collect/testing -> util.
+- Add collect/testing -> truth.
+- Add collect/testing/google -> truth.
+
+Additionally, the automation identifies that cache was missing a BUILD dependency on util.
+(It got away with it because the dependency was pulled in transitively through base. (This worked because strict Java deps doesn't fully apply to GWT.))
+I have added the appropriate dependency.
+
+(This CL redoes *most* of CL 62235637 (which was rolled back in CL 62240733), and it also touches other packages that that CL did not.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=62345986

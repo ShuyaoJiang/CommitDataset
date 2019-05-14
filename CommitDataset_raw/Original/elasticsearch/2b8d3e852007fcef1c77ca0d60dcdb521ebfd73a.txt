@@ -1,0 +1,16 @@
+Security: fix dynamic mapping updates with aliases (#30787)
+
+This commit fixes an issue with dynamic mapping updates when an index
+operation is performed against an alias and when the user only has
+permissions to the alias. Dynamic mapping updates resolve the concrete
+index early to prevent issues so the information about the alias that
+the triggering operation was being executed against is lost. When
+security is enabled and a user only has privileges to the alias, this
+dynamic mapping update would be rejected as it is executing against the
+concrete index and not the alias. In order to handle this situation,
+the security code needs to look at the concrete index and the
+authorized indices of the user; if the concrete index is not authorized
+the code will attempt to find an alias that the user has permissions to
+update the mappings of.
+
+Closes #30597

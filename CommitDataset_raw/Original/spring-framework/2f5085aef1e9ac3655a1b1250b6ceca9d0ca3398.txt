@@ -1,0 +1,14 @@
+Introduce ExtendedBeanInfo
+
+Decorator for instances returned from
+Introspector#getBeanInfo(Class<?>) that supports detection and inclusion
+of non-void returning setter methods. Fully supports indexed properties
+and otherwise faithfully mimics the default
+BeanInfo#getPropertyDescriptors() behavior, e.g., PropertyDescriptor
+ordering, etc.
+
+This decorator has been integrated with CachedIntrospectionResults
+meaning that, in simple terms, the Spring container now supports
+injection of setter methods having any return type.
+
+Issue: SPR-8079

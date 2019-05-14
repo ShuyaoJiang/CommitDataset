@@ -1,0 +1,16 @@
+Fix a bug where DefaultPromise.toString() says 'incomplete' when it's done
+
+Motivation:
+
+DefaultPromise.toString() returns 'DefaultPromise(incomplete)' when it's
+actually complete with non-null result.
+
+Modifications:
+
+Handle the case where the promise is done and its result is non-null in
+toString()
+
+Result:
+
+The String returned by DefaultPromise.toString() is not confusing
+anymore.

@@ -1,0 +1,12 @@
+Disable child context's /error endpoint if disabled in parent
+
+Previously, EndpointWebMvcChildContextConfiguration would attempt to
+create a /error endpoint, irrespective of whether or not the parent
+had such an endpoint. If the endpoint was disabled in the parent this
+would cause a failure due to the absence of an ErrorAttributes bean.
+
+This commit updates EndpointWebMvcChildContextConfiguration to make
+the creation of its /error endpoint conditional on the existence of
+an ErrorAttributes bean.
+
+Closes gh-4164

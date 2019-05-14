@@ -1,0 +1,6 @@
+Fix threading issue on listener notification (#28730)
+
+This is a fix for #28729. Currently if a write operation is not properly
+queued with a selector we notify the listener. However, we are doing
+this by calling a method that is only meant for the selector thread to
+call. This commit fixes that issue.

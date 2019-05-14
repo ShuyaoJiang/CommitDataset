@@ -1,0 +1,17 @@
+Reduce calls to System.nanoTime() and object creation in IdleStateHandler. Related to [#3808]
+
+Motivation:
+
+Calling System.nanoTime() for each channelRead(...) is very expensive. See [#3808] for more detailed description.
+Also we always do extra work for each write and read even if read or write idle states should not be handled.
+
+Modifications:
+
+- Move System.nanoTime() call to channelReadComplete(...).
+- Reuse ChannelFutureListener for writes
+- Only add ChannelFutureListener to writes if write and all idle states should be handled.
+- Only call System.nanoTime() for reads if idle state events for read and all states should be handled.
+
+Result:
+
+Less overhead when using the IdleStateHandler.

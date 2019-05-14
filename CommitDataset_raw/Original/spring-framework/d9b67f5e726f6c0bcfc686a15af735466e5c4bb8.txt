@@ -1,0 +1,14 @@
+Use Mono semantics for JSON object/array serialization
+
+Before this commit, a handler method returning a stream with a JSON
+content-type was producing a JSON object for single element streams
+or a JSON array for multiple elements streams.
+
+This kind of dynamic change of the output based on the number of
+elements was difficult to handle on client side and not consistent
+with Spring MVC behavior.
+
+With this commit, we achieve a more consistent behavior by using
+the Mono semantics to control this behavior. Mono (and Promise/Single)
+are serialized to JSON object and Flux (and Observable/Stream) are
+serialized to JSON array.

@@ -1,0 +1,8 @@
+Tweak Travis configuration as Surefire is now silent in quite mode
+
+Surefire 2.20 is completely silent when running in quiet mode which
+causes Travis to incorrectly detect that the build has hung. This
+commit removes the use of quiet mode in the hope that it will
+strike a reasonable balance between enough log output to prevent
+a false positive for the build being hung while also not generating
+so much output that Travis cannot cope.

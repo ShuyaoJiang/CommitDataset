@@ -1,0 +1,11 @@
+Fix setter detection in `configprops` endpoint
+
+Previously, the setter of a property whose second letter is upper-case (
+such as `oAuth2Uri`) was not detected properly. The JavaBean spec states
+that, in such a case, the first letter should not be capitalized (i.e.
+the setter should be `setoAuth2Uri` rather than `setOAuth2Uri`).
+
+This commit makes sure that Jackson uses standard bean names and fixes
+the setter detection algorithm to take this case into account.
+
+Closes gh-13878

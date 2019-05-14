@@ -1,0 +1,13 @@
+Ignore temporary .writing files when finding output files
+
+Spring Integration's FileWritingMessageHandler uses a .writing file
+while it's in the process of writing a message to disk and then
+performs a rename (depending on the OS and filesystem this may or may
+not be atommic) to create the .msg file. Prior to this commit the
+test was finding the temporary .writing files and examining them. This
+could lead to a FileNotFoundException being thrown as the temporary
+file was deleted while the test was trying to read its contents.
+
+This commit updates the test to only look for files with a .msg suffix
+
+Fixes gh-2428

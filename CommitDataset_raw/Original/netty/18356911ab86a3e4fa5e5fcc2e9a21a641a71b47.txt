@@ -1,0 +1,13 @@
+Stop calling BIO_write once internal buffer is full.
+
+Motivation:
+
+Previous we called BIO_write until either everything was written into it or it returned an error, which meant that the buffer is full. This then needed a ERR_clear_error() call which is expensive.
+
+Modifications:
+
+Break out of writing loop once we detect that not everything was written and so the buffer is full.
+
+Result:
+
+Less overhead when writing more data then the internal buffer can take.

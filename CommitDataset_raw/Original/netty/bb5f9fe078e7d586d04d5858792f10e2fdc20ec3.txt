@@ -1,0 +1,13 @@
+Scoring loopback addresses as 0 in DefaultChannelId
+
+Motivation:
+
+As described in #3490, [compareAddresses](https://github.com/netty/netty/blob/master/transport/src/main/java/io/netty/channel/DefaultChannelId.java#L182)  seems to allow loopback addresses to score high, disallowing replacing the loopback address.
+
+Modifications:
+
+Changed [scoreAddress](https://github.com/netty/netty/blob/master/transport/src/main/java/io/netty/channel/DefaultChannelId.java#L283) to score loopback addresses as 0.
+
+Result:
+
+Fixes #3490

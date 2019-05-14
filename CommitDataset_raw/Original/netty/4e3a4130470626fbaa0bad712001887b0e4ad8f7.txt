@@ -1,0 +1,13 @@
+Correctly handle UpgradeEvent.release(decrement).
+
+Motivation:
+
+We missed to pass the decrement value to the wrapped FullHttpRequest and so missed to decrement the reference count in the correct way.
+
+Modifications:
+
+Correctly pass the decrement value to the wrapped request.
+
+Result:
+
+UpgradeEvent.release(decrement) works as expected.

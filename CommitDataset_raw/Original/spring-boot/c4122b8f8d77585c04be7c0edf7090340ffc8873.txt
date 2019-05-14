@@ -1,0 +1,33 @@
+Work around brittle annotation scanning in Mojarra
+
+FacesListener in Mojarra 2.2.12 (used in Glassfish 4.1.1) is a
+ServletContainerInitializer that’s annotated to handle types annotated
+with javax.annotation.Resource.
+OAuth2RestOperationsConfiguration.SessionScopedConfiguration is one such
+class. This leads to com.sun.faces.config.DelegatingAnnotationProvider
+calling getAnnotations on SessionScopedConfiguration.class. This fails
+with a java.lang.ArrayStoreException due to SessionScopedConfiguration
+being annotated with @ConditionalOnBean(OAuth2ClientConfiguration) and
+OAuth2ClientConfiguration not being on the classpath.
+DelegatingAnnotationProvider currently catches NoClassDefFoundErrors
+thrown during its annotation processing. It needs to be made more
+robust so that it also copes with an ArrayStoreException, in a similar
+way to how org.glassfish.apf.impl.AnnotationProcessorImpl was updated to
+fix GLASSFISH-21265 [1]. I’ve opened an issue to this effect [2].
+
+In the meantime, we can work around the brittleness in
+DelegatingAnnotationProvider by restructuring
+SessionScopedConfiguration. This commit moves the use of @Resource into
+a nested inner class, ClientContextConfiguration, while leaving the use
+of @ConditionalOnBean on SessionScopedConfiguration. This means that it
+is now ClientContextConfiguration that is passed to FacesListener and
+processed by DelegatingAnnotationProcessor, thereby avoiding exposing
+it to the @ConditionalOnBean annotation that it does not handle
+gracefully. A Glassfish-based deployment test has also been added to
+verify the fix.
+
+Closes gh-2079
+Closes gh-4321
+
+[1] https://java.net/jira/browse/GLASSFISH-21265
+[2] https://java.net/jira/browse/JAVASERVERFACES-4076

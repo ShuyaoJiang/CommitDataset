@@ -1,0 +1,16 @@
+Allow defining default content negotiation strategy
+
+During the HTTP Content Negotiation phase, the ContentNegotiationManager
+uses configured ContentNegotiationStrategy(ies) to define the list of
+content types accepted by the client.
+
+When HTTP clients don't send Accept headers, nor use a configured
+file extension in the request, nor a request param, developers can
+define a default content type using the
+ContentNegotiationConfigurer.defaultContentType() method.
+
+This change adds a new overloaded defaultContentType method that takes a
+ContentNegotiationStrategy as an argument. This strategy will take the
+current request as an argument and return a default content type.
+
+Issue: SPR-12286

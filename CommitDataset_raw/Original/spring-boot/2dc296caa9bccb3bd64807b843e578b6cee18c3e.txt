@@ -1,0 +1,18 @@
+[bs-98] Add support for Tomcat database pool
+
+* If Tomcat jdbc is available and the driverClassName and url
+are provided or can be guessed (e.g. for HSQL) it is used.
+Properties spring.database.{driverClassName,url} are consulted.
+
+* If Commons DBCP is available it is used (if Tomcat is not)
+
+* Otherwise an EmbeddedDatabase is created if all the bits are
+available
+
+* A JdbcOperations and a NamedParameterJdbcOperations are
+available by default if a DataSource is created
+
+* The data source is initialized from spring.database.schema (csv
+of resource patterns)
+
+[Fixes #49393511]

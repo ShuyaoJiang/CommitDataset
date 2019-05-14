@@ -1,0 +1,24 @@
+Allow ACI classes access to servlet context params
+
+Prior to this commit, StandardServletEnvironment's servlet context
+PropertySource remained stubbed out until it the ServletContext became
+available and could be replaced during the refresh() of its enclosing
+WebApplicationContext. This behavior is acceptable in most cases.
+However, if the user has declared an ApplicationContextInitializer that
+attempts to access servlet context-params via the Environment API, this
+result in a kind of 'false negative', i.e. the context-param key and
+value are actually present in the ServletContext, but the PropertySource
+representing servlet context params is still a stub at this point,
+meaning that it returns an empty result in all cases.
+
+With this change, WebApplicationContextUtils#initServletPropertySources
+is invoked eagerly by the ContextLoader if any ACI classes have been
+declared. This swaps out the servlet context property source stub for
+the real thing just in time for ACIs to use it if necessary.
+
+Extra guard logic has been added to #initServletPropertySources to
+ensure idempotency -- once the stub has been replaced, the method
+never attempts the replacement again, e.g. during the normal context
+refresh() when this method will be called again.
+
+Issue: SPR-8991

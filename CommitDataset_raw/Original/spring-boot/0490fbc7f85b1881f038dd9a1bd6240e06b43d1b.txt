@@ -1,0 +1,18 @@
+Polish contribution
+
+`InfoProvider` is now `InfoContributor` and contributes to the `Info`
+instance via a builder. The `Info` instance is immutable. Each
+contributor can be disabled via the `management.info.<name>.enabled`
+key or all can be disabled using `management.info.defaults.enabled` (this
+is similar to what the health endpoint does).
+
+By default, all keys from the environment starting with `info.` are
+exposed. If a `git.properties` file is present in the classpath, the
+content of `GitInfo` is exposed using the `git` key.
+
+A `SimpleInfoContributor` and `AbstractEnvironmentInfoContributor` are
+available for convenience. `InfoContributor` instances can be ordered
+the usual way, with a default order provided by
+`InfoProviderAutoConfiguration#DEFAULT_ORDER`.
+
+Closes gh-3492

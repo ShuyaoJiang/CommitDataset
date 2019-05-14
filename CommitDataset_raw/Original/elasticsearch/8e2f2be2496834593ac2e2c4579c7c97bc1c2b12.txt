@@ -1,0 +1,6 @@
+Track Lucene operations in engine explicitly (#29357)
+
+Today we reply on `IndexWriter#hasDeletions` to check if an index
+contains "update" operations. However, this check considers both deletes
+and updates. This commit replaces that check by tracking and checking
+Lucene operations explicitly. This would provide us stronger assertions.

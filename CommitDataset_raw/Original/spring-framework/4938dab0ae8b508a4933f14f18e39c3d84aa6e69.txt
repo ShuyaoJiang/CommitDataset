@@ -1,0 +1,14 @@
+Fix XML parser default value handling
+
+The xml parser does not fill in defaults provided in the XSD when
+validation is disabled. As a result, attributes like default-lazy-init
+will not receive the value "default" but an empty string.
+
+With this commit, BeanDefinitionParserDelegate now takes this into
+account, checking default values against empty string as well as
+"default".
+
+As a consequence, default-lazy-init attribute should now work correctly
+even when the XSD validation is disabled.
+
+Issue: SPR-8335

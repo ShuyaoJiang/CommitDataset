@@ -1,0 +1,7 @@
+Restart any non-running identical requests instead of ignoring them. (#2261)
+
+Running requests are left to complete to avoid cancelling and restarting
+expensive operations (network or I/O). Completed requests are asked to
+begin again, but short cut the normal request pipeline and redeliver the previously loaded resource to ensure that Targets and RequestListeners 
+are notified as expected. Failed, cancelled, paused etc requests (all 
+other states) are simply restarted.

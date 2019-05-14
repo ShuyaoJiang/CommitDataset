@@ -1,0 +1,28 @@
+Infer return type of parametrized factory methods
+
+Currently, if a factory method is parameterized and the corresponding
+variable types are declared on the method itself instead of on the
+enclosing class or interface, Spring always predicts the return type to
+be Object, even if the return type can be explicitly inferred from the
+method signature and supplied arguments (which are available in the bean
+definition).
+
+This commit introduces a new resolveParameterizedReturnType() method in
+GenericTypeResolver that attempts to infer the concrete type for the
+generic return type of a given parameterized method, falling back to the
+standard return type if necessary. Furthermore,
+AbstractAutowireCapableBeanFactory now delegates to
+resolveParameterizedReturnType() when predicting the return type for
+factory methods.
+
+resolveParameterizedReturnType() is capable of inferring the concrete
+type for return type T for method signatures similar to the following.
+Such methods may potentially be static. Also, the formal argument list
+for such methods is not limited to a single argument.
+
+ - public <T> T foo(Class<T> clazz)
+ - public <T> T foo(Object obj, Class<T> clazz)
+ - public <V, T> T foo(V obj, Class<T> clazz)
+ - public <T> T foo(T obj)
+
+Issue: SPR-9493

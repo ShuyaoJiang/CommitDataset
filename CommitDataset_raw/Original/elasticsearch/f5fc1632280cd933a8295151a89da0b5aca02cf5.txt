@@ -1,0 +1,9 @@
+Blob store compression fix (#39073)
+
+Blob store compression was not enabled for some of the files in
+snapshots due to constructor accessing sub-class fields. Fixed to
+instead accept compress field as constructor param. Also fixed chunk
+size validation to work.
+
+Deprecated repositories.fs.compress setting as well to be able to unify
+in a future commit.

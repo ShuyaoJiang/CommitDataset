@@ -1,0 +1,22 @@
+Defer channelInactive and channelUnregistered events in Http2MultiplexCodec (#8021)
+
+Motivation:
+
+There is an inconsistency between the order of events in the
+StreamChannel implementation in Http2MultiplexCodec and other Channel
+implementations that extend AbstractChannel where channelInactive and
+channelUnregistered events are not performed 'later'. This can cause an
+unexected order of events for ChannelHandler implementations that call
+Channel.close() in response to some event.
+
+Modification:
+
+The Http2MultiplexCodec.DefaultHttp2StreamChannel.Http2ChannelUnsafe was
+modified to bounce the deregistration and channelInactive events through
+the parent channels EventLoop.
+
+Result:
+
+Stream events are now in the proper order.
+
+Fixes #8018.

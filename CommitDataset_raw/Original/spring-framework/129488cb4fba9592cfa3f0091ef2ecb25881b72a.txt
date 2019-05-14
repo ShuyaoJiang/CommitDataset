@@ -1,0 +1,20 @@
+Improve extensibility of TestContext bootstrapping & context caching
+
+ - DefaultBootstrapContext and DefaultCacheAwareContextLoaderDelegate
+   are now public classes in the 'support' subpackage.
+
+ - Introduced getCacheAwareContextLoaderDelegate() in
+   AbstractTestContextBootstrapper as an extension point for configuring
+   custom ContextCache support.
+
+ - Introduced reflection-based createBootstrapContext() utility method
+   in BootstrapUtils; TestContextManager now delegates to BootstrapUtils
+   in order to avoid package cycles.
+
+ - Introduced logStatistics() method in the ContextCache API and defined
+   statistics logging category as a constant.
+
+ - DefaultCacheAwareContextLoaderDelegate now delegates to
+   ContextCache.logStatistics().
+
+Issue: SPR-12683

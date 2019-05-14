@@ -1,0 +1,9 @@
+Ignore additional PDF417 barcode rows
+
+Some barcode generators (e.g. Okapi) seem to generate additional barcode
+rows at the end of the barcode, which can be decoded as valid barcode
+rows, but actually contain garbage. The barcode metadata states that
+these additional rows are not part of the barcode. So we ignore those
+addional rows when parsing the barcode. This could potentially also
+happen (though quite unlikely) if data after the barcode looks like a
+barcode row.

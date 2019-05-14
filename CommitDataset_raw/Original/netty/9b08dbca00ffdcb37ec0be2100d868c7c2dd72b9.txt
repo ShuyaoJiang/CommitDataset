@@ -1,0 +1,14 @@
+Leak detection combined with composite buffers results in incorrectly handled writerIndex when calling ByteBufUtil.writeAscii/writeUtf8 (#8153)
+
+Motivation:
+
+We need to add special handling for WrappedCompositeByteBuf as these also extend AbstractByteBuf, otherwise we will not correctly adjust / read the writerIndex during processing.
+
+Modifications:
+
+- Add instanceof checks for WrappedCompositeByteBuf as well.
+- Add testcases
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8152.

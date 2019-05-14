@@ -1,0 +1,10 @@
+Improve upgrade process for reserved users (elastic/x-pack-elasticsearch#1712)
+
+- Don't attempt to upgrade from 2.x
+- Attempt up to 10 retries if the migration fails (with increasing back-off between attempts)
+- If a cached user is disabled, recheck with the underlying store
+
+The last change is required if the migration takes a long time.
+While users are being migrated, they might be marked as disabled, but when the migration is complete they need to be usable immediately.
+
+Original commit: elastic/x-pack-elasticsearch@2621867014149b6f922c8f51cae72cf9fa026ab8

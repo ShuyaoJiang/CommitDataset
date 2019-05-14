@@ -1,0 +1,11 @@
+Zlib decoder calls reduction and index fix
+
+Motivation:
+The JdkZlibDecoder and JZlibDecoder call isReadable and readableBytes in the same method. There is an opportunity to reduce the number of methods calls to just use readableBytes.  JdkZlibDecoder reads from a ByteBuf with an absolute index instead of using readerIndex()
+
+Modifications:
+- Use readableBytes where isReadable was used
+- Correct absolute ByteBuf index to be relative to readerIndex()
+
+Result:
+Less method calls duplicating work and preventing an index out of bounds exception.

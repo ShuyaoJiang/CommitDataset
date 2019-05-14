@@ -1,0 +1,13 @@
+[#5372] Ensure OpenSslClientContext / OpenSslServerContext can be garbage collected
+
+Motivation:
+
+OpenSslClientContext / OpenSslServerContext can never be garbage collected as both are part of a reference to a callback that is stored as global reference in jni code.
+
+Modifications:
+
+Ensure the callbacks are static and so not hold the reference.
+
+Result:
+
+No more leak due not collectable OpenSslClientContext / OpenSslServerContext

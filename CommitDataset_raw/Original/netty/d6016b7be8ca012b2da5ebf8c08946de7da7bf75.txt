@@ -1,0 +1,14 @@
+[#3457] Proper fix for IllegalStateException caused by closed file descriptor / channel
+
+Motivation:
+
+During 6b941e9bdbc1b1a9090c280bc6c44903ff7c7b67 I introduced a regression that could cause an IllegalStateException.
+A non-proper fix was commited as part of #3443. This commit add a proper fix.
+
+Modifications:
+
+Remove FileDescriptor.INVALID and add FileDescriptor.isOpen() as replacement. Once FileDescriptor.close() is called isOpen() will return false.
+
+Result:
+
+No more IllegalStateException caused by a close channel.

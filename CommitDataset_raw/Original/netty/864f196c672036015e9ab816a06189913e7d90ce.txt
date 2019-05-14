@@ -1,0 +1,18 @@
+Add missing SslContextBuilder.forServer(KeyManagerFactory)
+
+Motivation:
+
+keyManager() is required on server-side, and so there is a forServer()
+method for each override of keyManager(). However, one of the
+forServer() overrides was missing, which meant that if you wanted to use
+a KeyManagerFactory you were forced to provide garbage configuration
+just to get past null checks.
+
+Modifications:
+
+Add missing override.
+
+Result:
+
+No hacks to use SslContextBuilder on server-side with KeyManagerFactory.
+Resolves #3775

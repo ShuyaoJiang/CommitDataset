@@ -1,0 +1,15 @@
+Add workaround for race condition in start-stop-daemon
+
+There’s a race condition in start-stop-daemon when --make-pidfile and
+--background are used together [1]. This race condition can lead to the
+command returning before the PID file has been created. The missing PID
+file then causes the launch script to incorrectly report that the
+service failed to start.
+
+This commit updates the launch script to wait for up to 10 seconds for
+the PID file to be created when start-stop-daemon is used to launch the
+app.
+
+Closes gh-4524
+
+[1] https://bugs.launchpad.net/ubuntu/+source/dpkg/+bug/1036899

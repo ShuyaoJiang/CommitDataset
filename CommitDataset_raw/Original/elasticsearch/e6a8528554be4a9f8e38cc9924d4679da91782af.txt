@@ -1,0 +1,7 @@
+Force depth_first mode execution for terms aggregation under a nested context (#28421)
+
+This commit forces the depth_first mode for `terms` aggregation that contain a sub-aggregation that need to access the score of the document
+in a nested context (the `terms` aggregation is a child of a `nested` aggregation). The score of children documents is not accessible in
+breadth_first mode because the `terms` aggregation cannot access the nested context.
+
+Close #28394

@@ -1,0 +1,19 @@
+Don't send a RST on close of the stream may not have existed (#8086)
+
+Motivation:
+
+When a Http2MultiplexCodec stream channel fails to write the first
+HEADERS it will forcibly close, and that will trigger sending a
+RST_STREAM, which is commonly a connection level protocol error. This is
+because it has what looks like a valid stream id, but didn't check with
+the connection as to whether the stream may have actually existed.
+
+Modifications:
+
+Instead of checking if the stream was just a valid looking id ( > 0) we
+check with the connection as to whether it may have existed at all.
+
+Result:
+
+We no longer send a RST_STREAM frame from Http2MultiplexCodec for idle
+streams.

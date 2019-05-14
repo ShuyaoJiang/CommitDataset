@@ -1,0 +1,13 @@
+Correctly have exceptions thrown from decode(...) method be wrapped with DecodingException
+
+Motivation:
+
+Normally if a decoder produces an exception its wrapped with DecodingException. This is not the cause for NotSslRecordException in SslHandler and SniHandler.
+
+Modifications:
+
+Just throw the NotSslRecordException exception for decode(...) and so ensure its correctly wrapped in a DecodingException before its passed through the pipeline.
+
+Result:
+
+Consist behavior.

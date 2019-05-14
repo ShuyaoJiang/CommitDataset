@@ -1,0 +1,15 @@
+[Painless] Generate Bridge Methods (#36097)
+
+We use MethodHandles.asType to cast argument types into the appropriate parameter types for 
+method calls when the target of the call is a def type at runtime. Currently, certain implicit casts 
+using the def type are asymmetric. It is possible to cast Integer -> float as an argument to parameter, but not from int -> Float (boxed to primitive with upcasting is okay, but primitive to 
+boxed with upcasting is not).
+
+This PR introduces a solution to the issue by generating bridge methods for all whitelisted methods 
+that have at least a single boxed type as an argument. The bridge method will conduct appropriate 
+casts and then call the original method. This adds a bit of overhead for correctness. It should not be
+used often as Painless avoids boxed types as much as possible.
+
+Note that a large portion of this change is adding methods to do the appropriate def to boxed type 
+casts and a few mechanical changes as well. The most important method for review is 
+generateBridgeMethod in PainlessLookupBuilder.

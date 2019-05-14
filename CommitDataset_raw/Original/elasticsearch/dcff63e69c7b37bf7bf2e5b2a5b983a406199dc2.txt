@@ -1,0 +1,7 @@
+Do not serialize basic license exp in x-pack info (#30848)
+
+This is a bug that was identified by the kibana team. Currently on a
+get-license call we do not serialize the hard-coded expiration for basic
+licenses. However, the kibana team calls the x-pack info route which
+still does serialize the expiration date. This commit removes that
+serialization in the rest response.

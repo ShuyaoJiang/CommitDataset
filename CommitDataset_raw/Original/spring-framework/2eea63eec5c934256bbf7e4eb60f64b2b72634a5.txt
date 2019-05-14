@@ -1,0 +1,14 @@
+Introduce Framework/DispatcherServlet constructors
+
+Constructors have been added to both FrameworkServlet and
+DispatcherServlet to support instance-based programmatic registration
+of Servlets within ServletContainerInitializer implementations in
+Servlet 3.0+ environments, and more particularly when using Spring 3.1's
+WebApplicationInitializer SPI.
+
+This change also renames the method added to FrameworkServlet in
+SPR-8185 from #initializeWebApplicationContext to #applyInitializers.
+The reason being that a method named #initWebApplicationContext was
+already present and the names overlapped confusingly.
+
+Issue: SPR-7672, SPR-8185

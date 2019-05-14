@@ -1,0 +1,13 @@
+Propagate full Unsafe unavailability reason in PlatformDependent
+
+Motivation:
+It is not clear why Unsafe is unavailable when it is explicitly
+disabled, or when Netty thinks it is running on Android.
+
+Modification:
+Change the "has" fields and methods to be causes.  A null cause
+means Unsafe is present.  This catches all possible reason why
+Unsafe might not be available.
+
+Result:
+Easier to debug Netty start up when logging cannot be turned on.

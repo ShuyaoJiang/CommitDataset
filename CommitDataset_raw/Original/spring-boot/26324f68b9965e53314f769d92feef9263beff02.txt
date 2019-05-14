@@ -1,0 +1,15 @@
+Make system props available when building model for CLI dep mgmt bom
+
+Certain Maven profile activator’s require access to System properties
+to determine whether or not a profile should be activated.
+JdkVersionProfileActivator is one such activator.
+
+Prior to this commit, the presence of a Maven profile that was activated
+based on the JDK in a bom imported using @DependencyManagementBom in the
+CLI would trigger a failure as the JdkVersionProfileActivator could not
+determine the version of Java on which it was running.
+
+This commit updates the CLI to pass the JVM’s System properties to the
+request to build a bom’s model so that those system properties can be
+used by JdkVersionProfileActivator (and any other activators which need
+them).

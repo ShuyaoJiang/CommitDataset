@@ -1,0 +1,10 @@
+PathVariable consistently reflects value up to 1st ";"
+
+Given "/{foo}" and "/a=42;c=b", previously that would be treated as a
+sequence of matrix vars with an empty path variable. After the change
+the path variable "foo" is "a=42".
+
+This should be ok for backawards compatibility since it's unlikely for
+anything to rely on an empty path variable.
+
+Issue: SPR-11897

@@ -1,0 +1,12 @@
+Make it easier to use YAML configuration to turn off a logger
+
+A level named off is used to disable logging for a particular logger.
+YAML interprets off as false, leading to a failed attempt to get the
+LogLevel for FALSE. A workaround is to quote the level, i.e. use "off"
+rather than off.
+
+This commit updates LoggingApplicationListener to coerce the string
+false back to the level off.
+
+Closes gh-3631
+See gh-3628

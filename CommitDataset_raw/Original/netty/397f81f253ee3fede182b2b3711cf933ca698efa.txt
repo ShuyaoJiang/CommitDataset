@@ -1,0 +1,24 @@
+[#2305] Fix issue related to decoding post request raized an exception due to a split of information by chunk not correctly taken into account by the decoder
+
+Motivation:
+
+If the last item analyzed in a previous received HttpChunk/HttpContent was a part of an attribute's name, the read index was not set to the new right place and therefore raizing an exception in some case (since the "new" name analyzed is empty, which is not allowed so the exception).
+
+What appears there is that the read index should be reset to the last valid position encountered whatever the case. Currently it was set when only when there is an attribute not already finished (name is ok, but content is possibly not).
+
+Therefore the issue is that elements could be rescanned multiple times (including completed elements) and moreover some bad decoding can occur such as when in a middle of an attribute's name.
+
+Modifications:
+
+To fix this issue, since "firstpos" contains the last "valid" read index of the decoding (when finding a '&', '=', 'CR/LF'), we should add the setting of the read index for the following cases:
+
+'lastchunk' encountered, therefore finishing the current buffer
+any other cases than current attribute is not finished (name not found yet in particular)
+So adding for this 2 cases:
+
+undecodedChunk.readerIndex(firstpos);
+
+Result:
+
+Now the decoding is done once, content is added from chunk/content to chunk/content, name is decoded correctly even if in the middle of 2 chunks/contents.
+A Junit test code was added: testChunkCorrect that should not raized any exception.

@@ -1,0 +1,16 @@
+Circuit-break based on real memory usage
+
+With this commit we introduce a new circuit-breaking strategy to the parent
+circuit breaker. Contrary to the current implementation which only accounts for
+memory reserved via child circuit breakers, the new strategy measures real heap
+memory usage at the time of reservation. This allows us to be much more
+aggressive with the circuit breaker limit so we bump it to 95% by default. The
+new strategy is turned on by default and can be controlled  with the new cluster
+setting `indices.breaker.total.userealmemory`.
+
+Note that we turn it off for all integration tests with an internal test cluster
+because it leads to spurious test failures which are of no value (we cannot
+fully control heap memory usage in tests). All REST tests, however, will make
+use of the real memory circuit breaker.
+
+Relates #31767

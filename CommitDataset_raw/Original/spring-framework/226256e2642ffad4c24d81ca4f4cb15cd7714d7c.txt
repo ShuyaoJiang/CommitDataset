@@ -1,0 +1,9 @@
+Respect <description> within <entry> per beans XSD
+
+Prior to this change, a parsing exception would be thrown if a
+<description> element was placed within a <map><entry/></map>
+element. The beans XSD has always permitted this arrangement,
+but BeanDefinitionParserDelegate did not respect it. The latter now
+simply ignores any <description> element, rather than failing.
+
+Issue: SPR-8563

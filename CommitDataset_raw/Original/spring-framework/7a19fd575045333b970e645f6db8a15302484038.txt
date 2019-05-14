@@ -1,0 +1,22 @@
+Fix regression in static setter method support
+
+The intention of ExtendedBeanInfo, introduced with SPR-8079 in
+v3.1.0.M2, was to support dependency injection against non-void
+returning write methods. However, it also inadvertently introduced
+support for injection against static setter methods.
+
+When use of ExtendedBeanInfo was made optional with SPR-9723 in
+v3.2.0.M2, ExtendedBeanInfo continued to support static write methods,
+but its new BeanInfoFactory-based approach to testing whether or not
+a given bean class contains candidate write methods was written in a
+fashion exclusive of static methods, and this thereby introduced a
+regression - a regression in an otherwise undocumented and unintended
+feature, but a regression nevertheless.
+
+The reporting of SPR-10115 proves that at least one user has come to
+depend on this behavior allowing injection against static write
+methods, and so this commit fixes the regression by ensuring that the
+candidacy test includes standard and non-void setter methods having a
+static modifier.
+
+Issue: SPR-10115, SPR-9723, SPR-8079

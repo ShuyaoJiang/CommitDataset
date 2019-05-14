@@ -1,0 +1,8 @@
+Fix content type detection with leading whitespace (#32632)
+
+Today content type detection on an input stream works by peeking up to
+twenty bytes into the stream. If the stream is headed by more whitespace
+than twenty bytes, we might fail to detect the content type. We should
+be ignoring this whitespace before attempting to detect the content
+type. This commit does that by ignoring all leading whitespace in an
+input stream before attempting to guess the content type.

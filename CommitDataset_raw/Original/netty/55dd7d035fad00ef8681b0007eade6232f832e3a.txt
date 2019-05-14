@@ -1,0 +1,13 @@
+Fix a class loader leak in ForkJoinPool
+
+Motivation:
+
+As reported in #4211, when using Netty in Tomcat (or other container based deployment), ForkJoinPool leaks an instance of `Submitter` so that the class loader of `Submitter` won't be GCed. However, since `Submitter` is just a wrapper of `int`, we can replace it with `int[1]`.
+
+Modifications:
+
+Replace `Submitter` with `int[1]`.
+
+Result:
+
+No class loader leak in ForkJoinPool when using in a container.

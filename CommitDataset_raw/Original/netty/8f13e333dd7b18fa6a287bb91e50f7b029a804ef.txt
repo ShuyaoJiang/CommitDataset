@@ -1,0 +1,14 @@
+Always return a real slice even when the length is 0
+
+Motivation:
+
+We need to always return a real slice even when the requested length is 0. This is needed as otherwise we not correctly share the reference count and so may leak a buffer if the user call release() on the returned slice and expect it to decrement the reference count of the "parent" buffer.
+
+Modifications:
+
+- Always return a real slice
+- Add unit test for the bug.
+
+Result:
+
+No more leak possible when a user requests a slice of length 0 of a SlicedByteBuf.

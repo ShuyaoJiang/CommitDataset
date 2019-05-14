@@ -1,0 +1,10 @@
+[ML] Uplift model memory limit on job migration (#37126)
+
+When a 6.1-6.3 job is opened in a later version
+we increase the model memory limit by 30% if it's
+below 0.5GB. The migration of jobs from cluster
+state to the config index changes the job version,
+so we need to also do this uplift as part of that
+config migration.
+
+Relates #36961

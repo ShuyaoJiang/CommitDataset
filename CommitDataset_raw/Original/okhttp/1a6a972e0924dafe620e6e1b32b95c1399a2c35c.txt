@@ -1,0 +1,67 @@
+Migrate Request/Response + their body types to Kotlin (#4831)
+
+* Rename Request.java -> Request.kt
+
+* Rename RequestBody.java -> RequestBody.kt
+
+* Rename Response.java -> Response.kt
+
+* Rename ResponseBody.java -> ResponseBody.kt
+
+* Convert Request to Kotlin
+
+* Convert RequestBody to Kotlin
+
+* Convert Response to Kotlin
+
+* Convert ResponseBody to Kotlin
+
+* Clean up package private usages in tests
+
+* Use isDuplex() in HttpLoggingInterceptor
+
+Apparently making this a function is a breaking change to kotlin consumers, and the previous "isDuplex" method was swizzled to a property accessor before
+
+* Exclude Request/Response now-explicitly final methods from japi
+
+The classes were final already, so this is a false positive
+
+* Fix isSuccesful
+
+* Make builders + funs open to match OkHttp3
+
+* Clean up lazy usages to be more idiomatic
+
+* Move boolean "is" properties back to vals to preserve API for both langs
+
+This is also more idiomatic for kotlin anyway
+
+* Use more idiomatic require checks
+
+* Fix require null logic
+
+* Un-backtick nulls
+
+* Revert "Clean up lazy usages to be more idiomatic"
+
+This reverts commit 4bb472ae5a5b94e816897191e10418ceac9d5bf1.
+
+* Add missing braces
+
+* +4 indent on doc
+
+* Remove todo doc
+
+* Use HttpUrl.get()
+
+* Fix weird spacing
+
+* Backticks
+
+* ###
+
+* ### Duplex APIs
+
+* Link grpc
+
+* Move back to regular control flow

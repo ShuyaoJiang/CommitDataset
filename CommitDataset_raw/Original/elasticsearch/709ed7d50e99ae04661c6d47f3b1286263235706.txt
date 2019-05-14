@@ -1,0 +1,13 @@
+Watcher: Only try to load triggered watches index, if it exists (elastic/x-pack-elasticsearch#1569)
+
+This is mainly a commit to reduce noise in test logfiles when going
+through them. When watcher shuts down and another node takes over, it
+might try to start watcher again and tries to load triggered watches.
+However the triggered watches index could be gone in the meantime due to
+further shutdown. This results in logging a stack trace that the index
+does not exist.
+
+This commit checks the cluster state before trying to load triggered
+watches to prevent an IndexNotFoundException in the logs.
+
+Original commit: elastic/x-pack-elasticsearch@9f26d557d0de2c93eea364ad7a3cd185d6af43bd

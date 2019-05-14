@@ -1,0 +1,17 @@
+Fix package list URL for Reactor javadoc in Dokka
+
+Reactor is now building its Javadoc with a recent JDK version, which
+changes the structure of the published HTML pages.
+
+Without this change, the build fails during the Dokka generation with
+the following exception:
+
+```
+Exception while loading package-list from
+ExternalDocumentationLinkImpl(
+  url=http://projectreactor.io/docs/core/release/api/,
+  packageListUrl=http://projectreactor.io/docs/core/release/api/package-list)
+```
+
+This commit now points to the `/element-list` page, which seems to
+contain the same information as the `package-list` page.

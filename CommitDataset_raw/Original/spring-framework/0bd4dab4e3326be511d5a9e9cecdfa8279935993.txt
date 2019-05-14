@@ -1,0 +1,13 @@
+Filter @Configuration classes out of LTW test
+
+Moving @EnableMBeanExport and its MBeanExportConfiguration
+@Configuration class into context.annotation caused a side effect with
+ComponentScanningWithLTWTests, which component scans context.annotation
+in order to test LTW behavior. Picking up MBeanExportConfiguration
+without proper MBean configuration resulted in a NullPointerException
+during test execution.
+
+This commit simply filters out all @Configuration classes from the LTW
+test's component-scanning directive.
+
+Issue: SPR-8943

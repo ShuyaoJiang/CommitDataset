@@ -1,0 +1,14 @@
+Make typeless APIs usable with indices whose type name is different from `_doc` (#35790)
+
+This commit makes `document`, `update`, `explain`, `termvectors` and `mapping`
+typeless APIs work on indices that have a type whose name is not `_doc`.
+Unfortunately, this needs to be a bit of a hack since I didn't want calls with
+random type names to see documents with the type name that the user had chosen
+upon type creation.
+
+The `explain` and `termvectors` do not support being called without a type for
+now so the test is just using `_doc` as a type for now, we will need to fix
+tests later but this shouldn't require further changes server-side since passing
+`_doc` as a type name is what typeless APIs do internally anyway.
+
+Relates #35190

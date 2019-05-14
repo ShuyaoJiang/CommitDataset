@@ -1,0 +1,7 @@
+Avoid doing redundant work when checking for self references. (#26927)
+
+Currently we test all maps, arrays or iterables. However, in the case that maps
+contain sub maps for instance, we will test the sub maps again even though the
+work has already been done for the top-level map.
+
+Relates #26907

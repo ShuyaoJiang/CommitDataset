@@ -1,0 +1,15 @@
+Restore LoggingSystems’ previous cleanup behaviour
+
+This commit reverts the changes made for gh-4026. Those changes updated
+each LoggingSystem to close/stop the underlying logging system as part
+of the clean up processing. Unfortunately, this approach doesn’t work
+in an environment where their are multiple application contexts and
+some have a shorter lifecycle than the “main” application context. In
+such an environment, closing an application context with a shorter
+lifecycle prior to the main application context being closed will
+close/stop the main application context’s logging system as, rather than
+being scoped to an application context, a logging system is shared
+across multiple application contexts. (The exact details of how widely
+shared the logging system is varies between logging systems and, in the
+case of Logback and Log4J2, also depends on which ContextSelector
+implementation is being used.

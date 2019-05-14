@@ -1,0 +1,10 @@
+OpenSslEngine wrap with heap buffer bug
+
+Motivation:
+ReferenceCountedOpenSslEngine#wrap must have a direct buffer for a destination to interact with JNI. If the user doesn't supply a direct buffer we internally allocate one to write the results of wrap into. After this operation completes we copy the contents of the direct buffer into the heap buffer and use internalNioBuffer to get the content. However we pass in the end index but the internalNioBuffer expects a length.
+
+Modifications:
+- pass the length instead of end index to internalNioBuffer
+
+Result:
+ReferenceCountedOpenSslEngine#wrap will copy the correct amount of data into the destination buffer when heap buffers are wrapped.

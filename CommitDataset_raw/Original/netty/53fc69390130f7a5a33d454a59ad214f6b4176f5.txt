@@ -1,0 +1,11 @@
+SslHandler and OpenSslEngine miscalculation of wrap destination buffer size
+
+Motivation:
+When we do a wrap operation we calculate the maximum size of the destination buffer ahead of time, and return a BUFFER_OVERFLOW exception if the destination buffer is not big enough. However if there is a CompositeByteBuf the wrap operation may consist of multiple ByteBuffers and each incurs its own overhead during the encryption. We currently don't account for the overhead required for encryption if there are multiple ByteBuffers and we assume the overhead will only apply once to the entire input size. If there is not enough room to write an entire encrypted packed into the BIO SSL_write will return -1 despite having actually written content to the BIO. We then attempt to retry the write with a bigger buffer, but because SSL_write is stateful the remaining bytes from the previous operation are put into the BIO. This results in sending the second half of the encrypted data being sent to the peer which is not of proper format and the peer will be confused and ultimately not get the expected data (which may result in a fatal error). In this case because SSL_write returns -1 we have no way to know how many bytes were actually consumed and so the best we can do is ensure that we always allocate a destination buffer with enough space so we are guaranteed to complete the write operation synchronously.
+
+Modifications:
+- SslHandler#allocateNetBuf should take into account how many ByteBuffers will be wrapped and apply the encryption overhead for each
+- Include the TLS header length in the overhead computation
+
+Result:
+Fixes https://github.com/netty/netty/issues/6481

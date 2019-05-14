@@ -1,0 +1,10 @@
+EPOLL Socket Shutdown Fix
+
+Motivation:
+8dbf5d02e53a72c42467b8dc0a5e1482d5f49af4 modified the shutdown code for Socket but did not correctly calculate the change in shutdown state and only applying this change. This is significant because if sockets are being opening and closed quickly and the underlying FD happens to be reused we need to take care that we don't unintentionally change the state of the new FD by acting on an object which represents the old incarnation of that FD.
+
+Modifications:
+- Calculate the shutdown change, and only apply what has changed, or exit if no change.
+
+Result:
+Socket.shutdown can not inadvertently affect the state of another logical FD.

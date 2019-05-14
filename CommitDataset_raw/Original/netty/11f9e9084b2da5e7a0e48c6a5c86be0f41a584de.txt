@@ -1,0 +1,14 @@
+[#3921] EmbeddedChannel should add ChannelHandlers once registered
+
+Motivation:
+
+Currently in EmbeddedChannel we add the ChannelHandlers before the Channel is registered which leads to have the handlerAdded(...) callback
+be called from outside the EventLoop and also prevent the user to obtain a reference to the EventLoop in the callback itself.
+
+Modifications:
+
+Delay adding ChannelHandlers until EmbeddedChannel is registered.
+
+Result:
+
+Correctly call handlerAdded(...) after EmbeddedChannel is registered.

@@ -1,0 +1,15 @@
+Introduce 'useRegisteredExtensionsOnly' property in classes using MediaTypeFactory
+
+This commit introduces a `useRegisteredExtensionsOnly` property that
+indicates whether classes that use the `MediaTypeFactory` for supplying
+default media types can do so.
+
+ - In classes that were introduced in Spring 5.0, the
+ `useRegisteredExtensionsOnly` property takes the place of the
+ `useJaf` property that was removed in 0aaa652
+ - In classes that existed before Spring 5.0, the
+ `useRegisteredExtensionsOnly` property is added in addition to the
+ deprecated `useJaf`, the latter delegating to the former, but with
+ flipped behavior.
+
+Issue: SPR-14908

@@ -1,0 +1,18 @@
+Expose caching-specific infrastructure
+
+Expose the underlying cache infrastructure bean if Boot auto-configures
+it. This is the case for ehCache, hazelcast and JCache. This change has
+two side effects:
+
+1. It is now possible to customize the underlying cache infrastructure
+and let Boot only wrap it in the Spring's CacheManager abstraction. No
+customizations are applied if the caching-specific service is customized
+2. Such infrastructure is disposed when the application terminates as
+it is now defined as `@Bean` and both `close()` and `shutdown()` methods
+are invoked if present on the target type.
+
+While the latter can be troublesome, we feel that a particular cache
+instance is not meant to be shared and must be disposed when the
+application terminates.
+
+Closes gh-2848

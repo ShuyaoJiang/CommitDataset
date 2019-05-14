@@ -1,0 +1,17 @@
+[#2769] Fix regression when writing different message types
+
+Motivation:
+
+Due a regression NioSocketChannel.doWrite(...) will throw a ClassCastException if you do something like:
+
+channel.write(bytebuf);
+channel.write(fileregion);
+channel.flush();
+
+Modifications:
+
+Correctly handle writing of different message types by using the correct message count while loop over them.
+
+Result:
+
+No more ClassCastException

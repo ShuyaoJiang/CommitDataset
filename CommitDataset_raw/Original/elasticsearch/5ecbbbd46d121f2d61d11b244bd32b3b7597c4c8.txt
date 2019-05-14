@@ -1,0 +1,11 @@
+Use plain old exception if security init fails
+
+When security initialization fails during startup today we throw an
+Error. This triggers the uncaught exception handler immediately killing
+the node. While the node is going to die either way, we should not be
+triggering the killer and in general we should avoid using Throwables
+that extend Error.
+
+Relates elastic/x-pack-elasticsearch#2035
+
+Original commit: elastic/x-pack-elasticsearch@546f7f900260292a9433a98c0d65d23795e1b02f

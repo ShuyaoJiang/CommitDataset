@@ -1,0 +1,18 @@
+Fix a race condition in
+AbstractServiceTest#testListenerDoesntDeadlockOnStopAndWaitFromTerminated.
+
+The race condition is triggered due to a slight difference in the behavior of
+startAsync().awaitRunning() vs. startAndWait()
+
+startAndWait() would return RUNNING even if the service in question was
+already TERMINATED whereas awaitRunning() will throw if the state is
+TERMINATED when it is called.
+
+The service in question here very quickly transitions from
+STARTING->RUNNING->TERMINATED so depending on thread timing awaitRunning
+could observe the service as RUNNING or as TERMINATED, the fix is to have the
+service shutdown be triggered by a call to stop rather than happening
+automatically.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=50639385

@@ -1,0 +1,21 @@
+Don't add null to SmtpResponse.details()
+
+Motivation:
+
+If the remote server returns an invalid response in the form "000 \r\n"
+(i.e. a three digit code, then space, but no details), null is added
+as a singletonList to the response being constructed.
+
+This seems unexpected and it would be easier to handle an empty
+details list in client code.
+
+Modifications:
+
+If detail is null (because frame.isReadable() returned false after
+reading the separator), initialise DefaultSmtpResponse with an empty
+list instead of a list containing a single null value.
+
+Result:
+
+When encountering this malformed server response, a DefaultSmtpResponse
+with a code but no details will be created.

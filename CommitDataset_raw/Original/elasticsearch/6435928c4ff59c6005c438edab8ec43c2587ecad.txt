@@ -1,0 +1,8 @@
+Remove no existing commits assertion in onInit()
+
+This assertion does not hold if a shard is recovered from an empty store
+but failed then retries. Moreover, if the openMode is CREATE_INDEX_*, we
+pass CREATE mode to the IndexWriterConfig to create a new index and
+overwrite the existing one.
+
+Closes #27960

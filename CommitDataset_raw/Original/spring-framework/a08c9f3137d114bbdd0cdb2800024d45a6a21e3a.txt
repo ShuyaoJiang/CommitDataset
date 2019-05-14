@@ -1,0 +1,9 @@
+Polish serialization/deserialization exception logging
+
+This commit introduces the following changes in AbstractHandlerExceptionResolver:
+ - warnLogger used to log exception is enabled by default
+ - the exception message is now logged instead of the whole exception stacktrace
+ - warn logging is only performed if doResolveException() returns a non-null
+   ModelAndView, in order to avoid logging multiple times the error
+
+Issue: SPR-13100

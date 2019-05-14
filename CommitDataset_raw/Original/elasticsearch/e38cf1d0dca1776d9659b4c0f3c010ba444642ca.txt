@@ -1,0 +1,6 @@
+Add the ability to set the number of hits to track accurately (#36357)
+
+In Lucene 8 searches can skip non-competitive hits if the total hit count is not requested.
+It is also possible to track the number of hits up to a certain threshold. This is a trade off to speed up searches while still being able to know a lower bound of the total hit count. This change adds the ability to set this threshold directly in the track_total_hits search option. A boolean value (true, false) indicates whether the total hit count should be tracked in the response. When set as an integer this option allows to compute a lower bound of the total hits while preserving the ability to skip non-competitive hits when enough matches have been collected.
+
+Relates #33028

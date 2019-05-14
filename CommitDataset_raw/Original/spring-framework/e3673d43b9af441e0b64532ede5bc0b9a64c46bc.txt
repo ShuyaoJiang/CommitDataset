@@ -1,0 +1,18 @@
+Thread-safe reactive ServerHttpRequest
+
+This commit replaces the lazy URI and headers initialization in the
+reactive ServerHttpRequest in favor of eager initialization at
+construction time. Both the URI and headers are nearly guaranteed to
+be accessed for every request (URI for application path, headers for
+"Origin" header).
+
+Query params are still lazily parsed but parsing is idemptotent and
+in the unlikely case of concurrent access (it's the framework that
+typically accesses query params) it maybe parsed twice but should
+be side effect free still.
+
+Cookies are also parsed lazily and since we delegate to the "native"
+request, it depends on the underlying runtime whether synchronization
+is needed. This commit adds synchronization for the HttpServletRequest.
+At present RxNetty, Reactor, and Undertow implementations provide
+thread-safe access to cookies.

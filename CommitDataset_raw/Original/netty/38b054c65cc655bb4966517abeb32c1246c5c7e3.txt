@@ -1,0 +1,13 @@
+Correctly handle read-only ByteBuf in ByteToMessageDecoder
+
+Motivation:
+
+If a read-only ByteBuf is passed to the ByteToMessageDecoder.channelRead(...) method we need to make a copy of it once we try to merge buffers for cumulation. This usually is not the case but can for example happen if the local transport is used. This was the cause of the leak report we sometimes saw during the codec-http2 tests, as we are using the local transport and write a read-only buffer. This buffer will then be passed to the peer channel and fired through the pipeline and so end up as the cumulation buffer in the ByteToMessageDecoder. Once the next fragement is received we tried to merge these and failed with a ReadOnlyBufferException which then produced a leak.
+
+Modifications:
+
+Ensure we copy the buffer if its read-only.
+
+Result:
+
+No more exceptions and so leak when a read-only buffer is passed to ByteToMessageDecoder.channelRead(...)

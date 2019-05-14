@@ -1,0 +1,8 @@
+[Tests] Fix creating ExplainLifecycleRequest with no indices (#35828)
+
+We didn't check that the ExplainLifecycleRequest was constructed with at least
+one index before, now that we do we must also make sure the tests
+mutateInstance() method used in equals/hashCode checks doesn't accidentally
+create an empty index array.
+
+Closes #35822

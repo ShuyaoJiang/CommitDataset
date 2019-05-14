@@ -1,0 +1,10 @@
+SQL: Fix esType for DATETIME/DATE and INTERVALS (#38179)
+
+Since introduction of data types that don't have a corresponding type
+in ES the `esType` is error-prone when used for `unmappedType()` calls.
+Moreover since the renaming of `DATE` to `DATETIME` and the introduction
+of an actual date-only `DATE` the `esType` would return `datetime` which
+is not a valid type for ES mapping.
+
+Fixes: #38051
+

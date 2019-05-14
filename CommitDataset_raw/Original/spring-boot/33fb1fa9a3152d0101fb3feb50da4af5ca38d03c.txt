@@ -1,0 +1,16 @@
+Avoid creating meter binders before registry has been customized
+
+Previously, MeterRegistryPostProcessor would trigger the creation of all
+meter binders and meter registry customizers before applying the
+customizers and calling the binders. In some situations with complex
+dependency graphs where the creation of a binder and the injection of
+its dependencies inadvertently triggered some meter binding, this
+could result in meters being bound before the registry had been
+customized.
+
+This commit reworks MeterRegistryPostProcessor and MeterRegistryConfigurer
+to defer the retrieval of registry customizers and meter binders until
+just before they are needed. As a result, customizers are now retrieved
+and applied before the binders are retrieved.
+
+Closes gh-15483

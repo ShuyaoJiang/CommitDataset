@@ -1,0 +1,48 @@
+ByteBufAllocator API w/ ByteBuf perf improvements
+
+This commit introduces a new API for ByteBuf allocation which fixes
+issue #643 along with refactoring of ByteBuf for simplicity and better
+performance. (see #62)
+
+A user can configure the ByteBufAllocator of a Channel via
+ChannelOption.ALLOCATOR or ChannelConfig.get/setAllocator().  The
+default allocator is currently UnpooledByteBufAllocator.HEAP_BY_DEFAULT.
+
+To allocate a buffer, do not use Unpooled anymore. do the following:
+
+  ctx.alloc().buffer(...); // allocator chooses the buffer type.
+  ctx.alloc().heapBuffer(...);
+  ctx.alloc().directBuffer(...);
+
+To deallocate a buffer, use the unsafe free() operation:
+
+  ((UnsafeByteBuf) buf).free();
+
+The following is the list of the relevant changes:
+
+- Add ChannelInboundHandler.freeInboundBuffer() and
+  ChannelOutboundHandler.freeOutboundBuffer() to let a user free the
+  buffer he or she allocated. ChannelHandler adapter classes implement
+  is already, so most users won't need to call free() by themselves.
+  freeIn/OutboundBuffer() methods are invoked when a Channel is closed
+  and deregistered.
+
+- All ByteBuf by contract must implement UnsafeByteBuf. To access an
+  unsafe operation: ((UnsafeByteBuf) buf).internalNioBuffer()
+
+- Replace WrappedByteBuf and ByteBuf.Unsafe with UnsafeByteBuf to
+  simplify overall class hierarchy and to avoid unnecesary instantiation
+  of Unsafe instances on an unsafe operation.
+
+- Remove buffer reference counting which is confusing
+
+- Instantiate SwappedByteBuf lazily to avoid instantiation cost
+
+- Rename ChannelFutureFactory to ChannelPropertyAccess and move common
+  methods between Channel and ChannelHandlerContext there. Also made it
+  package-private to hide it from a user.
+
+- Remove unused unsafe operations such as newBuffer()
+
+- Add DetectionUtil.canFreeDirectBuffer() so that an allocator decides
+  which buffer type to use safely

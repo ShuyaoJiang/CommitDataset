@@ -1,0 +1,14 @@
+[Encoder|Decoder]HttpMessageWriter server support
+
+There is a natural way to implement ServerHttpMessage[Reader|Writer]
+from [Encoder|Decoder]HttpMessageWriter by resolving hints first via
+a protected method and then delegating to the regular read or write.
+
+There is no downside either since it does not prevent
+[Encoder|Decoder]HttpMessageWriter from being used for both client and
+server scenarios while they're more useful.
+
+As a positive side effect AbstractServerHttpMessage[Reader|Writer] can
+be removed further simplfications can be made (in a future commit) to
+accept ServerHttpMessageWriter for configuration purposes on the server
+side and remove instanceof checks for ServerHttpMessageWriter.

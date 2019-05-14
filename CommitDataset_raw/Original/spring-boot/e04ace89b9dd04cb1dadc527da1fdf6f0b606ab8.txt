@@ -1,0 +1,13 @@
+Fix LinkageError with ExpectedException and FilteredClassPathRunner
+
+Previously, when the ExpectedException JUnit rule was used with
+FilteredClassPathRunner a LinkageError would occur if any of
+ExpectedException's methods that take a Hamcrest Matcher were called.
+This was due to the FilteredClassLoader delegating loading of
+org.junit classes to its parent but not org.hamcrest classes. This
+resulted in JUnit classes loading one version of the Hamcrest class
+and the test class loading another.
+
+This commit ensures that both the JUnit classes and the test class
+use the same version of Hamcrest classes by also delegating the
+loading of org.hamcrest classes to FilteredClassLoader's parent.

@@ -1,0 +1,11 @@
+Fix host+port resolution in ReactorServerHttpRequest
+
+Prior to this commit, the host+port information of the incoming request
+where taken from the remoteAddress, which is actually the socket address
+of the HTTP client (i.e. not the server).
+
+This commit resolves this information from the "Host" HTTP request
+header, if available, or the actual local address of the channel if no
+header is available.
+
+Issue: SPR-15084

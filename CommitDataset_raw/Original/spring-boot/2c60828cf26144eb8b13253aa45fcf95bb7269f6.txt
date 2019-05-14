@@ -1,0 +1,13 @@
+Ensure ServerProperties default values does not override
+
+Since ServerProperties had primitive properties for port (in
+particular) it was not possible to check when applying those
+properties if the user had actually changed the value. This
+in turn meant that a custom EmbeddedServletContainerFactory
+could not set the default values.
+
+Fixed by making int properties of ServerProperties into
+Integer and checking for null before setting on the
+container factory.
+
+Fixes gh-84

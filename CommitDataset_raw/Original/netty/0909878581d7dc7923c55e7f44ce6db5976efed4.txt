@@ -1,0 +1,19 @@
+Read only when requested (read-on-demand)
+
+This pull request introduces a new operation called read() that replaces the existing inbound traffic control method. EventLoop now performs socket reads only when the read() operation has been issued. Once the requested read() operation is actually performed, EventLoop triggers an inboundBufferSuspended event that tells the handlers that the requested read() operation has been performed and the inbound traffic has been suspended again. A handler can decide to continue reading or not.
+
+Unlike other outbound operations, read() does not use ChannelFuture at all to avoid GC cost. If there's a good reason to create a new future per read at the GC cost, I'll change this.
+
+This pull request consequently removes the readable property in ChannelHandlerContext, which means how the traffic control works changed significantly.
+
+This pull request also adds a new configuration property ChannelOption.AUTO_READ whose default value is true. If true, Netty will call ctx.read() for you. If you need a close control over when read() is called, you can set it to false.
+
+Another interesting fact is that non-terminal handlers do not really need to call read() at all. Only the last inbound handler will have to call it, and that's just enough. Actually, you don't even need to call it at the last handler in most cases because of the ChannelOption.AUTO_READ mentioned above.
+
+There's no serious backward compatibility issue. If the compiler complains your handler does not implement the read() method, add the following:
+
+public void read(ChannelHandlerContext ctx) throws Exception {
+    ctx.read();
+}
+
+Note that this pull request certainly makes bounded inbound buffer support very easy, but itself does not add the bounded inbound buffer support.

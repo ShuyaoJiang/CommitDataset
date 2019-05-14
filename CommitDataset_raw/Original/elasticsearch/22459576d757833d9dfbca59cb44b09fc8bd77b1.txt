@@ -1,0 +1,50 @@
+Logging: Make node name consistent in logger (#31588)
+
+First, some background: we have 15 different methods to get a logger in
+Elasticsearch but they can be broken down into three broad categories
+based on what information is provided when building the logger.
+
+Just a class like:
+```
+private static final Logger logger = ESLoggerFactory.getLogger(ActionModule.class);
+```
+or:
+```
+protected final Logger logger = Loggers.getLogger(getClass());
+```
+
+The class and settings:
+```
+this.logger = Loggers.getLogger(getClass(), settings);
+```
+
+Or more information like:
+```
+Loggers.getLogger("index.store.deletes", settings, shardId)
+```
+
+The goal of the "class and settings" variant is to attach the node name
+to the logger. Because we don't always have the settings available, we
+often use the "just a class" variant and get loggers without node names
+attached. There isn't any real consistency here. Some loggers get the
+node name because it is convenient and some do not.
+
+This change makes the node name available to all loggers all the time.
+Almost. There are some caveats are testing that I'll get to. But in
+*production* code the node name is node available to all loggers. This
+means we can stop using the "class and settings" variants to fetch
+loggers which was the real goal here, but a pleasant side effect is that
+the ndoe name is now consitent on every log line and optional by editing
+the logging pattern. This is all powered by setting the node name
+statically on a logging formatter very early in initialization.
+
+Now to tests: tests can't set the node name statically because
+subclasses of `ESIntegTestCase` run many nodes in the same jvm, even in
+the same class loader. Also, lots of tests don't run with a real node so
+they don't *have* a node name at all. To support multiple nodes in the
+same JVM tests suss out the node name from the thread name which works
+surprisingly well and easy to test in a nice way. For those threads
+that are not part of an `ESIntegTestCase` node we stick whatever useful
+information we can get form the thread name in the place of the node
+name. This allows us to keep the logger format consistent.
+

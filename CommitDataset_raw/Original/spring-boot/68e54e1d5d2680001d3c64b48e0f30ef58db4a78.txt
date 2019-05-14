@@ -1,0 +1,26 @@
+Favour entries in source jar over standard libraries when repackaging
+
+When writing a jar, once an entry has been written it will never be
+overwritten, i.e. the first write of a given entry will win. Previously,
+when repackaging a jar, the existing contents were written followed by
+any libraries. This caused a problem when repackaged a WAR file and
+a library needed to be unpacked as the existing entry in WEB-INF/lib
+would prevent the library with the UNPACK comment from being written.
+This was addressed in f761916b by inverting the order so libraries
+would take precedence over entries in the source jar.
+
+It’s now become apparent that this change in the order causes a problem
+for users who are obfuscating their code. The obfuscated code exists in
+the source jar but is also provided to the repackager in its original
+form as a library. When libraries take precedence, this means that the
+code in its original form ends up in the repackaged war and the
+obfuscation is lost.
+
+This commit updates the repackager to write libraries that require
+unpacking first. This allows the UNPACK comment to be written even if
+there’s also a source entry for the library. Next, source entries are
+written. This allows obfuscated source entries to take precedence over
+any unobfuscated library equivalents. Lastly, standard libraries that
+do not require unpacking are written into the repackaged archive.
+
+Closes gh-3444

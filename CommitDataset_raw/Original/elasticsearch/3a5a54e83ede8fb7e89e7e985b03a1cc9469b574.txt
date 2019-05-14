@@ -1,0 +1,10 @@
+Collapses package structure for some bucket aggs (#25579)
+
+This change collapses some of the packages for the bucket aggregations into their parent packages. This was done for the following aggregations:
+* The variants of the range aggregation (geo_distance, date and ip) were moved into the `o.e.s.a.bucket.range` package
+* The `o.e.s.a.bucket.terms.support` package was removed and the classes were moved to `o.e.s.a.bucket.terms`
+* The filter aggregation was moved to `o.e.s.a.bucket.filter`
+
+Since this PR is already relatively large with only the above changes subsequent PRs will do similar operations on relevant metric and pipeline aggregations
+
+Relates to #22868

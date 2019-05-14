@@ -1,0 +1,21 @@
+Fixes for compression codecs
+
+Motivation:
+
+Fixed founded mistakes in compression codecs.
+
+Modifications:
+
+- Changed return type of ZlibUtil.inflaterException() from CompressionException to DecompressionException
+- Updated @throws in javadoc of JZlibDecoder to throw DecompressionException instead of CompressionException
+- Fixed JdkZlibDecoder to throw DecompressionException instead of CompressionException
+- Removed unnecessary empty lines in JdkZlibEncoder and JZlibEncoder
+- Removed public modifier from Snappy class
+- Added MAX_UNCOMPRESSED_DATA_SIZE constant in SnappyFramedDecoder
+- Used in.readableBytes() instead of (in.writerIndex() - in.readerIndex()) in SnappyFramedDecoder
+- Added private modifier for enum ChunkType in SnappyFramedDecoder
+- Fixed potential bug (sum overflow) in Bzip2HuffmanAllocator.first(). For more info, see http://googleresearch.blogspot.ru/2006/06/extra-extra-read-all-about-it-nearly.html
+
+Result:
+
+Fixed sum overflow in Bzip2HuffmanAllocator, improved exceptions in ZlibDecoder implementations, hid Snappy class

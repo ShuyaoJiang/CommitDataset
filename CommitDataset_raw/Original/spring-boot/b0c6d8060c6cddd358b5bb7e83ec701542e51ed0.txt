@@ -1,0 +1,13 @@
+Remove Git plugin from Spring Boot tools
+
+The Git plugin was primarily being used to provide version information
+that Boot's maven plugin can add into the MANIFEST.MF of the uber-jars
+that it creates under the Spring-Boot-Commit-Id attribute.
+
+This commit removes the Git plugin from Boot's own projects, but
+leaves it in the spring-boot-starter-parent for use by Spring
+Boot-based applications.
+
+The attribute in the uber-jars' MANIFEST.MF has been replaced with a
+Spring-Boot-Version attribute. The value of this attribute is the
+implementation version of Repackager class's package.

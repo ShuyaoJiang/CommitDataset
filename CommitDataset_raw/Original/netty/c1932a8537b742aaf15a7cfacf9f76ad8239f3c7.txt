@@ -1,0 +1,10 @@
+ByteBuf Input Stream Reference Count Ownership
+
+Motivation:
+Netty provides a adaptor from ByteBuf to Java's InputStream interface. The JDK Stream interfaces have an explicit lifetime because they implement the Closable interface. This lifetime may be differnt than the ByteBuf which is wrapped, and controlled by the interface which accepts the JDK Stream. However Netty's ByteBufInputStream currently does not take reference count ownership of the underlying ByteBuf. There may be no way for existing classes which only accept the InputStream interface to communicate when they are done with the stream, other than calling close(). This means that when the stream is closed it may be appropriate to release the underlying ByteBuf, as the ownership of the underlying ByteBuf resource may be transferred to the Java Stream.
+
+Motivation:
+- ByteBufInputStream.close() supports taking reference count ownership of the underyling ByteBuf
+
+Result:
+ByteBufInputStream can assume reference count ownership so the underlying ByteBuf can be cleaned up when the stream is closed.

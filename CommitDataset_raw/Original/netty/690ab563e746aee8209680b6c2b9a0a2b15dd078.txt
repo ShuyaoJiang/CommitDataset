@@ -1,0 +1,14 @@
+Ensure ChannelHandlerContext.attr(...) and ChannelHandlerContext.hasAttr(...) has no semantic change
+
+Motivation:
+
+The ChannelHandlerContext.attr(...) and ChannelHandlerContext.hasAttr(...) delegated to Channel for the attributes which is a semantic change compared to 4.0 releases. We should not change the semantic to not break users applications when upgrading to 4.1.0
+
+Modifications:
+
+- Revert semantic change
+- Mark ChannelHandlerContext.attr(...) and hasAttr(...) as @deprecated so we can remove these later
+
+Result:
+
+Semantic of attribute operations on ChannelHandlerContext is the same in 4.1 as in 4.0 again.

@@ -1,0 +1,37 @@
+Harden periodically check to avoid endless flush loop (#29125)
+
+In #28350, we fixed an endless flushing loop which may happen on 
+replicas by tightening the relation between the flush action and the
+periodically flush condition.
+
+1. The periodically flush condition is enabled only if it is disabled 
+after a flush.
+
+2. If the periodically flush condition is enabled then a flush will
+actually happen regardless of Lucene state.
+
+(1) and (2) guarantee that a flushing loop will be terminated. Sadly, 
+the condition 1 can be violated in edge cases as we used two different
+algorithms to evaluate the current and future uncommitted translog size.
+
+- We use method `uncommittedSizeInBytes` to calculate current 
+  uncommitted size. It is the sum of translogs whose generation at least
+the minGen (determined by a given seqno). We pick a continuous range of
+translogs since the minGen to evaluate the current uncommitted size.
+
+- We use method `sizeOfGensAboveSeqNoInBytes` to calculate the future 
+  uncommitted size. It is the sum of translogs whose maxSeqNo at least
+the given seqNo. Here we don't pick a range but select translog one by
+one.
+
+Suppose we have 3 translogs `gen1={#1,#2}, gen2={}, gen3={#3} and 
+seqno=#1`, `uncommittedSizeInBytes` is the sum of gen1, gen2, and gen3
+while `sizeOfGensAboveSeqNoInBytes` is the sum of gen1 and gen3. Gen2 is
+excluded because its maxSeqno is still -1.
+
+This commit removes both `sizeOfGensAboveSeqNoInBytes` and 
+`uncommittedSizeInBytes` methods, then enforces an engine to use only
+`sizeInBytesByMinGen` method to evaluate the periodically flush condition.
+
+Closes #29097
+Relates ##28350

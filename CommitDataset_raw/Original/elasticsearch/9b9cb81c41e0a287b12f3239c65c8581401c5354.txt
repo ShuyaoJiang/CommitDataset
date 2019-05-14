@@ -1,0 +1,5 @@
+Fix serialization errors when cross cluster search goes to a single shard (#26881)
+
+The single shard optimization that we have in our search api changes the type of response returned by the query transport action name based on the shard search request. if the request goes to one shard, we will do query and fetch at the same time, hence the response will be different. The proxying layer used in cross cluster search was not aware of this distinction, which causes serialization issues every time a cross cluster search request goes to a single shard and goes through a gateway node which has to forward the shard request to a data node. The coordinating node would then expect a QueryFetchSearchResult while the gateway would return a QuerySearchResult.
+
+Closes #26833

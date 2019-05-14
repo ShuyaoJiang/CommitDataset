@@ -1,0 +1,10 @@
+Fix for Android crash caused by mis-aligned call of Unsafe.getLong on a 4-byte aligned field offset.
+
+Any use of Unsafe to read java arrays of "another type" is dangerous
+and unsupported (by Unsafe), so fall back to safe java more
+conservatively, unless we are running 64-bit java with 8-byte aligned
+byte array offset.  This leaves the Big Java Server optimizations in place.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=152215885

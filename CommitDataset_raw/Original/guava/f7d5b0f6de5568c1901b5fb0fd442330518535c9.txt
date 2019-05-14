@@ -1,0 +1,41 @@
+Remove AbstractMultiset's default O(n) (or worse) implementations of size(), count(), and clear().
+
+As part of the cleanup:
+- make TreeMultiset.clear() (in the normal case) O(n) rather than something worse (due to rebalancing)
+- make AbstractMapBasedMultiset stop allocating its entrySet() and an entrySet().iterator() during construction
+- make TreeMultiset.clear() (in the normal case), StandardConcurrentMultimap.clear() and several Multiset view implementations' clear() methods avoid allocating Entry objects
+
+Maybe it makes sense to have such default implementations in AbstractMap, a public type accessible to end users who might really want a quick and dirty Map. But AbstractMultiset is package-private, and we'd probably rather be explicit about when we're choosing an O(n) implementation.
+
+Also, rename Multisets.sizeImpl to linearTimeSizeImpl.
+
+Effects on ArrayListMultimapProGuard:
+58546 bytes => 58285 bytes
+54 classes => 54 classes
+409 methods => 406 methods
+
+Effects on HashMultimapProGuard:
+60833 bytes => 60572 bytes
+54 classes => 54 classes
+415 methods => 412 methods
+
+Effects on HashMultisetProGuard:
+21990 bytes => 21685 bytes
+17 classes => 17 classes
+150 methods => 147 methods
+
+Effects on LinkedHashMultimapProGuard:
+70828 bytes => 70567 bytes
+61 classes => 61 classes
+490 methods => 487 methods
+
+Effects on LinkedHashMultisetProGuard:
+26100 bytes => 25794 bytes
+21 classes => 21 classes
+172 methods => 169 methods
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=182364268

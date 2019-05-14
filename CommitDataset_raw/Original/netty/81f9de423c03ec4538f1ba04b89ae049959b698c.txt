@@ -1,0 +1,21 @@
+HostsFileParser should allow both IPv4 and IPv6 for a given host
+
+Motivation:
+
+HostsFileParser only retains the first address for each given hostname.
+This is wrong, and it’s allowed to have both an IPv4 and an IPv6.
+
+Modifications:
+
+* Have `HostsFileParser` now return a `HostsFileEntries` that contains IPv4 entries and IPv6 entries
+* Introduce `ResolvedAddressTypes` to describe resolved address types preferences
+* Add a new `ResolvedAddressTypes` parameter to `HostsFileEntriesResolver::address` to account for address types preferences
+* Change `DnsNameResolver` constructor to take a `ResolvedAddressTypes`, allowing for a null value that would use default
+* Change `DnsNameResolverBuilder::resolvedAddressTypes` to take a `ResolvedAddressTypes`
+* Make `DnsNameResolver::resolvedAddressTypes` return a `ResolvedAddressTypes`
+* Add a static `DnsNameResolverBuilder::computeResolvedAddressTypes` to ease converting from `InternetProtocolFamily`
+
+Result:
+
+We now support hosts files that contains IPv4 and IPv6 pairs for a same
+hostname.

@@ -1,0 +1,14 @@
+Fix inputstream reading for HTTP range requests
+
+Prior to this commit, range requests would be served by
+ResourceHttpRequestHandler by partially reading the inputstream of
+static resources. In case of resources contained in ZIP/JAR containers,
+InputStreams may not fill the entire read buffer when calling
+`inputStream.read(byte[])`. This was the case when using Spring Boot's
+ZipInflaterInputStream - this would then not read the entire file
+content and would close the response without writing the expected body
+length indicated in the "Content-Length" header.
+
+This commit makes sure that the whole resource is read.
+
+Issue: SPR-13661

@@ -1,0 +1,9 @@
+Avoid obtaining size of recycled Bitmap in logs in BitmapPreFillRunner.
+
+If the BitmapPool is too full or the Bitmap is larger than the 
+BitmapPool size, putting a Bitmap into the pool may recycle it. As a 
+result it’s unsafe for us to use the Bitmap after the call to put() in 
+the BitmapPool, including in logging. I’ve resolved the issue by 
+memoizing the Bitmap size prior to the put() call.
+
+Fixes #2574.

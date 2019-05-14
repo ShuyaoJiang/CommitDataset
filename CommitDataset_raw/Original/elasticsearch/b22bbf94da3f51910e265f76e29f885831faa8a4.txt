@@ -1,0 +1,18 @@
+Avoid blocking on channel close on network thread (#25521)
+
+Currently when we close a channel in Netty4Utils.closeChannels we
+block until the closing is complete. This introduces the possibility
+that a network selector thread will block while waiting until a
+separate network selector thread closes a channel.
+
+For instance: T1 closes channel 1 (which is assigned to a T1 selector).
+Channel 1's close listener executes the closing of the node. That
+means that T1 now tries to close channel 2. However, channel 2 is
+assigned to a selector that is running on T2. T1 now must wait until T2
+closes that channel at some point in the future.
+
+This commit addresses this by adding a boolean to closeChannels
+indicating if we should block on close. We only set this boolean to true
+if we are closing down the server channels at shutdown. This call is
+never made from a network thread. When we call the closeChannels method
+with that boolean set to false, we do not block on close.

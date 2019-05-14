@@ -1,0 +1,8 @@
+S3 Repository: Add back repository level credentials (#24609)
+
+Specifying s3 access and secret keys inside repository settings are not
+secure. However, until there is a way to dynamically update secure
+settings, this is the only way to dynamically add repositories with
+credentials that are not known at node startup time. This commit adds
+back `access_key` and `secret_key` s3 repository settings, but protects
+it with a required system property `allow_insecure_settings`.

@@ -1,0 +1,23 @@
+TEST: Unmute testPrimaryRelocationWhileIndexing
+
+Previously we did not put an indexing to a version map if that map does
+not require safe access but removed the existing delete tombstone only
+if assertion enabled. In #29585, we removed the side-effect caused by
+assertion then this test started failing. This failure can be explained
+as follows:
+
+- Step 1: Index a doc then delete that doc
+
+- Step 2: The version map can switch to unsafe mode because of
+  concurrent refreshes (implicitly called by flushes)
+
+- Step 3: Index a document - the version map won't add this version
+  value and won't prune the tombstone (previously it did)
+
+- Step 4: Delete a document - this will return NOT_FOUND instead of
+  DELETED because of the stale delete tombstone
+
+This failure is actually fixed by #29619 in which we never leave stale
+delete tombstones
+
+Closes #29626

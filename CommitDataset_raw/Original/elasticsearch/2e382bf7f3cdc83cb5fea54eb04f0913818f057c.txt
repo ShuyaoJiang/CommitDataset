@@ -1,0 +1,11 @@
+Disallow dynamic mapping updated in follow shards
+
+I forgot to configure a mapping in the follow shard shard, which caused
+a dynamic update (due to type auto creation), but this was ignored.
+
+Subsequent searches in follow index then failed due to a mapping missing.
+(The _id couldn't be fetched during fetch phase, because the mapping was missing)
+
+We should at a later stage investigate how to best solve this, but for
+know to avoid confusion just fail if a dynamic update happens in a
+follow shard.

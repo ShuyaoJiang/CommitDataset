@@ -1,0 +1,16 @@
+Fix a problem where all classes are compiled again
+
+Motivation:
+
+Due to a known problem[1] of maven-compiler-plugin, our build always
+compiles everything from scratch, which is waste of time.
+
+Modifications:
+
+Exclude package-info.java from the source list.
+
+Result:
+
+Much shorter build time.
+
+[1]: https://jira.codehaus.org/browse/MCOMPILER-205

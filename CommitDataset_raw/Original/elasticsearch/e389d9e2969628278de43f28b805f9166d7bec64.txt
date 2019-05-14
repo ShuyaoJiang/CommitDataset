@@ -1,0 +1,3 @@
+Clarify RemoteClusterService#groupIndices behaviour (#33899)
+
+When executing a cross-cluster search, we need to search against all local indices (and no remote indices) in case no indices are specified. Also, if only remote indices are specified, no local indices will be queried. We previously added empty local indices whenever they were not present in the map of the grouped indices, then we would act differently later based on the extracted remote indices. Instead, we now add the empty array for local indices only in case we need to search all local indices; the entry for local indices is not added when local indices should not be searched. This way the grouped indices reflect reality and provide a better indication of what indices will be searched.

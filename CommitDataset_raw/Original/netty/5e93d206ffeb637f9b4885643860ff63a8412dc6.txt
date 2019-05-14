@@ -1,0 +1,26 @@
+Overhaul - Split ChannelHandler & Merge ChannelHandlerContext
+
+- Extracted some handler methods from ChannelInboundHandler into
+  ChannelStateHandler
+- Extracted some handler methods from ChannelOutboundHandler into
+  ChannelOperationHandler
+- Moved exceptionCaught and userEventTriggered are now in
+  ChannelHandler
+  
+- Channel(Inbound|Outbound)HandlerContext is merged into
+  ChannelHandlerContext
+- ChannelHandlerContext adds direct access methods for inboud and
+  outbound buffers
+  - The use of ChannelBufferHolder is minimal now.
+    - Before: inbound().byteBuffer()
+    - After: inboundByteBuffer()
+    - Simpler and better performance
+    
+- Bypass buffer types were removed because it just does not work at all
+  with the thread model.
+  - All handlers that uses a bypass buffer are broken.  Will fix soon.
+
+- CombinedHandlerAdapter does not make sense anymore either because
+  there are four handler interfaces to consider and often the two
+  handlers will implement the same handler interface such as
+  ChannelStateHandler.  Thinking of better ways to provide this feature

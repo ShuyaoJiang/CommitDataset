@@ -1,0 +1,19 @@
+Refactor to consistent use of AnnotationAttributes
+
+Uses of AnnotationMetadata#getAnnotationAttributes throughout the
+framework have been updated to use the new AnnotationAttributes API in
+order to take advantage of the more concise, expressive and type-safe
+methods there.
+
+All changes are binary compatible to the 3.1.0 public API, save
+the exception below.
+
+A minor binary compatibility issue has been introduced in
+AbstractCachingConfiguration, AbstractAsyncConfiguration and
+AbstractTransactionManagementConfiguration when updating their
+protected Map<String, Object> fields representing annotation attributes
+to use the new AnnotationAttributes API. This is a negligible breakage,
+however, as the likelilhood of users subclassing these types is very
+low, the classes have only been in existence for a short time (further
+reducing the likelihood), and it is a source-compatible change given
+that AnnotationAttributes is assignable to Map<String, Object>.

@@ -1,0 +1,16 @@
+Represent lists as actual lists inside Settings (#26878)
+
+Today we represent each value of a list setting with it's own dedicated key
+that ends with the index of the value in the list. Aside of the obvious
+weirdness this has several issues especially if lists are massive since it
+causes massive runtime penalties when validating settings. Like a list of 100k
+words will literally cause a create index call to timeout and in-turn massive
+slowdown on all subsequent validations runs.
+
+With this change we use a simple string list to represent the list. This change
+also forbids to add a settings that ends with a .0 which was internally used to
+detect a list setting.  Once this has been rolled out for an entire major
+version all the internal .0 handling can be removed since all settings will be
+converted.
+
+Relates to #26723

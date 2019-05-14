@@ -1,0 +1,57 @@
+Upstream changes made directly to AOSP.
+
+This change is a combination of 4 separate commits
+to fix various bugs observed during android platform
+testing.
+
+https://android-review.googlesource.com/#/c/63781/
+--------------------------------------------
+Allow certificate inspections after connect.
+
+We don't have to wait for the request to be sent
+before allowing inspection of SSL certs. They can be
+inspected as soon as the connection is established.
+
+Fixes CTS test UrlConnectionTest#testInspectSslAfterConnect
+
+https://android-review.googlesource.com/#/c/63821/
+---------------------------------------------
+Respect read timeout on recycled connections.
+
+Partial fix for CTS test : URLConnectionTest#testGetKeepAlive.
+
+https://android-review.googlesource.com/#/c/63782/
+-----------------------------------
+Fix HttpUrlConnection#isUsingProxy.
+
+The earlier implementation disregarded what the
+ProxySelector had to say. We now query the selected
+route (if one has been established).
+
+Fixes compatibility test:
+HttpURLConnectionTest#testUsingProxySelector
+
+https://android-review.googlesource.com/#/c/63872/
+--------------------------------------------
+Don't support anything other than Basic auth.
+
+We should disregard authentication schemes other than
+"Basic" and let clients handle them themselves.
+
+The java Authenticator API gives us a user name and
+password combination, but we can't know how to format
+that information for any scheme other than basic.
+
+Historically:
+
+The JB implementation responds to challenges from an
+arbitrary scheme "X" by sending a header with scheme
+"X" but formatted like the "Basic" scheme.
+
+The current implementation responds to challenges from
+an arbitrary scheme "X" by sending a header with scheme
+"Basic" and formatter like the "Basic scheme".
+
+Partial fix for test cases in URLConnectionTest:
+- testAuthenticateWithCommaSeparatedAuthenticationMethods
+- testAuthenticateWithMultipleAuthenticationHeaders

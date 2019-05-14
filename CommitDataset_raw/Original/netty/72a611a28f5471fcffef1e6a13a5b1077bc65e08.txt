@@ -1,0 +1,10 @@
+HTTP Content Encoder allow EmptyLastHttpContent
+
+Motiviation:
+The HttpContentEncoder does not account for a EmptyLastHttpContent being provided as input.  This is useful in situations where the client is unable to determine if the current content chunk is the last content chunk (i.e. a proxy forwarding content when transfer encoding is chunked).
+
+Modifications:
+- HttpContentEncoder should not attempt to compress empty HttpContent objects
+
+Result:
+HttpContentEncoder supports a EmptyLastHttpContent to terminate the response.

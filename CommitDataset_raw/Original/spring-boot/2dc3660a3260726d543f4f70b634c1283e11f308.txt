@@ -1,0 +1,17 @@
+Align launcher exception handling with direct invocation of main method
+
+Previously, if an application’s main method threw an exception,
+MainMethodRunner would catch the exception and call System.exit(1).
+This meant that the JVM would exit, irrespective of whether or not
+any non-daemon threads were running. In contrast, when an application’s
+main method was invoked directly (in an IDE, for example) the JVM
+would not exit if one or more non-daemon threads were running. This
+is standard JVM behaviour that we should be consistent with in the
+launcher.
+
+This commit updates MainMethodRunner to wrap any exception thrown by an
+application’s main method in a RuntimeException and rethrow it. This
+alllows the JVM to handle the exception and use its normal rules for
+deciding whether or not it should exit.
+
+Closes gh-4984

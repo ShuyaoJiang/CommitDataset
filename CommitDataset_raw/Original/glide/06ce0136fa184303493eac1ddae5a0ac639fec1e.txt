@@ -1,0 +1,24 @@
+Automated g4 rollback of changelist 166253525.
+
+*** Reason for rollback ***
+
+b/64987553
+
+*** Original change description ***
+
+Choose whether or not to use HARDWARE bitmaps based on transformations in Glide.
+
+Previously we were checking only against the requested and actual size
+of the image as a heuristic to see if we thought a transformation would
+be applied. That doesn't work well for certain types of transformations
+that don't necessarily change the size of the image but do change its
+shape (rounded corners, circle crop etc).
+
+Now we're explicitly checking to see if a transformation will be applied
+to the load and I...
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=166268954

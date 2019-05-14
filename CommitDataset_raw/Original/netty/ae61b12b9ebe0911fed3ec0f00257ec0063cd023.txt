@@ -1,0 +1,13 @@
+Reduce memory usage of SslHandler when OpenSslEngine is in use
+
+Motivation:
+
+JDK's SSLEngine.wrap() requires the output buffer to be always as large as MAX_ENCRYPTED_PACKET_LENGTH even if the input buffer contains small number of bytes.  Our OpenSslEngine implementation does not have such wasteful behaviot.
+
+Modifications:
+
+If the current SSLEngine is OpenSslEngine, allocate as much as only needed.
+
+Result:
+
+Less peak memory usage.

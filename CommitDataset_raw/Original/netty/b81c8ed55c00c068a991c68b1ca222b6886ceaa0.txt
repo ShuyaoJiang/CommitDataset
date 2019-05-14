@@ -1,0 +1,15 @@
+Use AuthoritativeDnsServerCache for creating the new redirect stream. (#8316)
+
+* Use AuthoritativeDnsServerCache for creating the new redirect stream.
+
+Motivation:
+
+At the moment if a user wants to provide custom sorting of the nameservers used for redirects it needs to be implemented in two places. This is more complicated as it needs to be.
+
+Modifications:
+
+- Just delegate to the AuthoritativeDnsServerCache always as we fill it before we call newRedirectDnsServerStream anyway.
+
+Result:
+
+Easier way for the user to implement custom sorting.

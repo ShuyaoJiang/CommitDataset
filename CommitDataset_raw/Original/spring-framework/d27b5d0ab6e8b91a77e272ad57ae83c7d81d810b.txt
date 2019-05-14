@@ -1,0 +1,12 @@
+Improve CORS handling
+
+This commit improves CORS support by:
+ - Using CORS processing only for CORS-enabled endpoints
+ - Skipping CORS processing for same-origin requests
+ - Adding Vary headers for non-CORS requests
+
+It introduces an AbstractHandlerMapping#hasCorsConfigurationSource
+method in order to be able to check CORS endpoints efficiently.
+
+Closes gh-22273
+Closes gh-22496

@@ -1,0 +1,25 @@
+Core: Add DateFormatter interface for java time parsing (#33467)
+
+The existing approach used date formatters when a format based string
+like `date_time||epoch_millis` was used, instead of the custom code.
+
+In order to properly solve this, a new interface called
+`DateFormatter` has been added, which now can be implemented for custom
+formatters. Currently there are two implementations, one using java time
+and one doing the epoch_millis formatter, which simply parses a number
+and then converts it to a date in UTC timezone.
+
+The DateFormatter interface now also has a method to retrieve the name
+of the formatter pattern, which is needed for mapping changes anyway.
+
+The existing `CompoundDateTimeFormatter` class has been removed, the
+name was not really nice anyway.
+
+One more minor change is the fact, that the new java time using
+FormatDateFormatter does not try to parse the date with its printer
+implementation first (which might be a strict one and fail), but a
+printer can now be specified in addition. This saves one potential
+failure/exception when parsing less strict dates.
+
+If only a printer is specified, the printer will also be used as a
+parser.

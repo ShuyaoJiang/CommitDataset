@@ -1,0 +1,11 @@
+Don't use @ComponentScan for default packages
+
+Update the 'default' package used for @Entity and Repository scanning
+to be the package of the class annotated with @EnableAutoConfiguration
+rather than using @ComponentScan.
+
+This allows JPA and Spring Data to be used without requiring component
+scanning and also removes the confusion that could arise from reusing
+the @ComponentScan annotation, which already has well defined semantics.
+
+Fixes gh-200

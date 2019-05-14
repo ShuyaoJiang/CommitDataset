@@ -1,0 +1,56 @@
+Fix scoped-proxy memory leak w/ @Resource injection
+
+Prior to this change, request-scoped components having
+@Resource-injected dependencies caused a memory leak in
+DefaultListableBeanFactory#dependenciesForBeanMap.
+
+Consider the following example:
+
+    @Component
+    @Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
+    public class MyComponent {
+
+        @Resource
+        private HttpServletRequest request;
+
+        // ...
+    }
+
+The bean name for "MyComponent" will end up being
+'scopedTarget.myComponent', which will become a key in
+the #dependenciesForBeanMap structure.
+
+On the first request, the injected HttpServletRequest bean will be a
+proxy and will internally have a bean name of the form
+"$Proxy10@1a3a2a52". This name will be added to the Set value associated
+with the 'scopedTarget.myComponent' entry in #dependenciesForBeanMap.
+
+On the second request, the process will repeat, but the injected
+HttpServletRequest will be a different proxy instance, thus having a
+different identity hex string, e.g. "$Proxy10@5eba06ff". This name will
+also be added to the Set value associated with the
+'scopedTarget.myComponent' entry in #dependenciesForBeanMap, and this
+is the source of the leak: a new entry is added to the set on each
+request but should be added only once.
+
+This commit fixes the leak by introducing caching to
+CommonAnnotationBeanPostProcessor#ResourceElement similar to that already
+present in AutowiredAnnotationBeanPostProcessor#AutowiredFieldElement
+and #AutowiredMethodElement. Essentially, each ResourceElement instance
+now tracks whether it has been created, caches the ultimate value to be
+injected and returns it eagerly if necessary. Besides solving the memory
+leak, this has the side effect of avoiding unnecessary proxy creation.
+
+This fix also explains clearly why injection into request-scoped
+components using @Autowired never suffered this memory leak: because the
+correct caching was already in place. Because @Resource is considerably
+less-frequently used than @Autowired, and given that this particular
+injection arrangement is relatively infrequent, it becomes
+understandable how this bug has been present without being reported
+since the introduction of @Resource support in Spring 2.5: developers
+were unlikely to encounter it in the first place; and if they did, the
+leak was minor enough (adding strings to a Set), that it could
+potentially go unnoticed indefinitely depending on request volumes and
+available memory.
+
+Issue: SPR-9176

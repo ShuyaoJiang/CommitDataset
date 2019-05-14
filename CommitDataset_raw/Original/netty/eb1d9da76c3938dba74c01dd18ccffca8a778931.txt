@@ -1,0 +1,15 @@
+Enable SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER when using OpenSslContext
+
+Motivation:
+
+We need to enable SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER when using OpenSslContext as the memory address of the buffer that is passed to OpenSslEngine.wrap(...) may change during calls and retries. This is the case as
+if the buffer is a heap-buffer we will need to copy it to a direct buffer to hand it over to the JNI layer. When not enable this mode we may see errors like: 'error:1409F07F:SSL routines:SSL3_WRITE_PENDING: bad write retry'.
+Related to https://github.com/netty/netty-tcnative/issues/100.
+
+Modifications:
+
+Explitict set mode to SSL.SSL_MODE_RELEASE_BUFFERS | SSL.SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER . (SSL.SSL_MODE_RELEASE_BUFFERS was used before implicitly).
+
+Result:
+
+No more 'error:1409F07F:SSL routines:SSL3_WRITE_PENDING: bad write retry' possible when writing heap buffers.

@@ -1,0 +1,9 @@
+Painless: Add PainlessConstructor (#32447)
+
+PainlessMethod was being used as both a method and a constructor, and while there are 
+similarities, there are also some major differences. This allows the reflection objects to be 
+stored reducing the number of other pieces of data stored in a PainlessMethod as they are 
+now redundant. This temporarily increases some of the code in FunctionRef and 
+PainlessDocGenerator as they now differentiate between constructors and methods, BUT 
+is also makes the code more maintainable because there aren't checks in several places 
+anymore to differentiate.

@@ -1,0 +1,34 @@
+Add DnsNameResolver.resolveAll(DnsQuestion) (#7803)
+
+* Add DnsNameResolver.resolveAll(DnsQuestion)
+
+Motivation:
+
+A user is currently expected to use DnsNameResolver.query() when he or
+she wants to look up the full DNS records rather than just InetAddres.
+
+However, query() only performs a single query. It does not handle
+/etc/hosts file, redirection, CNAMEs or multiple name servers.
+
+As a result, such a user has to duplicate all the logic in
+DnsNameResolverContext.
+
+Modifications:
+
+- Refactor DnsNameResolverContext so that it can send queries for
+  arbitrary record types.
+  - Rename DnsNameResolverContext to DnsResolveContext
+  - Add DnsAddressResolveContext which extends DnsResolveContext for
+    A/AAAA lookup
+  - Add DnsRecordResolveContext which extends DnsResolveContext for
+    arbitrary lookup
+- Add DnsNameResolverContext.resolveAll(DnsQuestion) and its variants
+- Change DnsNameResolverContext.resolve() delegates the resolve request
+  to resolveAll() for simplicity
+- Move the code that decodes A/AAAA record content to DnsAddressDecoder
+
+Result:
+
+- Fixes #7795
+- A user does not have to duplicate DnsNameResolverContext in his or her
+  own code to implement the usual DNS resolver behavior.

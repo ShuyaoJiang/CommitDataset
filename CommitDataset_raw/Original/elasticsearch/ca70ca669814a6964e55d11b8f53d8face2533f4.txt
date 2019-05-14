@@ -1,0 +1,11 @@
+Fix BWC release tests
+
+When running the release tests, we set build.snapshot to false and this
+causes all version numbers to not have "-SNAPSHOT". This is true even
+for the tips of the branches (e.g., currently 5.6.6 on the 5.6
+branch). Yet, if we do not set snapshot to false, then we would still be
+trying to find artifacts with "-SNAPSHOT" appended which would not have
+been build since build.snapshot is false. To fix this, we have to push
+build.snapshot into the version logic.
+
+Relates #27778

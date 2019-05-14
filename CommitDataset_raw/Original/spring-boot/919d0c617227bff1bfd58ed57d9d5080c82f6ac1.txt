@@ -1,0 +1,13 @@
+Use data binding to access spring.profiles .active and .include
+
+Previously, spring.profiles.active and spring.profiles.include were
+looked up manually. This meant that configuration that used indexes
+(for example spring.profiles.active[0]=dev) were not bound. As a
+result, YAML lists did not work.
+
+This commit updates ConfigFileApplicationListener to use a
+RelaxedDataBinder to retrieve the values of spring.profiles.active
+and spring.profiles.include, thereby reusing the data binding logic
+that supports property names with indexes.
+
+See gh-6995

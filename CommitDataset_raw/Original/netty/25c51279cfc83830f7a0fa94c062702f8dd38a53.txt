@@ -1,0 +1,7 @@
+Revert "[#1442] Make sure closing the channel will not cause an UnsupportedOperationException"
+
+This reverts commit a1a86b9de48e4696e3496904dd972336f57b4a0b because the
+semantic of ctx.isRemoved() is confusing to a user - why is
+ctx.isRemoved() false when handlerRemoved() is invoked? A better
+solution would be check if the connection is inactive and mark the
+promise as failure before attempting to write anything.

@@ -1,0 +1,3 @@
+Explicitly handle wrapped, re-thrown exceptions from onComplete, onError.
+
+Because Exceptions.throwIfFatal treats these as fatal, prior to this they would bubble up to the caller. This is either the thread uncaught exception handler which is fine, but in the case of async sources it would go to the library code invoking the async callback (like OkHttp's Call) which might swallow them.

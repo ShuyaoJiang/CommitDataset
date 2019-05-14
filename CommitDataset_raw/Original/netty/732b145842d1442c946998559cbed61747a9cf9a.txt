@@ -1,0 +1,13 @@
+Http2ConnectionHandler: allow graceful shutdown to wait forever
+
+Motivation:
+
+There should be a way to allow graceful shutdown to wait for all open streams to close without a timeout. Using gracefulShutdownTimeoutMillis with a large value is a bit of a hack, and has a gotcha that sufficiently large values will overflow the long, resulting in a ClosingChannelFutureListener that executes immediately.
+
+Modification:
+
+Allow to use gracefulShutdownTimeoutMillis(-1) to express waiting until all streams are closed.
+
+Result:
+
+We can now shutdown the connection without a forced timeout.

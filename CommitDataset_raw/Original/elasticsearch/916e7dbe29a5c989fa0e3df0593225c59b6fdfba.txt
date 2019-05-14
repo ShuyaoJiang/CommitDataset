@@ -1,0 +1,9 @@
+Add NioGroup for use in different transports (#27737)
+
+This commit is related to #27260. It adds a base NioGroup for use in
+different transports. This class creates and starts the underlying
+selectors. Different protocols or transports are established by passing
+the ChannelFactory to the bindServerChannel or openChannel
+methods. This allows a TcpChannelFactory to be passed which will
+create and register channels that support the elasticsearch tcp binary
+protocol or a channel factory that will create http channels (or other).

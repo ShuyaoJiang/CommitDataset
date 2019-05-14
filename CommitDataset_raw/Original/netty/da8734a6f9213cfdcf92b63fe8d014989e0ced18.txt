@@ -1,0 +1,15 @@
+codec-http2: Mark requests as chunked in Http2ServerDowngrader
+
+Motivation:
+
+Http2ServerDowngrader doesn't mark chunked requests as chunked, even
+though the natural conversion from http/2 requests to http/1.1 requests
+is to chunked ones.
+
+Modifications:
+
+Mark requests that aren't already complete as chunked.
+
+Result:
+
+Requests will be chunked, and can later be aggregated if necessary.

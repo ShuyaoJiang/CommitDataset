@@ -1,0 +1,30 @@
+Refine validator and MVC validator configuration
+
+Update `ValidationAutoConfiguration` and `WebMvcAutoConfiguration` to
+ensure as much as possible that only a single Validator bean of each
+type is registered.
+
+Validation auto-configuration now does the following:
+- If no validator is found: Registers a `LocalValidatorFactoryBean`
+  (providing both Spring and JSR validation)
+- If the user defines a Spring & JSR validator: Backs off
+- If the user defines only a JSR validator: Adapts it to a Spring
+  validator (without exposing another JSR implementation)
+
+WebMvcAutoConfiguration auto-configuration has been updated to make
+MVC validation follow common Spring Boot patterns:
+- If not validator beans are found (due to the user excluding
+  ValidationAutoConfiguration) a new `mvcValidator` bean will be
+  registered.
+- If a single validator bean is found it will be used for MVC
+  validation.
+- If multiple validator beans are defined it will either use the one
+  named `mvcValidator` or it will register a new `mvcValidator` bean
+
+Any automatically registered `mvcValidator` bean will not implement
+the JSR validator interface.
+
+Finally, it is no longer possible to provide an MVC validator via a
+`WebMvcConfigurer`.
+
+Fixes gh-8495

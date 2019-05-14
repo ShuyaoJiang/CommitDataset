@@ -1,0 +1,14 @@
+Enhance JarCommand to support lists of includes and excludes
+
+The lists are comma separated. In addition, user can add prefixes
+"+" or "-", to signal that those values should be removed from the
+default list, not added to a fresh one. E.g.
+
+$ spring jar app.jar --include lib/*.jar,-static/** --exclude -**/*.jar
+
+to include a jar file specifically, and make sure it is not excluded,
+and additionally not include the static/** resources that would otherwise
+be included in the defaults. As soon as "+" or "-" prefixes are detected
+the default entries are all added (except the ones exlcuded with "-").
+
+Fixes gh-1090

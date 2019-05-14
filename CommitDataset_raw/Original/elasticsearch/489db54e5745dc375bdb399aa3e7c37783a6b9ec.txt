@@ -1,0 +1,7 @@
+Ignore numeric shard count if waiting for ALL (#31265)
+
+Today, if GET /_cluster/health?wait_for_active_shards=all does not immediately
+succeed then it throws an exception due to an erroneous and unnecessary call to
+ActiveShardCount#enoughShardsActive(). This commit fixes this logic.
+
+Fixes #31151

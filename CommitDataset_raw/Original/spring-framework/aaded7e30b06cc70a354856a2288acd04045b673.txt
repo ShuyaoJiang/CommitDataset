@@ -1,0 +1,10 @@
+Improve default content type selection
+
+Previously ContentNegotiationManager continued with the next
+ContentNegotiationStrategy only if the current one returned an empty
+list. Now it also does that if the current ContentNegotiationStrategy
+returns "*/*". Since the absence of an Accept header and "*/*" have
+the same meaning, this allows a default content type to be used in
+either case.
+
+Issue: SPR-10513

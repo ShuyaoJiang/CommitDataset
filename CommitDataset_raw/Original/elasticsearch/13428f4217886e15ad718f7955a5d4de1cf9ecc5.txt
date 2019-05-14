@@ -1,0 +1,7 @@
+SQL: Do not compile against matrix aggs module
+
+Since matrix aggs module isn't on the classpath at runtime, we shouldn't
+compile with it on the classpath. Doing so makes it possible for us to
+die with dignity when we can't load the class. Which happens right now.
+
+Original commit: elastic/x-pack-elasticsearch@6d2ca5e36794af876ee2ca0e6e6909ecb5a3ab61

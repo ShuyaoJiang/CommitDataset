@@ -1,0 +1,12 @@
+Fix `range` queries on `_type` field for singe type indices (#31756)
+
+With the introduction of single types in 6.x, the `_type` field is no longer
+indexed, which leads to certain queries that were working before throw errors
+now. One such query is the `range` query, that, if performed on a single typer
+index, currently throws an IAE since the field is not indexed.
+This change adds special treatment for this case in the TypeFieldMapper,
+comparing the range queries lower and upper bound to the one existing type and
+either returns a MatchAllDocs or a MatchNoDocs query.
+
+Relates to #31632
+Closes #31476

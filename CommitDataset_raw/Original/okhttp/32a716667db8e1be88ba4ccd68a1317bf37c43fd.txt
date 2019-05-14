@@ -1,0 +1,7 @@
+Fix unresolved function call on JVM < 1.7
+
+This notably allows the mockwebserver project to be run on Android.
+ServerSocket only implements Closeable since Java 1.7 and thus calling of
+closeQuietly(Closeable) with a ServerSocket argument fails when running
+on Java 1.5 or 1.6 JVMs. This is the same as is already done for
+closeQuietly(Socket).

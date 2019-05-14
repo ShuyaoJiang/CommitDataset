@@ -1,0 +1,6 @@
+Use ExecutorService.execute, not ExecutorService.submit.
+
+The latter returns a Future that we never call get() on, and
+never get the exception from.
+
+Fixes: https://github.com/square/okhttp/issues/1294

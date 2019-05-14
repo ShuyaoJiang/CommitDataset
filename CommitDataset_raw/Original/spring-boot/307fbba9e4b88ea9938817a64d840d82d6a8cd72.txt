@@ -1,0 +1,23 @@
+Use spring-boot-dependencies as spring-boot-dependency-tools' parent
+
+Previously spring-boot-dependency-tools used spring-boot-tools as its
+parent. This meant that it inherited spring-boot-parents' dependency
+management that we did not want to expose to applications. The
+solution to this was to generate the effective pom and then filter
+out any thing that did not appear in spring-boot-dependencies' pom.
+This filtering had to unwanted side-effect of breaking bom imports:
+the effective pom would contain the dependency management from the
+imported bom, but this would be filtered out as the entries didn't
+appear in spring-boot-dependencies' pom.
+
+This commit updates spring-boot-dependency-tools to use
+spring-boot-dependencies as its parent. This means that its effective
+pom contains the desired dependency management and nothing more,
+allowing the filtering logic to be removed.
+
+The use of Spring Security's bom has been reinstated as it will now
+work as intended and versions for its modules will be available in the
+CLI and via the Gradle plugin.
+
+Closes #825
+Fixes #838

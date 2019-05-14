@@ -1,0 +1,19 @@
+Remove redundant code block in HttpPostRequestEncoder and make some cleanup
+
+Motivation:
+
+The class `HttpPostRequestEncoder` has minor issues:
+- The `encodeNextChunkMultipart()` method contains two identical blocks of code with a difference only in the cast interfaces: `Attribute` vs `HttpData`. Because the `Attribute` is extended by `HttpData`, the block with the `Attribute` can be safely deleted.
+- The `getNewMultipartDelimiter()` method contains a redundant `toLowerCase()`.
+- The `addBodyFileUploads()` method throws `NPE` instead of `IllegalArgumentException`.
+
+Modifications:
+
+- Remove duplicated code block from `encodeNextChunkMultipart()`.
+- Remove redundant `toLowerCase()` from `getNewMultipartDelimiter()`.
+- Replace `NPE` with `IllegalArgumentException` in `addBodyFileUploads()`.
+- Use `ObjectUtil#checkNotNull` where possible.
+
+Result:
+
+More correct and clean code.

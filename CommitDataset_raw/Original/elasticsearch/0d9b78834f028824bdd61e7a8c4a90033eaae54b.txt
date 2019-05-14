@@ -1,0 +1,53 @@
+LLClient: Support host selection (#30523)
+
+Allows users of the Low Level REST client to specify which hosts a
+request should be run on. They implement the  `NodeSelector` interface
+or reuse a built in selector like `NOT_MASTER_ONLY` to chose which nodes
+are valid. Using it looks like:
+```
+Request request = new Request("POST", "/foo/_search");
+RequestOptions options = request.getOptions().toBuilder();
+options.setNodeSelector(NodeSelector.NOT_MASTER_ONLY);
+request.setOptions(options);
+...
+```
+
+This introduces a new `Node` object which contains a `HttpHost` and the
+metadata about the host. At this point that metadata is just `version`
+and `roles` but I plan to add node attributes in a followup. The
+canonical way to **get** this metadata is to use the `Sniffer` to pull
+the information from the Elasticsearch cluster.
+
+I've marked this as "breaking-java" because it breaks custom
+implementations of `HostsSniffer` by renaming the interface to
+`NodesSniffer` and by changing it from returning a `List<HttpHost>` to a
+`List<Node>`. It *shouldn't* break anyone else though.
+
+Because we expect to find it useful, this also implements `host_selector`
+support to `do` statements in the yaml tests. Using it looks a little
+like:
+
+```
+---
+"example test":
+  - skip:
+      features: host_selector
+  - do:
+      host_selector:
+        version: " - 7.0.0" # same syntax as skip
+      apiname:
+        something: true
+```
+
+The `do` section parses the `version` string into a host selector that
+uses the same version comparison logic as the `skip` section. When the
+`do` section is executed it passed the off to the `RestClient`, using
+the `ElasticsearchHostsSniffer` to sniff the required metadata.
+
+The idea is to use this in mixed version tests to target a specific
+version of Elasticsearch so we can be sure about the deprecation
+logging though we don't currently have any examples that need it. We do,
+however, have at least one open pull request that requires something
+like this to properly test it.
+
+Closes #21888

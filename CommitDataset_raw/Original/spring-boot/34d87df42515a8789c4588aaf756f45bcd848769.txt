@@ -1,0 +1,15 @@
+Clarify use of the `spring.datasource` prefix
+
+Previously, Spring Boot mapped both `DataSourceProperties` and the actual
+`DataSource` implementation to the same prefix. This results in a huge
+amount of keys in the `spring.datasource` namespace  with no way to
+identify those that are valid for the pooled data source in use.
+
+This commit maps the four pooled data sources we support in four isolated
+namespace, keeping `spring.datasource` only for the common settings.
+
+These are `spring.datasource.tomcat`, `spring.datasource.hikari`,
+`spring.datasource.dbcp` and `spring.datasource.dbcp2` for the Tomcat,
+Hikari, Commons DBCP and Commons DBCP2 implementations respectively.
+
+Closes gh-2183

@@ -1,0 +1,12 @@
+Improve close in ConcurrentWebSocketSessionDecorator
+
+Before this commit the concurrent session wrapper mainly protected the
+sending of messages. The close itself however may also cause a message
+to be sent as is the case of the SockJS protocol.
+
+This change protects the close and checks if the session has exceeded
+send time or buffer limits in which case the close status is changed
+to SESSION_NOT_RELIABLE (introduced in commit cbd5af3a) which in turn
+signals that extra care should be exercised when closing the session.
+
+Issue: SPR-13904

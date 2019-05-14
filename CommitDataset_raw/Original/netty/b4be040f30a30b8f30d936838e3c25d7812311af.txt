@@ -1,0 +1,14 @@
+Introduce DnsCache API + DnsResolver extensibility
+
+Motivation:
+Caching is currently nested in DnsResolver.
+It should also be possible to extend DnsResolver to ba able to pass a different cache on each resolution attemp.
+
+Modifications:
+
+* Introduce DnsCache, NoopDnsCache and DefaultDnsCache. The latter contains all the current caching logic that was extracted.
+* Introduce protected versions of doResolve and doResolveAll that can be used as extension points to build resolvers that bypass the main cache and use a different one on each resolution.
+
+Result:
+
+Isolated caching logic. Better extensibility.

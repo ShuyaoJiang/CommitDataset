@@ -1,0 +1,9 @@
+Do not consider bridge methods in SpEL properties
+
+Modify ReflectivePropertyAccessor so that it no longer considers
+bridge methods when finding getters or setters. This should help
+to prevent subtle errors that can occur when particular JDK
+implementations happen to return bridge methods before non-bridge
+methods when calling Class.getMethods()
+
+Issue: SPR-9994

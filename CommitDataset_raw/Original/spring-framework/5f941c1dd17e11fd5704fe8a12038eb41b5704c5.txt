@@ -1,0 +1,10 @@
+Fix using system default charset in view rendering
+
+Prior to this commit, FreeMarkerView used the system default charset to
+render. This commit switches this by defaulting to UTF-8, if no charset
+is specified in the content type.
+
+ - Add contentType parameter to AbstractView.renderInternal, used to
+ determine the charset contained therein
+ - Adds a defaultCharset property to AbstractView and
+ ViewResolverSupport.

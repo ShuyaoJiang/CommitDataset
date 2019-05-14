@@ -1,0 +1,10 @@
+Add some logging related to retention lease syncing (#39066)
+
+When the background retention lease sync fires, we check an see if any
+retention leases are expired. If any did expire, we execute a full
+retention lease sync (write action). Since this is happening on a
+background thread, we do not block that thread waiting for success (it
+will simply try again when the timer elapses). However, we were
+swallowing exceptions that indicate failure. This commit addresses that
+by logging the failures. Additionally, we add some trace logging to the
+execution of syncing retention leases.

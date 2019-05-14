@@ -1,0 +1,28 @@
+Lazily instantiate HttpServerUpgradeHandler.UpgradeCodec
+
+Related: #3814
+
+Motivation:
+
+To implement the support for an upgrade from cleartext HTTP/1.1
+connection to cleartext HTTP/2 (h2c) connection, a user usually uses
+HttpServerUpgradeHandler.
+
+It does its job, but it requires a user to instantiate the UpgradeCodecs
+for all supported protocols upfront. It means redundancy for the
+connections that are not upgraded.
+
+Modifications:
+
+- Change the constructor of HttpServerUpgradeHandler
+  - Accept UpgraceCodecFactory instead of UpgradeCodecs
+- The default constructor of HttpServerUpgradeHandler sets the
+  maxContentLength to 0 now, which shouldn't be a problem because a
+  usual upgrade request is a GET.
+- Update the examples accordingly
+
+Result:
+
+A user can instantiate Http2ServerUpgradeCodec and its related objects
+(Http2Connection, Http2FrameReader/Writer, Http2FrameListener, etc) only
+when necessary.

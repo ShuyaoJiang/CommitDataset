@@ -1,0 +1,7 @@
+Fix percolator highlight sub fetch phase to not highlight query twice (#26622)
+
+* Fix percolator highlight sub fetch phase to not highlight query twice
+
+The PercolatorHighlightSubFetchPhase does not override hitExecute and since it extends HighlightPhase the search hits
+are highlighted twice (by the highlight phase and then by the percolator). This does not alter the results, the second highlighting
+just overrides the first one but this slow down the request because it duplicates the work.

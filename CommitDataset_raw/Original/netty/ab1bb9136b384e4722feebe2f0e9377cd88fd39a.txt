@@ -1,0 +1,37 @@
+[#3654] Synchronize on PoolSubpage head when allocate / free PoolSubpages
+
+Motivation:
+
+Currently we hold a lock on the PoolArena when we allocate / free PoolSubpages, which is wasteful as this also affects "normal" allocations. The same is true vice-verse.
+
+Modifications:
+
+Ensure we synchronize on the head of the PoolSubPages pool. This is done per size and so it is possible to concurrently allocate / deallocate PoolSubPages with different sizes, and also normal allocations.
+
+Result:
+
+Less condition and so faster allocation/deallocation.
+
+Before this commit:
+xxx:~/wrk $ ./wrk -H 'Connection: keep-alive' -d 120 -c 256 -t 16 -s scripts/pipeline-many.lua  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    17.61ms   29.52ms 689.73ms   97.27%
+    Req/Sec   278.93k    41.97k  351.04k    84.83%
+  530527460 requests in 2.00m, 71.64GB read
+Requests/sec: 4422226.13
+Transfer/sec:    611.52MB
+
+After this commit:
+xxx:~/wrk $ ./wrk -H 'Connection: keep-alive' -d 120 -c 256 -t 16 -s scripts/pipeline-many.lua  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    15.85ms   24.50ms 681.61ms   97.42%
+    Req/Sec   287.14k    38.39k  360.33k    85.88%
+  547902773 requests in 2.00m, 73.99GB read
+Requests/sec: 4567066.11
+Transfer/sec:    631.55MB
+
+This is reproducable every time.

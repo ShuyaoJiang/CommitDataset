@@ -1,0 +1,19 @@
+Test that gradle and Java version types match (#24943)
+
+Both gradle and java code attempt to infer the type of a each
+Version constant in Version.java. It is super important that
+they infer that each constant has the same type. If they disagree
+we might accidentally not be testing backwards compatibility for
+some version.
+
+This adds a test to make sure that they agree, modulo known and
+accepted differences (mostly around alphas). It also changes the
+minimum wire compatible version from the released 5.4.0 to the
+unreleased 5.5.0 as that lines up with the gradle logic.
+
+Relates to #24798 
+
+Note that the gradle and java version logic doesn't actually match so
+this contains a hack to make it *look* like it matches. Since this is a
+start, I'm merging it and going to work on some followups to make the
+logic actually match.....

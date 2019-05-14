@@ -1,0 +1,13 @@
+Move `HttpHandler` configuration to a dedicated auto-configuration
+
+An `HttpHandler` bean must be provided once the infrastructure triggered
+by `@EnableWebFlux` has been processed. Rather than creating a
+`HttpHandler` in that auto-configuration, this commit moves it to a
+dedicated auto-config, like we do for `DispatcherServlet` for
+servlet-based webapps.
+
+As this is the only bean we auto-configure in a functional fashion, the
+`WebFluxFunctionalAutoConfiguration` is now merged with this new
+auto-configuration, making its purposes clearer.
+
+Cloess gh-8436

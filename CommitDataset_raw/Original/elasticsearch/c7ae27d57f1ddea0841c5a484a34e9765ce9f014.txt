@@ -1,0 +1,10 @@
+nested: In case of a single type the _id field should be added to the nested document instead of _uid field.
+
+When `index.mapping.single_type` is `true` the `_uid` field is not used and instead `_id` field is used.
+Prior to this change nested documents would in this case still use the `_uid` field to mark to what root
+document they belong to. In case of deleting documents this could lead to only the root  Lucene document
+to be deleted and not the nested Lucene documents. This broke the docid block ordering the block join
+relies on in order to work correctly and thus causing the `nested` query, `nested` aggregation, nested sorting
+and nested inner hits to either fail or yield incorrect results.
+
+This bug only manifests in 6.0.0-ALPHA2 release and snaphots (5.5.0-SNAPSHOT, 5.6.0-SNAPSHOT, 6.0.0-SNAPSHOT).

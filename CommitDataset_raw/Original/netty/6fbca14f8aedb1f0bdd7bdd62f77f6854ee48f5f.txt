@@ -1,0 +1,13 @@
+Cleaning up the initialization of Http2ConnectionHandler
+
+Motivation:
+
+It currently takes a builder for the encoder and decoder, which makes it difficult to decorate them.
+
+Modifications:
+
+Removed the builders from the interfaces entirely. Left the builder for the decoder impl but removed it from the encoder since it's constructor only takes 2 parameters. Also added decorator base classes for the encoder and decoder and made the CompressorHttp2ConnectionEncoder extend the decorator.
+
+Result:
+
+Fixes #3530

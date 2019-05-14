@@ -1,0 +1,12 @@
+Refactor WebTestClient exchange mutator support
+
+This commit factors ServerWebExchange mutator support out of
+WebTestClient in favor of an independent public class called
+MockServerExchangeMutator which implements WebFilter and can be
+applied to the WebTestClient as any other WebFilter.
+
+The MockServerExchangeMutator also exposes a method to apply
+a client-side filter for "per request" mutators. See the Javadoc
+of the MockServerExchangeMutator.
+
+Issue: SPR-15570

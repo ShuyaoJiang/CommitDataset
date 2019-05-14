@@ -1,0 +1,7 @@
+Fixing the custom object serialization bug in diffable utils. (#39544)
+
+While serializing custom objects, the length of the list is computed after
+filtering out the unsupported objects but while writing objects the filter
+is not applied thus resulting in writing unsupported objects which will fail
+to deserialize by the receiever. Adding the condition to filter out unsupported
+custom objects.

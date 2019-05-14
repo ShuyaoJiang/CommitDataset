@@ -1,0 +1,13 @@
+Allow to obtain RecvByteBufAllocator.Handle to allow more flexible implementations
+
+Motivation:
+
+At the moment it's only possible for a user to set the RecvByteBufAllocator for a Channel but not access the Handle once it is assigned. This makes it hard to write more flexible implementations.
+
+Modifications:
+
+Add a new method to the Channel.Unsafe to allow access the the used Handle for the Channel. The RecvByteBufAllocator.Handle is created lazily.
+
+Result:
+
+It's possible to write more flexible implementatons that allow to adjust stuff on the fly for a Handle that is used by a Channel

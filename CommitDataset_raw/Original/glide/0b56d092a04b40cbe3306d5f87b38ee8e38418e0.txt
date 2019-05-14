@@ -1,0 +1,21 @@
+Choose whether or not to use HARDWARE bitmaps based on transformations in Glide.
+
+Previously we were checking only against the requested and actual size
+of the image as a heuristic to see if we thought a transformation would
+be applied. That doesn't work well for certain types of transformations
+that don't necessarily change the size of the image but do change its
+shape (rounded corners, circle crop etc).
+
+Now we're explicitly checking to see if a transformation will be applied
+to the load and I've removed the heuristic. This should catch cases like
+CircleCrop and also allow us to use hardware bitmaps when doing scaling
+entirely within Downsampler.
+
+In addition, we're now not applying transformations to Bitmaps for scale
+only transformations that can be done with DownsampleStrategies alone.
+This is a change in behavior, but since the Transformations were no-ops
+previously, it should be low risk.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=166253525

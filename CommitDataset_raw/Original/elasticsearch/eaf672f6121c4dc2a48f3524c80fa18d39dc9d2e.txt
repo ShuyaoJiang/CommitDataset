@@ -1,0 +1,18 @@
+[ML] Don't install empty ML metadata on startup (#30751)
+
+This change is to support rolling upgrade from a pre-6.3 default
+distribution (i.e. without X-Pack) to a 6.3+ default distribution
+(i.e. with X-Pack).
+
+The ML metadata is no longer eagerly added to the cluster state
+as soon as the master node has X-Pack available.  Instead, it
+is added when the first ML job is created.
+
+As a result all methods that get the ML metadata need to be able
+to handle the situation where there is no ML metadata in the
+current cluster state.  They do this by behaving as though an
+empty ML metadata was present.  This logic is encapsulated by
+always asking for the current ML metadata using a static method
+on the MlMetadata class.
+
+Relates #30731

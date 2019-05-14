@@ -1,0 +1,16 @@
+HttpObjectDecoder ignores HTTP trailer header when empty line is rece… (#8799)
+
+* HttpObjectDecoder ignores HTTP trailer header when empty line is received in seperate ByteBuf
+
+Motivation:
+
+When the empty line that termines the trailers was sent in a seperate ByteBuf we did ignore the previous parsed trailers and just returned none.
+
+Modifications:
+
+- Correct respect previous parsed trailers.
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8736

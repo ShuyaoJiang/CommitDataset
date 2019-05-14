@@ -1,0 +1,10 @@
+Remove version from license file name for GCS SDK (#31221)
+
+Most of our license file names strip the version off the artifact name
+when deducing the license filename. However, the version on the GCS SDK
+(google-api-services-storage) does not match the usual format and
+instead starts with a vee. This means that the license filename for this
+license ended up carrying the version and we should not do that. This
+commit adjusts the regex the deduces the license filename to account for
+this case, and adjusts the google-api-services-storage license files
+accordingly.

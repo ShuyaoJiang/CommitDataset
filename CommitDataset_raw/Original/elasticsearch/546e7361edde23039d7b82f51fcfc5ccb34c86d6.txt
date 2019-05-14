@@ -1,0 +1,8 @@
+[Tests] Nudge wait time in RemoteClusterServiceTests (#33853)
+
+This test occasionally fails in `testCollectSearchShards` waiting on what seems
+to be a search request to a remote cluster for one second. Given that the test
+fails here very rarely I suspect maybe one second is very rarely not enough so
+we could fix it by increasing the max wait time slightly.
+
+Closes #33852

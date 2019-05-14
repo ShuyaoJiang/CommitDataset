@@ -1,0 +1,14 @@
+Correctly decrement pending bytes when submitting AbstractWriteTask fails. (#8349)
+
+Motivation:
+
+Currently we may end up in the situation that we incremented the pending bytes before submitting the AbstractWriteTask but never decrement these again if the submitting of the task fails. This may result in incorrect watermark handling.
+
+Modifications:
+
+- Correctly decrement pending bytes if subimitting of task fails and also ensure we recycle it correctly.
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8343.

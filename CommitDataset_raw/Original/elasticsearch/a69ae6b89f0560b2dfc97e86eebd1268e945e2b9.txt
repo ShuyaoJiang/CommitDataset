@@ -1,0 +1,10 @@
+[CCR] Add metadata to keep track of the index uuid of the leader index in the follow index (#33367)
+
+The follow index api checks if the recorded uuid in the follow index matches
+with uuid of the leader index and fails otherwise. This validation will
+prevent a follow index from following an incompatible leader index.
+
+The create_and_follow api will automatically add this custom index metadata
+when it creates the follow index.
+
+Closes #31505

@@ -1,0 +1,13 @@
+No HTTP/2 RST_STREAM if no prior HEADERS were sent
+
+Motivation:
+
+Because we flow control HEADERS frames, it's possible that an intermediate error can result in a RST_STREAM frame being sent for a frame that the other endpoint is not yet aware of. This is a violation of the spec and will either result in spammy logs at the other endpoint or broken connections.
+
+Modifications:
+
+Modified the HTTP/2 handler so that it only sends RST_STREAM if it has sent at least one HEADERS frame to the remote endpoint for the stream.
+
+Result:
+
+Fixes #4465

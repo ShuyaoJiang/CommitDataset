@@ -1,0 +1,19 @@
+Do not define JNI_OnLoad when not dynamic
+
+Motivation:
+Due to an oversight (by myself), linking two JNI modules with
+duplicate symbols fails in linking.  This only seems to happen
+some of the time (the behavior seems to be different between GCC
+and Clang toolchains).  For instance, including both netty tcnative
+and netty epoll fails to link because of duplicate JNI_OnLoad
+symobols.
+
+Modification:
+Do not define the JNI_OnLoad and JNI_OnUnload symbols when
+compiling for static linkage, as indicated by the NETTY_BUILD_STATIC
+preprocessor define.  They are never directly called when
+statically linked.
+
+Result:
+Able to statically compile epoll and tcnative code into a single
+binary.

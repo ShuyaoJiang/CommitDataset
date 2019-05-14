@@ -1,0 +1,10 @@
+Make HypermediaAutoConfiguration more lenient.
+
+HypermediaAutoConfiguration didn't consider an @EnableHypermediaSupport 
+annotation being present in the user configuration which could've caused 
+it to be evaluated twice.
+
+This is especially the case if both the auto-configuration for Spring 
+HATEOAS and Spring Data REST kick in as Spring Data REST actively declares
+@EnableHypermediaSupport. The double evaluation then causes injection
+ambiguities as we now get multiple beans of e.g. LinkDiscoverers deployed.

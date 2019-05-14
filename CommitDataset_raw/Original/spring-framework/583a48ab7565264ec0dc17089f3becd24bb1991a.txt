@@ -1,0 +1,12 @@
+Do not process conditional requests for non-GET
+
+Prior to this commit, HttpEntityMethodProcessor would process
+conditional requests even if those aren't GET requests.
+This is an issue for POST requests with "If-None-Match: *" headers and
+many other use cases, which should not receive an HTTP 304 Not Modified
+status in response.
+
+This commit only triggers ETag/Last-Modified conditional requests bits
+for GET requests.
+
+Issue: SPR-13496

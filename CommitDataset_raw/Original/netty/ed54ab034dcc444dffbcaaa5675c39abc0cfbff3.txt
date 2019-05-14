@@ -1,0 +1,14 @@
+Correctly clear the error stack in all cases when using ReferenceCountedOpenSslEngine. (#7941)
+
+Motivation:
+
+We missed to correctly clear the error stack in one case when using the ReferenceCountedOpenSslEngine. Because of this it was possible to pick up an error on an unrelated operation.
+
+Modifications:
+
+- Correctly clear the stack
+- Add verification of empty error stack to tests.
+
+Result:
+
+Not possible to observe unrelated errors.

@@ -1,0 +1,9 @@
+Send clear session as routable remote request (#36805)
+
+This commit adds a RemoteClusterAwareRequest interface that allows a
+request to specify which remote node it should be routed to. The remote
+cluster aware client will attempt to route the request directly to this
+node. Otherwise it will send it as a proxy action to eventually end up
+on the requested node.
+
+It implements the ccr clean_session action with this client.

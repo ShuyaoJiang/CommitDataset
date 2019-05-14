@@ -1,0 +1,14 @@
+Rework determineTransactionManager condition
+
+SPR-11954 introduced a regression that when the "default" transaction
+manager is cached, qualified transaction managers are not taken into
+account anymore.
+
+This commit rework the "determineTransactionManager" condition to
+favor qualifier and "named" transaction managers. If none of these apply,
+the default transaction manager is used as it should.
+
+Also reworked the caching infrastructure so that a single cache holds
+all transaction manager instances.
+
+Issue: SPR-12541

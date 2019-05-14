@@ -1,0 +1,12 @@
+Decouple DnsCache and DnsCacheEntry
+
+Motivation:
+DnsCache (an interface) is coupled to DnsCacheEntry (a final class). This means that DnsCache implementations can't implement their own DnsCacheEntry objects if the default behavior isn't appropriate.
+
+Modifications:
+- DnsCacheEntry should be moved to DefaultDnsCache as it is an implementation detail
+- DnsCache#cache(..) should return a new DnsCacheEntry
+- The methods which from DnsCacheEntry that were used outside the scope of DefaultDnsCache should be moved into an interface
+
+Result:
+DnsCache is more extensible and not tightly coupled to a default implementation of DnsCacheEntry.

@@ -1,0 +1,13 @@
+Take memory overhead of ChannelOutboundBuffer / PendingWriteQueue into account
+
+Motivation:
+
+To guard against the case that a user will enqueue a lot of empty or small buffers and so raise an OOME we need to also take the overhead of the ChannelOutboundBuffer / PendingWriteQueue into account when detect if a Channel is writable or not. This is related to #5856.
+
+Modifications:
+
+When calculate the memory for an message that is enqueued also add some extra bytes depending on the implementation.
+
+Result:
+
+Better guard against OOME.

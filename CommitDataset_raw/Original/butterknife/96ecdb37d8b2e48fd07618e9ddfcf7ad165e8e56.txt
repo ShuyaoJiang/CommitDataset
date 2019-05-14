@@ -1,0 +1,11 @@
+Support for Android Gradle Plugin 3.3.
+
+Android Gradle Plugin 3.3 includes direct bytecode generation of the R
+class in libraries, which breaks previous R2 generator as it relies on
+the generated source.
+
+Switch to reading the symbol table (R.txt), dropping support for plugins
+before 3.1, where the internal getter for the symbol table was moved.
+
+Filed https://issuetracker.google.com/118668005 to introduce an API in
+the Android Gradle Plugin to avoid the use of internal classes.

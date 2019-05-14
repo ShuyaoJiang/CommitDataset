@@ -1,0 +1,16 @@
+Support repeatable annotations as composed annotations
+
+Prior to this commit, AnnotationUtils supported searching for
+repeatable annotations even if the repeatable annotation was declared
+on a custom stereotype annotation. However, there was no support for
+merging of attributes in composed repeatable annotations. In other
+words, it was not possible for a custom annotation to override
+attributes in a repeatable annotation.
+
+This commit addresses this by introducing
+findMergedRepeatableAnnotations() methods in AnnotatedElementUtils.
+These new methods provide full support for explicit annotation
+attribute overrides configured via @AliasFor (as well as
+convention-based overrides) with "find semantics".
+
+Issue: SPR-13973

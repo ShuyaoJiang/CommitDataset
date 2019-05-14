@@ -1,0 +1,44 @@
+Introduce programmatic tx mgmt in the TCF
+
+Historically, Spring's JUnit 3.8 TestCase class hierarchy supported
+programmatic transaction management of "test-managed transactions" via
+the protected endTransaction() and startNewTransaction() methods in
+AbstractTransactionalSpringContextTests.
+
+The Spring TestContext Framework (TCF) was introduced in Spring 2.5 to
+supersede the legacy JUnit 3.8 support classes; however, prior to this
+commit the TCF has not provided support for programmatically starting
+or stopping the test-managed transaction.
+
+This commit introduces a TestTransaction class in the TCF that provides
+static utility methods for programmatically interacting with
+test-managed transactions. Specifically, the following features are
+supported by TestTransaction and its collaborators.
+
+ - End the current test-managed transaction.
+
+ - Start a new test-managed transaction, using the default rollback
+   semantics configured via @TransactionConfiguration and @Rollback.
+
+ - Flag the current test-managed transaction to be committed.
+
+ - Flag the current test-managed transaction to be rolled back.
+
+Implementation Details:
+
+ - TransactionContext is now a top-level, package private class.
+
+ - The existing test transaction management logic has been extracted
+   from TransactionalTestExecutionListener into TransactionContext.
+
+ - The current TransactionContext is stored in a
+   NamedInheritableThreadLocal that is managed by
+   TransactionContextHolder.
+
+ - TestTransaction defines the end-user API, interacting with the
+   TransactionContextHolder behind the scenes.
+
+ - TransactionalTestExecutionListener now delegates to
+   TransactionContext completely for starting and ending transactions.
+
+Issue: SPR-5079

@@ -1,0 +1,5 @@
+Update global checkpoint when increasing primary term on replica (#25422)
+
+When a replica shard increases its primary term under the mandate of a new primary, it should also update its global checkpoint; this gives us the guarantee that its global checkpoint is at least as high as the new primary and gives a starting point for the primary/replica resync.
+
+Relates to #25355, #10708

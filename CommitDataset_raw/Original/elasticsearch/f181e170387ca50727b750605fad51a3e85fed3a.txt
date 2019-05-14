@@ -1,0 +1,13 @@
+Introduce retention leases versioning (#37951)
+
+Because concurrent sync requests from a primary to its replicas could be
+in flight, it can be the case that an older retention leases collection
+arrives and is processed on the replica after a newer retention leases
+collection has arrived and been processed. Without a defense, in this
+case the replica would overwrite the newer retention leases with the
+older retention leases. This commit addresses this issue by introducing
+a versioning scheme to retention leases. This versioning scheme is used
+to resolve out-of-order processing on the replica. We persist this
+version into Lucene and restore it on recovery. The encoding of
+retention leases is starting to get a little ugly. We can consider
+addressing this in a follow-up.

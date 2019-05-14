@@ -1,0 +1,19 @@
+Add an option to force the numeric type of a field sort (#38095)
+
+This change adds an option to the `FieldSortBuilder` that allows to transform the type
+of a numeric field into another. Possible values for this option are `long` that transforms
+the source field into an integer and `double` that transforms the source field into a floating point.
+This new option is useful for cross-index search when the sort field is mapped differently on some
+indices. For instance if a field is mapped as a floating point in one index and as an integer in another
+it is possible to align the type for both indices using the `numeric_type` option:
+
+```
+{
+   "sort": {
+    "field": "my_field",
+    "numeric_type": "double" <1>
+   }
+}
+```
+
+<1> Ensure that values for this field are transformed to a floating point if needed.

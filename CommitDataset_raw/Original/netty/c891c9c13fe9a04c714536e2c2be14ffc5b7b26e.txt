@@ -1,0 +1,17 @@
+Include more detail why Unsafe is not available
+
+Motivation:
+PD and PD0 Both try to find and use Unsafe.  If unavailable, they
+try to log why and continue on.  However, it is not always east to
+enable this logging.  Chaining exceptions together is much easier
+to reach, and the original exception is relevant when Unsafe is
+needed.
+
+Modifications:
+* Make PD log why PD0 could not be loaded with a trace level log
+* Make PD0 remember why Unsafe wasn't available
+* Expose unavailability cause through PD for higher level use.
+* Make Epoll and KQueue include the reason when failing
+
+Result:
+Easier debugging in hard to reconfigure environments

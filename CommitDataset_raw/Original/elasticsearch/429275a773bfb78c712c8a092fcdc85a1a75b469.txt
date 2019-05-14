@@ -1,0 +1,7 @@
+Remove ElasticsearchQueryCachingPolicy (#27190)
+
+We have an hidden setting called `index.queries.cache.term_queries` that disables caching of term queries in the query cache.
+Though term queries are not cached in the Lucene UsageTrackingQueryCachingPolicy since version 6.5.
+This makes the es policy useless but also makes it impossible to re-enable caching for term queries.
+This change appeared in Lucene 6.5 so this setting is no-op since version 5.4 of Elasticsearch
+The change in this PR removes the setting and the custom policy.

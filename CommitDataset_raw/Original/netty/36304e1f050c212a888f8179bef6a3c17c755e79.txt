@@ -1,0 +1,13 @@
+Reduce object allocation by using same ChannelFutureListener instance.
+
+Motivation:
+
+When VoidChannelPromise.unvoid() was called we created a new ChannelFutureListener everytime. This is not needed as its stateless.
+
+Modifications:
+
+Reuse the ChannelFutureListener.
+
+Result:
+
+Less object allocations

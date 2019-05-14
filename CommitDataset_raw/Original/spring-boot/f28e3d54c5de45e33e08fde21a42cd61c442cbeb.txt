@@ -1,0 +1,12 @@
+Upgrade to Tomcat 8.5.3
+
+This commit changes the default version of Tomcat to 8.5.3 while
+also retaining support for Tomcat 8.0 and 7.0. The main difference
+in 8.5 is that the ServerSocketFactory abstraction that allowed the
+TrustStore and KeyStore to be configured programatically no longer
+exists. This logic has been replaced with the use of a custom URL
+protocol (springbootssl) that provides access to the key store and
+trust store of an SslStoreProvider. In addition to working with 8.5,
+this approach has the advantage of also working with 8.0 and 7.0.
+
+Closes gh-6164

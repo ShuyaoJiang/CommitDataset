@@ -1,0 +1,10 @@
+Make configurable the initial and max size of InternalThreadLocalMap#stringBuilder
+
+Motivation:
+In some cases of using an `InternalThreadLocalMap#stringBuilder`, the `StringBuilder`s size can often exceed the exist limit (1024 bytes). This can lead to permanent memory reallocation.
+
+Modifications:
+Add custom properties for the initial capacity and maximum size (after which the `StringBuilder`s capacity will be reduced to the initial capacity).
+
+Result:
+An `InternalThreadLocalMap#stringBuilder`s initial and max size is configurable. Fixes [#7092].

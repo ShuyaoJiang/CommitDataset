@@ -1,0 +1,5 @@
+Fix _host based require filters (#38173)
+
+Using index.routing.allocation.require._host does not correctly work because the boolean logic in
+filter matching is broken (DiscoveryNodeFilters.match(...) will return false) when
+opType ==OpType.AND

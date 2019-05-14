@@ -1,0 +1,14 @@
+UnsafeByteBufUtil errors and simplification
+
+Motiviation:
+UnsafeByteBufUtil has some bugs related to using an incorrect index, and also omitting the array paramter when dealing with byte[] objects. There is also some simplification possible with respect to type casting, and minor formatting consistentcy issues.
+
+Modifications:
+- Ensure indexing is correct when dealing with native memory
+- Fix the native access and endianness for the medium/unsigned medium methods
+- Ensure array is used when dealing with heap memory
+- Remove unecessary casts when using long
+- Fix formating and alignment
+
+Result:
+UnsafeByteBufUtil is more correct and won't access direct memory when heap arrays are used.

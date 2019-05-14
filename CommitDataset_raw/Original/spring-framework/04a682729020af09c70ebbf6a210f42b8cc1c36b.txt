@@ -1,0 +1,23 @@
+Reproduce claims raised in SPR-8849
+
+This commit introduces a test suite (Spr8849Tests) that demonstrates
+the claims made in SPR-8849.
+
+Specifically, if <jdbc:embedded-database id="xyz" /> is used to create
+an embedded HSQL database in an XML configuration file and that
+configuration file is imported in different sets of configuration files
+that are used to load ApplicationContexts for different integration
+tests, the embedded database will be initialized multiple times using
+any nested <jdbc:script /> elements. If such a script is used to create
+a table, for example, subsequent attempts to initialize the database
+named "xyz" will fail since an embedded database named "xyz" already
+exists in the JVM.
+
+As a work-around, this test suite uses a SpEL expression to generate a
+random string for each embedded database instance:
+
+  id="#{T(java.util.UUID).randomUUID().toString()}"
+
+See the Javadoc in Spr8849Tests for further information.
+
+Issue: SPR-8849

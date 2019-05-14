@@ -1,0 +1,22 @@
+Fix InputStream caching in ContentCachingReqWrapper
+
+Prior to this commit, the ContentCachingRequestWrapper would immediately
+consume the wrapped request's InputStream when asked for the cached
+content; that caused several issues:
+
+* the request body was read in memory even if it wasn't yet consumed by
+the application, leading to inefficiencies.
+* when requesting the InputStream, an empty InputStream was returned
+since the original was already read.
+
+This case only happened for form POSTs requests.
+
+This commit makes sure that the wrapper does not alter the request
+expected behavior:
+
+* when getting the inputstream, it is wrapped in order to cache its
+content
+* when getting request parameters, the request body is cached and its
+inputstream is consumed, as expected
+
+Issue: SPR-12810

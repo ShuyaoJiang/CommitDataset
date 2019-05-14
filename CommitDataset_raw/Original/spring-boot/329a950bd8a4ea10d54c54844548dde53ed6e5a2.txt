@@ -1,0 +1,16 @@
+Remove testing support from the CLI
+
+The testing support in the CLI has proven to be more trouble than
+it's worth. Our recommendation is that, once an app gets to the stage
+of requiring a test suite, it should be converted to a Maven or
+Gradle project. This makes it easy to version, publish, deploy etc
+using the vast ecosystems of the two build systems.
+
+As part of this change, the dependency management for Spock has been
+moved into spring-boot-parent, thereby making it "private". This
+allows it to continue to manage the test-only Spock dependency in
+spring-boot-test without also managing the version of Spring that is
+used by a user's application.
+
+Closes gh-9087
+Fixes gh-9043

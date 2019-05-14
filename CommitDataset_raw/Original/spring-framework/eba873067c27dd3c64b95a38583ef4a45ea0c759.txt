@@ -1,0 +1,10 @@
+Better hide lazy resolution of JMS payloads
+
+This commit fixes MessagingMessageConverter to no longer expose the lazy
+message resolution algorithm. This restores proper behaviour for
+converters used outside of that context.
+
+Instead, such arrangement is now private to
+AbstractAdaptableMessageListener (as it should).
+
+Issue: SPR-14389

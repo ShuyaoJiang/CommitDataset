@@ -1,0 +1,31 @@
+Do not perform cleanup if Manifest write fails with dirty exception (#40519)
+
+Currently, if Manifest write is unsuccessful (i.e. WriteStateException
+is thrown) we perform cleanup of newly created metadata files.
+However, this is wrong. 
+Consider the following sequence (caught by CI here
+https://github.com/elastic/elasticsearch/issues/39077):
+
+- cluster global data is written **successful**
+- the associated manifest write **fails** (during the fsync, ie files
+have been written)
+- deleting (revert) the manifest files, **fails**, metadata is
+therefore persisted
+- deleting (revert) the cluster global data is **successful**
+
+In this case, when trying to load metadata (after node restart
+because of dirty WriteStateException),  the following exception will
+happen
+```
+java.io.IOException: failed to find global metadata [generation: 0]
+```
+because the manifest file is referencing missing global metadata file.
+
+This commit checks if thrown WriteStateException is dirty and if its
+we don't perform any cleanup, because new Manifest file might be
+created, but its deletion has failed.
+In the future, we might add more fine-grained check - perform the
+clean up if WriteStateException is dirty, but Manifest deletion is
+successful.
+
+Closes https://github.com/elastic/elasticsearch/issues/39077

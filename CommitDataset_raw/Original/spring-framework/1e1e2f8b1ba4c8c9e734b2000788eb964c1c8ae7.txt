@@ -1,0 +1,8 @@
+Support HttpEntity method arguments
+
+The RequestBodyArgumentResolver has been refactored to have a shared
+base class and tests with the new HttpEntityMethodArgumentResolver.
+
+An HttpEntity argument is not expected to have an async wrapper because
+the request headers are available immediately. The body however can be
+asynchronous, e.g. HttpEntity<Flux<String>>.

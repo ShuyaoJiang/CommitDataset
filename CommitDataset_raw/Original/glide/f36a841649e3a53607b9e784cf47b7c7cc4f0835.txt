@@ -1,0 +1,9 @@
+Avoid masking errors when building a ModelLoader throws an exception.
+
+Currently we accidentally retain some temporary data between calls that
+causes a second request for the failed ModelLoader to fail for a
+different reason, masking the original error. By clearing out the
+temporary data whenever an exception is thrown, we avoid this problem.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=96878903

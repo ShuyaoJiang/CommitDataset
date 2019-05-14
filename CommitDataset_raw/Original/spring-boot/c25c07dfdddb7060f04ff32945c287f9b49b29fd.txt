@@ -1,0 +1,12 @@
+Remove dead code
+
+ConfigurationPropertiesReportEndpoint parses the meta-data to inspect
+entities that have potential cycles in them. The whole logic is based on
+the lookup of `META-INF/spring-configuration-metadata.json` files on the
+classpath. Unfortunately, the lookup instruction had a typo and did not
+retrieve any file.
+
+Surely that code was written with a clear intention in mind but it was
+effectively dead code outside tests so it has been removed.
+
+Closes gh-3310

@@ -1,0 +1,26 @@
+Do not allow Sampler to allocate more than maxDoc size, better CB accounting (#39381)
+
+The `sampler` agg creates a BestDocsDeferringCollector, which internally
+initializes a priority queue of size `shardSize`.  This queue is
+populated with empty `Object` sentinels, which is roughly 16b per
+object.
+
+Similarly, the Diversified samplers create a DiversifiedTopDocsCollectors
+which internally track PQ slots with ScoreDocKeys, weighing in around
+28kb
+
+If the user sets a very abusive `shard_size`, this could easily OOM
+a node or cluster since these PQ are allocated up-front without
+any checks.
+
+This commit makes sure that when we create the collector, it
+cannot be larger than the maxDoc so that we don't accidentally blow
+up the node.  We ensure the size is not greater than the overall
+index maxDoc. A similar treatment is done for `maxDocsPerValue`
+parameter of the diversified samplers
+
+For good measure, this also adds in some CB accounting to try and track
+memory usage.
+
+Finally, a redundant array creation is removed to reduce a bit of
+temporary memory.

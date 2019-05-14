@@ -1,0 +1,14 @@
+Decouple XContentBuilder from BytesReference (#28972)
+
+* Decouple XContentBuilder from BytesReference
+
+This commit removes all mentions of `BytesReference` from `XContentBuilder`.
+This is needed so that we can completely decouple the XContent code and move it
+into its own dependency.
+
+While this change appears large, it is due to two main changes, moving
+`.bytes()` and `.string()` out of XContentBuilder itself into static methods
+`BytesReference.bytes` and `Strings.toString` respectively. The rest of the
+change is code reacting to these changes (the majority of it in tests).
+
+Relates to #28504

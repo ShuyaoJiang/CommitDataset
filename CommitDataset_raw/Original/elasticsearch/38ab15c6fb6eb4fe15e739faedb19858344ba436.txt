@@ -1,0 +1,6 @@
+Avoid shutting down the only master (#36272)
+
+Today the InternalTestClusterTests sometimes set up a cluster with a single
+master, start some other ndoes, shut the original master down, and then reset
+the cluster. This doesn't really work, because the original master may be
+stale. This change avoids shutting down the only master in this situation.

@@ -1,0 +1,20 @@
+Do not ignore shard not-available exceptions in replication (#28571)
+
+The shard not-available exceptions are currently ignored in the
+replication as the best effort avoids failing not-yet-ready shards.
+However these exceptions can also happen from fully active shards. If
+this is the case, we may have skipped important failures from replicas.
+Since #28049, only fully initialized shards are received write requests.
+This restriction allows us to handle all exceptions in the replication.
+
+There is a side-effect with this change. If a replica retries its peer
+recovery second time after being tracked in the replication group, it
+can receive replication requests even though it's not-yet-ready. That
+shard may be failed and allocated to another node even though it has a
+good lucene index on that node.
+
+This PR does not change the way we report replication errors to users,
+hence the shard not-available exceptions won't be reported as before.
+
+Relates #28049
+Relates #28534

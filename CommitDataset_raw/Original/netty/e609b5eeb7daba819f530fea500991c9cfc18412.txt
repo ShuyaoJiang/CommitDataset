@@ -1,0 +1,18 @@
+Close consumed inputs in ChunkedWriteHandler (#8876)
+
+Motivation:
+
+ChunkedWriteHandler needs to close both successful and failed
+ChunkInputs. It used to never close successful ones.
+
+Modifications:
+
+* ChunkedWriteHandler always closes ChunkInput before completing
+the write promise. 
+* Ensure only ChunkInput#close() is invoked
+on a failed input.
+* Ensure no methods are invoked on a closed input.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8875.

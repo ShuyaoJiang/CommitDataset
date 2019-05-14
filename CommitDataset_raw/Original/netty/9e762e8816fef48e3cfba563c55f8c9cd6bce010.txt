@@ -1,0 +1,16 @@
+Correctly detect if KeyManagerFactory is supported by OpenSSL even when sun.security.x509.* can not be accessed and bouncycastle is not on the classpath. (#8415)
+
+Motivation:
+
+OpenSsl used SelfSignedCertificate in its static init block to detect if KeyManagerFactory is supported. Unfortunally this only works when either sun.security.x509.* can be accessed or bouncycastle is on the classpath.
+We should not depend on either of it.
+
+This came up in https://github.com/netty/netty-tcnative/issues/404#issuecomment-431551890.
+
+Modifications:
+
+Just directly use the bytes to generate the X509Certificate and so not depend on sun.security.x509.* / bouncycastle.
+
+Result:
+
+Correctly be able to detect if KeyManagerFactory can be supported in all cases.

@@ -1,0 +1,8 @@
+Add test for `PutFollowAction` on a closed index (#38236)
+
+This is related to #35975. Currently when an index falls behind a leader
+it encounters a fatal exception. This commit adds a test for that
+scenario. Additionally, it tests that the user can stop following, close
+the follower index, and put follow again. After the indexing is
+re-bootstrapped, it will recover the documents it lost in normal
+following operations.

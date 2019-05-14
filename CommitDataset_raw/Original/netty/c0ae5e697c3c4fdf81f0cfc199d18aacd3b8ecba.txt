@@ -1,0 +1,30 @@
+DnsAddressResolverGroup to use pluggable DnsNameResolverBuilder (#7793)
+
+Motivation:
+
+Right now to customize DNS name resolver when using DnsAddressResolverGroup
+one should subclass implementation and override newNameResolver method when
+in fact it's possible to collect all settings in a DnsNameResolverBuilder
+instance. Described in #7749.
+
+Modifications:
+
+- Added new constructor for DnsNameResolverBuilder in order to delay
+  EventLoop specification
+
+- Added copy() method to DnsNameResolverBuilder to provide an immutable
+  copy of the builder
+
+- Added new single-argument constructor for DnsAddressResolverGroup and
+  RoundRobinDnsAddressResolverGroup accepting DnsNameResolverBuilder
+  instance
+
+- DnsAddressResolverGroup to build a new resolver using DnsNameResolverBuilder
+  given instead of creating a new one
+
+- Test cases to check that changing channelFactory after the builder was passed
+  to create a DnsNameResolverGroup would not propagate to the name resolver
+
+Result:
+
+Much easier to customize DNS settings w/o subclassing DnsAddressResolverGroup

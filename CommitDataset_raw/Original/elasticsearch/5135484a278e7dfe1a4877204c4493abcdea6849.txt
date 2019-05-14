@@ -1,0 +1,12 @@
+Test: Expect extra Exception in die_with_dignity (#29138)
+
+I did a little digging. It looks like IOException is thrown when the other
+side closes its connection while we're waiting on our buffer to fill up. We
+totally expect that in this test. It feels to me like we should throw a
+`ConnectionClosedException` but upstream does not agree:
+https://issues.apache.org/jira/browse/HTTPASYNC-134
+
+While we *could* catch the exception and transform it ourselves that
+seems like a bigger change than is merited at this point.
+
+Closes #29136

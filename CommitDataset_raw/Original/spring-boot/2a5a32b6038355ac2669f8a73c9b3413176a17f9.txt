@@ -1,0 +1,23 @@
+Add auto-configuration for H2’s web console
+
+Three conditions must be met for the console to be enabled:
+
+ - H2 is on the classpath
+ - The application is a web application
+ - spring.h2.console.enabled is set to true
+
+If spring-boot-devtools is on the classpath, spring.h2.console.enabled
+will be set to true automatically. Without the dev tools, the enabled
+property will have to be set to true in application.properties.
+
+By default, the console is available at /h2-console. This can be
+configured via the spring.h2.console.path property. The value of this
+property must begin with a '/'.
+
+When Spring Security is on the classpath the console will be secured
+based on the user's security.* configuration. When the console is
+secured, CSRF protection is disabled and frame options is set to
+SAMEORIGIN for its path. Both settings are required in order for the
+console to function.
+
+Closes gh-766

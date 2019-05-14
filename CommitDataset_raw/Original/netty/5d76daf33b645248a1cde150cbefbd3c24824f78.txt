@@ -1,0 +1,34 @@
+Allow to customize NIO (channel) select strategies.
+
+Motivation:
+
+Under high throughput/low latency workloads, selector wakeups are
+degrading performance when the incoming operations are triggered
+from outside of the event loop. This is a common scenario for
+"client" applications where the originating input is coming from
+application threads rather from the socket attached inside the
+event loops.
+
+As a result, it can be desirable to defer the blocking select
+so that incoming tasks (write/flush) do not need to wakeup
+the selector.
+
+Modifications:
+
+This changeset adds the notion of a generic SelectStrategy which,
+based on its contract, allows the implementation to optionally
+defer the blocking select based on some custom criteria.
+
+The default implementation resembles the original behaviour, that
+is if tasks are in the queue `selectNow()` and move on, and if no
+tasks need to be processed go into the blocking select and wait
+for wakeup.
+
+The strategy can be customized per `NioEventLoopGroup` in the
+constructor.
+
+Result:
+
+High performance client applications are now given the chance to
+customize for how long the actual selector blocking should be
+deferred by employing a custom select strategy.

@@ -1,0 +1,11 @@
+@Entity no longer required with spring-aspect
+
+This commits complements 222d2b1 for another required dependency.
+
+javax.persistence.Entity was previously required, regardless of which
+aspects were actually used by the project. It is now optional and will
+not break the build if it is not present. Note that the side effect is that
+AnnotationDrivenStaticEntityMockingControl is disabled as well if the
+JPA API is not available.
+
+Issue: SPR-6819

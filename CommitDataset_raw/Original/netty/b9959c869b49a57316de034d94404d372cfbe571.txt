@@ -1,0 +1,28 @@
+Do not eagerly initialize the logger factory
+
+Motivation:
+
+For applications that set their own logger factory, they want that
+logger factory to be the one logger factory. Yet, Netty eagerly
+initializes this and then triggers initialization of other classes
+before the application has had a chance to set its preferred logger
+factory.
+
+Modifications:
+
+With this commit there are two key changes:
+ - Netty does not attempt to eagerly initialize the default logger
+   factory, only doing so if the application layer above Netty has not
+   already set a logger factory
+ - do not eagerly initialize unrelated classes from the logger factory;
+   while the motivation behind this was to initialize ThreadLocalRandom
+   as soon as possible in case it has to block reading from /dev/random,
+   this can be worked around for applications where it is problematic by
+   setting securerandom.source=file:/dev/urandom in their Java system
+   security policy (no, it is not less secure; do not even get me
+   started on myths about /dev/random)
+
+Result:
+
+Netty uses the logger factory that the application prefers, and does not
+initialize unrelated classes.

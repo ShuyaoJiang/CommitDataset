@@ -1,0 +1,12 @@
+Restore method signatures on MediaType
+
+Previously the method signatures for includes and isCompatibleWith were
+incompatible with Spring 3.2.x since the argument was now MimeType.
+This caused NoSuchMethodError to be thrown when a class was compiled
+against MediaType from Spring 3.2.x and ran against MediaType
+from Spring 4.x.
+
+This commit restores the signatures and implements each method by
+invoking the super class method.
+
+Issue: SPR-10860

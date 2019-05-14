@@ -1,0 +1,14 @@
+ApplicationContext-based HttpHandler setup
+
+This commit adds support for detecting the target WebHandler along with
+WebFilters, WebExceptionHandlers, and other spring-web reactive
+strategies in an ApplicationContext.
+
+WebReactiveConfigurationSupport has @Bean factory methods for
+DispatcherHandler and ResponseStatusExceptionHandler.
+
+WebHttpHandlerBuilder has a static factory method that initializes the
+builder from an ApplicationContext. This method is also used in the
+DispatcherHandler#toHttpHandler(ApplicationContext) shortcut method.
+
+Issue: SPR-14837

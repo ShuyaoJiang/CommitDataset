@@ -1,0 +1,19 @@
+Create snapshot role (#35820)
+
+This commit introduces the `create_snapshot` cluster privilege and
+the `snapshot_user` role.
+This role is to be used by "cronable" tools that call the snapshot API
+periodically without recurring to the `manage` cluster privilege. The
+`create_snapshot` cluster privilege is much more limited compared to
+the `manage` privilege.
+
+The `snapshot_user` role grants the privileges to view the metadata of
+all indices (including restricted ones, i.e. .security). It obviously grants the
+create snapshot privilege but the repository has to be created using another
+role. In addition, it grants the privileges to (only) GET repositories and
+snapshots, but not create and delete them.
+
+The role does not allow to create repositories. This distinction is important
+because snapshotting equates to the `read` index privilege if the user has
+control of the snapshot destination, but this is not the case in this instance,
+because the role does not grant control over repository configuration.

@@ -1,0 +1,9 @@
+Fix failing CLI tests
+
+This commit fixes some failing CLI tests. The failure here is that a
+guard against the system property es.path.conf was added yet these tests
+were not adapted for this change. This commit implements this adapation
+which overrides the createEnv method where the problematic guard is
+invoked. We do this to avoid having to set es.path.conf in tests.
+
+Original commit: elastic/x-pack-elasticsearch@20e1724823589ce45a2067030e37512dbfb88537

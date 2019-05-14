@@ -1,0 +1,10 @@
+HTTP/2 HPACK Decoder VarInt Improvement
+
+Motivation:
+HTTP/2 Decoder#decodeULE128 current will tolerate more bytes than necessary when attempted to detect overflow. The usage of this method also currently requires an additional overflow conditional.
+
+Modifications:
+- Integrate the first byte into Decoder#decodeULE128 which allows us to detect overflow reliably and avoid overflow checks outside of this method.
+
+Result:
+Less conditionals and earlier overflow detection in Decoder#decodeULE128

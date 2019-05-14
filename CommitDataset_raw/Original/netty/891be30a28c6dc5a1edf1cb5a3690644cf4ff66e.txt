@@ -1,0 +1,13 @@
+Remove memory copy when extract frame in LengthFieldBasedFrameDecoder
+
+Motivation:
+
+We are currently doing a memory cop to extract the frame in LengthFieldBasedFrameDecoder which can be eliminated.
+
+Modifications:
+
+Use buffer.slice(...).retain() to eliminate the memory copy.
+
+Result:
+
+Better performance.

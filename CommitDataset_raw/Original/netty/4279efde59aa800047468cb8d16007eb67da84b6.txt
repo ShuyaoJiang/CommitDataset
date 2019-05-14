@@ -1,0 +1,21 @@
+Handle the interface name in IPv6 address correctly
+
+Motivation:
+
+NetUtil.isValidIpV6Address() handles the interface name in IPv6 address
+incorrectly. For example, it returns false for the following addresses:
+
+- ::1%lo
+- ::1%_%_in_name_
+
+Modifications:
+
+- Strip the square brackets before validation for simplicity
+- Strip the part after the percent sign completely before validation for
+  simplicity
+- Simplify and reformat NetUtilTest
+
+Result:
+
+- The interface names in IPv6 addresses are handled correctly.
+- NetUtilTest is cleaner

@@ -1,0 +1,10 @@
+Sanitize request fragment in ResourceUrlEncodingFilter
+
+Prior to this change, ResourceUrlEncodingFilter would try to resolve
+the resource path using request URL without removing fragment first,
+whereas only paths should be used.
+
+This commit synchronizes behavior of ResourceUrlEncodingFilter with
+behavior of ResourceUrlProvider.
+
+Issue: SPR-17535

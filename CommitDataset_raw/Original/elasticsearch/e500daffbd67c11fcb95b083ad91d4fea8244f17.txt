@@ -1,0 +1,8 @@
+Do not swallow exceptions in TimedRunnable (#39856)
+
+Executors of type fixed_auto_queue_size (i.e. search / search_throttled) wrap runnables into
+TimedRunnable, which is an AbstractRunnable. This is dangerous as it might silently swallow
+exceptions, and possibly miss calling a response listener. While this has not triggered any failures in
+the tests I have run so far, it might help uncover future problems.
+
+Follow-up to #36137

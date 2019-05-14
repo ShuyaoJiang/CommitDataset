@@ -1,0 +1,16 @@
+HttpObjectAggregator adds 'Connection: close' header if necessary
+
+Motivation:
+
+The HttpObjectAggregator never appends a 'Connection: close' header to
+the response of oversized messages even though in the majority of cases
+its going to close the connection.
+
+Modification:
+
+This PR addresses that by ensuring the requisite header is present when
+the connection is going to be closed.
+
+Result:
+
+Gracefully signal that we are about to close the connection.

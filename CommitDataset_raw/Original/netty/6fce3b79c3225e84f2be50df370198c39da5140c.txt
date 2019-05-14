@@ -1,0 +1,13 @@
+Do not try to init TrustManagerFactory if trustCertChainFile is null.
+
+Motivation:
+
+We called TrustManagerFactory.init(...) even when the trustCertChainFile is null. This could lead to exceptions during the handshake.
+
+Modifications:
+
+Correctly only call TurstManagerFactory.init() if trustCertcChainFail is not null.
+
+Result:
+
+Correct behavior.

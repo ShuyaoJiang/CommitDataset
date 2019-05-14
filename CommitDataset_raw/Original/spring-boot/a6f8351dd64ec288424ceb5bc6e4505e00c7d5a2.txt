@@ -1,0 +1,16 @@
+Close Liquibase-specific DataSource once database has been migrated
+
+Previously, when the liquibase.url, .username, and .password
+properties were used to configure a DataSource specifically for
+Liquibase that DataSource would never be explicitly closed. As it is
+created by DataSourceBuilder with no explicitly configured type it
+will use whichever connection pool is available and, therefore, will
+create and keep open the pool's minimum number of connections. This
+is an unnecessary use of resources both in the application and in the
+database.
+
+This commit updates LiquibaseAutoConfiguration so that if it uses
+DataSourceBuilder to create a DataSource then it will also close that
+DataSource once the database has been migrated.
+
+Closes gh-9218

@@ -1,0 +1,11 @@
+Update SSLReloadIntegTests to work with JDK11 (#34129)
+
+In prior versions of Java, we expected to see a SSLHandshakeException
+when starting a handshake with a server that we do not trust. In JDK11,
+the exception has changed to a SSLException, which
+SSLHandshakeException extends. This is most likely a side effect of the
+TLS 1.3 changes in JDK11. This change updates the test to catch the
+SSLException instead of the SSLHandshakeException and enables the test
+to work on JDK8 through JDK11.
+
+Closes #32293

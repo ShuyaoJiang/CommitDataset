@@ -1,0 +1,15 @@
+Allow to create SslContext from existing PrivateKey / X509Certificate
+
+Motivation:
+
+Sometimes the user already has a PrivateKey / X509Certificate which should be used to create a new SslContext. At the moment we only allow to construct it via Files.
+
+Modifications:
+
+- Add new methods to the SslContextBuilder to allow creating a SslContext from PrivateKey / X509Certificate
+- Mark all public constructors of *SslContext as @Deprecated, the user should use SslContextBuilder
+- Update tests to us SslContextBuilder.
+
+Result:
+
+Creating of SslContext is possible with PrivateKay/X509Certificate

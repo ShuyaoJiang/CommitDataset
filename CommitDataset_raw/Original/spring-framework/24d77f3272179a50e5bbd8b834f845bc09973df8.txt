@@ -1,0 +1,14 @@
+Prepend leading slash in ResourceUrlProvider
+
+The getForRequestUrl method of ResourceUrlProvider uses the
+HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE attribute to
+determine the relevant portion of the resource URL path.
+
+However there are cases when that attribute may not have a leading
+(e.g. when the current URL was matched to a prefix-based pattern
+and hence extracted via PathMatcher#extractPathWithinPattern), which
+interferes with the matching of resource URL paths to patterns.
+
+This change ensures a leading slash is present
+
+Issue: SPR-12281

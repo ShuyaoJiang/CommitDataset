@@ -1,0 +1,11 @@
+Search option terminate_after does not handle post_filters and aggregations correctly (#28459)
+
+* Search option terminate_after does not handle post_filters and aggregations correctly
+
+This change fixes the handling of the `terminate_after` option when post_filters (or min_score) are used.
+`post_filter` should be applied before `terminate_after` in order to terminate the query when enough document are accepted
+by the post_filters.
+This commit also changes the type of exception thrown by `terminate_after` in order to ensure that multi collectors (aggregations)
+do not try to continue the collection when enough documents have been collected.
+
+Closes #28411

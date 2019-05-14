@@ -1,0 +1,9 @@
+Fix checkpoints advance test
+
+This commit fixes an issue in the checkpoints advance test. Namely, when
+there zero documents indexed, after the global checkpoint is synced, the
+global checkpoint will have advanced to the no ops performed. There is a
+larger conceptual problem here, namely that the primary does not update
+its knowledge of its own local checkpoint upon recovery which causes the
+global checkpoint to initially be unassigned and then advance to no ops
+performed, but this will be addressed in a follow-up.

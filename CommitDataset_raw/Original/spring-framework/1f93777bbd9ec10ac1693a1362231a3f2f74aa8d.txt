@@ -1,0 +1,42 @@
+Support ApplicationContextInitializers in the TCF
+
+Starting with Spring 3.1 applications can specify
+contextInitializerClasses via context-param and init-param in web.xml;
+however, there is currently no way to have such initializers invoked in
+integration testing scenarios without writing a custom
+SmartContextLoader. For comprehensive integration testing it should
+therefore be possible to re-use ApplicationContextInitializers in the
+Spring TestContext Framework as well.
+
+This commit makes this possible at the @ContextConfiguration level by
+allowing an array of ACI types to be specified, and the out-of-the-box
+SmartContextLoader implementations invoke the declared initializers at
+the appropriate time.
+
+ - Added initializers and inheritInitializers attributes to
+   @ContextConfiguration.
+
+ - Introduced support for ApplicationContextInitializers in
+   ContextConfigurationAttributes, MergedContextConfiguration, and
+   ContextLoaderUtils.
+
+ - MergedContextConfiguration stores context initializer classes as a
+   Set and incorporates them into the implementations of hashCode() and
+   equals() for proper context caching.
+
+ - ApplicationContextInitializers are invoked in the new
+   prepareContext(GenericApplicationContext, MergedContextConfiguration)
+   method in AbstractGenericContextLoader, and ordering declared via the
+   Ordered interface and @Order annotation is honored.
+
+ - Updated DelegatingSmartContextLoader to support initializers.
+   Specifically, a test class may optionally declare neither XML
+   configuration files nor annotated classes and instead declare only
+   application context initializers. In such cases, an attempt will
+   still be made to detect defaults, but their absence will not result
+   an an exception.
+
+ - Documented support for application context initializers in Javadoc
+   and in the testing chapter of the reference manual.
+
+Issue: SPR-9011

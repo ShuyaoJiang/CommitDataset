@@ -1,0 +1,10 @@
+SslHandler wrap memory leak
+
+Motivation:
+The SslHandler wrap method requires that a direct buffer be passed to the SSLEngine.wrap() call. If the ByteBuf parameter does not have an underlying direct buffer then one is allocated in this method, but it is not released.
+
+Modifications:
+- Release the direct ByteBuffer only accessible in the scope of SslHandler.wrap
+
+Result:
+Memory leak in SslHandler.wrap is fixed.

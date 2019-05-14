@@ -1,0 +1,19 @@
+Watcher: Ensure TriggerEngine start replaces existing watches (#33157)
+
+This commit ensures that when `TriggerService.start()` is called,
+we ensure in the trigger engine implementations that current watches are
+removed instead of adding to the existing ones in
+`TickerScheduleTriggerEngine.start()`
+
+Two additional minor fixes, where the result remains the same but less code gets executed.
+
+1. If the node is not a data node, we forgot to set the status to
+STARTING when watcher is being started. This should not be a big issue,
+because a non-data node does not spent a lot of time loading as there
+are no watches which need loading.
+2. If a new cluster state came in during a reload, we had two checks in
+place to abort loading the current one. The first one before we load all
+the watches of the local node and the second before watcher is starting
+with those new watches. Turned out that the first check was not
+returning, which meant we always tried to load all the watches, and then
+would fail on the second check. This has been fixed here.

@@ -1,0 +1,14 @@
+Protect against stack overflow when searching meta annotations
+
+It is legal for an annotation to be annotated with itself. Previously,
+when searching for meta annotations this could lead to a stack overflow.
+This was likely to occur when using Kotlin as, like Java, its Target
+annotation is annotated with itself. A stack overflow doesn’t occur
+with Java’s Target annotation due to some short-circuiting logic for
+annotations in java.lang.
+
+This commit updates the logic for finding meta-annotations to
+short-circuit when an annotation that has already been seen is
+encountered.
+
+Closes gh-5902

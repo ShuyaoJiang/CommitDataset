@@ -1,0 +1,9 @@
+Fix concurrency issue in TestDispatcherServlet
+
+This change fixes a timing issue in tests using Spring MVC Tests where
+assertions on an async result may not wait long enough.
+
+The fix involves the use of a new callback in  MockAsyncContext that
+allows tests to detect when an async dispatch has been invoked.
+
+Issue: SPR-10838

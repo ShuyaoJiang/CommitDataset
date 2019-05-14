@@ -1,0 +1,18 @@
+Fix NPE when CumulativeSum agg encounters null/empty bucket (#29641)
+
+Fix NPE when CumulativeSum agg encounters null/empty bucket
+
+If the cusum agg encounters a null value, it's because the value is
+missing (like the first value from a derivative agg), the path is
+not valid, or the bucket in the path was empty.
+
+Previously cusum would just explode on the null, but this changes it
+so we only increment the sum if the value is non-null and finite.
+This is safe because even if the cusum encounters all null or empty
+buckets, the cumulative sum is still zero (like how the sum agg returns
+zero even if all the docs were missing values)
+
+I went ahead and tweaked AggregatorTestCase to allow testing pipelines,
+so that I could delete the IT test and reimplement it as AggTests.
+
+Closes #27544

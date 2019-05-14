@@ -1,0 +1,14 @@
+Ignore binding failures for env vars and system properties
+
+1.3.0.M4 tightened up the configuration property binding such that
+ignoreUnknownFields = false now works as intended. Unfortunately, this
+has led to some complaints as applications that worked with 1.2.x have
+stopped working. For example, a SERVER_HOME environment variable does
+not cause a failure in 1.2.x despite there being no home property on
+ServerProperties but will now fail in 1.3.0.M4.
+
+This commit updates RelaxedDataBinder to ignore binding failures for
+properties that come from a source outside of the application’s control,
+namely environment variables and system properties.
+
+Closes gh-3775

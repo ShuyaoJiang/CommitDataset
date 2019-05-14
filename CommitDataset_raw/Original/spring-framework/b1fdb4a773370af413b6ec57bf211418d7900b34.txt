@@ -1,0 +1,16 @@
+Remove Gradle Daemon JVM args compatible with JDK 9
+
+This commit reverts the changes made in 7bc44a9 so that developers who
+do not use the Gradle daemon are not adversely affected by the explicit
+JVM args that were introduced in that commit.
+
+Developers who wish to run the build against JDK 9 with the Gradle
+daemon can add the following to the gradle.properties file in their
+'gradle user home' directory (e.g., ~/.gradle/gradle.properties):
+
+    org.gradle.daemon=true
+    org.gradle.jvmargs=-XX:MaxMetaspaceSize=1024m -Xmx1024m
+
+See also: https://issues.gradle.org/browse/GRADLE-3256
+
+Issue: SPR-12549

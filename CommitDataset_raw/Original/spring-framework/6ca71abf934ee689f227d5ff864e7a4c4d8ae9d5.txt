@@ -1,0 +1,16 @@
+Intermittent MBeanServerFactoryBeanTests failure
+
+Prior to this commit the testWithLocateExistingAndExistingServer method
+would fail if any preceding test called the ManagementFactory
+getPlatformMBeanServer() method. In such situations the platform
+server is located instead of the expected freshly created server.
+
+These failures are more likely to happen when compiling with JDK 7
+due to the fact that the reflection API no longer returns methods
+in a consistent order.
+
+Unfortunately there is no easy way to reset the platform MBean server
+so the new code must resort to using reflection to access the private
+static ManagementFactory.platformMBeanServer field.
+
+Issue: SPR-9288

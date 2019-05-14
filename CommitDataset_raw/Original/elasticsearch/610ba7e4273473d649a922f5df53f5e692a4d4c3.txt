@@ -1,0 +1,61 @@
+Register data node stats from info carried back in search responses (#25430)
+
+* Register data node stats from info carried back in search responses
+
+This is part of #24915, where we now calculate the EWMA of service time for
+tasks in the search threadpool, and send that as well as the current queue size
+back to the coordinating node. The coordinating node now tracks this information
+for each node in the cluster.
+
+This information will be used in the future the determining the best replica a
+search request should be routed to. This change has no user-visible difference.
+
+* Move response time timing into ResponseListenerWrapper
+
+* Move ResponseListenerWrapper to ActionListener instead of SearchActionListener
+
+Also removes the logger
+
+* Move `requestIndex` back to private
+
+* De-guice-ify ResponseCollectorService \o/
+
+* Undo all changes to SearchQueryThenFetchAsyncAction
+
+* Remove unneeded response collector from TransportSearchAction
+
+* Undo all changes to SearchDfsQueryThenFetchAsyncAction
+
+* Completely rewrite the inside of ResponseCollectorService's record keeping
+
+* Documentation and cleanups for ResponseCollectorService
+
+* Add unit test for collection of queue size and service time
+
+* Fix Guice construction error
+
+* Add basic unit tests for ResponseCollectorService
+
+* Fix version constant for the master merge
+
+* Fix test compilation after master merge
+
+* Add a test for node removal on cluster changed event
+
+* Remove integration test as there are now unit tests
+
+* Rename ResponseListenerWrapper -> SearchExecutionStatsCollector
+
+* Fix line-length
+
+* Make classes private and final where appropriate
+
+* Pass nodeId into SearchExecutionStatsCollector and use only ActionListener
+
+* Get nodeId from connection so searchShardTarget can be private
+
+* Remove threadpool from SearchContext, get it from IndexShard instead
+
+* Add missing import
+
+* Use BiFunction for responseWrapper rather than passing in collector service

@@ -1,0 +1,15 @@
+Provide common cache config
+
+Prior to this commit, common cache operation settings had to be
+repeated for every operation: cache name(s), custom cache manager
+and custom key manager.
+
+This commit introduces the @CacheConfig annotation to bet set at
+class-level (either directly or as a meta-annotation). As the cache
+name(s) can be rationalized there, the "value" of the various
+annotations are no longer mandatory.
+
+CacheAnnotationParser has an API breakage to be able to retrieve
+information at class-level.
+
+Issue: SPR-11316

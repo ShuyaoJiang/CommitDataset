@@ -1,0 +1,8 @@
+Make RetryAndFollowUpInterceptor.streamAllocation volatile. (#3836)
+
+It was possible for a call to cancel() to not cancel because the canceling
+thread wouldn't observe the streams.
+
+I've added a local StreamAllocation variable to avoid extra volatile reads.
+
+Closes: https://github.com/square/okhttp/issues/3834

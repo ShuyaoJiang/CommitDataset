@@ -1,0 +1,17 @@
+Swap the parameter order of the Collections.disjoint call in Sets.intersection
+
+Collections.disjoint is implemented in such a way that it has better
+performance if its 2nd parameter is the smaller of the two when both params are
+instances of Set. The Sets.intersection javadoc says it has better performance
+when set1 is the smaller set, but that is currently not the case for the
+isEmpty operation specifically.
+
+Our team ran into a pathological case of this where we check for an empty
+intersection of two sets, one being ~5 orders of magnitude larger than the
+other.
+
+RELNOTES=Update isEmpty operation of intersection to follow the smaller set first advice in the javadoc.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=230394245

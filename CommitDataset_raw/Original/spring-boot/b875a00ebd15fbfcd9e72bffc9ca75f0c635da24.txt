@@ -1,0 +1,14 @@
+Tighten up conditions: a web application may not be using Spring MVC
+
+Previously, some classes that were annotatated with
+@ConditionalOnWebApplication assumed that, if the application was a
+web application, Spring MVC (spring-webmvc) would be on the classpath.
+If it was not, the application would fail to start, typically with an
+error relating to WebMvcConfigurerAdapter being unavailable.
+
+This commit updates the affected configuration classes and annotates
+them with @ConditionalOnClass(WebMvcConfigurerAdapter.class) to
+ensure that their auto-configuration only takes effect if its a web
+application and Spring MVC is on the classpath.
+
+Fixes gh-2345

@@ -1,0 +1,23 @@
+Remove silent batch mode from install plugin (#29359)
+
+Today we have a silent batch mode in the install plugin command when
+standard input is closed or there is no tty. It appears that
+historically this was useful when running tests where we want to accept
+plugin permissions without having to acknowledge them. Now that we have
+an explicit batch mode flag, this use-case is removed. The motivation
+for removing this now is that there is another place where silent batch
+mode arises and that is when a user attempts to install a plugin inside
+a Docker container without keeping standard input open and attaching a
+tty. In this case, the install plugin command will treat the situation
+as a silent batch mode and therefore the user will never have the chance
+to acknowledge the additional permissions required by a plugin. This
+commit removes this silent batch mode in favor of using the --batch flag
+when running tests and requiring the user to take explicit action to
+acknowledge the additional permissions (either by leaving standard input
+open and attaching a tty, or by passing the --batch flags themselves).
+
+Note that with this change the user will now see a null pointer
+exception when they try to install a plugin in a Docker container
+without keeping standard input open and attaching a tty. This will be
+addressed in an immediate follow-up, but because the implications of
+that change are larger, they should be handled separately from this one.

@@ -1,0 +1,11 @@
+Create a public API to bind a ConfigurationProperties object
+
+Previously, the API used to bind a ConfigurationProperties annotated
+object was private to the BeanPostProcessor implementation.
+
+This commit moves most of the logic to ConfigurationPropertiesBinder. As
+we want this object to have the same state regardless of how it is built,
+a builder is now provided that detects the components that the binder
+needs if not specified explicitly.
+
+Closes gh-8344

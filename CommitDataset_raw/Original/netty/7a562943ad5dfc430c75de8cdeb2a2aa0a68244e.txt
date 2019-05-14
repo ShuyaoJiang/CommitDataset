@@ -1,0 +1,15 @@
+[#4533] Ensure replacement of decoder is delayed after finishHandshake() is called
+
+Motivation:
+
+If the user calls handshake.finishHandshake() we need to ensure that the user has the chance to setup the pipeline before any WebSocketFrames are read. Because of this we need
+to delay the removal of the HttpRequestDecoder.
+
+Modifications:
+
+- Remove the HttpRequestDecoder via the EventLoop and so delay it which gives the user a chance to setup the pipeline after finishHandshake() completes
+- Add unit test for this.
+
+Result:
+
+Less surpising and correct behaviour even if the http response and websocket frame are received in one read operation.

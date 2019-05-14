@@ -1,0 +1,293 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (oidc-signatures.txt, accessors-smart-LICENSE.txt, accessors-smart-NOTICE.txt, ... ). 
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.xpack.core.security.action.oidc:  
+
+1.1. Add a class for open id connect authenticate action. It allows to:
+
+	Instantiate open id connect authenticate action;
+	Handle new response;
+	Get response reader
+
+1.2. Add a class for open id connect authenticate request. It allows to:
+
+	Instantiate open id connect authenticate request;
+	Instantiate open id connect authenticate request  with stream input;
+	Get redirect uri;
+	Set redirect uri;
+	Get state;
+	Set state;
+	Get nonce;
+	Set nonce;
+	Validate open id connect authenticate request;
+	Write  to stream output;
+	Read  from stream input;
+	Convert open id connect authenticate request to string
+
+1.3. Add a class for open id connect authenticate request builder. It allows to:
+
+	Instantiate open id connect authenticate request builder  with elasticsearch client;
+	Redirect uri;
+	Get state;
+	Handle nonce
+
+1.4. Add a class for open id connect authenticate response. It allows to:
+
+	Instantiate open id connect authenticate response  with expires in time value;
+	Instantiate open id connect authenticate response  with stream input;
+	Get principal;
+	Get access token string;
+	Get refresh token string;
+	Get expires  in;
+	Read  from stream input;
+	Write  to stream output
+
+1.5. Add a class for open id connect logout action. It allows to:
+
+	Instantiate open id connect logout action;
+	Handle new response;
+	Get response reader
+
+1.6. Add a class for open id connect logout request. It allows to:
+
+	Instantiate open id connect logout request;
+	Instantiate open id connect logout request  with stream input;
+	Validate open id connect logout request;
+	Get token;
+	Set token;
+	Get refresh token;
+	Set refresh token;
+	Write  to stream output;
+	Read  from stream input
+
+1.7. Add a class for open id connect logout response. It allows to:
+
+	Instantiate open id connect logout response  with stream input;
+	Instantiate open id connect logout response;
+	Read  from stream input;
+	Write  to stream output;
+	Convert open id connect logout response to string;
+	Get end session url
+
+1.8. Add a class for open id connect prepare authentication action. It allows to:
+
+	Instantiate open id connect prepare authentication action;
+	Handle new response;
+	Get response reader
+
+1.9. Add a class for open id connect prepare authentication request. It allows to:
+
+	Get realm name;
+	Get state;
+	Get nonce;
+	Get issuer;
+	Get login hint;
+	Set realm name;
+	Set issuer;
+	Set state;
+	Set nonce;
+	Set login hint;
+	Instantiate open id connect prepare authentication request;
+	Instantiate open id connect prepare authentication request  with stream input;
+	Validate open id connect prepare authentication request;
+	Write  to stream output;
+	Read  from stream input;
+	Convert open id connect prepare authentication request to string
+
+1.10. Add a class for open id connect prepare authentication request builder. It allows to:
+
+	Instantiate open id connect prepare authentication request builder  with elasticsearch client;
+	Get realm name
+
+1.11. Add a class for open id connect prepare authentication response. It allows to:
+
+	Instantiate open id connect prepare authentication response;
+	Instantiate open id connect prepare authentication response  with stream input;
+	Get authentication request url;
+	Get state;
+	Get nonce;
+	Read  from stream input;
+	Write  to stream output;
+	Convert open id connect prepare authentication response to string;
+	Convert open id connect prepare authentication response to X content
+
+2. Changes to package org.elasticsearch.xpack.core.security.authc:  
+
+2. Changes to package org.elasticsearch.xpack.core.security.authz.privilege:  
+
+2. Changes to package org.elasticsearch.xpack.security.action.oidc:  
+
+2.1. Add a class for open id connect authenticate request tests. It allows to:
+
+	Handle test serialization;
+	Handle test validation
+
+2.2. Add a class for open id connect prepare authentication request tests. It allows to:
+
+	Handle test serialization;
+	Handle test serialization with state and nonce;
+	Handle test validation
+
+2.3. Add a class for transport open id connect authenticate action. It allows to:
+
+	Instantiate transport open id connect authenticate action  with thread pool, transport service, action filters, authentication service, token service and token service;
+	Execute task
+
+2.4. Add a class for transport open id connect logout action. It allows to:
+
+	Instantiate transport open id connect logout action  with transport service, action filters, realms, token service and token service;
+	Execute task;
+	Build response;
+	Validate authentication and metadata;
+	Get metadata map from metadata;
+	Invalidate refresh token
+
+2.5. Add a class for transport open id connect logout action tests. It allows to:
+
+	Handle setup;
+	Handle test logout invalidates tokens;
+	Handle cleanup
+
+2.6. Add a class for transport open id connect prepare authentication action. It allows to:
+
+	Instantiate transport open id connect prepare authentication action  with transport service, action filters, realms and realms;
+	Execute task;
+	Prepare authentication response
+
+3. Changes to package org.elasticsearch.xpack.security.authc:  
+
+3. Changes to package org.elasticsearch.xpack.security.authc.oidc:  
+
+3.1. Add a class for open id connect authenticator tests. It allows to:
+
+	Handle setup;
+	Handle cleanup;
+	Build authenticator;
+	Handle test empty redirect url is rejected;
+	Handle test invalid state is rejected;
+	Handle test invalid nonce is rejected;
+	Handle test authenticate implicit flow with rsa;
+	Handle test authenticate implicit flow with ecdsa;
+	Handle test authenticate implicit flow with hmac;
+	Handle test clock skew is honored;
+	Handle test implicit flow fails with expired token;
+	Handle test implicit flow fails not yet issued token;
+	Handle test implicit flow fails invalid issuer;
+	Handle test implicit flow fails invalid audience;
+	Handle test authenticate implicit flow fails with forged rsa id token;
+	Handle test authenticate implicit flow fails with forged ecsdsa id token;
+	Handle test authenticate implicit flow fails with forged hmac id token;
+	Handle test authenticate implicit flow fails with forged access token;
+	Handle test implicit flow fails with none algorithm;
+	Handle test implicit flow fails with algorithm mixup attack;
+	Handle test implicit flow fails with unsigned jwt;
+	Get op config;
+	Get default rp config;
+	Get rp config;
+	Get rp config no access token;
+	Build auth response;
+	Handle mock source;
+	Build tokens;
+	Get random jwk  for type;
+	Get curve from hash size
+
+3.2. Add a class for open id connect provider configuration. It allows to:
+
+	Instantiate open id connect provider configuration  with issuer, authorization endpoint URI, token endpoint URI, userinfo endpoint URI, endsession endpoint URI and endsession endpoint URI;
+	Get provider name;
+	Get authorization endpoint;
+	Get token endpoint;
+	Get userinfo endpoint;
+	Get endsession endpoint;
+	Get issuer;
+	Get jwk set path
+
+3.3. Add a class for open id connect realm settings tests. It allows to:
+
+	Handle setup env;
+	Handle test incorrect response type throws error;
+	Handle test missing authorization endpoint throws error;
+	Handle test invalid authorization endpoint throws error;
+	Handle test missing token endpoint throws error;
+	Handle test invalid token endpoint throws error;
+	Handle test missing jwks url throws error;
+	Handle test missing issuer throws error;
+	Handle test missing name type throws error;
+	Handle test missing redirect uri throws error;
+	Handle test missing client id throws error;
+	Handle test missing principal claim throws error;
+	Handle test pattern without setting throws error;
+	Build config
+
+3.4. Add a class for open id connect realm tests. It allows to:
+
+	Handle setup env;
+	Handle test authentication;
+	Handle test with authorizing realm;
+	Handle test claim pattern parsing;
+	Handle test invalid principal claim pattern parsing;
+	Handle test build relying party config without open id scope;
+	Handle test building authentication request;
+	Handle test builiding authentication request with default scope;
+	Handle test build logout response;
+	Handle test building authentication request with existing state and nonce;
+	Handle test building authentication request with login hint;
+	Authenticate user role mapper with oidc;
+	Initialize realms
+
+3.5. Add a class for open id connect test case. It allows to:
+
+	Get basic realm settings;
+	Generate id token;
+	Build config;
+	Write jwk set  to file
+
+3.6. Add a class for open id connect token. It allows to:
+
+	Instantiate open id connect token  with state, nonce and nonce;
+	Handle principal;
+	Get credentials;
+	Handle clear credentials;
+	Get state;
+	Get nonce;
+	Get redirect url;
+	Convert open id connect token to string
+
+3.7. Add a class for relying party configuration. It allows to:
+
+	Instantiate relying party configuration  with client ID, client secret secure string, redirect uri, response type, requested scope, JWS algorithm, post logout redirect uri and post logout redirect uri;
+	Get client id;
+	Get client secret;
+	Get redirect uri;
+	Get response type;
+	Get requested scope;
+	Get signature algorithm;
+	Get post logout redirect uri
+
+4. Changes to package org.elasticsearch.xpack.security.rest.action.oidc:  
+
+4.1. Add a class for open id connect base rest handler. It allows to:
+
+	Instantiate open id connect base rest handler  with settings, X pack license state and X pack license state;
+	Check feature available
+
+4.2. Add a class for rest open id connect authenticate action. It allows to:
+
+	Instantiate rest open id connect authenticate action  with settings, rest controller, X pack license state and X pack license state;
+	Handle inner prepare request;
+	Get name
+
+4.3. Add a class for rest open id connect logout action. It allows to:
+
+	Instantiate rest open id connect logout action  with settings, rest controller, X pack license state and X pack license state;
+	Handle inner prepare request;
+	Get name
+
+4.4. Add a class for rest open id connect prepare authentication action. It allows to:
+
+	Instantiate rest open id connect prepare authentication action  with settings, rest controller, X pack license state and X pack license state;
+	Handle inner prepare request;
+	Get name
+

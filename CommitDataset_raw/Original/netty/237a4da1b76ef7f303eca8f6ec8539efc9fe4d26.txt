@@ -1,0 +1,10 @@
+Shutting down the outbound side of the channel should not accept future writes
+
+Motivation:
+Implementations of DuplexChannel delegate the shutdownOutput to the underlying transport, but do not take any action on the ChannelOutboundBuffer. In the event of a write failure due to the underlying transport failing and application may attempt to shutdown the output and allow the read side the transport to finish and detect the close. However this may result in an issue where writes are failed, this generates a writability change, we continue to write more data, and this may lead to another writability change, and this loop may continue. Shutting down the output should fail all pending writes and not allow any future writes to avoid this scenario.
+
+Modifications:
+- Implementations of DuplexChannel should null out the ChannelOutboundBuffer and fail all pending writes
+
+Result:
+More controlled sequencing for shutting down the output side of a channel.

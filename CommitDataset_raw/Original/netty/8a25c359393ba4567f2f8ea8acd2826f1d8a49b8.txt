@@ -1,0 +1,31 @@
+Filter user-provided ciphers using RFC cipher names
+
+Motivation:
+
+Previously filterCipherSuites was being passed the OpenSSL-formatted
+cipher names. Commit 43ae974 introduced a regression as it swapped to the
+RFC/JDK format, except that user-provided ciphers were not converted and
+remained in the OpenSSL format.
+
+This mis-match would cause all user-provided to be thrown away, leading
+to failure trying to set zero ciphers:
+Exception in thread "main" javax.net.ssl.SSLException: failed to set cipher suite: []
+	at io.netty.handler.ssl.ReferenceCountedOpenSslContext.<init>(ReferenceCountedOpenSslContext.java:299)
+	at io.netty.handler.ssl.OpenSslContext.<init>(OpenSslContext.java:43)
+	at io.netty.handler.ssl.OpenSslServerContext.<init>(OpenSslServerContext.java:347)
+	at io.netty.handler.ssl.OpenSslServerContext.<init>(OpenSslServerContext.java:335)
+	at io.netty.handler.ssl.SslContext.newServerContextInternal(SslContext.java:421)
+	at io.netty.handler.ssl.SslContextBuilder.build(SslContextBuilder.java:441)
+Caused by: java.lang.Exception: Unable to configure permitted SSL ciphers (error:100000b1:SSL routines:OPENSSL_internal:NO_CIPHER_MATCH)
+	at io.netty.internal.tcnative.SSLContext.setCipherSuite(Native Method)
+	at io.netty.handler.ssl.ReferenceCountedOpenSslContext.<init>(ReferenceCountedOpenSslContext.java:295)
+	... 7 more
+
+Modifications:
+
+Remove the reformatting of user-provided ciphers, as they are already in
+the RFC/JDK format.
+
+Result:
+
+No regression, and the internals stay sane using the RFC/JDK format.

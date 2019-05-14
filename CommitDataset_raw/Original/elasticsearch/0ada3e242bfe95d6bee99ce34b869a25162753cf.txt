@@ -1,0 +1,7 @@
+Ensure sendBatch not called recursively (#39988)
+
+This PR introduces AsyncRecoveryTarget which executes remote calls of
+peer recovery asynchronously. In this change, we also add a new
+assertion to ensure that method sendBatch, which sends a batch of
+history operations in phase2, is never called recursively on the same
+thread. This new assertion will also be used in method sendFileChunks.

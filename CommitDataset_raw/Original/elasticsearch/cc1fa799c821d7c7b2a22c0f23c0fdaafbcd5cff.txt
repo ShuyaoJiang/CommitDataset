@@ -1,0 +1,7 @@
+Remove `TcpChannel#setSoLinger` method (#35924)
+
+This commit removes the dedicated `setSoLinger` method. This simplifies
+the `TcpChannel` interface. This method has very little effect as the
+SO_LINGER is not set prior to the channels being closed in the abstract
+transport test case. We still will set SO_LINGER on the
+`MockNioTransport`. However we can do this manually.

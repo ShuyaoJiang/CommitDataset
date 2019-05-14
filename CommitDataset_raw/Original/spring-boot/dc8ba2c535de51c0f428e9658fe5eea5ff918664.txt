@@ -1,0 +1,21 @@
+Load configuration from default profiles if no others active
+
+Before this change if no profile is active yaml documents with
+spring.profiles=default were loaded, but they are also loaded
+if there *is* an active profile which is more of a problem. In
+addition if the user chanes the default profile in the
+Environmemt Spring Boot ignore that value ("default" is a magic
+String).
+
+After this change:
+
+* If no profile is explicitly active, the default profiles from
+the Environment are used explicitly
+* The default profiles cause properties to be loaded just like
+other profiles, so from YAML documents with spring.profiles and
+from files in application-default.properties for instance
+* The default profiles are not active when any other profile is
+* Properties defined in "top-level" YAML documents with no
+specific spring.profiles still act as defaults for *all* profiles
+
+Fixes gh-1219, fixes gh-2623

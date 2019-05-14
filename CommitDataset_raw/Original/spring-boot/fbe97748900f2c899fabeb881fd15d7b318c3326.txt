@@ -1,0 +1,15 @@
+Use spring.cache.config with JCache
+
+According to the spec, specifying a custom URI when retrieving a
+`javax.cache.CacheManager` might be used as a way to transmit the
+location of a custom configuration file to initialize the underlying
+cache manager.
+
+If `spring.cache.config` is set, we use that information to retrieve a
+CacheManager with that configuration file. Unfortunately, hazelcast does
+not support this feature so we are setting the property key it expects
+instead.
+
+See https://github.com/hazelcast/hazelcast/issues/4943
+
+Closes gh-2743

@@ -1,0 +1,22 @@
+Update JDK SSL Tests to use SSL Context Builder.
+
+Motivation:
+
+Use new / non-deprecated APIs for creating SSL Context
+in tests, in order to be able to implement OpenSsl
+tests with maximum code reuse.
+
+Modifications:
+
+Use `SslContextBuilder.(forServer|forClient)` instead
+of deprecated `JdkSslServerContext` constructor.
+Use `ApplicationProtocolConfig` instead of Protocol
+Negotiator.
+Use custom exception type for skipping tests to avoid
+swallowing exceptions arising from tests.
+
+Result:
+
+Exceptions from tests aren't swallowed.
+Using new APIs allows reusing same test code for
+OpenSsl tests.

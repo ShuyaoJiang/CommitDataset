@@ -1,0 +1,6 @@
+Suppress hdfsFixture if there are spaces in the path (#30302)
+
+HDFS sets its thread-name format based partly on a URL-encoded version of the
+path, but the URL-encoding of spaces as `%20` is interpreted as a field in the
+formatted string of type `2`, which is nonsensical. This change simply skips 
+these tests in this case.

@@ -1,0 +1,12 @@
+Implement invalidate() properly in MockHttpSession
+
+The invalidate() method in MockHttpSession is currently implemented
+incorrectly. According to the Servlet specification, the method should
+throw an IllegalStateException if it is invoked on an already
+invalidated session. However, invoking invalidate() on the same
+MockHttpSession instance multiple times does not throw an exception.
+
+This commits addresses this issue by checking the invalid field and
+throwing an IllegalStateException if it has already been set to true.
+
+Issue: SPR-9686

@@ -1,0 +1,16 @@
+[ML] Fix close job when the process has not launched yet (elastic/x-pack-elasticsearch#2616)
+
+If a job close is requested after a job was opened but before
+its process was launched, the job close returns successfully
+without doing anything. The result is that the process hangs
+around. This has been causing test failures as documented
+int elastic/x-pack-elasticsearch#2360 and elastic/x-pack-elasticsearch#1270.
+
+This commit fixes this problem by refactoring the
+AutodetectProcessManager. It introduces a state pattern
+to make clear the states of the process and it uses locking
+to ensure a close waits for the job process to be created.
+
+relates elastic/x-pack-elasticsearch#1270
+
+Original commit: elastic/x-pack-elasticsearch@ff858bd1362abc0b9d6ce887ce44b35d1cdc26ab

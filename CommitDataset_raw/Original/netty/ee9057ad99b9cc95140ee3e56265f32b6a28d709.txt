@@ -1,0 +1,13 @@
+CorsHandler.write(...) should not cause a flush. (#7839)
+
+Motivation:
+
+Unnecessary flushes reduce the amount of flush coalescing that can happen at higher levels and thus can increase number of packets (because of TCP_NODELAY) and lower throughput (due to syscalls, TLS frames, etc)
+
+Modifications:
+
+Replace writeAndFlush(...) with write(...)
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7837.

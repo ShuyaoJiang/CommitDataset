@@ -1,0 +1,8 @@
+[Tests] Relax assertion in SuggestStatsIT (#28544)
+
+The test expects suggest times in milliseconds that are strictly
+positive. Internally they are measured in nanos, it is possible that on
+really fast execution this is rounded to 0L, so this should also be an
+accepted value.
+
+Closes #28543

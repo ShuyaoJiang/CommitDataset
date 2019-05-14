@@ -1,0 +1,10 @@
+Update proxyTargetClass-related Javadoc; add tests
+
+There was some question about whether enabling subclass proxies via
+proxyTargetClass / proxy-target-class settings would break annotation-
+based demarcation of joinpoints due to inability to discover those
+annotations in various scenarios. The provided tests prove that in
+any conceivable case, these annotations (@Transactional, at least)
+are discovered in a consistent fashion, meaning that switching proxy
+strategies should be transparent to the application and honor
+intended annotation semantics.

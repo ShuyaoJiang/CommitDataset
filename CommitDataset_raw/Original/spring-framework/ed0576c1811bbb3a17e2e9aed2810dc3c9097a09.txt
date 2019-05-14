@@ -1,0 +1,86 @@
+Support executor qualification with @Async#value
+
+Prior to this change, Spring's @Async annotation support was tied to a
+single AsyncTaskExecutor bean, meaning that all methods marked with
+@Async were forced to use the same executor. This is an undesirable
+limitation, given that certain methods may have different priorities,
+etc. This leads to the need to (optionally) qualify which executor
+should handle each method.
+
+This is similar to the way that Spring's @Transactional annotation was
+originally tied to a single PlatformTransactionManager, but in Spring
+3.0 was enhanced to allow for a qualifier via the #value attribute, e.g.
+
+  @Transactional("ptm1")
+  public void m() { ... }
+
+where "ptm1" is either the name of a PlatformTransactionManager bean or
+a qualifier value associated with a PlatformTransactionManager bean,
+e.g. via the <qualifier> element in XML or the @Qualifier annotation.
+
+This commit introduces the same approach to @Async and its relationship
+to underlying executor beans. As always, the following syntax remains
+supported
+
+  @Async
+  public void m() { ... }
+
+indicating that calls to #m will be delegated to the "default" executor,
+i.e. the executor provided to
+
+  <task:annotation-driven executor="..."/>
+
+or the executor specified when authoring a @Configuration class that
+implements AsyncConfigurer and its #getAsyncExecutor method.
+
+However, it now also possible to qualify which executor should be used
+on a method-by-method basis, e.g.
+
+  @Async("e1")
+  public void m() { ... }
+
+indicating that calls to #m will be delegated to the executor bean
+named or otherwise qualified as "e1". Unlike the default executor
+which is specified up front at configuration time as described above,
+the "e1" executor bean is looked up within the container on the first
+execution of #m and then cached in association with that method for the
+lifetime of the container.
+
+Class-level use of Async#value behaves as expected, indicating that all
+methods within the annotated class should be executed with the named
+executor. In the case of both method- and class-level annotations, any
+method-level #value overrides any class level #value.
+
+This commit introduces the following major changes:
+
+ - Add @Async#value attribute for executor qualification
+
+ - Introduce AsyncExecutionAspectSupport as a common base class for
+   both MethodInterceptor- and AspectJ-based async aspects. This base
+   class provides common structure for specifying the default executor
+   (#setExecutor) as well as logic for determining (and caching) which
+   executor should execute a given method (#determineAsyncExecutor) and
+   an abstract method to allow subclasses to provide specific strategies
+   for executor qualification (#getExecutorQualifier).
+
+ - Introduce AnnotationAsyncExecutionInterceptor as a specialization of
+   the existing AsyncExecutionInterceptor to allow for introspection of
+   the @Async annotation and its #value attribute for a given method.
+   Note that this new subclass was necessary for packaging reasons -
+   the original AsyncExecutionInterceptor lives in
+   org.springframework.aop and therefore does not have visibility to
+   the @Async annotation in org.springframework.scheduling.annotation.
+   This new subclass replaces usage of AsyncExecutionInterceptor
+   throughout the framework, though the latter remains usable and
+   undeprecated for compatibility with any existing third-party
+   extensions.
+
+ - Add documentation to spring-task-3.2.xsd and reference manual
+   explaining @Async executor qualification
+
+ - Add tests covering all new functionality
+
+Note that the public API of all affected components remains backward-
+compatible.
+
+Issue: SPR-6847

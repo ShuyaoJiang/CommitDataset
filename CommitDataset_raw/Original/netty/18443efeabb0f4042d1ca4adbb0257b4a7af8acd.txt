@@ -1,0 +1,17 @@
+Add support for byte order to LengthFieldPrepender
+
+Motivation:
+
+While the LengthFieldBasedFrameDecoder supports a byte order the LengthFieldPrepender does not.
+That means that I can simply add a LengthFieldBasedFrameDecoder with ByteOrder.LITTLE_ENDIAN to my pipeline
+but have to write my own Encoder to write length fields in little endian byte order.
+
+Modifications:
+
+Added a constructor that takes a byte order and all other parameters.
+All other constructors delegate to this one with ByteOrder.BIG_ENDIAN.
+LengthFieldPrepender.encode() uses this byte order to write the length field.
+
+Result:
+
+LengthFieldPrepender will write the length field in the defined byte order.

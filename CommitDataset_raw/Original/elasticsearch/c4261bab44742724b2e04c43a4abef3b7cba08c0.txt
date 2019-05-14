@@ -1,0 +1,13 @@
+Add minimal sanity checks to custom/scripted similarities. (#33564)
+
+Add minimal sanity checks to custom/scripted similarities.
+
+Lucene 8 introduced more constraints on similarities, in particular:
+ - scores must not be negative,
+ - scores must not decrease when term freq increases,
+ - scores must not increase when norm (interpreted as an unsigned long)
+   increases.
+
+We can't check every single case, but could at least run some sanity checks.
+
+Relates #33309

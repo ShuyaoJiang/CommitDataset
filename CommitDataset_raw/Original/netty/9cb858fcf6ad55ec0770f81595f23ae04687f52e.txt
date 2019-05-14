@@ -1,0 +1,13 @@
+NetUtil IPv6 bugs related to IPv4 and compression
+
+Motivation:
+NetUtil#getByName and NetUtil#isValidIpV6Address do not strictly enforce the format of IPv4 addresses that are allowed to be embedded in IPv6 addresses as specified in https://tools.ietf.org/html/rfc4291#section-2.5.5. This may lead to invalid addresses being parsed, or invalid addresses being considered valid. Compression of a single IPv6 word was also not handled correctly if there are 7 : characters.
+
+Modifications:
+- NetUtil#isValidIpV6Address should enforce the IPv4-Compatible and IPv4-Mapped are the only valid formats for including IPv4 addresses as specified in https://tools.ietf.org/html/rfc4291#section-2.5.5
+- NetUtil#getByName should more stritcly parse IPv6 addresses which contain IPv4 addresses as specified in https://tools.ietf.org/html/rfc4291#section-2.5.5
+- NetUtil should allow compression even if the number of : characters is 7.
+- NetUtil#createByteArrayFromIpAddressString should use the same IP string to byte[] translation which is used in NetUtil#getByName
+
+Result:
+NetUtil#getByName and NetUtil#isValidIpV6Address respect the IPv6 RFC which defines the valid formats for embedding IPv4 addresses.

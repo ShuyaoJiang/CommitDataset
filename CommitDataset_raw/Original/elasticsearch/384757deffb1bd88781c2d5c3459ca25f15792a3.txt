@@ -1,0 +1,18 @@
+ingest: support default pipelines + bulk upserts (#36618)
+
+This commit adds support to enable bulk upserts to use an index's
+default pipeline. Bulk upsert, doc_as_upsert, and script_as_upsert
+are all supported.
+
+However, bulk script_as_upsert has slightly surprising behavior since
+the pipeline is executed _before_ the script is evaluated. This means
+that the pipeline only has access the data found in the upsert field
+of the script_as_upsert. The non-bulk script_as_upsert (existing behavior)
+runs the pipeline _after_ the script is executed. This commit
+does _not_ attempt to consolidate the bulk and non-bulk behavior for
+script_as_upsert.
+
+This commit also adds additional testing for the non-bulk behavior,
+which remains unchanged with this commit.
+
+fixes #36219

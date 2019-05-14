@@ -1,0 +1,18 @@
+Add supporting MQTT 3.1.1
+
+Motivation:
+
+MQTT 3.1.1 became an OASIS Standard at 13 Nov 2014.
+http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
+MQTT 3.1.1 is a minor update of 3.1. But, previous codec-mqtt supported only MQTT 3.1.
+
+Modifications:
+
+- Add protocol name `MQTT` with previous `MQIsdp` for `CONNECT`’s variable header.
+- Update client identifier validation for 3.1 with 3.1.1.
+- Add `FAILURE (0x80)` for `SUBACK`’s new error code.
+- Add a test for encode/decode `CONNECT` of 3.1.1.
+
+Result:
+
+MqttEncoder/MqttDecoder can encode/decode frames of 3.1 or 3.1.1.

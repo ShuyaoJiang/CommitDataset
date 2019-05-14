@@ -1,0 +1,12 @@
+OpenSslEngine wrap may generate bad data if multiple src buffers
+
+Motivation:
+SSL_write requires a fixed amount of bytes for overhead related to the encryption process for each call. OpenSslEngine#wrap(..) will attempt to encrypt multiple input buffers until MAX_PLAINTEXT_LENGTH are consumed, but the size estimation provided by calculateOutNetBufSize may not leave enough room for each call to SSL_write. If SSL_write is not able to completely write results to the destination buffer it will keep state and attempt to write it later. Netty doesn't account for SSL_write keeping state and assumes all writes will complete synchronously (by attempting to allocate enough space to account for the overhead) and feeds the same data to SSL_write again later which results in corrupted data being generated.
+
+Modifications:
+- OpenSslEngine#wrap should only produce a single TLS packet according to the SSLEngine API specificaiton [1].
+[1] https://docs.oracle.com/javase/8/docs/api/javax/net/ssl/SSLEngine.html#wrap-java.nio.ByteBuffer:A-int-int-java.nio.ByteBuffer-
+- OpenSslEngine#wrap should only consider a single buffer when determining if there is enough space to write, because only a single buffer will ever be consumed.
+
+Result:
+OpenSslEngine#wrap will no longer produce corrupted data due to incorrect accounting of space required in the destination buffers.

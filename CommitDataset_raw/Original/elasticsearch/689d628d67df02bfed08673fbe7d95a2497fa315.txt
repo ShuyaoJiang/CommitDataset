@@ -1,0 +1,6 @@
+move phase-after steps to have the previous phase's phase in its key (#4387)
+
+Previously, phase X's `after` step had `X` as its associated phase. This causes confusion because
+we have only entered phase `X` once the `after` step is complete. Therefore, this refactor
+pushes the after's phase to be associated with the previous phase. This first phase is an exception. 
+The first phase's `after` step is associated with the first phase (not some non-existent prior phase).

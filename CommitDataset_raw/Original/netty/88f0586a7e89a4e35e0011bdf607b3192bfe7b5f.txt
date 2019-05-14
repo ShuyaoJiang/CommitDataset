@@ -1,0 +1,33 @@
+Remove HpackDecoder.maxHeaderListSizeGoAway (#7911)
+
+Motivation:
+
+When a sender sends too large of headers it should not unnecessarily
+kill the connection, as killing the connection is a heavy-handed
+solution while SETTINGS_MAX_HEADER_LIST_SIZE is advisory and may be
+ignored.
+
+The maxHeaderListSizeGoAway limit in HpackDecoder is unnecessary because
+any headers causing the list to exceeding the max size can simply be
+thrown away. In addition, DefaultHttp2FrameReader.HeadersBlockBuilder
+limits the entire block to maxHeaderListSizeGoAway. Thus individual
+literals are limited to maxHeaderListSizeGoAway.
+
+(Technically, literals are limited to 1.6x maxHeaderListSizeGoAway,
+since the canonical Huffman code has a maximum compression ratio of
+.625. However, the "unnecessary" limit in HpackDecoder was also being
+applied to compressed sizes.)
+
+Modifications:
+
+Remove maxHeaderListSizeGoAway checking in HpackDecoder and instead
+eagerly throw away any headers causing the list to exceed
+maxHeaderListSize.
+
+Result:
+
+Fewer large header cases will trigger connection-killing.
+DefaultHttp2FrameReader.HeadersBlockBuilder will still kill the
+connection when maxHeaderListSizeGoAway is exceeded, however.
+
+Fixes #7887

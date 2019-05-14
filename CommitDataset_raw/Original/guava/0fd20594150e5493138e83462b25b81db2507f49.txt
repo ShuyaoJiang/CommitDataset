@@ -1,0 +1,18 @@
+Move the the static constant empty iterator to live in its implementation class, ArrayItr.
+
+This removes the only static constant field from c.g.c.c.Iterators, which allows ProGuard to eliminate it and move its methods to another common location.  Additionally, if we don't reference emptyIterator() or forArray(...) in future, we'll eliminate ArrayItr too.
+
+[]
+Effects on ImmutableSetProGuard:
+23711 bytes => 23087 bytes
+18 classes => 17 classes
+143 methods => 140 methods
+
+Effects on ImmutableMapProGuard:
+32685 bytes => 32171 bytes
+30 classes => 29 classes
+192 methods => 190 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147359807

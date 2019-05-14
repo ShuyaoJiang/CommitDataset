@@ -1,0 +1,16 @@
+A rewrite of Monitor internals.
+- use a linked list of active guards instead of an ArrayList
+- never signal next waiter while this thread still counted in active guards
+- optimize away excess signals
+- other stuff rewritten to Martin's taste
+
+Like lukes, I got bitten by the Improve Monitor bug, in part
+also as a learning experience.
+
+This class really needs more tests.
+
+I got carried away, and now have a new appreciation for how
+hard it is to get this kind of code correct.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=42348803

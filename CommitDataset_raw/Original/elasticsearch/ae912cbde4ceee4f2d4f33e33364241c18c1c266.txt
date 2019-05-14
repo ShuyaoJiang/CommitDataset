@@ -1,0 +1,10 @@
+[Docs] Fix Java Api index administration usage (#28260)
+
+The Java API documentation for index administration currenty is wrong because
+the PutMappingRequestBuilder#setSource(Object... source) an
+CreateIndexRequestBuilder#addMapping(String type, Object... source) methods
+delegate to methods that check that the input arguments are valid key/value
+pairs. This changes the docs so the java api code examples are included from
+documentation integration tests so we detect compile and runtime issues earlier.
+
+Closes #28131

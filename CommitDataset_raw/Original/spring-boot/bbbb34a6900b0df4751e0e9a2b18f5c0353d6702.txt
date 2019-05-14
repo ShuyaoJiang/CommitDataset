@@ -1,0 +1,17 @@
+Expose cache statistics as metrics
+
+Add an abstraction that provides a standard manner to retrieve a
+statistics snapshot of a cache.
+
+Specific implementations for JSR-107, ehcache, hazelcast, guava and
+concurrent map are provided. At the moment the size of the cache and
+the hit/miss ratios are recorded. Cache metrics are exposed via the
+`cache.` prefix followed by the name of the cache. In case of conflict,
+the name of the cache manager is added as a qualifier.
+
+It is possible to easily register a new CacheStatisticsProvider for an
+unsupported cache system and the CacheStatistics object itself can be
+extended to provide additional metrics.
+
+See gh-2633
+Closes gh-2770

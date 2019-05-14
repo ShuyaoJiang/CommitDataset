@@ -1,0 +1,11 @@
+Update logging listener to use normal stack trace ordering by default
+
+Previously, LoggingApplicationListener used %rEx as the default
+exception conversion word. This would result in the nested causes
+being logging in reverse order, i.e. the most deeply nested cause
+would be logged first.
+
+This commit updates the default to be %wEx and adds a test to verify
+the default behaviour.
+
+Closes gh-4247

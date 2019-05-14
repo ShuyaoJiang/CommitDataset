@@ -1,0 +1,10 @@
+Fix setting by time unit (#37192)
+
+This commit fixes an issue with a settings builder method that allows
+setting a duration by time unit. In particular, this method can suffer
+from a loss of precision. For example, if the input duration is 1500
+microseconds then internally we are converting this to "1ms",
+demonstrating the loss of precision. Instead, we should internally
+convert this to a TimeValue that correctly represents the input
+duration, and then convert this to a string using a method that does not
+lose the unit. That is what this commit does.

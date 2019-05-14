@@ -1,0 +1,16 @@
+Reorder PlatformDependent.isRoot() check
+
+Motivation:
+
+isRoot() is an expensive operation. We should avoid calling it if
+possible.
+
+Modifications:
+
+Move the isRoot() checks to the end of the 'if' block, so that isRoot()
+is evaluated only when really necessary.
+
+Result:
+
+isRoot() is evaluated only when SO_BROADCAST is set and the bind address
+is anylocal address.

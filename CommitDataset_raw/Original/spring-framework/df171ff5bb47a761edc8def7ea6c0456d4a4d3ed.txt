@@ -1,0 +1,11 @@
+MockMvc request builder preserves double slashes
+
+The MockHttpServletRequestBuilder now uses java.net.URI internally
+rather than UriComponents.
+
+This means that for the MockMvcRequestBuilders method variants that
+accept a java.net.URI we can use it as is. The difference is almost
+none but it does mean that you can create a URI with double slashes
+(for testing purposes) and have it remain that way.
+
+Issue: SPR-13435

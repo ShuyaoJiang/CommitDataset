@@ -1,0 +1,35 @@
+Restructure embedded web server packages
+
+Rework `org.springframework.boot.context.embedded` to relocate classes
+to `org.springframework.boot.web`. Packages are now organized around
+the following areas:
+
+Packages for shared concerns, for example the `WebServer` interface
+to start/stop a server and the common configuration elements:
+- org.springframework.boot.web.context
+- org.springframework.boot.web.server
+
+Servlet specific packages:
+- org.springframework.boot.web.servlet.server
+- org.springframework.boot.web.servlet.context
+- org.springframework.boot.web.servlet.filter
+
+Reactive specific packages:
+- org.springframework.boot.web.reactive.context
+- org.springframework.boot.web.reactive.server
+
+Embedded server implementations (both reactive and servlet):
+- org.springframework.boot.web.embedded
+
+In addition:
+
+- Rename `EmbeddedServletContainerFactory` to `ServletWebServerFactory`
+  to align with the `ReactiveWebServerFactory`.
+- Rename `EmbeddedWebApplicationContext` to
+  `ServletWebServerApplicationContext` and
+- Rename `EmbeddedReactiveWebApplicationContext` to
+  `ReactiveWebServerApplicationContext`.
+- Add checkstyle rules to restrict imports.
+- Fixup all affected code to use the correct imports and local names.
+
+Fixes gh-8532

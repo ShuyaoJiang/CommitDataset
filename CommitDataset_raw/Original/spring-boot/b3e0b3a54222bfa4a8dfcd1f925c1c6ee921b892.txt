@@ -1,0 +1,9 @@
+Consider mvn spring-boot:run that exits with 130 (SIGINT) to be successful
+
+Previously, if mvn spring-boot:run with a forked JVM was killed with 
+CTRL+C, the run would be considered unsuccessful. This commits updates
+the run mojo to consider a forked JVM that exists with 130 (the exit
+code produced when exiting due to SIGINT which is what CTRL+C sends) to
+be successful.
+
+Closes gh-6498

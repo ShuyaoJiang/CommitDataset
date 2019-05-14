@@ -1,0 +1,19 @@
+Remove ContentTypeResolver from composite converter
+
+Before this change CompositeMessageConverter had a ContentTypeResolver
+field that was in turn set on all contained converters.
+
+After this change that field is removed and effectively
+CompositeMessageConverter is a simple container of other converters.
+Each converter in turn must have been configured with a
+ContentTypeResolver.
+
+Doing so means it is less likely to have unexpected consequences when
+configuring converters, the ContentTypeResolver set in the composite
+converter overriding the one configured in a contained converter.
+
+Also commit 676ce6 added default ContentTypeResolver initialization
+to AbstractMessageConverter, which ensures that converters are still
+straight forward to configure.
+
+Issue: SPR-11462

@@ -1,0 +1,18 @@
+Reorder channel state changes in Http2MultiplexCodec child channel
+
+Motivation:
+
+If a write fails for a Http2MultiplexChannel stream channel, the channel
+may be forcibly closed, but only after the promise has been failed. That
+means continuations attached to the promise may see the channel in an
+inconsistent state of still being open and active.
+
+Modifications:
+
+Move the satisfaction of the promise to after the channel cleanup logic
+runs.
+
+Result:
+
+Listeners attached to the future that resulted in a Failed write will
+see the stream channel in the correct state.

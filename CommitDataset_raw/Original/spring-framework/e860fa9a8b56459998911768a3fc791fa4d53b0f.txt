@@ -1,0 +1,9 @@
+Move feed message converters ahead of jackson/jaxb2
+
+The Atom/RSS message converters are now registered ahead of the
+Jackson and the JAXB2 message converters by default. Since the Atom
+and RSS converters convert to and from very specific object types
+Feed and Channel respectively, that shouldn't introduce any regressions
+and will work more intuitively when the requested media type is "*/*".
+
+Issue: SPR-9054

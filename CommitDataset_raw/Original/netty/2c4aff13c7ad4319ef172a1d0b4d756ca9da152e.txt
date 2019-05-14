@@ -1,0 +1,22 @@
+Add an operation that resets the state of HttpObjectDecoder
+
+Motivation:
+
+Currently, it is impossible to give a user the full control over what to do in response to the request with 'Expect: 100-continue' header.  Currently, a user have to do one of the following:
+
+- Accept the request and respond with 100 Continue, or
+- Send the reject response and close the connection.
+
+.. which means it is impossible to send the reject response and keep the connection alive so that the client sends additional requests.
+
+Modification:
+
+Added a public method called 'reset()' to HttpObjectDecoder so that a user can reset the state of the decoder easily.  Once called, the decoder will assume the next input will be the beginning of a new request.
+
+HttpObjectAggregator now calls `reset()`right after calling 'handleOversizedMessage()' so that the decoder can continue to decode the subsequent request even after the request with 'Expect: 100-continue' header is rejected.
+
+Added relevant unit tests / Minor clean-up
+
+Result:
+
+This commit completes the fix of #2211

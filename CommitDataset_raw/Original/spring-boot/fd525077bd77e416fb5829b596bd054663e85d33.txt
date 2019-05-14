@@ -1,0 +1,16 @@
+Improve HornetQ/Artemis embedded tests
+
+Previously, HornetQ and Artemis tests were using a test configuration
+class listing the configuration classes to use explicitly in the purpose
+of disabling the XA support.
+
+This had a very unfortunate side effect for Artemis as we forgot to add
+an import on the "real" configuration and this got unnoticed because of
+this duplication.
+
+It turns out that this special configuration class is no longer necessary
+as XA backs off automatically anyway now. The tests have been updated
+to use the regular auto-configuration and were failing with Artemis. The
+import has now be added.
+
+Closes gh-4226

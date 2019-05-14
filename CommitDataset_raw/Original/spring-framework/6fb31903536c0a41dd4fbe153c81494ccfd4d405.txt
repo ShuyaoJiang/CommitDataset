@@ -1,0 +1,9 @@
+Fix regression with binding and validation
+
+Previously, the binding may have to call the getter first to retrieve the
+old value of a property before actually setting it. This was guarded by
+a catch block that was accidentally removed in 3d86f15
+
+Restore that catch block and add a test to cover it.
+
+Issue: SPR-12805

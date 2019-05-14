@@ -1,0 +1,13 @@
+Allow override of HTTP/2 graceful connection shutdown.
+
+Motivation:
+
+Currently the graceful shutdown of the HTTP/2 connection waits until there are no active streams. There may be use cases that buffer stream creation (due to limits imposed by MAX_CONCURRENT_STREAMS), in which case they may still want those streams to complete before closing.
+
+Modifications:
+
+Added a isGracefulShutdownComplete method to Http2ConnectionHandler, which can be overridden by a subclass.
+
+Result:
+
+Graceful shutdown logic can be overridden.

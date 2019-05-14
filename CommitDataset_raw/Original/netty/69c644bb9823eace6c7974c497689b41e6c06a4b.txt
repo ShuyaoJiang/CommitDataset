@@ -1,0 +1,14 @@
+Correctly detect if protocol is enabled when using netty-tcnative (#7940)
+
+Motivation:
+
+We sometimes did not correctly detect when a protocol is not enabled when using netty-tcnative as we did not take into account when the option flag is 0 (as for example in BoringSSL for SSLv2).
+
+Modifications:
+
+- Correctly take an option flag with 0 into account.
+- Add unit tests.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7935.

@@ -1,0 +1,11 @@
+Deprecate RouterFunctionMetrics
+
+Spring Boot now deploys both annotation-based and functional endpoints
+under the same `HttpHandler`; this means the currently auto-configured
+`MetricsWebFilter` is instrumenting all endpoints to produce metrics.
+
+There is no need for a WebFlux functional specific support.
+This commit removes mentions of `RouterFunctionMetrics` in the docs and
+deprecates that class.
+
+Closes gh-12833

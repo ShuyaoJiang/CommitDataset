@@ -1,0 +1,8 @@
+Assume that rollover datemath tests run on the same day. (#34527)
+
+in #28741 RolloverIT fails because we are cutting over to the
+next day while the test executes. We assume that this doesn't happen
+based on the assertions in the test. This adds a assumeTrue to ensure
+we are at least 5 min away form a date-flip.
+
+Closes #28741

@@ -1,0 +1,30 @@
+Correctly handle 205 Reset Content response with transfer-encoding
+
+Motivation:
+
+According to RFC 7231 the server may choose to:
+```
+indicate a zero-length payload for the response by including a
+Transfer-Encoding header field with a value of chunked and a message
+body consisting of a single chunk of zero-length
+```
+https://tools.ietf.org/html/rfc7231#page-53
+
+In such cases the exception below appears during decoding phase:
+```
+java.lang.IllegalArgumentException: invalid version format: 0
+	at io.netty.handler.codec.http.HttpVersion.<init>(HttpVersion.java:121)
+	at io.netty.handler.codec.http.HttpVersion.valueOf(HttpVersion.java:76)
+	at io.netty.handler.codec.http.HttpResponseDecoder.createMessage(HttpResponseDecoder.java:118)
+	at io.netty.handler.codec.http.HttpObjectDecoder.decode(HttpObjectDecoder.java:219)
+```
+
+Modifications:
+
+HttpObjectDecoder.isContentAlwaysEmpty specifies content NOT empty
+when 205 Reset Content response
+
+Result:
+
+There is no `IllegalArgumentException: invalid version format: 0`
+when handling 205 Reset Content response with transfer-encoding

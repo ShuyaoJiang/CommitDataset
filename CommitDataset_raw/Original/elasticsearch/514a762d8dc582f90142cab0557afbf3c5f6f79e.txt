@@ -1,0 +1,24 @@
+Specialize pre-closing checks for engine implementations (#38702)
+
+The Close Index API has been refactored in 6.7.0 and it now performs 
+pre-closing sanity checks on shards before an index is closed: the maximum 
+sequence number must be equals to the global checkpoint. While this is a 
+strong requirement for regular shards, we identified the need to relax this 
+check in the case of CCR following shards.
+
+The following shards are not in charge of managing the max sequence 
+number or global checkpoint, which are pulled from a leader shard. They 
+also fetch and process batches of operations from the leader in an unordered 
+way, potentially leaving gaps in the history of ops. If the following shard lags 
+a lot it's possible that the global checkpoint and max seq number never get 
+in sync, preventing the following shard to be closed and a new PUT Follow 
+action to be issued on this shard (which is our recommended way to 
+resume/restart a CCR following).
+
+This commit allows each Engine implementation to define the specific 
+verification it must perform before closing the index. In order to allow 
+following/frozen/closed shards to be closed whatever the max seq number 
+or global checkpoint are, the FollowingEngine and ReadOnlyEngine do 
+not perform any check before the index is closed.
+
+Co-authored-by: Martijn van Groningen <martijn.v.groningen@gmail.com>

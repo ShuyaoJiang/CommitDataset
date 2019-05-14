@@ -1,0 +1,13 @@
+Index phrases (#30450)
+
+Specifying `index_phrases: true` on a text field mapping will add a subsidiary
+[field]._index_phrase field, indexing two-term shingles from the parent field.
+The parent analysis chain is re-used, wrapped with a FixedShingleFilter.
+
+At query time, if a phrase match query is executed, the mapping will redirect it
+to run against the subsidiary field.
+
+This should trade faster phrase querying for a larger index and longer indexing
+times.
+
+Relates to #27049 

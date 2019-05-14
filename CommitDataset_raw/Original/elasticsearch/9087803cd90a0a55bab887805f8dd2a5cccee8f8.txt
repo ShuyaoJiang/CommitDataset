@@ -1,0 +1,7 @@
+Add the ability to define custom inner hit sub context builder (#24676)
+
+This commit moves the handling of nested and parent/child inner hits to specialized classes that can be defined outside of ES core.
+InnerHitBuilderContext is now used by the parent query (nested or hasChild, ...) to build the sub context from the InnerHitBuilder definition.
+BWC is also ensured so that nodes in previous versions can still send/receive inner hits to/from this version.
+
+Relates #20257

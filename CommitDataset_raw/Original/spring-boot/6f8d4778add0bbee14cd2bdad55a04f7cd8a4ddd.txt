@@ -1,0 +1,12 @@
+Prevent a jar from being repackaged more than once
+
+Previously, Repackager would repackage a jar file as many times as
+it was asked to do so. This lead to problems if a user made a mistake
+when using Maven that led to the package phase being driven twice,
+for example by running "mvn clean install package".
+
+This commit updates Repackager so that a repackage call becomes a
+no-op if the source jar's manifest already contains the
+Spring-Boot-Version attribute which is added by repackaging.
+
+Fixes #1251

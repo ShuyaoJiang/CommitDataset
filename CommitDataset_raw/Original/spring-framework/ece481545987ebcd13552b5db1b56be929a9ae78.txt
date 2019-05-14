@@ -1,0 +1,8 @@
+Ensure ISE will not be thrown when the client disconnects
+
+- ServletServerHttpResponse.ResponseAsyncListener#onError/onTimeout
+must complete the async operation
+- ServletHttpHandlerAdapter.HandlerResultSubscriber#onComplete must
+check that the async operation is not completed
+
+Issue: SPR-15412

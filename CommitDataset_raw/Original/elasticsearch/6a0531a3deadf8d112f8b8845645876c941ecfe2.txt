@@ -1,0 +1,16 @@
+Fix intermittent failure in ApiKeyIntegTests (#38627)
+
+Few tests failed intermittently and most of the
+times due to invalidated or expired keys that were
+deleted were still reported in search results.
+This commit removes the test and adds enhancements
+to other tests testing different scenario's.
+
+When ExpiredApiKeysRemover is triggered, the tests
+did not await its termination thereby sometimes
+the results would be wrong for a search operation.
+
+DELETE_INTERVAL setting has been further reduced to
+100ms so we can trigger ExpiredApiKeysRemover faster.
+
+Closes #38408

@@ -1,0 +1,17 @@
+Fix handling of bad requests (#29249)
+
+Today we have a few problems with how we handle bad requests:
+ - handling requests with bad encoding
+ - handling requests with invalid value for filter_path/pretty/human
+ - handling requests with a garbage Content-Type header
+
+There are two problems:
+ - in every case, we give an empty response to the client
+ - in most cases, we leak the byte buffer backing the request!
+
+These problems are caused by a broader problem: poor handling preparing
+the request for handling, or the channel to write to when the response
+is ready. This commit addresses these issues by taking a unified
+approach to all of them that ensures that:
+ - we respond to the client with the exception that blew us up
+ - we do not leak the byte buffer backing the request

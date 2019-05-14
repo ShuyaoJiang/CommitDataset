@@ -1,0 +1,12 @@
+HttpHeaders fails getAllow if set to EmptyCollection
+
+Prior to this commit, calls to getAllow would fail is setAllow was set
+to an EmptyCollection right before.
+
+    java.lang.IllegalArgumentException: No enum constant
+    org.springframework.http.HttpMethod
+
+This commit fixes this by testing the header value for an empty value
+before trying to use it to get a value from the Enum.
+
+Issue: SPR-11917

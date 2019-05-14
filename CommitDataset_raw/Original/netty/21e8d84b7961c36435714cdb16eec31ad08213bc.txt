@@ -1,0 +1,12 @@
+HTTP/2 Simplify Headers Decode Bounds Checking
+
+Motivation:
+The HPACK decoder keeps state so that the decode method can be called multiple times with successive header fragments. This decoder also requires that a method is called to signify the decoding is complete. At this point status is returned to indicate if the max header size has been violated. Netty always accumulates the header fragments into a single buffer before attempting to HPACK decode process and so keeping state and delaying notification that bounds have been exceeded is not necessary.
+
+Modifications:
+- HPACK Decoder#decode(..) now must be called with a complete header block
+- HPACK will terminate immediately if the maximum header length, or maximum number of headers is exceeded
+- Reduce member variables in the HPACK Decoder class because they can now live in the decode(..) method
+
+Result:
+HPACK bounds checking is done earlier and less class state is needed.

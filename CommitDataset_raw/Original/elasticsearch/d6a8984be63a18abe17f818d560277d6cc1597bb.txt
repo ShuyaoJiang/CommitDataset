@@ -1,0 +1,5 @@
+Make sure shard is not closed when updating local checkpoint
+
+If a primary shard is relocated, and then subsequently closed, there is a short window where ReplicationOperation could access the
+closed shard (engine is not shut down yet) and, because it does not know that the shard was relocated, try to update the local
+checkpoint, tripping an assertion in GlobalCheckPointTracker that a local checkpoint cannot be updated if it's not in primary mode.

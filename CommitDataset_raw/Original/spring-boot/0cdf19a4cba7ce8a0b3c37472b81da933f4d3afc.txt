@@ -1,0 +1,12 @@
+Update test to align with more precise information about target class
+
+The latest Spring Framework 4.2.2 snapshots have reworked
+EventListenerMethodProcessor so that it no longer queries a proxies
+target class. Previously, when this was happening, it happened early
+in the context's lifecycle when the bean's concrete type was unknown.
+The led to the target class being set as the proxied interface.
+
+With the latest 4.2.2 snapshots, the first call to
+AopUtils.getTargetClass() happens in the test, by which time the
+actual concrete type of the bean is known. This commit updates the
+test so that its expectations match the more precise result.

@@ -1,0 +1,23 @@
+Trigger user event when H2 conn preface & SETTINGS frame are sent
+
+Motivation:
+Previously client Http2ConnectionHandler trigger a user event
+immediately when the HTTP/2 connection preface is sent. Any attempt to
+immediately send a new request could cause the server to terminate the
+connection, as it might not have received the SETTINGS frame from the
+client. Per RFC7540 Section 3.5, the preface "MUST be followed by a
+SETTINGS frame (Section 6.5), which MAY be empty."
+(https://tools.ietf.org/html/rfc7540#section-3.5)
+
+This event could be made more meaningful if it also indicates that the
+initial client SETTINGS frame has been sent to signal that the channel
+is ready to send new requests.
+
+Modification:
+- Renamed event to Http2ConnectionPrefaceAndSettingsFrameWrittenEvent.
+- Modified Http2ConnectionHandler to trigger the user event only if it
+  is a client and it has sent both the preface and SETTINGS frame.
+
+Result:
+It is now safe to use the event as an indicator that the HTTP/2
+connection is ready to send new requests.

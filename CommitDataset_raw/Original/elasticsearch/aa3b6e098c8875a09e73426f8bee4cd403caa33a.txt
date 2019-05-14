@@ -1,0 +1,8 @@
+Reject follow request if following setting not enabled on follower (#32448)
+
+Today we do not check if the `following_index` setting of the follower
+is enabled or not when processing a follow-request. If that setting is
+disabled, the follower will use the default engine, not the following
+engine. This change checks and rejects such invalid follow requests.
+
+Relates #30086

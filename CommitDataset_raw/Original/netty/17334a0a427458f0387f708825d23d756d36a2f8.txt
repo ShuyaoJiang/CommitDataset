@@ -1,0 +1,10 @@
+[#2390] Minimize memory usage of NioDatagramChannel
+
+Motivation:
+At the moment we create a HashMap that holds the MembershipKeys for multicast with every NioDatagramChannel even when most people not need it at al
+
+Modifications:
+Lazy create the HashMap when needed.
+
+Result:
+Less memory usage and less object creation

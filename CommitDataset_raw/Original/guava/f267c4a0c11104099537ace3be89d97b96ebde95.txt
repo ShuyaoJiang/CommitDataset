@@ -1,0 +1,11 @@
+Turn Iterators.emptyModifiableIterator into an enum singleton instead of an anonymous inner class.
+
+ProGuard can't eliminate static fields, but it can recognize that the enum isn't referenced except by emptyModifiableIterator and eliminate it from classes that reference other methods in Iterators.
+
+Effects on ImmutableMapProGuard: ([]41126 bytes => 40551 bytes
+40 classes => 39 classes
+247 methods => 243 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146953456

@@ -1,0 +1,10 @@
+Fix ModifiedClassPathRunner tests if run via IDEA
+
+IntelliJ can shorten the classpath to a single classpath.jar in order to
+circumvent errors originating from a too long classpath. This breaks the
+filtering inside ModifiedClassPathRunner as the classpath contains only a
+single jar to match against. This can be fixed by applying a similar
+mechanism already provided for Surefire manifest-only booter JARs, which
+extracts the real classpath from the JAR's Manifest file.
+
+See gh-12535

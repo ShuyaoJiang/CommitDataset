@@ -1,0 +1,12 @@
+Notify onConnectionClosed rather than onNodeDisconnect to prune transport handlers (#24639)
+
+Today we prune transport handlers in TransportService when a node is disconnected.
+This can cause connections to starve in the TransportService if the connection is
+opened as a short living connection ie. without sharing the connection to a node
+via registering in the transport itself. This change now moves to pruning based
+on the connections cache key to ensure we notify handlers as soon as the connection
+is closed for all connections not just for registered connections.
+
+Relates to #24632
+Relates to #24575
+Relates to #24557

@@ -1,0 +1,10 @@
+Remove hardcoded graph toString() tests. Instead, simply verify that every node and edge appears in the graph's string representation. This is done for a few reasons:
+
+1) It gives us a false sense of test coverage. For example, getPropertiesString() is used in both the actual code and the test code. If there was a bug in getPropertiesString none of the tests would catch it.
+
+2) Any minor tweak to the graph string format, which should be an easy change, requires touching a lot of tests.
+
+3) The biggest reason: incidentNodes() on an undirected graph makes no guarantee of order. As such, a test should not hardcode the expected toString() result. Multiple string representations of the same graph are equally valid.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=117974195

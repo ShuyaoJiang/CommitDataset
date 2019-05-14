@@ -1,0 +1,10 @@
+SslHandlerTest ByteBuf leak
+
+Motivation:
+We are now more careful to flush alerts that are generated when errors occur. We should also be more careful in unit tests to release any buffers that may be queued due to potential errors wich result in alerts.
+
+Modifications:
+- When SslHandlerTest uses EmbeddedChannel we should always call finishAndReleaseAll
+
+Results:
+Fixes https://github.com/netty/netty/issues/6057

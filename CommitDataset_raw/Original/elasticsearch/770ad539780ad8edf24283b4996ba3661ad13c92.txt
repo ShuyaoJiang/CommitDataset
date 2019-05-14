@@ -1,0 +1,10 @@
+Introduce long polling for changes (#33683)
+
+Rather than scheduling pings to the leader index when we are caught up
+to the leader, this commit introduces long polling for changes. We will
+fire off a request to the leader which if we are already caught up will
+enter a poll on the leader side to listen for global checkpoint
+changes. These polls will timeout after a default of one minute, but can
+also be specified when creating the following task. We use these time
+outs as a way to keep statistics up to date, to not exaggerate time
+since last fetches, and to avoid pipes being broken.

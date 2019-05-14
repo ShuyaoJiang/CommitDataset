@@ -1,0 +1,21 @@
+[TEST] Manually trigger resource watching (#34893)
+
+SSLTrustRestrictionsTests.testRestrictionsAreReloaded checks that the
+SSL trust configuration is automatically updated reapplied if the
+underlying "trust_restrictions.yml" file is modified.
+
+Since the default resource watcher frequency is 5seconds, it could
+take 10 second to run that test (as it waits for 2 reloaded).
+
+Previously this test set that frequency to a very low value (3ms) so
+that the elapsed time for the test would be reduced. However this
+caused other problems, including that the resource watcher would
+frequently run while the cluster was shutting down and files were
+being cleaned up.
+
+This change resets that watch frequency back to its default (5s) and
+then manually calls the "notifyNow" method on the resource watcher
+whenever the restrictions file is modified, so that the SSL trust
+configuration is reloaded at exactly the right time.
+
+Resolves: #34502

@@ -1,0 +1,7 @@
+Ensure we rewrite common queries to `match_none` if possible (#25650)
+
+In certain situations we can early terminate and just skip the entire
+query phase or make the lucene level rewrite very cheap if we can already
+tell that a query won't match any documents. For instance if there is a single
+`match_none` ie. due to some range rewrite in a filter or must clause of a boolean
+query it can just drop all it's other queries since it will never match.

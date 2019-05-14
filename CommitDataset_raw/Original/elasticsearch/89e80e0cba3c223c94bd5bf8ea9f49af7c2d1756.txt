@@ -1,0 +1,25 @@
+Teach SQL to parse Elasticsearch's standard error responses (elastic/x-pack-elasticsearch#2764)
+
+This teaches SQL to parse Elasticsearch's standard error responses
+but doesn't change SQL to general Elasticsearch's standard error responses
+in all cases. That can come in a followup. We do this parsing with
+jackson-core, the same dependency Elasticsearch uses for parsing
+json. We shade jackson-core in the JDBC driver so that users don't have to worry about
+dependency clashes. We do not do so in the CLI because it is a standalone
+application.
+
+We get a few "bonus" changes along the way:
+1. We save a copy operation. Before this change responses were spooled
+into memory and then parsed. After this change they are parsed directly
+from the response stream.
+2. We had a few classes entirely to support the spooling operation that we
+no longer need: `BytesArray`, `FastByteArrayInputStream`, and
+`BasicByteArrayOutputStream`.
+3. SQL's `Version` was incorrectly parsing the version from the jar manifest.
+We didn't notice because the test was rigged to return `UNKNOWN` because
+we *were* running the test from the compiled classes directory instead of the
+jar. As part of shading jackson we moved running the tests to running against
+the shaded jar. Now we can actually assert that we parse the version correctly.
+It turns out we weren't. So I fixed it.
+
+Original commit: elastic/x-pack-elasticsearch@2e8f397bf421c6186d32c614f3bc2d1f78f5d989

@@ -1,0 +1,19 @@
+REST test for typeless APIs. (#33934)
+
+This commit duplicates REST tests for the
+ - `indices.create`
+ - `indices.put_mapping`
+ - `indices.get_mapping`
+ - `index`
+ - `get`
+ - `delete`
+ - `update`
+ - `bulk`
+APIs, so that we both test them when used without types (include_type_name=false)
+and with types, mostly for mixed-version cluster tests.
+
+Given a suite called `X_test_name.yml`, I first copied it to
+`(X+1)_test_name_with_types.yml` and then changed `X_test_name.yml` to set
+`include_type_name=false` on every API that supports it.
+
+Relates #15613

@@ -1,0 +1,14 @@
+[ML] Preview of datafeed with aggs should respect chunking config (elastic/x-pack-elasticsearch#4241)
+
+While it makes sense to apply auto-chunking in order to limit
+the time range of the search for previewing datafeeds without aggs,
+the same is not the case when aggs are used. In contrary, we should
+do the preview the same way it would be if the datafeed run, as this
+can reveal problems with regard to the datafeed configuration.
+
+In addition, by default datafeeds with aggs have a manual chunking config
+that limits the cost of each search. So, setting the chunking to auto
+in those cases may lead to the datafeed preview failing even though
+actually running the datafeed would work fine.
+
+Original commit: elastic/x-pack-elasticsearch@79e317efb2e3d9e963c5cc56d99eef350cd06e96

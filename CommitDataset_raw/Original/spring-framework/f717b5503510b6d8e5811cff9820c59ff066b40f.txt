@@ -1,0 +1,9 @@
+Fix test bug related to legacy JUnit AssertionFailedError
+
+AssertionFailedError was thrown by JUnit 3.8. Since RedirectViewTests
+has been upgraded to JUnit 4, now standard java.lang.AssertionErrors are
+thrown. Thus, attempting to catch an AssertionFailedError is futile.
+
+Of course, since these tests have not been failing, it is likely a moot
+point, but changing the try-catch blocks to catch a possible
+AssertionError can't be a bad thing.

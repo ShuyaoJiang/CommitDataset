@@ -1,0 +1,8 @@
+Change the cache to have non-shared semantics.
+
+This means we'll cache responses that use an 'Authorization' header. This
+means OkHttp's cache shouldn't be used on middleboxes that sit between
+user agents and the origin server; in practice this is never a use case
+for OkHttp.
+
+Fixes https://github.com/square/okhttp/issues/1035

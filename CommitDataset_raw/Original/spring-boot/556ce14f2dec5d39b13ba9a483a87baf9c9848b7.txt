@@ -1,0 +1,13 @@
+Fix TestRestTemplate.withBasicAuth interceptors
+
+Update `TestRestTemplate` to handle `BasicAuthorizationInterceptor`s
+correctly. Prior to this commit the `BasicAuthorizationInterceptor`
+was added directly to the `ClientHttpRequestFactory` rather than
+to the `RestTemplate`. This meant that it could not easily be removed
+when `TestRestTemplate.withBasicAuth` was invoked.
+
+The `TestRestTemplate` now sets the interceptor on `RestTemplate`
+directly and relies on the logic in `InterceptingHttpAccessor` to
+add it to the `ClientHttpRequestFactory`.
+
+Fixes gh-7812

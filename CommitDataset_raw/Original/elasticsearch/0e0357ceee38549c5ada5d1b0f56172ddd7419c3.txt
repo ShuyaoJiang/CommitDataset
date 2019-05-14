@@ -1,0 +1,15 @@
+Add realistic hlrc response serialization test base class (#39844)
+
+The base class facilitates generating a server side response test instance,
+that gets serialized as xcontent, which then gets parsed into a hlrc response
+instance, which then gets asserted against the server side response instance.
+
+This way of testing is more realistic then how hlrc response classes are tested
+today, which basically tests that serialization works by generating
+hlrc response instance, serialize that to xcontent and then parse it back
+to a hlrc response instance.
+
+Besides adding a base test class, this change also cuts AcknowledgedResponseTests
+and BroadcastResponseTests over to use this base class.
+
+Relates to #39745

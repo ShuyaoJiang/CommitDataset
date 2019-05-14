@@ -1,0 +1,15 @@
+Proposal to fix issue #3768 (3.10)
+
+Motivations:
+When using HttpPostRequestEncoder and trying to set an attribute if a
+charset is defined, currenlty implicit Charset.toStrng() is used, given
+wrong format.
+As in Android for UTF-16 = "com.ibm.icu4jni.charset.CharsetICU[UTF-16]".
+
+Modifications:
+Each time charset is used to be printed as its name, charset.name() is
+used to get the canonical name.
+
+Result:
+Now get "UTF-16" instead.
+(3.10 version)

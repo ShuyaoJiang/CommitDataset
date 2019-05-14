@@ -1,0 +1,11 @@
+re-enable ILM integration tests and fix policyRegistry update bug (#32108)
+
+This PR re-introduces our ILM integration tests with mock steps
+that we can control in the tests.
+
+These tests uncovered a bug where the policy-steps-registry was
+not being updated on newly elected masters when there were no
+cluster-state changes to ILM metadata. The fix layed out cleans up
+the registry/runner when a node is un-elected as master. It re-assigns
+the class variables so that the existing runner/registry instances that
+may be running can continue to do so in other threads, potentially.

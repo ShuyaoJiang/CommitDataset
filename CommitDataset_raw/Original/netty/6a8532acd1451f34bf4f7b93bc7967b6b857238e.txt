@@ -1,0 +1,21 @@
+Reset the contentExpected flag when RSET is written
+
+Motivation:
+
+If the remote server returns a 4xx/5xx error in response to
+a DATA command (or earlier command if using pipelining),
+SmtpRequestEncoder can become stuck in an invalid state,
+not allowing any requests to be sent.
+
+This makes the channel unusable and the connection has to be closed,
+or the encoder handler has to be replaced.
+
+Modifications:
+
+If a RSET command is written to the channel, the contentExpected
+flag is set to false, and the RSET is written to the channel.
+
+Result:
+
+Sending a RSET command after a server 4xx/5xx error will make it
+possible to use the current connection for new mail transactions.

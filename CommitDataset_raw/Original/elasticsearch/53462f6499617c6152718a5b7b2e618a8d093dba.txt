@@ -1,0 +1,12 @@
+Make fields optional in multi_match query and rely on index.query.default_field by default (#27380)
+
+* Make fields optional in multi_match query and rely on index.query.default_field by default
+
+This commit adds the ability to send `multi_match` query without providing any `fields`.
+When no fields are provided the `multi_match` query will use the fields defined in the index setting `index.query.default_field`
+(which in turns defaults to `*`).
+The same behavior is already implemented in `query_string` and `simple_query_string` so this change just applies
+the heuristic to `multi_match` queries.
+Relying on `index.query.default_field` rather than `*` is safer for big mappings that break the 1024 field expansion limit added in 7.0 for all
+text queries. For these kind of mappings the admin can change the `index.query.default_field` in order to make sure that exploratory queries using
+`multi_match`, `query_string` or `simple_query_string` do not throw an exception.

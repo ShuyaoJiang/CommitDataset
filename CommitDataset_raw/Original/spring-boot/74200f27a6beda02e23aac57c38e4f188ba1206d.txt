@@ -1,0 +1,12 @@
+Drop jackson-module-kotlin from spring-boot-starter-json
+
+Previously, a dependency on jackson-module-kotlin with Kotlin excluded
+was added to spring-boot-starter-json. This gave Kotlin users a smooth
+experience with Jackson and JSON at minimal, we thought, cost to other
+users. We have since learned that this arrangement causes a
+ClassNotFoundException at runtime when Jackson is configured to find
+modules via the service loader. This makes the cost of including
+jackson-module-kotlin to high for non-Kotlin users so this commit
+removes it.
+
+Closes gh-11133

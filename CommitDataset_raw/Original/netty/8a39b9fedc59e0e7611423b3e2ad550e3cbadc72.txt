@@ -1,0 +1,10 @@
+Fix buffer leak introduced by #2462
+
+Motivation:
+Because of not correctly release a buffer before null out the reference a memory leak shows up.
+
+Modifications:
+Correct call buffer.release() before null out reference.
+
+Result:
+No more leak

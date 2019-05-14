@@ -1,0 +1,13 @@
+Use Constructor for reflective class instantiation.
+
+Motivation:
+Calling `newInstance()` on a Class object can bypass compile time
+checked Exception propagation.  This is noted in Java Puzzlers,
+as well as in ErrorProne:
+http://errorprone.info/bugpattern/ClassNewInstance
+
+Modifications:
+Use the niladic constructor to create a new instance.
+
+Result:
+Compile time safety for checked exceptions

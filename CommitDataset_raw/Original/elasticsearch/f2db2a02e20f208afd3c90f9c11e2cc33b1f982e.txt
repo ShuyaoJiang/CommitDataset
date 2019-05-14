@@ -1,0 +1,12 @@
+Truncate tlog cli should assign global checkpoint (#28192)
+
+We are targeting to always have a safe index once the recovery is done. 
+This invariant does not hold if the translog is manually truncated by 
+users because the truncate translog cli resets the global checkpoint to
+unassigned. This commit assigns the global checkpoint to the max_seqno
+of the last commit when truncating translog. We can only safely do it
+because the truncate translog command will generate a new history uuid
+for that shard. With a new history UUID, sequence-based recovery between
+that shard and other old shards will be disabled.
+
+Relates #28181

@@ -1,0 +1,11 @@
+Default max concurrent search req. numNodes * 5 (#31171)
+
+We moved to 1 shard by default which caused some issues in how many
+concurrent shard requests we allow by default. For instance searching
+a 5 shard index on a single node will now be executed serially per shard
+while we want these cases to have a good concurrency out of the box. This
+change moves to `numNodes * 5` which corresponds to the default we used to 
+have in the previous version.
+
+Relates to #30783
+Closes #30994

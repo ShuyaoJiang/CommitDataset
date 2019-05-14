@@ -1,0 +1,15 @@
+Add `_source`-only snapshot repository (#32844)
+
+This change adds a `_source` only snapshot repository that allows to wrap
+any existing repository as a _backend_ to snapshot only the `_source` part
+including live docs markers. Snapshots taken with the `source` repository
+won't include any indices,  doc-values or points. The snapshot will be reduced in size and
+functionality such that it requires full re-indexing after it's successfully restored.
+
+The restore process will copy the `_source` data locally starts a special shard and engine
+to allow `match_all` scrolls and searches. Any other query, or get call will fail with and unsupported operation exception.  The restored index is also marked as read-only.
+
+This feature aims mainly for disaster recovery use-cases where snapshot size is
+a concern or where time to restore is less of an issue.
+
+**NOTE**: The snapshot produced by this repository is still a valid lucene index. This change doesn't allow for any longer retention policies which is out of scope for this change.

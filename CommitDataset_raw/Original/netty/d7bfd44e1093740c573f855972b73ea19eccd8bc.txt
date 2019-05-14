@@ -1,0 +1,9 @@
+[#982] [#977] [#858] Allow to transfer the content a ChannelHandlers inbound/outbound buffer on removal/replacement
+
+This changes the behavior of the ChannelPipeline.remove(..) and ChannelPipeline.replace(..) methods in that way
+that after invocation it is not possible anymore to access any data in the inbound or outbound buffer. This is
+because it empty it now to prevent side-effects. If a user want to preserve the content and forward it to the
+next handler in the pipeline it is adviced to use one of the new methods which where introduced.
+
+ - ChannelPipeline.removeAndForward(..)
+ - ChannelPipeline.replaceAndForward(..)

@@ -1,0 +1,16 @@
+Retain order of active profiles in the TCF
+
+Ever since @ActiveProfiles was introduced, the declared active profiles
+for integration tests have been sorted in order to support unique cache
+key generation; however, there are use cases for which the original
+ordering should be retained.
+
+For example, Spring Boot's ConfigFileApplicationListener loads
+configuration files for active profiles in the order returned by
+Environment.getActiveProfiles(), with the assumption that the ordering
+matches the order in which the developer declared the active profiles.
+
+This commit maintains the uniqueness of active profiles declared via
+@ActiveProfiles but no longer sorts them.
+
+Issue: SPR-12492

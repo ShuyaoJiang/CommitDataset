@@ -1,0 +1,9 @@
+Give jspawnhelper execute permissions in bundled JDK (#39787)
+
+The posix_spawn method of launching a process from Java
+goes via an intermediate process called jspawnhelper
+which lives in the lib directory rather than the bin
+directory and hence got missed by the original chmod
+loop.  This change adds jspawnhelper as a special case.
+It's the only program that's in the lib directory in a
+macOS JDK 11.

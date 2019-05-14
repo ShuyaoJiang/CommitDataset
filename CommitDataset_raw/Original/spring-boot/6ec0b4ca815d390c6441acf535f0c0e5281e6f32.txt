@@ -1,0 +1,17 @@
+Only consider letters when checking if a name is upper-case
+
+Previously, for a string to be considered upper-case,
+EmbeddedServerPortFileWriter required every character in the
+string to be upper-case. This meant that strings containing numbers were
+considered lower-case even if every letter in the string was upper-case.
+OS X’s case-preserving, case-insensitive file system masked this problem
+as the tests were still able to find the created file, even though the
+case of its name was not as expected.
+
+This commit updates EmbeddedServerPortFileWriter to only require
+characters that are letters (as defined by Character.isLetter()) to be
+upper-case. It also updates the tests to verify that the case of the
+created file’s name is correct in such a way that it will fail, even
+on OS X, when it is not.
+
+Fixes gh-1676

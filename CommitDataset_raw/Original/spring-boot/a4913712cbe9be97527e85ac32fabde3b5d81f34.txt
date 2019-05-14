@@ -1,0 +1,10 @@
+Do not expose the composite ReactiveHealthIndicator as a bean
+
+Previously, a `ReactiveHealthIndicator` bean was exposed to define the
+health indicator to use for the reactive endpoint. Having it exposed as
+a bean has the side effect that the regular `HealthIndicator` composite
+is picked up and a "reactive" entry is added to the health details.
+
+This commit creates such indicator internally as it should be.
+
+Closes gh-11222

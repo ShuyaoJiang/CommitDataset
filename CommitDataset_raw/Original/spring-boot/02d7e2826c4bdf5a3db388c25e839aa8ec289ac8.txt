@@ -1,0 +1,22 @@
+Don’t call ignoring.antMatchers([]) as empty array now maps to /**
+
+Previously, if security.ignored was set to none and the error controller
+was disabled, there would be no paths to ignore and we would call
+IgnoredRequestConfigurer.antMatchers with an empty array. While a bit
+pointless, this had no effect on Spring Security’s configuration.
+
+This behaviour has changed in the latest 4.0.3 snapshots [1]. An empty
+array passed to IgnoredRequestConfigurer.antMatchers now maps to /**. As
+Spring Boot configures its ignored paths with highest precedence this
+means that security is now disabled for every path.
+
+This commit updates both the management security and application
+security configuration to avoid calling antMatchers with an empty
+array, thereby ensuring that we don’t inadvertently ignore every path.
+Even if the change to Spring Security is reverted we can keep this
+change. The behaviour will remain the same and, arguably, it makes the
+intent of our configuration clearer.
+
+Closes gh-4345
+
+[1] https://github.com/spring-projects/spring-security/commit/8663ac41731ead18c549a24c2c94b78ce0cceb1b

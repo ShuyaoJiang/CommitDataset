@@ -1,0 +1,6 @@
+Aggregations bug: Significant_text fails on arrays of text. (#25030)
+
+* Aggregations bug: Significant_text fails on arrays of text.
+The set of previously-seen tokens in a doc was allocated per-JSON-field string value rather than once per JSON document meaning the number of docs containing a term could be over-counted leading to exceptions from the checks in significance heuristics. Added unit test for this scenario
+
+Closes #25029

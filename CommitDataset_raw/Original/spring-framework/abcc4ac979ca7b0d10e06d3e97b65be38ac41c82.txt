@@ -1,0 +1,8 @@
+Fix composability issue in ExchangeMutatorWebFilter
+
+This commit replaces the UnaryOperatory<ServerWebExchange> inputs with
+Function<ServerWebExchange, ServerWebExchange> instead. Unfortunately
+the composability methods inherited from Function don't work in terms
+of generics for composing multiple UnaryOperator's.
+
+Issue: SPR-15599

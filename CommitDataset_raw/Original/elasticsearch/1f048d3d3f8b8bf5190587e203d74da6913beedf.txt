@@ -1,0 +1,6 @@
+Remove unneeded listener on MoveToNextStepUpdateTask (#33725)
+
+There was a listener that re-runs the policy with the new state when the cluster
+state is processed by the `MoveToNextStepUpdateTask`. This removes this listener
+as we will execute the policy through the `IndexLifecyleService` cluster state
+listener.

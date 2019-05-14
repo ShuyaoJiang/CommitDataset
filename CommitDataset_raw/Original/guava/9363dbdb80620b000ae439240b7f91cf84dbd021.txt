@@ -1,0 +1,6 @@
+Remove deprecated, unused, Google-internal Futures.transform overload that accepts a plain Future.
+The ListenableFuture overloads appear to be serving users well.
+For those users who are stuck with a plain Future, we still provide Futures.lazyTransform, which has similar but not identical behavior to Futures.transform. Specifically, lazyTransform does not cache the result of the transformation. This could in principle result in Futures whose value changes over time. This, along with the potential costs of repeated function application, is a reason to prefer Futures.transform when possible.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=59754254

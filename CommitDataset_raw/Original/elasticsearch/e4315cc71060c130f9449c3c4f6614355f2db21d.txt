@@ -1,0 +1,7 @@
+Use external version type for history ops from Lucene (#31568)
+
+Today we use INTERNAL version type for the history operations from
+Lucene index. However, this does not cover the case in which the
+original operation has the version type EXTERNAL and version number 0.
+Semantically all operations from translog or Lucene should always use
+EXTERNAL version type.

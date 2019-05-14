@@ -1,0 +1,5 @@
+reindex: automatically choose the number of slices (#26030)
+
+In reindex APIs, when using the `slices` parameter to choose the number of slices, adds the option to specify `slices` as "auto" which will choose a reasonable number of slices. It uses the number of shards in the source index, up to a ceiling. If there is more than one source index, it uses the smallest number of shards among them.
+
+This gives users an easy way to use slicing in these APIs without having to make decisions about how to configure it, as it provides a good-enough configuration for them out of the box. This may become the default behavior for these APIs in the future.

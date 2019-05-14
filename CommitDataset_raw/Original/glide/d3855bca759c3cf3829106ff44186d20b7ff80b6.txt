@@ -1,0 +1,5 @@
+Avoid removing jobs from queues to ensure cleanup runs.
+
+Right now we’re overly aggressive about removing jobs that may have pending data from queues on executors. Doing so can cause resources to be obtained and never cleaned up. Notably DataFetcher’s cleanup method may never be called. This cl ensures that we always allow the jobs to handle cancellation themselves, giving them the opportunity to ensure cleanup runs before they stop. 
+
+Fixes #1996

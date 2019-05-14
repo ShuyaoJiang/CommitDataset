@@ -1,0 +1,13 @@
+Fix the serialization of sparse immutable tables.
+
+The 'cellColumnIndices' fields of DenseImmutableTable and SparseImmutableTable
+appeared to serve the same purpose, but were actually slightly different. This
+broke serialization of sparse immutable tables. Additionally, our serialization
+tests did not cover sparse immutable tables.
+
+Rename the SparseImmutableTable field for clarity, and add tests covering
+sparse immutable tables.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=131855143

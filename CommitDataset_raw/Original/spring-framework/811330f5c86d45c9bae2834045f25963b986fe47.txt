@@ -1,0 +1,18 @@
+Add GsonHttpMessageConverter
+
+This commit adds support to read and write JSON using the Google Gson
+library. GsonHttpMessageConverter offers default Gson configuration, but
+can be customized by using GsonFactoryBean. GsonFactoryBean includes
+several convenience properties for configuring the internal GsonBuilder
+and the resulting Gson object.
+
+By default Gson converts byte arrays to JSON arrays instead of a Base64
+encoded string. GsonBase64ByteArrayJsonTypeAdapter provides support to
+read and write Base64 encoded byte arrays, and can be enabled in
+GsonFactoryBean.
+
+RestTemplate will enable GsonHttpMessageConverter only if Jackson 2 is
+not found on the class path, because by default GsonHttpMessageConverter
+supports the same media types as Jackson.
+
+Issue: SPR-9488

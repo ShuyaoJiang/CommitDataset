@@ -1,0 +1,12 @@
+Add BackOffExecution to isolate state
+
+ This commit separates the BackOff configuration from an actual
+ execution. BackOffExecution now contains all the state of a
+ particular execution and BackOff is only meant to start (i.e.
+ create) a new execution.
+
+ The method "reset" has been removed as its no longer necessary:
+ when an execution does not need to be used for a given operation
+ anymore it can be simply discarded.
+
+ Issue: SPR-11746

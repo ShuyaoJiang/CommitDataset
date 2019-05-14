@@ -1,0 +1,15 @@
+Improve AntPathMatcher matching performance
+
+This commit speeds up the AntPathMatcher implementation by
+pre-processing patterns and checking that candidates are likely
+matches if they start with the static prefix of the pattern.
+
+Those changes can result in a small performance penalty for positive
+matches, but with a significant boost for checking candidates that don't
+match. Overall, this tradeoff is acceptable since this feature is often
+used to select a few matching patterns in a much bigger list.
+
+This will lead to small but consistent performance improvements in
+Spring MVC when matching a given request with the available routes.
+
+Issue: SPR-13913

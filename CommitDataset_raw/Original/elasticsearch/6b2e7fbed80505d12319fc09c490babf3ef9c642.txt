@@ -1,0 +1,15 @@
+Add api to upgrade from basic to trial license (elastic/x-pack-elasticsearch#2419)
+
+This is related to elastic/x-pack-elasticsearch#1941.
+
+Currently we support self-generating either a basic or trial license at
+cluster startup. With the addition of the basic option, it is possible
+that a user would choose to self-generate and eventually register a
+basic license.
+
+This commit allows a user to upgrade to a 30-day trial license if they
+have not already utilized this 30-day trial license before. Additionally
+it adds a get route to check if the user is eligible to upgrade. This
+route will allow kibana to implement a cleaner UI.
+
+Original commit: elastic/x-pack-elasticsearch@7f19b33a087b1fdad7bd847bec67e1e6f6942828

@@ -1,0 +1,21 @@
+Fix hash function and hash table size in Snappy
+
+Motivation:
+
+1. Hash function in the Snappy encoding is wrong probably: used '+' instead of '*'. See the reference implementation [1].
+2. Size of the hash table is calculated, but not applied.
+
+Modifications:
+
+1. Fix hash function: replace addition by multiplication.
+2. Allocate hash table with calculated size.
+3. Use an `Integer.numberOfLeadingZeros` trick for calculate log2.
+4. Release buffers in tests.
+
+Result:
+
+1. Better compression. In the test `encodeAndDecodeLongTextUsesCopy` now compressed size is 175 instead of 180 before this change.
+2. No redundant allocations for hash table.
+3. A bit faster the calc of shift (less an expensive math operations).
+
+[1] https://github.com/google/snappy/blob/513df5fb5a2d51146f409141f9eb8736935cc486/snappy.cc#L67

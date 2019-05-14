@@ -1,0 +1,15 @@
+Add Mustache support for Spring WebFlux apps
+
+This commit moves the existing Spring MVC Mustache support to its own
+`servlet` package and adds a new one under `reactive` for the WebFlux
+web applications.
+
+New `MustacheView` and `MustacheViewResolver` types resolve and render
+Mustache views for WebFlux applications.
+
+Since this templating engine is now supported by two flavors of Spring
+web apps, the `spring-boot-starter-mustache` does not depend anymore on
+the `spring-boot-starter-web` one: it's up to the developer to add the
+relevant starter `web` or `webflux` to their application.
+
+Fixes gh-8648

@@ -1,0 +1,12 @@
+Skip Shrink when numberOfShards not changed (#37953)
+
+Previously, ShrinkAction would fail if
+it was executed on an index that had
+the same number of shards as the target
+shrunken number.
+
+This PR introduced a new BranchingStep that
+is used inside of ShrinkAction to branch which
+step to move to next, depending on the
+shard values. So no shrink will occur if the
+shard count is unchanged.

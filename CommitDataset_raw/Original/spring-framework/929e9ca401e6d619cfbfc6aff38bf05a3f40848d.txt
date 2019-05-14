@@ -1,0 +1,9 @@
+Raise MessageConversionException in @Payload resolver
+
+If a payload is present but conversion returns null (meaning no
+converter knows how to convert), raise a MessageConversionException
+that provides information about the type we were trying to convert
+to and the message itself whose headers (namely content-type) contain
+crucial information required to debug the problem.
+
+Issue: SPR-11577

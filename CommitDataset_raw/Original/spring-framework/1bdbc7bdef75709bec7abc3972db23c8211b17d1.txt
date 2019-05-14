@@ -1,0 +1,13 @@
+Optimize for Flux to/from Mono conversions
+
+This commit optimizes Flux <-> Mono conversions in our codebase by
+avoiding to hide that conversion from Reactor.
+
+This tries to keep conversions sequentially so that they can be detected
+by Reactor and optimized. In Spring WebFlux, this means keeping the
+conversions at the edges of a method implementation (right when getting
+an input parameter, and before returning it as a result). If those
+conversions are made between other operators, Reactor might not be able
+to detect those conversions and optimize them.
+
+Issue: SPR-17203

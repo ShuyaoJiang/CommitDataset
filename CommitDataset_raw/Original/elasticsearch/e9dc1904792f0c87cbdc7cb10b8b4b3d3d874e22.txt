@@ -1,0 +1,25 @@
+Throws ElasticsearchException from cluster state tasks if something
+really bad happens
+
+If the `onFailure()` method is called on the cluster state task then
+something bad happened that we can't really deal with so this change
+throws an ElasticsearchException in that case and the step will be
+re-executed when the policy is next triggered. If we can't submit a
+cluster state task then we can't move to the error state so there isn't
+really anything else we can do here. If the cluster state task fails
+like this there are probably bigger issues witht he cluster anyway.
+
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/ExecuteStepsUpdateTask.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTask.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToNextStepUpdateTask.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/ClusterStateUpdateStepTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/ExecuteStepsUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToNextStepUpdateTaskTests.java

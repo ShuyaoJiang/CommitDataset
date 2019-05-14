@@ -1,0 +1,12 @@
+Stop returning cluster state size by default (#40016)
+
+Computing the compressed size of the cluster state on every invocation
+of cluster:monitor/state action is expensive, and the value of this
+field is dubious anyway. Therefore we want to remove computing this
+field. As a first step, we stop computing and return this field by
+default. To avoid breaking users, we will give them a system property to
+use to tide them over until the next major release when we will actually
+remove this field. This comes with a deprecation warning too, and the
+backport to the appropriate minor will also include a note in the
+migration guide. There will be a follow-up to remove this field in the
+next major version.

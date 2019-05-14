@@ -1,0 +1,8 @@
+Add a frozen engine implementation (#34357)
+
+This change adds a `frozen` engine that allows lazily open a directory reader
+on a read-only shard. The engine wraps general purpose searchers in a LazyDirectoryReader
+that also allows to release and reset the underlying index readers after any and before
+secondary search phases.
+
+Relates to #34352

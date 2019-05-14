@@ -1,0 +1,39 @@
+Improve performance of Recycler
+
+Motivation:
+
+Recycler is used in many places to reduce GC-pressure but is still not as fast as possible because of the internal datastructures used.
+
+Modification:
+
+ - Rewrite Recycler to use a WeakOrderQueue which makes minimal guaranteer about order and visibility for max performance.
+ - Recycling of the same object multiple times without acquire it will fail.
+ - Introduce a RecyclableMpscLinkedQueueNode which can be used for MpscLinkedQueueNodes that use Recycler
+
+These changes are based on @belliottsmith 's work that was part of #2504.
+
+Result:
+
+Huge increase in performance.
+
+4.0 branch without this commit:
+
+Benchmark                                                (size)   Mode   Samples        Score  Score error    Units
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    00000  thrpt        20 116026994.130  2763381.305    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    00256  thrpt        20 110823170.627  3007221.464    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    01024  thrpt        20 118290272.413  7143962.304    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    04096  thrpt        20 120560396.523  6483323.228    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    16384  thrpt        20 114726607.428  2960013.108    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    65536  thrpt        20 119385917.899  3172913.684    ops/s
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 297.617 sec - in io.netty.microbench.internal.RecyclableArrayListBenchmark
+
+4.0 branch with this commit:
+
+Benchmark                                                (size)   Mode   Samples        Score  Score error    Units
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    00000  thrpt        20 204158855.315  5031432.145    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    00256  thrpt        20 205179685.861  1934137.841    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    01024  thrpt        20 209906801.437  8007811.254    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    04096  thrpt        20 214288320.053  6413126.689    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    16384  thrpt        20 215940902.649  7837706.133    ops/s
+i.n.m.i.RecyclableArrayListBenchmark.recycleSameThread    65536  thrpt        20 211141994.206  5017868.542    ops/s
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 297.648 sec - in io.netty.microbench.internal.RecyclableArrayListBenchmark

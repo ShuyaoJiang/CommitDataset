@@ -1,0 +1,19 @@
+Fix CachingResourceResolver key generation
+
+When used in combination with GzipResourceResolver, the
+CachingResourceResolver does not properly cache results, since it only
+takes the request path as a input for cache key generation.
+
+Here's an example of that behavior:
+
+1. an HTTP client requests a resource with `Accept-Encoding: gzip`, so
+the GzipResourceResolver can resolve a gzipped resource.
+2. the configured CachingResourceResolver caches that resource.
+3. another HTTP client requests the same resource, but it does not
+support gzip encoding; the previously cached gzipped resource is still
+returned.
+
+This commit uses the presence/absence of gzip encoding support as an
+input in cache keys generation.
+
+Issue: SPR-12982

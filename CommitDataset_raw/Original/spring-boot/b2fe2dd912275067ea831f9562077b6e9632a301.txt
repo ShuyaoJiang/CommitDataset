@@ -1,0 +1,45 @@
+Add init command to the CLI
+
+This commit adds a new command to the CLI that allows to initialize a new
+project from the command line. It uses the Spring initializr service to
+actually generate the project.
+
+The command offers two main operations:
+
+1. Listing the capabilities of the service (--list or -l). This basically
+dumps the defaults of a given service and the list of dependencies and
+project types it supports
+2. Generating a project. By default, http://start.spring.io is used and
+its configured defaults are applied. Running spring init would therefore
+have the same effect as clicking the 'generate project' on the UI without
+entering any extra information. No file is overwritten by default.
+
+The generation can be customized with the following options:
+
+* --boot-version (-bv) Spring Boot version the project should use
+* --dependencies (-d) comma separated list of dependencies to add to the
+generated project
+* --java-version (-jv) Java version to use
+* --packaging (-p) the packaging for the project (jar, war)
+* --target the url of the service to use
+
+The actual type of the project can be defined in several ways:
+
+1. Using the --type (-t) option that identifies a type that is supported
+by the service
+2. A combination of --build and/or --format that can be used to uniquely
+identify matching these tags. Build represents the build system to use
+(e.g. maven or gradle) while --format defines the format of the generated
+project.
+
+The project is saved on disk with the name provided by the server through
+the Content-Disposition header, if any. It is possible to force it with
+the --output option. It is possible to overwrite existing files by adding
+the --force (-f) flag.
+
+The --extract (-x) option allows to extract the project instead of saving
+the zip archive. By default, the project is extracted in the current
+working directory but it is possible to specify an alternate directory
+using the --output option.
+
+Fixes gh-1751

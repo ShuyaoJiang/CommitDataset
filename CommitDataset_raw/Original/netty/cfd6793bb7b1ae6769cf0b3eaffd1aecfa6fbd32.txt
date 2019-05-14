@@ -1,0 +1,22 @@
+Customizable estimation for messages written outside the EventLoop
+
+Motivation:
+
+Estimation algorithm currently used for WriteTasks is complicated and
+wrong. Additionally, some code relies on outbound buffer size
+incremented only on actual writes to the outbound buffer.
+
+Modifications:
+
+- Throw away the old estimator and replace with a simple algorithm that
+  uses the client-provided estimator along with a statically configured
+  WriteTask overhead (io.netty.transport.writeTaskSizeOverhead system
+  property with the default value of 48 bytes)
+- Add a io.netty.transport.estimateSizeOnSubmit boolean system property
+  allowing the clients to disable the message estimation outside the
+  event loop
+
+Result:
+
+Task estimation is user controllable and produces better results by
+default

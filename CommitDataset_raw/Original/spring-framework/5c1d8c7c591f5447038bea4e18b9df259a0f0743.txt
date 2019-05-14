@@ -1,0 +1,16 @@
+Leverage ZonedDateTime in HttpHeaders
+
+This commit introduces 2 new public methods in HttpHeaders in order
+to leverage Java 8 ZonedDateTime in addition to the existing long
+(with GMT time zone implied) variants:
+ - ZonedDateTime getFirstZonedDateTime(String headerName)
+ - void setZonedDateTime(String headerName, ZonedDateTime date)
+
+This commit also leverages Java 8 thread-safe DateTimeFormatter for
+HttpHeader implementation instead of SimpleDateFormat. As a consequence
+of the usage of DateTimeFormatter.RFC_1123_DATE_TIME, HTTP date header
+serialization could change slightly for single digit days from for
+example "Thu, 01 Jan 1970 00:00:00 GMT" to
+"Thu, 1 Jan 1970 00:00:00 GMT".
+
+Issue: SPR-15661

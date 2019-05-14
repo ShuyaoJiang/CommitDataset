@@ -1,0 +1,18 @@
+[ML] Normalize records and buckets separately (elastic/x-pack-elasticsearch#1524)
+
+Previously we used to normalize records with their buckets.  This required
+nested scrolls: an outer scroll over buckets, then a nested scroll for
+records in each bucket.  This was fragile.
+
+The new approach is to simply scroll first through buckets, then through
+records.  This is made possible because we no longer store max_record_score
+on buckets nor bucket anomaly_score on records.
+
+While making these changes I noticed that the PerPartitionMaxProbabilities
+class was redundant (because it was storing max_record_score in the case of
+per-partition normalization), so I removed it.  I also removed a redundant
+Map from the Bucket class and fixed its equals() and hashCode() methods.
+
+relates elastic/x-pack-elasticsearch#1115
+
+Original commit: elastic/x-pack-elasticsearch@efbee635736a7bb4978e89b1c10a02f0d8df5a6a

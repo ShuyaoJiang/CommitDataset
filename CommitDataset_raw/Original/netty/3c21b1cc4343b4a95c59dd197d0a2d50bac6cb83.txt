@@ -1,0 +1,15 @@
+Fix buffer leak in DefaultFullBinaryMemcacheRequest/Response
+
+Motivation:
+
+DefaultFullBinaryMemcacheRequest/Response overrides release(), retain(),
+and touch() methods without calling its super, resulting in a leak of
+the extras.
+
+Modifications:
+
+When overriding release(), retain(), and touch(), ensure to call super.
+
+Result:
+
+Fixes #2533 by fixing the buffer leak

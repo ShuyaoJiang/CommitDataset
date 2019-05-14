@@ -1,0 +1,10 @@
+Fix connection recycling for TLS+gzip+chunked.
+
+We had a bug where the underlying SSLInputStream always returned
+0 for InputStream.available(). This prevented us from ever reading
+the "end of stream" chunk, which prevented connection recycling.
+http://code.google.com/p/android/issues/detail?id=38817
+
+Also fix a nearby bug where we were fast-forwarding the gzipped
+stream when we should have been fast-forwarding the transfer
+stream when we were preparing to recycle a connection.

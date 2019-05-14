@@ -1,0 +1,12 @@
+Fix cache decoration
+
+Prior to this commit, a cache that is added on-the-fly is not properly
+decorated by the provided CacheManager implementation that supports
+it (EhCache and JCache).
+
+This commits adds an extra getMissingCache method to
+the AbstractCacheManager that can be extended to provide a cache that
+may exist in the native cache manager but is not yet known by the
+spring abstraction.
+
+Issue: SPR-11518

@@ -1,0 +1,15 @@
+Prevent ApplicationListener that depends on EMF from creating a cycle
+
+Previously, when an EntityManagerFactory was being initialized
+synchronously, the DataSourceSchemaCreatedEvent would be published
+during its initialization. This meant that an application listener that
+depends on the EntityManagerFactory would create a dependency cycle if
+it was a potential recipient of the event.
+
+For the synchronous case, this commit moves the publication of the
+event so that it occurs after the initialisation of the entity manager
+factory. This allows an application listener that is a potential
+recipient of the DataSourceSchemaCreatedEvent to depend on the
+EntityManagerFactory without creating a cycle.
+
+Closes gh-14651

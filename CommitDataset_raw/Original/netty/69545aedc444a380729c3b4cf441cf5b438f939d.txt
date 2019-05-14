@@ -1,0 +1,14 @@
+CompositeByteBuf.decompose(...) does not correctly slice content. (#8403)
+
+Motivation:
+
+CompositeByteBuf.decompose(...) did not correctly slice the content and so produced an incorrect representation of the data.
+
+Modifications:
+
+- Rewrote implementation to fix bug and also improved it to reduce GC
+- Add unit tests.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8400.

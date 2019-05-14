@@ -1,0 +1,32 @@
+Update resource handler XML Namespace
+
+This change introduces a new <mvc:resource-chain/> tag that mirrors
+the ResourceChainRegistration java config counterpart.
+
+Resolvers and Transformers can be registered with bean/ref tags, and
+specific tags have been created for <mvc:version-resovlver> and
+<mvc:resource-cache> in order to make common configurations easier.
+
+Note that a specific "auto-configuration" attribute on the
+resource-chain allows to completely disable default registration of
+Resolvers and Transformers (sane defaults considered by the Framework).
+
+  <mvc:resources mapping="/resources/**" location="/, classpath:/META-INF/">
+      <mvc:resource-chain>
+        <mvc:resource-cache cache="resourceCache"/>
+        <mvc:resolvers>
+          <mvc:version-resolver>
+            <mvc:fixed-version-strategy version="abc" patterns="/**/*.js"/>
+            <mvc:content-version-strategy patterns="/**"/>
+          </mvc:version-resolver>
+        </mvc:resolvers>
+        <mvc:transformers>
+          <bean class="org.springframework.web.servlet.resource.AppCacheManifestTransformer"/>
+        </mvc:transformers>
+      </mvc:resource-chain>
+  </mvc:resources>
+
+This also fixes a typo in the class name of
+AppCacheManifestResourceTransfo*r*mer.
+
+Issue: SPR-12129

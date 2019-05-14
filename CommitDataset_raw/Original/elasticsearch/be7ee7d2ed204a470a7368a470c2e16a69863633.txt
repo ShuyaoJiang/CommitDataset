@@ -1,0 +1,16 @@
+[ML] Fix race condition when creating multiple jobs (#40049)
+
+If multiple jobs are created together and the anomaly
+results index does not exist then some of the jobs could
+fail to update the mappings of the results index. This
+lead them to fail to write their results correctly later.
+
+Although this scenario sounds rare, it is exactly what
+happens if the user creates their first jobs using the
+Nginx module in the ML UI.
+
+This change fixes the problem by updating the mappings
+of the results index if it is found to exist during a
+creation attempt.
+
+Fixes #38785

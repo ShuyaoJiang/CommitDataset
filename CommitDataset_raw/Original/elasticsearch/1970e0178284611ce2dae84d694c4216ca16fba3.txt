@@ -1,0 +1,13 @@
+Add lower bound for translog flush threshold (#28382)
+
+If the translog flush threshold is too small (eg. smaller than the
+translog header), we may repeatedly flush even there is no uncommitted
+operation because the shouldFlush condition can still be true after
+flushing. This is currently avoided by adding an extra guard against the
+uncommitted operations. However, this extra guard makes the shouldFlush
+complicated. This commit replaces that extra guard by a lower bound for
+translog flush threshold. We keep the lower bound small for convenience
+in testing.
+
+Relates #28350
+Relates #23606

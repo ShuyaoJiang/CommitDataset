@@ -1,0 +1,18 @@
+Exclude commons-logging to the extent that even Gradle’s happy
+
+Gradle hasn’t different exclusion semantics to Maven. In Maven you can
+exclude spring-core’s commons-logging dependency once and it’ll be
+honoured even if you have multiple transitive routes to commons-logging
+via spring-core. In Gradle you have to exclude commons-logging from
+everything that has a transitive spring-core dependency. To make matters
+worse this doesn’t only apply to dependencies and exclusions declared in
+build.gradle but also to dependencies and exclusions declared in the pom
+files of the artifacts that a Gradle build depends upon.
+
+In short, to make our starters work as intended with Gradle, this commit
+adds many, many exclusions for commons-logging. It also removes
+commons-logging exclusions from spring-boot-dependencies’
+<dependencyManagement> as they have no effect with Gradle and their
+presence can cause us to miss required exclusions in a starter
+
+Fixes #987

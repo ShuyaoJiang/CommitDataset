@@ -1,0 +1,9 @@
+[Zen2] Introduce ClusterBootstrapService (#35488)
+
+Today, the bootstrapping of a Zen2 cluster is driven externally, requiring
+something else to wait for discovery to converge and then to inject the initial
+configuration. This is hard to use in some situations, such as REST tests.
+
+This change introduces the `ClusterBootstrapService` which brings the bootstrap
+retry logic within each node and allows it to be controlled via an (unsafe)
+node setting.

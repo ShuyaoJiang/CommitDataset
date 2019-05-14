@@ -1,0 +1,11 @@
+EPOLL ET Set ReadFlag and Limit epollInReadyRunnable
+
+Motivation:
+441aa4c5756b975e8ee1dccbe2902633e0f587e8 conditionally set the readFlag based upon if maybeMoreDataToRead is set. It is possible that the read flag will not be set, and nothing will be read by executeEpollInReadyRunnable and no actual data will be read even though the user requested it.
+
+Modifications:
+- Always set the readFlag in doBeginRead
+- Make it so only a single epollInReadyRunnable can execute for a channel at a time
+
+Result:
+Less chance of missing read events in EPOLL transport.

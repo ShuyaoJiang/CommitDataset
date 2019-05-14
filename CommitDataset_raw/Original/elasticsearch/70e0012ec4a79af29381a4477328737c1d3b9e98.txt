@@ -1,0 +1,11 @@
+[TEST][Monitoring] Remove Unneeded Assert (elastic/x-pack-elasticsearch#4284)
+
+This removes the `assert` that has been causing some very unexpected test
+failures due to unexpected threading issues.
+
+Some of the code changed and became async, so it is no longer guaranteed
+that the same thread calls `doFlush` and `doClose`. We could similarly
+make the field `volatile`, but since this `assert` is not really helping
+anything it's easier to remove it.
+
+Original commit: elastic/x-pack-elasticsearch@ba39de605f3ed35c11394aef5df8a55e0b621562

@@ -1,0 +1,36 @@
+Watcher: Make start/stop cycle more predictable and synchronous (#30118)
+
+The current implementation starts/stops watcher using an executor. This
+can result in our of order operations.
+
+This commit reduces those executor calls to an absolute minimum in order
+to be able to do state changes within the cluster state listener method,
+which runs in sequence.
+
+When a state change occurs that forces the watcher service to pause
+(like no watcher index, no master node, no local shards), the service is
+now in a paused state.
+
+Pausing is a super lightweight operation, which marks the
+ExecutionService as paused and waits for the currently executing watches
+to finish in the background via an executor. The same applies for
+stopping, the potentially long running operation is outsourced in to an
+executor, as waiting for executed watches is decoupled from the current
+state.
+
+The only other long running operation is starting, where watches need to
+be loaded. This is also done via an executor, but has an additional
+protection by checking the cluster state version it was started with. If
+another cluster state version was trying to load the watches, then this
+loading will not take effect.
+
+This PR also cleans up some unused states, like the a simple boolean in
+the HistoryStore/TriggeredWatchStore marking it as started or stopped,
+as this can now be caught in the execution service.
+
+Another advantage of this approach is the fact, that now only triggered
+watches are not getting executed, while watches that are run via the
+Execute Watch API will still be executed regardless if watcher is
+stopped or not.
+
+Lastly the TickerScheduleTriggerEngine thread now only starts on data nodes.

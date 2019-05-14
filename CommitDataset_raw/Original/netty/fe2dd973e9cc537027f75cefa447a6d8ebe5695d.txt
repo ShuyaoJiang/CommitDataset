@@ -1,0 +1,11 @@
+Unify KQueue and Epoll wait timeout approach
+
+Motivation:
+KQueueEventLoop and EpollEventLoop implement different approaches to applying a timeout of their respective poll calls. Epoll attempts to ensure the desired timeout is satisfied at the java layer and at the JNI layer, but it should be sufficient to account for spurious wakups at the JNI layer. Epoll timeout granularity is also limited to milliseconds which may be too large for some latency sensitive applications.
+
+Modifications:
+- Make EpollEventLoop wait method look like KQueueEventLoop
+- Epoll should support a finer timeout granularity via timerfd_create. We can hide most of these details behind the epollWait0 JNI call to avoid crossing additional JNI boundaries.
+
+Result:
+More consistent timeout approach between KQueue and Epoll.

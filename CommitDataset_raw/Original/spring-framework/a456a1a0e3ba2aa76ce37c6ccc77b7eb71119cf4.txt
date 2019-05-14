@@ -1,0 +1,31 @@
+Improve annotation processing thread-safety
+
+Commit http://bit.ly/nXumTs ensured that component methods and fields
+marked with 'common annotations' such as @Resource, @PostConstruct and
+@PreDestroy are invoked/assigned once and only once, even if multiple
+instances of the CommonAnnotationBeanPostProcessor are processing the
+same bean factory.
+
+The implementation works against the InjectionMetadata API, adding and
+removing these members from sets that track whether they are already
+'externally managed', i.e. that another CABPP has already handled them,
+thus avoiding redundant processing.
+
+Prior to this change, the #remove operations against these sets were
+not synchronized. In a single-threaded context this is fine thanks to
+logic in AbstractAutowireCapableBeanFactory#doCreateBean that checks to
+see whether a given bean definition has already been post processed.
+However, as reported by SPR-8598, certain cases involving multiple
+threads and annotated prototype-scoped beans can cause concurrent
+modification exceptions during the #remove operation (ostensibly because
+another thread is attempting to do the same removal at the same time,
+though this has yet to be reproduced in isolation).
+
+Now the sets originally introduced by the commit above are decorated
+with Collections#synchronizedSet and any iterations over those sets
+are synchronized properly. This change should have low performance
+impact as such processing happens at container startup time (save for
+non-singleton lookups at runtime), and there should be little
+contention in any case.
+
+Issue: SPR-8598

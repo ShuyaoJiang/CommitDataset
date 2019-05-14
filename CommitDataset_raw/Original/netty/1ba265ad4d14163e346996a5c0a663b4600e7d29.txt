@@ -1,0 +1,13 @@
+AbstractMethodError with barchart-udt
+
+Motivation:
+
+`SocketChannelUDT` from barchart-udt does not have the java 7 `public abstract SocketChannel bind(SocketAddress local)` method. Calling the abstract method `SocketChannel.bind(SocketAddress localAddress)` for `SocketChannelUDT` leads to an `AbstractMethodError` runtime error.
+
+Modifications:
+
+Make workaround with explicit call of `SocketChannelUDT.bind(SocketAddress local)` as it done in `NioUdtByteConnectorChannel`.
+
+Result:
+
+Fixes [#6934].

@@ -1,0 +1,15 @@
+Migrate Caliper benchmarks from the old, superclass-based API to the new, annotation-based API.
+
+More information: LSC: Caliper Benchmark API migration (https://docs.google.com[]document/d/15KUhmIsTVn0EA9u2S5es4Otn5k3Lo_ZHhkDsT9LYRKc)
+
+ATTENTION REVIEWERS: This is a (mostly) scripted, behavior-preserving change. It should have the following effect:
+- No longer extend c.g.caliper.legacy.Benchmark
+- setUp method overrides are now annotated with @BeforeExperiment
+- tearDown method overrides are now annotated with @AfterExperiment
+- time methods are now annotated with @Benchmark and the time prefix has been removed
+
+Tested:
+ran test_all_benchmarks
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=47282574

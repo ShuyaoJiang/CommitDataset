@@ -1,0 +1,12 @@
+Add security for Cloud Foundry actuators
+
+Add security to Cloud Foundry actuator endpoints. Security is enforced
+by a `HanderInterceptor` on `CloudFoundryEndpointHandlerMapping`. Each
+endpoint call expects an 'Authorization' header containing a bearer
+token. The token signature is checked against the UAA public keys then
+passed to the Cloud Controller to obtain an ultimate access level.
+
+The client may either have 'RESTRICTED' or FULL' access, with the latter
+only providing access to a limited set of endpoints.
+
+See gh-7108

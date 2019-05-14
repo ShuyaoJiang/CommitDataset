@@ -1,0 +1,24 @@
+Don't remove @GrabResolver in JarCommand, disable initClass instead
+
+Previously, JarCommand removed all @GrabResolver annotations in an
+AST transformation. This was being performed as custom resolver
+configuration is not necessary in a jar as all of the dependencies are
+available from the jar. Furthermore, leaving the annotations in place
+caused a failure when the jar was run due to a missing Ivy dependency
+that's required by Groovy's default GrapeEngine, GrapeIvy.
+
+The removal of @GrabResolver annotations was being done before they
+could be used by Groovy's GrabAnnotationTransformation to configure
+the GrapeEngine's resolvers. This resulted in the annotations having
+no effect such that a dependency that was only available from a
+repository made available by @GrabResolver would fail to resolve if
+it was not cached locally.
+
+This commit updates the AST transformation to leave the @GrabResolver
+annotations in place but to set their initClass attribute to false.
+This allows the annotation to be used while the jar's being compiled,
+but supresses the generation of the static initializer that adds the
+custom resolver to the GrapeEngine when the compiled code's run via
+java -jar.
+
+Fixes gh-2330

@@ -1,0 +1,14 @@
+SQL: Extend field resolution to deal with unquoted qualified columns (elastic/x-pack-elasticsearch#3894)
+
+* foo.bar can mean either: no table field foo.bar or table foo, field bar
+The resolution rule has been extended to include the latter case as
+fallback.
+* Always check field ambiguity
+* Since field with dots can create confusion (when not qualified), the
+analyzer always now always checks for both qualified and not-qualified
+fields and throws an ambiguity message with the potential candidates.
+This forces the use of qualifiers or quotes to better indicate the
+desired field.
+* Add example of aliasing the table to remove ambiguity
+
+Original commit: elastic/x-pack-elasticsearch@8b70b9c4ee40de22617b69c0156cde5c09e3eb09

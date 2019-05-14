@@ -1,0 +1,34 @@
+Delete deprecated getValues from ScriptDocValues (#36183)
+
+* Adds deprecation logging to ScriptDocValues#getValues.
+
+First commit addressing issue #22919.
+
+`ScriptDocValues#getValues` was added for backwards compatibility but no
+longer needed. Scripts using the syntax `doc['foo'].values` when
+`doc['foo']` is a list should be using `doc['foo']` instead.
+
+* Fixes two build errors in #34279
+
+* Removes unused import in ScriptDocValuesDatesTest
+* Removes used of `.values` in example in diversified-sampler-aggregation.asciidoc
+
+* Removes use of .values from painless test.
+
+Part of #34279
+
+* Updates tests to use `doc[foo]` syntax rather than `doc[foo].values`.
+
+* Removes use of `getValues()` and replaces use of `doc[foo].values` with `doc[foo]`.
+
+* Indentation fix.
+
+* Remove unnecessary list construction at previous `getValues()` callsite in ScriptDocValues.GeoPoints.
+
+* Update migration doc and add link to `getValue` in ScriptDocValues javadoc.
+
+* Fix compile
+
+* Fix javadoc issue
+
+* Removes ScriptDocValues#getValues usage from painless whitelist.

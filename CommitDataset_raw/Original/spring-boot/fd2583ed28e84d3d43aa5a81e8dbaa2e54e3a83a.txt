@@ -1,0 +1,20 @@
+Support concise @Grab on all types of imports
+
+Previously, the automatic addition of the group and version to a
+@Grab annotation based on the module name would only work on standard
+import statements. This commit adds support for this functionality
+on wildcard imports, static imports and wildcard static imports.
+
+All of the following are now supported:
+
+@Grab('spring-core')
+import org.springframework.util.Assert
+
+@Grab('spring-core')
+import org.springframework.util.*
+
+@Grab('spring-core')
+import static org.springframework.util.Assert.isTrue
+
+@Grab('spring-core')
+import static org.springframework.util.Assert.*

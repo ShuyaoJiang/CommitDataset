@@ -1,0 +1,19 @@
+Fix potential infinite loop when resolving CNAME records
+
+Related: #4771
+
+Motivation:
+
+A malicious or misconfigured DNS server can send the CNAME records that
+resolve into each other, causing an unexpected infinite loop in
+DnsNameResolverContext.onResponseCNAME().
+
+Modifications:
+
+- Remove the dereferenced CNAME from the alias map so that infinite loop
+  is impossible.
+- Fix inspection warnings and typos in DnsNameResolverTest
+
+Result:
+
+Fixes #4771

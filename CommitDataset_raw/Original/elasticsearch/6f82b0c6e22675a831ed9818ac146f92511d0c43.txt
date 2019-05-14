@@ -1,0 +1,6 @@
+Allow `ClusterState.Custom` to be created on initial cluster states (#26144)
+
+Today we have a `null` invariant on all `ClusterState.Custom`. This makes
+several code paths complicated and requires complex state handling in some cases.
+This change allows to register a custom supplier that is used to initialize the
+initial clusterstate with these transient customs.

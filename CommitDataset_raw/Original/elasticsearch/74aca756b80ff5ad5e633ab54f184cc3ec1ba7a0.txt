@@ -1,0 +1,6 @@
+Remove the distinction between query and filter context in QueryBuilders (#35354)
+
+When building a query Lucene distinguishes two cases, queries that require to produce a score and queries that only need to match. We cloned this mechanism in the QueryBuilders in order to be able to produce different queries based on whether they need to produce a score or not. However the only case in es that require this distinction is the BoolQueryBuilder that sets a different minimum_should_match when a `bool` query is built in a filter context..
+This behavior doesn't seem right because it makes the matching of `should` clauses different when the score is not required.
+
+Closes #35293

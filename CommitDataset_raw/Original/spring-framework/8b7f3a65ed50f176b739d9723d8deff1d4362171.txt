@@ -1,0 +1,11 @@
+Fix exception if no RequestDataValueProcessor is present
+
+This modification fixes the way AbstractView retrieves the
+RequestDataValueProcessor bean, correctly returning null if there
+is no bean of such type at the Application Context.
+
+This avoids an exception in RedirectView (which extends AbstractView)
+when trying to post-process the URL generated for redirection, when
+no RequestDataValueProcessor exists.
+
+Issue: SPR-15136

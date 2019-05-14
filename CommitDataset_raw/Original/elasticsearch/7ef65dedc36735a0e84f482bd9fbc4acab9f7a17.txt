@@ -1,0 +1,13 @@
+[TEST] improve validation of yaml suites (#34957)
+
+Validation of test sections and suites consists of checking that the proper skip features sections are in place depending on the features used in tests.
+
+The validation logic was previously only performed on do sections included in each test section, and the skip needed to be present in the same test section. What happens often though is that the skip is added to the setup section, or the teardown section.
+
+This commit improves the validation of test suites by validating setup and teardown section first, then looking at each test section while still eventually reading the skip section from setup or teardown.
+
+We are also making SkipSection, SetupSection, TearDownSection, ClientYamlTestSection and ClientYamlTestSuite immutable. Previously it was possible to utilize constants like SetupSection.EMPTY, which were modifiable and affect every other future users by modifiying them. This has been corrected.
+
+Also, validation has been improved to cumulate errors so that all the errors from a suite will be listed at once.
+
+Relates to #34735

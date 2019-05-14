@@ -1,0 +1,5 @@
+Resolves #643, test cases failed due to global state in CallsCount (#803)
+
+* Resolves #643, test cases failed due to presence of global state in CallsCount. Because AppTest was executed before B2BServiceTest, it scheduled 1 sec timer using ThrottleTimerImpl class. While resetting it used that global CallCount class reset() method, which reset all counters. So that causes thread safety issue because of unintended sharing of application state between test cases, which is not a good practice.
+
+* Updated class diagram png and added UCLS file

@@ -1,0 +1,20 @@
+[ML] Wait for autodetect to be ready in the datafeed (#37349)
+
+This is a reinforcement of #37227.  It turns out that
+persistent tasks are not made stale if the node they
+were running on is restarted and the master node does
+not notice this.  The main scenario where this happens
+is when minimum master nodes is the same as the number
+of nodes in the cluster, so the cluster cannot elect a
+master node when any node is restarted.
+
+When an ML node restarts we need the datafeeds for any
+jobs that were running on that node to not just wait
+until the jobs are allocated, but to wait for the
+autodetect process of the job to start up.  In the case
+of reassignment of the job persistent task this was
+dealt with by the stale status test.  But in the case
+where a node restarts but its persistent tasks are not
+reassigned we need a deeper test.
+
+Fixes #36810

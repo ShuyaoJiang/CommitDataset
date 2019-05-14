@@ -1,0 +1,13 @@
+Minimize memory footprint for AbstractChannelHandlerContext for handlers that execute in the EventExecutor. (#8786)
+
+Motivation:
+
+We cache the Runnable for some tasks to reduce GC pressure in 4 different fields. This gives overhead in terms of memory usage in all cases, even if we always execute in the EventExecutor (which is the case most of the times).
+
+Modifications:
+
+Move the 4 fields to another class and only have one reference to this in AbstractChannelHandlerContext. This gives a small overhead in the case of execution that is done outside of the EventExecutor but reduce memory footprint in the more likily execution case.
+
+Result:
+
+Less memory used per AbstractChannelHandlerContext in most cases.

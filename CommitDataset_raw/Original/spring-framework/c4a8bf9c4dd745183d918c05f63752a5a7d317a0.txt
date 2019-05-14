@@ -1,0 +1,16 @@
+Add new features on @ControllerAdvice
+
+Prior to this commit, @ControllerAdvice annotated beans would
+assist all known Controllers, by applying @ExceptionHandler,
+@InitBinder, and @ModelAttribute.
+
+This commit updates the @ControllerAdvice annotation,
+which accepts now base package names, assignableTypes,
+annotations and basePackageClasses.
+
+If attributes are set, only Controllers that match those
+selectors will be assisted by the annotated class.
+This commit does not change the default behavior when
+no value is set, i.e. @ControllerAdvice().
+
+Issue: SPR-10222

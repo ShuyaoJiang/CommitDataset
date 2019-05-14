@@ -1,0 +1,28 @@
+Introduce `RequestInterceptor` to replace `RequestHeaders`.
+
+In addition to global headers (which were doable before), this allows for global
+path param replacement in URLs.
+
+This has cropped up in a few APIs over the internet and we're traditionally not provided
+a good path to implementation. Before you would have to manually move the global param
+around your application to every method call site onto a Retrofit interface. This new
+interface provides a single place to manage these global params along with other
+global headers (such as for authentication).
+
+Given:
+
+    @GET("/show/{apiKey}/{showId}/episodes")
+    List<Episode> episodes(@Path("showId") String showId)
+
+Usage:
+
+    class FooInterceptor implements RequestInterceptor {
+      @Inject @ApiKey String apiKey;
+
+      @Override public void intercept(RequestFacade request) {
+        request.addPathParam("apiKey", apiKey);
+      }
+    }
+
+This also has the added benefit of saving an extra `List` allocation for global headers
+since they are now set directly on the underlying `Request` via the facade interface.

@@ -1,0 +1,5 @@
+New RenderMode API (#1072)
+
+While testing, I discovered that animations with lots of/large masks and mattes perform significantly worse with hardware acceleration than software acceleration on pre-Pie devices because of RenderNode#textureUpload. It is really hard to detect this dynamically so I'm leaving the default on automatic (with an additional heuristic for >4 mattes and masks) but having an option to set it to hardware/software manually.
+
+#381

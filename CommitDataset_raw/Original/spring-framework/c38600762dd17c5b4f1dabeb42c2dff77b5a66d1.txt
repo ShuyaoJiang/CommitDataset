@@ -1,0 +1,16 @@
+Reinject Servlet mocks between TestNG test methods
+
+Prior to this commit, if multiple test methods were executed in a
+subclass of AbstractTestNGSpringContextTests annotated with
+@WebAppConfiguration, then injected Servlet API mocks would only
+reference the mocks created for the first test method. Subsequent test
+methods could therefore never reference the current mocks, and there
+was a discrepancy between the state of the injected mocks and the mock
+set in the RequestContextHolder.
+
+This commit addresses this issue by ensuring that dependencies
+(including updated mocks) are injected into the test instance before
+the next test method if the ServletTestExecutionListener resets the
+request attributes in RequestContextHolder.
+
+Issue: SPR-11626

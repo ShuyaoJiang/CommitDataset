@@ -1,0 +1,10 @@
+Re-deprecate xpack rollup endpoints (#36451)
+
+Redeprecates the `/_xpack/rollup` endpoints in favor of `/_rollup`.
+
+When we cleanup the rollup in a cluster containing 6.x nodes we need to
+use `/_xpack/rollup` instead of `/_rollup` because the 6.x nodes don't
+know about `/_rollup`. In those cases we must ignore the deprecation
+warnings that the 7.0 node will return for the end point.
+
+Closes #36044

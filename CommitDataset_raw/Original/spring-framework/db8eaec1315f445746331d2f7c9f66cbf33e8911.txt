@@ -1,0 +1,13 @@
+Cache BridgeMethodResolver results
+
+Add a cache to `BridgeMethodResolver` to help with repeated calls to
+resolve the same methods. Since bridge method resolution can be somewhat
+expensive (especially when resolving generics), and the number of bridge
+methods is quite small, a cache generally helps.
+
+This commit also simplifies the code a little by calling `doWithMethods`
+directly rather than relying on `ReflectionUtils.getAllDeclaredMethods`
+to do so. The methods list is now always created, but we save the list
+creation that `getAllDeclaredMethods` used to do.
+
+Closes gh-22579

@@ -1,0 +1,21 @@
+Optimize Utf8.encodedLength even more, at the cost of increased complexity.
+I continue to be surprised by the size of the branch-mispredict penalty.
+
+I added tricky overflow logic to remove the need to use longs.
+
+Discussion on guava-discuss
+https://groups.google.com/forum/#!msg/guava-discuss/cMMsMJ8SGD4/vjmklk0kenIJ
+
+Benchmark notes:
+
+(for client in vanilla Utf8 Utf-3; do g4d $client && g4 sync && [] run --java_cpu=k8 -- javatests/com/google/common/base:Utf8Benchmark -DmaxCodePoint=0x80,0x90,0x100,0x800,0x10000 --trials=2 --benchmark=lengthOfString,lengthOfStringBuilder; done)
+https://caliper.googleplex.com/runs/607baae7-a24a-40b7-a3d0-6892c129f1fe # vanilla
+https://caliper.googleplex.com/runs/71ac4495-1d70-4265-ab58-23e61095ff27 # Utf8
+https://caliper.googleplex.com/runs/124a69f7-d87b-48c6-95d4-22cbbafe774d # Utf-3
+
+5x faster for 0x100 !
+
+See []
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=56498817

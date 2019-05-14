@@ -1,0 +1,10 @@
+[DOCS] Add warning about bypassing ML PUT APIs (#38509)
+
+Now that ML configurations are stored in the .ml-config
+index rather than in cluster state there is a possibility
+that some users may try to add configurations directly to
+the index.  Allowing this creates a variety of problems
+including possible data exflitration attacks (depending on
+how security is set up), so this commit adds warnings
+against allowing writes to the .ml-config index other than
+via the ML APIs.

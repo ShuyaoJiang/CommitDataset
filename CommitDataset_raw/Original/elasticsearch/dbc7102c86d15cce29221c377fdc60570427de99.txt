@@ -1,0 +1,7 @@
+Fix inner hits retrieval when stored fields are disabled (_none_) (#33018)
+
+Now that types are unique per mapping we can retrieve the document mapper
+without referencing the type. This fixes an NPE when stored fields are disabled.
+For 6x we'll need a different fix since mappings can still have multiple types.
+
+Relates #32941

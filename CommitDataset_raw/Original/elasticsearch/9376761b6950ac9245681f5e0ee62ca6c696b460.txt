@@ -1,0 +1,9 @@
+SQL: Fix issue with date columns returned always in UTC (#40163)
+
+When selecting columns of ES type `date` (SQL's DATETIME) the
+`FieldHitExtractor` was not using the timezone of the client session
+but always resorted to UTC. The same behaviour (UTC only) was
+encountered also for grouping keys (`CompositeKeyExtractor`) and
+for First/Last functions on dates (`TopHitsAggExtractor`).
+
+Fixes: #40152

@@ -1,0 +1,17 @@
+Remove index audit output type (#37707)
+
+This commit removes the Index Audit Output type, following its deprecation
+in 6.7 by 8765a31d4e6770. It also adds the migration notice (settings notice).
+
+In general, the problem with the index audit output is that event indexing
+can be slower than the rate with which audit events are generated,
+especially during the daily rollovers or the rolling cluster upgrades.
+In this situation audit events will be lost which is a terrible failure situation
+for an audit system.
+Besides of the settings under the `xpack.security.audit.index` namespace, the
+`xpack.security.audit.outputs` setting has also been deprecated and will be
+removed in 7. Although explicitly configuring the logfile output does not touch
+any deprecation bits, this setting is made redundant in 7 so this PR deprecates
+it as well.
+
+Relates #29881

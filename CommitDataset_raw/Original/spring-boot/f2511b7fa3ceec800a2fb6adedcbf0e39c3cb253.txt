@@ -1,0 +1,20 @@
+Improve Web DEBUG logging output configuration
+
+Since SPR-16946, Spring Framework revisited the DEBUG logging output
+developers get while working on Spring MVC and Spring WebFlux
+applications.
+
+This commit aligns to those changes where DEBUG output was produced
+in Spring Boot (especially in `DefaultErrorWebExceptionHandler`).
+
+This also enables DEBUG logging on the related packages when running an
+application with Spring Boot Developer Tools, providing a better
+development experience.
+
+This is also adding the new `spring.insights.web.log-request-details`
+configuration property, which logs additional information about the
+incoming requests at the DEBUG and TRACE levels. Since that information
+can be sensitive (e.g. credentials, tokens, etc.), this property is not
+enabled by default nor activated by the Developer Tools.
+
+Closes: gh-13511

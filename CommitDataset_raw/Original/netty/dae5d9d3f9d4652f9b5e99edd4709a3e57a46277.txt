@@ -1,0 +1,14 @@
+Ensure FlowControlled data frames will be correctly removed from the … (#8726)
+
+Motivation:
+
+When a write error happens during writing of flowcontrolled data frames we miss to correctly detect this in the write loop which may result in an infinite loop as we will never detect that the frame should be removed from the queue.
+
+Modifications:
+
+- When we fail a flowcontrolled data frame we ensure that the next frame.write(...) call will signal back that the whole frame was handled and so can be removed.
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8707.

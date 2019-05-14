@@ -1,0 +1,6 @@
+Preserve response headers on cluster update task (#31421)
+
+#31241 changed the cluster state update tasks to run under system context. The context wrapping
+did not preserve response headers, though. This has led to a test failure on 6.x #31408, as the
+deprecation warnings were not carried back anymore to the caller when creating an index. This
+commit changes the restorable context supplier to preserve response headers.

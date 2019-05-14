@@ -1,0 +1,7 @@
+Improve handling of HEAD requests with a Content-Length specified. (#3572)
+
+Rather than getting the content length from a header on demand, this gets it
+at the time that the RealResponseBody is created. This means that HEAD requests
+can have a non-zero Content-Length header while their bodies have no content.
+
+Closes: https://github.com/square/okhttp/issues/3365

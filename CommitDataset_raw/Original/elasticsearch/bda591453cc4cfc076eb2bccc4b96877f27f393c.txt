@@ -1,0 +1,30 @@
+Add elasticsearch-node detach-cluster command (#37979)
+
+This commit adds the second part of `elasticsearch-node` tool -
+`detach-cluster` command in addition to `unsafe-bootstrap` command.
+Also, this commit changes the semantics of `unsafe-bootstrap`, now
+`unsafe-bootstrap` changes clusterUUID.
+So the algorithm of running `elasticsearch-node` tool is the following:
+1) Stop all nodes in the cluster.
+2) Pick master-eligible node with the highest (term, version) pair and
+run the `unsafe-bootstrap` command on it. If there are no survived
+master-eligible nodes - skip this step.
+3) Run `detach-cluster` command on the remaining survived nodes.
+
+Detach cluster makes the following changes to the node metadata:
+1) Sets clusterUUID committed to false.
+2) Sets currentTerm and term to 0. 
+3) Removes voting tombstones and sets voting configurations to special
+constant MUST_JOIN_ELECTED_MASTER, that prevents initial cluster
+bootstrap.
+
+`ElasticsearchNodeCommand` base abstract class is introduced, because
+`UnsafeBootstrapMasterCommand` and `DetachClusterCommand` have a lot in
+common.
+Also, this commit adds "ordinal" parameter to both commands, because it's 
+impossible to write IT otherwise.
+For MUST_JOIN_ELECTED_MASTER case special handling is introduced in
+`ClusterFormationFailureHelper`.
+Tests for both commands reside in `ElasticsearchNodeCommandIT` (renamed
+from `UnsafeBootstrapMasterIT`). 
+

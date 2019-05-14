@@ -1,0 +1,5 @@
+Always set stream when connecting HttpUrlConnection
+
+That way we will always close the stream in cleanup(). Prior to this change, when cancel was called, stream was never set to non-null and therefore never closed in cleanup. Because disconnecting the stream doesn’t seem to close the contained ResponseBody object, failing to obtain and then close the stream results in leaked objects.
+
+Progress towards #2352

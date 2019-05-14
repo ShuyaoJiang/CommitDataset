@@ -1,0 +1,12 @@
+Resend SIGTERM if app is still running 30 seconds after first attempt
+
+Previously, the default launch script would send SIGTERM once and then
+wait for up to 60 seconds for the app to have stopped. If the service
+was stopped immediately after being started the first SIGTERM would
+occasionally be ignored (presumably because the JVM was not yet in a
+state to handle it) causing the service stop request to fail.
+
+This commit updates the launch script to resend SIGTERM to the process
+if it's still running 30 seconds after the first SIGTERM was sent.
+
+Closes gh-4941

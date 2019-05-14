@@ -1,0 +1,14 @@
+Workaround JDK bug that will cause an AssertionError when calling ServerSocketChannel.config().getOptions(). (#8183)
+
+Motivation:
+
+There is a JDK bug which will return IP_TOS as supported option for ServerSocketChannel even if its not supported afterwards and cause an AssertionError.
+See http://mail.openjdk.java.net/pipermail/nio-dev/2018-August/005365.html.
+
+Modifications:
+
+Add a workaround for the JDK bug.
+
+Result:
+
+ServerSocketChannel.config().getOptions() will not throw anymore and work as expected.

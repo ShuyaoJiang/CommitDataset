@@ -1,0 +1,15 @@
+[Tests] Fix flakiness by ensuring stable cluster (#39300)
+
+In integration tests where `setBootstrapMasterNodeIndex()` is used in
+combination with `autoMinMasterNodes = false` the cluster can start
+bootstrapping once the number of nodes set with the
+`setBootstrapMasterNodeIndex` have been started but it's not ensured
+that all nodes have successfully joined to form the cluster.
+
+This behaviour was introduced with 5db7ed22a0aab6e630a89952ec94327d205fc3a3
+and in order to ensure that the cluster is properly formed before proceeding
+with the integration test, use `ensureStableCluster()` with the
+appropriate number of expected nodes.
+
+Fixes: #39220
+

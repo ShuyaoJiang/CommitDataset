@@ -1,0 +1,7 @@
+Share common readFrom/writeTo code in AcknowledgeResponse (#30983)
+
+The majority of Responses inheriting from AcknowledgeResponse implement
+the readFrom and writeTo serialization method in the same way. Moving this
+as a default into AcknowledgeResponse and letting the few exceptions that
+need a slightly different implementation handle this themselves saves a lot
+of duplication.

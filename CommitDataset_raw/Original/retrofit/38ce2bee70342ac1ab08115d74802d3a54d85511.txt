@@ -1,0 +1,9 @@
+Use execute() instead of enqueue() in Rx adapter
+
+Retrofit should leave threading up to the Scheduler used to invoke call().
+
+Otherwise, there can be two types of unwanted behavior:
+
+1. It can execute on another Thread when sync behavior is desired.
+
+2. It uses unnecessary extra Threads even when already called on a Scheduler.

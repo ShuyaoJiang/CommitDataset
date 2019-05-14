@@ -1,0 +1,10 @@
+Fix auto-configuration order for Spring Data Rest
+
+Update Rest, Hypermedia and HttpMessageConverter auto-configuration to
+ensure beans are created in the correct order.
+
+Prior to this commit the MappingJackson2HttpMessageConverter bean would
+not be created because Spring Data Rest's TypeConstrained versions had
+already been registered.
+
+Fixes gh-1729

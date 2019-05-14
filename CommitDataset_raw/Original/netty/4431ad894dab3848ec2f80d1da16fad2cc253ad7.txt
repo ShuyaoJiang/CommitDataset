@@ -1,0 +1,11 @@
+OpenSslEngine may lose data if the non-application buffer is small/full
+
+Motivation:
+If an event occurs which generates non-application data (shutdown, handshake failure, alert generation, etc...) and the non-application buffer in the ByteBuffer BIO is full (or sufficiently small) we may not propagate all data to our peer before tearing down the socket.
+
+Modifications:
+- when wrap() detects the outbound is closed, but there is more data pending in the non-application buffers, we must also check if OpenSSL will generate more data from calling SSL_shutdown again
+- when wrap() detects a handshakeExcpetion during failure we should check if OpenSSL has any pending data (in addition to the non-application buff) before throwing the handshake exception
+
+Result:
+OpenSslEngine more reliably transmits data to the peer before closing the socket.

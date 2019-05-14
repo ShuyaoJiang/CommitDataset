@@ -1,0 +1,8 @@
+[#559] Fix SocketSuspendTest.testSuspendAccept()
+
+- Reimplemented the test
+- Fixed various bugs related with read/accept suspension found while testing
+  - defaultInterestOps of NioServerSocketChannel should be OP_ACCEPT
+  - There's no need do deregister and re-register to suspend/resume accept()
+  - Occational infinite loop with 100% CPU consumption in OioEventLoop, caused by OioSocketChannel
+  - Even if read/accept is suspended, what's read or accepted should be notified to a user

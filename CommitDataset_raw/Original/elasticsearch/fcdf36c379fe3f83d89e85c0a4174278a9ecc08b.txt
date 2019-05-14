@@ -1,0 +1,9 @@
+Fix missing columns to be a 400 error (elastic/x-pack-elasticsearch#2123)
+
+1. We talked about doing 422 but that doesn't work because the netty plugin
+maps 422 -> 400 and I didn't think it was worth changing that right now.
+2. Missing columns in the `WHERE` clause still cause a 500 response because
+we don't resolve the `SELECT` part if there is an error in the `WHERE`
+clause.
+
+Original commit: elastic/x-pack-elasticsearch@355d8292e57b25a74aa16e894e6b1227f8837af7

@@ -1,0 +1,12 @@
+Fixes #7566 by handling concatenated GZIP streams.
+
+Motivation:
+According to RFC 1952, concatenation of valid gzip streams is also a valid gzip stream. JdkZlibDecoder only processed the first and discarded the rest.
+
+Modifications:
+- Introduced a constructor argument decompressConcatenated that if true, JdkZlibDecoder would continue to process the stream.
+
+Result:
+- If 'decompressConcatenated = true', concatenated streams would be processed in
+compliance to RFC 1952.
+- If 'decompressConcatenated = false' (default), existing behavior would remain.

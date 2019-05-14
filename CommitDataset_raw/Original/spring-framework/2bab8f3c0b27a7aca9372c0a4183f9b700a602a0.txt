@@ -1,0 +1,28 @@
+Generate -docs, -schema and -dist zips
+
+ - Add 'api' gradle task to generate project-wide API Javadoc
+
+   results in <root>/build/api
+
+ - Add docsZip task including api and reference documentation
+
+   suitable for publication to
+   http://static.springframework.org/docs/spring-framework
+
+ - Add schemaZip task including all spring-* XSD files
+
+   suitable for publication to http://static.springframework.org/schema
+
+ - Add distZip task to include all libs, docs and schema
+
+   - filter src/dist/*.txt for ${copyright} and ${version}
+   - copy legal (notice, license) dynamically into individual jar files
+   - copy legal and readme files into root of distribution zip
+
+ - Refactor location of 'wrapper' task
+
+Each of the zip tasks (docsZip, schemaZip, distZip) have been added to
+the 'archives' configuration, meaning that (a) they will be built
+automatically with `gradle build` and (b) will be published
+automatically to artifactory when using the Artifactory Gradle plugin
+and/or Artifactory Bamboo integration.

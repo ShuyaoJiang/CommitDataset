@@ -1,0 +1,14 @@
+Use less memory during writes when using SslHandler with SslProvider.OpenSsl
+
+Motivation:
+
+In commit fc3c9c9523150190760801dd0fbf014909519942 I changes the way how we calculate the capacity of the needed ByteBuf for wrap operations that happen during writes when the SslHandler is used. This had the effect that the same capacity for ByteBufs is needed for the JDK implementation of SSLEngine but also for our SSLEngine implementation that uses OpenSSL / BoringSSL / LibreSSL. Unfortunally this had the side-effect that applications that used our SSLEngine implementation now need a lot more memory as bascially the JDK implementation always needs a 16kb buffer for each wrap while we can do a lot better for our SSLEngine implementation.
+
+Modification:
+
+- Resurrect code that calculate a better ByteBuf capacity when using our SSLEngine implementation and so be able to safe a lot of memory
+- Add test-case to ensure it works as expected and is not removed again later on.
+
+Result:
+
+Memory footprint of applications that uses our SSLEngine implementation based on OpenSSL / BoringSSL / LibreSSL is back to the same amount of before commit fc3c9c9523150190760801dd0fbf014909519942.

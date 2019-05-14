@@ -1,0 +1,14 @@
+Use explicit version for build-tools in example plugin integ tests (#37792)
+
+The example plugins are currently built within the build-tools integ
+tests as a means to ensure the gradle plugin works for external plugin
+builds. These tests generate a dummy build.gradle, and a dummy local
+maven repository to find the local builds dependencies in. Currently
+that build-tools dependency uses "+" as the version. However, this
+allows gradle to find the "latest" version, and unfortunately gradle has
+its own plugin repository which is apparently connected to jcenter. This
+recently triggered a flood of CI failures when jcenter suddenly pulled
+alpha2, and all builds started trying to use that instead of the locally
+built build-tools. This commit uses the explicit version of build-tools
+that was build locally, which will cause resolution to stop when the
+local repo is first checked.

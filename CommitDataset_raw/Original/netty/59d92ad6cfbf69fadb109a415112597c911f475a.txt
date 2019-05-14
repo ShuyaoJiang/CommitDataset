@@ -1,0 +1,10 @@
+[#2485] Use RecvByteBufAllocator for all allocations related to read from Channel
+
+Motivation:
+At the moment we sometimes use only RecvByteBufAllocator.guess() to guess the next size and the use the ByteBufAllocator.* directly to allocate the buffer. We should always use RecvByteBufAllocator.allocate(...) all the time as this makes the behavior easier to adjust.
+
+Modifications:
+Change the read() implementations to make use of RecvByteBufAllocator.
+
+Result:
+Behavior is more consistent.

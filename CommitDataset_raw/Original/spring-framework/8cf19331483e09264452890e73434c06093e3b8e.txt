@@ -1,0 +1,20 @@
+Only print request/response body if char enc is present in MVC Test
+
+Commit e65a1a4372 introduced support in PrintingResultHandler for only
+printing the request or response body in the Spring MVC Test framework
+if the content type is known to be text-based (e.g., plain text, HTML,
+XHTML, XML, JSON, etc.). For unknown content types the body is assumed
+to be text-based and is therefore always printed. The latter behavior,
+however, is undesirable since the content may in fact not be text-based.
+
+This commit addresses this issue by making the printing of the request
+or response body an opt-in feature. Specifically, if a character
+encoding has been set, the request or response body will be printed by
+the PrintingResultHandler. Note, however, that the character encoding
+is set to ISO-8859-1 in MockHttpServletResponse by default.
+
+In addition, MockHttpServletRequest's getContentAsString() method now
+throws an IllegalStateException if the character encoding has not been
+set.
+
+Issue: SPR-14776

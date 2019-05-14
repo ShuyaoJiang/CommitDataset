@@ -1,0 +1,11 @@
+Limit auto grow collection size when using SpEL
+
+Provide an additional constructor on SpelParserConfiguration that can
+be used to limit the maximum size that a collection will auto grow when
+being accessed via a SpEL expression.
+
+This constraint is particularly useful when SpEL is used with data
+binding as it prevents a malicious user from crafting a request that
+causes OutOfMemory exceptions.
+
+Issue: SPR-10229

@@ -1,0 +1,11 @@
+Restore proper use of the fork parameter
+
+Previously, disabling forking was not possible if JVM arguments or an
+agent are specified, even if the fork attribute is explicitly set to
+`false`.
+
+The  fork attribute is now detected as it should and forking is disabled
+when the fork attribute is set to false, even if JVM arguments or an
+agent is either specified or discovered.
+
+Fixes gh-2220

@@ -1,0 +1,15 @@
+[#2761] ChannelOutboundBuffer can cause data-corruption because of caching ByteBuffers
+
+Motivation:
+
+We cache the ByteBuffers in ChannelOutboundBuffer.nioBuffers() for the Entries in the ChannelOutboundBuffer to reduce some overhead. The problem is this can lead to data-corruption if an incomplete write happens and next time we try to do a non-gathering write.
+
+To fix this we should remove the caching which does not help a lot anyway and just make the code buggy.
+
+Modifications:
+
+Remove the caching of ByteBuffers.
+
+Result:
+
+No more data-corruption.

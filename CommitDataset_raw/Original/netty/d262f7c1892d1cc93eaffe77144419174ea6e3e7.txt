@@ -1,0 +1,27 @@
+Reduce permissions needed for process ID
+
+Motiviation:
+
+DefaultChannelId attempts to acquire a default process ID by determining
+the process PID. However, to do this it attempts to punch through to the
+system classloader, a permission that in the face of a restrictive
+security manager is unlikely to be granted. Looking past this, it then
+attempts to load a declared method off a reflectively loaded class,
+another permission that is not likely to be granted in the face of a
+restrictive security manager. However, neither of these permissions are
+necessary as the punching through to the system security manager is
+completely unneeded, and there is no need to load a public method as a
+declared method.
+
+Modifications:
+
+Instead of punching through to the system classloader requiring
+restricted permissions, we can just use current classloader. To address
+the access declared method permission, we instead just reflectively
+obtain the desired public method via Class#getMethod.
+
+Result:
+
+Acquiring the default process ID from the PID will succeed without
+requiring the runtime permissions "getClassLoader" and
+"accessDeclaredMembers".

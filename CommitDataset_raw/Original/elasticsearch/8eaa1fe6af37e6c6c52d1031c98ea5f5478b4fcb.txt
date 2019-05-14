@@ -1,0 +1,7 @@
+SQL: Don't allow inexact fields for MIN/MAX (#39563)
+
+MIN/MAX on strings are supported and are implemented with
+TopAggs FIRST/LAST respectively, but they cannot operate on
+`text` fields without underlying `keyword` fields => inexact.
+
+Follows: #39427

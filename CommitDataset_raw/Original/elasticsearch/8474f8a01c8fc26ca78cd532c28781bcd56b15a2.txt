@@ -1,0 +1,13 @@
+Validate source of an index in LuceneChangesSnapshot (#32288)
+
+Today it's possible to encounter an Index operation in Lucene whose
+_source is disabled, and _recovery_source was pruned by the MergePolicy.
+If it's the case, we create a Translog#Index without source and let the
+caller validate it later. However, this approach is challenging for the
+caller.
+
+Deletes and No-Ops don't allow invoking "source()" method. The caller
+has to make sure to call "source()" only on index operations. The
+current implementation in CCR does not follow this and fail to replica
+deletes or no-ops. Moreover, it's easier to reason if a Translog#Index
+always has the source.

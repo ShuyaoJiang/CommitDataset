@@ -1,0 +1,10 @@
+Check stemmer language setting early (#34601)
+
+Currently the StemmerTokenFilterFactory checks the validity of the language
+setting only when the first TokenStream is processed. Instead we should throw an
+error earlier at mapping creation time. This change adds a check to the
+StemmerTokenFilterFactory constructor that checks for a valid `language` setting
+by trying to create a new TokenStream from an empty input stream. This will
+throw errors about wrong language settings early on.
+
+Closes #34170

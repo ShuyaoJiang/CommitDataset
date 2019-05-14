@@ -1,0 +1,12 @@
+SQL: Implement FIRST/LAST aggregate functions (#37936)
+
+FIRST and LAST can be used with one argument and work similarly to MIN
+and MAX but they are implemented using a Top Hits aggregation and
+therefore can also operate on keyword fields. When a second argument is
+provided then they return the first/last value of the first arg when its
+values are ordered ascending/descending (respectively) by the values of
+the second argument. Currently because of the usage of a Top Hits
+aggregation FIRST and LAST cannot be used in the HAVING clause of a
+GROUP BY query to filter on the results of the aggregation.
+
+Closes: #35639

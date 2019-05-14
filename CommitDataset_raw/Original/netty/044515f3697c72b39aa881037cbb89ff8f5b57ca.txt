@@ -1,0 +1,19 @@
+Defer HTTP/2 stream transition state on initial write until headers are written (#8471)
+
+
+Motivation:
+When the DefaultHttp2ConnectionEncoder writes the initial headers for a new
+locally created stream we create the stream in the half-closed state if the
+end-stream flag is set which signals to the life cycle manager that the headers
+have been sent. However, if we synchronously fail to write the headers the
+life cycle manager then sends a RST_STREAM on our behalf which is a connection
+level PROTOCOL_ERROR because the peer sees the stream in an IDLE state.
+
+Modification:
+Don't open the stream in the half-closed state if the end-stream flag is
+set and let the life cycle manager take care of it.
+
+Result:
+Cleaner state management in the DefaultHttp2ConnectionEncoder.
+
+Fixes #8434.

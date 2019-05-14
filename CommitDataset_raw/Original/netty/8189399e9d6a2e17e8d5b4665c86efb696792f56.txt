@@ -1,0 +1,15 @@
+Ignore EINTR on close(...) as there is nothing sane we can do.
+
+Motivation:
+
+If close(...) reports EINTR there is nothing sane we can do so it makes no sense to even report it. See also:
+
+https://github.com/apple/swift-nio/pull/217
+
+Modifications:
+
+Just ignore EINTR when calling close(...)
+
+Result:
+
+Less noise in the logs.

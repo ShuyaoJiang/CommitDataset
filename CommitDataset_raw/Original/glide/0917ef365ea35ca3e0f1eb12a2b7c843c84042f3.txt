@@ -1,0 +1,14 @@
+Avoid throwing when decoding Files with DiskCacheStrategy.AUTOMATIC.
+
+AUTOMATIC allows decoding items from the resource cache in case the item
+being loaded is local. If the item is remote and the user is requesting
+a File however, the resource cache generator will throw an exception
+because it’s unable to find any path that will obtain a File from any
+Model. I’ve fixed this here by special casing Files and ignoring missing
+paths for them in ResourceCacheGenerator so that loads for File types
+won’t fail with automatic if they would have otherwise succeed with
+DiskCacheStrategy.DATA. I’ve also updated a few of the error messages
+to try to make it clearer why a load has failed if it fails for a 
+similar reason.
+
+Fixes #2824.

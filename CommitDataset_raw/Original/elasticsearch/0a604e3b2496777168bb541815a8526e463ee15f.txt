@@ -1,0 +1,12 @@
+Fix Two Races that Lead to Stuck Snapshots (#37686)
+
+* Fixes two broken spots:
+    1. Master failover while deleting a snapshot that has no shards will get stuck if the new master finds the 0-shard snapshot in `INIT` when deleting
+    2. Aborted shards that were never seen in `INIT` state by the `SnapshotsShardService` will not be notified as failed, leading to the snapshot staying in `ABORTED` state and never getting deleted with one or more shards stuck in `ABORTED` state
+* Tried to make fixes as short as possible so we can backport to `6.x` with the least amount of risk
+* Significantly extended test infrastructure to reproduce the above two issues
+  * Two new test runs:
+      1. Reproducing the effects of node disconnects/restarts in isolation
+      2. Reproducing the effects of disconnects/restarts in parallel with shard relocations and deletes
+* Relates #32265 
+* Closes #32348

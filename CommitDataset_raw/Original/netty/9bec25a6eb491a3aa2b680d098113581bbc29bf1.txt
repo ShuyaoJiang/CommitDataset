@@ -1,0 +1,11 @@
+Set the Transfer-Encoding header instead of adding
+
+Motivation:
+
+HttpUtil.setTransferEncodingChunked could add a second Transfer-Encoding
+header if one was already present. While this is technically valid, it
+does not appear to be the intent of the method.
+
+Result:
+
+Only one Transfer-Encoding header is present after calling this method.

@@ -1,0 +1,10 @@
+Assert connection pool eviction in HttpOverHttp2Test.tearDown()
+
+While investigating https://github.com/square/okhttp/issues/4470, I noticed there are sometimes connections left in the pool after calling ConnectionPool.evictAll() in HttpOverHttp2Test.tearDown(). As a result, tests that assume the connection pool is initially empty can appear flaky while the blame is in previous tests, making it hard to debug, and possibly hiding a connection leak bug.
+
+So far I've noticed the new assertion fails (very rarely) when tearing down these tests:
+* recoverFromMultipleCancelReusesConnection
+* emptyDataFrameSentWithEmptyBody
+* gzippedResponseBody
+
+This change may increase flakiness in the short term, but will make it easier to debug, by blaming the right tests.

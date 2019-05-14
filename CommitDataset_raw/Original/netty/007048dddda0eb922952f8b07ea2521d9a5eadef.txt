@@ -1,0 +1,11 @@
+DnsNameResolver empty/null hostname missed by a416b79
+
+Motivation:
+a416b79 introduced a check for null or empty host name to be compatible with the JDK resolution. However the doResolve(String, Promise) method, and if the doResolve(String, DnsRecord[], Promise, DnsCache) method was overridden the empty/null hostname would not be correctly resolved.
+
+Modifications:
+- Move the empty/null host name check into the lowest level doResolve method in DnsNameResolver
+- Remove the duplicate logic in InetNameResolver.java which can be bypassed anyways
+
+Result:
+By default (unless behavior is overridden) DnsNameResolver resolves null/empty host names to local host just like the JDK.

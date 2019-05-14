@@ -1,0 +1,16 @@
+Reduce ConfigurationPropertyName memory usage
+
+Significantly rework `ConfigurationPropertyName` in an attempt to reduce
+the amount of memory and garbage produced. The name elements are now
+stored as CharSequences and whenever possible subsequences are used.
+
+This helps to reduce the memory footprint since the underlying char
+array can be shared between the source string, and the individual
+elements.
+
+For example: `ConfigurationProperty.of("foo.bar.baz")` will return
+a name that provides access to the elements `foo`, `bar` and `baz`.
+However, these three names all share the same char[], just using
+different offsets and lengths.
+
+See gh-9000

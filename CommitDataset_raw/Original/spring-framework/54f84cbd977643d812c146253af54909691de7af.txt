@@ -1,0 +1,11 @@
+MockMvcWebConnection stores cookies from response
+
+Previously MockMvcWebConnection did not update the cookie manager with the
+cookies from MockHttpServletResponse. This meant that newly added cookies
+are not saved to the cookie manager and thus are not presented in the next
+request.
+
+This commit ensures that MockMvcWebConnection stores the response cookies
+in the cookie manager.
+
+Issue: SPR-14265

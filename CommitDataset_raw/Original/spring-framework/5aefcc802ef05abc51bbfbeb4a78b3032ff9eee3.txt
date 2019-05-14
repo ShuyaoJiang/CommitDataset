@@ -1,0 +1,11 @@
+Prevent early bean initialization with @EnableCaching
+
+Prior to this commmit, any configuration class holding a CacheManager
+bean would be eagerly instantiated. This is because the
+CacheConfiguration infrastructure requests all beans of type
+CacheManager.
+
+This commit defers the resolution of the CacheManager as late
+as possible.
+
+Issue: SPR-12336

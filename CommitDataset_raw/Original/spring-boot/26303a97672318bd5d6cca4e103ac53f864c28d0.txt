@@ -1,0 +1,7 @@
+Ensure DataSource can load database driver
+
+Update DataSource conditional to ensure that the driver class
+can actually be loaded by the DataSource. This fixes an issue when
+deploying a classic WAR where `org.apache.tomcat.jdbc.pool.DataSource`
+is found the parent classloader but the database driver cannot be loaded
+because is included as a local `/lib` dependency.

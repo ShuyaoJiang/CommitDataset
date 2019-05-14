@@ -1,0 +1,9 @@
+Disable unnecessary database initialization
+
+If a DataSource class is found in the classpath then
+EmbeddedDataSourceConfiguration will not be used, so the in-memory
+database will not be shutdown on application context closing.
+As a result, unnecessary database initialization may cause subsequent
+tests to fail, for example see [1].
+
+[1] https://github.com/spring-projects/spring-boot/issues/1712

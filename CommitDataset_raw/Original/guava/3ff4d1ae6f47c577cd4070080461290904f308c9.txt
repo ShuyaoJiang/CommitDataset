@@ -1,0 +1,14 @@
+Use J2ObjC's @RetainedWith annotation instead of @Weak on ImmutableMap.keySet
+to prevent crashes on iOS.
+
+TESTED=Created a map inside a autorelease pool and saved a reference to the
+keyset. Checked that the keyset functions correctly outside the autorelease
+pool. Checked that both the keyset and the map are deallocated by the
+autorelease pool when not holding a reference to the keyset. Did this test with
+both ImmutableMap.of(<2 entries>) and ImmutableBiMap.of(<2 entries>).
+
+RELNOTES=J2ObjC: Fixes crashes from use of `ImmutableMap.keySet()`.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=233811320

@@ -1,0 +1,14 @@
+AbstractResponseBodySubscriber improvements
+
+When the thread is writing to the response in
+RECEIVED.onWritePossible(), the execution may stop because isReady()
+returned false. In this case the buffer is partially written.
+When there is partially written case:
+1. The state will be changed from WRITING to RECEIVED
+2. A check for "write possible" will be performed:
+  - If onWritePossible event has been already called by the web
+  container while in WRITING state then this check will trigger
+  RECEIVED.onWritePossible() because isReady() will be true and the
+  writing will continue.
+  - Otherwise the writing will be resumed when the web container sends
+  onWritePossible event.

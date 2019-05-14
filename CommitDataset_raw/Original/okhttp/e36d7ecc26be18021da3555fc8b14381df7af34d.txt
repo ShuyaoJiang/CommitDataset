@@ -1,0 +1,10 @@
+Fix flakiness in CallTest.cancelTagImmediatelyAfterEnqueue()
+
+There's a race where the HTTP engine has been created, but not yet connected
+and the cancel isn't as immediate as it could be. Fix the test by making sure
+there's a response to be retrieved.
+
+With the upcoming connection pool changes we might make the implementation
+more robust.
+
+Closes: https://github.com/square/okhttp/issues/2001

@@ -1,0 +1,8 @@
+Fix audit index template upgrade loop (#30779)
+
+The Index Audit trail allows the override of the template index
+settings with settings specified on the conf file.
+A bug will manifest when such conf file settings are specified
+for templates that need to be upgraded. The bug is an endless
+upgrade loop because the upgrade, although successful, is
+not reckoned as such by the upgrade service.

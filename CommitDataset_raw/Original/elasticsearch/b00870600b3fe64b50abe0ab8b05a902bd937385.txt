@@ -1,0 +1,10 @@
+Never block on key in `LiveVersionMap#pruneTombstones` (#28736)
+
+Pruning tombstones is best effort and should not block if a key is currently
+locked. This can cause a deadlock in rare situations if we switch of append
+only optimization while heavily updating the same key in the engine
+while the LiveVersionMap is locked. This is very rare since this code
+patch only executed every 15 seconds by default since that is the interval
+we try to prune the deletes in the version map.
+
+Closes #28714

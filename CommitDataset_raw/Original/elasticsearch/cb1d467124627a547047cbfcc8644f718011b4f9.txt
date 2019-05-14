@@ -1,0 +1,9 @@
+Cat apis: Fix index creation time to use strict date format (#32510)
+
+With the move to java time, the default formatter used by toString on
+ZonedDateTime uses optional components for least significant portions of
+the date. This commit changes the cat indices api to use a strict date
+time format, which will always output milliseconds, even if they are
+zero.
+
+closes #32466

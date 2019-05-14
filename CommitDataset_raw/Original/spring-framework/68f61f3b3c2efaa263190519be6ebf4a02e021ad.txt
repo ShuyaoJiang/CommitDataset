@@ -1,0 +1,10 @@
+Fix nested @Component annotation instantiation bug
+
+3.1 M2 introduced a regression that causes false positives during
+@Configuration class candidate checks. Now performing a call to
+AnnotationMetadata#isInterface in addition to checks for @Component and
+@Bean annotations when determining whether a candidate is a 'lite'
+configuration class. Annotations are in the end interfaces, so both
+are filtered out at once.
+
+Issue: SPR-8761

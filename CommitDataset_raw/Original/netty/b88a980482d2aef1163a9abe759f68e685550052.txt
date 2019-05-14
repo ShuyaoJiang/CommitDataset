@@ -1,0 +1,39 @@
+Change arena to thread cache mapping algorithm to be closer to ideal.
+
+Motivation:
+Circular assignment of arenas to thread caches can lead to less than optimal
+mappings in cases where threads are (frequently) shutdown and started.
+
+Example Scenario:
+There are a total of 2 arenas. The first two threads performing an allocation
+would lead to the following mapping:
+
+Thread 0 -> Arena 0
+Thread 1 -> Arena 1
+
+Now, assume Thread 1 is shut down and another Thread 2 is started. The current
+circular assignment algorithm would lead to the following mapping:
+
+Thread 0 -> Arena 0
+Thread 2 -> Arena 0
+
+Ideally, we want Thread 2 to use Arena 1 though.
+
+Presumably, this is not much of an issue for most Netty applications that do all
+the allocations inside the eventloop, as eventloop threads are seldomly shut down
+and restarted. However, applications that only use the netty-buffer package
+or implement their own threading model outside the eventloop might suffer from
+increased contention. For example, gRPC Java when using the blocking stub
+performs some allocations outside the eventloop and within its own thread pool
+that is dynamically sized depending on system load.
+
+Modifications:
+
+Implement a linear scan algorithm that assigns a new thread cache to the arena
+that currently backs the fewest thread caches.
+
+Result:
+
+Closer to ideal mappings between thread caches and arenas. In order to always
+get an ideal mapping, we would have to re-balance the mapping whenever a thread
+dies. However, that's difficult because of deallocation.

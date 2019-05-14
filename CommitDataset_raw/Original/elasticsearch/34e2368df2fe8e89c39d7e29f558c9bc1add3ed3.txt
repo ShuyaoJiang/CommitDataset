@@ -1,0 +1,8 @@
+Fix unsafe publication in opt-out query cache (#40957)
+
+This opt-out query cache has an unsafe publication issue, where the
+cache is exposed to another thread (namely the cluster state update
+thread) before the constructor has finished execution. This exposes the
+opt-out query cache to concurrency bugs. This commit addresses this by
+ensuring that the opt-out query cache is not registered as a listener
+for license state changes until after the constructor has returned.

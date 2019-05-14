@@ -1,0 +1,11 @@
+DNS Resovler tests should be more explicit about ndots
+
+Motivation:
+The DNS resolver may use default configuration inherited from the environment. This means the ndots value may change and result in test failure if the tests don't explicitly set the assumed value.
+
+Modifications:
+- Explicitly set ndots in resolver-dns unit tests so we don't fail if the environment overrides the search domain and ndots
+
+Result:
+Unit tests are less dependent upon the enviroment they run in.
+Fixes https://github.com/netty/netty/issues/6966.

@@ -1,0 +1,12 @@
+Support detection and with test initializers
+
+Relax `SpringBootTestContextBootstrapper` rules so that a test can
+specify an `ApplicationContextInitializer` and still have
+`@SpringBootConfiguration` detected.
+
+Prior to this commit detection would not occur because it's possible
+that an initializer _could_ register configuration. This scenario is
+actually quite unlikely to occur, certainly less likely than wanting to
+use an initializer in combination with auto-detection.
+
+Fixes gh-8483

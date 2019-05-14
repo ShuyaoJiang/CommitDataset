@@ -1,0 +1,8 @@
+SQL: values in datetime script aggs should be treated as long (#39773)
+
+When a query is translated into script terms agg where key has a date
+type, it should generate a terms agg with value_type long instead of
+date, otherwise the key gets formatted as a string, which confuses
+hit extractor.
+
+Fixes #37042

@@ -1,0 +1,26 @@
+added support for Protobuf codec nano runtime
+
+Motivation:
+
+Netty was missing support for Protobuf nano runtime targeted at
+weaker systems such as Android devices.
+
+Modifications:
+
+Added ProtobufDecoderNano and ProtobufDecoderNano
+in order to provide support for Nano runtime.
+
+modified ProtobufVarint32FrameDecoder and
+ProtobufLengthFieldPrepender in order to remove any
+on either Nano or Lite runtime by copying the code
+for handling Protobuf varint32 in from Protobuf
+library.
+
+modified Licenses and NOTICE in order to reflect the
+changes i made.
+
+added Protobuf Nano runtime as optional dependency
+
+Result:
+
+Netty now supports Protobuf Nano runtime.

@@ -1,0 +1,10 @@
+[Zen2] Introduce auto_shrink_voting_configuration setting (#35217)
+
+Today we allow the user to set the minimum size of a voting configuration. On
+reflection we would rather this was simply '3' where possible, and we can use
+the retirement API to control the removal of nodes more explicitly.
+
+This change replaces the old reconfigurator setting with a new one,
+`cluster.auto_shrink_voting_configuration`, which determines whether
+Elasticsearch should automatically remove nodes from the voting configuration
+or not.

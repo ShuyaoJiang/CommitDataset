@@ -1,0 +1,14 @@
+polish web.Mock* classpath
+
+Previously when running the tests for spring-web, spring-webmvc,
+spring-test-mvc, and spring-orm there were possible collissions in the
+classpath due to the fact that each had its own copy of the web.Mock*
+classes in it. This causes uncertainty for which class the code was
+running against. Furthermore, the maintance of keeping the copies up to
+date was tedious.
+
+Now there are two copies of the web.Mock* classes. The ones that exist
+in spring-test main sources and a copy that supports servlet 3 within
+spring-web test sources. The copy in spring-web test sources has been
+moved to a new package to avoid having the classes exist twice on the
+classpath within Eclipse.

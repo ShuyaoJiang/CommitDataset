@@ -1,0 +1,13 @@
+[Monitoring] Add Cluster Alert for Nodes Changed (elastic/x-pack-elasticsearch#3504)
+
+This creates a cluster alert that triggers whenever a node is:
+
+- Added
+- Removed
+- Restarted (aka Removed and Added between collections)
+
+Unlike all previous cluster alerts, this cluster is always instantly resolved because there is no way to otherwise resolve it later (especially if nodes are replaced).
+
+This will require a small change to the UI so that it does not simply ignore resolved alerts.
+
+Original commit: elastic/x-pack-elasticsearch@6340bf7960c12052cc7c637fee5c73bbdc257379

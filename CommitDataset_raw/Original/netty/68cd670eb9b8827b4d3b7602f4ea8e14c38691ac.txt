@@ -1,0 +1,13 @@
+Remove ChannelHandlerInvoker
+
+Motivation:
+
+We tried to provide the ability for the user to change the semantics of the threading-model by delegate the invoking of the ChannelHandler to the ChannelHandlerInvoker. Unfortunually this not really worked out quite well and resulted in just more complexity and splitting of code that belongs together. We should remove the ChannelHandlerInvoker again and just do the same as in 4.0
+
+Modifications:
+
+Remove ChannelHandlerInvoker again and replace its usage in Http2MultiplexCodec
+
+Result:
+
+Easier code and less bad abstractions.

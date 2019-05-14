@@ -1,0 +1,8 @@
+Build: Improve test status logging (#28563)
+
+Tests use the (internal) gradle progress logger. Since aroudn gradle
+4.0, loggers can have children loggers which each get their own line of
+updating output. This commit improves the test status output to give
+each jvm its own status line, as well as lines for suite and test
+counts. It also fixes an issue where the progress logger was not marked
+as completed, which caused its last output to never be cleared.

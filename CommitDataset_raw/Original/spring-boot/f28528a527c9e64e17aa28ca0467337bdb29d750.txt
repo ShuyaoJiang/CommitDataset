@@ -1,0 +1,12 @@
+Allow Data JPA's bootstrap mode to be configured via the environment
+
+In Spring Data Lovelace, repositories' bootstrap mode can be
+configured via @EnableJpaRepositories. This commit adds support for
+configuring the mode via the environment rather than having to use
+the annotation. Additionally, when deferred or lazy bootstrapping is
+being used, the LocalContainerEntityManagerFactoryBean is configured
+to use a bootstrap executor. This allows JPA's initialization to be
+performed on a separate thread, allowing the rest of application
+context initialization to proceed in parallel.
+
+Closes gh-13833

@@ -1,0 +1,40 @@
+Fix regression for newline separators in SQL scripts
+
+Changes made in conjunction with SPR-9531, introduced a regression with
+regard to support for using a single newline character as the statement
+separator within SQL scripts. Investigation of the cause of this issue
+resulted in the discovery of another, similar issue: support for
+multiple newlines as a statement separator has been broken for years
+but has gone unnoticed until now.
+
+The reason that both of these issues have gone unnoticed is a result of
+the fact that the test suite only executes SQL script integration tests
+against HSQL DB, and HSQL does not care if two statements occur on the
+same line; whereas, the H2 database will throw an exception if multiple
+statements are included on the same line when executing an update.
+
+This commit addresses both of these issues and provides further
+enhancements to Spring's SQL script support as follows.
+
+ - ScriptUtils now properly checks if the supplied script contains the
+   custom statement separator or default separator before falling back
+   to the 'fallback' separator (i.e., newline).
+
+ - Introduced FALLBACK_STATEMENT_SEPARATOR constant in ScriptUtils.
+
+ - ScriptUtils.readScript() no longer omits empty lines from the input
+   file since a statement separator string may in fact be composed of
+   multiple newline characters.
+
+ - Introduced overloaded variants of splitSqlScript() and
+   executeSqlScript() in ScriptUtils with smaller argument lists for
+   common use cases.
+
+ - Extracted AbstractDatabasePopulatorTests from DatabasePopulatorTests
+   and introduced concrete HsqlDatabasePopulatorTests and
+   H2DatabasePopulatorTests subclasses for testing against HSQL and H2.
+
+ - Split ScriptUtilsTests into ScriptUtilsUnitTests and
+   ScriptUtilsIntegrationTests for faster builds.
+
+Issue: SPR-11560

@@ -1,0 +1,15 @@
+Fix assertion error when closing / shutdown native channel and SO_LINGER is set.
+
+Motivation:
+
+When SO_LINGER is used we run doClose() on the GlobalEventExecutor by default so we need to ensure we schedule all code that needs to be run on the EventLoop on the EventLoop in doClose. Beside this there are also threading issues when calling shutdownOutput(...)
+
+Modifications:
+
+- Schedule removal from EventLoop to the EventLoop
+- Correctly handle shutdownOutput and shutdown in respect with threading-model
+- Add unit tests
+
+Result:
+
+Fixes [#7159].

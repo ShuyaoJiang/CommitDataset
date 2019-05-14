@@ -1,0 +1,11 @@
+Painless: modify grammar to allow more statement delimiters (#29566)
+
+This allows the grammar to determine when and what delimiters statements will use by
+splitting up the statements into regular statements and delimited statements, those that do
+not require a delimiter versus those that do. This allows consumers of the statements to
+determine what delimiters the statements will use so that in certain cases semicolons are
+not necessary like when there's a closing right bracket.
+
+This change removes the need for semicolon insertion in the lexer, simplifying the existing
+lexer quite a bit. It also ensures that there isn't a need to track semicolons being inserted
+into places that aren't necessary such as array initializers.

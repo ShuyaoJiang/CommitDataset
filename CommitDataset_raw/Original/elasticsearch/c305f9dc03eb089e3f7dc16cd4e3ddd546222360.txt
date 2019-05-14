@@ -1,0 +1,13 @@
+Make keepalive pings bidirectional and optimizable (#35441)
+
+This is related to #34405 and a follow-up to #34753. It makes a number
+of changes to our current keepalive pings.
+
+The ping interval configuration is moved to the ConnectionProfile.
+
+The server channel now responds to pings. This makes the keepalive
+pings bidirectional.
+
+On the client-side, the pings can now be optimized away. What this
+means is that if the channel has received a message or sent a message
+since the last pinging round, the ping is not sent for this round.

@@ -1,0 +1,12 @@
+[CCR] AutoFollowCoordinator should tolerate that auto follow patterns may be removed (#35945)
+
+AutoFollowCoordinator should take into account that after auto following
+an index and while updating that a leader index has been followed, that
+the auto follow pattern may have been removed via delete auto follow patterns
+api.
+
+Also fixed a bug that when a remote cluster connection has been removed,
+the auto follow coordinator does not die when it tries get a remote client for 
+that cluster.
+
+Closes #35480

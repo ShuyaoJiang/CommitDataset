@@ -1,0 +1,10 @@
+Fix HTTP/2 test cleanup with LocalChannel
+
+Motivation:
+When a LocalChannel is closed it is responsible to ensure all queued objects are released. When a LocalChannel is closed it will also close its peer channel. However in HTTP/2 unit tests we may not wait until all channels have completed the shutdown process before destroying the threads and exiting the test. This may mean buffers are GCed before they are released and be reported as a leak.
+
+Modifications:
+- In HTTP/2 tests when we use LocalChannel we should wait for all channels to close before exiting the test and cleaning up the associated EventLoopGroups.
+
+Result:
+More correct usage of LocalChannel in HTTP/2 tests.

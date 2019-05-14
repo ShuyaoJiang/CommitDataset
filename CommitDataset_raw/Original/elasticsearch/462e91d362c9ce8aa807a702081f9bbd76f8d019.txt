@@ -1,0 +1,14 @@
+Logging: Use settings when building daemon threads (#32751)
+
+Subclasses of `EsIntegTestCase` run multiple Elasticsearch nodes in the
+same JVM and when we log we look at the name of the thread to figure out
+the node name. This makes sure that all calls to `daemonThreadFactory`
+include the node name.
+
+Closes #32574
+
+I'd like to follow this up with more drastic changes that make it
+impossible to do this incorrectly but that change is much larger than
+this and I'd like to get these log lines fixed up sooner rather than
+later.
+

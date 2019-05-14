@@ -1,0 +1,14 @@
+Skip the Gradle Plugin when building with JDK 10
+
+Previously, the JDK 10 build would fail as we build the plugin using
+Gradle 4.0.x (the lowest version of Gradle that we support) and
+Gradle 4.0.x doesn't work with Java 10.
+
+Upgrading to Gradle 4.1, which appears to work with Java 10, was
+considered but rejected for now as it introduces the risk that we
+inadvertently use an API that's new in 4.1 and break our 4.0 support.
+
+This commit goes for the extreme option and disables building the
+Gradle Plugin when building with JDK.
+
+See gh-12028

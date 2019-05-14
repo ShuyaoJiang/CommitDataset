@@ -1,0 +1,15 @@
+Use Hibernate native APIs to defer processing DDL
+
+The EntityManagerFactory will happily process the DDL on startup, but
+that happens too early (because of LoadtimeWeaverAware processing). We
+can defer it to a more civilised stage, e.g. ContextRefreshedEvent by
+using the Hibernate native APIs directly.
+
+It makes the JpaProperties slightly more complex because they need
+to distinguish between the early init and late processing versions
+of the Hibernate properties.
+
+Not ready for prime time yet because there is no way to deal with
+multiple EntityManagers.
+
+Fixes gh-894

@@ -1,0 +1,16 @@
+Polish WebClient metrics support
+
+This commit improves the for Actuator Metrics in WebClient.
+
+Unlike the server couterpart of WebFlux, using a `retry` operator on a
+`WebClient` pipeline does resubscribes to the whole chain.
+The previous implementation recorded start time at the time of pipeline
+build phase, but outside of it. This doesn't work since retrying the
+same pipeline doesn't update the recorded start time and the duration of
+sequential calls are cumulative.
+
+This is now fixed using the Reactor `Context`, since we're now recording
+the start time at subscription time and record metrics on `onNext` and
+`onError` signals.
+
+Closes gh-12228

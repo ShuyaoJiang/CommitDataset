@@ -1,0 +1,21 @@
+Constrain targets for @Filter declaration
+
+For clarity, add @Target({}) to definition of @Filter, constraining it
+to complex annotation composition only; i.e. it cannot be placed on
+any element, only within annotations, e.g.
+
+    @ComponentScan(includeFilters=@Filter(...))
+
+is legal, while
+
+    @Filter
+    public class MyType { }
+
+is not.
+
+Also, widen @Retention from SOURCE to RUNTIME, even though it is not
+technically necessary, as all parsing of @Filter annotations happens via
+ASM, i.e. at the source level.  This change is made primarily for
+consistency (@ComponentScan's Retention is RUNTIME) and in avoidance of
+potential confusion or surprise on the part of those casually browsing
+the code.

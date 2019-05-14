@@ -1,0 +1,20 @@
+Harmonize JTA dependency
+
+Mixing Hibernate and a JTA provider may lead to duplicate JTA
+dependencies as the API is published with different coordinates.
+
+The following has been applied:
+
+* We now use `javax.transaction:javax.transaction-api` everywhere.
+* The `data-jpa` starter has been updated to replace the JBoss JTA
+  dependency with the standard one.
+* The `jta-bitronix` starter has been updated to use JTA 1.2 instead of
+  JTA 1.1 (unfortunately, JTA 1.1 is published with different
+  coordinates).
+* The `jta-atomikos` starter has been updated to define a dependency on
+  JTA as the current version does not do it at all.
+* The HornetQ JMS server is also relying on JTA but that dependency
+  should have been optional. It has been excluded for the time being as
+  it was using (yet) another set of coordinates.
+
+Fixes gh-2092

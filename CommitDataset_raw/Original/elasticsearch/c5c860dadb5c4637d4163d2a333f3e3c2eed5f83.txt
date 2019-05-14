@@ -1,0 +1,26 @@
+Add template config for Beat state to X-Pack Monitoring (#31809)
+
+With https://github.com/elastic/beats/pull/7075 Beats introduces state reporting for X-Pack Monitoring. The data sent up to Elasticsearch ends up stored in the following format.
+
+```
+"beats_state": {
+  "timestamp": "2018-07-05T07:21:03.581Z",
+  "state": {
+    "module": {
+      "count": 1,
+      "names": [
+        "http"
+      ]
+    }
+  },
+  "beat": {
+    "uuid": "594039b5-6353-4d78-9bad-778ecc0fe83f",
+    "type": "metricbeat",
+    "version": "7.0.0-alpha1",
+    "name": "ruflin",
+    "host": "ruflin"
+  }
+}
+```
+
+This PR adds the new fields to the template.

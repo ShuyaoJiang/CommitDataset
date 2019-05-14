@@ -1,0 +1,6 @@
+This change replaces usages of static final fields on CharMatcher, e.g. CharMatcher.WHITESPACE, with the equivalent static factory method, e.g. CharMatcher.whitespace().
+
+The change is being made so that we can remove the static final fields, primarily because they must be eagerly initialized, causing many implementation classes (which may be unnecessary) to be loaded. This is a significant performance problem on Android. Using methods allows implementation classes to only be loaded when actually needed, as well as matching our long-standing preference for factory methods over public fields.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=112814971

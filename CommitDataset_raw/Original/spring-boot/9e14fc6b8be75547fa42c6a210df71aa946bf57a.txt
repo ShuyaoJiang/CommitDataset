@@ -1,0 +1,13 @@
+Cope with hanging call to connection.start() in JmsHealthIndicator
+
+Previously, if the call to connection.start() hung, JmsHealthIndicator
+would also hang and then never respond.
+
+This commit introduces the use of an additional thread that waits for
+up to 5 seconds for the connection to start. If the call to start
+does not complete within that time, the connection is closed. The
+call to close causes the call to start to throw an exception, thereby
+stopping the hang and allowing the indicator to report that the
+broker is down.
+
+Closes gh-10809

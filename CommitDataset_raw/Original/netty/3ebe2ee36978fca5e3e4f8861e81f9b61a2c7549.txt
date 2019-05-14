@@ -1,0 +1,27 @@
+Remove unnecessary loop and indentation in decompressors
+
+Motivation:
+
+Decompression handlers contain heavy use of switch-case statements. We
+use compact indentation style for 'case' so that we utilize our screen
+real-estate more efficiently.
+
+Also, the following decompression handlers do not need to run a loop,
+because ByteToMessageDecoder already runs a loop for them:
+
+- FastLzFrameDecoder
+- Lz4FrameDecoder
+- LzfDecoder
+
+Modifications:
+
+- Fix indentations
+- Do not wrap the decoding logic with a for loop when unnecessary
+- Handle the case where a FastLz/Lzf frame contains no data properly so
+  that the buffer does not leak and less garbage is produced.
+
+Result:
+
+- Efficiency
+- Compact source code
+- No buffer leak

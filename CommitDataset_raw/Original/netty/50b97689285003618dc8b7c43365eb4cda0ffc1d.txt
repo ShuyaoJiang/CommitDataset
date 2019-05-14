@@ -1,0 +1,13 @@
+[#4095] Correctly handle Upgrade responses with special handling of Hixie 76
+
+Motivation:
+
+Hixie 76 needs special handling compared to other connection upgrade responses. Our detection code of non websocket responses did actually always use the special handling that only should be used for Hixie 76 responses.
+
+Modifications:
+
+Correctly detect connection upgrade responses which are not for websockets.
+
+Result:
+
+Be able to upgrade connections for other protocols then websockets.

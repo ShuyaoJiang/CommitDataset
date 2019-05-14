@@ -1,0 +1,11 @@
+Fix HtmlUnitRequestBuilder merge
+
+Previously invoking HtmlUnitRequestBuilder merge caused the pathInfo of
+the parent to be corrupted. This could additional invocations with the
+same parent.
+
+This fix ensures that the parent is no longer directly used. Instead,
+we create a copy of the parent by merging the parent that was passed in
+with the copy.
+
+Fixes SPR-14584

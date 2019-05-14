@@ -1,0 +1,14 @@
+[#4079] Fix IllegalStateException when HttpContentEncoder is used and 100 Continue response is used.
+
+Motivation:
+
+Whe a 100 Continue response was written an IllegalStateException was produced as soon as the user wrote the following response. This regression was introduced by 41b0080fcc8fcace7cd62d238f6a932e79ec8bb1.
+
+Modifications:
+
+- Special handle 100 Continue responses
+- Added unit tests
+
+Result:
+
+Fixed regression.

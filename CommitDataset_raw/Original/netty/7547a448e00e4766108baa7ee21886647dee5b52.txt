@@ -1,0 +1,13 @@
+[#4906] Ensure addLast(...) works as expected in EmbeddedChannel
+
+Motivation:
+
+If the user will use addLast(...) on the ChannelPipeline of EmbeddedChannel after its constructor was run it will break the EmbeddedChannel as it will not be able to collect inbound messages and exceptions.
+
+Modifications:
+
+Ensure addLast(...) work as expected by move the logic of handling messages and exceptions ti protected methods of DefaultChannelPipeline and use a custom implementation for EmbeddedChannel
+
+Result:
+
+addLast(...) works as expected when using EmbeddedChannel.

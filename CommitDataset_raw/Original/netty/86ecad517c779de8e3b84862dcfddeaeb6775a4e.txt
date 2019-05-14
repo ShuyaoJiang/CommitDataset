@@ -1,0 +1,13 @@
+Consolidate creation of SslHandshakeException when caused by a callback that is used in the native SSL implementation. (#8979)
+
+Motivation:
+
+We have multiple places where we store the exception that was produced by a callback in ReferenceCountedOpenSslEngine, and so have a lot of code-duplication.
+
+Modifications:
+
+- Consolidate code into a package-private method that is called from the callbacks if needed
+
+Result:
+
+Less code-duplication and cleaner code.

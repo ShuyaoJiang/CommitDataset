@@ -1,0 +1,11 @@
+Convert more users from to-be-deprecated Futures.chain to new AsyncFunction-based Future.transform.
+Deprecate Futures.chain.
+
+- xargs perlsed 'Function<(\s*)(.*),(\s+)ListenableFuture<(\s*)([^?].*)>>(\s+)(.*)(\s+)=(\s+)new(\s+)Function<(\s*)(.*),(\s+)ListenableFuture<([^?].*)>>' 'AsyncFunction<$1$2,$3$4$5>$6$7$8=$9new$10AsyncFunction<$11$12,$13$14>' < files
+- xargs perlsed 'Function<(\s*)(.*),(\s+)ListenableFuture<(\s*)([^?].*)>>' 'AsyncFunction<$1$2,$3$4$5>' < files
+- xargs perlsed '\bFutures.chain' Futures.transform < files
+- importtool --add=com.google.common.util.concurrent.AsyncFunction $(g4 whatsout -c 26028933 ....java)
+- many manual fixes
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=26043722

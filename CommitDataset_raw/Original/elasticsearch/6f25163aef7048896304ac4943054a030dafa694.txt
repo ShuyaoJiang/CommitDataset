@@ -1,0 +1,8 @@
+Filter pre-6.0 nodes for checkpoint invariants
+
+When checking that the global checkpoint on the primary is consistent
+with the local checkpoints of the in-sync shards, we have to filter
+pre-6.0 nodes from the check or the invariant will trivially trip. This
+commit filters these nodes out when checking this invariant.
+
+Relates #26666

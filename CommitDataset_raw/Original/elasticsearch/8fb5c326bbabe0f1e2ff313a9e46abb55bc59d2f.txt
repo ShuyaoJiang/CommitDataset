@@ -1,0 +1,11 @@
+Skip sibling pipeline aggregators reduction during non-final reduce (#40101)
+
+Today a coordinating node forces a final reduction of sibling pipeline aggregators whenever reducing aggs, unless it is reducing aggs incrementally. This works well for incremental reduction of aggs, but breaks CCS when minimizing roundtrips as each cluster ends up reducing its own pipeline aggregators locally while that should only be done by the CCS coordinating node later. This causes issues as after their reduction,  pipeline aggs cannot be further reduced, which is what happens with CCS causing errors like "java.lang.UnsupportedOperationException: Not supported" being returned.
+
+Each coordinating node should rather honour the reduce context flag that
+indicates whether we are executing a final reduce or not. If not, it should leave the sibling pipeline aggregations alone.
+
+Note that his bug affects only pipeline aggs that don't have a parent in
+the aggs tree, while all the others work well.
+
+Relates to #40059 but does not fix it yet, as the CCS coordinating node also needs to be adapted to recreate sibling pipeline aggregators from the request.

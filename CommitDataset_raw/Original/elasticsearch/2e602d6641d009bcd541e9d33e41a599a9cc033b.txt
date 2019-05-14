@@ -1,0 +1,3 @@
+[TEST] reset subAggregationsSupplier in AggregationsTests to empty sub-aggs once the maxDepth is reached
+
+If we don't do this, although we don't set the subAggsSupplier again, we will reuse the one set in the previous run, hence we can end up in situations where we keep on generating sub aggregations till a StackOverflowError gets thrown.

@@ -1,0 +1,13 @@
+Remove bottleneck while create InetSocketAddress in native transport
+
+Motivation:
+
+Everytime a new connection is accepted via EpollSocketServerChannel it will create a new EpollSocketChannel that needs to get the remote and local addresses in the constructor. The current implementation uses new InetSocketAddress(String, int) to create these. This is quite slow due the implementation in oracle and openjdk.
+
+Modifications:
+
+Encode all needed informations into a byte array before return from jni layer and then use new InetSocketAddress(InetAddress, int) to create the socket addresses. This allows to create the InetAddress via a byte[] and so reduce the overhead, this is done either by using InetAddress.getByteAddress(byte[]) or by Inet6Address.getByteAddress(String, byte[], int).
+
+Result:
+
+Reduce performance overhead while accept new connections with native transport

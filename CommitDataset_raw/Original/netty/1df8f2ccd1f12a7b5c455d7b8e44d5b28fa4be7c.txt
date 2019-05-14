@@ -1,0 +1,13 @@
+KQueue crash due to close/cleanup sequencing
+
+Motivation:
+The kqueue documentation states that 'Calling close() on a file descriptor will remove any kevents that reference the descriptor.' [1], but doesn't mention if this cleanup will be done synchronously. Under some circumstances it has been observed that cleanup was not done immediately and when KQueueEventLoop attempted to access the channel associated with the event the JVM would crash, a ClassCastException, or generally undefined behavior would occur because of invalid pointer references.
+
+[1] https://www.freebsd.org/cgi/man.cgi?query=kqueue&sektion=2
+
+Modifications:
+- AbstractKqueueChannel#doClose should not rely upon this assumption and instead should call doDeregister() to ensure cleanup is done synchronously.
+- Deleting a kevent should also set the jniSelfPtr stored in the udata of that kevent to NULL, to ensure we will not dereference it later.
+
+Result:
+No more kqueue crash due to close/cleanup sequencing.

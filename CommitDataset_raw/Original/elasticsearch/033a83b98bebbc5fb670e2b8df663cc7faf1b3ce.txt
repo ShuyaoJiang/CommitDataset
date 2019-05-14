@@ -1,0 +1,7 @@
+Use String.join() to describe a list of tasks (#28941)
+
+This change replaces the use of string concatenation with a call to
+String.join(). String concatenation might be quadratic, unless the compiler can
+optimise it away, whereas String.join() is more reliably linear. There can
+sometimes be a large number of pending ClusterState update tasks and #28920
+includes a report that this operation sometimes takes a long time.

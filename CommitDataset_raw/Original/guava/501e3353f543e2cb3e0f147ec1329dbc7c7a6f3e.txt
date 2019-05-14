@@ -1,0 +1,11 @@
+Update edgesConnecting().size() and edgesConnecting().isEmpty() to be more efficient for Networks with parallel edges. In particular, take advantage of the cached successor multisets. Currently the methods are always O(D). This will also be O(D) if successors hasn't been invoked, but will be O(1) for future calls. For example, with something like:
+
+edgesConnecting(n1, n2).size()
+edgesConnecting(n1, n3).size()
+edgesConnecting(n1, n4).size()
+...
+
+All calls after the first will be O(1), as it invokes successors(n1). This makes it so that, if someone has a dense graph with O(N^2) edges, calling edgesConnecting().size() or edgesConnecting().isEmpty() on every pair of nodes is O(N^2) (i.e. amortized O(1)) rather than (N^3).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=127381761

@@ -1,0 +1,13 @@
+Lz4FrameDecoder should reduce memory copies whenever possible
+
+Motivation:
+
+When the user constructs Lz4FrameDecoder with a Checksum implementation like CRC32 or Adler32 and uses Java8 we can directly use a ByteBuffer to do the checksum work. This way we can eliminate memory copies.
+
+Modifications:
+
+Detect if ByteBuffer can be used for checksum work and if so reduce memory copies.
+
+Result:
+
+Less memory copies when using JDK8

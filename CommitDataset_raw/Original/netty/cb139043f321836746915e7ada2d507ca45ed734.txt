@@ -1,0 +1,17 @@
+[#5831] HttpServerCodec cannot encode a respons e to HEAD
+ request with a 'content-encoding: chunked' header
+
+Motivation:
+
+It is valid to send a response to a HEAD request that contains a transfer-encoding: chunked header, but it is not valid to include a body, and there is no way to do this using the netty4 HttpServerCodec.
+
+The root cause is that the netty4 HttpObjectEncoder will transition to the state ST_CONTENT_CHUNK and the only way to transition back to ST_INIT is through the encodeChunkedContent method which will write the terminating length (0\r\n\r\n\r\n), a protocol error when responding to a HEAD request
+
+Modifications:
+
+- Keep track of the method of the request and depending on it handle the response differently when encoding it.
+- Added a unit test.
+
+Result:
+
+Correclty handle HEAD responses that are chunked.

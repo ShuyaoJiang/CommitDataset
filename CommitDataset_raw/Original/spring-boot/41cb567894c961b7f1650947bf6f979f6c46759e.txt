@@ -1,0 +1,13 @@
+Don't flush in ErrorPageFilter for < 400 response that's committed
+
+Previously, for a non-async response with a successful status (< 400),
+ErrorPageFilter would always call flushBuffer. This triggers an
+exception in Tomcat if the client has closed the connection before the
+response has been fully sent. In this case, Tomcat treats the response
+as successful and commits it before control returns to the filter.
+
+This commit updates ErrorPageFilter to only perform the flush if the
+response has not already been committed, leaving any further flushing
+that may be necessary to be handled by the servlet container.
+
+Fixes gh-1938

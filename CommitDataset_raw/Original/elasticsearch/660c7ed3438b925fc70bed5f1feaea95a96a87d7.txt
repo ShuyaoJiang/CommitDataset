@@ -1,0 +1,8 @@
+Treat TransportService stopped error as node is closing (#39800)
+
+If TransportService is stopped before a shard-failure request is sent
+but after the request is registered, TransportService will notify
+ReplicationOperation a TransportException with an error message:
+"transport stop, action: internal:cluster/shard/failure".
+
+Relates #39584

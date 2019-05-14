@@ -1,0 +1,6 @@
+Simplify selector close method (#25838)
+
+Currently we have an option to interrupt the selector thread on close.
+This option is not needed as we do not call this method and we should
+not be blocking on the network thread. Instead we only need to ever call
+wakeup() on the raw selector.

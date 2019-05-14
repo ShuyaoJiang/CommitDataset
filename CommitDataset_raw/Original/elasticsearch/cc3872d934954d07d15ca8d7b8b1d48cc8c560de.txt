@@ -1,0 +1,6 @@
+ Reduce composite references at network level (#36400)
+
+Creating `CompositeBytesReference` has more overhead than a single
+`ByteBufferReference`. Many of our messages will be contained to a
+single `ByteBuffer`. This commit avoids creating composite instances
+when there is 0 or 1  underlying `ByteBuffers`.

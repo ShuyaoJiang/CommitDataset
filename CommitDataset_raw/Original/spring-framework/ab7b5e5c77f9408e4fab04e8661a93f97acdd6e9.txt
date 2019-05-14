@@ -1,0 +1,22 @@
+Demo how to use SpringClassRule in nested test classes
+
+Due to restrictions imposed by JUnit 4, the SpringClassRule must be
+declared as a public static field, which makes it impossible to be
+declared directly within a nested (i.e., inner) test class.
+
+This commit demonstrates a work-around that makes it possible to use
+the SpringClassRule and SpringMethodRule in a nested (i.e., inner) test
+class when using a custom JUnit 4 runner such as the
+HierarchicalContextRunner from Stefan Bechtold.
+
+The trick is to have inner test classes extend a class that properly
+declares the SpringClassRule and SpringMethodRule. The
+SpringRuleConfigurer in this commit serves as an example.
+
+Note, however, that each such nested test class must declare its own
+@ContextConfiguration. Furthermore, TestExecutionListeners in the
+Spring TestContext Framework are not applied to the enclosing instance
+of such an inner test class, meaning that @Autowired fields in the
+enclosing instance will not be injected, etc.
+
+Issue: SPR-14150

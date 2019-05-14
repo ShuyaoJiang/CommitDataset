@@ -1,0 +1,34 @@
+QA: Switch xpack rolling upgrades to three nodes (#31112)
+
+This is much more realistic and can find more issues. This causes the
+"mixed cluster" tests to be run twice so I had to fix the tests to work
+in that case. In most cases I did as little as possible to get them
+working but in a few cases I went a little beyond that to make them
+easier for me to debug while getting them to work. My test changes:
+
+1. Remove the "basic indexing" tests and replace them with a copy of the
+tests used in the OSS. We have no way of sharing code between these two
+projects so for now I copy.
+2. Skip the a few tests in the "one third" upgraded scenario:
+  * creating a scroll to be reused when the cluster is fully upgraded
+  * creating some ml data to be used when the cluster is fully ugpraded
+3. Drop many "assert yellow and that the cluster has two nodes"
+assertions. These assertions duplicate those made by the wait condition
+and they fail now that we have three nodes.
+4. Switch many "assert green and that the cluster has two nodes" to 3
+nodes. These assertions are unique from the wait condition and, while
+I imagine they aren't required in all cases, now is not the time to
+find that out. Thus, I made them work.
+5. Rework the index audit trail test so it is more obvious that it is
+the same test expecting different numbers based on the shape of the
+cluster. The conditions for which number are expected are fairly
+complex because the index audit trail is shut down until the template
+for it is upgraded and the template is upgraded when a master node is
+elected that has the new version of the software.
+6. Add some more information to debug the index audit trail test because
+it helped me figure out what was going on.
+
+I also dropped the `waitCondition` from the `rolling-upgrade-basic`
+tests because it wasn't needed.
+
+Closes #25336

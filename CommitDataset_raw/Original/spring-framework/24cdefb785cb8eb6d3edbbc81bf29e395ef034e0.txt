@@ -1,0 +1,14 @@
+Workaround for WFLY-3474 NullPointerException
+
+Prior to this commit, the ServletResponseHttpHeaders.get method
+would throw an NPE when used under Wildfly 8.0.0.Final and 8.1.0.Final.
+This can be traced to WFLY-3474, which throws an NPE when calling
+HttpServletResponse.getHeaders("foo") and that header has not
+been defined prior to that.
+This would cause NPE being thrown by AbstractSockJsService when
+checking for CORS HTTP headers in the server HTTP response.
+
+This commit surrounds that method call in AbstractSockJsService and
+guards against this issue.
+
+Issue: SPR-11919

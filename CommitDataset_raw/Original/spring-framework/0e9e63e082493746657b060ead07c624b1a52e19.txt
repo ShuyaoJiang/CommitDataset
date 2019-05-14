@@ -1,0 +1,12 @@
+Preserve shadowed fields in DirectFieldAccessor
+
+Prior to this change, DirectFieldAccessor would ignore fields shadowed
+in subclasses, favoring the last field processed, which happens to be
+the most super declaration based on the way ReflectionUtils.doWithFields
+works.
+
+Because the locally shadowed field may be of a different type that the
+superclass declaration, it is most correct to preserve and work with
+the shadowed field.
+
+Issue: SPR-8398

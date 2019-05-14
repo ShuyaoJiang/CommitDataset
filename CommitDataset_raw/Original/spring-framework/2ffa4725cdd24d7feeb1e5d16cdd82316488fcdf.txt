@@ -1,0 +1,22 @@
+Allow SELECT statements in ResourceDatabasePopulator
+
+ResourceDatabasePopulator is a component that underlies the database
+initialization support within Spring's jdbc: namespace, e.g.:
+
+    <jdbc:initialize-database data-source="dataSource">
+        <jdbc:script execution="INIT" location="classpath:init.sql"/>
+    </jdbc:initialize-database>
+
+Prior to this commit, ResourceDatabasePopulator#executeSqlScript's use
+of Statement#executeUpdate(sql) precluded the possibility of SELECT
+statements because returning a result is not permitted by this method
+and results in an exception being thrown.
+
+Whether this behavior is a function of the JDBC specification or an
+idiosyncracy of certain implementations does not matter as the issue
+can be worked around entirely. This commit eliminates use
+of #executeUpdate(sql) in favor of #execute(sql) followed by a call
+to #getUpdateCount, effectively allowing any kind of SQL statement to
+be executed during database initialization.
+
+Issue: SPR-8932

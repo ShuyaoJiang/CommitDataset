@@ -1,0 +1,10 @@
+AdaptiveRecvByteBufAllocator should ramp up while reading
+
+Motivation:
+AdaptiveRecvByteBufAllocator currently adjusts the ByteBuf allocation size guess when readComplete is called. However the default configuration for number of reads before readComplete is called is 16. This means that there will be 16 reads done before any adjustment is done. If there is a large amount of data pending AdaptiveRecvByteBufAllocator will be slow to adjust the allocation size guess. In addition to being slow the result of only updating the guess in readComplete means that we must go back to the selector and wait to be woken up again when data is ready to read. Going back to the selector is an expensive operations and can add significant latency if there is large amount of data pending to read.
+
+Modifications:
+- AdaptiveRecvByteBufAllocator should check on each read if a step up is necessary. The step down process is left unchanged and can be more gradual at the cost of potentially over allocating.
+
+Result:
+AdaptiveRecvByteBufAllocator increases the guess size during the read loop to reduce latency when large amounts of data is being read.

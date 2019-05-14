@@ -1,0 +1,14 @@
+Reduce code duplication in ContextLoaderUtils
+
+Prior to this commit, the following two methods in ContextLoaderUtils
+contained almost identical loops for traversing the test class
+hierarchy:
+
+ - resolveContextLoaderClass(Class<?>, String)
+ - resolveContextConfigurationAttributes(Class<?>)
+
+With this commit, resolveContextLoaderClass() no longer traverses the
+class hierarchy. Instead, it now works directly with the resolved list
+of ContextConfigurationAttributes, thereby removing code duplication.
+
+Issue: SPR-9918

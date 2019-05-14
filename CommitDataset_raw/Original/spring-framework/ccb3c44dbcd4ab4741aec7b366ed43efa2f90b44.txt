@@ -1,0 +1,25 @@
+Add ResolvedResource in resource handling chain
+
+Prior to this commit, the resource handling chain and its
+`ResourceResolvers` would use specific `Resource` implementations in
+order to add resource metadata to the HTTP response. For example,
+`VersionedResource` and `EncodedResource` are both adding specific HTTP
+response headers.
+
+This commit aims at making this mechanism more stable and reusable,
+since the previous implementation would fail in case a resolved resource
+would be both a `VersionedResource` wrapping a `EncodedResource` (or the
+other way arount). Only one of the specific implementations would
+contribute its metadata since the code supporting that in
+`ResourceHttpRequestHandler` would only check for `instanceof` tests,
+whereas those implementations are acutally delegating calls to
+the wrapped resource.
+
+Now both `VersionedResource` and `EncodedResource` have been replaced by
+specific implementations of `ResolvedResource`, which directly provides
+those HTTP response headers as part of `getResponseHeaders()`.
+
+This commit applies the same changes for the web reactive
+implementations and its `ResourceWebHandler`.
+
+Issue: SPR-14264

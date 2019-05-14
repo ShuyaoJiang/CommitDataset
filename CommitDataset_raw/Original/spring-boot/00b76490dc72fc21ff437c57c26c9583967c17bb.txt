@@ -1,0 +1,9 @@
+Remove error logging on ClientAbortException
+
+Update `ErrorPageFilter` so that a Tomcat `ClientAbortException` no
+longer causes "Cannot forward to error page for request" logging for
+committed responses. Since a `ClientAbortException` indicates that the
+client is no longer available it's of no consequence that the request
+has been committed and the forward will fail.
+
+Closes gh-13221

@@ -1,0 +1,8 @@
+Reduce synchronization on field data cache
+
+The field data cache can come under heavy contention in cases when lots
+of search threads are hitting it for doc values. This commit reduces the
+amount of contention here by using a double-checked locking strategy to
+only lock when the cache needs to be initialized.
+
+Relates #27365

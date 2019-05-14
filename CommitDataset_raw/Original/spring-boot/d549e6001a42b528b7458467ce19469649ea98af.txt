@@ -1,0 +1,14 @@
+Add support for com.mongodb.client.MongoClient
+
+Next to com.mongodb.MongoClient the MongoDB Java driver offers the
+com.mongodb.client.MongoClient as entry point for database and
+collection operations. Spring Data MongoDB supports
+c.m.client.MongoClient via its MongoDbFactory using
+SimpleMongoClientDbFactory.
+
+The MongoAutoConfiguration now backs off if any of those two clients is
+already defined in the Application context allowing
+MongoDataAutoConfiguration to pick up the users driver implementation of
+choice.
+
+See gh-14176

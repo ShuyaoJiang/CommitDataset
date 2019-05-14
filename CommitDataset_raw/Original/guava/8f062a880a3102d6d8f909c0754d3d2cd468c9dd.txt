@@ -1,0 +1,10 @@
+Remove DI annotations from ServiceManager.
+
+If this breaks your server due to a missing @Inject constructor on ServiceManager, please install a com.google.common.util.concurrent.ServiceModule in your injector to provide an identical binding.
+
+Tap global presubmit has been run with this change multiple times to try to identify all servers that would break when this constructor is deleted, all those injectors/servers have been fixed.  However, if your injector does not have a tap test that would expose this issue, this cl may break your server.  The fix is simple, please let me know and i can send advice/followup cls.
+
+This is the final step of a Large Scale Change ([]across [].  See https://docs.google.com[]document/d/1HxavPxi9152BGIhWhfpwXhrj2Roagq4rgj5f-PiBGl0/edit?usp=sharing for more information.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=58291439

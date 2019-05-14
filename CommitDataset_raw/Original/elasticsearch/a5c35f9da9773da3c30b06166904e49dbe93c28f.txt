@@ -1,0 +1,9 @@
+Fix HistoryIntegrationTests timestamp comparsion (#38505)
+
+When the millisecond part of a timestamp is 0 the toString
+representation in java-time is omitting the millisecond part (joda was
+not). The Search response is returning timestamps formatted with
+WatcherDateTimeUtils, therefore comparisons of strings should be done
+with the same formatter
+
+relates #27330

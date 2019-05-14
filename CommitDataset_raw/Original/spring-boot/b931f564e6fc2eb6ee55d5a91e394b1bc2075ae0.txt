@@ -1,0 +1,15 @@
+Work around Gradle 3.3's overzealous deprecation warning
+
+In Gradle 3.3, when an API that will be removed in 4.0 is called, a
+deprecation warning is output as part of the build. Users have noticed
+his warning and, quite reasonably, complained about it. Unfortunately,
+avoiding the warning requires the use of an API that was introduced in
+Gradle 3.x which we can't use directly as we want to remain compatible
+with Gradle 2.x.
+
+This commit introduces the use of reflection to call
+ProjectDependency.getTargetConfiguration() via reflection when it's
+available (Gradle 3) and ProjectDependency.getProjectConfiguration()
+when it's not (Gradle 2).
+
+Closes gh-8154

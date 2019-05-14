@@ -1,0 +1,22 @@
+Call ctx.flush() at least once in ChunkedWriteHandler.flush()
+
+Related: #3219
+
+Motivation:
+
+ChunkedWriteHandler.flush() does not call ctx.flush() when channel is
+not writable. This can be a problem when other handler / non-Netty
+thread writes messages simultaneously, because
+ChunkedWriteHandler.flush() might have no chance to observe
+channel.isWritable() returns true and thus the channel is never flushed.
+
+Modifications:
+
+- Ensure that ChunkedWriteHandler.flush() calls ctx.flush() at least
+  once.
+
+Result:
+
+A stall connection issue, that occurs when certain combination of
+handlers exist in a pipeline, has been fixed. (e.g. SslHandler and
+ChunkedWriteHandler)

@@ -1,0 +1,13 @@
+Make AbstractChannel.outboundBuffer volatile.
+
+Motivation:
+
+The field can be read from arbitrary threads via Channel.(isWritable()|bytesBeforeWritable()|bytesBeforeUnwritable()), WriteAndFlushTask.newInstance(), PendingWriteQueue, etc.
+
+Modifications:
+
+Make AbstractChannel.outboundBuffer volatile.
+
+Result:
+
+More correct in a concurrent use case.

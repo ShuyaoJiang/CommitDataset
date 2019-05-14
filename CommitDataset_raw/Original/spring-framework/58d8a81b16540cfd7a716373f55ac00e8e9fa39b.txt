@@ -1,0 +1,27 @@
+Fix maven dependency scope conflicts in MergePlugin
+
+Spring Framework's build is using a custom MergePlugin in order to merge
+a project into another one and share/override configuration and
+dependencies.
+
+Prior to this commit, two projects merged into a third one could trigger
+dependency conflicts when exporting the project definition into a POM.
+When trying to define the scope for a given dependency, those two
+projects would compete for this with the same priority, resulting in a
+Gradle exception.
+
+One could trigger this issue by running:
+
+    ./gradlew :spring-orm:install -x javadoc
+
+Because `spring-orm-hibernate4` and `spring-orm-hibernate5` get merged
+into `spring-orm` and both define optional/test dependencies to
+spring-mvc, etc.
+
+This commit makes sure that two projects, when defining dependency
+scopes, don't use the same priority value; the MergePlugin now adds the
+index of the current subproject to the priority value. So when two
+projects compete for this, the one defined in last will define the
+dependency scope.
+
+Issue: SPR-13013

@@ -1,0 +1,13 @@
+Add UriTemplateHandler
+
+This change introduces a strategy for expanding a URI template into a
+URI and makes it a property of the RestTemplate and AsyncRestTemplate
+so that they can be pre-configured with such a strategy.
+
+The DefaultUriTemplateHandler relies on UriComponentsBuilder internally
+and provides functionality equivalent to using the UriTemplate.
+A DefaultUriTemplateHandler can also be configured to parse the path
+of a URI template into path segments in order to allow expanding URI
+variables according to path segment encoding rules.
+
+Issue: SPR-12750

@@ -1,0 +1,14 @@
+Fix content type issue in ResourceRegionHttpMessageWriter
+
+ResourceRegionHttpMessageWriter no longer extends from
+EncoderHttpMessageWriter freeing it to pass the correct content type
+into the encoder.
+
+Considering that the main benefit of EncoderHttpMessageWriter is to
+deal with content type fallback cases, there is nothing to be missed.
+
+Furthermore ResourceRegionHttpMessageWriter is a package private class
+that is used internally within ResourceHttpMessageWriter and never
+exposed externally as a an actual HttpMessageWriter.
+
+Issue: SPR-15358

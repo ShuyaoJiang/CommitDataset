@@ -1,0 +1,16 @@
+Add await busy loop for SimpleKdcLdapServer initialization (#39221)
+
+There have been intermittent failures where either
+LDAP server could not be started or KDC server could
+not be started causing failures during test runs.
+
+`KdcNetwork` class from Apache kerby project does not set reuse
+address to `true` on the socket so if the port that we found to be free
+is in `TIME_WAIT` state it may fail to bind. As this is an internal
+class for kerby, I could not find a way to extend.
+
+This commit adds a retry loop for initialization. It will keep
+trying in an await busy loop and fail after 10 seconds if not
+initialized.
+
+Closes #35982

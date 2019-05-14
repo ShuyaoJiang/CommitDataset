@@ -1,0 +1,7 @@
+Fixed NETTY-365 HashedWheelTimer.stop() enters an infinite loop when
+called from TimerTask
+Fixed NETTY-379 Intermittent slippery task timeout in HashedWheelTimer
+* Throw an IllegalStateException if HashedWheelTimer.stop() is called
+from TimerTask
+* Reschedule the slipped task accurately instead of delaying it by one
+round

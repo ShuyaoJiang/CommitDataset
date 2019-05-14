@@ -1,0 +1,23 @@
+Automatically prepare indices for splitting (#27451)
+
+Today we require users to prepare their indices for split operations.
+Yet, we can do this automatically when an index is created which would
+make the split feature a much more appealing option since it doesn't have
+any 3rd party prerequisites anymore.
+
+This change automatically sets the number of routinng shards such that
+an index is guaranteed to be able to split once into twice as many shards.
+The number of routing shards is scaled towards the default shard limit per index
+such that indices with a smaller amount of shards can be split more often than
+larger ones. For instance an index with 1 or 2 shards can be split 10x
+(until it approaches 1024 shards) while an index created with 128 shards can only
+be split 3x by a factor of 2. Please note this is just a default value and users
+can still prepare their indices with `index.number_of_routing_shards` for custom
+splitting.
+
+NOTE: this change has an impact on the document distribution since we are changing
+the hash space. Documents are still uniformly distributed across all shards but since
+we are artificually changing the number of buckets in the consistent hashign space
+document might be hashed into different shards compared to previous versions.
+
+This is a 7.0 only change.

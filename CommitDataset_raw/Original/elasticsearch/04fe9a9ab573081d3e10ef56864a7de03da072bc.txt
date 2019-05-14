@@ -1,0 +1,10 @@
+Relax remote check for bwc project checkouts (#28666)
+
+The remote check previously validated both the remote name and the
+repository as well, meaning that if someone passed in a repository that
+was not a github URL, it would fail. This meant that it was not possible
+to fully test bwc out with multiple branches without first pushing to a
+remote. Removing the full check allows a user to pass in the origin
+remote as its remote, which is already added as a file based remote to
+each bwc snapshot build. This will allow changes to be made locally
+across all bwc branches, tested, and then pushed simultaneously.

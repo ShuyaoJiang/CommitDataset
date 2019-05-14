@@ -1,0 +1,7 @@
+Add PeerFinder#onFoundPeersUpdated (#32939)
+
+Today the PeerFinder silently updates the set of found peers as new peers are
+discovered and old ones are disconnected, and elections are scheduled
+independently of these changes. In fact, it would be better if the election
+scheduler were only activated on discovery of a quorum of peers. This commit
+introduces the `onFoundPeersUpdated` method that allows this flow.

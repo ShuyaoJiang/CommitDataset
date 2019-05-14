@@ -1,0 +1,19 @@
+Watcher: Create templates on nodes newer than the master (elastic/x-pack-elasticsearch#2950)
+
+This problem was introduced due to distributed watch execution.
+
+When a node newer than the master node joins the cluster and gets a
+.watches shard assigned it is supposed to start watcher. However
+when a new version of the watch history template is part of that new
+node (and we might increase that version anytime), this template does
+not get installed, because only the master node is updating watcher
+templates.
+
+This commit checks if the local node version is higher than the master
+node version and then also puts missing templates.
+
+Currently this is done for all watcher templates, not only the watcher history.
+
+relates elastic/x-pack-elasticsearch#2944
+
+Original commit: elastic/x-pack-elasticsearch@4960231ea706b260104a03e73c6e914143852c69

@@ -1,0 +1,3 @@
+Make InternalComposite key comparable
+
+Keys are compared in BucketSortPipelineAggregation so making key type (ArrayMap) implement Comparable. Maps are compared using the entry set's iterator so ordered maps order is maintain. For each entry first comparing key then value. Assuming all keys are strings. When comparing entries' values if type is not identical and\or type not implementing Comparable, throwing exception. Not implementing equals() and hashCode() functions as parent's ones are sufficient. Tests included.

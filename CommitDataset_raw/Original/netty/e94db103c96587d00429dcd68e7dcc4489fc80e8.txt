@@ -1,0 +1,13 @@
+Ensure flowController().writePendingBytes() is triggered when writing response in example
+
+Motivation:
+
+We called ctx.flush() which is not correct as it will not call flowController().writePendingBytes().
+
+Modifications:
+
+Call flush(ChannelHandlerContext) and so also call flowController().writePendingBytes().
+
+Result:
+
+Correct http2 example

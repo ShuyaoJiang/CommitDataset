@@ -1,0 +1,12 @@
+Rename the bulk thread pool to write thread pool (#29593)
+
+This commit renames the bulk thread pool to the write thread pool. This
+is to better reflect the fact that the underlying thread pool is used to
+execute any document write request (single-document index/delete/update
+requests, and bulk requests).
+
+With this change, we add support for fallback settings
+thread_pool.bulk.* which will be supported until 7.0.0.
+
+We also add a system property so that the display name of the thread
+pool remains as "bulk" if needed to avoid breaking users.

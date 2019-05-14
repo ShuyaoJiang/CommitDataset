@@ -1,0 +1,9 @@
+In Java 8 branch, fall back to an ImmutableSet backed by j.u.HashSet (and its binary tree magic) if apparent hash flooding is detected.
+
+As part of this restructuring, we redesign Immutable{Set,SortedSet}.Builder to always allocate O(distinct) memory instead of O(insertions), deduplicating as elements come in (somewhat lazily in ISS.B's case).
+
+RELNOTES=Protect against hash flooding in ImmutableSet, addressing https://github.com/google/guava/issues/3016.  Additionally, use only O(distinct) memory in Immutable{Set,SortedSet}.Builder, rather than O(insertions).
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=185156965

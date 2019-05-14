@@ -1,0 +1,12 @@
+Add bootstrap check that enforces TLS if a production license is in the local clusterstate (elastic/x-pack-elasticsearch#2499)
+
+This change will enforce transport SSL to be enforced if security is enabled and the
+license in the clusterstate is a production license. The cluster state is loaded from
+local storage such that we don't need to join a cluster to make these checks. Yet, the cluster
+might have already got a different license if the node got disconnected while the license got
+downgraded and then TLS got disabled. This corner case requires manual intervention which
+we consider ok given the simplicity of this change.
+
+Relates to elastic/x-pack-elasticsearch#2463
+
+Original commit: elastic/x-pack-elasticsearch@5765b7cd2152c4e344e7a5d63fb423e5044fa0a0

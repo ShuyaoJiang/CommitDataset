@@ -1,0 +1,13 @@
+Rework @TestPropertySource compatibility
+
+Rework @TestPropertySource changes introduced in commit d251b513
+to restore compatibility with Spring Boot 1.1
+
+- Only add the `server.port` property when no @IntegrationTest
+  annotation is found.
+- Always add a default `spring.jmx.enabled=false` property.
+- Restore the SpringApplicationContextLoader.getEnvironmentProperties
+  protected method.
+- Remove the @IntegrationTest.properties attribute.
+
+See gh-1697

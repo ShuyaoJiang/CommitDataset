@@ -1,0 +1,8 @@
+ICU plugin: use root locale by default for collators (#26413)
+
+Calls to Collator.getInstance without arguments returns a
+collator that uses the system's default locale, which we don't
+want because it makes behavior harder to reproduce. Change it
+to always use the root locale instead.
+
+For #25587

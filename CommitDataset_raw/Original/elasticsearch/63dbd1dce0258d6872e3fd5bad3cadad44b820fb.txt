@@ -1,0 +1,9 @@
+Allow User/Password realms to disable authc (#34033)
+
+The "lookupUser" method on a realm facilitates the "run-as" and
+"authorization_realms" features.
+This commit allows a realm to be used for "lookup only", in which
+case the "authenticate" method (and associated token methods) are
+disabled.
+It does this through the introduction of a new
+"authentication.enabled" setting, which defaults to true.

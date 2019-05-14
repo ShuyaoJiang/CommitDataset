@@ -1,0 +1,11 @@
+FileDescriptor writev core dump
+
+Motivation:
+FileDescriptor#writev calls JNI code, and that JNI code dereferences a NULL pointer which crashes the application. This occurs when writing a single CompositeByteBuf object with more than one component.
+
+Modifications:
+- Initialize the iovec iterator properly to avoid the core dump
+- Fix the array length calculation if we aren't able to fit all the ByteBuffer objects in the iovec array
+
+Result:
+No more core dump.

@@ -1,0 +1,7 @@
+[Tests] Check QueryProfileShardResult parser robustness for new fields (#25130)
+
+When parsing resonses we should be ignoring any new unknown fields or inner
+objects in most cases to be forward compatible with changes in core on the
+client side. This change adds test for this for QueryProfileShardResult and
+nested substructures and changes the parsing code where necessary to be able to
+ignore new fields and objects in the xContent.

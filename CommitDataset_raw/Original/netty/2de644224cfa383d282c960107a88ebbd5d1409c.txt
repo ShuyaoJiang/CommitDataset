@@ -1,0 +1,13 @@
+Correctly mark EpollServerDomainSocketChannel.isActive() as true after bind is complete.]
+
+Motivation:
+
+We missed to set active = true in EpollServerDomainSocketChannel.doBind(...) which also means that channelActive(...) was never triggered.
+
+Modifications:
+
+Correct set active = true in doBind(...)
+
+Result:
+
+EpollServerDomainSocketChannel is correctly set to active when bound.

@@ -1,0 +1,9 @@
+Allows failing shards without marking as stale (#28054)
+
+Currently when failing a shard we also mark it as stale (eg. remove its
+allocationId from from the InSync set). However in some cases, we need 
+to be able to fail shards but keep them InSync set. This commit adds
+such capacity. This is a preparatory change to make the primary-replica
+resync less lenient.
+
+Relates #24841

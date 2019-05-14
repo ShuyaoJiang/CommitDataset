@@ -1,0 +1,10 @@
+Fix NPE for /_cat/indices when no primary shard (#26953)
+
+When a node which contains the primary shard is unavailable, the primary
+stats (and the total stats) of an `IndexStats` will be empty for a short
+moment (while the primary shard is being relocated). However, we assume
+that these stats are always non-empty when handling `_cat/indices` in
+RestIndicesAction. This commit checks the content of these stats before
+accessing.
+
+Closes #26942

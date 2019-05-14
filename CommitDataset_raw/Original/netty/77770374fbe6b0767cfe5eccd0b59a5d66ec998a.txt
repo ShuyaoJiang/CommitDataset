@@ -1,0 +1,30 @@
+Ability to run a task at the end of an eventloop iteration.
+
+  Motivation:
+
+This change is part of the change done in PR #5395 to provide an `AUTO_FLUSH` capability.
+Splitting this change will enable to try other ways of implementing `AUTO_FLUSH`.
+
+Modifications:  
+
+Two methods:
+
+```java
+void executeAfterEventLoopIteration(Runnable task);
+  boolean removeAfterEventLoopIterationTask(Runnable task);
+```
+are added to `SingleThreadEventLoop` class for adding/removing a task to be executed at the end of current/next iteration of this `eventloop`.
+
+In order to support the above, a few methods are added to `SingleThreadEventExecutor`
+
+```java
+protected void afterRunningAllTasks() { }
+```
+
+This is invoked after all tasks are run for this executor OR if the passed timeout value for `runAllTasks(long timeoutNanos)` is expired.
+
+Added a queue of `tailTasks` to `SingleThreadEventLoop` to hold all tasks to be executed at the end of every iteration.
+ 
+Result:  
+
+`SingleThreadEventLoop` now has the ability to execute tasks at the end of an eventloop iteration.

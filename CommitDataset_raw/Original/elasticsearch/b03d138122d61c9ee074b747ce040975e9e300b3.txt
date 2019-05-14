@@ -1,0 +1,9 @@
+Lift retention lease expiration to index shard (#38380)
+
+This commit lifts the control of when retention leases are expired to
+index shard. In this case, we move expiration to an explicit action
+rather than a side-effect of calling
+ReplicationTracker#getRetentionLeases. This explicit action is invoked
+on a timer. If any retention leases expire, then we hard sync the
+retention leases to the replicas. Otherwise, we proceed with a
+background sync.

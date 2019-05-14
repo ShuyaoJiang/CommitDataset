@@ -1,0 +1,37 @@
+Watcher: Use Bulkprocessor in HistoryStore/TriggeredWatchStore (#32490)
+
+Currently a watch execution results in one bulk request, when the
+triggered watches are written into the that index, that need to be
+executed. However the update of the watch status, the creation of the
+watch history entry as well as the deletion of the triggered watches
+index are all single document operations.
+
+This can have quite a negative impact, once you are executing a lot of
+watches, as each execution results in 4 documents writes, three of them
+being single document actions.
+
+This commit switches to a bulk processor instead of a single document
+action for writing watch history entries and deleting triggered watch
+entries. However the defaults are to run synchronous as before because
+the number of concurrent requests is set to 0. This also fixes a bug,
+where the deletion of the triggered watch entry was done asynchronously.
+
+However if you have a high number of watches being executed, you can
+configure watcher to delete the triggered watches entries as well as
+writing the watch history entries via bulk requests.
+
+The triggered watches deletions should still happen in a timely manner,
+where as the history entries might actually be bound by size as one
+entry can easily have 20kb.
+
+The following settings have been added:
+
+- xpack.watcher.bulk.actions (default 1)
+- xpack.watcher.bulk.concurrent_requests (default 0)
+- xpack.watcher.bulk.flush_interval (default 1s)
+- xpack.watcher.bulk.size (default 1mb)
+
+The drawback of this is of course, that on a node outage you might end
+up with watch history entries not being written or watches needing to be
+executing again because they have not been deleted from the triggered
+watches index. The window of these two cases increases configuring the bulk processor to wait to reach certain thresholds.

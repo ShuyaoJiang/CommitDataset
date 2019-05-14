@@ -1,0 +1,9 @@
+Fix build.snapshot bug in version collection (#28641)
+
+The build.snapshot was mistakenly passed in to every snapshot version,
+so when release tests were run, these versions were mistaken as released
+entities and could not be found in maven, because they do not
+exist. This fix removes that bug in logic, and always makes them proper
+snapshots. This has a benefit of cleaning up the VersionUtilsTests
+because they no longer rely on different sets of versions to check
+against, which was also a bug.

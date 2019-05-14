@@ -1,0 +1,10 @@
+[ML] Account for the possibility of C++ log messages being UTF-16 (elastic/x-pack-elasticsearch#2952)
+
+On Windows, log4cxx always writes to stderr in UTF-16, and we get the
+logs from C++ to Java by redirecting stderr to our named pipe.  Hence
+the log handler in Java needs to tolerate the log stream it's reading
+being either UTF-16 (for Windows) or UTF-8 (for other platforms).
+
+Fixes elastic/machine-learning-cpp#385
+
+Original commit: elastic/x-pack-elasticsearch@89237d71255558c7b4452d6c7b8ae24bc5d1aa32

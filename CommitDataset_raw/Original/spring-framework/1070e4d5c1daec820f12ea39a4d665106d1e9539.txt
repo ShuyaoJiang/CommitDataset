@@ -1,0 +1,29 @@
+Initialize FrameworkServlet property sources eagerly
+
+Prior to this change,
+FrameworkServlet#configureAndRefreshWebApplicationContext called
+ #postProcessWebApplicationContext(wac) and #applyInitializers(wac)
+prior to #refresh, but because servlet-based property source stubs were
+not replaced until #refresh, any post-processing or initialization
+routines could not benefit from accessing the Environment to retrieve
+properties from the ServletContext or ServletConfig.
+
+The workaround to this problem is detailed in SPR-9610 - the user simply
+needed to call WebApplicationContextUtils#initServletPropertySources
+manually within their ApplicationContextInitializer (or overridden
+ #postProcessWebApplicationContext method)
+
+This commit ensures that
+FrameworkServlet#configureAndRefreshWebApplicationContext calls
+WebApplicationContextUtils#initServletPropertySources eagerly, prior to
+invoking #postProcessWebApplicationContext and #applyInitializers.
+Related Javadoc has also been updated throughout to clarify the behavior
+of #initServletPropertySources, when it can be called and what the
+effects are, etc.
+
+Note also that a reproduction issue was added to demonstrate the problem
+and verify its resolution [1].
+
+[1]: https://github.com/SpringSource/spring-framework-issues/tree/master/SPR-9610
+
+Issue: SPR-9610

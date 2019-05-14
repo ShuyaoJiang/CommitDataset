@@ -1,0 +1,13 @@
+Don't use VM.maxDirectMemory() on IBM J9 / Eclipse OpenJ9 to retrieve direct memory limit (#7966)
+
+Motivation:
+
+On J9 / OpenJ9 netty initializes this value with 64M, even the direct accessible memory is actually unbounded.
+
+Modifications:
+
+Skip usage of VM.maxDirectMemory() on J9 / OpenJ9
+
+Result:
+
+More correct direct memory limit detection. Fixes #7654.

@@ -1,0 +1,19 @@
+Watcher: Create two index ugprade checks for watcher upgrade (elastic/x-pack-elasticsearch#2298)
+
+As there are two indices to upgrade for watcher, it makes a lot of sense
+to also have two upgrade checks.
+
+There is one upgrader for the watches index, which deletes
+old templates, adds the new one before and then does the reindexing.
+Same for the triggered watches index.
+
+This also means, that there will be two entries popping up in the kibana
+UI.
+
+Note: Each upgrade check checks if the other index (for the .watches
+upgrade check the triggered watches index and vice versa) is already
+upgraded and only if that is true, watcher is restarted.
+
+relates elastic/x-pack-elasticsearch#2238
+
+Original commit: elastic/x-pack-elasticsearch@2c92040ed6ba8d12ca6bd7ea6eeb973245c1ff4f

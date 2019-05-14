@@ -1,0 +1,10 @@
+EpollDatagramChannel avoid getOption
+
+Motivation:
+EpollDatagramChannel uses getOption in the isActive method. getOption is backed by a relatively large conditional if/else if block and this conditional checking can be avoided in the epoll transport.
+
+Modifications:
+- Add EpollDatagramChannelConfig#getActiveOnOpen and use this in EpollDatagramChannel
+
+Result:
+Conditional checking due to getOption is removed from EpollDatagramChannel.

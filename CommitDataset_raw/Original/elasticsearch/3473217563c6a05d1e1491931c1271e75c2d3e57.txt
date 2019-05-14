@@ -1,0 +1,10 @@
+Remove Joda usage from ILM (#35220)
+
+This commit removes the Joda time usage from ILM and the HLRC components of ILM.
+It also fixes an issue where using the `?human=true` flag could have caused the
+parser not to work. These millisecond fields now follow the standard we use
+elsewhere in the code, with additional fields added iff the `human` flag is
+specified.
+
+This is a breaking change for ILM, but since ILM has not yet been released, no
+compatibility shim is needed.

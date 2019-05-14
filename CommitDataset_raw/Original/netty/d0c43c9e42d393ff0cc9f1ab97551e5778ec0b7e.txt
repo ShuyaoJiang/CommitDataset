@@ -1,0 +1,13 @@
+We should prefer heap buffers when using the OIO transport to reduce memory copies.
+
+Motivation:
+
+When using the OIO transport we need to act on byte[] when writing and reading from / to the underyling Socket. So we should ensure we use heap buffers by default to reduce memory copies.
+
+Modifications:
+
+Ensure we prefer heap buffers by default for the OIO transport.
+
+Result:
+
+Possible less memory copies.

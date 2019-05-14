@@ -1,0 +1,14 @@
+Support comments in SQL scripts in JdbcTestUtils
+
+Prior to this commit, utility methods in JdbcTestUtils interpreted SQL
+comments as separate statements, resulting in an exception when such a
+script is executed.
+
+This commit addresses this issue by introducing a
+readScript(lineNumberReader, String) method that accepts a comment
+prefix. Comment lines are therefore no longer returned in the parsed
+script. Furthermore, the existing readScript(lineNumberReader) method
+now delegates to this new readScript() method, supplying "--" as the
+default comment prefix.
+
+Issue: SPR-9593

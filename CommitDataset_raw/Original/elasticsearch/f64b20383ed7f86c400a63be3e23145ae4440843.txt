@@ -1,0 +1,5 @@
+Replace awaitBusy with assertBusy in atLeastDocsIndexed (#38190)
+
+Unlike assertBusy, awaitBusy does not retry if the code-block throws an
+AssertionError. A refresh in atLeastDocsIndexed can fail because we call
+this method while we are closing some node in FollowerFailOverIT.

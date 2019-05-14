@@ -1,0 +1,15 @@
+[ML] Improve the way ML jobs are allocated to nodes (elastic/x-pack-elasticsearch#2975)
+
+This change modifies the way ML jobs are assigned to nodes to primarily
+base the decision on the estimated memory footprint of the jobs. The
+memory footprint comes from the model size stats if the job has been
+running long enough, otherwise from the model memory limit. In addition,
+an allowance for the program code and stack is added.
+
+If insufficient information is available to base the allocation decision on
+memory requirements then the decision falls back to using simple job
+counts per node.
+
+relates elastic/x-pack-elasticsearch#546
+
+Original commit: elastic/x-pack-elasticsearch@b276aedf2fca6aee7382ba8f9deef6034a5d0ec3

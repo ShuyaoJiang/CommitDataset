@@ -1,0 +1,13 @@
+Fix some OkBuffer bugs.
+
+GzipSource exceptions used six hex digits instead of
+8 to print ints.
+
+readUtf8 always did an extra copy of the bytes being
+read.
+
+Moving bytes between buffers crashed when the destination
+was empty and the source was a prefix.
+
+InputStream reading returned values in -128..127 instead
+of in 0..255.

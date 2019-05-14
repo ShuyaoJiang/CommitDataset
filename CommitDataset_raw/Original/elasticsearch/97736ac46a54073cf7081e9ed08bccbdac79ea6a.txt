@@ -1,0 +1,10 @@
+Logging: Skip test if it'd fail
+
+If we're running on a platform where we can't install syscall filters
+Elasticsearch logs a message before it reads the data directory to get
+the node name. Because that log message doesn't have a node name this
+test will fail. Since we mostly run the test on OSes where we *can*
+install the syscall filters we can fairly safely skip the test on OSes
+where we can't install the syscall filters.
+
+Closes #33540

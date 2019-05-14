@@ -1,0 +1,16 @@
+Replace LocalEventLoopGroup with DefaultEventLoopGroup
+
+Motivation:
+
+LocalEventLoopGroup and LocalEventLoop are not really special for LocalChannels.  It can be used for other channel implementations as long as they don't require special handling.
+
+Modifications:
+
+- Add DefaultEventLoopGroup and DefaultEventLoop
+- Deprecate LocalEventLoopGroup and make it extend DefaultEventLoopGroup
+- Add DefaultEventLoop and remove LocalEventLoop
+- Fix inspector warnings
+
+Result:
+
+- Better class names.

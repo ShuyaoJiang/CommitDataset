@@ -1,0 +1,37 @@
+Bootstrap a Zen2 cluster once quorum is discovered (#37463)
+
+Today when bootstrapping a Zen2 cluster we wait for every node in the
+`initial_master_nodes` setting to be discovered, so that we can map the
+node names or addresses in the `initial_master_nodes` list to their IDs for
+inclusion in the initial voting configuration. This means that if any of
+the expected master-eligible nodes fails to start then bootstrapping will
+not occur and the cluster will not form. This is not ideal, and we would
+prefer the cluster to bootstrap even if some of the master-eligible nodes
+do not start.
+
+Safe bootstrapping requires that all pairs of quorums of all initial
+configurations overlap, and this is particularly troublesome to ensure
+given that nodes may be concurrently and independently attempting to
+bootstrap the cluster. The solution is to bootstrap using an initial
+configuration whose size matches the size of the expected set of
+master-eligible nodes, but with the unknown IDs replaced by "placeholder"
+IDs that can never belong to any node.  Any quorum of received votes in any
+of these placeholder-laden initial configurations is also a quorum of the
+"true" initial set of master-eligible nodes, giving the guarantee that it
+intersects all other quorums as required.
+
+Note that this change means that the initial configuration is not
+necessarily robust to any node failures. Normally the cluster will form and
+then auto-reconfigure to a more robust configuration in which the
+placeholder IDs are replaced by the IDs of genuine nodes as they join the
+cluster; however if a node fails between bootstrapping and this
+auto-reconfiguration then the cluster may become unavailable. This we feel
+to be less likely than a node failing to start at all.
+
+This commit also enormously simplifies the cluster bootstrapping process.
+Today, the cluster bootstrapping process involves two (local) transport actions
+in order to support a flexible bootstrapping API and to make it easily
+accessible to plugins. However this flexibility is not required for the current
+design so it is adding a good deal of unnecessary complexity. Here we remove
+this complexity in favour of a much simpler ClusterBootstrapService
+implementation that does all the work itself.

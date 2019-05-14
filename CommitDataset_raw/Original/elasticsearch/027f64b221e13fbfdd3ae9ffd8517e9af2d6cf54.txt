@@ -1,0 +1,11 @@
+[ML] Fix a race condition simultaneous close requests are made for a job (elastic/x-pack-elasticsearch#2913)
+
+When simultaneous close requests were made for the same job it was possible
+that one of the requests would inappropriately log error messages about the
+job having failed.  This change prevents that problem, whilst continuing to
+adhere to the requirement that close requests for already closing jobs do not
+return until the close request that is doing the work completes.
+
+relates elastic/x-pack-elasticsearch#2912
+
+Original commit: elastic/x-pack-elasticsearch@513b7fa1d6e4da04680e4f9c1449044740e5b453

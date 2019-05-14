@@ -1,0 +1,12 @@
+Allow unmapped fields in composite aggregations (#35331)
+
+Today the `composite` aggregation throws an error if a source targets an
+unmapped field and `missing_bucket` is set to false. Documents without a
+value for a source cannot produce any bucket if `missing_bucket` is not
+activated so the error is a shortcut to say that the response will be empty.
+However this is not consistent with the `terms` aggregation which accepts
+unmapped field by default even if the response is also guaranteed to be empty.
+This commit removes this restriction, if a source contains an unmapped field
+we now return an empty response (no buckets).
+
+Closes #35317

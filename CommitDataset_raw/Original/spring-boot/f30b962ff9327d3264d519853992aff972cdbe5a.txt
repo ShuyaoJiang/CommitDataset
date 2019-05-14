@@ -1,0 +1,14 @@
+Add support for unpacking nested JARs
+
+Update the executable JAR code to automatically unpack any entries
+which include an entry comment starting `UNPACK:` to the temp folder.
+The existing Maven and Gradle plugins have been updated with new
+configuration options and the `spring-boot-tools` project has been
+updated to write the appropriate entry comment based on a flag passed
+in via the `Library` class.
+
+This support has been added to allow libraries such a JRuby (which
+assumes that `jruby-complete.jar` is always accessible as file) to work
+with Spring Boot executable jars.
+
+Fixes gh-1070

@@ -1,0 +1,15 @@
+Compliant SAML Response destination check (#31175)
+
+Make SAML Response Destination check compliant
+
+Only validate the Destination element of an incoming SAML Response
+if Destination is present and the SAML Response is signed.
+The standard [1] - 3.5.5.2 and [2] - 3.2.2 does mention that the
+Destination element is optional and should only be verified when
+the SAML Response is signed. Some Identity Provider implementations
+are known to not set a Destination XML Attribute in their SAML
+responses when those are not signed, so this change also aims to
+enhance interoperability.
+
+[1] https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf
+[2] https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf

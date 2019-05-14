@@ -1,0 +1,12 @@
+SQL: Don't put aggs only queries into scroll context
+
+SQL was adding scroll timeouts to aggregation only queries. At best this
+is just confusing because we never scroll these queries. It *might*
+leave behind a scroll context that we don't want. It is failing some new
+validation that says that we have to have a `size` for every scroll
+query.
+
+Anyway, the simplest thing to do is to not put a scroll on aggregation
+only queries.
+
+Original commit: elastic/x-pack-elasticsearch@f6819a32b82eb411d7be9c9c9fab6793568146b1

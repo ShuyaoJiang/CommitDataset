@@ -1,0 +1,27 @@
+Add get-user-privileges API (#33928)
+
+This API is intended as a companion to the _has_privileges API.
+It returns the list of privileges that are held by the current user.
+
+This information is difficult to reason about, and consumers should
+avoid making direct security decisions based solely on this data.
+For example, each of the following index privileges (as well as many
+more) would grant a user access to index a new document into the
+"metrics-2018-08-30" index, but clients should not try and deduce
+that information from this API.
+- "all" on "*"
+- "all" on "metrics-*"
+- "write" on "metrics-2018-*"
+- "write" on "metrics-2018-08-30"
+
+Rather, if a client wished to know if a user had "index" access to
+_any_ index, it would be possible to use this API to determine whether
+the user has any index privileges, and on which index patterns, and
+then feed those index patterns into _has_privileges in order to
+determine whether the "index" privilege had been granted.
+
+The result JSON is modelled on the Role API, with a few small changes
+to reflect how privileges are modelled when multiple roles are merged
+together (multiple DLS queries, multiple FLS grants, multiple global
+conditions, etc).
+

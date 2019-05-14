@@ -1,0 +1,15 @@
+Fix issue with suffix pattern match
+
+Spring Framework 3.2 M2 added the ability to map requests using only
+file extensions registered through the configured through a
+ContentNeotiationManager, as opposed to allowing any file extension
+(i.e. ".*"). The MVC namespace the MVC Java config automatically
+register extensions such as ".json" and ".xml" depending on libraries
+found on the classpath. That in turn causes issues in cases where
+additional extensions are in use but not registered (e.g. ".html").
+
+This change ensures that matching with registered file extensions only
+works only if explicitly enabled through a property on
+RequestMappingHandlerMapping.
+
+Issue: SPR-10061, SPR-8474

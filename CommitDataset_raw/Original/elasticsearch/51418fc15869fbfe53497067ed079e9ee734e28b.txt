@@ -1,0 +1,11 @@
+Watcher: Mark watcher as started only after loading watches (#30403)
+
+Starting watcher should wait for the watcher to be started before
+marking the status as started, which is now done via a callback.
+
+Also, reloading watcher could set the execution service to paused. This could
+lead to watches not being executed, when run in tests. This fix does not
+change the paused flag in the execution service, just clears out the
+current queue and executions.
+
+Closes #30381

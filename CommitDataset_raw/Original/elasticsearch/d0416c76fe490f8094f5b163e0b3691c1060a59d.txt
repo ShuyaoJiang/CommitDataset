@@ -1,0 +1,11 @@
+Fix edge cases in CompositeKeyExtractorTests (#30175)
+
+Currently the test picks random java.util.TimeZone ids in some places.
+Internally we still need to convert back to joda DateTimeZone by id
+occassionally (e.g. when serializing to pre 6.3 versions). There are
+some deprecated "SystemV/*" time zones that Jodas DateTimeZone refuses
+to convert. This change excludes those rare cases from the set of
+allowed random time zones. It would be quiet odd for them to appear in
+practice.
+
+Closes #30156

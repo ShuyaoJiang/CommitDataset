@@ -1,0 +1,48 @@
+Provide helper methods in ByteBufUtil to write UTF-8/ASCII CharSequences. Related to [#909]
+
+Motivation:
+
+We expose no methods in ByteBuf to directly write a CharSequence into it. This leads to have the user either convert the CharSequence first to a byte array or use CharsetEncoder. Both cases have some overheads and we can do a lot better for well known Charsets like UTF-8 and ASCII.
+
+Modifications:
+
+Add ByteBufUtil.writeAscii(...) and ByteBufUtil.writeUtf8(...) which can do the task in an optimized way. This is especially true if the passed in ByteBuf extends AbstractByteBuf which is true for all of our implementations which not wrap another ByteBuf.
+
+Result:
+
+Writing an ASCII and UTF-8 CharSequence into a AbstractByteBuf is a lot faster then what the user could do by himself as we can make use of some package private methods and so eliminate reference and range checks. When the Charseq is not ASCII or UTF-8 we can still do a very good job and are on par in most of the cases with what the user would do.
+
+The following benchmark shows the improvements:
+
+Result: 2456866.966 ?(99.9%) 59066.370 ops/s [Average]
+  Statistics: (min, avg, max) = (2297025.189, 2456866.966, 2586003.225), stdev = 78851.914
+  Confidence interval (99.9%): [2397800.596, 2515933.336]
+
+Benchmark                                                        Mode   Samples        Score  Score error    Units
+i.n.m.b.ByteBufUtilBenchmark.writeAscii                         thrpt        50  9398165.238   131503.098    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiString                   thrpt        50  9695177.968   176684.821    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiStringViaArray           thrpt        50  4788597.415    83181.549    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiStringViaArrayWrapped    thrpt        50  4722297.435    98984.491    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiStringWrapped            thrpt        50  4028689.762    66192.505    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiViaArray                 thrpt        50  3234841.565    91308.009    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiViaArrayWrapped          thrpt        50  3311387.474    39018.933    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeAsciiWrapped                  thrpt        50  3379764.250    66735.415    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8                          thrpt        50  5671116.821   101760.081    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8String                    thrpt        50  5682733.440   111874.084    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8StringViaArray            thrpt        50  3564548.995    55709.512    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8StringViaArrayWrapped     thrpt        50  3621053.671    47632.820    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8StringWrapped             thrpt        50  2634029.071    52304.876    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8ViaArray                  thrpt        50  3397049.332    57784.119    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8ViaArrayWrapped           thrpt        50  3318685.262    35869.562    ops/s
+i.n.m.b.ByteBufUtilBenchmark.writeUtf8Wrapped                   thrpt        50  2473791.249    46423.114    ops/s
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1,387.417 sec - in io.netty.microbench.buffer.ByteBufUtilBenchmark
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+The *ViaArray* benchmarks are basically doing a toString().getBytes(Charset) which the others are using ByteBufUtil.write*(...).

@@ -1,0 +1,9 @@
+Roll translog generation on primary promotion
+
+When a primary is promoted, rolling the translog generation here makes
+simpler reasoning about the relationship between primary terms and
+translog generation. Note that this is not strictly necessary for
+correctness (e.g., to avoid duplicate operations with the same sequence
+number within a single generation).
+
+Relates #27313

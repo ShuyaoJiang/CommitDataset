@@ -1,0 +1,13 @@
+Ensure that environment post processors are ordered correctly
+
+Previously, ConfigFileApplicationListener would always add itself to the
+end of the list of environment post processors loaded via
+spring.factories. This meant that its order (highest precedence + 10)
+would not be honoured and it would only be in the right place in the
+list if any other post processors happened to have a higher precedence.
+
+This commit updates ConfigFileApplicationListener to sort the list of
+post processors using AnnotationAwareOrderComparator once its added
+itself to the list.
+
+Closes gh-4595

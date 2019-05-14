@@ -1,0 +1,10 @@
+Guard Endpoint bean declarations with ConditionalOnExposedEndpoint
+
+This commit adds the newly introduced `@ConditionalOnExposedEndpoint`
+conditional annotation to all auto-configured `Endpoint` in Actuator.
+
+With that change, `EndPoint` instances and related infrastructure will
+only be created when they are meant to be exposed and used. This will
+save CPU and memory resources when Actuator is present.
+
+Closes gh-16093

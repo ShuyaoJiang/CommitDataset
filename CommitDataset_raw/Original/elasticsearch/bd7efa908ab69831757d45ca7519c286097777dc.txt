@@ -1,0 +1,29 @@
+Add ability to split shards (#26931)
+
+This change adds a new `_split` API that allows to split indices into a new
+index with a power of two more shards that the source index.  This API works
+alongside the `_shrink` API but doesn't require any shard relocation before
+indices can be split.
+
+The split operation is conceptually an inverse `_shrink` operation since we
+initialize the index with a _syntetic_ number of routing shards that are used
+for the consistent hashing at index time. Compared to indices created with
+earlier versions this might produce slightly different shard distributions but
+has no impact on the per-index backwards compatibility.  For now, the user is
+required to prepare an index to be splittable by setting the
+`index.number_of_routing_shards` at index creation time.  The setting allows the
+user to prepare the index to be splittable in factors of
+`index.number_of_routing_shards` ie. if the index is created with
+`index.number_of_routing_shards: 16` and `index.number_of_shards: 2` it can be
+split into `4, 8, 16` shards. This is an intermediate step until we can make
+this the default. This also allows us to safely backport this change to 6.x.
+
+The `_split` operation is implemented internally as a DeleteByQuery on the
+lucene level that is executed while the primary shards execute their initial
+recovery. Subsequent merges that are triggered due to this operation will not be
+executed immediately. All merges will be deferred unti the shards are started
+and will then be throttled accordingly.
+
+This change is intended for the 6.1 feature release but will not support pre-6.1
+indices to be split unless these indices have been shrunk before. In that case
+these indices can be split backwards into their original number of shards.

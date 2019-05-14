@@ -1,0 +1,17 @@
+[Monitoring] Make Exporters Async (#35765)
+
+This changes the exporter code -- most notably the `http` exporter --
+to use async operations throughout the resource management and bulk
+initialization code (the bulk indexing of monitoring documents was
+already async).
+
+As part of this change, this does change one semi-core aspect of the
+`HttpResource` class in that it will no longer block all concurrent calls
+until the first call completes with
+`HttpResource::checkAndPublishIfDirty`.
+Now, any parallel attempts to check the resources will be skipped until
+the first call completes (success or failure). While this is a technical
+change, it has very little practical impact because the existing behavior
+was either quick success (then every blocked request processed) or
+each request timed out and failed anyway, thus being effectively
+skipped (and a burden on the system).

@@ -1,0 +1,17 @@
+Mitigate date histogram slowdowns with non-fixed timezones. (#30534)
+
+Date histograms on non-fixed timezones such as `Europe/Paris` proved much slower
+than histograms on fixed timezones in #28727. This change mitigates the issue by
+using a fixed time zone instead when shard data doesn't cross a transition so
+that all timestamps share the same fixed offset. This should be a common case
+with daily indices.
+
+NOTE: Rewriting the aggregation doesn't work since the timezone is then also
+used on the coordinating node to create empty buckets, which might be out of the
+range of data that exists on the shard.
+
+NOTE: In order to be able to get a shard context in the tests, I reused code
+from the base query test case by creating a new parent test case for both
+queries and aggregations: `AbstractBuilderTestCase`.
+
+Mitigates #28727

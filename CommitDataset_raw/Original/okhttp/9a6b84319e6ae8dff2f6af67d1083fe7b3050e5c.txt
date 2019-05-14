@@ -1,0 +1,11 @@
+Initial refactoring towards a Transmitter abstraction
+
+Currently this just moves all calls into StreamAllocation, RealConnection, and
+HttpCodec into a new Transmitter type.
+
+In follow-up I'll try to improve the API boundaries of this new type, possibly
+by combining it with StreamAllocation. The ultimate goal is that it should be
+very obvious from inspection that we don't leak connections and that we don't
+miss any events.
+
+https://github.com/square/okhttp/issues/4603

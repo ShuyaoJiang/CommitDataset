@@ -1,0 +1,7 @@
+Node should start up despite of a lingering `.es_temp_file` (#21210)
+
+When ES starts up we verify we can write to all data folders and that they support atomic moves. We do so by creating and deleting temp files. If for some reason the files was successfully created but not successfully deleted, we still shut down correctly but subsequent start attempts will fail with a file already exists exception.
+
+This commit makes sure to first clean any existing temporary files.
+
+Superseeds #21007

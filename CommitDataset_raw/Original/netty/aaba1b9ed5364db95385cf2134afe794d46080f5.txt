@@ -1,0 +1,18 @@
+Accept over 2^31-1 MAX_HEADER_LIST_SIZE
+
+Motivation:
+
+The MAX_HEADER_LIST_SIZE of SETTINGS is represented by
+unsigned 32-bit value and this value isn't limited in RFC7540.
+But in current implementation, its stored to int variable so
+over 2^31-1 value is recognized as minus and handled as
+PROTOCOL_ERROR.
+
+Modifications:
+
+If a value of MAX_HEADER_LIST_SIZE is larger than 2^31-1, its
+handled as 2^31-1
+
+Result:
+
+Over 2^31-1 MAX_HEADER_LIST_SIZE is became acceptable

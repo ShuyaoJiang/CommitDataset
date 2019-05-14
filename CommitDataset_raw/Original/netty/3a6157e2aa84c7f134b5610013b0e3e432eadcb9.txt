@@ -1,0 +1,13 @@
+Unit Test for SslHandler's handlerRemoved()
+
+Motivation
+
+SslHandler's handlerRemoved() is supposed to release the SSLEngine (which it does) but there is no Test for it to make sure it really happens and doesn't unexpectedly change in the future.
+
+Modifications
+
+Add a Unit Test that makes sure that SslHandler releases the SSLEngine when the Channel gets closed.
+
+Result
+
+Assurance that SslHandler will not leak (ReferenceCounted) SSLEngines.

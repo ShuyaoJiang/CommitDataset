@@ -1,0 +1,15 @@
+Revert deferred DDL changes and re-oreder database migrations
+
+Schema initialization now happens in @PostConstruct (effectively)
+whether it is via the Hibernate EntityManagerFactory or the
+Boot DataSourceInitialization (in addition or instead). The data.sql
+script if it exists is still executed on an event fired from the
+other places, so those tests are passing.
+
+Flyway and liquibase have bean factory post processors (like
+the one they use to order the audit aspect in Spring Data) that
+enforce a dependency on those components from the EntityManagerFactory.
+So Hibernate validation is still happy (and there are 2 tests to
+prove it now as well).
+
+Fixes gh-1022

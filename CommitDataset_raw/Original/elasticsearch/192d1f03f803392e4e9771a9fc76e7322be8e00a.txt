@@ -1,0 +1,11 @@
+Do not swallow exception in ChecksumBlobStoreFormat.writeAtomic() (#27597)
+
+The ChecksumBlobStoreFormat.writeAtomic() method writes a blob using a
+temporary name and then moves the blob to its final name. The move
+operation can fail and in this case the temporary blob is deleted. If
+this delete operation also fails, then the initial exception is lost.
+
+This commit ensures that when something goes wrong during the move
+operation the initial exception is kept and thrown, and if the delete
+operation also fails then this additional exception is added
+as a suppressed exception to the initial one.

@@ -1,0 +1,12 @@
+Optimize warning header de-duplication (#37725)
+
+Now that warning headers no longer contain a timestamp of when the
+warning was generated, we no longer need to extract the warning value
+from the warning to determine whether or not the warning value is
+duplicated. Instead, we can compare strings directly.
+
+Further, when de-duplicating warning headers, are constantly rebuilding
+sets. Instead of doing that, we can carry about the set with us and
+rebuild it if we find a new warning value.
+
+This commit applies both of these optimizations.

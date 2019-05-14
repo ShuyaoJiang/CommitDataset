@@ -1,0 +1,3 @@
+Move GlobalCheckpointTracker and remove SequenceNumbersService (#27837)
+
+This commit moves GlobalCheckpointTracker from the engine to IndexShard, where it better fits logically: Tracking the global checkpoint based on the local checkpoints of all shards in the replication group is not a property of the engine, but rather a property fulfilled by the current primary shard. The LocalCheckpointTracker on the other hand is driven by the contents of the local translog. By moving GlobalCheckpointTracker to IndexShard, it makes little sense to keep the SequenceNumbersService class around - it would only wrap the LocalCheckpointTracker. This commit therefore removes the class and replaces occurrences of SequenceNumbersService in the engine directly by LocalCheckpointTracker.

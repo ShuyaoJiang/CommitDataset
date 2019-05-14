@@ -1,0 +1,12 @@
+Error handling for WebFlux should log HTTP 5xx errors
+
+This commit ensures that all errors handled by the
+`DefaultErrorWebExceptionHandler` (Spring WebFlux error convetion
+support) logs an error with request information and exception
+stacktrace.
+
+This is limited to errors that result in an HTTP 5xx error.
+Exceptions that extend `ResponseStatusException` and set a non-5xx
+status will not be logged.
+
+Closes gh-10904

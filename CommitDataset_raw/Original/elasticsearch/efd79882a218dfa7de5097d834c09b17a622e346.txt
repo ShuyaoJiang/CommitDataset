@@ -1,0 +1,5 @@
+Allow build to directly run under JDK 9 (#25859)
+
+With Gradle 4.1 and newer JDK versions, we can finally invoke Gradle directly using a JDK9 JAVA_HOME without requiring a JDK8 to "bootstrap" the build. As the thirdPartyAudit task runs within the JVM that Gradle runs in, it needs to be adapted now to be JDK9 aware.
+
+This commit also changes the `JavaCompile` tasks to only fork if necessary (i.e. when Gradle's JVM and JAVA_HOME's JVM differ).

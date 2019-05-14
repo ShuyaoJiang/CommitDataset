@@ -1,0 +1,13 @@
+Handle unresolved property names with underscore
+
+When the configuration property name is not resolved against
+the target bean's property descriptors and the property name
+is delimited by `underscore` instead of `dot`, then `RelaxedDataBinder`
+doesn't bind those properties to the target if the property is
+of type Map.
+
+With thanks to @ilayaperumalg for the original PR.
+Updated by @dsyer to recognize that the property is of type Map, rather
+than blindly trying all combinations of property paths.
+
+Fixes gh-3836

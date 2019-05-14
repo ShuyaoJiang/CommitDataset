@@ -1,0 +1,14 @@
+Use higher maxQueriesPerResolve and make exception message more clear.
+
+Motivation:
+
+We use a default of 3 for maxQueriesPerResolve when using the DnsNameResolverBuilder, which is too low if you want to resolve a hostname that uses a lot of CNAME records.
+
+Modifications:
+
+- Use higher default (16)
+- Make exception message more clear why it failed.
+
+Result:
+
+Be able to resolve more domains by default and be able to better trouble shoot why a resolver failed.

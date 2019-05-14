@@ -1,0 +1,24 @@
+Use a non-volatile read for ensureAccessible() whenever possible to reduce overhead and allow better inlining. (#8266)
+
+Motiviation:
+
+At the moment whenever ensureAccessible() is called in our ByteBuf implementations (which is basically on each operation) we will do a volatile read. That per-se is not such a bad thing but the problem here is that it will also reduce the the optimizations that the compiler / jit can do. For example as these are volatile it can not eliminate multiple loads of it when inline the methods of ByteBuf which happens quite frequently because most of them a quite small and very hot. That is especially true for all the methods that act on primitives.
+
+It gets even worse as people often call a lot of these after each other in the same method or even use method chaining here.
+
+The idea of the change is basically just ue a non-volatile read for the ensureAccessible() check as its a best-effort implementation to detect acting on already released buffers anyway as even with a volatile read it could happen that the user will release it in another thread before we actual access the buffer after the reference check.
+
+Modifications:
+
+- Try to do a non-volatile read using sun.misc.Unsafe if we can use it.
+- Add a benchmark
+
+Result:
+
+Big performance win when multiple ByteBuf methods are called from a method.
+
+With the change:
+UnsafeByteBufBenchmark.setGetLongUnsafeByteBuf  thrpt   20  281395842,128 ± 5050792,296  ops/s
+
+Before the change:
+UnsafeByteBufBenchmark.setGetLongUnsafeByteBuf  thrpt   20  217419832,801 ± 5080579,030  ops/s

@@ -1,0 +1,24 @@
+Automatic diagnosis of resource leaks
+
+Now that we are going to use buffer pooling by default, it is obvious
+that a user will forget to call .free() and report memory leak. In this
+case, we should have a tool to determine if it is a bug in our allocator
+implementation or in the user's code.
+
+This pull request adds a system property flag called
+'io.netty.resourceLeakDetection'. If set, when a user forgets to call
+.free(), the ResourceLeakDetector will detect it and log a message with
+detailed stack trace to tell where the leaked buffer has been allocated.
+
+Because obtaining stack trace is an expensive operation, I used sampling
+technique. Allocation is recorded only for every 113th allocation. I
+chose 113 because it's a prime number.
+
+In production, a user might not want to enable this option due to
+potential performance impact. If a user does not specify the
+'-Dio.netty.resourceLeakDetection' option leak detection is disabled.
+
+Even if the leak detection is enabled, the overhead should be less than
+5% because only ~1% of allocations are monitored.
+
+I also replaced SharedResourceMisuseDetector with ResourceLeakDetector.

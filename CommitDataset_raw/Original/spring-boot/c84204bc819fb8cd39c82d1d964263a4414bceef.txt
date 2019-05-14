@@ -1,0 +1,21 @@
+Remove Netty4 auto-configuration in RestTemplate
+
+This commit removes the automatic configuration of the Netty  request
+factory in RestTemplateBuilder, for the following reasons:
+
+* as of Spring 5, `Netty4ClientHttpRequestFactory` is now deprecated
+* there are quite a few issues logged in Spring Framework (duplicate
+headers, such as SPR-15446 and SPR-15476)
+* by default, the `Netty4ClientHttpRequestFactory` is adding a
+"Connection: close" request header to all outgoing requests, which
+means that the underlying HTTP connection won't be reused between
+requests (which is a performance problem)
+
+In that case, using any other request factory is a better choice for
+Spring Boot 2.0+.
+
+Note that the `RestTemplateBuilder` still allows to provide it manually
+with the request factory to use. Developers can still choose this option
+and will be aware of its deprecation status.
+
+Fixes gh-9150

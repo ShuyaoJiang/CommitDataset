@@ -1,0 +1,13 @@
+added overloaded method to the DefaultChannelPipeline in order to avoid unnecessary allocation
+
+Motivation :
+
+Avoid unnecessary array allocation when using the function with varargs in the DefaultChannelPipeline class.
+
+Modifications :
+
+Added addLast and addFirst overloaded methods with 1 handler instead of varargs.
+
+Result :
+
+No array allocation when using simple construction like pipeline.addLast(new Handler());

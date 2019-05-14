@@ -1,0 +1,11 @@
+Fix RedisRepositoriesAutoConfiguration condition
+
+Rather than checking if Jedis is on the classpath, this commit changes
+the conditions of `RedisRepositoriesAutoConfiguration` to check for the
+presence of a `RedisConnectionFactory` bean that is going to be
+necessary to create the Redis repositories anyway.
+
+Checking for Jedis is no longer correct since we now support Lettuce as
+well.
+
+Closes gh-9523

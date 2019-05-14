@@ -1,0 +1,9 @@
+Avoid uri tag explosion when use of path variable is undetected
+
+Previously, WebMvcTags would fall back to using the request’s path
+info if Spring MVC’s best matching path pattern attribute was not
+available. For non-Spring MVC web frameworks that support path
+variables, such as Jersey, this led to an explosion of URI tags that
+could exhaust the heap.
+
+Closes gh-12447

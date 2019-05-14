@@ -1,0 +1,23 @@
+Add TcpChannel to unify Transport implementations (#27132)
+
+Right now our different transport implementations must duplicate
+functionality in order to stay compliant with the requirements of
+TcpTransport. They must all implement common logic to open channels,
+close channels, keep track of channels for eventual shutdown, etc.
+
+Additionally, there is a weird and complicated relationship between
+Transport and TransportService. We eventually want to start merging
+some of the functionality between these classes.
+
+This commit starts moving towards a world where TransportService retains
+all the application logic and channel state. Transport implementations
+in this world will only be tasked with returning a channel when one is
+requested, calling transport service when a channel is accepted from
+a server, and starting / stopping itself.
+
+Specifically this commit changes how channels are opened and closed. All
+Transport implementations now return a channel type that must comply with
+the new TcpChannel interface. This interface has the methods necessary
+for TcpTransport to completely manage the lifecycle of a channel. This
+includes setting the channel up, waiting for connection, adding close
+listeners, and eventually closing.

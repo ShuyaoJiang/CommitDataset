@@ -1,0 +1,10 @@
+HttpServerKeepAliveHandler 204 response with no Content-Length should keepalive
+
+Motivation:
+https://tools.ietf.org/html/rfc7230#section-3.3.2 states that a 204 response MUST NOT include a Content-Length header. If the HTTP version permits keep alive these responses should be treated as keeping the connection alive even if there is no Content-Length header.
+
+Modifications:
+- HttpServerKeepAliveHandler#isSelfDefinedMessageLength should account for 204 respones
+
+Result:
+Fixes https://github.com/netty/netty/issues/6549.

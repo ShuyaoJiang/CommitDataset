@@ -1,0 +1,19 @@
+Do not fail a DNS query promise prematurely
+
+Motivation:
+
+DnsNameResolverContext completes its DNS query promise automatically
+when no queries are in progress, which means there's no need to fail the
+promise explicitly.
+
+Modifications:
+
+- Do not fail a DNS query promise explicitly but add an informational
+  trace
+
+Result:
+
+- Fixes #6600
+- Unexpected exception on one question type does not fail the promise
+  too soon. If the other question succeeds, the query will succeed,
+  making the resolver more robust.

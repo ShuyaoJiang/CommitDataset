@@ -1,0 +1,11 @@
+Add get file chunk timeouts with listener timeouts (#38758)
+
+This commit adds a `ListenerTimeouts` class that will wrap a
+`ActionListener` in a listener with a timeout scheduled on the generic
+thread pool. If the timeout expires before the listener is completed,
+`onFailure` will be called with an `ElasticsearchTimeoutException`.
+
+Timeouts for the get ccr file chunk action are implemented using this
+functionality. Additionally, this commit attempts to fix #38027 by also
+blocking proxied get ccr file chunk actions. This test being un-muted is
+useful to verify the timeout functionality.

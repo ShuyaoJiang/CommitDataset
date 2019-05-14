@@ -1,0 +1,3 @@
+Fix connection leak on failed WebSocket handshake
+
+Note that as long as there are leaking tests, I can't commit an assertion that verifies the fix. Since all tests share the same OkHttpClient and ConnectionPool, a leaking test will cause such an assertion to fail for all subsequent tests. To test the fix, I added an assertion locally and ran each fixed test individually.

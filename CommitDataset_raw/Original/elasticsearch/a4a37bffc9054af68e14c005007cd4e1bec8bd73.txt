@@ -1,0 +1,13 @@
+[ML] Fix datafeed skipping first bucket after lookback when aggs are … (#39859)
+
+The problem here was that `DatafeedJob` was updating the last end time searched
+based on the `now` even though when there are aggregations, the extactor will
+only search up to the floor of `now` against the histogram interval.
+This commit fixes the issue by using the end time as calculated by the extractor.
+
+It also adds an integration test that uses aggregations. This test would fail
+before this fix. Unfortunately the test is slow as we need to wait for the
+datafeed to work in real time.
+
+Closes #39842
+

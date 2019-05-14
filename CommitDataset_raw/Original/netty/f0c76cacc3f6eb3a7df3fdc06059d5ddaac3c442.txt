@@ -1,0 +1,27 @@
+Replace reflective access of Throwable#addSuppressed with version guarded access
+
+Motivation:
+
+In environments with a security manager, the reflective access to get the reference to
+Throwable#addSuppressed can cause issues that result in Netty failing to load. The main
+motivation in this pull request is to remove the use of reflection to prevent issues in
+these environments.
+
+Modifications:
+
+ThrowableUtil no longer uses Class#getDeclaredMembers to get the Method that references
+Throwable#addSuppressed and instead guards the call to Throwable#addSuppressed with a
+Java version check.
+
+Additionally, a annotation was added that suppresses the animal sniffer java16 signature
+check on the given method. The benefit of the annotation is that it limits the exclusion
+of Throwable to just the ThrowableUtil class and has string text indicating the reason
+for suppressing the java16 signature check.
+
+Result:
+
+Netty no longer requires the use of Class#getDeclaredMethod for ThrowableUtil and will
+work in environments restricted by a security manager without needing to grant reflection
+permissions.
+
+Fixes #7614

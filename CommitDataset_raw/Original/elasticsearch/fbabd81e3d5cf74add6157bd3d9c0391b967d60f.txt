@@ -1,0 +1,24 @@
+[ML] Allow stop unassigned datafeed and relax unset upgrade mode wait (#39034)
+
+These two changes are interlinked.
+
+Before this change unsetting ML upgrade mode would wait for all
+datafeeds to be assigned and not waiting for their corresponding
+jobs to initialise.  However, this could be inappropriate, if
+there was a reason other that upgrade mode why one job was unable
+to be assigned or slow to start up.  Unsetting of upgrade mode
+would hang in this case.
+
+This change relaxes the condition for considering upgrade mode to
+be unset to simply that an assignment attempt has been made for
+each ML persistent task that did not fail because upgrade mode
+was enabled.  Thus after unsetting upgrade mode there is no
+guarantee that every ML persistent task is assigned, just that
+each is not unassigned due to upgrade mode.
+
+In order to make setting upgrade mode work immediately after
+unsetting upgrade mode it was then also necessary to make it
+possible to stop a datafeed that was not assigned.  There was
+no particularly good reason why this was not allowed in the past.
+It is trivial to stop an unassigned datafeed because it just
+involves removing the persistent task.

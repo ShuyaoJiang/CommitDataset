@@ -1,0 +1,11 @@
+Allow greater flexibility for template method createDataBinderFactory
+
+Prior to this commit, the template method createDataBinderFactory
+would only allow ServletRequestDataBinderFactory as a return type.
+
+This commit updates the method signature and allows
+InitBinderDataBinderFactory, a superclass of the previous one.
+Then other implementations can override this method and return
+other InitBinderDataBinderFactory types.
+
+Issue: SPR-10920

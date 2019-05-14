@@ -1,0 +1,17 @@
+Use factoryBeanObjectType attribute to find factory bean to replace
+
+Previously, MockitoPostProcessor would fail to replace a factory bean
+with a mock if the factory bean didn't return a matching type from
+getObjectType(). This prevented Spring Data respoitories from being
+replaced with a mock as Spring Data's repository factory beans
+generally do not know the specific repository type that they will
+produce when MockPostProcesser (a bean factory post-processor) is
+running.
+
+Spring Data has been updated to add a factoryBeanObjectType attribute
+to its factory bean definitions. MockitoPostProcessor has been updated
+to look for FactoryBeans with this attribute and to use its value
+to determine whether or not the factory bean produces a bean of the
+required type and, therefore, should be replaced with a mock.
+
+Closes gh-6541

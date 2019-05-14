@@ -1,0 +1,19 @@
+Reinstate use of ConversionService for String -> File conversion
+
+Prior to 3db5c70b, RelaxedDataBinder would use a ConversionService
+to convert a String into a File via its ObjectToObjectConverter.
+3db5c70b changed the configuration of the data binder such that a
+FileEditor was registered. Property editors take precedence over any
+conversion service so the FileEditor was used instead. This caused a
+regression as the FileEditor uses slightly unusual logic for a String
+to File conversion. Specifically, when given a value of ".", it will
+locate a ClassPathResource for the root of the classpath and use the
+result of calling getFile() on that resource. This fails when the
+root of the classpath is in a jar file and also provides a different
+result when the root of the classpath is not the current directory.
+
+This commit updates RelaxedDataBinder to suppress the registration
+of an editor for File. This restores the behaviour prior to 3db5c70b
+by allowing the ConversionService to be used instead.
+
+Closes gh-12786

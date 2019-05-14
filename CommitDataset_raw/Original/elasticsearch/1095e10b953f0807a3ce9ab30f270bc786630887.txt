@@ -1,0 +1,13 @@
+Fix Watcher stats class cast exception (#39821)
+
+The watcher stats implementation tries to look at all queued watches
+before preparing the result. We want to cast these to a
+WatchExecutionTask to extract the context to prepare the stats for
+queued watches. The problem is that not all tasks on the watcher queue
+were WatchExecutionTask. This is because a manually executed watch was
+not even at all wrapped in a WatchExecutionTask. Moreover, we were using
+ExecutorService#submit(Runnable) which would wrap the Runnable in a
+FutureTask<?>. This commit addresses this by using a WatchExecutionTask,
+and also using ExecutorService#execute(Runnable) so that no wrapping
+occurs. This will let us continue with the assumption that all queued
+tasks are WatchExecutionTasks.

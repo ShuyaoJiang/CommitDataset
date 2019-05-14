@@ -1,0 +1,13 @@
+Throw IOException (not ChannelException) if netty_epoll_linuxsocket_setTcpMd5Sig fails (#9039)
+
+Motivation:
+
+At the moment we throw a ChannelException if netty_epoll_linuxsocket_setTcpMd5Sig fails. This is inconsistent with other methods which throw a IOException.
+
+Modifications:
+
+Throw IOException
+
+Result:
+
+More correct and consistent exception usage in epoll transport

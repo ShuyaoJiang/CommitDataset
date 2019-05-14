@@ -1,0 +1,11 @@
+Maintain classpath order in PropertiesLauncher
+
+I think this is safe, judging by the integration tests, but I'm not
+putting it in 1.2.x until we've had some feedback on it. The
+integration tests actually had a bug that was masking this problem
+because they were merging Properties from the whole classpath instead
+of picking the first available resource (which is generally what
+we do in Spring Boot applications for application.properties for
+instance).
+
+Fixes gh-3048

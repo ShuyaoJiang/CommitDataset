@@ -1,0 +1,17 @@
+Tolerate Successfully built being found in response other than last
+
+Different versions of Docker produce different responses when building
+and tagging an image. On CI, a response with a stream like
+"Successfully built 185991ffe24a" followed by a response with a
+stream like "Successfully tagged spring-boot-it/centos:6.9-a23bced6"
+is received. By default, for the building of an image to be considered
+successful, the Docker Java client requires the stream for the last
+response item to contain "Successfully built". This means that, on the
+CI server, it incorrectly believes that the building of the tagged
+image has failed.
+
+This commit uses a custom BuildImageResultCallback that doesn't
+require the last response to be the one that has a stream containing
+"Successfully built". Instead, it looks back through the error-free
+responses (newest to oldest) looking for one with a stream containing
+"Successfully built".

@@ -1,0 +1,13 @@
+Ensure we flush out all pending data on SslException. Related to [#3900]
+
+Motivation:
+
+We need to ensure we flush out all pending data when an SslException accours so the remote peer receives all alerts.
+
+Modifications:
+
+Ensure we call ctx.flush() when needed.
+
+Result:
+
+Correctly receive alerts in all cases on the remote peer.

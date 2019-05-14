@@ -1,0 +1,14 @@
+Support EncodedResourceResolver in resource chain
+
+As of https://jira.spring.io/browse/SPR-16381, Spring Framework now
+supports both gzip and Brotli as compression formats for static
+resources resolved by the resource chain.
+
+The `GzipResourceResolver` has been deprecated and replaced by the
+`EncodedResourceResolver`. This commit uses this new resolver and adapts
+the configuration key to reflect those changes.
+
+Note that this resolver is now configured ahead of the
+`VersionResourceResolver`.
+
+Closes gh-13242

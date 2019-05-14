@@ -1,0 +1,12 @@
+Ensure native memory is released when OpenSslServercontext constructor throws exception
+
+Motivation:
+
+We need to ensure we do all checks inside of the try / catch block so we free native memory that was allocated in the constructor of the super class in a timely manner.
+Modifications:
+
+Move all checks inside of the try block.
+
+Result:
+
+Correctly release native memory (and not depend on the finalizer) when a check in the constructors fails

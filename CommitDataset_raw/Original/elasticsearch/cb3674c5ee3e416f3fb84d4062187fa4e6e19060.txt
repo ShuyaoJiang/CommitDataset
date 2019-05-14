@@ -1,0 +1,14 @@
+Add reason to global checkpoint updates on replica
+
+Updating the global checkpoint on a replica can occur for a few
+different reasons:
+ - from inlined global checkpoint updates
+ - from a primary term transition
+ - from finalizing recovery
+
+Yet, the trace logging for a global checkpoint update does not present
+this information that can be useful when tracing test failures. This
+commit adds a reason for the global checkpoint update on a replica so
+that we can trace these updates.
+
+Relates #25612

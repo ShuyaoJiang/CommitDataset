@@ -1,0 +1,19 @@
+Reuse mock request from the TCF in Spring MVC Test
+
+Prior to this commit, the Spring MVC Test Framework always created a
+new MockHttpServletRequest, disregarding any mock request already
+present in Spring Web's RequestContextHolder -- for example, one
+created by the ServletTestExecutionListener in the Spring TestContext
+Framework (TCF).
+
+This commit modifies MockHttpServletRequestBuilder so that it reuses a
+mock request created by the TCF. However,
+MockMultipartHttpServletRequestBuilder continues to always create a new
+MockMultipartHttpServletRequest since a MockHttpServletRequest created
+by the TCF is not directly compatible with a
+MockMultipartHttpServletRequest. Furthermore, in order to avoid
+unforeseen side effects, MockHttpServletRequestBuilder will always
+create a new MockHttpServletRequest if a mock request is present in the
+RequestContextHolder but not created by the TCF.
+
+Issue: SPR-13211

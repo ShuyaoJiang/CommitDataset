@@ -1,0 +1,10 @@
+Fix _cluster/state to always return cluster_uuid (#30656)
+
+Since #30143, the Cluster State API should always returns the current
+cluster_uuid in the response body, regardless of the metrics filters.
+
+This is not exactly true as it is returned only if metadata metrics and
+no specific indices are requested.
+
+This commit fixes the behavior to always return the cluster_uuid and
+add new test.

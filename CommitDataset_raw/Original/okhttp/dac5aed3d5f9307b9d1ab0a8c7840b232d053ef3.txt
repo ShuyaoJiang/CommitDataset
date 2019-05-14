@@ -1,0 +1,10 @@
+Move connection pooling logic.
+
+Previously we had this ugly, awkward release() method that
+attempted to manage connection pooling, discarding streams
+for caching, and closing broken streams.
+
+Move connection reuse to HttpConnection, with policy informed
+by HttpEngine. It specifies what to do when the connection
+becomes idle: pool, close or hold. The connection does what
+it's told.

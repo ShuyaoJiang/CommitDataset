@@ -1,0 +1,7 @@
+[Test] GoogleCloudStorageFixture command line is too long on Windows (#28991)
+
+Windows has some strong limitations on command line arguments,
+specially when it's too long. In the googlecloudstoragefixture anttask
+the classpath argument is very long and the command fails. This commit
+removes the classpath as an argument and uses the CLASSPATH
+environment variable instead.

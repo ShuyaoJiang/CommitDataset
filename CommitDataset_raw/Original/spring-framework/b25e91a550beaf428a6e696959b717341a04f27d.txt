@@ -1,0 +1,13 @@
+Relax JavaBean rules for SpEL property access
+
+Relax the method search algorithm used by `ReflectivePropertyAccessor`
+to include methods of the form `getXY()` for properties of the form
+`xy`.
+
+Although the JavaBean specification indicates that a property `xy`
+should use the accessors `getxY()` and `setxY()`, in practice many
+developers choose to have an uppercase first character. The
+`ReflectivePropertyAccessor` will now consider these style methods if
+the traditional conventions fail to find a match.
+
+Issue: SPR-10716

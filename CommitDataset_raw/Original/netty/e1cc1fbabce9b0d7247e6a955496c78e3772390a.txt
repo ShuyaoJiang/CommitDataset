@@ -1,0 +1,14 @@
+[#2705] Call fireChannelReadComplete() if channelActive(...) decodes messages in ReplayingDecoder / ByteToMessageDecoder
+
+Motivation:
+
+In ReplayingDecoder / ByteToMessageDecoder channelInactive(...) method we try to decode a last time and fire all decoded messages throw the pipeline before call ctx.fireChannelInactive(...). To keep the correct order of events we also need to call ctx.fireChannelReadComplete() if we read anything.
+
+Modifications:
+
+- Channel channelInactive(...) to call ctx.fireChannelReadComplete() if something was decoded
+- Move out.recycle() to finally block
+
+Result:
+
+Correct order of events.

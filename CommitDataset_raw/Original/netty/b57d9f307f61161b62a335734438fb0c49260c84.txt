@@ -1,0 +1,8 @@
+Allow per-write promises and disallow promises on flush()
+
+- write() now accepts a ChannelPromise and returns ChannelFuture as most
+  users expected.  It makes the user's life much easier because it is
+  now much easier to get notified when a specific message has been
+  written.
+- flush() does not create a ChannelPromise nor returns ChannelFuture.
+  It is now similar to what read() looks like.

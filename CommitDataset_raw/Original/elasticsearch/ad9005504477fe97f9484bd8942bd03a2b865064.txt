@@ -1,0 +1,10 @@
+Stop auto-followers on shutdown (#40124)
+
+When shutting down a node, auto-followers will keep trying to run. This
+is happening even as transport services and other components are being
+closed. In some cases, this can lead to a stack overflow as we rapidly
+try to check the license state of the remote cluster, can not because
+the transport service is shutdown, and then immeidately retry
+again. This can happen faster than the shutdown, and we die with stack
+overflow. This commit adds a stop command to auto-followers so that this
+retry loop occurs at most once on shutdown.

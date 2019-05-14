@@ -1,0 +1,17 @@
+Fix MediaType lookup for ResourceHttpRequestHandler
+
+As of 4.3 ResourceHttpRequestHandler delegates to the configured
+ContentNegotiationManager, or one created internally, to look up
+the media type for are resource.
+
+This commit ensures the internally created ContentNegotiationManager is
+correctly injected with the ServletContext through which it can perform
+lookups as before.
+
+Also the ServletPathContentNegotiationStrategy now checks the
+ServletContext first and then delegates to its parent the
+PathContentNegotiationStrategy and not vice versa. This is
+consistent with how handleNoMatch (also in the same class) works
+and also matches how ResourceHttpRequestHandler worked before 4.3.
+
+Issue: SPR-14368

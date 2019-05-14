@@ -1,0 +1,16 @@
+[Test] Add full cluster restart test for Rollup (#31533)
+
+This pull request adds a full cluster restart test for a Rollup job. 
+The test creates and starts a Rollup job on the cluster and checks 
+that the job already exists and is correctly started on the upgraded 
+cluster.
+
+This test allows to test that the persistent task state is correctly 
+parsed from the cluster state after the upgrade, as the status field 
+has been renamed to state in #31031.
+
+The test undercovers a ClassCastException that can be thrown in 
+the RollupIndexer when the timestamp as a very low value that fits 
+into an integer. When it's the case, the value is parsed back as an 
+Integer instead of Long object and (long) position.get(rollupFieldName) 
+fails.

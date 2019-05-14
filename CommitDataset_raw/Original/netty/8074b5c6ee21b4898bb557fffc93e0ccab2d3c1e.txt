@@ -1,0 +1,17 @@
+[#2542] HTTP post request decoder does not support quoted boundaries
+
+Motivation:
+According to RFC2616 section 19, boundary string could be quoted, but
+currently the PostRequestDecoder does not support it while it should.
+
+Modifications:
+Once the boundary is found, one check is made to verify if the boundary
+is "quoted", and if so, it is "unqoted".
+
+Note: in following usage of this boundary (as delimiter), quote seems no
+more allowed according to the same RFC, so the reason that only the
+boundary definition is corrected.
+
+Result:
+Now the boundary could be whatever quoted or not. A Junit test case
+checks it.

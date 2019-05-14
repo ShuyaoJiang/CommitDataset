@@ -1,0 +1,12 @@
+Ensure that Hibernate's JtaPlatform can be customized
+
+Previously, when JpaProperties was applying additional properties it
+discarded any existing properties. This meant that custom
+configuration of Hibernate's JtaPlatform was not detected and that
+Boot's SpringJtaPlatform would always be configured instead.
+
+This commit updates JpaProperties to include all of the existing
+properties when it's asked to apply any additional properties.
+
+See gh-2348
+Closes gh-2359

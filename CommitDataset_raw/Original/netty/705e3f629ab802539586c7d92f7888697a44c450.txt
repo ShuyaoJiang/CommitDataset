@@ -1,0 +1,13 @@
+Not use InternalThreadLocalMap where access may be done from outside the EventLoop.
+
+Motivation:
+
+We should not use the InternalThreadLocalMap where access may be done from outside the EventLoop as this may create a lot of memory usage while not be reused anyway.
+
+Modifications:
+
+Not use InternalThreadLocalMap in places where the code-path will likely be executed from outside the EventLoop.
+
+Result:
+
+Less memory bloat.

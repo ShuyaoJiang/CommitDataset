@@ -1,0 +1,10 @@
+INGEST: Fix ThreadWatchDog Throwing on Shutdown (#32578)
+
+* INGEST: Fix ThreadWatchDog Throwing on Shutdown
+
+* #32539 is caused by the fact that ThreadWatchDog.Default could throw on shutdown if the ThreadPool is interrupted while `interruptLongRunningExecutions` is in progress. This is a result of the watchdog not having a lifecycle of its own (normally it terminates when the threadpool terminates).
+  * We can't easily use `org.elasticsearch.common.util.concurrent.EsRejectedExecutionException#isExecutorShutdown` to catch this state the same way other components do since thatwould require adding the core lib to Grok as a dependency
+  * Since we have no knowledge of the lifecycle in this compontent since we're only passed the scheduler `BiFunction` I fixed this by only scheduling the watchdog when there's actually registered threads in it.
+    * I think using the patter of locking via two `Atomic*` values should not be much of a performance concern here under load since either the integer will likely be > 0 in this case (because we have multiple Grok in parallel) or the running state will be true because there likely was at least one thread registered when the watchdog ran and so the enqueing of the watchdog task during `register` will happen very rarely here (in the worst case scenario of only a single Grok thread it will happen less frequently than once every `ingest.grok.watchdog.interval`). The atomic update on the count should not be relevant relative to the cost of adding a new node to the CHM either.
+* Fixes #32539
+  * Also fixes the watchdog to run if it doens't have to in general.

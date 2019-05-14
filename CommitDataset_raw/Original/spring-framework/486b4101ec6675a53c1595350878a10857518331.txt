@@ -1,0 +1,13 @@
+Introduce MessageHeader accessor types
+
+A new type MessageHeaderAccesssor provides read/write access to
+MessageHeaders along with typed getter/setter methods along the lines
+of the existing MessageBuilder methods (internally MessageBuilder
+merely delegates to MessageHeaderAccessor). This class is extensible
+with sub-classes expected to provide typed getter/setter methods for
+specific categories of message headers.
+
+NativeMessageHeaderAccessor is one specific sub-class that further
+provides read/write access to headers from some external message
+source (e.g. STOMP headers). Native headers are stored in a separate
+MultiValueMap and kept under a specific key.

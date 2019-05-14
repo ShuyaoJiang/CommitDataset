@@ -1,0 +1,13 @@
+Allow the Active Directory UPN authenticator to work with suffixes (elastic/x-pack-elasticsearch#1958)
+
+The active directory user principal name format typically takes the form user@domain, which is what
+the current implementation expects. However, active directory also allows the definition of other
+suffixes that are not actual domains. A user can still authenticate using this user principal name
+but the behavior of our realm would cause it to fail as it parsed the suffix as a domain and used it
+as the search base for the user. Instead, we should use the default user search base and only look
+for entries that have this exact user principal name. In a scenario where a realm is configured for
+multiple domains in the same forest, the search base should be the base for the entire forest.
+
+relates elastic/x-pack-elasticsearch#1744
+
+Original commit: elastic/x-pack-elasticsearch@de00c4817ed54183725bead9d9db0d92a1031212

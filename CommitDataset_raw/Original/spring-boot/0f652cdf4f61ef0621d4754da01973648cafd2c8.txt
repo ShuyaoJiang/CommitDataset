@@ -1,0 +1,10 @@
+Fix injection point with proxied DataSource
+
+Prior to this commit, the `ApplicationContext` couldn't start with a
+JDK-proxied `HikariDataSource` as the JMX auto-configuration was
+attempting to inject a (too narrowed) `HikariDataSource`.
+
+This commit rather injects a regular `DataSource` and attempt to unwrap
+it as a `HikariDataSource`.
+
+Closes gh-12271

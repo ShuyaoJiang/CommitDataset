@@ -1,0 +1,8 @@
+Reduce heap-memory usage of ingest-geoip plugin (#28963)
+
+With this commit we reduce heap usage of the ingest-geoip plugin by
+memory-mapping the database files. Previously, we have stored these
+files gzip-compressed but this has resulted that data are loaded on the
+heap.
+
+Closes #28782

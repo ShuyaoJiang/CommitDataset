@@ -1,0 +1,23 @@
+Prevent channel re-registration from firing channelActive
+
+Motivation:
+
+AbstractUnsafe considers two possibilities during channel registration. First,
+the channel may be an outgoing connection, in which case it will be registered
+before becoming active. Second, the channel may be an incoming connection in,
+which case the channel will already be active when it is registered. To handle
+the second case, AbstractUnsafe checks if the channel is active after
+registration and calls ChannelPipeline.fireChannelActive() if so.  However, if
+an active channel is deregistered and then re-registered this logic causes a
+second fireChannelActive() to be invoked. This is unexpected; it is reasonable
+for handlers to assume that this method will only be invoked once per channel.
+
+Modifications:
+
+This change introduces a flag into AbstractUnsafe to recognize if this is the
+first or a subsequent registration. ChannelPipeline.fireChannelActive() is only
+possible for the first registration.
+
+Result:
+
+ChannelPipeline.fireChannelActive() is only called once.

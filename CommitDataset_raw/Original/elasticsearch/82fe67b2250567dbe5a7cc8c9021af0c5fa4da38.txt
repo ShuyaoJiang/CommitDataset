@@ -1,0 +1,15 @@
+[Rollup] Remove builders from TermsGroupConfig (#32507)
+
+While working on adding the Create Rollup Job API to the 
+high level REST client (#29827), I noticed that the configuration 
+objects like TermsGroupConfig rely on the Builder pattern in 
+order to create or parse instances. These builders are doing 
+some validation but the same validation could be done within 
+the constructor itself or on the server side when appropriate.
+
+This commit removes the builder for TermsGroupConfig, 
+removes some other methods that I consider not really usefull 
+once the TermsGroupConfig object will be exposed in the 
+high level REST client. It also simplifies the parsing logic.
+
+Related to #29827

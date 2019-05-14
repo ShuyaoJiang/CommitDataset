@@ -1,0 +1,12 @@
+Move non-core mappers to a module. (#26549)
+
+Today we have all non-plugin mappers in core. I'd like to start moving those
+that neither map to json datatypes nor are very frequently used like `date` or
+`ip` to a module.
+
+This commit creates a new module called `mappers-extra` and moves the
+`scaled_float` and `token_count` mappers to it. I'd like to eventually move
+`range` fields there but it's more complicated due to their intimate
+relationship with range queries.
+
+Relates #10368

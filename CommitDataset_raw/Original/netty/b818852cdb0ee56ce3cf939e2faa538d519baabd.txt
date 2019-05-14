@@ -1,0 +1,16 @@
+Update DatagramPacket.recipient() to return the actual destination IP (#7879)
+
+Motivation:
+
+DatagramPacket.recipient() doesn't return the actual destination IP, but the IP the app is bound to.
+
+Modification:
+
+- IP_RECVORIGDSTADDR option is enabled for UDP sockets, which allows retrieval of ancillary information containing the original recipient.
+- _recvFrom(...) function from transport-native-unix-common/src/main/c/netty_unix_socket.c is modified such that if IP_RECVORIGDSTADDR is set, recvmsg is used instead of recvfrom; enabling the retrieval of the original recipient.
+- DatagramSocketAddress also contains a 'local' address, representing the recipient.
+- EpollDatagramChannel is updated to return the retrieved recipient address instead of the address the channel is bound to.
+
+Result:
+
+Fixes #4950.

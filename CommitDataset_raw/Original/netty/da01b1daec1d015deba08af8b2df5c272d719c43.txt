@@ -1,0 +1,13 @@
+Decryption failed or bad mac record in Android 5.0
+
+Motivation:
+
+Android 5.0 (API version 21) has a bug which not correctly set the bytesConsumed of SSLEngineResult when HandshakeStatus is FINISHED.  Because of this we need to special handle the status and so workaround the Android bug.
+
+Modifications:
+
+- Break the unwrap for (;;) loop when HandshakeStatus is FINISHED and bytesConsumed == 0 && bytesProduced == 0.
+
+Result:
+
+SslHandler works with all known version of Android.

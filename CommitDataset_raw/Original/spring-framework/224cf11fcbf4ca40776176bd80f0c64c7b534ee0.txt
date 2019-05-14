@@ -1,0 +1,27 @@
+Make @Configuration class enhancement idempotent
+
+The registration of more than one ConfigurationClassPostProcessor
+results in the double-enhancement of @Configuration classes, i.e. a
+two-deep CGLIB subclass hierarchy is created.
+
+As a side-effect of changes introduced in 3.1 M2 fixing SPR-8080, this
+behavior now results in an infinite loop at CGLIB callback processing
+time, leading to a StackOverflowException which is then suppressed by
+the container, and ultimately results in the user being presented with
+an unintuitive "Bean 'x' is not already in creation" exception.
+
+This fix introduces a marker interface 'EnhancedConfiguration' to be
+implemented by all generated @Configuration subclasses. The
+configuration class enhancer can then behave in an idempotent fashion
+by checking to see whether a candidate @Configuration class is already
+assignable to this type i.e. already enhanced and ignore it if so.
+
+Naturally, users should avoid registering more than one
+ConfigurationClassPostProcessor, but this is not always possible. As
+with the case in point, SPR-8824 originates from problems with
+spring-data-neo4j, which explicitly registers its own
+ConfigurationClassPostProcessor. The user has little control over this
+arrangement, so it is important that the framework is defensive as
+described above.
+
+Issue: SPR-8824

@@ -1,0 +1,10 @@
+Move validation to server for put user requests (#32471)
+
+This change moves the validation for values of usernames and passwords
+from the request to the transport action. This is done to prevent
+the need to move more classes into protocol once we add this API to the
+high level rest client. Additionally, this resolves an issue where
+validation depends on settings and we always pass empty settings
+instead of the actual settings.
+
+Relates #32332

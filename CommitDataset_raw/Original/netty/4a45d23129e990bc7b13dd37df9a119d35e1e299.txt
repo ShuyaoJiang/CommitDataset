@@ -1,0 +1,22 @@
+Add the encoder/decoder getter methods to HttpClientCodec
+
+Motivation:
+
+There's no way for a user to get the encoder and the decoder of an
+HttpClientCodec.  The lack of such getter methods makes it impossible to
+remove the codec handlers from the pipeline correctly.
+
+For example, a user could add more than one HttpClientCodec to the
+pipeline, and then the user cannot easily decide which encoder and
+decoder to remove.
+
+Modifications:
+
+- Add encoder() and decoder() method to HttpClientCodec which returns
+  HttpRequestEncoder and HttpResponseDecoder respectively
+- Also made the same changes to HttpServerCodec
+
+Result:
+
+A user can distinguish the handlers added by multiple HttpClientCodecs
+easily.

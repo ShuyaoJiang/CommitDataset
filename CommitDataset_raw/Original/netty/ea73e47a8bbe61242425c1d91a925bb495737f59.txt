@@ -1,0 +1,10 @@
+FastThreadLocal#set remove duplicate isIndexedVariableSet call
+
+Motivation:
+FastThreadLocal#set calls isIndexedVariableSet to determine if we need to register with the cleaner, but the set(InternalThreadLocalMap, V) method will also internally do this check so we can share code and only do the check a single time.
+
+Modifications:
+- extract code from set(InternalThreadLocalMap, V) so it can be called externally to determine if a new item was created
+
+Result:
+Less code duplication in FastThreadLocal#set.

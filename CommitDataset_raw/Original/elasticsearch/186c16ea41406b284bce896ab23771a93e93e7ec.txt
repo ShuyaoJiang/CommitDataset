@@ -1,0 +1,9 @@
+Ensure pending transport handlers are invoked for all channel failures (#25150)
+
+Today if a channel gets closed due to a disconnect we notify the response
+handler that the connection is closed and the node is disconnected. Unfortunately
+this is not a complete solution since it only works for published connections.
+Connections that are unpublished ie. for discovery can indefinitely hang since we
+never invoke their handers when we get a failure while a user is waiting for
+the response. This change adds connection tracking to TcpTransport that ensures
+we are notifying the corresponding connection if there is a failure on a channel.

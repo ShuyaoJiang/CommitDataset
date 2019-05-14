@@ -1,0 +1,29 @@
+Fix incorrect sizing of temp byte arrays in (Unsafe)ByteBufUtil (#8484)
+
+Motivation:
+
+Two similar bugs were introduced by myself in separate recent PRs #8393
+and #8464, while optimizing the assignment/handling of temporary arrays
+in ByteBufUtil and UnsafeByteBufUtil.
+
+The temp arrays allocated for buffering data written to an OutputStream
+are incorrectly sized to the full length of the data to copy rather than
+being capped at WRITE_CHUNK_SIZE.
+
+Unfortunately one of these is in the 4.1.31.Final release, I'm really
+sorry and will be more careful in future.
+
+This kind of thing is tricky to cover in unit tests.
+
+Modifications:
+
+Revert the temp array allocations back to their original sizes.
+
+Avoid making duplicate calls to ByteBuf.capacity() in a couple of places
+in ByteBufUtil (unrelated thing I noticed, can remove it from this PR if
+desired!)
+
+Result:
+
+Temporary byte arrays will be reverted to their originally intended
+sizes.

@@ -1,0 +1,20 @@
+Motivation: (#7848)
+
+It is possible to create streams in the half-closed state where the
+stream state doesn't reflect that the request headers have been sent by
+the client or the server hasn't received the request headers. This
+state isn't possible in the H2 spec as a half closed stream must have
+either received a full request or have received the headers from a
+pushed stream. In the current implementation, this can cause the stream
+created as part of an h2c upgrade request to be in this invalid state
+and result in the omission of RST frames as the client doesn't believe
+it has sent the request to begin with.
+
+Modification:
+
+The `DefaultHttp2Connection.activate` method checks the state and
+modifies the status of the request headers as appropriate.
+
+Result:
+
+Fixes #7847.

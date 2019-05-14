@@ -1,0 +1,12 @@
+Avoid failing install if system-sysctl is masked
+
+On Debian-based systems the install scripts are run with set -e meaning
+that if there is an error in executing one of these scripts then the
+script fails. If systemd-sysctl is masked then trying to restart the
+systemd-sysctl service to pick up the changes to vm.max_map_count will
+fail leading to the post-install script failing. Instead, we should
+account for the possbility of failure here by not letting the command to
+restart this service exit with non-zero status code. This commit does
+this, and adds a test for this situation.
+
+Relates #25657

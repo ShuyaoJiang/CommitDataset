@@ -1,0 +1,10 @@
+Validate schema and data resources
+
+Previously, if a user specifies a path to a schema or data DDL that does
+not exist, the application will start up fine and the missing DDL would
+not be reported.
+
+This commit validates that user-defined resources actually exist and
+throw a new `ResourceNotFoundException` if they don't.
+
+Closes gh-7088

@@ -1,0 +1,21 @@
+Index ids in binary form. (#25352)
+
+Indexing ids in binary form should help with indexing speed since we would
+have to compare fewer bytes upon sorting, should help with memory usage of
+the live version map since keys will be shorter, and might help with disk
+usage depending on how efficient the terms dictionary is at compressing
+terms.
+
+Since we can only expect base64 ids in the auto-generated case, this PR tries
+to use an encoding that makes the binary id equal to the base64-decoded id in
+the majority of cases (253 out of 256). It also specializes numeric ids, since
+this seems to be common when content that is stored in Elasticsearch comes
+from another database that uses eg. auto-increment ids.
+
+Another option could be to require base64 ids all the time. It would make things
+simpler but I'm not sure users would welcome this requirement.
+
+This PR should bring some benefits, but I expect it to be mostly useful when
+coupled with something like #24615.
+
+Closes #18154

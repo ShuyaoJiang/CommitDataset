@@ -1,0 +1,12 @@
+Avoid referencing any Ordering methods except natural() in ImmutableSortedSet.
+
+This is a behavior change, but kevinb@ and I agreed that this shouldn't really be detectable -- the handful of users of SortedSet.comparator() don't seem likely to actually do much introspecting on the comparator, and the comparator is equivalent, just no longer an Ordering.
+
+Effects on ImmutableSortedSetProGuard:
+81478 bytes => 78328 bytes
+32 classes => 29 classes
+307 methods => 287 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=151474930

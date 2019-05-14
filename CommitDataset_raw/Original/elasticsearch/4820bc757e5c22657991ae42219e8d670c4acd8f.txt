@@ -1,0 +1,17 @@
+SQL: Implement sorting and retrieving score (elastic/x-pack-elasticsearch#3340)
+
+Accessing `_score` from SQL looks like:
+```
+--------------------------------------------------
+POST /_sql
+{
+    "query": "SELECT SCORE(), * FROM library WHERE match(name, 'dune') ORDER BY SCORE() DESC"
+}
+--------------------------------------------------
+```
+
+This replaces elastic/x-pack-elasticsearch#3187
+
+relates elastic/x-pack-elasticsearch#2887
+
+Original commit: elastic/x-pack-elasticsearch@fe96348c22580e29676d773bc9491e4559ab08f0

@@ -1,0 +1,6 @@
+Introduce a `search_throttled` threadpool (#33732)
+
+Today all searches happen on the search threadpool which is the correct
+behavior in almost any case. Yet, there are exceptions where for instance
+searches searches should be passed through a single-thread
+thread-pool to reduce impact on a node. This change adds a index-private setting that allows to mark an index as throttled for searches and forks off all non-stats searcher access to this thread-pool for indices that are marked as `index.search.throttled`

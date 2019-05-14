@@ -1,0 +1,14 @@
+Correctly let Http2UnkownFrame extend HttpStreamFrame and so be usable with Http2MultiplexCodec. (#7976)
+
+Motivation:
+
+This is a followup for #7860. In the fix for #7860 we only partly fixed the problem as Http2UnknownFrame did not correctly extend HttpStreamFrame and so only worked when using the Http2FrameCodec. We need to have it extend HttpStreamFrame as otherwise Http2MultiplexCodec will reject to handle it correctly.
+
+Modifications:
+
+- Let Http2UnknownFrame extend HttpStreamFrame
+- Add unit tests for writing and reading Http2UnkownFrame instances when the Http2MultiplexCodec is used.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7969.

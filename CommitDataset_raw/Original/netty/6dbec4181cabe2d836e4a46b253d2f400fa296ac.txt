@@ -1,0 +1,13 @@
+Ensure we not complete the same promise that may be failed because of outbound handler exception.
+
+Motivation:
+
+It's important that we do not pass in the original ChannelPromise to safeClose(...) as when flush(...) will throw an Exception it will be propagated to the AbstractChannelHandlerContext which will try to fail the promise because of this. This will then fail as it was already completed by safeClose(...).
+
+Modifications:
+
+Create a new ChannelPromise and pass it to safeClose(...).
+
+Result:
+
+No more confusing logs because of failing to fail the promise.

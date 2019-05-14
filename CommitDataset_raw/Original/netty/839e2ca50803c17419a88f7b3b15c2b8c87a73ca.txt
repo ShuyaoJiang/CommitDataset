@@ -1,0 +1,10 @@
+Revert JDK GCM direct buffer crash workaround
+
+Motivation:
+Commit 108dc23cab13eea074397f0ade80859da4744323 introduced a workaround due to a JDK crash when GCM cipher was used during an unwrap operation. Attempting to reproduce this issue with the latest JDK (1.8.0_72-b15) demonstrate that this issue no longer exists while it can be reliably reproduced on earlier JDKs (1.8.0_25-b17 and earlier)
+
+Modifications:
+- Remove the copy-to-heap-buffer workaround for JDK engine
+
+Result:
+Fixes https://github.com/netty/netty/issues/3256

@@ -1,0 +1,11 @@
+Improve Couchbase repository support
+
+Previously, if Couchbase was available on the classpath but not
+configured, Spring Boot would attempt to scan the project for
+repositories anyway.
+
+This commit makes sure that it only happens if an infrastructure
+bean required is present. The tests have also been rewritten to better
+reflect what would happen in practice.
+
+Closes gh-5349

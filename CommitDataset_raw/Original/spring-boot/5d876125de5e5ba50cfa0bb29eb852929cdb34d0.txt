@@ -1,0 +1,18 @@
+Refine validation auto-configuration
+
+Checking for the presence of a `ValidationProvider` resource is
+unfortunately not enough to trigger the validation auto-configuration.
+
+If `hibernate-validator` is added on the classpath without a `javax.el`
+implementation, the former will blow up on startup. So far this was a
+pilot error so we didn't have to care about it. Now that we have an
+auto-configuration that may lead to this error, we need to be extra
+careful and check that scenario ourselves.
+
+This commit adds an extra condition that runs as late as possible and
+attempt to actually initialize a `Validator`. If that fails for whatever
+reason, the auto-configuration will now back off.
+
+Several additional tests have been added to exercise this scenario.
+
+Closes gh-6228

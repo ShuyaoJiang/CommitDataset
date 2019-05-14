@@ -1,0 +1,8 @@
+Avoid NPE in follower stats when no tasks metadata (#35802)
+
+When there is no persistent tasks metadata we could hit a null pointer
+exception when executing a follower stats request. This is because we
+inspect the persistent tasks metadata. Yet, if no tasks have been
+registered, this is null (as opposed to empty). We need to avoid
+de-referencing the persistent tasks metadata in this case. That is what
+this commit does, and we add a test for this situation.

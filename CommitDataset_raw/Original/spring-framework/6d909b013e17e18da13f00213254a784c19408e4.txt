@@ -1,0 +1,8 @@
+Do not commit response on access to content
+
+MockHttpServletResponse no longer calls flushBuffer on calls to
+getContentAsByteArray and getContentAsString. The flushing doesn't
+actually do anything useful but does commit the response leading to
+unexpected side effects.
+
+Issue: SPR-16430

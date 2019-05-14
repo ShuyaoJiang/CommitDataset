@@ -1,0 +1,12 @@
+EPOLL ET Missed Reads
+
+Motivation:
+bfbef036a8c1121083b485a98b9cb04a84e7dfea made EPOLL respect autoRead while in ET mode. However it is possible that we may miss data pending on the RECV queue if autoRead is off. This is because maybeMoreDataToRead is updated after fireChannelRead and if a user calls read() from here maybeMoreDataToRead will be false because it is updated after the fireChannelRead call. The way maybeMoreDataToRead was updated also causes a single channel to continuously read on the event loop and not relinquish and give other channels to try reading.
+
+Modifications:
+- Ensure maybeMoreDataToRead is always set after all user events, and is evaluated with readPending to execute a epollInReady on the EventLoop
+- Combine the checkResetEpollIn and maybeMoreDataToRead logic to invoke a epollInReady later into the epollInFinally method due to similar responsibilities
+- Update unit tests to reflect the user calling read() on the event loop from channelRead()
+
+Result:
+EPOLL ET with autoRead set to false will not leave data on the RECV queue.

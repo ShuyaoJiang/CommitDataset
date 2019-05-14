@@ -1,0 +1,13 @@
+Added checkStartsWith option for WebSocketServerProtocolHandler
+
+Motivation:
+
+Enables optional .startsWith() matching of req.uri() with websocketPath.
+
+Modifications:
+
+New checkStartsWith boolean option with default false value added to both WebSocketServerProtocolHandler and WebSocketServerProtocolHandshakeHandler. req.uri() matching is based on this option.
+
+Result:
+
+By default old behavior matching via .equal() is preserved. To use checkStartsWith use constructor shortcut: new WebSocketServerProtocolHandler(websocketPath, true) or fill this flag on full form of constructor among other options.

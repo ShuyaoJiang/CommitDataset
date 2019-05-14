@@ -1,0 +1,10 @@
+OpenSslEngine may use networkBIO after calling shutdown
+
+Motivation:
+To ensure that all bytes queued in OpenSSL/tcnative internal buffers we invoke SSL_shutdown again to stimulate OpenSSL to write any pending bytes. If this call fails we may call SSL_free and the associated shutdown method to free resources. At this time we may attempt to use the networkBIO which has already been freed and get a NPE.
+
+Modifications:
+- Don't call bioLengthByteBuffer(networkBIO) if we have called shutdown() in ReferenceCountedOpenSslEngine
+
+Result:
+Fixes https://github.com/netty/netty/issues/6466

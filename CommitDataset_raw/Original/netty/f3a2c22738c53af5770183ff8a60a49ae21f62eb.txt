@@ -1,0 +1,17 @@
+Fix an infinite loop when writing a zero-length FileRegion
+
+Related: #2964
+
+Motivation:
+
+Writing a zero-length FileRegion to an NIO channel will lead to an
+infinite loop.
+
+Modification:
+
+- Do not write a zero-length FileRegion by protecting with proper 'if'.
+- Update the testsuite
+
+Result:
+
+Another bug fixed

@@ -1,0 +1,12 @@
+Tighten FlashMapManager for use with alternative storage options
+
+Ensure that both FlashMapManager methods - the one invoked at the
+start of a request and the one invoked before a redirect, update
+the underlying storage fully since it's not guaranteed that both
+will be invoked on any given request.
+
+Also move the logic to remove expired FlashMap instances to the
+metohd invoked at the start of a request to ensure the check is
+made frequently enough.
+
+SPR-8997

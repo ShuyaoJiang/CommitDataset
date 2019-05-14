@@ -1,0 +1,8 @@
+Handle stream exceptions in Transmitter
+
+This changes failure recovery to only attempt when the failure
+occurs when OkHttp is doing I/O. If a failure is triggered by
+something else (such as a bad RequestBody or Interceptor) then
+that failure will not be retried.
+
+https://github.com/square/okhttp/issues/4603

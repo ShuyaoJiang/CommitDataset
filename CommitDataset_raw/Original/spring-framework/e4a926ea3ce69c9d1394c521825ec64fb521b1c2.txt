@@ -1,0 +1,18 @@
+Modify SpEL Tokenizer to support methods on numbers
+
+When attempting to parse an Integer literal expression such as
+42.toString(), SpEL currently throws a SpelParseException with a message
+similar to: "EL1041E:(pos 3): After parsing a valid expression, there is
+still more data in the expression: 'toString'". The problem here is that
+'3.' is currently considered a valid number (including the dot).
+However, SpEL succeeds at parsing an equivalent expression for a Double
+literal such as 3.14.isInfinite().
+
+To address this issue, the SpEL Tokenizer no longer consumes the
+trailing '.' on an integer as part of the integer. So '3.foo()' will now
+be parsed as '3' '.' 'foo()' and not '3.' 'foo()' -- which was what
+prevented parsing of method invocations on integers. To keep the change
+simple, the parser will no longer handle real numbers of the form
+'3.e4'. From now on they must include the extra 0 (i.e., '3.0e4').
+
+Issue: SPR-9612

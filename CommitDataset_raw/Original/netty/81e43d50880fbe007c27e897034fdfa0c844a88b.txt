@@ -1,0 +1,15 @@
+DefaultFileRegion.transferTo with invalid count may cause busy-spin (#8885)
+
+Motivation:
+
+`DefaultFileRegion.transferTo` will return 0 all the time when we request more data then the actual file size. This may result in a busy spin while processing the fileregion during writes.
+
+Modifications:
+
+- If we wrote 0 bytes check if the underlying file size is smaller then the requested count and if so throw an IOException
+- Add DefaultFileRegionTest
+- Add a test to the testsuite
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8868.

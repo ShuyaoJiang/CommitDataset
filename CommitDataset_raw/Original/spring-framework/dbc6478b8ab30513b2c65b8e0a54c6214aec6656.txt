@@ -1,0 +1,11 @@
+Refactor HTTP Cookie support
+
+There is now an HttpCookie (simple name-value pair) and separately a
+ServerHttpCookie sub-class with additional attributes that a server
+can send to clients.
+
+HttpHeaders is no longer the place to access cookies. Instead there is
+a read-only HttpCookie map on ServerHttpRequest and a mutable
+ServerHttpCookie map on ServerHttpResponse.
+
+Cookies are stored in a map that preserves their order.

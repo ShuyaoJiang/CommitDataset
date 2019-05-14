@@ -1,0 +1,10 @@
+Core: Revert back to joda's multi date formatters (#36814)
+
+This commit partially reverts #36447 by using the ability of Joda time's
+DateTimeFormatterBuilder to append multiple parsers instead of using the
+MergedDateFormatter. The MergedDateFormatter will be removed in a future
+change, as it is not as performant due to creating potentially many
+exceptions during heavy date parsing. This change is a stop-gap until
+that followup is ready.
+
+closes #36602

@@ -1,0 +1,9 @@
+Protect ScriptedMetricIT test cases against failures on 0-doc shards (#32959) (#32968)
+
+Randomized test conditions that cause some shards to have no docs on them
+failed due to test asserts that relied on a lazy initialization side effect
+from the map script. After this fix:
+
+- Test cases with the relevant init script are protected
+- Test cases with the relevant combine or reduce scripts were already
+  protected, because the combine and reduce scripts safely handle this case.

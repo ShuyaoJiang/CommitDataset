@@ -1,0 +1,14 @@
+First step towards HTTP/2 automatic pings. (#3874)
+
+This changes the executor services in HTTP/2 connection to split up
+listener executors (of which there may be many threads) from writer
+executors (of which there is one per connection).
+
+This adds a scheduled executor job to send pings on an interval. We
+don't yet fail the connection if pongs are not received.
+
+For follow-up there's some work to remove exising APIs to send pings
+through the HTTP/2 APIs. These are unused and make it awkard to
+confirm that only the automatic pings are being replied to.
+
+See https://github.com/square/okhttp/issues/3261

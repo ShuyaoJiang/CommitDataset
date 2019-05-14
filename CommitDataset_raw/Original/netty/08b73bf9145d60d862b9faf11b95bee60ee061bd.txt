@@ -1,0 +1,122 @@
+Unhealthy channel is not offered back to the pool.
+
+Motivation:
+When releasing unhealthy channel back to a pool we don't have to offer it since on acquire it will be discarded anyways.
+ Also checking healthiness at release is a good idea so we don't end up having tons of unhealthy channels in the pool(unless they became unhealthy after being offered)
+
+Modifications:
+private SimpleChannelPool.offerIfHealthy() method added that is called from SimpleChannelPool.doReleaseChannel(). SimpleChannelPool.offerIfHealthy() offers channel back to pool only if channel is healthy.
+Otherwise it throws setFailure exception to the promise.
+
+ Result:
+The pool is now much cleaner and not spammed with unhealthy channels.
+
+Added ability to choose if channel health has to be validated on release by passing boolean flag.
+
+Motivation:
+Depending on performance preferences and individual use cases sometimes we would like to be able force health check of a channel at release time and do not offer it back to the pool. Other times we would want to just release channel and offer it back to the pool and check health only when we try to acquire that channel from the pool. See more details here: https://github.com/netty/netty/issues/4077#issuecomment-130461684
+
+Modifications:
+Future<Void> release(Channel channel, Promise<Void> promise, boolean offerHealthyOnly);
+The offerHealthyOnly boolean flag allows developers to choose whether to do channel validation before offering it back to pool or not.
+Appropriate modifications made to hierarchy of implementations of ChannelPool. offerHealthyOnly=true will force channel health to be checked before offering back to pool. offerHealthyOnly=false  will ignore channel health check and will just try just offer it back to the pool
+ offerHealthyOnly=true by default.
+
+Result:
+Channel health check before offer back to pool is controlled by a flag now.
+
+Code changed to satisfy checkstyle requirements.
+
+Motivation:
+Code needs to satisfy checkstyle requirements.
+
+Modifications:
+ SimpleChannelPool.java:279 line split to be less then 120 characters.
+ SimpleChannelPool.java:280:31 space added after '{'
+ SimpleChannelPool.java:282:17 space added after '{'
+ SimpleChannelPoolTest.java:198 - extra white space line removed.
+
+Result:
+Code satisfies checkstyle requirements.
+
+ offerHealthyOnly is passed as a constructor parameter now.
+
+Motivation:
+Instead of passing offerHealthyOnly as a method parameter it is better to pass it in as SimpleChannelPool or FixedChannelPool constructor.
+
+Modifications:
+ Redundant release method that takes offerHealthyOnly removed from ChannelPool.
+ offerHealthyOnly parameter added to constructor for FixedChannelPool and SimpleChannelPool.
+
+Result:
+SimpleChannelPool and FixedChannelPool are now take offerHealthyOnly as a constructor parameter. Default behavior is: offerHealthyOnly=true.
+
+Code changed to satisfy checkstyle requirements.
+
+Motivation:
+Code needs to satisfy checkstyle requirements.
+
+Modifications:
+ SimpleChannelPool.java:84: line made to be no longer then 120 characters.
+ SimpleChannelPool.java:237: extra white space line removed.
+
+Result:
+Code satisfies checkstyle requirements.
+
+Tests do not need to be too  copled to the code. Exception message should not be validated
+
+Motivation:
+We don't need our tests to be too coupled to the code. Exception type validation in tests is just good enough.
+
+Modifications:
+Exception validation message removed from SimpleChannelPoolTest.testUnhealthyChannelIsNotOffered() test.
+
+Result:
+The SimpleChannelPoolTest test is less coupled to the code now.
+
+Stack trace set to empty for UNHEALTHY_NON_OFFERED_TO_POOL.
+
+Motivation:
+We don't need stack trace for UNHEALTHY_NON_OFFERED_TO_POOL.
+
+Modifications:
+Added  UNHEALTHY_NON_OFFERED_TO_POOL.setStackTrace(EmptyArrays.EMPTY_STACK_TRACE) to static init block.
+
+Result:
+UNHEALTHY_NON_OFFERED_TO_POOL's stack trace set to empty.
+
+Minor code re-factorings.
+
+Motivation:
+For better code readability we need to apply several minor code re-factorings.
+
+Modifications:
+javadocs true -> {@code true}
+offerHealthyOnly variable name changed to releaseHeathCheck
+<p/> -> <p> in javadocs
+offerHealthyOnly removed from doReleaseChannel as it not needed there.
+
+Result:
+Code quality is improved.
+
+Code changed to satisfy checkstyle requirements.
+
+Motivation:
+Code needs to satisfy checkstyle requirements.
+
+Modifications:
+SimpleChannelPool.java:87: line made to be no longer then 120 characters.
+
+Result:
+Code satisfies checkstyle requirements.
+
+Pull request needs to contain only necessary changes
+
+Motivation:
+The pull request should not contain unnecessary changes that are not needed as part of required functionality of pull request.
+
+Modifications:
+private void doReleaseChannel(final Channel channel, final Promise<Void> promise) - >  private void doReleaseChannel(Channel channel, Promise<Void> promise)
+
+Result:
+Pull request contains less unnecessary modifications.

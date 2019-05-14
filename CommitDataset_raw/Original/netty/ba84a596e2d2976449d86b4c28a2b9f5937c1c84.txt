@@ -1,0 +1,16 @@
+Allow servers to specify ENABLE_PUSH to 0 explicitly
+
+Motivation:
+
+If server sends SETTINGS with ENABLE_PUSH, its handled as
+PROTOCOL_ERROR in spite of the value. But the value specified to
+0 may be allowed in RFC7540.
+
+Modifications:
+
+Check whether ENABLE_PUSH sent from a server is 0 or not.
+
+Result:
+
+When server specifies ENABLE_PUSH to 0 explicitly, client doesn't
+handle it as PROTOCOL_ERROR.

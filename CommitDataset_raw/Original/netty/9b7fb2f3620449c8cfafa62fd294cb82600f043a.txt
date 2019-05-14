@@ -1,0 +1,14 @@
+Use the correct alert depending on the CertificateException when using OpenSslEngine
+
+Motivation:
+
+We tried to detect the correct alert to use depending on the CertificateException that is thrown by the TrustManager. This not worked all the time as depending on the TrustManager implementation it may also wrap a CertPathValidatorException.
+
+Modification:
+
+- Try to unwrap the CertificateException if needed and detect the right alert via the CertPathValidatorException.
+- Add unit to verify
+
+Result:
+
+Send the correct alert depending on the CertificateException when using OpenSslEngine.

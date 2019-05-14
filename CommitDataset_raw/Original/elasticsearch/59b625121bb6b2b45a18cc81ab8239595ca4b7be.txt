@@ -1,0 +1,9 @@
+Ensure `InternalEngineTests.testConcurrentWritesAndCommits` doesn't pile up commits (#25367)
+
+`InternalEngineTests.testConcurrentWritesAndCommits` can be very heavy on disks
+if threads are slow and the main thread keeps on pulling commit points holding on
+to many many segments. This commit adds some quadratic backoff to not pile up too many
+commits and to make sure indexing threads can make progress. This also now doesn't do
+busy waiting but waits on a latch with a timeout.
+
+Closes #25110

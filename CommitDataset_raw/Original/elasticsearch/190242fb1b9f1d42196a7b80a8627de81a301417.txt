@@ -1,0 +1,8 @@
+Test: add setting to change request timeout for rest client (#25201)
+
+This commit adds a setting to change the request timeout for the rest client. This is useful as the
+default timeout is 30s, which is also the same default for calls like cluster health. If both are
+the same then the response from the cluster health api will not be received as the client usually
+times out first making test failures harder to debug.
+
+Relates #25185

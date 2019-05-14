@@ -1,0 +1,14 @@
+Refinements related to a committed response
+
+1. setComplete checks the isCommitted flag to avoid an unnecessary
+debug message. This method is meant to be safe to call many times.
+
+2. setStatusCode lowers log message to TRACE, since the return value
+communicates the outcome it's arguably much less critical.
+
+3. Add comment and test case for ResponseStatusExceptionHandler.
+A ResponseStatusException is clearly meant to be handled by this
+handler so don't let it pass through even if the respones is
+committed.
+
+Issue: SPR-16231

@@ -1,0 +1,9 @@
+Fix use of hostname in Windows service (#34193)
+
+To pass the HOSTNAME envrionment variable to the Windows service, we
+have to add some command line flags to the service invocation. Namely,
+we have to specify that we are passing HOSTNAME variable, and we will
+pass for it the value of %%COMPUTERNAME%%. This ensures that if the
+hostname is changed, we pick this up the next time that the service is
+started. This change is needed for the service now that we use the
+HOSTNAME as the default node name.

@@ -1,0 +1,19 @@
+Fix MergePlugin transitive dependencies
+
+A little terminiology first:
+
+* merge.from - a project that contains source that will be merged
+               into merge.into
+* merge.into - a project that contains source code that will have
+               code from merge.from merged into it.
+
+Previously a module that dependended on merge.into would not see
+the merge.from module as a transitive dependency. This worked fine
+from a Gradle build because all the code from merge.from is merged
+into the merge.into jar. However, in an IDE it did not work because
+the IDE does not assemble a jar.
+
+This fix ensures that merge.from modules are automatically added
+to the classpath of any module relying on the merge.into project.
+
+Fixes SPR-14650

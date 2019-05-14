@@ -1,0 +1,15 @@
+Use modifiable set for @ServletComponentScan with no packages
+
+Previously, when a project contained multiple `@ServletComponentScan`
+annotated classes in classpath, and at least one annotation don't
+explicitly specify `basePackages` and `basePackageClass` attribute,
+the application could fail to start with an
+UnsupportedOperationException. The failure occurred due to the
+creating of an unmodifiable set when no base packages are configured
+and a subsequent attempt to add base packages to that sit.
+
+This commit fixes the issue by removing the use of an unmodifiable set
+when `@ServletComponentScan` with no base packages in processed before
+any other `@ServletComponentScan` annotations.
+
+See gh-12715

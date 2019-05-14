@@ -1,0 +1,9 @@
+Release cached item in ChannelSendOperator
+
+1. If the write Subscriber cancels with the item cached, release it.
+
+2. If the write Publisher emits an error while the item is cached, when
+the write Subscriber subscribes, release the cached item and emit the
+error signal.
+
+Closes gh-22720

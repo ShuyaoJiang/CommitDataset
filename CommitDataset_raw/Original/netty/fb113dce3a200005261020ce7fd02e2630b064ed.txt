@@ -1,0 +1,13 @@
+HttpPostRequestEncoder may return a slice which is not retained.
+
+Motivation:
+
+We miss to retain a slice before return it to the user and so an reference count error may accour later on.
+
+Modifications:
+
+Use readRetainedSlice(...) and so ensure we retain the buffer before hand it of to the user.
+
+Result:
+
+Fixes [#6626].

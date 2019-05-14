@@ -1,0 +1,12 @@
+IdleStateHandler volatile member variables
+
+Motivation:
+IdleStateHandler has a number of volatile member variables which are only accessed from the EventLoop thread. These do not have to be volatile. The accessibility of these member variables are not consistent between private and package private. The state variable can also use a byte instead of an int.
+
+Modifications:
+- Remove volatile from member variables
+- Change access to private for member variables
+- Change state from int to byte
+
+Result:
+IdleStateHandler member variables cleaned up.

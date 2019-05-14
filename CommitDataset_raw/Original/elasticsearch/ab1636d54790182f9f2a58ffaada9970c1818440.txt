@@ -1,0 +1,68 @@
+Engine - do not index operations with seq# lower than the local checkpoint into lucene (#25827)
+
+When a replica processes out of order operations, it can drop some due to version comparisons. In the past that would have resulted in a VersionConflictException being thrown and the operation was totally ignored. With the seq# push, we started storing these operations in the translog (but not indexing them into lucene) in order to have complete op histories to facilitate ops based recoveries. This in turn had the undesired effect that deleted docs may be resurrected during recovery in some extreme edge situation (see a complete explanation below). This PR contains a simple fix, which is also an optimization for the recovery process, incoming operation that have a seq# lower than the current local checkpoint (i.e., have already been processed) should not be indexed into lucene. Note that sometimes we can also skip storing them in the translog, but this is not required for the fix and is more complicated.
+
+This is the equivalent of #25592
+
+## More details on resurrected ops 
+
+Consider two operations: 
+ - Index d1, seq no 1
+ - Delete d1, seq no 3
+
+On a replica they come out of order:
+ - Translog gen 1 contains:
+    - delete (seqNo 3)
+ - Translog gen 2 contains:
+    - index (seqNo 1) (wasn't indexed into lucene, but put into the translog)
+    - another operation (seqNo 10)
+ - Translog gen 3 
+    - another op (seqNo 9)
+ - Engine commits with:
+    - local checkpoint 9
+    - refers to gen 2 
+
+If this replica becomes a primary:
+    - Local recovery will replay translog gen 2 and up, causing index #1 to be re-index. 
+    - Even if recovery will start at gen 3, the translog retention policy will cause file based recovery to replay the entire translog. If it happens to start at gen 2 (but not 1), we will run into the same problem.
+
+#### Some context - out of order delivery involving deletes:
+
+On normal operations, this relies on the gc_deletes setting. We assume that the setting represents an upper bound on the time between the index and the delete operation. The index operation will be detected as stale based on the tombstone map in the LiveVersionMap.
+
+Recovery presents a challenge as it can replay an old index operation that was in the translog and override a delete operation that was done when the engine was opened (and is not part of the replayed snapshot). To deal with this situation, we disable GC deletes (i.e. retain all deletes) for the duration of recoveries. This means that the delete operation will be remembered and the index operation ignored.
+
+Both of the above scenarios (local recover + peer recovery) create a situation where the delete operation is never replayed. It this "lost" as lucene doesn't remember it happened and our LiveVersionMap is populated with it.
+
+#### Solution:
+
+Note that both local and peer recovery represent a scenario where we replay translog ops on top of an existing lucene index, potentially with ongoing indexing. Therefore we can treat them the same.
+
+The local checkpoint in Lucene represent a marker indicating that all operations below it were performed on the index. This is the only form of "memory" that we have that relates to deletes. If we can achieve the following:
+1) All ops below the local checkpoint are not indexed to lucene.
+2) All ops above the local checkpoint are
+
+It will mean that all  variants are covered: (i# == index op seq#, d# == delete op seq#, lc == local checkpoint in commit)
+1) i# < d# <= lc - document is already deleted in lucene and stays that way.
+2) i# <= lc < d# - delete is replayed on index - document is deleted
+3) lc < i# < d# - index is replayed and then delete - document is deleted.
+
+More formally - we want to make sure that for all ops that performed on the primary o1 and o2, if o2 is processed on a shard before o1, o1 will be dropped. We have the following scenarios
+
+1) If both o1 or o2 are not included in the replayed snapshot and are above it (i.e., have a higher seq#), they fall under the gc deletes assumption.
+2) If both o1 is part of the replayed snapshot but o2 is above it:
+	- if o2 arrives first, o1 must arrive due to the recovery and potentially via replication as well. since gc deletes is disabled we are guaranteed to know of o2's existence.
+3) If both o2 and o1 are part of the replayed snapshot:
+	- we fall under the same scenarios as #2 - disabling GC deletes ensures we know of o2 if it arrives first.
+4) If o1 falls before the snapshot and o2 is either part of the snapshot or higher:
+	- Since the snapshot is guaranteed to contain all ops that are not part of lucene and are above the lc in the commit used, this means that o1 is part of lucene and o1 < local checkpoint. This means it won't be processed and we're not in the scenario we're discussing.
+5) If o2 falls before the snapshot but o1 is part of it:
+	- by the same reasoning above, o2 is < local checkpoint. Since o1 < o2, we also get o1 < local checkpoint and this will be dropped.
+
+
+#### Implementation:
+
+For local recovery, we can filter the ops we read of the translog and avoid replaying them. For peer recovery this is tricky as we do want to send the operations in order to have some history on the target shard. Filtering operations on the engine level (i.e., not indexing to lucene if op seq# <= lc) would work for both. 
+
+
+

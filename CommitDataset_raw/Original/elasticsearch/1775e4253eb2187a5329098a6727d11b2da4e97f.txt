@@ -1,0 +1,6 @@
+Introducing a translog deletion policy (#24950)
+
+Currently, the decisions regarding which translog generation files to delete are hard coded in the interaction between the `InternalEngine` and the `Translog` classes. This PR extracts it to a dedicated class called `TranslogDeletionPolicy`, for two main reasons:
+
+1) Simplicity - the code is easier to read and understand (no more two phase commit on the translog, the Engine can just commit and the translog will respond)
+2) Preparing for future plans to extend the logic we need - i.e., retain multiple lucene commit and also introduce a size based retention logic, allowing people to always keep a certain amount of translog files around. The latter is useful to increase the chance of an ops based recovery.

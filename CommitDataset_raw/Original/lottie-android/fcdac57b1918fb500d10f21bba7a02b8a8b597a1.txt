@@ -1,0 +1,11 @@
+Allow animations with masks and mattes to scale up
+
+Previously, animations were given a max scale due to saveLayer,
+which is used for mattes and masks, only saving the canvas size.
+This is problematic when the scale makes the animations larger
+than the view because the masks and mattes get clipped. This gets
+around that by scaling up the animation up until the size of the
+view then scaling the canvas with the remaining scale.
+
+#395 #301 #161 #326 #315
+Fixes #404

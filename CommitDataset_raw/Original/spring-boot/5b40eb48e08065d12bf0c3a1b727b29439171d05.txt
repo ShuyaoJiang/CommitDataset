@@ -1,0 +1,12 @@
+Improve MBean without backing Endpoint support
+
+Improve support for MBeans without a backing endpoint by introducing
+a `JmxEndpoint` interface. The `JmxEndpoint` is intentionally
+similar in design to the `MvcEndpoint` from the `mvc` package and
+allows for completely custom JMX beans that are not backed by any
+real actuator `Endpoint`.
+
+The `AuditEventsMBean` has been refactored to use the new interface and
+has been renamed to `AuditEventsJmxEndpoint`.
+
+See gh-6579

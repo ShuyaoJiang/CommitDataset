@@ -1,0 +1,10 @@
+REST hl client: cluster health to default to cluster level (#31268)
+
+With #29331 we added support for the cluster health API to the
+high-level REST client. The transport client does not support the level
+parameter, and it always returns all the info needed for shards level
+rendering. We have maintained that behaviour when adding support for
+cluster health to the high-level REST client, to ease migration, but the
+correct thing to do is to default the high-level REST client to
+`cluster` level, which is the same default as when going through the
+Elasticsearch REST layer.

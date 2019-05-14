@@ -1,0 +1,14 @@
+ReadOnlyEngine should update translog recovery state information (#39238)
+
+`ReadOnlyEngine` never recovers operations from translog and never 
+updates translog information in the index shard's recovery state, even 
+though the recovery state goes through the `TRANSLOG` stage during 
+the recovery. It means that recovery information for frozen shards indicates 
+an unkown number of recovered translog ops in the Recovery APIs 
+(translog_ops: `-1` and translog_ops_percent: `-1.0%`) and this is confusing.
+
+This commit changes the `recoverFromTranslog()` method in `ReadOnlyEngine` 
+so that it always recover from an empty translog snapshot, allowing the recovery 
+state translog information to be correctly updated.
+
+Related to #33888 

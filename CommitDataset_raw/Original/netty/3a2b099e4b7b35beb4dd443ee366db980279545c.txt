@@ -1,0 +1,12 @@
+Fix test failure in testsuite-osgi-deps
+
+This commit fixes both failure of test itself and failure of compiling
+and running test.
+
+- When the test was run via 'mvn test', Maven gives karaf-maven-plugin a
+  list of class directories instead of OSGi bundles, so that
+  karaf-maven-plugin generates incorrect feature.xml.  I added a
+  workaround for this specific case to DependencyIT
+- When the packaging of project is 'feature', maven-compiler-plugin is
+  not run at all.  Added a <plugin/> section so that it's always
+  compiled.

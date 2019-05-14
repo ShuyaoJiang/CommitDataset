@@ -1,0 +1,6 @@
+Remove @GuardedBy annotation from all public methods of Monitor.
+
+Rationale: It's arguably incorrect for leave, which gives up the lock. It doesn't make sense for the other methods either because "lock" is meaningless to users of the class. Furthermore, every one of these methods checks whether the lock is held if necessary, so there's not actually any danger in calling them incorrectly (they fail fast).
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=26114296

@@ -1,0 +1,16 @@
+Do not reuse mock requests in Spring MVC Test
+
+SPR-13211 introduced support for reusing mock requests in Spring MVC
+Test if the request was created by the the Spring TestContext
+Framework. Unfortunately, that change makes it impossible for
+MockMvc.perform() to be invoked multiple times within the same test
+method without side effects. For example, session attributes and
+request parameters are transparently and unexpectedly retained for
+subsequent invocations of perform(), causing certain categories of
+tests to fail.
+
+This commit reverts the changes introduced in SPR-13211 and introduces
+a new MockMvcReuseTests class to serve as regression tests within
+Spring's test suite.
+
+Issue: SPR-13260, SPR-13211

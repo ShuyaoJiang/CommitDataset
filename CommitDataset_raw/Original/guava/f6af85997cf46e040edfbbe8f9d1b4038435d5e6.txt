@@ -1,0 +1,27 @@
+Rollforward [] which was rolled back in [] because it
+caused some tests using appengine to fail with IOExceptions when calling
+FileInputStream.available().  The workaround in the rollforward is to not call
+the method.  The one case where we were calling it we had actually already
+called a similar method, so trying again doesn't seem valuable anyway.
+
+*** Original change description ***
+
+Implement ByteSource.asCharSource(charset).read() using the decoding string
+constructor instead of streaming the contents into a StringBuilder.
+
+this allows us to avoid a number of copies that are currently happening for
+each character (1. into a temporary CharBuffer, 2. into a StringBuilder, 3 into
+the String char[]) and replace it with simply whatever is required by
+ByteSource.read() and the String(byte[], charset) constructor.  For certain
+ByteSource implementations (like FileByteSource) ByteSource.read() can often
+presize the byte[] correctly and the string constructor can also do some things
+to guess at the correct array sizes and avoid copies in the common case.
+
+Benchmarks have shown that this should improve the speed of Files.toString
+significantly.
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=162275181

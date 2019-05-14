@@ -1,0 +1,14 @@
+Rewrite SslHandler / Reduce the chance of OIO-OIO dead lock
+
+- SslHandler always begins handshake unless startTls is true
+  - Removed issueHandshake property
+  - If a user wants to start handshake later, he/she has to add 
+    SslHandler later.
+- Removed enableRenegotiation property
+  - JDK upgrade fixes the security vulnerability - no need to complicate
+    our code
+- Some property name changes
+  - getSSLEngineInboundCloseFuture() -> sslCloseFuture() 
+- Updated securechat example
+- Added timeout for handshake and close_notify for better security
+  - However, it's currently hard-coded.  Will make it a property later.

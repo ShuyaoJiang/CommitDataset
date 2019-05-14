@@ -1,0 +1,18 @@
+CCS: don't proxy requests for already connected node (#31273)
+
+Cross-cluster search selects a subset of nodes for each remote cluster
+and sends requests only to them, which will act as a proxy and properly
+redirect such requests to the target nodes that hold the relevant data.
+What happens today is that every time we send a request to a remote
+cluster, it will be sent to the next node in the proxy list
+(in round-robin fashion), regardless of whether the target node is
+already amongst the ones that we are connected to. In case for instance
+we need to send a shard search request to a data node that's also one of
+the selected proxy nodes, we may end up sending the request to it
+through one of the other proxy nodes.
+This commit optimizes this case to make sure that whenever we are
+already connected to a remote node, we will send a direct request rather
+than using the next proxy node.
+There is a side-effect to this, which is that round-robin will be a bit
+unbalanced as the data nodes that are also selected as proxies will
+receive more requests.

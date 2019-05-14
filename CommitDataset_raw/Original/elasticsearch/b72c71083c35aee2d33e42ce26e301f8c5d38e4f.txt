@@ -1,0 +1,7 @@
+Cleanup IndexFieldData visibility (#25900)
+
+Today we expose `IndexFieldDataService` outside of IndexService to do maintenance
+or lookup field data in different ways. Yet, we have a streamlined way to access IndexFieldData
+via `QueryShardContext` that should encapsulate all access to it. This also ensures that we control all other functionality like cache clearing etc.
+
+This change also removes the `recycler` option from `ClearIndicesCacheRequest` this option is a no-op and should have been removed long ago.

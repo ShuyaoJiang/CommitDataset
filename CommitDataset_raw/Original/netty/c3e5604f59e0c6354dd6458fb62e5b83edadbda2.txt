@@ -1,0 +1,14 @@
+Do not throw IndexOutOfBoundsException on an invalid SSL record
+
+Motivation:
+
+When an SSL record contains an invalid extension data, SniHandler
+currently throws an IndexOutOfBoundsException, which is not optimal.
+
+Modifications:
+
+- Do strict index range checks
+
+Result:
+
+No more unnecessary instantiation of exceptions and their stack traces

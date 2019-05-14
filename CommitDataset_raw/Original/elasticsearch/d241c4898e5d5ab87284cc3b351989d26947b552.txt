@@ -1,0 +1,8 @@
+Removes parent child fielddata specialization (#24737)
+
+This change removes the field data specialization needed for the parent field and replaces it with
+a simple DocValuesIndexFieldData. The underlying global ordinals are retrieved via a new function called
+IndexOrdinalsFieldData#getOrdinalMap.
+The children aggregation is also modified to use a simple WithOrdinals value source rather than the deleted WithOrdinals.Parent.
+
+Relates #20257

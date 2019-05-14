@@ -1,0 +1,10 @@
+Remove TLS 1.0 as a default SSL protocol (#37512)
+
+The default value for ssl.supported_protocols no longer includes TLSv1
+as this is an old protocol with known security issues.
+Administrators can enable TLSv1.0 support by configuring the
+appropriate `ssl.supported_protocols` setting, for example:
+
+xpack.security.http.ssl.supported_protocols: ["TLSv1.2","TLSv1.1","TLSv1"]
+
+Relates: #36021

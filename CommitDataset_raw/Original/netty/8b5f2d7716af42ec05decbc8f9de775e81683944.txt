@@ -1,0 +1,11 @@
+Http2DefaultFrameWriter direct write instead of copy
+
+Motivation:
+The Http2DefaultFrameWriter copies all contents into a buffer (or uses a CompositeBuffer in 1 case) and then writes that buffer to the socket. There is an opportunity to avoid the copy operations and write directly to the socket.
+
+Modifications:
+- Http2DefaultFrameWriter should avoid copy operations where possible.
+- The Http2FrameWriter interface should be clarified to indicate that ByteBuf objects will be released.
+
+Result:
+Hopefully less allocation/copy leads to memory and throughput performance benefit.

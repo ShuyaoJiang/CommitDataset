@@ -1,0 +1,11 @@
+Fix exclude filter to not exclude MediaType
+
+This commit removes MediaType from the list of exclude types as it looks
+like an error: MediaType has a constructor taking a `String` and binding
+works fine with it.
+
+This has the effect of properly generating the metadata for the only key
+that Spring Boot exposes with a MediaType type:
+spring.data.rest.default-media-type.
+
+Closes gh-11568

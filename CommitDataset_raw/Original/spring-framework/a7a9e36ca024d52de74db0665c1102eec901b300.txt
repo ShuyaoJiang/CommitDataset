@@ -1,0 +1,15 @@
+Add ResourceRegionHttpMessageWriter
+
+This new `HttpMessageWriter` leverages the `ResourceRegionEncoder` to
+write `ResourceRegion` to HTTP responses, thus supporting HTTP Range
+requests.
+
+Whenever possible, this message writer uses the zero copy support for
+single range requests.
+
+This `HttpMessageWriter` is never used directly, but is used as a
+delegate by the `ResourceHttpMessageWriter`. When provided with the
+`BOUNDARY_STRING_HINT`, the `ResourceRegionHttpMessageWriter`
+adapts its behavior in order to write a single/multiple byte ranges.
+
+Issue: SPR-14664

@@ -1,0 +1,8 @@
+Fix total hits serialization of the search response (#36290)
+
+This change removes the custom serialization of the total hits
+and reuses the shard's serialization of Lucene#read/writeTopDocs
+in the client code. This also removes the incorrect assertion that
+trips randomly in bwc tests.
+
+Closes #36284

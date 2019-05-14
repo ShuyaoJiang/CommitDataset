@@ -1,0 +1,10 @@
+Add support for custom ProtocolResolver with Devtools
+
+Prior to this commit, custom `ProtocolResolvers` set on the
+`ApplicationContext` were lost when Devtools is used as the customized
+`ResourceLoader` did not copy any customization made to the default
+resource loader.
+
+This commit makes sure to copy any `ProtocolResolver` set on the context.
+
+Closes gh-9331

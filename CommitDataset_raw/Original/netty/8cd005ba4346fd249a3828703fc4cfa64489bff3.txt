@@ -1,0 +1,13 @@
+Provide a way to cache the internal nioBuffer of the PooledByteBuffer to reduce GC. (#8593)
+
+Motivation:
+
+Often a temporary ByteBuffer is used which can be cached to reduce the GC pressure.
+
+Modifications:
+
+Add a Deque per PoolChunk which will be used for caching.
+
+Result:
+
+Less GC.

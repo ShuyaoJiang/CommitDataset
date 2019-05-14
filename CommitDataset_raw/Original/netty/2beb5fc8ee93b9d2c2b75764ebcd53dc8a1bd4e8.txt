@@ -1,0 +1,13 @@
+DelegatingSslContext should also be able to configure the SslHandler
+
+Motivation:
+
+DelegatingSslContext at the moment intercept newEngine calls and allow to init the SslEngine after it is created. The problem here is that this may not work the SSLEngine that is wrapped in the SslHandler when calling newHandler(...). This is because some SslContext implementations not delegate to newEngine(...) when creating the SslHandler to allow some optimizations. For this we should also allow to init the SslHandler after its creation and by default just delegate to initEngine(...).
+
+Modifications:
+
+Allow the user to also init the SslHandler after creation while by default init its SSLEngine after creation.
+
+Result:
+
+More flexible and correct code.

@@ -1,0 +1,10 @@
+Fix building Javadoc JARs on JDK for client JARs (#29274)
+
+When a module or plugin register that it has a client JAR, we copy
+artifacts like the Javadoc and sources JARs as the JARs for the client
+as well (with -client added to the name). I previously had to disable
+the Javadoc task on JDK 10 due to a bug in bin/javadoc. After JDK 10
+went GA without a fix for this bug, I added workaround to fix the
+Javadoc task on JDK 10. However, I made a mistake reverting the
+previously skipped Javadocs tasks and missed that one that copies the
+Javadoc JAR for client JARs. This commit fixes that issue.

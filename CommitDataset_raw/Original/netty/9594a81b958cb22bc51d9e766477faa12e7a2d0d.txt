@@ -1,0 +1,13 @@
+[#2622] Correctly check reference count before try to work on the underlying memory
+
+Motivation:
+
+Because of how we use reference counting we need to check for the reference count before each operation that touches the underlying memory. This is especially true as we use sun.misc.Cleaner.clean() to release the memory ASAP when possible. Because of this the user may cause a SEGFAULT if an operation is called that tries to access the backing memory after it was released.
+
+Modification:
+
+Correctly check the reference count on all methods that access the underlying memory or expose it via a ByteBuffer.
+
+Result:
+
+Safer usage of ByteBuf

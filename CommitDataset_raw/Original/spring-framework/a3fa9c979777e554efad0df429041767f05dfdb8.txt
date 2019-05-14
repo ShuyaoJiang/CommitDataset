@@ -1,0 +1,11 @@
+Add check for unused WebSocket sessions
+
+Sessions connected to a STOMP endpoint are expected to receive some
+client messages. Having received none after successfully connecting
+could be an indication of proxy or network issue. This change adds
+periodic checks to see if we have not received any messages on a
+session which is an indication the session isn't going anywhere
+most likely due to a proxy issue (or unreliable network) and close
+those sessions.
+
+Issue: SPR-11884

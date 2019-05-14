@@ -1,0 +1,8 @@
+Remove write pausing in Undertow response
+
+Using the simple example shown in the ticket but switching from
+Mono<String> to Flux<String> (and 5,000,000 onNext calls) shows that
+constant pausing causes significant overhead and is not worth the
+trouble vs ignoring the onWritePossible in REQUESTED state.
+
+Issue: SPR-16702

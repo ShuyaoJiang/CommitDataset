@@ -1,0 +1,26 @@
+Add heart-beat support to STOMP broker relay
+
+Previously, the STOMP broker relay did not support heart-beats. It sent
+0,0 in the heart-beats header for its own CONNECTED message, and set the
+heart-beats header to 0,0 when it was forwarding a CONNECTED from from a
+client to the broker.
+
+The broker relay now supports heart-beats for the system relay session.
+It will send heart-beats at the send interval that's been negotiated
+with the broker and will also expect to receive heart-beats at the
+receive interval that's been negotiated with the broker. The receive
+interval is multiplied by a factor of three to satisfy the STOMP spec's
+suggestion of lenience and ActiveMQ 5.8.0's heart-beat behaviour (see
+AMQ-4710).
+
+The broker relay also supports heart-beats between clients and the
+broker. For any given client's relay session, any heart-beats received
+from the client are forwarded on to the broker and any heart-beats
+received from the broker are sent back to the client.
+
+Internally, a heart-beat is represented as a Message with a byte array
+payload containing the single byte of new line ('\n') character and
+'empty' headers. SubscriptionMethodReturnValueHandler has been updated
+to default the message type to SimpMessageType.MESSAGE. This eases
+the distinction between a heartbeat and a message that's been created
+from a return value from application code.

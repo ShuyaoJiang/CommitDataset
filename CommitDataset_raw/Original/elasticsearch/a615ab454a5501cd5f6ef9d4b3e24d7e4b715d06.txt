@@ -1,0 +1,21 @@
+Watcher: Only trigger a watch if new or schedule/changed (#35908)
+
+The trigger engine did always create a new schedule data structure, when
+the watcher indexing listener called an add. However the indexing
+listener also called add, when the watch status was updated. This means,
+that upon a watch status update the watch got retriggered, potentially
+waiting a defined interval from the watch status update onwards, instead
+of waiting from the last run.
+
+This commit only updates the schedule in the trigger engine, if it
+actually has changed, otherwise the existing schedule will not be
+touched. This has two results
+
+1. If a watch is updated by an execution, the existing interval will not
+be touched (meaning the scheduled time will not move forward).
+2. If a watch is updated by a user, but the schedule is not changed, it
+will not be reset from the update (for example starting to count from 5
+minutes again, if the interval was set to 5 minutes).
+
+Furthermore some minor cleanups were applied, making variables final in
+the ctor, preventing double creation of variables.

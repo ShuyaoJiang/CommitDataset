@@ -1,0 +1,16 @@
+Fix TransportChangePasswordActionTests
+
+testIncorrectPasswordHashingAlgorithm is based on the assumption
+that the algorithm selected for the change password request is
+different than the one selected for the NativeUsersStore.
+pbkdf2_10000 is the same as pbkdf2 since 10000 is the default cost
+factor for pbkdf2 and thus should not be used as an option for the
+passwordHashingSettings.
+
+Also make sure that the same algorithm is used for settings and
+change password requests in other tests for consistency, even if
+we expect to not reach the code where the algorithm is checked for
+now.
+
+Resolves #31696
+Reverts 1c4f480794f2465c78e8e29645956f16971eeead

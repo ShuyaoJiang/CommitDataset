@@ -1,0 +1,17 @@
+Require Bean Validation 1.1 to enable validation auto-configuration
+
+Previously, ValidationAutoConfiguration would configure a
+MethodValidationPostProcessor if any Bean Validation 1.0 or later
+implementation was available, however the underlying infrastructure
+requires Bean Validation 1.1 with any implementation or
+Bean Validation 1.0 with Hibernate Validator 4.3.
+
+This caused a problem on TomEE which uses Apache BVal, and Bean
+Validation 1.0 implementation. Spring Framework would identify that
+Bean Validaton 1.0 was being used and then try to load Hibernate
+Validator classes that are not present.
+
+This commit fixes the problem by requiring Bean Validation 1.1 before
+auto-configuring a MethodValidationPostProcessor.
+
+Closes gh-7665

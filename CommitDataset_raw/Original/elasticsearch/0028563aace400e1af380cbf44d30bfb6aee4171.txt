@@ -1,0 +1,15 @@
+Pass through script params in scripted metric agg (#29154)
+
+* Pass script level params into scripted metric aggs (#28819)
+
+Now params that are passed at the script level and at the aggregation level
+are merged and can both be used in the aggregation scripts. If there are
+any conflicts, aggregation level params will win. This may be followed
+by another change detecting that case and throwing an exception to
+disallow such conflicts.
+
+* Disallow duplicate parameter names between scripted agg and script (#28819)
+
+If a scripted metric aggregation has aggregation params and script params
+which have the same name, throw an IllegalArgumentException when merging
+the parameter lists.

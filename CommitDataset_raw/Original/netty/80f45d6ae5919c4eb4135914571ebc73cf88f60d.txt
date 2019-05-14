@@ -1,0 +1,13 @@
+Ensure closing a Socket / FileDescriptor multiple times will not throw exception
+
+Motivation:
+
+If an user will close a Socket / FileDescriptor multiple times we should handle the extra close operations as NOOP.
+
+Modifications:
+
+Only do the actual closing one time
+
+Result:
+
+No exception if close is called multiple times.

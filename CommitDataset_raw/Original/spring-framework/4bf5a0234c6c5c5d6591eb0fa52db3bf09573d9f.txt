@@ -1,0 +1,11 @@
+Add doesNotExist match to HeaderResultMatchers
+
+Prior to this commit, one could not test for the absence of
+a specific HTTP header in a response.
+Using header("X-Custom-Header", Matchers.nullValue()) would not
+work because it tests for an empty value of an existing header.
+
+This commit adds a doesNotExist method on the
+HeaderResultMatcher.
+
+Issue: SPR-10771

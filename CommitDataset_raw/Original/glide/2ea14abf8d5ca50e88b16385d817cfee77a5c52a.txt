@@ -1,0 +1,10 @@
+Add an explicit null check to Util.getSnapshot.
+
+Explicitly checking for null avoids our previous implicit expectation 
+that the iterator of the provided Collection would do the null checking 
+for us. This expectation is valid in Glide right now because we only 
+pass WeakHashMaps to this method, but it seems like a dangerous 
+assumption to make in a utility method.
+
+We can’t require a WeakHashMap directly because all of our usages are
+wrapped in Collections.newSetFromMap.

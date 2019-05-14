@@ -1,0 +1,19 @@
+[ML] Reject put datafeed for job that is marked as deleted (elastic/x-pack-elasticsearch#1537)
+
+Deleting a job issues 2 cluster state updates.
+The first marks the job as deleted.
+The second actually removes the job.
+Both check that there is no datafeed referring to the job.
+If a put datafeed request arrives between those 2 cluster
+state updates, the datafeed gets created and the final
+job cluster state update fails. This means we end up with
+both the job and the datafeed, but the job's results and
+state have been deleted.
+
+This commit changes the behaviour so that the put
+datafeed request fails for a job that is marked as deleted
+as this scenario is avoiding partially executing an action.
+
+relates elastic/x-pack-elasticsearch#1510 
+
+Original commit: elastic/x-pack-elasticsearch@76fa0f0b1a3da826a10696303b9bc5a0cbc5a352

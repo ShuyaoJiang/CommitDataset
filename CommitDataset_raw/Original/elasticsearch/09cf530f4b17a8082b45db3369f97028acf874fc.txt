@@ -1,0 +1,9 @@
+Derive max composite buffers from max content len
+
+With this commit we determine the maximum number of buffers that Netty keeps
+while accumulating one HTTP request based on the maximum content length (default
+1500 bytes, overridable with the system property `es.net.mtu`). Previously, we
+kept the default value of 1024 which is too small for bulk requests which leads
+to unnecessary copies of byte buffers internally.
+
+Relates #29448

@@ -1,0 +1,13 @@
+RTU.setField() shouldn't call toString() on target
+
+ReflectionTestUtils.setField() implicitly calls toString() on the target
+object when arguments for a call to Assert.notNull() are built. This can
+have undesirable side effects, for example if the toString() invocation
+results in a thrown exception or access to an external system (e.g., a
+database).
+
+This commit addresses this issue by inlining the Assert.notNull() code,
+thereby avoiding accidental invocation of toString() on a non-null
+target.
+
+Issue: SPR-9571

@@ -1,0 +1,13 @@
+[#3297] Fix race while resolve remote address that can cause NPE
+
+Motivation:
+
+We may produce a NPE due a race that can happen while check if a resolution was done and failed.
+
+Modifications:
+
+Correctly first check if the resultion is done before try to detect if it failed and so remove the race that can produce a NPE.
+
+Result:
+
+No more race possible while resolve address during connect.

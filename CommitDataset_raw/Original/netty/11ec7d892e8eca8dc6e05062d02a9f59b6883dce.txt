@@ -1,0 +1,22 @@
+Cleanup SslHandler handshake/renegotiation (#8555)
+
+Motivation:
+
+The code for initiating a TLS handshake or renegotiation process is
+currently difficult to reason about.
+
+Modifications:
+
+This commit introduces to clear paths for starting a handshake. The
+first path is a normal handshake. The handshake is started and a timeout
+is scheduled.
+
+The second path is renegotiation. If the first handshake is incomplete,
+the renegotiation promise is added as a listener to the handshake
+promise. Otherwise, the renegotiation promise replaces the original
+promsie. At that point the handshake is started again and a timeout is
+scheduled.
+
+Result:
+
+Cleaner and easier to understand code. 

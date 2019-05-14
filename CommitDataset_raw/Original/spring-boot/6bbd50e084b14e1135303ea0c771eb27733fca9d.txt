@@ -1,0 +1,13 @@
+Update launch script to canonicalize jarfolder
+
+Previously, if the folder which contained the jar was a symlink the
+launch script would use the symlinked folder's name when determining
+the default identity.
+
+This commit updates the launch script so that symlinks are resolved
+and the canonical name of the folder which contains the jar is used
+when determining the script's default identity. The behaviour when
+APP_NAME has been set is unchanged.
+
+Closes gh-5679
+Closes gh-5733

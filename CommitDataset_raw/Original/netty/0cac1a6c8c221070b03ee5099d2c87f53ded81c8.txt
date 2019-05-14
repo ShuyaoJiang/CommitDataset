@@ -1,0 +1,21 @@
+H2C upgrades should be ineligible for flow control (#7400)
+
+H2C upgrades should be ineligible for flow control
+
+Motivation:
+
+When the h2c upgrade request is too big, the Http2FrameCodec complains
+it's too big for flow control reasons, even though it's ineligible for
+flow control.
+
+Modifications:
+
+Specially mark upgrade streams and make Http2FrameCodec know not to try
+to flow control on those streams.
+
+Result:
+
+Servers won't barf when they receive an upgrade request with a fat
+payload.
+
+[Fixes #7280]

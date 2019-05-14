@@ -1,0 +1,8 @@
+[Zen2] Add lag detector (#35685)
+
+A publication can succeed and complete before all nodes have applied the
+published state and acknowledged it, thanks to the publication timeout; however
+we need every node eventually either to apply the published state (or a later
+state) or be removed from the cluster. This change introduces the LagDetector
+which achieves this liveness property by removing any lagging nodes from the
+cluster.

@@ -1,0 +1,11 @@
+Fix boot curies href when server has custom servlet path
+
+Previously, the servlet path was being applied twice. Once by the
+code that sets up the DefaultCurieProvider and once by the provider
+itself which uses ServletUriComponentBuilder's
+fromCurrentServletMapping() to build the application URI.
+
+This commit removes the duplicate logic when creating the
+DefaultCurieProvider.
+
+Closes gh-6585

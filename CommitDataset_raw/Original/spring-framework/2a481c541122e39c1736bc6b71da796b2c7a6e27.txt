@@ -1,0 +1,19 @@
+Fix race conditions in AbstractListenerReadPublisher
+
+Transition from DEMAND->NO_DEMAND:
+Two concurrent threads enter DEMAND.request and DEMAND.onDataAvailable.
+And DEMAND.onDataAvailable finishes before DEMAND.request to be able to
+update the demand field then a request for reading will be lost.
+
+Transition from READING->NO_DEMAND:
+readAndPublish() returns false because there is no demand but before
+switching the states READING.request is invoked again a request for
+reading will be lost.
+
+Changing READING->DEMAND/NO_DEMAND is made conditional so that the
+operations will be executed only if changing states succeeds.
+
+When in READING state detect completion before each next item in order
+to exit sooner, if completed.
+
+Issue: SPR-16207

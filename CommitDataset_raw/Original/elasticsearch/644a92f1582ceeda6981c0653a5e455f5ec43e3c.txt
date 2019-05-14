@@ -1,0 +1,12 @@
+Fix rollup on date fields that don't support epoch_millis (#31890)
+
+The rollup indexer uses a range query to select the next page
+of results based on the last time bucket of the previous round
+and the `delay` configured on the rollup job. This query uses
+the `epoch_millis` format implicitly but doesn't set the `format`.
+This result in errors during the rollup job if the field
+definition doesn't allow this format. It can also miss documents
+if the format is not accepted but another format in the field
+definition is able to parse the query (e.g.: `epoch_second`).
+This change ensures that we use `epoch_millis` as the only format
+to parse the rollup range query.

@@ -1,0 +1,13 @@
+Support content type `application/x-ndjson` in DeprecationRestHandler (#36025)
+
+org.elasticsearch.rest.RestController#hasContentType checks to see if the
+RestHandler supports the `application/x-ndjson` Content-Type. DeprecationRestHandler
+is a wrapper around the real RestHandler, and prior to this change
+would always return `false` due to the interface's default supportsContentStream().
+This prevents API's that use multi-line JSON from properly being deprecated
+resulting in an HTTP 406 error.
+
+This change ensures that the DeprecationRestHandler honors the
+supportsContentStream() of the wrapped RestHandler.
+
+Relates to #35958

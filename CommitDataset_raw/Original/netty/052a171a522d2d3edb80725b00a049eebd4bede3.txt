@@ -1,0 +1,13 @@
+Fixes infinite loop during handshake in SslHandler in Android devices
+
+Motivation:
+
+On Android devices with version less than Lollipop, HarmonyJSSE is used for SSL. After completion of handshake, handshake status is NOT_HANDSHAKING instead of FINISHED. Also encrypting empty buffer after handshake should cause underflow exception and produce 0 bytes, but here it happily encrypts it causing for loop to never break
+
+Modification:
+
+Since 0 bytes should only be consumed in handshake process. Added a condition to break loop when 0 bytes are consumed and handshake status is NOT_HANDSHAKING
+
+Result:
+
+Sucessful ssl handshake on Android devices, no infinite loop now

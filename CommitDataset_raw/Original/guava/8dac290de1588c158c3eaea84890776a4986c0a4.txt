@@ -1,0 +1,9 @@
+Fix occasional hangs.
+Also, include LinkedBlockingDeque in our public tests, since we've required Java 6 for a long time.
+Plus, use static imports, Stopwatch, and Truth, and reformat.
+
+The cause of the hang is that sometimes we cancel the producer task before it has even begun to execute. Part of the correct fix is probably to wait longer than 10ms, as martinrb has taught me.... But for the moment, let's at least wait for the task to start before potentially cancelling it.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=142670289

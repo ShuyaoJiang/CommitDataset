@@ -1,0 +1,8 @@
+Fix test that will fail in an upcoming patch to GWT.
+
+The semantics for String.toUpperCase() are that of the JavaScript browser implementation and might not conform to their JRE specification.
+
+In FF "pa\u00dfword".toUpperCase() is not "PASSWORD"; however the test was succeeding in GWT due to a pass of static evaluation that was done in the GWT compiler. The GWT compiler is removing all optimizations from -draftCompile and in that scenario the test fails.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=65192347

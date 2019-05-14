@@ -1,0 +1,13 @@
+Read if needed on ProxyHandler's handshake. Fixes #5933.
+
+Motivation:
+
+When auto-read is disabled and no reads are issued by a user, ProxyHandler will stall the connection on the proxy handshake phase waiting for the first response from a server (that was never read).
+
+Modifications:
+
+Read if needed when very first handshake message is send by ProxyHandler.
+
+Result:
+
+Proxy handshake now succeeds no matter if auto-read disabled or enabled. Without the fix, the new test is failing on master.

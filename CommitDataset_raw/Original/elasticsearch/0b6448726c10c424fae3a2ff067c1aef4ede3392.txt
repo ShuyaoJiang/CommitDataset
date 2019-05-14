@@ -1,0 +1,15 @@
+Fix classes that can exit
+
+In a previous change, we locked down the classes that can exit by
+specifying explicit classes rather than packages than can exit. Alas,
+there was a bug in the sense that the class that we exit from in the
+case of an uncaught exception is not
+ElasticsearchUncaughtExceptionHandler but rather an anonymous nested
+class of ElasticsearchUncaughtExceptionHandler. To address this, we
+replace this anonymous class with a bonafide nested class
+ElasticsearchUncaughtExceptionHandler$PrivilegedHaltAction. Note that if
+we try to get this class name we have a $ in the middle of the string
+which is a special regular expression character; as such, we have to
+escape it.
+
+Relates #27518

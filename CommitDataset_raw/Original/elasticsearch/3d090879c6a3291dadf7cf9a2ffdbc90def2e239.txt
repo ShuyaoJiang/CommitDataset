@@ -1,0 +1,15 @@
+Fix potential race during TcpTransport close (#39031)
+
+Fixed two potential causes for leaked threads during tests:
+1. When adding a channel to serverChannels, we add it under a monitor
+that we do not use when reading from it. This is potentially unsafe if
+there is no other happens-before relationship ensuring the safety of
+this.
+2. Long-shot but if the thread pool was shutdown before entering this
+code, we would silently forget about closing server channels so added
+assert.
+
+Strengthened the locking to ensure that once we stop the transport, no
+new server channels can be made.
+
+Relates to CI failure issue: #37543

@@ -1,0 +1,3 @@
+[#1614] Fix bug in SingleThreadEventExecutor which prevent scheduled tasks to get executed
+
+The problem was that with OioSocketChannel there was always a read Task in the taskQueue and with the old logic it never tried to execute scheduled tasks if there was at least one task in the taskQueue.

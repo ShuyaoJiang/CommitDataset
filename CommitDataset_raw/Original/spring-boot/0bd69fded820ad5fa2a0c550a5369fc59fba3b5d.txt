@@ -1,0 +1,11 @@
+Fix detection of ScheduledExecutorService
+
+`@EnableScheduling` detects primarily a suitable `TaskScheduler` in the
+context and fallbacks to the presence of a `ScheduledExecutorService` if
+that is not the case.
+
+This commit improves the auto-configuration to back off when such
+scheduled executor service is present, so that the framework
+initialization code can pick it up as usual.
+
+Closes gh-15032

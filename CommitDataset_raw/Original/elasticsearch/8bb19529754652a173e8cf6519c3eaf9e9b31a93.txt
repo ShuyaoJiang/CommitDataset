@@ -1,0 +1,9 @@
+Fix NodeJoinTests again (#36133)
+
+In #36033 we removed a catch block because we thought we were preventing
+exceptions by avoiding concurrent elections, missing the obvious fact that some
+joins are supposed to be failing.
+
+As a quick fix the catch was reinstated in 3a5dab6d8ef23ba3cb60162e9e2b7e002145
+but this change adds finesse by only catching exceptions from the joins that we
+expect to fail. It also inlines an always-false parameter to `initialState()`.

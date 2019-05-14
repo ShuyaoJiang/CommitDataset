@@ -1,0 +1,18 @@
+Control max size and count of warning headers (#28427)
+
+Control max size and count of warning headers
+
+Add a static persistent cluster level setting
+"http.max_warning_header_count" to control the maximum number of
+warning headers in client HTTP responses.
+Defaults to unbounded.
+
+Add a static persistent cluster level setting
+"http.max_warning_header_size" to control the maximum total size of
+warning headers in client HTTP responses.
+Defaults to unbounded.
+
+With every warning header that exceeds these limits,
+a message will be logged in the main ES log,
+and any more warning headers for this response will be
+ignored.

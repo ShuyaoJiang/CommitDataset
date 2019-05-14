@@ -1,0 +1,3 @@
+update cluster-state task execution to halt on new phase (#32886)
+
+As we migrate to a per-phase execution model, we need to prepare our cluster-state-step execution model to be aligned. It is the case that the final iteration into the next "currentStep" from the next phase would not be available in the registry yet. This change exits the execution loop early as to not jump into executing the next phase's steps before the registry is properly updated

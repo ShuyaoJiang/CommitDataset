@@ -1,0 +1,5 @@
+Added support to allow manually declaring a EntityManagerFactoryBean.
+
+Added the necessary @ConditionalOnMissingBean annotations to allow selectively declaring an EntityManagerFactoryBean, a JpaVendorAdapter or a PlatformTransactionManager. Especially the first one might be necessary to make sure the persistence provider evaluates an orm.xml. This unfortunately rules out using the packages to scan feature of Spring's LCEMFB.
+
+I've filed https://jira.springsource.org/browse/SPR-11260 to potentially remove the need for this workaround in Spring itself.

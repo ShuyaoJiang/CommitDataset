@@ -1,0 +1,16 @@
+[ML] Correctly ignore extra aggregation buckets (elastic/x-pack-elasticsearch#2530)
+
+The problem here is that the code was ignoring buckets
+whose start time was before the start time of the extractor.
+However, this is not a good enough condition. For example,
+when there are no data in the bucket extra bucket that is
+being queried, the first bucket will be the one containing
+the start time.
+
+This commit fixes the issue by changing the condition to
+ignore buckets before the first bucket that includes the
+start time of the extraction.
+
+relates elastic/x-pack-elasticsearch#2519 
+
+Original commit: elastic/x-pack-elasticsearch@15c7d2655f01f9cfcb6e78b91b301a916265e1d1

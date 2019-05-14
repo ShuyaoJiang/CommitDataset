@@ -1,0 +1,11 @@
+Fix a bug of DnsNameResolver while working with NoopDnsCache.
+
+Motivation:
+
+If DnsNameResolver works with NoopDnsCache, IndexOutOfBoundsException will
+be thrown.
+
+Modifications:
+
+Test if the result of DnsNameResolver.get(hostname) is empty before
+accessing it's elements.

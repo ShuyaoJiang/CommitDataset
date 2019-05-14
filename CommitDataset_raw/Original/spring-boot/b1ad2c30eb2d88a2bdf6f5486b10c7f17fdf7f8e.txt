@@ -1,0 +1,23 @@
+Ignore type-constrained converter when auto-configuring Jackson converter
+
+Previously, JacksonHttpMessageConvertersConfiguration would configure a
+general-purpose MappingJackson2HttpMessageConverter only if there was
+no existing MappingJackson2HttpMessageConverter in the application
+context. This was problematic when a
+TypeConstrainedMappingJackson2HttpMessageConverter bean was present.
+Such a bean is only capable of performing conversion for a specific
+type, and therefore is no substitute for a general purpose converter,
+yet its presence was causing the auto-configuration of a general
+purpose converters to be turned off. This would leave Spring MVC’s
+default converter being used for application/json requests which would
+not honour the user’s Jackson configuration.
+
+This commit enhances @ConditionalOnMissingBean so that the annotation
+can be used to specify one or more types that should be ignored when
+searching for beans. This allows the
+TypeConstrainedMappingJackson2HttpMessageConverter beans that are
+published by Spring Data REST to be ignored such that the
+general-purpose MappingJackson2HttpMessageConverter is still
+auto-configured.
+
+Fixes gh-2914

@@ -1,0 +1,10 @@
+DefaultHttp2Connection modifying child map while iterating
+
+Motivation:
+When DefaultHttp2Connection removes a stream it iterates over all children and adds them as children to the parent of the stream being removed. This process may remove elements from the child map while iterating without using the iterator's remove() method. This is generally unsafe and may result in an undefined iteration.
+
+Modifications:
+- We should use the Iterator's remove() method while iterating over the child map
+
+Result:
+Fixes https://github.com/netty/netty/issues/6163

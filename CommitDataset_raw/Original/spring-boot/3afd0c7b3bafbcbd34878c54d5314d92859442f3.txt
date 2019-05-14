@@ -1,0 +1,8 @@
+Address Shellcheck warning (SC2086) for $arguments in launch script
+
+$arguments needs to be split on spaces so it can’t just be wrapped
+in quotes. This commit updates arguments to be an array that is then
+expanded ("{arguments[@]}"). The use of @ and double quotes means that
+it is expanded into all elements individually quoted.
+
+See gh-4866

@@ -1,0 +1,13 @@
+Exposed engine must have all ops below gcp during rollback (#36159)
+
+Today we expose a new engine immediately during Lucene rollback. The new
+engine is started with a safe commit which might not include all
+acknowledged operation. With this change, we won't expose the new engine
+until it has recovered from the local translog.
+
+Note that this solution is not complete since it's able to reserve only
+acknowledged operations before the global checkpoint. This is because we
+replay translog up to the global checkpoint during rollback. A per-doc
+Lucene rollback would solve this issue entirely.
+
+Relates #32867

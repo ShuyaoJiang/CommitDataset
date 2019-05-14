@@ -1,0 +1,14 @@
+Enable global checkpoint listeners to timeout (#33620)
+
+In cross-cluster replication, we will use global checkpoint listeners to
+long poll for updates to a shard. However, we do not want these polls to
+wait indefinitely as it could be difficult to discern if the listener is
+still waiting for updates versus something has gone horribly wrong and
+cross-cluster replication is stuck. Instead, we want these listeners to
+timeout after some period (for example, one minute) so that they are
+notified and we can update status on the following side that
+cross-cluster replication is still active. After this, we will
+immediately enter back into a poll mode.
+
+To do this, we need the ability to associate a timeout with a global
+checkpoint listener. This commit adds this capability.

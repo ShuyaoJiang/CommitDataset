@@ -1,0 +1,17 @@
+Use reflection to call cleaner on direct byte buffers in JDK9.
+
+Motivation:
+
+Project Jigsaw in JDK9 has moved the direct byte buffer cleaner from
+sun.misc.Cleaner to java.lang.ref.Cleaner$Cleanable. This cause the
+current platform tests to throw a ClassNotFoundException, disabling the
+use of direct byte buffer cleaners.
+
+Modifications:
+
+I use reflection to find the clean method in either sun.misc.Cleaner or
+java.lang.ref.Cleaner$Cleanable.
+
+Result:
+
+Netty uses direct byte buffers on JDK9 as it already do on earlier JDKs.

@@ -1,0 +1,3 @@
+Propagate network exceptions that happen inside the converter.
+
+Gson has a truly nasty behavior of catching exceptions thrown from the underlying input stream and wrapping in JsonParseExceptions which causes network exceptions to be reported as unexpected exceptions! By wrapping the underlying stream we could when it fails and check at the call site to ensure we report the failure as network-related not conversion-related.

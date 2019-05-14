@@ -1,0 +1,10 @@
+Add a way to signal that an endpoint request is invalid
+
+This commit adds InvalidEndpointRequestException as a technology
+agnostic way to signal that an endpoint request is invalid. When such
+exception is thrown, the web layer translates that to a 400.
+
+Rather than overriding the reason, this commit makes sure to reuse the
+error infrastructure.
+
+Closes gh-10618

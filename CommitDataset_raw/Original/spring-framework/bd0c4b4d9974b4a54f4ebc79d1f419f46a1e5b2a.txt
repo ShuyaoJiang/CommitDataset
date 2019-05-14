@@ -1,0 +1,22 @@
+Deprecate SimpleJdbcTestUtils in favor of JdbcTestUtils
+
+Several static utility methods in SimpleJdbcTestUtils accept an instance
+of SimpleJdbcTemplate as an argument; however, SimpleJdbcTemplate has
+been deprecated since Spring 3.1 in favor of simply using JdbcTemplate
+which now also supports Java 5 language constructs such as var-args.
+Consequently, use of such methods from SimpleJdbcTestUtils results in
+deprecation warnings without an equivalent API to migrate to.
+
+This commit addresses this issue by migrating all existing methods in
+SimpleJdbcTestUtils to JdbcTestUtils. The migrated methods now accept an
+instance of JdbcTemplate as an argument, thereby avoiding the
+deprecation warnings but maintaining semantic compatibility with the
+functionality previous available in SimpleJdbcTestUtils.
+
+In addition, this commit also introduces two new methods:
+
+ - countRowsInTableWhere(): counts the rows in a given table, using
+   a provided `WHERE` clause
+ - dropTables(): drops the tables with the specified names
+
+Issue: SPR-9235

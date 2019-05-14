@@ -1,0 +1,9 @@
+Enforce UTF-8 response encoding in SseEmitter
+
+This commit sets the response content type to
+"text/event-stream;charset=UTF-8". Even if the SSE spec says that the
+encoding should always be UTF-8 and that specifying the charset is
+optional, we're setting it in all cases, since some containers might use
+the default encoding "ISO-8859-1" and confuse HTTP clients.
+
+Issue: SPR-14407

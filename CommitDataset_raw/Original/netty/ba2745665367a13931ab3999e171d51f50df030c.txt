@@ -1,0 +1,10 @@
+Use the index-based AsciiString constructor instead of substring()
+
+Motivation:
+The construction `new AsciiString(string.substring(...))` can be replaced with the `new AsciiString(string, start, length)` to avoid extra allocation.
+
+Modifications:
+Apply the described replacement in `HttpConversionUtil#setHttp2Authority`.
+
+Result:
+Less allocations.

@@ -1,0 +1,14 @@
+New native transport for kqueue
+
+Motivation:
+We currently don't have a native transport which supports kqueue https://www.freebsd.org/cgi/man.cgi?query=kqueue&sektion=2. This can be useful for BSD systems such as MacOS to take advantage of native features, and provide feature parity with the Linux native transport.
+
+Modifications:
+- Make a new transport-native-unix-common module with all the java classes and JNI code for generic unix items. This module will build a static library for each unix platform, and included in the dynamic libraries used for JNI (e.g. transport-native-epoll, and eventually kqueue).
+- Make a new transport-native-unix-common-tests module where the tests for the transport-native-unix-common module will live. This is so each unix platform can inherit from these test and ensure they pass.
+- Add a new transport-native-kqueue module which uses JNI to directly interact with kqueue
+
+Result:
+JNI support for kqueue.
+Fixes https://github.com/netty/netty/issues/2448
+Fixes https://github.com/netty/netty/issues/4231

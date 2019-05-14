@@ -1,0 +1,16 @@
+Skip final reduction if SearchRequest holds a cluster alias (#37000)
+
+With #36997 we added the ability to provide a cluster alias with a
+SearchRequest.
+
+The next step is to disable the final reduction whenever a cluster alias
+is provided with the SearchRequest. A cluster alias will be provided
+when executing a cross-cluster search request with alternate execution
+mode, where each cluster does its own reduction locally. In order for
+the CCS node to be able to later perform an additional reduction of the
+results, we need to make sure that all the needed info stays available.
+This means that terms aggregations can be reduced but not pruned, and
+pipeline aggs should not be executed. The final reduction will happen
+later in the CCS coordinating node.
+
+Relates to #36997 & #32125

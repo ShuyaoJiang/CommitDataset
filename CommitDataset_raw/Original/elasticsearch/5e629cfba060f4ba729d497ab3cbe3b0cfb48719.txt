@@ -1,0 +1,10 @@
+Ensure query resources are fetched asynchronously during rewrite (#25791)
+
+The `QueryRewriteContext` used to provide a client object that can
+be used to fetch geo-shapes, terms or documents for percolation. Unfortunately
+all client calls used to be blocking calls which can have significant impact on the
+rewrite phase since it occupies an entire search thread until the resource is
+received. In the case that the index the resource is fetched from isn't on the local
+node this can have significant impact on query throughput.
+
+Note: this doesn't fix MLT since it fetches stuff in doQuery which is a different beast. Yet, it is a huge step in the right direction

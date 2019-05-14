@@ -1,0 +1,11 @@
+Set global checkpoint before open engine from store (#27972)
+
+In PR #27965, we set the global checkpoint from the translog in a store
+recovery. However, we set after an engine is opened. This causes the
+global checkpoint assertion in TranslogWriter violated as if we are
+forced to close the engine before we set the global checkpoint. A
+closing engine will close translog which in turn read the current global
+checkpoint; however it is still unassigned and smaller than the initial
+global checkpoint from translog.
+
+Closes #27970

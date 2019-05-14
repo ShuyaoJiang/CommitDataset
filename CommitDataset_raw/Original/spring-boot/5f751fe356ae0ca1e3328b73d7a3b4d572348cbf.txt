@@ -1,0 +1,14 @@
+Set TCCL of shutdown thread when triggered by the shutdown endpoint
+
+Previously, the shutdown endpoint would spawn a new thread to perform
+the shutdown but did not explicitly configure its thread context
+class loader (TCCL). This mean that the new thread would use the
+request thread's TCCL as its TCCL. This meant that a different TCCL
+would be used compared to a shutdown triggered by the shutdown hook
+and also caused problems with Tomcat's thread leak detection logic.
+
+This commit updates the shutdown endpoint to explicitly configure the
+TCCL of the shutdown thread to be the ClassLoader that loaded the
+endpoint's class.
+
+Closes gh-6361

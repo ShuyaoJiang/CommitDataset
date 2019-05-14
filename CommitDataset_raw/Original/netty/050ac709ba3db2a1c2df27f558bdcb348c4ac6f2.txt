@@ -1,0 +1,11 @@
+PromiseNotifier does not propagate cancel events
+
+Motivation:
+If the Future that the PromiseNotifier is listening to is cancelled, it does not propagate the cancel to all the promises it is expected to notify.
+
+Modifications:
+- If the future is cancelled then all the promises should be cancelled
+- Add a UnaryPromiseNotifier if a collection of promises is not necessary
+
+Result:
+PromiseNotifier propagates cancel events to all promises

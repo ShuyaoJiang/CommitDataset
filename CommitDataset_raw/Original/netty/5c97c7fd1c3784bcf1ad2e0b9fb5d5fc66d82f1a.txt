@@ -1,0 +1,6 @@
+Resolved issue: NETTY-140 ChannelFuture.await*() should throw an IllegalStateException if dead lock is expected
+* Added IoWorkerRunnable which maintains a thread local boolean variable
+* Improved DefaultChannelFuture to check IoWorkerRunnable.IN_IO_THREAD to detect possible dead lock
+* All I/O worker runnables are wrapped by IoWorkerRunnable.
+
+

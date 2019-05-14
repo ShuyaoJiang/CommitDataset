@@ -1,0 +1,8 @@
+Skips Cassandra and Elasticsearch tests on Windows
+
+Neither Cassandra nor Elasticsearch starts reliably on Windows. This
+commit adds a custom class rule to the associated sample application
+tests to skip them on Windows. A class rule is used rather than a
+Unit assumption as we want to avoid starting Elasticsearch (done by
+the application context) and Cassandra (done by a test execution
+listener) and an assumption would be too late.

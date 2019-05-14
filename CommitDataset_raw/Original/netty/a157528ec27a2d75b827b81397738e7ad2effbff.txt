@@ -1,0 +1,14 @@
+Ensure we only add OpenSslEngine to the OpenSslEngineMap when handshake is started
+
+Motivation:
+
+We need to ensure we only add the OpenSslEngine to the OpenSslEngineMap when the handshake is started as otherwise we may produce a memory leak when the OpenSslEngine is created but not actually used. This can for example happen if we encounter a connection refused from the remote peer. In this case we will never remove the OpenSslEngine from the OpenSslEngineMap and so it will never be collected (as we hold a reference). This has as affect that the finalizer will never be run as well.
+
+Modifications:
+
+- Lazy add the OpenSslEngine to the OpenSslEngineMap to elimate possible leak.
+- Call OpenSslEngine.shutdown() when SslHandler is removed from the ChannelPipeline to free memory asap in all cases.
+
+Result:
+
+No more memory leak with OpenSslEngine if connection is refused.

@@ -1,0 +1,10 @@
+Handle invalid STOMP content-length header value
+
+After this change if a content-length header is provided but is less
+than 0 or cannot be parsed as a number, it is ignored and the body
+is read sequentially, i.e. until we reach a null byte terminator.
+
+This provides better protection against clients that may set the
+content-length header in error.
+
+Issue: SPR-11528

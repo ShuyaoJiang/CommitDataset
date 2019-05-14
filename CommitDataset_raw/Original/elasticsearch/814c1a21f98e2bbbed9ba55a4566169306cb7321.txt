@@ -1,0 +1,11 @@
+Stop exporting HOSTNAME from scripts
+
+Today we explicitly export the HOSTNAME variable from scripts. This is
+probably a relic from the days when the scripts were not run on bash but
+instead assume a POSIX-compliant shell only where HOSTNAME is not
+guaranteed to exist. Yet, bash guarantees that HOSTNAME is set so we do
+not need to set it in scripts. This commit removes this legacy.
+
+Relates elastic/x-pack-elasticsearch#2047
+
+Original commit: elastic/x-pack-elasticsearch@7b833e061c2df5f54e1040f733ab1cfce67619f7

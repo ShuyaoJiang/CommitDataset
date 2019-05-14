@@ -1,0 +1,5 @@
+Import Spring Data release train BOM instead of individual modules.
+
+The dependencies pom.xml now declares an import to the spring-data-releasetrain BOM pom.xml which in turn constraints version numbers for a dedicated release train release. This has the effect of users being able to upgrade to a certain release train by redeclaring the spring-data-releasetrain.version property to e.g. Dijkstra-M1. Individual modules can be upgraded by simply declaring the dependency in the desired version manually in a <dependencies /> or <dependencyManagement /> block.
+
+Removed the explicit declaration for Spring HATEOAS as it is pulled in transitively by Spring Data REST anyway and thus makes sure it's in a compatible version.

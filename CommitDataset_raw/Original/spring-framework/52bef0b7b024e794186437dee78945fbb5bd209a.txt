@@ -1,0 +1,34 @@
+Allow static modifier on @Bean methods
+
+Declaring @Bean methods as 'static' is now permitted, whereas previously
+it raised an exception at @Configuration class validation time.
+
+A static @Bean method can be called by the container without requiring
+the instantiation of its declaring @Configuration class. This is
+particularly useful when dealing with BeanFactoryPostProcessor beans,
+as they can interfere with the standard post-processing lifecycle
+necessary to handle @Autowired, @Inject, @Value, @PostConstruct and
+other annotations.
+
+static @Bean methods cannot recieve CGLIB enhancement for scoping and
+AOP concerns. This is acceptable in BFPP cases as they rarely if ever
+need it, and should not in typical cases ever be called by another
+@Bean method.  Once invoked by the container, the resulting bean will
+be cached as usual, but multiple invocations of the static @Bean method
+will result in creation of multiple instances of the bean.
+
+static @Bean methods may not, for obvious reasons, refer to normal
+instance @Bean methods, but again this is not likely a concern for BFPP
+types. In the rare case that they do need a bean reference, parameter
+injection into the static @Bean method is technically an option, but
+should be avoided as it will potentially cause premature instantiation
+of more beans that the user may have intended.
+
+Note particularly that a WARN-level log message is now issued for any
+non-static @Bean method with a return type assignable to BFPP.  This
+serves as a strong recommendation to users that they always mark BFPP
+@Bean methods as static.
+
+See @Bean Javadoc for complete details.
+
+Issue: SPR-8257, SPR-8269

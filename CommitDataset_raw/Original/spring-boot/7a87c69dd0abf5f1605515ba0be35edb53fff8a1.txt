@@ -1,0 +1,13 @@
+Normalize spec when creating jar URL by removing /../ and /./
+
+Previously when Handler was creating a URL from a context URL and a
+spec, any occurrances of /../ or /./ in the spec would be left as-is.
+This differed from the JDK's Handler implementation which normalizes
+the URL by modifying the path to remove any occurrences of /../ or
+/./
+
+This commit updates our Handler implementation to align it with the
+JDK's. Tests have been added to assert that, given the same inputs,
+the two Handler classes produce the same output.
+
+Closes gh-9917

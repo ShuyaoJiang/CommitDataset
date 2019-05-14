@@ -1,0 +1,13 @@
+Stop using `forward.new InverseEntrySet()` because javac9 generates Objects.requireNonNull() calls for it.
+
+That method isn't available under old versions of Android.
+Thankfully, the calls are caught by Animal Sniffer.
+Internally, [] eliminates these when targeting Java 6 (b/32446315). Another reason to build with Bazel someday?
+
+No effect on Proguard numbers.
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=183091037

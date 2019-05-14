@@ -1,0 +1,9 @@
+Build: Use branch specific refspec sysprop for bwc builds (#29299)
+
+This commit changes the sysprop for overriding the branch bwc builds use
+to be branch specific. There are 3 different bwc branches built, but all
+of them currently read the exact same sysprop. For example, with this change
+and current branches, you can now specify eg `-Dtests.bwc.refspec.6.x=my_6x`
+and it will build only next-minor-snapshot with that branch, while
+next-bugfix-snapshot will continue to use 5.6.
+

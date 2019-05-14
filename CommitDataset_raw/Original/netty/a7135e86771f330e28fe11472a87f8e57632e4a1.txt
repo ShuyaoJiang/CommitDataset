@@ -1,0 +1,10 @@
+HttpObjectAggregator doesn't check content-length header
+
+Motivation:
+The HttpObjectAggregator always responds with a 100-continue response. It should check the Content-Length header to see if the content length is OK, and if not responds with a 417.
+
+Modifications:
+- HttpObjectAggregator checks the Content-Length header in the case of a 100-continue.
+
+Result:
+HttpObjectAggregator responds with 417 if content is known to be too big.

@@ -1,0 +1,12 @@
+Deprecate and ignore ResourceLeakDetector's maxActive parameter
+
+Motivation:
+ResourceLeakDetector supports a parameter called maxActive. This parameter is used in attempt to limit the amount of objects which are being tracked for leaks at any given time, and generates an error log message if this limit is exceeded. This assumes that there is a relationship between leak sample rate and object lifetime for objects which are already being tracked. This relationship may appear to work in cases were there are a single leak record per object and those leak records live for the lifetime of the application but in general this relationship doesn't exist. The original motivation was to provide a limit for cases such as HashedWheelTimer to limit the number of instances which exist at any given time. This limit is not enforced in all circumstances in HashedWheelTimer (e.g. if the thread is a daemon) and can be implemented outside ResourceLeakDetector.
+
+Modifications:
+- Deprecate all methods which interact with maxActive in ResourceLeakDetectorFactory and ResourceLeakDetector
+- Remove all logic related to maxActive in ResourceLeakDetector
+- HashedWheelTimer implements its own logic to impose a limit and warn users if too many instances exists at any given time.
+
+Result:
+Fixes https://github.com/netty/netty/issues/6225.

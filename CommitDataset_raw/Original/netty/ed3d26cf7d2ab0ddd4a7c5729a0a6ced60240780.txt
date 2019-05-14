@@ -1,0 +1,14 @@
+[#3837] Null out ByteBuffer[] array once done
+
+Motivation:
+
+the ByteBuffer[] that we keep in the ThreadLocal are never nulled out which can lead to have ByteBuffer instances sit there forever.
+This is even a bigger problem if nioBuffer() of ByteBuffer returns a new ByteBuffer that can not be destroyed by ByteBuffer.release().
+
+Modifications:
+
+Null out ByteBuffer array after processing.
+
+Result:
+
+No more dangling references after done.

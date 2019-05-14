@@ -1,0 +1,12 @@
+Include information about a property’s origin in binding failures
+
+This commit enhances RelaxedDataBinder to include information about the
+origin of a property (its original name before any prefix was removed
+and its source) when it encounters an unwritable property. For example,
+launching an application with a SERVER_HOME environment variable
+configured will produce the following failure message:
+
+Failed to bind 'SERVER_HOME' from 'systemEnvironment' to 'HOME' property
+on 'org.springframework.boot.autoconfigure.web.ServerProperties'
+
+Closes gh-3778

@@ -1,0 +1,12 @@
+Fix handling of exceptions thrown on HEAD requests
+
+Today when an exception is thrown handling a HEAD request, the body is
+swallowed before the channel has a chance to see it. Yet, the channel is
+where we compute the content length that would be returned as a header
+in the response. This is a violation of the HTTP specification. This
+commit addresses the issue. To address this issue, we remove the special
+handling in bytes rest response for HEAD requests when an exception is
+thrown. Instead, we let the upstream channel handle the special case, as
+we already do today for the non-exceptional case.
+
+Relates #25172

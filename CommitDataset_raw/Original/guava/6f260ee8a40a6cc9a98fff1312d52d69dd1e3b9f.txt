@@ -1,0 +1,10 @@
+Go back to avoiding AssertionError(String, Throwable), which isn't available in Gingerbread.
+http://developer.android.com/reference/java/lang/AssertionError.html#AssertionError%28java.lang.String,%20java.lang.Throwable%29
+
+This rolls back CL 111609121, which AFAIK didn't break any tests but would have made broken tests run under Gingerbread throw NoSuchMethodError instead of the proper, descriptive AssertionError.
+
+I had noted this compatibility issue previously but had dismissed it because we were not running our tests on Android at the time.
+https://github.com/google/guava/issues/1999#issuecomment-85579982
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=111622300

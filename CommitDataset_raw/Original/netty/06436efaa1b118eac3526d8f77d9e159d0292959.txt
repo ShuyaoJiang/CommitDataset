@@ -1,0 +1,13 @@
+[#5190] Ensure memory is not leaked when readEndOfLine(...) throws an exception.
+
+Motivation:
+
+We need to ensure we not retain the buffer until readEndOfLine(...) completes as otherwise we may leak memory in the case of an exception.
+
+Modifications:
+
+Only call retain after readEndOfLine(...) returns.
+
+Result:
+
+No more leak in case of exception while decoding redis messages.

@@ -1,0 +1,8 @@
+Inline the implementation of DoubleMath.mean rather than using a helper class. This is called inside loops often enough that I think it's worth avoiding the object assignment. Also improve the javadoc.
+
+This code is basically all copied from Stats.meanOf, where it was reviewed, so hopefully it shouldn't be too controversial.
+
+(For background, we accidentally --- it was my fault --- ended up with DoubleMath.mean and Stats.meanOf duplicating the same functionality. One of them needs to go, and it seems clear this one should survive, since it's already in guava and it's not even @Beta. But I want to make sure this one has the improvements from the other.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=86081434

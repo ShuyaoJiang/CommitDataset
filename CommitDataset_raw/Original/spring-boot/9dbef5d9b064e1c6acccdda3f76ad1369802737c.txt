@@ -1,0 +1,13 @@
+Remove use a separate runner thread from the Launcher
+
+Previously, the Launcher was creating a new runner thread that would
+call the application's main method. An exception thrown by this thread
+is handled differently to one thrown by the JVM's main thread leading
+to different exit behaviour. Furthermore, the separate thread isn't
+actually necessary.
+
+This commit removew the use of a separate runner thread from the
+Launcher. This means that the JVM's exit behaviour will be consistent
+and also removes the overhead of createing a starting an extra thread.
+
+Closes gh-5006

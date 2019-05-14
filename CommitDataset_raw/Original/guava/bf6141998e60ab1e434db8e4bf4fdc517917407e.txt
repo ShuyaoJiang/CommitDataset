@@ -1,0 +1,17 @@
+Fix documentation for checkArgument and checkState
+
+Both claim
+
+@throws NullPointerException if the check fails and either {@code
+errorMessageTemplate} or {@code errorMessageArgs} is null (don't let this
+happen)
+
+but this doesn't actually happen - the message is created using
+Precondition.format that handles null values without throwing.
+
+This is more of a concern for the "don't let Args be null" because having
+potential null args is in fact a legitimate usecase.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=169252415

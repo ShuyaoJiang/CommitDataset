@@ -1,0 +1,33 @@
+Get jdbc tests passing
+
+`gradle check -xforbiddenPatterns` now passes in jdbc.
+
+This makes running the embedded HTTP server slightly more difficult,
+you now have to add the following to your jvm arguments.
+```
+-ea -Dtests.rest.cluster=localhost:9200 -Dtests.embed.sql=true -Dtests.security.manager=false
+```
+
+Depending on your environment the embedded jdbc connection may give
+spurious failures that look like:
+```
+org.elasticsearch.xpack.sql.jdbc.jdbc.JdbcException: RemoteTransportException[[node-0][127.0.0.1:9300][indices:data/read/search]]; nested: SearchPhaseExecutionException[]; nested: GeneralScriptException[Failed to compile inline script [( params.a0 > params.v0 ) && ( params.a1 > params.v1 )] using lang [painless]]; nested: CircuitBreakingException[[script] Too many dynamic script compilations within one minute, max: [15/min]; please use on-disk, indexed, or scripts with parameters instead; this limit can be changed by the [script.max_compilations_per_minute] setting];
+...
+Caused by: Failed to execute phase [fetch],
+..
+Caused by: GeneralScriptException[Failed to compile inline script [( params.a0 > params.v0 ) && ( params.a1 > params.v1 )] using lang [painless]]; nested: CircuitBreakingException[[script] Too many dynamic script compilations within one minute, max: [15/min]; please use on-disk, indexed, or scripts with parameters instead; this limit can be changed by the [script.max_compilations_per_minute] setting];
+...
+Caused by: CircuitBreakingException[[script] Too many dynamic script compilations within one minute, max: [15/min]; please use on-disk, indexed, or scripts with parameters instead; this limit can be changed by the [script.max_compilations_per_minute] setting]
+```
+
+`gradle check` works around this by setting `script.max_compilations_per_minute`
+to `1000`.
+
+Another change is that we no longer support loading the test data by
+uncommenting some code. Instead we load the test data into Elaticsearch
+before the first test and we deleted it after the last test. This is
+so that tests that required different test data can interoperate with
+eachother. The spec tests all use the same test data but the metadata
+tests do not.
+
+Original commit: elastic/x-pack-elasticsearch@8b8f684ac19d4dc2d2b7bdce05caa0f1693bd937

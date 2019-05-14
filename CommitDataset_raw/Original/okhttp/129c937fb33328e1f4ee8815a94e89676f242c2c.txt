@@ -1,0 +1,13 @@
+Make HttpURLConnection streams throw IOException after close()
+
+This is to revert to prior behavior found in earlier releases:
+OkHttp changed to throw IllegalStateException.
+
+HttpEngine has also been changed to explicitly close the request
+body on disconnect() to ensure that these exceptions are thrown
+at the expected moment (e.g. on write() on a closed, buffered
+stream).
+
+Additional close() checks have been added to okio classes and
+tests have been added. The tests are probes for interesting
+examples, not complete.

@@ -1,0 +1,9 @@
+Ensure ErrorControllers work when using AOP
+
+Add a BeanFactoryPostProcessor to set PRESERVE_TARGET_CLASS_ATTRIBUTE
+to true on all ErrorController bean definitions. Without this attribute
+AOP advice on @Controllers causes ErrorController beans to be created
+as JDK proxies (since they implement a single valid looking interface)
+and therefore not get found by Spring MVC.
+
+Fixes gh-4236

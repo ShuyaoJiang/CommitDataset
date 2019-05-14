@@ -1,0 +1,17 @@
+Remove dead code in Http2CodecUtil (#8009)
+
+Motivation:
+
+The `ByteBuffer emptyPingBuf()` method of Http2CodecUtils is has been dead
+code since DefaultHttp2PingFrame switched from using a ByteBuf to represent
+the 8 octets to a long.
+
+Modifications:
+
+Remove the method and the unused static ByteBuf.
+
+Result:
+
+Less dead code.
+
+Fixes #8002

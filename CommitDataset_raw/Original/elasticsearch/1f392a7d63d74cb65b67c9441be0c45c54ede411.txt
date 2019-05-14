@@ -1,0 +1,12 @@
+Support roles with application privileges against wildcard applications (#40398)
+
+This commit introduces 2 changes to application privileges:
+
+- The validation rules now accept a wildcard in the "suffix" of an application name.
+  Wildcards were always accepted in the application name, but the "valid filename" check
+  for the suffix incorrectly prevented the use of wildcards there.
+
+- A role may now be defined against a wildcard application (e.g. kibana-*) and this will
+  be correctly treated as granting the named privileges against all named applications.
+  This does not allow wildcard application names in the body of a "has-privileges" check, but the
+  "has-privileges" check can test concrete application names against roles with wildcards.

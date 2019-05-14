@@ -1,0 +1,7 @@
+Test call cancellation while request headers are sent
+
+Reproduce an issue where canceling an HTTP/2 request while request headers are sent has no effect.
+
+Other than being a real issue, this may also be the root cause of https://github.com/square/okhttp/issues/4470.
+
+It seems to be related to the fact that the HTTP2Codec has no stream assigned at that point, so HTTP2Codec.cancel() is a no-op.

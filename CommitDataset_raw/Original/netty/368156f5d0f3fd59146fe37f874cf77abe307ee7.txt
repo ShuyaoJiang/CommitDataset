@@ -1,0 +1,16 @@
+Another round of the new API design
+
+- Channel now creates a ChannelPipeline by itself
+
+  I find no reason to allow a user to use one's own pipeline
+  implementation since I saw nobody does except for the cases where a
+  user wants to add a user attribute to a channel, which is now covered
+  by AttributeMap.
+
+- Removed ChannelEvent and its subtypes because they are replaced by
+  direct method invocation.
+- Replaced ChannelSink with Channel.unsafe()
+- Various getter renaming (e.g. Channel.getId() -> Channel.id())
+- Added ChannelHandlerInvoker interface
+- Implemented AbstractChannel and AbstractServerChannel
+- Some other changes I don't remember

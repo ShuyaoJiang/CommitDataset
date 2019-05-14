@@ -1,0 +1,39 @@
+Eliminate all Javadoc warnings
+
+ - Support external Javadoc links using Gradle's javadoc.options.links
+
+ - Fix all other Javadoc warnings, such as typos, references to
+   non-existent (or no longer existent) types and members, etc,
+   including changes related to the Quartz 2.0 upgrade (SPR-8275) and
+   adding the HTTP PATCH method (SPR-7985).
+
+ - Suppress all output for project-level `javadoc` tasks in order to
+   hide false-negative warnings about cross-module @see and @link
+   references (e.g. spring-core having a @see reference to spring-web).
+   Use the `--info` (-i) flag to gradle at any time to see project-level
+   javadoc warnings without running the entire `api` task. e.g.
+   `gradle :spring-core:javadoc -i`
+
+ - Favor root project level `api` task for detection of legitimate
+   Javadoc warnings. There are now zero Javadoc warnings across the
+   entirety of spring-framework. Goal: keep it that way.
+
+ - Remove all @link and @see references to types and members that exist
+   only in Servlet <= 2.5 and Hibernate <= 4.0, favoring 3.0+ and 4.0+
+   respectively. This is necessary because only one version of each of
+   these dependencies can be present on the global `api` javadoc task's
+   classpath. To that end, the `api` task classpath has now been
+   customized to ensure that the Servlet 3 API and Hibernate Core 4 jars
+   have precedence.
+
+ - SPR-8896 replaced our dependency on aspectjrt with a dependency on
+   aspectjweaver, which is fine from a POM point of view, but causes
+   a spurious warning to be emitted from the ant iajc task that it
+   "cannot find aspectjrt on the classpath" - even though aspectjweaver
+   is perfectly sufficient. In the name of keeping the console quiet, a
+   new `rt` configuration has been added, and aspectjrt added as a
+   dependency to it. In turn, configurations.rt.asPath is appended to
+   the iajc classpath during both compileJava and compileTestJava for
+   spring-aspects.
+
+Issue: SPR-10078, SPR-8275, SPR-7985, SPR-8896

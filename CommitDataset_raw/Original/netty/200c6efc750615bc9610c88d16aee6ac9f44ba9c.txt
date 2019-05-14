@@ -1,0 +1,13 @@
+[#3364] Not use VoidChannelPromise in SslHandler to guard against IllegalStateException
+
+Motivation:
+
+SslHandler adds a pending write with an empty buffer and a VoidChannelPromise when a user flush and not pending writes are currently stored. This may produce an IllegalStateException later if the user try to add a ChannelFutureListener to the promise in the next ChannelOutboundHandler.
+
+Modifications:
+
+Replace ctx.voidPromise() with ctx.newPromise()
+
+Result:
+
+No more IllegalStateException possible

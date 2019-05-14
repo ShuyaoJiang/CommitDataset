@@ -1,0 +1,8 @@
+Fix occasional Jetty test failures
+
+Update `DefaultServletWebServerFactoryCustomizerTests` so that the Jetty
+access log tests use the default timezone. Prior to this commit it was
+possible that running the tests outside of UTC could result in Jetty
+throwing a "negative delay" IllegalArgumentException.
+
+See gh-8819

@@ -1,0 +1,16 @@
+Use project location to infer the artifactId
+
+On start.spring.io, if you customize the artifactId it creates a zip file
+with the same name. The `spring init` command did not have a similar
+shortcut.
+
+This commit updates the request to customize the artifactId if none is
+set and a custom location was specified. Just as we check for the
+presence of a dot to figure out if we have to extract the archive or not,
+we check for it to generate an artifactId without an extension.
+
+In practice, `spring init foo` creates a foo directory with a project
+whose artifactId is `foo` and `spring init foo.zip` stores a foo.zip
+file with the same project (i.e. the artifactId is `foo`).
+
+Closes gh-3714

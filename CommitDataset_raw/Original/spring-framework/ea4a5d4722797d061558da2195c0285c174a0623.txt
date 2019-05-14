@@ -1,0 +1,20 @@
+Add XML config support ResourceResolver & ResourceTransformer
+
+This change adds support for configuring ResourceResolvers and
+ResourceTransformers with ResourceHttpRequestHandlers.
+
+This is an example configuration:
+
+    <mvc:resources mapping="/resources/**" location="/">
+      <mvc:resolvers>
+        <bean class="org.springframework.web.servlet.resource.PathResourceResolver"/>
+        <ref bean="myResourceResolver"/>
+      </mvc:resolvers>
+      <mvc:transformers>
+        <bean class="org.springframework.web.servlet.resource.CssLinkResourceTransformer" />
+      </mvc:transformers>
+    </mvc:resources>
+
+    <bean id="myResourceResolver" class="org.example.resource.MyResourceResolver"/>
+
+Issue: SPR-10951

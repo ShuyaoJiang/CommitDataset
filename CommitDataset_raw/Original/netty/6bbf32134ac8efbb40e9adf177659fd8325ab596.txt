@@ -1,0 +1,14 @@
+Log more details if notification of promise fails in PromiseNotifier and AbstractChannelHandlerContext
+
+Motivation:
+
+To make it easier to debug why notification of a promise failed we should log extra info and make it consistent.
+
+Modifications:
+
+- Create a new PromiseNotificationUtil that has static methods that can be used to try notify a promise and log.
+- Reuse this in AbstractChannelHandlerContext, ChannelOutboundBuffer and PromiseNotifier
+
+Result:
+
+Easier to debug why a promise could not be notified.

@@ -1,0 +1,12 @@
+Log close_notify during handshake at debug level (#39715)
+
+A TLS handshake requires exchanging multiple messages to initiate a
+session. If one side decides to close during the handshake, it is
+supposed to send a close_notify alert (similar to closing during
+application data exchange). The java SSLEngine engine throws an
+exception when this happens. We currently log this at the warn level if
+trace logging is not enabled. This level is too high for a valid
+scenario. Additionally it happens all the time in tests (quickly closing
+and opened transports). This commit changes this to be logged at the
+debug level if trace is not enabled. Additionally, it extracts the
+transport security exception handling to a common class.

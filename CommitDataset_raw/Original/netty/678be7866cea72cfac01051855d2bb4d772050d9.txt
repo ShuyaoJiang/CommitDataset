@@ -1,0 +1,3 @@
+NETTY-154 channelOpen / channelBound / channelConnected needs to be called from the boss thread in NIO Socket transport.
+* Boss thread now calls channelOpen channelBound and channelConnected
+* to avoid a race condition when channel.setInterestOps() in the three handler methods above, interestOpsLock is acquired properly

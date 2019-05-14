@@ -1,0 +1,29 @@
+Fix incorrect name encoding/decoding in DNS records
+
+Motivation:
+
+- The decoded name should always end with a dot (.), but we currently
+  strip it, which is incorrect.
+  - (O) 0 -> "."
+  - (X) 0 -> ""
+  - (O) 5 netty 2 io 0 -> "netty.io."
+  - (X) 5 netty 2 io 0 -> "netty.io"
+- The encoded name should end with a null-label, which is a label whose
+  length is 0, but we currently append an extra NUL, causing FORMERR(1)
+  on a strict DNS server:
+  - (O) . -> 0
+  - (X) . -> 0 0
+  - (O) netty.io. -> 5 netty 2 io 0
+  - (X) netty.io. -> 5 netty 2 io 0 0
+
+Modifications:
+
+- Make sure to append '.' when decoding a name.
+- Improve index checks so that the decoder can raise
+  CorruptFrameException instead of IIOBE
+- Do not encode extra NUL
+- Add more tests
+
+Result:
+
+Robustness and correctness

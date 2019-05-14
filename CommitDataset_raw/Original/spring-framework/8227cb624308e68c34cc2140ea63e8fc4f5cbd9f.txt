@@ -1,0 +1,16 @@
+Introduce ConfigurableConversionService interface
+
+Consolidates ConversionService and ConverterRegistry interfaces;
+implemented by GenericConversionService.
+
+ConfigurablePropertyResolver#getConversionService now returns this
+new type (hence so too does
+ConfigurableEnvironment#getConversionService). This allows for
+convenient addition / removal of Converter instances from Environment's
+existing ConversionService.  For example:
+
+    ConfigurableApplicationContext ctx = new ...
+    ConfigurableEnvironment env = ctx.getEnvironment();
+    env.getConversionService().addConverter(new FooConverter());
+
+Issue: SPR-8389

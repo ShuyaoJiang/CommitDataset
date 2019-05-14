@@ -1,0 +1,18 @@
+Remove many NOCOMMITs from cli protocol
+
+* Move read from a static method to a ctor to mirror core.
+* Make read and writes read and write the same data.
+* Instead of the "header" integer use a byte for the response
+type.
+* For responses that do not make their request type obvious
+then serialize the request type.
+* Remove the request type member from requests and responses and
+replace with an abstract method. These type members have caused
+us trouble in core in the past.
+* Remove the Message superclass as it didn't have anything in it.
+* Pass client version to the request reader and response writer.
+* Add round trip tests for the protocol.
+* Force Requests and Responses to provide good `toString`, `equals`,
+and `hashCode`.
+
+Original commit: elastic/x-pack-elasticsearch@653ed8c27f543d4d60be8af1762c3c901da07fe0

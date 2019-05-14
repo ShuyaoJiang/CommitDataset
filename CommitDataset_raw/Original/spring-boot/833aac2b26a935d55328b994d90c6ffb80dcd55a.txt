@@ -1,0 +1,16 @@
+Drive EnvironmentPostProcessors from ConfigFileApplicationListener
+
+Previously, ConfigFileApplicationListener was listed in spring.factories
+as both an EnvironmentPostProcessor and an ApplicationListener. This
+was problematic as ConfigFileApplicationListener is stateful and listing
+it twice lead to two separate instances with separate state.
+
+This commit restore ConfigFileApplicationListener to only being an
+ApplicationListener. The driving of EnvironmentPostProcessors that was
+performed by EnvironmentPostProcessingApplicationListener is now
+performed by ConfigFileApplicationListener which adds itself as an
+EnvironmentPostProcessor. This ensures that there’s only a single
+instance of ConfigFileApplicationListener, allowing its state to be
+managed correctly.
+
+Closes gh-4258

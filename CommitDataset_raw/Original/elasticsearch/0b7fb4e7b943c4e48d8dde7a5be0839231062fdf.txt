@@ -1,0 +1,8 @@
+Painless: Clean up FunctionRef (#32644)
+
+This change consolidates all the logic for generating a FunctionReference (renamed from 
+FunctionRef) from several arbitrary constructors to a single static function that is used at 
+both compile-time and run-time. This increases long-term maintainability as it is much 
+easier to follow when and how a function reference is being generated. It moves most of 
+the duplicated logic out of the ECapturingFuncRef, EFuncRef and ELambda nodes and 
+Def as well.

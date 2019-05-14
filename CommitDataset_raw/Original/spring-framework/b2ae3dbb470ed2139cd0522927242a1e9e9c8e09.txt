@@ -1,0 +1,28 @@
+Avoid 'type mismatch' errors in ExtendedBeanInfo
+
+Certain edge cases around return type covariance can trigger an
+IntrospectionException when trying to create a new PropertyDescriptor;
+particularly around the addition of write methods with parameter types
+that do not match read method return types.
+
+These type mismatch exceptions are raised during normal Introspector
+operations as well (i.e. without ExtendedBeanInfo in the mix), but
+the Introspector intentionally supresses them. In covariance cases,
+there is often already a suitable write method present, e.g. discovered
+in a supertype or superinterface, that, with the benefit of bridge
+methods works just fine in practice at runtime.  That is to say, in
+these suppression cases, the rejection of the write method is 'OK' in
+that there is already a write method present that can handle a call.
+
+ExtendedBeanInfo now mirrors this suppression behavior, but does issue
+a WARN-level log message to let the user know.
+
+An important effect of this change is that ExtendedBeanInfo now modifies
+the delegate BeanInfo object, whereas previously it did not. In practice
+this probably matters very little, but it is a design change worth
+noting. The reason for this change was to avoid the need to create new
+PropertyDescriptors wherever possible. It was discovered that by updating
+existing PDs, one can avoid these IntrospectionExceptions a greater
+percentage of the time.
+
+Issue: SPR-8806

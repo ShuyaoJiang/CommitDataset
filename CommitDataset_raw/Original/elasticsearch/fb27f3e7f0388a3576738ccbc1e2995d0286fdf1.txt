@@ -1,0 +1,57 @@
+HLREST: Add x-pack-info API (#31870)
+
+This is the first x-pack API we're adding to the high level REST client
+so there is a lot to talk about here!
+
+= Open source
+
+The *client* for these APIs is open source. We're taking the previously
+Elastic licensed files used for the `Request` and `Response` objects and
+relicensing them under the Apache 2 license.
+
+The implementation of these features is staying under the Elastic
+license. This lines up with how the rest of the Elasticsearch language
+clients work.
+
+= Location of the new files
+
+We're moving all of the `Request` and `Response` objects that we're
+relicensing to the `x-pack/protocol` directory. We're adding a copy of
+the Apache 2 license to the root fo the `x-pack/protocol` directory to
+line up with the language in the root `LICENSE.txt` file. All files in
+this directory will have the Apache 2 license header as well. We don't
+want there to be any confusion. Even though the files are under the
+`x-pack` directory, they are Apache 2 licensed.
+
+We chose this particular directory layout because it keeps the X-Pack
+stuff together and easier to think about.
+
+= Location of the API in the REST client
+
+We've been following the layout of the rest-api-spec files for other
+APIs and we plan to do this for the X-Pack APIs with one exception:
+we're dropping the `xpack` from the name of most of the APIs. So
+`xpack.graph.explore` will become `graph().explore()` and
+`xpack.license.get` will become `license().get()`.
+
+`xpack.info` and `xpack.usage` are special here though because they
+don't belong to any proper category. For now I'm just calling
+`xpack.info` `xPackInfo()` and intend to call usage `xPackUsage` though
+I'm not convinced that this is the final name for them. But it does get
+us started.
+
+= Jars, jars everywhere!
+
+This change makes the `xpack:protocol` project a `compile` scoped
+dependency of the `x-pack:plugin:core` and `client:rest-high-level`
+projects. I intend to keep it a compile scoped dependency of
+`x-pack:plugin:core` but I intend to bundle the contents of the protocol
+jar into the `client:rest-high-level` jar in a follow up. This change
+has grown large enough at this point.
+
+In that followup I'll address javadoc issues as well.
+
+= Breaking-Java
+
+This breaks that transport client by a few classes around. We've
+traditionally been ok with doing this to the transport client.

@@ -1,0 +1,12 @@
+Leverage Jackson non-blocking parser
+
+This commit introduces the Jackson2Tokenizer as a replacement for the
+JsonObjectDecoder. The latter was dropped because of its complexity, and
+hard dependency on Netty's ByteBuf.
+
+The new Jackson2Tokenizer leverages the new non-blocking JSON parser,
+using it to parse the incoming data buffers into TokenBuffers, each
+token buffer representing one JSON object. As with JsonObjectDecoder,
+it also supports streaming individual JSON array elements.
+
+Issue: SPR-14528

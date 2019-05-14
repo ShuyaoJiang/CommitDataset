@@ -1,0 +1,41 @@
+Reinstate the use of shutdown hooks in the tests
+
+Commit adf2c44b was an attempt to prevent HSQLDB from throwing an
+exception when the JVM exits. This was achieved by disabling the
+application context’s shutdown hook in the tests. This had the unwanted
+side effect of causing tests’ application contexts not to be closed. The
+reported symptom was that @Destroy methods were no longer being invoked.
+We need a different solution to the problem.
+
+The exception was:
+
+Caused by: org.hsqldb.HsqlException: Database lock acquisition failure: attempt to connect while db opening /closing
+    at org.hsqldb.error.Error.error(Unknown Source)
+    at org.hsqldb.error.Error.error(Unknown Source)
+    at org.hsqldb.error.Error.error(Unknown Source)
+    at org.hsqldb.DatabaseManager.getDatabase(Unknown Source)
+    at org.hsqldb.DatabaseManager.newSession(Unknown Source)
+    ... 23 common frames omitted
+
+I originally thought this was due to a race between the application
+context’s shutdown hook and HSQLDB’s shutdown hook, however HSQLDB
+doesn’t use a shutdown hook. I believe that the problem is due to 
+an HSQLDB database being created with shutdown=true in its URL, similar
+to the problem described here [1]. This will shut down the database when
+the last connection to it is closed, however the shutdown will happen
+asynchronously. If the JVM then runs the application context’s shutdown
+hook, EmbeddedDatabaseFactory will attempt to connect to the database to
+execute the SHUTDOWN command. This executes synchronously but will race
+with the asynchronous shutdown that’s executing as a result of
+shutdown=true in the JDBC url and the last connection to the database
+being closed. 
+
+This commit reinstates the use of application context shutdown hooks in
+the tests, and updates the documentation to recommend that, if a user
+manually configures the URL for their embedded database, they do so 
+in such a way that the database doesn’t shutdown automatically, thereby
+allowing the shutdown to be driven by application context close.
+
+Closes gh-4208
+
+[1] http://sourceforge.net/p/hsqldb/bugs/1400/

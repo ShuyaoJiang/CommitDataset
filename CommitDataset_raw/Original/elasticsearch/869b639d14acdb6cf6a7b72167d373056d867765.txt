@@ -1,0 +1,21 @@
+QA: System property to override distribution (#30591)
+
+This configures all `qa` projects to use the distribution contained in
+the `tests.distribution` system property if it is set. The goal is to
+create a simple way to run tests against the default distribution which
+has x-pack basic features enabled while not forcing these tests on all
+contributors. You run these tests by doing something like:
+
+```
+./gradlew -p qa -Dtests.distribution=zip check
+```
+
+or
+
+```
+./gradlew -p qa -Dtests.distribution=zip bwcTest
+```
+
+x-pack basic *shouldn't* get in the way of any of these tests but
+nothing is ever perfect so this we have to disable a few when running
+with the zip distribution.

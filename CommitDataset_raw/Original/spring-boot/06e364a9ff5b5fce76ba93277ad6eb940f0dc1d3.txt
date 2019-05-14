@@ -1,0 +1,10 @@
+Monkey with JarUrlConnection to make it work when LANG unset
+
+The problem all along has been in AsciiBytes, so the fix in
+commit ce3aaf was just a stop gap for a system where multi-byte
+characters are supported but the default encoding is not UTF-8 (e.g.
+most Windows systems). The real solution is not to leave it to
+chance and always pick an encoding for the JarEntry names (i.e.
+in AsciiBytes).
+
+Fixes gh-764

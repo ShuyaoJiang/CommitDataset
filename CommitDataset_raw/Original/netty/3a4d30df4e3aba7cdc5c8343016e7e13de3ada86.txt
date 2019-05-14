@@ -1,0 +1,18 @@
+Make SocksServer example compatible with `curl --socks5-hostname`
+
+Motivation:
+
+Socks5 proxy supports resolve domain at the server side. When testing
+with curl, the SocksServer in example package only works for proxy
+request with IP, not with domain name (`--socks5` vs
+`--socks5-hostname`). As curl is widely used, it should work with
+the example provided.
+
+Modifications:
+
+Passing address and port to the Socks5CommandResponse, so that it
+works for curl.
+
+Result:
+
+`curl --socks5-hostname` works as expected.

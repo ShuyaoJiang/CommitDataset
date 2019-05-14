@@ -1,0 +1,23 @@
+Add an option to set an Origin whitelist for Websocket and SockJS
+
+This commit introduces a new OriginHandshakeInterceptor. It filters
+Origin header value against a list of allowed origins.
+
+AbstractSockJsService as been modified to:
+ - Reject CORS requests with forbidden origins
+ - Disable transport types that does not support CORS when an origin
+   check is required
+ - Use the Origin request header value instead of "*" for
+   Access-Control-Allow-Origin response header value
+   (mandatory when  Access-Control-Allow-Credentials=true)
+ - Return CORS header only if the request contains an Origin header
+
+It is possible to configure easily this behavior thanks to JavaConfig API
+WebSocketHandlerRegistration#addAllowedOrigins(String...) and
+StompWebSocketEndpointRegistration#addAllowedOrigins(String...).
+It is also possible to configure it using the websocket XML namespace.
+
+Please notice that this commit does not change the default behavior:
+cross origin requests are still enabled by default.
+
+Issues: SPR-12226

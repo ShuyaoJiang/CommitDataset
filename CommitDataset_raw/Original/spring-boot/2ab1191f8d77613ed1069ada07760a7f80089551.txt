@@ -1,0 +1,16 @@
+Do not expose servlet locations in WebFlux
+
+The `spring.resources.static-locations` key (see `ResourceProperties`)
+lists many locations by default, including `"classpath:/static"` and
+`"/"`. The latter is about exposing resources located in the root
+servlet location.
+
+Reactive web applications don't depend on a Servlet-related
+`ApplicationContext`/`ResourceLoader`, so `"/"` is then resolved as
+`"classpath:/"`, which exposes the whole classpath.
+
+To avoid such situations, the `GenericReactiveWebApplicationContext`
+overrides the `getResourceByPath(String path)` method and always returns
+non existent resources if the path starts with `"/"`.
+
+Fixes gh-8485

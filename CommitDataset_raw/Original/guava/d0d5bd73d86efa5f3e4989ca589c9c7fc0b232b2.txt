@@ -1,0 +1,13 @@
+Stop using ByteArrayOutputStream in ByteStreams.toByteArray methods.
+
+They were using ByteStreams.copy to copy the source to the BAOS. This meant reading from the source into a buffer, then copying from that buffer to a different buffer in the BAOS. Additionally, the way BAOS operates is not great: whenever it needs more space, it creates a new array twice as large as the previous, copies all bytes from the previous array to the new one, and discards the previous array.
+
+Instead, read directly from the source into a sequence of buffers. When a buffer fills up, don't discard it, but instead create a new, twice as large, buffer and start reading into it.
+
+(Roll-forward of previously rolled back e50ce7e7ed79fbce1901081838c8e0f9269d4128 now that the tests failing because they were mocking InputStream are fixed.)
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=190008826

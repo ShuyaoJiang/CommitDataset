@@ -1,0 +1,11 @@
+OioSctpChannel iterating over selected keys
+
+Motivation:
+OioSctpChannel.doReadMessages is iterating over the selected keys, and ignoring each selected key. It is not known why this is needed and no other channel implementation does this.
+
+Modifications:
+- Stop iterating over selected keys, and just read like other channels
+
+Result:
+No unnecessary iteration in OioSctpChannel.doReadMessages.
+Fixes https://github.com/netty/netty/issues/3884

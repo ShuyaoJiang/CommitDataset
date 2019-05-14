@@ -1,0 +1,12 @@
+[ML] Reverse engineer Grok patterns from categorization results (#30125)
+
+This change adds a grok_pattern field to the GET categories API
+output in ML. It's calculated using the regex and examples in the
+categorization result, and applying a list of candidate Grok
+patterns to the bits in between the tokens that are considered to
+define the category.
+
+This can currently be considered a prototype, as the Grok patterns
+it produces are not optimal. However, enough people have said it
+would be useful for it to be worthwhile exposing it as experimental
+functionality for interested parties to try out.

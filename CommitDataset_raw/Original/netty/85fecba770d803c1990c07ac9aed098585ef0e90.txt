@@ -1,0 +1,19 @@
+Fix for Issue #3308 related to slice missing retain
+
+Motivations:
+It seems that slicing a buffer and using this slice to write to CTX will
+decrease the initial refCnt to 0, while the original buffer is not yet
+fully used (not empty).
+
+Modifications:
+As suggested in the ticket and tested, when the currentBuffer is sliced
+since it will still be used later on, the currentBuffer is retained.
+
+Add a test case for this issue.
+
+Result:
+The currentBuffer still has its correct refCnt when reaching the last
+write (not sliced) of 1 and therefore will be released correctly.
+The exception does no more occur.
+
+This fix should be applied to all branches >= 4.0.

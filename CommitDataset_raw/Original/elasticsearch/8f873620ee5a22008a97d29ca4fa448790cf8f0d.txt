@@ -1,0 +1,19 @@
+Inline global checkpoints
+
+Today we rely on background syncs to relay the global checkpoint under
+the mandate of the primary to its replicas. This means that the global
+checkpoint on a replica can lag far behind the primary. The commit moves
+to inlining global checkpoints with replication requests. When a
+replication operation is performed, the primary will send the latest
+global checkpoint inline with the replica requests. This keeps the
+replicas closer in-sync with the primary.
+
+However, consider a replication request that is not followed by another
+replication request for an indefinite period of time. When the replicas
+respond to the primary with their local checkpoint, the primary will
+advance its global checkpoint. During this indefinite period of time,
+the replicas will not be notified of the advanced global
+checkpoint. This necessitates a need for another sync. To achieve this,
+we perform a global checkpoint sync when a shard falls idle.
+
+Relates #24513

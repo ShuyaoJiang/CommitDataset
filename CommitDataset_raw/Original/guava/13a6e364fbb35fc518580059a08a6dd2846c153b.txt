@@ -1,0 +1,29 @@
+Don't construct thousands of strings.
+
+Test timings aren't 100% consistent, even when I run the Maven tests locally (rather than the internal tests in some random cluster), so don't take this as definite truth, but I'm seeing some apparent improvements from this CL, even after my earlier CL to decrease the iteration count. Here are the numbers for all tests to take >=10 seconds:
+
+Before:
+00:11 testCorrectOrdering_smallHeapsPollFirst
+00:11 testCorrectOrdering_smallHeapsPollLast
+00:16 testHeapIntact
+00:17 testRandomAddsAndRemoves_duplicateElements
+00:19 testRemoveAt
+00:25 testRandomAddsAndRemoves
+00:48 testCorrectOrdering_mediumHeapsPollFirst
+00:52 testCorrectOrdering_mediumHeapsPollLast
+02:02 testCorrectOrdering_randomAccess
+
+After:
+00:08 testCorrectOrdering_smallHeapsPollFirst
+00:08 testCorrectOrdering_smallHeapsPollLast
+00:15 testHeapIntact
+00:17 testRandomAddsAndRemoves_duplicateElements
+00:18 testRemoveAt
+00:27 testRandomAddsAndRemoves
+00:46 testCorrectOrdering_mediumHeapsPollLast
+00:50 testCorrectOrdering_mediumHeapsPollFirst
+01:14 testCorrectOrdering_randomAccess
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=175152127

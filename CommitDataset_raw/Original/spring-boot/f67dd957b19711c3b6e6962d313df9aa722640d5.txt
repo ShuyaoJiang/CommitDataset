@@ -1,0 +1,11 @@
+Ignore excludeDevtools on extension when it has been set on bootRepackage
+
+Previously, bootRepackage's excludeDevtools property would be
+overridden by the springBoot extension's excludeDevtools property.
+This prevented devtools from being included by configuring it on the
+repackaging task.
+
+This commit corrects the logic so that the setting on the repackaging
+task takes priority. It also adds some tests to verify the behaviour.
+
+Closes gh-8308

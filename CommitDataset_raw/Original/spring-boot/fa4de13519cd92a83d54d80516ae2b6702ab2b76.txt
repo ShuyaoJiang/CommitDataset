@@ -1,0 +1,12 @@
+Rework ConfigurationPropertySources
+
+Rework the ConfigurationPropertySources and related adapter classes to
+help with performance. The ConfigurationPropertySources class now only
+monitors for updates when `.attach` is used. The `.get` methods now
+return the adapted version, but no longer checks to see if sources have
+been added or removed on each call.
+
+This commit also fixes a few caching issues and makes both the
+`PropertyMapper` implementations true static singletons.
+
+See gh-9000

@@ -1,0 +1,12 @@
+Fix so non super users can also create API keys (#40028)
+
+When creating API keys we check for if API key with
+the same key name already exists and fail the request if it does.
+The check should have been performed with XPackSecurityUser
+instead of the authenticated user. This caused the request to fail
+in case of the non-super user trying to create an API key.
+This commit fixes by executing search action with SECURITY_ORIGIN
+so it can be executed with XPackSecurityUser.
+Also fixed the Rest test to avoid using a user with `super_user` role.
+
+Closes #40029 

@@ -1,0 +1,13 @@
+Fix ProtobufDecoder handling of split message size
+
+This commit introduces a new readMessageSize(DataBuffer input) private
+method, inspired from CodedInputStream#readRawVarint32(int, InputStream)
+and adapted for DataBuffer using MessageDecoderFunction fields in
+order to support use cases where the message size is split between
+distinct chunks.
+
+It also fixes handling of end of streams by using
+DataBuffer#readableByteCount instead of -1 which is only relevant with
+InputStream.
+
+Issue: SPR-17429

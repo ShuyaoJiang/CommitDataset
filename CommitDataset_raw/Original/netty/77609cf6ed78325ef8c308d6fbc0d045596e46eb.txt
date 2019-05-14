@@ -1,0 +1,21 @@
+Fix a bug where AbstractConstant.compareTo() returns 0 for different constants
+
+Related issue: #2354
+
+Motivation:
+
+AbstractConstant.compareTo() can return 0 even if the specified constant
+object is not the same instance with 'this'.
+
+Modifications:
+
+- Compare the identityHashCode of constant first. If that fails,
+  allocate a small direct buffer and use its memory address as a unique
+  value.  If the platform does not provide a way to get the memory
+  address of a direct buffer, use a thread-local random value.
+- Signal cannot extend AbstractConstant. Use delegation.
+
+Result:
+
+It is practically impossible for AbstractConstant.compareTo() to return
+0 for different constant objects.

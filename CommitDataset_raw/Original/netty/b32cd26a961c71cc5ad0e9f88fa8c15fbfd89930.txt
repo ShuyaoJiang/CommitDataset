@@ -1,0 +1,16 @@
+Remove allocation from ResourceLeakDetector
+
+Motivation:
+RLD allocates an ArrayDeque in anticipation of recording access
+points.  If the leak detection level is less than ADVANCED though,
+the dequeue is never used.  Since SIMPLE is the default level,
+there is a minor perf win to not preemptively allocate it.
+
+This showed up in garbage profiling when creation a high number of
+buffers.
+
+Modifications:
+Only allocate the dequeue if it will be used.
+
+Result:
+Less garbage created.

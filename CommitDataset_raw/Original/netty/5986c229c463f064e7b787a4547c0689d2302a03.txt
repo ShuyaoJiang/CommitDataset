@@ -1,0 +1,13 @@
+[#5833] Ensure direct memory is released when DirectPoolArena is collected
+
+Motivation:
+
+We need to ensure we release all direct memory once the DirectPoolArena is collected. Otherwise we may never reclaim the memory and so leak memory.
+
+Modifications:
+
+Ensure we destroy all PoolChunk memory when DirectPoolArena is collected.
+
+Result:
+
+Free up unreleased memory when DirectPoolArena is collected.

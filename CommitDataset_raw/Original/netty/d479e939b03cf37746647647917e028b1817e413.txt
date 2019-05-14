@@ -1,0 +1,10 @@
+Buffer Leaks in Compression Tests
+
+Motivation:
+The unit tests for the compression encoders/decoders may write buffers to an EmbeddedChannel but then may not release buffer or close the channel after the test. This may result in buffer leaks.
+
+Modifications:
+- Call channel.finishAndReleaseAll() after each test
+
+Result:
+Fixes https://github.com/netty/netty/issues/6007

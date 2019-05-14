@@ -1,0 +1,23 @@
+[#5391] DnsNameResolver does not resolve property A+CNAME answer
+
+Motivation:
+
+The current DnsNameResolver fails to resolve an A+CNAME answer. For example:
+
+dig moose.rmq.cloudamqp.com
+
+...
+;; ANSWER SECTION:
+moose.rmq.cloudamqp.com. 1800   IN  CNAME   ec2-54-152-221-139.compute-1.amazonaws.com.
+ec2-54-152-221-139.compute-1.amazonaws.com. 583612 IN A 54.152.221.139
+...
+
+The resolver constructs a map of cnames but forgets the trailing "." in the values which lead to not resolve the A record.
+
+Modifications:
+
+Reuse the code of DefaltDnsRecordDecoder which correctly handles the trailing dot.
+
+Result:
+
+Correctly resolve.

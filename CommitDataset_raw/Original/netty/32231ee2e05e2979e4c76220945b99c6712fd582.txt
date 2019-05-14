@@ -1,0 +1,11 @@
+EPOLL RDHUP and IN at same time
+
+Motivation:
+If a RDHUP and IN event occurred at the same time it is possible we may not read all pending data on the channel. We should ensure we read data before processing the RDHUP event.
+
+Modifications:
+- Process the RDHUP event before the IN event.
+
+Result:
+Data will not be dropped.
+Fixes https://github.com/netty/netty/issues/4317

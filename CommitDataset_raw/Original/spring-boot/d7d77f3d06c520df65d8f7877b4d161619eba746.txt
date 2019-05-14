@@ -1,0 +1,26 @@
+Add OnPropertyValueCondition annotation
+
+This commit adds a new conditional annotation that checks if a
+property has a given value. This allows to replace constructs
+such as
+
+@ConditionalOnExpression("'${app.myProperty:foo}' == 'foo'")
+
+to
+
+@ConditionalOnPropertyValue(property="app.myProperty",
+        value="foo", defaultMatch=true)
+
+Which is definitely more verbose but has the following advantages:
+
+1. Works by default if the actual property in the environment is
+   a bit different (i.e. my-property)
+2. Works if the value of the property has a diferent case (FoO or
+   FOO would match)
+3. Gives a precise reporting in the auto configuration report
+
+The defaultMatch flag is meant to mention that the condition should
+also match if the value is not set; the auto-config report would
+also have an explicit report about it.
+
+Fixes gh-1000

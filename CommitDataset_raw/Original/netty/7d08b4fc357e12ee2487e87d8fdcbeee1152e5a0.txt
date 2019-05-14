@@ -1,0 +1,14 @@
+Remove optional dependency on javassist
+
+Motivation:
+
+We shipped a javassist based implementation for typematching and logged a confusing debug message about missing javassist. We never were able to prove it really gives any perf improvements so we should just remove it.
+
+Modifications:
+
+- Remove javassist dependency and impl
+- Fix possible classloader deadlock as reported by intellij
+
+Result:
+
+Less code to maintain and less confusing log message.

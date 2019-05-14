@@ -1,0 +1,28 @@
+Introduce @SqlConfig for common SQL script config
+
+Prior to this commit, @Sql provided attributes for configuring the
+syntax of the referenced SQL scripts as well as exception handling and
+transaction behavior; however, such configuration could not be reused
+across @Sql declarations thus requiring developers to copy-and-paste
+common configuration and resulting in unnecessary code duplication.
+
+This commit addresses this issue by introducing a new @SqlConfig
+annotation that can be used to declare common, global configuration for
+SQL scripts that can be reused within a test class hierarchy.
+
+ - Introduced top-level @SqlConfig annotation and extracted
+   common configuration attributes from @Sql.
+
+ - @SqlConfig can be used at the class level for common, global config
+   or via the new 'config' attribute of @Sql for local config.
+
+ - Introduced MergedSqlConfig as a holder for the merged values from
+   local and global @SqlConfig instances. MergedSqlConfig also contains
+   the logic for overriding global configuration with local
+   configuration.
+
+ - Refactored all attributes of @SqlConfig to be either of type String
+   or custom enums in order to support overriding. Empty Strings or
+   DEFAULT enum values imply the use of a default or inherited value.
+
+Issue: SPR-11896

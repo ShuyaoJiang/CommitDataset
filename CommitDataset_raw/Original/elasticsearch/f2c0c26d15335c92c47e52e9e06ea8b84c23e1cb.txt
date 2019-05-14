@@ -1,0 +1,14 @@
+[ML] Adjust structure finder for Joda to Java time migration (#37306)
+
+The ML file structure finder has always reported both Joda
+and Java time format strings.  This change makes the Java time
+format strings the ones that are incorporated into mappings
+and ingest pipeline definitions.
+
+The BWC syntax of prepending "8" to these formats is used.
+This will need to be removed once Java time format strings
+become the default in Elasticsearch.
+
+This commit also removes direct imports of Joda classes in the
+structure finder unit tests.  Instead the core Joda BWC class
+is used.

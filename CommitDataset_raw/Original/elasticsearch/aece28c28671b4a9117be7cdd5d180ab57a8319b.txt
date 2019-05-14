@@ -1,0 +1,18 @@
+Add test for global checkpoint sync with security
+
+After a write operation on an index, a post-operation global checkpoint
+sync fires. Previously, this action fired on the same user as executed
+the write action. If the user did not have priviledges for this action,
+the global checkpoint sync would fail. With an upstream change in core,
+this action now fires as the system user. This commit adds a test that
+create a user that has minimal write permissions on an index, but none
+that would imply it could execute the global checkpoint sync. This then
+serves as a test that the upstream change to fire the global checkpoint
+sync as the system user is correct. This test must run as a mulit-node
+test so that a replica is a assigned so that the global checkpoint sync
+fires in the first place. This test does indeed fail without the
+upstream change, and passes with it.
+
+Relates elastic/x-pack-elasticsearch#2744
+
+Original commit: elastic/x-pack-elasticsearch@bf7e77175690a1306da004711ce51b41a14c155f

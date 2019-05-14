@@ -1,0 +1,14 @@
+[#4363] Improve size calculation of messages when written from outside the EventLoop
+
+Motiviation:
+
+If a user writes from outside the EventLoop we increase the pending bytes of the outbound buffer before submitting the write request. This is done so the user can stop writing asap once the channel turns unwritable. Unfortunally this doesn't take the overhead of adding the task into the account and so it is very easy for an user to full up the task queue. Beside this we use a value of 0 for an unown message by default which is not ideal.
+
+Modifications:
+
+- port the message calculation we used in netty 3.x into AbstractChannelHandlerContext and so better calculate the overhead of a message that is submitted from outside the EventLoop
+- change the default estimated size for an unknown message to 8.
+
+Result:
+
+Better behaviour when submiting writes from outside the EventLoop.

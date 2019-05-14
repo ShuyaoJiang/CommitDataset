@@ -1,0 +1,15 @@
+Cookie name must be case sensitive
+
+Motivation:
+
+RFC 6265 does not state that cookie names must be case insensitive.
+
+Modifications:
+
+Fix io.netty.handler.codec.http.cookie.DefaultCookie#equals() method to
+use case sensitive String#equals() and String#compareTo().
+
+Result:
+
+It is possible to parse several cookies with same names but with
+different cases.

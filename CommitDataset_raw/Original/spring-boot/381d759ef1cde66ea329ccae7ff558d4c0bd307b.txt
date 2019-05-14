@@ -1,0 +1,15 @@
+Support server.compression with reactive servers
+
+This commit adds support for HTTP compression with reactive servers,
+with the following exceptions:
+
+* `server.compression.mime-types` and
+`server.compression.exclude-user-agents` are not supported by Reactor
+Netty at the moment
+
+* `server.compression.min-response-size` is only supported by Reactor
+Netty right now, since other implementations rely on the
+`"Content-Length"` HTTP response header to measure the response size
+and most reactive responses are using `"Transfer-Encoding: chunked"`.
+
+Closes gh-10782

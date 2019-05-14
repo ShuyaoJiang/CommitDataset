@@ -1,0 +1,17 @@
+[#2375] [#2404] Fix bug in respecting ChannelConfig.setAutoRead(false) and also fix Channel.read() for OIO
+
+Motivation:
+At the moment ChanneConfig.setAutoRead(false) only is guaranteer to not have an extra channelRead(...) triggered when used from within the channelRead(...) or channelReadComplete(...) method. This is not the correct behaviour as it should also work from other methods that are triggered from within the EventLoop. For example a valid use case is to have it called from within a ChannelFutureListener, which currently not work as expected.
+
+Beside this there is another bug which is kind of related. Currently Channel.read() will not work as expected for OIO as we will stop try to read even if nothing could be read there after one read operation on the socket (when the SO_TIMEOUT kicks in).
+
+Modifications:
+Implement the logic the right way for the NIO/OIO/SCTP and native transport, specific to the transport implementation. Also correctly handle Channel.read() for OIO transport by trigger a new read if SO_TIMEOUT was catched.
+
+Result:
+It is now also possible to use ChannelConfig.setAutoRead(false) from other methods that are called from within the EventLoop and have direct effect.
+
+Conflicts:
+	transport-sctp/src/main/java/io/netty/channel/sctp/nio/NioSctpChannel.java
+	transport/src/main/java/io/netty/channel/socket/nio/NioDatagramChannel.java
+	transport/src/main/java/io/netty/channel/socket/nio/NioSocketChannel.java

@@ -1,0 +1,10 @@
+Do not count shard changes tasks against REST tests (#33738)
+
+When executing CCR REST tests it is going to be expected after global
+checkpoint polling goes in that shard changes tasks can still be pending
+at the end of the test. One way to deal with this is to set a low
+timeout on these polls, but then that means we are not executing our
+REST tests with our default production settings and instead would be
+using an unrealistic low timeout. Alternatively, since we expect these
+tasks to be there, we can not count them against the test. That is what
+this commit does.

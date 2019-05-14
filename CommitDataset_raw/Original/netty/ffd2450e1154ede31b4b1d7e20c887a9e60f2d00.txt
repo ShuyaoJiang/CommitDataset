@@ -1,0 +1,15 @@
+Add logging configuration to pom.xml
+
+Motivation:
+Currently the default log level when running tests is debug. When
+running the build on the CI server it might be nice to avoid this debug
+level and allow for the level to be configured.
+
+Modifications:
+Added a logback-test.xml configuration that has been added to the
+common module. This allows for the logLevel to be configured.
+The default level will still be debug.
+
+Result:
+The log level can now be configured from the command line:
+$ mvn test -DlogLevel=error

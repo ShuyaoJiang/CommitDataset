@@ -1,0 +1,22 @@
+Support merging custom TELs with default TELs
+
+Prior to this commit, if a custom TestExecutionListener was registered
+via @TestExecutionListeners the defaults would not be registered. Thus,
+if a user wanted to declare a custom listener and use the default
+listeners, the user was forced to manually declare all default
+listeners in addition to any custom listeners. This unfortunately
+required that the user know exactly which listeners were registered by
+default. Moreover, the set of default listeners can change from release
+to release, and with the support for automatic discovery of default
+listeners introduced in SPR-11466 it is no longer even possible to know
+what the set of default TestExecutionListeners is before runtime.
+
+This commit addresses this issue by introducing a mechanism for merging
+custom declared listeners with the defaults for the current
+environment. Specifically, @TestExecutionListeners supports a new
+MergeMode that is used to control whether or not explicitly declared
+listeners are merged with the default listeners when
+@TestExecutionListeners is declared on a class that does not inherit
+listeners from a superclass.
+
+Issue: SPR-8854

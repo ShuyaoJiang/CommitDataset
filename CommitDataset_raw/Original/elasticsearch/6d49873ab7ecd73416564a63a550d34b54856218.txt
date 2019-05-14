@@ -1,0 +1,16 @@
+Fix Rollup's metadata parser (#36791)
+
+The parser used for rollup configs in _meta fields was not able to
+handle unrelated data in the meta field.  If an unrelated object
+was encountered, it would half-consume the JSON object, realize it
+wasn'ta rollup config, then stop parsing.  This would leave the object
+halfway consumed and the parsing framework would throw an exception.
+
+This commit replaces the parsing logic with a set of minimal parsers,
+each for the specific component we care about (`_doc`, `_meta`,
+`_rollup`) and configured to ignore unknown fields where applicable.
+
+More verbose, but less hacky than before and should be more robust.
+
+Also adds tests (randomized and explicit) to make sure this doesn't
+break in the future.

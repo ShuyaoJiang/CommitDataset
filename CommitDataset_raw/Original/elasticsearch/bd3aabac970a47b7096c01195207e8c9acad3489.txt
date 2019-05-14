@@ -1,0 +1,4 @@
+[TEST] Make SSL restrictions update atomic (#31050)
+
+SSLTrustRestrictionsTests updates the restrictions YML file during the test run to change the set of restrictions. This update was small, but it wasn't atomic.
+If the yml file is reloaded while empty or invalid, then it causes all SSL certificates to be considered invalid (until it is reloaded again), which could break the sniffing/administrative client that runs underneath the tests.

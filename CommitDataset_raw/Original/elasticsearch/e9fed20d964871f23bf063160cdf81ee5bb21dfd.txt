@@ -1,0 +1,10 @@
+Watcher: Use execute watch API in tests to prevent wrong watch history query
+
+This test failed, because there could have been other results in the
+watch history. However by switching to the execute watch API, there
+is no need to query the watch history at all. This also removes a 5
+second wait time in the test.
+
+relates elastic/x-pack-elasticsearch#1549
+
+Original commit: elastic/x-pack-elasticsearch@692779521edf92bb9baa0510a8b259e1441b462a

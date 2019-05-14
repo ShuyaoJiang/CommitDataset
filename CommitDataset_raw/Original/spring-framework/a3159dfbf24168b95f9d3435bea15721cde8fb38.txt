@@ -1,0 +1,53 @@
+Add script based templating support
+
+This commit adds support for script based templating. Any templating
+library running on top of a JSR-223 ScriptEngine that implements
+Invocable like Nashorn or JRuby could be used.
+
+For example, in order to render Mustache templates thanks to the Nashorn
+Javascript engine provided with Java 8+, you should declare the following
+configuration:
+
+@Configuration
+@EnableWebMvc
+public class MustacheConfig extends WebMvcConfigurerAdapter {
+
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		registry.scriptTemplate();
+	}
+
+	@Bean
+	public ScriptTemplateConfigurer configurer() {
+		ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
+		configurer.setEngineName("nashorn");
+		configurer.setScripts("mustache.js");
+		configurer.setRenderObject("Mustache");
+		configurer.setRenderFunction("render");
+		return configurer;
+	}
+}
+
+The XML counterpart is:
+
+<beans>
+	<mvc:annotation-driven />
+
+	<mvc:view-resolvers>
+		<mvc:script-template />
+	</mvc:view-resolvers>
+
+	<mvc:script-template-configurer engine-name="nashorn" render-object="Mustache" render-function="render">
+		<mvc:script location="mustache.js" />
+	</mvc:script-template-configurer>
+</beans>
+
+Tested with:
+ - Handlebars running on Nashorn
+ - Mustache running on Nashorn
+ - React running on Nashorn
+ - EJS running on Nashorn
+ - ERB running on JRuby
+ - String templates running on Jython
+
+Issue: SPR-12266

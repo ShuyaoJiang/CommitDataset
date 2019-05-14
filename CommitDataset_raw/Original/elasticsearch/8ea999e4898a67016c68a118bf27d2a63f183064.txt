@@ -1,0 +1,85 @@
+Include stack trace with ILM error in explain output (#35512)
+
+This changes the stacktrace to be included with the ILM explain error when the
+index is an on ERROR step.
+
+Before:
+
+```json
+{
+  "indices" : {
+    "foo" : {
+      "index" : "foo",
+      "managed" : true,
+      "policy" : "bad",
+      "lifecycle_date_millis" : 1542131670601,
+      "phase" : "warm",
+      "phase_time_millis" : 1542131676335,
+      "action" : "shrink",
+      "action_time_millis" : 1542131676335,
+      "step" : "ERROR",
+      "step_time_millis" : 1542131676451,
+      "failed_step" : "shrink",
+      "step_info" : {
+        "type" : "illegal_argument_exception",
+        "reason" : "the number of target shards [13] must be less that the number of source shards [2]"
+      },
+      "phase_execution" : {
+        "policy" : "bad",
+        "phase_definition" : {
+          "min_age" : "5s",
+          "actions" : {
+            "shrink" : {
+              "number_of_shards" : 13
+            }
+          }
+        },
+        "version" : 1,
+        "modified_date_in_millis" : 1542131669839
+      }
+    }
+  }
+}
+```
+
+After
+
+```
+{
+  "indices" : {
+    "foo" : {
+      "index" : "foo",
+      "managed" : true,
+      "policy" : "bad",
+      "lifecycle_date_millis" : 1542131670601,
+      "phase" : "warm",
+      "phase_time_millis" : 1542131676335,
+      "action" : "shrink",
+      "action_time_millis" : 1542131676335,
+      "step" : "ERROR",
+      "step_time_millis" : 1542131676451,
+      "failed_step" : "shrink",
+      "step_info" : {
+        "type" : "illegal_argument_exception",
+        "reason" : "the number of target shards [13] must be less that the number of source shards [2]",
+        "stack_trace" : "java.lang.IllegalArgumentException: the number of target shards [13] must be less that the number of source shards [2]\n\tat org.elasticsearch.cluster.metadata.IndexMetaData.selectShrinkShards(IndexMetaData.java:1509)\n\tat org.elasticsearch.action.admin.indices.shrink.TransportResizeAction.prepareCreateIndexRequest(TransportResizeAction.java:146)\n\tat org.elasticsearch.action.admin.indices.shrink.TransportResizeAction$1.onResponse(TransportResizeAction.java:104)\n\tat org.elasticsearch.action.admin.indices.shrink.TransportResizeAction$1.onResponse(TransportResizeAction.java:101)\n\tat org.elasticsearch.action.support.TransportAction$1.onResponse(TransportAction.java:64)\n\tat org.elasticsearch.action.support.TransportAction$1.onResponse(TransportAction.java:60)\n\tat org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction.onCompletion(TransportBroadcastByNodeAction.java:383)\n\tat org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction.onNodeResponse(TransportBroadcastByNodeAction.java:352)\n\tat org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction$1.handleResponse(TransportBroadcastByNodeAction.java:324)\n\tat org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction$1.handleResponse(TransportBroadcastByNodeAction.java:314)\n\tat org.elasticsearch.transport.TransportService$ContextRestoreResponseHandler.handleResponse(TransportService.java:1117)\n\tat org.elasticsearch.transport.TransportService$DirectResponseChannel.processResponse(TransportService.java:1198)\n\tat org.elasticsearch.transport.TransportService$DirectResponseChannel.sendResponse(TransportService.java:1178)\n\tat org.elasticsearch.transport.TaskTransportChannel.sendResponse(TaskTransportChannel.java:54)\n\tat org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$BroadcastByNodeTransportRequestHandler.messageReceived(TransportBroadcastByNodeAction.java:417)\n\tat org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$BroadcastByNodeTransportRequestHandler.messageReceived(TransportBroadcastByNodeAction.java:391)\n\tat org.elasticsearch.xpack.security.transport.SecurityServerTransportInterceptor$ProfileSecuredRequestHandler$1.doRun(SecurityServerTransportInterceptor.java:251)\n\tat org.elasticsearch.common.util.concurrent.AbstractRunnable.run(AbstractRunnable.java:37)\n\tat org.elasticsearch.xpack.security.transport.SecurityServerTransportInterceptor$ProfileSecuredRequestHandler.messageReceived(SecurityServerTransportInterceptor.java:309)\n\tat org.elasticsearch.transport.RequestHandlerRegistry.processMessageReceived(RequestHandlerRegistry.java:63)\n\tat org.elasticsearch.transport.TransportService$7.doRun(TransportService.java:714)\n\tat org.elasticsearch.common.util.concurrent.ThreadContext$ContextPreservingAbstractRunnable.doRun(ThreadContext.java:726)\n\tat org.elasticsearch.common.util.concurrent.AbstractRunnable.run(AbstractRunnable.java:37)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:834)\n"
+      },
+      "phase_execution" : {
+        "policy" : "bad",
+        "phase_definition" : {
+          "min_age" : "5s",
+          "actions" : {
+            "shrink" : {
+              "number_of_shards" : 13
+            }
+          }
+        },
+        "version" : 1,
+        "modified_date_in_millis" : 1542131669839
+      }
+    }
+  }
+}
+```
+
+Resolves #35498

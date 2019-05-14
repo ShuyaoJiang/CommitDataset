@@ -1,0 +1,14 @@
+Fix index prefixes to work with span_multi (#31066)
+
+* Fix index prefixes to work with span_multi
+
+Text fields that use `index_prefixes` can rewrite `prefix` queries into
+`term` queries internally. This commit fix the handling of this rewriting
+in the `span_multi` query.
+This change also copies the index options of the text field into the
+prefix field in order to be able to run positional queries. This is mandatory
+for `span_multi` to work but this could also be useful to optimize `match_phrase_prefix`
+queries in a follow up. Note that this change can only be done on indices created
+after 6.3 since we set the index options to doc only in this version.
+
+Fixes #31056

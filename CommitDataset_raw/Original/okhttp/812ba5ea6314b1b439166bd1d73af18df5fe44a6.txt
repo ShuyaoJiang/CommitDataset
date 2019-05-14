@@ -1,0 +1,6 @@
+Make OkHostnameVerifier a constant. This fixes connection reuse.
+
+Previously HTTPS connection reuse was broken because the
+hostname verifier is included as a route identifier, and
+with a different hostname verifier on every request we weren't
+reusing connections.

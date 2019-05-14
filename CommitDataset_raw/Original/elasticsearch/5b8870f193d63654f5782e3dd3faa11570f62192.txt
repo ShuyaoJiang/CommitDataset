@@ -1,0 +1,14 @@
+Only log warning when actually failing shards (#28558)
+
+Currently the master node logs a warning message whenever it receives a 
+failed shard request. However, this can be noisy because
+
+- Multiple failed shard requests can be issued for a single shard
+- Failed shard requests can be still issued for an already failed shard
+
+This commit moves the log-warn to AllocationService in which the failing 
+shard action actually happens. This is another prerequisite step in 
+order to not ignore the shard not-available exceptions in the
+replication.
+
+Relates #28534

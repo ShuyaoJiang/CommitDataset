@@ -1,0 +1,13 @@
+[#3367] Fix re-entrance bug in PendingWriteQueue
+
+Motivation:
+
+Because of a re-entrance bug in PendingWriteQueue it was possible to get the queue corrupted and also trigger an IllegalStateException caused by multiple recycling of the internal PendingWrite objects.
+
+Modifications:
+
+- Correctly guard against re-entrance
+
+Result:
+
+No more IllegalStateException possible

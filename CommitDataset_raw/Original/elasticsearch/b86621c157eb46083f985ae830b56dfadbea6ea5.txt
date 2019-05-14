@@ -1,0 +1,7 @@
+Adding mapping for hostname field (#37288)
+
+This new `hostname` field is meant to be a replacement for its sibling `name` field. See https://github.com/elastic/beats/pull/9943, particularly https://github.com/elastic/beats/pull/9943#discussion_r245932581.
+
+This PR simply adds the new field (`hostname`) to the mapping without removing the old one (`name`), because a user might be running an older-version Beat (without this field rename in it) with a newer-version Monitoring ES cluster (with this PR's change in it).
+
+AFAICT the Monitoring UI isn't currently using the `name` field so no changes are necessary there yet. If it decides to start using the `name` field, it will also want to look at the value of the `hostname` field.

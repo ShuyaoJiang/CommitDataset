@@ -1,0 +1,10 @@
+UnknownHostException should mention search domain if used
+
+Motivation:
+ba80fbbe05489227d64dcbd4f5e91bef68072c37 modified the UnknownHostException to not include the search domain if the DNS query failed, but this masks what DNS query actually failed. Have the full hostname (including the search domain) provides more visibility and may help diagnose a configuration error if queries are unexpectedly failing.
+
+Modifications:
+- Remove DnsNameResolverContext#pristineHostname
+
+Result:
+UnknownHostException is more accurate and reflect what hostname actually resulted in failure.

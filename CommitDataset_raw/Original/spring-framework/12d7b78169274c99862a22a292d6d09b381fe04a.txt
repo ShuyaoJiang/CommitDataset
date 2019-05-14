@@ -1,0 +1,23 @@
+Refactor reactive type conversion support
+
+This commit replaces Reactive Streams converters for RxJava1 and
+CompletableFuture with Reactor specific ones. The results in conversion
+that preserves stream semantics, i.e. Mono vs Flux.
+
+For example this is allowed:
+Flux -> Observable
+Mono -> Single
+Mono -> CompletableFuture
+
+This is not allowed:
+Flux -> Single
+Mono -> Observable
+Flux -> CompletableFuture
+
+As a result it is now possible to check through the ConversionService
+if a target type to convert to is a stream of many or of one which is
+useful for decoding purposes.
+
+The commit also adds PublisherToFluxConverter to allow conversion from
+raw Publisher to Flux. The reverse is not necessary since Flux is a
+Publisher and it's a no-op conversion.

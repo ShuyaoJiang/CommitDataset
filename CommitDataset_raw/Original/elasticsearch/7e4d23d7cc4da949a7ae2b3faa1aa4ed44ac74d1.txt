@@ -1,0 +1,5 @@
+Parse composite patterns using ClassicFormat.parseObject (#40100)
+
+Java-time fails parsing composite patterns when first pattern matches only the prefix of the input. It expects pattern in longest to shortest order. Because of this constructing just one DateTimeFormatter with appendOptional is not sufficient. Parsers have to be iterated and if the parsing fails, the next one in order should be used. In order to not degrade performance parsing should not be throw exceptions on failure. Format.parseObject was used as it only returns null when parsing failed and allows to check if full input was read.
+ 
+closes #39916

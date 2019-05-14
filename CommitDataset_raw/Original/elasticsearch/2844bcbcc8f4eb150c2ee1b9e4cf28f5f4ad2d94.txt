@@ -1,0 +1,11 @@
+Enable installing plugins from snapshots.elastic.co (#30765)
+
+We post snapshot builds to snapshots.elastic.co yet the official plugin
+installer will not let you install such plugins without manually
+downloading them and installing them from a file URL. This commit adds
+the ability for the plugin installer to use snapshots.elastic.co for
+installing official plugins if a es.plugins.staging is set and the
+current build is also a snapshot build. Otherwise, we continue to use
+staging.elastic.co if the current build is a release build and
+es.plugins.staging is set and, of course, use the release artifacts at
+artifacts.elastic.co for release builds with es.plugins.staging unset.

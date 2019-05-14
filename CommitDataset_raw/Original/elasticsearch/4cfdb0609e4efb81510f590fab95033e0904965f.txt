@@ -1,0 +1,8 @@
+Adapt InternalCluster#fullRestart to call onNodeStopped when all nodes are stopped (#35494)
+
+Refactors and simplifies the logic around stopping nodes, making sure that for a full cluster restart
+onNodeStopped is only called after the nodes are actually all stopped (and in particular not while
+starting up some nodes again). This change also ensures that a closed node client is not being used
+anymore (which required a small change to a test).
+
+Relates to #35049

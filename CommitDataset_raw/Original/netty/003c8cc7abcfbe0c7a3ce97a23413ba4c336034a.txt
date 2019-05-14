@@ -1,0 +1,14 @@
+Expose all defaults on PooledByteBufAllocator
+
+Motivation:
+Most, but not all defaults are statically exposed on
+PooledByteBufAllocator.  This makes it cumbersome to make a custom
+allocator where most of the defaults remain the same.
+
+Modification:
+Expose useCacheForAllThreads, and Direct preferred.  The latter is
+needed because it is under the internal package, and public code
+should probably not depend on it.
+
+Result:
+More customizeable allocators

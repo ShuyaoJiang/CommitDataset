@@ -1,0 +1,7 @@
+Add a cluster block that allows to delete indices that are read-only (#24678)
+
+Today when an index is `read-only` the index is also blocked from
+being deleted which sometimes is undesired since in-order to make
+changes to a cluster indices must be deleted to free up space. This is
+a likely scenario in a hosted environment when disk-space is limited to switch
+indices read-only but allow deletions to free up space.

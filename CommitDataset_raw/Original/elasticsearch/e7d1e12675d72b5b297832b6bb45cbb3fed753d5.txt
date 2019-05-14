@@ -1,0 +1,11 @@
+Wrap stream passed to createParser in try-with-resources (#28897)
+
+* Wrap stream passed to createParser in try-with-resources
+
+This wraps the stream (`.streamInput()`) that is passed to many of the
+`createParser` instances in the enclosing (or a new) try-with-resources block.
+This ensures the `BytesReference.streamInput()` is closed.
+
+Relates to #28504
+
+* Use try-with-resources instead of closing in a finally block

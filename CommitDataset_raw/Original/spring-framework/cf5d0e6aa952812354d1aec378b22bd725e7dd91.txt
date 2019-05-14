@@ -1,0 +1,15 @@
+Introduce publishEvent() convenience method in TestContext
+
+This commit introduces a publishEvent() method in the TestContext API
+as a convenience for publishing an ApplicationEvent to the test's
+ApplicationContext but only if the ApplicationContext is currently
+available and with lazy creation of the ApplicationEvent.
+
+For example, the beforeTestClass() method in
+EventPublishingTestExecutionListener is now implemented as follows.
+
+  public void beforeTestClass(TestContext testContext) {
+      testContext.publishEvent(BeforeTestClassEvent::new);
+  }
+
+Closes gh-22765

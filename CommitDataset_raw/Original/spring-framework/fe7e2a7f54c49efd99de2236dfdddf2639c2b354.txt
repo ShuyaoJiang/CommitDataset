@@ -1,0 +1,15 @@
+Improvements to the way the content of RequestConditions is exposed.
+
+RequestCondition types keep individual expression types (e.g. the
+discrete header or param expressions) package private. Although the 
+implementation of these types should remain private, there is no 
+reason not to provide access to the underlying expression data --
+e.g. for creating a REST endpoint documentation tool, or if you 
+want to know which of the "consumes"/"produces" media types
+are negated.
+
+This change ensures that all RequestCondition types have a public
+getter that makes available the basic expression data. 
+
+
+

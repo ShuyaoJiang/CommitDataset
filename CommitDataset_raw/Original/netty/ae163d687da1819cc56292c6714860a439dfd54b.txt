@@ -1,0 +1,13 @@
+[#3896] Unpooled.copiedBuffer(ByteBuffer) and copiedBuffer(ByteBuffer...) is not thread-safe.
+
+Motivation:
+
+As we modify the position of the passed in ByteBuffer's this methods are not thread-safe.
+
+Modifications:
+
+Duplicate the input ByteBuffers before copy the content to  byte[].
+
+Result:
+
+Unpooled.copiedBuffer(ByteBuffer) and copiedBuffer(ByteBuffer...) is now thread-safe.

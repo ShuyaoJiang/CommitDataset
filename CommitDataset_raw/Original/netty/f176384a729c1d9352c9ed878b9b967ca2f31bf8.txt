@@ -1,0 +1,14 @@
+Include the original Exception that caused the Channel to be closed in the ClosedChannelException (#8863)
+
+Motivation:
+
+To make it easier to understand why a Channel was closed previously and so why the operation failed with a ClosedChannelException we should include the original Exception.
+
+Modifications:
+
+- Store the original exception that lead to the closed Channel and include it in the ClosedChannelException that is used to fail the operation.
+- Add unit test
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8862.

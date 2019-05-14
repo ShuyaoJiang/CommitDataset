@@ -1,0 +1,11 @@
+Ensure index commit released when testing timeouts (#39273)
+
+This fixes #39245. Currently it is possible in this test that the clear
+session call times-out. This means that the index commit will not be
+released and there will be an assertion triggered in the test teardown.
+This commit ensures that we wipe the leader index in the test to avoid
+this assertion.
+
+It is okay if the clear session call times-out in normal usage. This
+scenario is unavoidable due to potential network issues. We have a local
+timeout on the leader to clean it up when this scenario happens.

@@ -1,0 +1,12 @@
+Add ClientHttpRequestInterceptor in WebClient
+
+This commit adds a new chain-based, interception contract to be used
+with `WebClient`. This is the HTTP client equivalent of the `WebFilter`
+contract already implemented in web reactive server.
+
+A `ClientHttpRequestInterceptor` implementation can transform the
+outgoing HTTP request (method, URI or headers) before delegating it to
+the next interceptor in the chain, or bypass the request processing
+altogether and return a (cached) HTTP response.
+
+Issue: SPR-14502

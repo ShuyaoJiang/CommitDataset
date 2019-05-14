@@ -1,0 +1,13 @@
+Fix false-positive leak detection report when ReferenceCountedOpenSslEngine constructor throws.
+
+Motivation:
+
+We need to ensure we only create the ResourceLeak when the constructor not throws.
+
+Modifications:
+
+Ensure ResourceLeakDetector.track(...) is only called if the constructor of ReferenceCoundedOpenSslEngine not throws.
+
+Result:
+
+No more false-positves.

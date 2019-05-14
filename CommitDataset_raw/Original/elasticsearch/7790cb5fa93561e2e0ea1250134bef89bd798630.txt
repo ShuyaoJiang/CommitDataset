@@ -1,0 +1,15 @@
+SQL: Reduce number of ranges generated for comparisons (#30267)
+
+* SQL: Reduce number of ranges generated for comparisons
+
+Rewrote optimization rule for combining ranges by improving the
+detection of binary comparisons in a tree to better combine
+them in a range, regardless of their place inside an expression.
+Additionally, improve the comparisons of Numbers of different types
+Also, improve reassembly of conjunction/disjunction into balanced
+trees.
+Do not promote BinaryComparisons to Ranges since it introduces NULL
+boundaries and thus a corner-case that needs too much handling
+Compare BinaryComparisons directly between themselves and to Ranges
+
+Fix #30017

@@ -1,0 +1,15 @@
+DedicatedClusterSnapshotRestoreIT to Zen2 (#37489)
+
+All tests except testRestorePersistentSettings (renamed to
+testExceptionWhenRestoringPersistentSettings) worked fine.
+testExceptionWhenRestoringPersistentSettings re-written to use a custom
+setting, because "minimum master node" setting is no longer available
+in Zen2. It turns out there is no good replacement for "minimum master
+node" setting for this test, that's why the custom setting is
+introduced.
+
+Unfortunately, there is #37485 bug and currently
+RestoreService does not perform setting validation. That's why the
+test is annotated with @AwaitsFix, the idea is to merge this commit and
+then fix the issue and enable the test. (The test passes with a simple
+fix, that adds a single line to RestoreService).

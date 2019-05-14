@@ -1,0 +1,10 @@
+Build: Fix reproduce info for methods with ( or ) (#35712)
+
+Our `REPRODUCE WITH` line wasn't working for tests with `(` or `)` in
+the method name. This isn't super common, but happens sometimes for our
+yml based rest tests. This is because randomized runner's globbing
+mechanism dind't escape `(` or `)`. I filed this upstream at
+https://github.com/randomizedtesting/randomizedtesting/issues/271
+and Dawid kindly fixed the issue. This upgrades to pick up the fix.
+
+Closes #35692

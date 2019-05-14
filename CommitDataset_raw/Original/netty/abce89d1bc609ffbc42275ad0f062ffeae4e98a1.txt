@@ -1,0 +1,10 @@
+Revert "[#5028] Fix re-entrance issue with channelWritabilityChanged(...) and write(...)"
+
+Motivation:
+Revert d0943dcd30b08eb4043aeb88fd983bcebf8c3432. Delaying the notification of writability change may lead to notification being missed. This is a ABA type of concurrency problem.
+
+Modifications:
+- Revert d0943dcd30b08eb4043aeb88fd983bcebf8c3432.
+
+Result:
+channelWritabilityChange will be called on every change, and will not be suppressed due to ABA scenario.

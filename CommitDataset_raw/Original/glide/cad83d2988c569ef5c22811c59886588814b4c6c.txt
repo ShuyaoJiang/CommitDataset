@@ -1,0 +1,20 @@
+Include Transcode class in cache key for cached resource classes.
+
+We've avoided returning resource classes that can't possible be
+transcoded to our expected transcode class to avoid uselessly decoding
+and then throwing out an unusable resource. Unfortunately when that
+optimization was implemented we didn't change the cache key used to keep
+track of the set of available resource classes, so the set of resources
+for two different transcode class requests could have the same cache key
+but different contents. As a result we introduced a race where a smaller
+than accurate (or even empty) set of resource classes could be returned
+if the first call to getRegisteredResourceClasses used the same Model
+and Resource class, but a different and less available trascode class.
+
+This change includes the transcode class in the cache key so that we
+stop incorrectly sharing cache keys across different resource class
+sets.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=210131660

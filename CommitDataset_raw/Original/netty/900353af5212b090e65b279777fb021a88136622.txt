@@ -1,0 +1,10 @@
+HTTP/2 Reduce Log Level
+
+Motivation:
+https://github.com/netty/netty/commit/83c4aa6ad880445856551de1f7d4aeb40ee06df4 changed the log level to warn, but should have changed to debug.
+
+Modifications:
+- Change the log level to debug in Http2ConnectionHandler if the GO_AWAY fails to send. The write failure could be the result of the channel already being closed.
+
+Result:
+Fixes https://github.com/netty/netty/issues/4930.

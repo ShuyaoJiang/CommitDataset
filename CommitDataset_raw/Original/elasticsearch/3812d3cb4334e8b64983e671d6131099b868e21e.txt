@@ -1,0 +1,7 @@
+TopHitsAggregator must propagate calls to `setScorer`. (#27138)
+
+It is required in order to work correctly with bulk scorer implementations
+that change the scorer during the collection process. Otherwise sub collectors
+might call `Scorer.score()` on the wrong scorer.
+
+Closes #27131

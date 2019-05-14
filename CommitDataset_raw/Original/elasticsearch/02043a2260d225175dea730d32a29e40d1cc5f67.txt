@@ -1,0 +1,9 @@
+[Tests] Fix rare edge case in SimpleQueryStringBuilderTests (#35201)
+
+If the random query string is "now" by accident _and_ we are also not setting
+some field names to use explicitely, then we can hit the "mapped_date" field
+from default test setup. This correctly leads to the query being was marked as
+not cacheable, but we assume and check so later. This change fixes this rare
+edge case by making sure we don't hit the "date" field in this rare cases.
+
+Closes #35183

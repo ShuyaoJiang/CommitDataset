@@ -1,0 +1,11 @@
+Do not set order of ResourceServerConfiguration instances
+
+The need to set the order of ResourceServerConfiguration was
+a bad assumption. The value of the order seems strange as well
+(-10), and a comment explaining it makes no sense (a resource
+server normally wants its filter *after* not *before* the existing
+auth server filter). Removing the bean post processor didn't
+fail any tests.
+
+In case there are multiple resource servers in the same context
+there was also a problem that they ended up with the same order.

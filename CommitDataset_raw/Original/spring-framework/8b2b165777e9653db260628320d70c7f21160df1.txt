@@ -1,0 +1,10 @@
+Fix "relay-port" XSD type in spring-websocket.xsd
+Prior to this commit, the `relay-port` attribute of the
+`<websocket:stomp-broker-relay />` tag was of type `xsd:int`.
+This prevents developers from using `PropertyPlaceholderConfigurer`,
+even though this configuration key is a good candidate for such use
+(this value depends on prod/staging/etc environment).
+
+This commit changes that type to `xsd:string`.
+
+Issue: SPR-11537

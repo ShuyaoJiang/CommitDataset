@@ -1,0 +1,10 @@
+Eliminate unnecessary extra synchronization in DefaultChannelPipeline
+
+Motivation:
+At the moment whenever we add/remove a ChannelHandler with an EventExecutorGroup we have two synchronization points in the execution path. One to find the childInvoker and one for add/remove itself. We can eliminate the former by call findIInvoker in the synchronization block, as we need to synchronize anyway.
+
+Modification:
+Remove the usage of AtomicFieldUpdater and the extra synchronization in findInvoker by moving the call of the method in the synchronized(this) block.
+
+Result:
+Less synchronization points and volatile reads/writes

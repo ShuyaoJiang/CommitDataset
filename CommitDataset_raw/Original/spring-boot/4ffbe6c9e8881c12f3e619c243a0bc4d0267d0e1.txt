@@ -1,0 +1,23 @@
+Add @ConditionalOnExposedEndpoint condition
+
+Prior to this commit, Actuator `Endpoint` instantiations would be
+guarded by `@ConditionalOnEnabledEnpoint` condition annotations. This
+feature saves resources as disabled endpoints aren't unnecessarily
+instantiated.
+
+By default, only `"health"` and `"info"` endpoints are exposed over the
+web and all endpoints are exposed over JMX.
+
+As of gh-16090, JMX is now disabled by default. This is an opportunity
+to avoid instantiating endpoints if they won't be exposed at all, which
+is more likely due to the exposure defaults.
+
+This commit adds a new `@ConditionalOnExposedEndpoint` conditional
+annotation that checks the `Environment` for configuration properties
+under `"management.endpoints.web.exposure.*"` and
+`"management.endpoints.jmx.exposure.*"`. In the case of JMX, an
+additional check is perfomed, checking that JMX is enabled first.
+The rules implemented in the condition itself are following the ones
+described in `ExposeExcludePropertyEndpointFilter`.
+
+See gh-16093

@@ -1,0 +1,16 @@
+Fix missing ETag/LastModified headers in responses
+
+Prior to this commit, the `HttpEntityMethodProcessor` would avoid
+writing ETag/Last-Modified response headers before calling
+`ServletWebRequest` to process conditional requests. This was done to
+avoid duplicate response header values due to headers being already
+written to the underlying servlet response.
+
+This is still necessary for GET/HEAD requests, since this is properly
+handled by `ServletWebRequest` for those cases. But
+`HttpEntityMethodProcessor` should not make that decision for
+PUT/PATCH/POST responses since developers are adding response headers on
+purpose and should be in control of the situation — whereas
+`ServletWebRequest` does not write those headers in those cases.
+
+Issue: SPR-14767

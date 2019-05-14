@@ -1,0 +1,22 @@
+Add counter and gauge services based on in-memory buffers
+
+This seems pretty efficient (approx 12M write/s as opposed to 2M with
+the DefaultCounterService). N.B. there is no need to change most of
+the rest of the metrics stuff because metrics are write-often, read-
+seldom, so we don't need high performance reads as much.
+
+The Spring Integration configuration and Dropwizard support has changed
+a bit. Functionally very similar and probably opaque to users, but now
+the messaging operates as an Exporter on a @Scheduled method, and
+Dropwizard is a replacement [Gauge,Counter]Service.
+
+Metrics are all
+collected live in-memory (and can be very fast with Java 8), buffered
+there and shipped out to a MessageChannel (if one exists with id
+"metricsChannel") in a background thread.
+
+We can still use Java 8 library APIs (like LongAdder) but to compile
+to java 7 compatible byte code we have to forgo the use of lambdas :-(
+and shorthand generics (<>).
+
+Fixes gh-2682, fixes gh-2513 (for Java 8 and Dropwizard users).

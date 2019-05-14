@@ -1,0 +1,44 @@
+Fix missing trailing data on HTTP client upgrade
+
+Motivation:
+
+When HttpClientUpgradeHandler upgrades from HTTP/1 to another protocol,
+it performs a two-step opertion:
+
+1. Remove the SourceCodec (HttpClientCodec)
+2. Add the UpgradeCodec
+
+When HttpClientCodec is removed from the pipeline, the decoder being
+removed triggers channelRead() event with the data left in its
+cumulation buffer. However, this is not received by the UpgradeCodec
+becuase it's not added yet. e.g. HTTP/2 SETTINGS frame sent by the
+server can be missed out.
+
+To fix the problem, we need to reverse the steps:
+
+1. Add the UpgradeCodec
+2. Remove the SourceCodec
+
+However, this does not work as expected either, because UpgradeCodec can
+send a greeting message such as HTTP/2 Preface. Such a greeting message
+will be handled by the SourceCodec and will trigger an 'unsupported
+message type' exception.
+
+To fix the problem really, we need to make the upgrade process 3-step:
+
+1. Remove/disable the encoder of SourceCodec
+2. Add the UpgradeCodec
+3. Remove the SourceCodec
+
+Modifications:
+
+- Add SourceCodec.prepareUpgradeFrom() so that SourceCodec can remove or
+  disable its encoder
+- Implement HttpClientCodec.prepareUpgradeFrom() properly
+- Miscellaneous:
+  - Log the related channel as well When logging the failure to send a
+    GOAWAY
+
+Result:
+
+Cleartext HTTP/1-to-HTTP/2 upgrade works again.

@@ -1,0 +1,9 @@
+Defer StreamResetException until response body buffer is fully read.
+
+We rely on the application layer to read the response body buffer
+before sending WINDOW_UPDATE's. Previously we'd immediately throw a
+StreamResetException. This prevented the application layer from reading
+the buffer which in turn means we would not send WINDOW_UPDATE's. This
+has potential to deplete the flow-control window.
+
+https://github.com/square/okhttp/issues/3915

@@ -1,0 +1,9 @@
+Security: cleanup code in file stores (#30348)
+
+This commit cleans up some code in the FileUserPasswdStore and the
+FileUserRolesStore classes. The maps used in these classes are volatile
+so we need to make sure that we don't perform multiple operations with
+the map unless we are sure we are using a reference to the same map.
+
+The maps are also never null, but there were a few null checks in the
+code that were not needed. These checks have been removed.

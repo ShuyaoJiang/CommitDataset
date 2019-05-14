@@ -1,0 +1,17 @@
+This implementation lazily (on 1st forecast request) checks for available
+diskspace and creates a subfolder for storing data outside of Lucene
+indexes, but as part of the ES data paths.
+
+Details:
+ - tmp storage is managed and does not allow allocation if disk space is
+   below a threshold (5GB at the moment)
+ - tmp storage is supposed to be managed by the native component but in
+   case this fails cleanup is provided:
+    - on job close
+    - on process crash
+    - after node crash, on restart
+ - available space is re-checked for every forecast call (the native
+   component has to check again before writing)
+
+Note: The 1st path that has enough space is chosen on job open (job
+close/reopen triggers a new search)

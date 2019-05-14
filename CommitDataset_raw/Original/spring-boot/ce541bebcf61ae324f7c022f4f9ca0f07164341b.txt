@@ -1,0 +1,15 @@
+Align BasicErrorController’s HTML response status with non-HTML status
+
+Previously, BasicErrorController would return the response status
+set in the javax.servlet.error.status_code request attribute when
+serving JSON but would also return a 200 OK response when serving
+HTML. This didn’t cause much trouble when a person was browsing, but
+proved problematic for machine clients that request text/html and care
+about the response status. For example, the success handler would be
+driven for an XHR request even though the response was really an error.
+
+This commit updates BasicErrorController to set the response status for
+text/html responses to match the status that it would use in an
+application/json response.
+
+Closes gh-4694

@@ -1,0 +1,8 @@
+Ensure remote cluster alias is preserved in inner hits aggs (#25627)
+
+We lost the cluster alias due to some special caseing in inner hits
+and due to the fact that we didn't pass on the alias to the shard request.
+This change ensures that we have the cluster alias present on the shard to
+ensure all SearchShardTarget reads preserve the alias.
+
+Relates to #25606

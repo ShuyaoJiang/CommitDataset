@@ -1,0 +1,10 @@
+Allow non-String args in JOptCommandLinePropertySource
+
+Prior to this commit, JOptCommandLinePropertySource prevented the
+possibility of non-String option arguments. This effectively prevents
+the use of JOpt's #ofType support (which allows specifying custom
+argument types).
+
+Now, non-String arguments are detected and converted to strings as
+necessary. JOpt's #ofType now works as expected. A test has been added
+to cover this case.

@@ -1,0 +1,14 @@
+Replace enabledByDefault to DefaultEnablement
+
+This commit introduces a DefaultEnablement enum that replaces the
+"enabledByDefault" boolean flag of Endpoint. This allows to better
+control what indicates the default enablement of an endpoint.
+
+With DefaultEnablement#ENABLED, the endpoint is enabled unless an
+endpoint specific property says otherwise. With DefaultEnabled#DISABLED,
+the endpoint is disabled unless an endpoint specific property says
+otherwise. DefaultEnablement#NEUTRAL provides a dedicated option to
+indicate that we should resort to the default settings in absence of
+a specific property.
+
+See gh-10161

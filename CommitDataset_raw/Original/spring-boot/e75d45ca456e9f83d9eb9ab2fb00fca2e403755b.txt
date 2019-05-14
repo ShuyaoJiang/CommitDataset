@@ -1,0 +1,10 @@
+Use empty trust-store password if SSL store provider present
+
+For Tomcat, if an SslStoreProvider is configured,
+`SslStoreProviderUrlStreamHandlerFactory` stores the trust-store with an
+empty password. Previously, if a password was supplied using the
+ssl.trust-store-password property, that would be the password used to
+load the trust-store and the connector would warn with "Password
+verification failed" message.
+
+Fixes gh-12688

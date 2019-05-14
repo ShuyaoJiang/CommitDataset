@@ -1,0 +1,14 @@
+Fix handle of ByteBuf with multi nioBuffer in EpollDatagramChannel and KQueueDatagramChannel
+
+Motivation:
+1. special handling of ByteBuf with multi nioBuffer rather than type of CompositeByteBuf (eg. DuplicatedByteBuf with CompositeByteBuf)
+2. EpollDatagramUnicastTest and KQueueDatagramUnicastTest passed because CompositeByteBuf is converted to DuplicatedByteBuf before write to channel
+3. uninitalized struct msghdr will raise error
+
+Modifications:
+1. isBufferCopyNeededForWrite(like isSingleDirectBuffer in NioDatgramChannel) checks wether a new direct buffer is needed
+2. special handling of ByteBuf with multi nioBuffer in EpollDatagramChannel, AbstractEpollStreamChannel, KQueueDatagramChannel, AbstractKQueueStreamChannel and IovArray
+3. initalize struct msghdr
+
+Result:
+handle of ByteBuf with multi nioBuffer in EpollDatagramChannel and KQueueDatagramChannel are ok

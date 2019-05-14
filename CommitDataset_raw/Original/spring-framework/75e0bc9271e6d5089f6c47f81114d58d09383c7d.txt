@@ -1,0 +1,24 @@
+Open up TestPropertySourceUtils for public consumption
+
+Spring Framework 4.1 introduced support for @TestPropertySource;
+however, the utilities used to parse inlined properties and add test
+property sources to the environment are currently private which
+prevents reuse by third-party frameworks like Spring Boot.
+
+This commit addresses this issue by making such utilities public.
+
+ - TestPropertySourceUtils is now a public class.
+
+ - Various utility methods in TestPropertySourceUtils have been made
+   public.
+
+ - addResourcePropertySourcesToEnvironment() has been renamed to
+   addPropertiesFilesToEnvironment().
+
+ - extractEnvironmentProperties() has been renamed to
+   convertInlinedPropertiesToMap().
+
+ - All public methods in TestPropertySourceUtils are now fully
+   documented.
+
+Issue: SPR-12721

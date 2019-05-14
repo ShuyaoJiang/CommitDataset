@@ -1,0 +1,15 @@
+Run specific health check
+
+This commit improves the `health` endpoint to run health check for a
+particular component or, if that component is itself a composite, an
+instance of that component.
+
+Concretely, it is now possible to issue a `GET` on
+`/actuator/health/{component}` and
+`/actuator/health/{component}/instance` to retrieve the health of a
+component or an instance of a composite component, respectively.
+
+If details cannot be showed for the current user, any request leads to a
+404 and does not invoke the health check at all.
+
+Closes gh-8865

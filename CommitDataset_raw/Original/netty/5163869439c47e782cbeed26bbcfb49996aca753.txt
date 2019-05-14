@@ -1,0 +1,13 @@
+Only try to load conscrypt class in tests when supported.
+
+Motivation:
+
+1419f5b601ec7f50938a5e745ec2312f881a580f added support for conscrypt but the CI started to fail when running tests with java7 as conscrypt is compiled with java8. This was partly fixed in c4832cd9d989788f32dc1321d3e4c72bffa3587a but we also need to ensure we not try to even load the classes.
+
+Modifications:
+
+Only try to load conscrypt classes when on java8+-
+
+Result:
+
+CI not fails anymore.

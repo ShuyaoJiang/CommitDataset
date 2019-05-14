@@ -1,0 +1,20 @@
+Add support for RFC2385 on Linux
+
+Motivation:
+
+There are protocols (BGP, SXP), which are typically deployed with TCP
+MD5 authentication to protect sessions from being hijacked/torn down by
+third parties. This facility is not available on most operating systems,
+but is typically present on Linux.
+
+Modifications:
+
+- add a new EpollChannelOption, which is write-only
+- teach Epoll(Server)SocketChannel to track which addresses have keys
+  associated
+- teach Native how to set the MD5 signature keys for a socket
+
+Result:
+
+Users of the native-epoll transport can set MD5 signature keys and thus
+leverage RFC-2385 protection on TCP connections.

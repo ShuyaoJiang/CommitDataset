@@ -1,0 +1,9 @@
+Refresh at end of concurrent relocate test
+
+We have to do something to force the global checkpoint to be
+synchronized to the replicas or the assertions at the end of the test
+that they are in sync will trip. Since the last write operation to hit a
+replica shard will only carry the penultimate global checkpoint (it will
+advance when the replicas respond with their local checkpoint), and a
+background sync will not happen until the primary shard falls idle, we
+force a sync through a refresh action.

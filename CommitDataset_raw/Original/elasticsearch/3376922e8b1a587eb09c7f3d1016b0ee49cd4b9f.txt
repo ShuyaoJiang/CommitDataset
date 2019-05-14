@@ -1,0 +1,14 @@
+Add proxy support to RemoteClusterConnection (#33062)
+
+This adds support for connecting to a remote cluster through
+a tcp proxy. A remote cluster can configured with an additional
+`search.remote.$clustername.proxy` setting. This proxy will be used
+to connect to remote nodes for every node connection established.
+We still try to sniff the remote clsuter and connect to nodes directly
+through the proxy which has to support some kind of routing to these nodes.
+Yet, this routing mechanism requires the handshake request to include some
+kind of information where to route to which is not yet implemented. The effort
+to use the hostname and an optional node attribute for routing is tracked
+in #32517
+
+Closes #31840

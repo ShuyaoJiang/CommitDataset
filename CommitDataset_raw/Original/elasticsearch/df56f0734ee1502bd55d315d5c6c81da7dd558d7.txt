@@ -1,0 +1,9 @@
+Tasks: Retry if task can't be written (#35054)
+
+Adds about a minute worth of backoffs and retries to saving task
+results so it is *much* more likely that a busy cluster won't lose task
+results. This isn't an ideal solution to losing task results, but it is
+an incremental improvement. If all of the retries fail when still log
+the task result, but that is far from ideal.
+
+Closes #33764

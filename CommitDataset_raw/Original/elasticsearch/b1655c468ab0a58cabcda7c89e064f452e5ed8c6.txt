@@ -1,0 +1,7 @@
+Remove ALL shard check in CheckShrinkReadyStep (#35346)
+
+Since it's still possible to shrink an index when replicas are unassigned, we
+should not check that all copies are available when performing the shrink, since
+we set the allocation requirement for a single node.
+
+Resolves #35321

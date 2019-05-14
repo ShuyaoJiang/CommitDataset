@@ -1,0 +1,232 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml). 
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.handler.codec.mqtt:  
+
+1.1. Add a class for mqtt codec test. It allows to:
+
+	Handle setup;
+	Handle test connect message for mqtt 31;
+	Handle test connect message for mqtt 311;
+	Handle test connect message with non zero reserved flag for mqtt 311;
+	Handle test connect message no password;
+	Handle test conn ack message;
+	Handle test publish message;
+	Handle test pub ack message;
+	Handle test pub rec message;
+	Handle test pub rel message;
+	Handle test pub comp message;
+	Handle test subscribe message;
+	Handle test sub ack message;
+	Handle test sub ack message with failure in payload;
+	Handle test un subscribe message;
+	Handle test unsub ack message;
+	Handle test ping req message;
+	Handle test ping resp message;
+	Handle test disconnect message;
+	Handle test unknown message type;
+	Handle test connect message for mqtt 31 too large;
+	Handle test connect message for mqtt 311 too large;
+	Handle test conn ack message too large;
+	Handle test publish message too large;
+	Handle test subscribe message too large;
+	Handle test sub ack message too large;
+	Handle test un subscribe message too large;
+	Handle test message with only fixed header;
+	Handle test message with only fixed header and message id variable header;
+	Create message  with fixed header;
+	Create message  with fixed header and message id variable header;
+	Create connect message;
+	Create conn ack message;
+	Create publish message;
+	Create subscribe message;
+	Create sub ack message;
+	Create unsubscribe message;
+	Validate fixed headers;
+	Validate connect variable header;
+	Validate connect payload;
+	Validate conn ack variable header;
+	Validate publish variable header;
+	Validate publish payload;
+	Validate message id variable header;
+	Validate subscribe payload;
+	Validate topic subscription;
+	Validate sub ack payload;
+	Validate unsubscribe payload;
+	Validate decoder exception  too large message
+
+1.2. Add a class for mqtt conn ack message. It allows to:
+
+	Instantiate mqtt conn ack message  with mqtt fixed header, mqtt conn ack variable header and mqtt conn ack variable header;
+	Handle variable header
+
+1.3. Add a class for mqtt conn ack variable header. It allows to:
+
+	Instantiate mqtt conn ack variable header  with mqtt connect return code;
+	Connect return code;
+	Check if mqtt conn ack variable header is session present;
+	Convert mqtt conn ack variable header to string
+
+1.4. Add a class for mqtt connect message. It allows to:
+
+	Instantiate mqtt connect message  with mqtt fixed header, mqtt connect variable header, mqtt connect payload and mqtt connect payload;
+	Handle variable header;
+	Get payload
+
+1.5. Add a class for mqtt connect payload. It allows to:
+
+	Instantiate mqtt connect payload;
+	Get client identifier;
+	Will topic;
+	Will message;
+	Will message  in bytes;
+	Get user name;
+	Get password;
+	Get password in bytes;
+	Convert mqtt connect payload to string
+
+1.6. Add a class for mqtt connect variable header. It allows to:
+
+	Instantiate mqtt connect variable header;
+	Name mqtt connect variable header;
+	Get version;
+	Check if mqtt connect variable header has user name;
+	Check if mqtt connect variable header has password;
+	Check if mqtt connect variable header is will retain;
+	Qos mqtt connect variable header;
+	Check if mqtt connect variable header is will flag;
+	Check if mqtt connect variable header is clean session;
+	Keep alive time seconds;
+	Convert mqtt connect variable header to string
+
+1.7. Add a class for mqtt encoder. It allows to:
+
+	Instantiate mqtt encoder;
+	Encode ctx channel handler context;
+	Encode byte buf allocator;
+	Encode connect message;
+	Get conn variable header flag;
+	Encode conn ack message;
+	Encode subscribe message;
+	Encode unsubscribe message;
+	Encode sub ack message;
+	Encode publish message;
+	Encode message  with only single byte fixed header and message id;
+	Encode message  with only single byte fixed header;
+	Get fixed header byte 1;
+	Write variable length int;
+	Get variable length int;
+	Encode string utf 8
+
+1.8. Add a class for mqtt fixed header. It allows to:
+
+	Instantiate mqtt fixed header  with mqtt message type, qos S and qos S;
+	Get message type;
+	Check if mqtt fixed header is dup;
+	Handle qos level;
+	Check if mqtt fixed header is retain;
+	Remaining length;
+	Convert mqtt fixed header to string
+
+1.9. Add a class for mqtt message. It allows to:
+
+	Instantiate mqtt message  with mqtt fixed header;
+	Instantiate mqtt message  with mqtt fixed header, decoder result and decoder result;
+	Get fixed header;
+	Handle variable header;
+	Get payload;
+	Handle decoder result;
+	Convert mqtt message to string
+
+1.10. Add an object creator class for mqtt message factory. It allows to:
+
+	Handle new message;
+	Handle new invalid message;
+	Instantiate mqtt message factory
+
+1.11. Add an object creator class for mqtt message id variable header. It allows to:
+
+	Process mqtt message id variable header mqtt message id variable header from;
+	Instantiate mqtt message id variable header;
+	Get message id;
+	Convert mqtt message id variable header to string
+
+1.12. Add a class for mqtt pub ack message. It allows to:
+
+	Instantiate mqtt pub ack message  with mqtt fixed header, mqtt message id variable header and mqtt message id variable header;
+	Handle variable header
+
+1.13. Add a class for mqtt publish message. It allows to:
+
+	Instantiate mqtt publish message  with mqtt fixed header, mqtt publish variable header, payload byte buf and payload byte buf;
+	Handle variable header;
+	Get payload;
+	Handle content;
+	Get copy;
+	Duplicate mqtt publish message;
+	Get retained duplicate;
+	Replace content byte buf;
+	Ref cnt;
+	Retain mqtt publish message;
+	Touch mqtt publish message;
+	Handle release;
+
+1.14. Add a class for mqtt publish variable header. It allows to:
+
+	Instantiate mqtt publish variable header;
+	Get topic name;
+	Get message id;
+	Get packet id;
+	Convert mqtt publish variable header to string
+
+1.15. Add a class for mqtt sub ack message. It allows to:
+
+	Instantiate mqtt sub ack message  with mqtt fixed header, mqtt message id variable header, mqtt sub ack payload and mqtt sub ack payload;
+	Handle variable header;
+	Get payload
+
+1.16. Add a class for mqtt sub ack payload. It allows to:
+
+	Instantiate mqtt sub ack payload;
+	Instantiate mqtt sub ack payload  with granted qo S levels iterable;
+	Get granted qo S levels;
+	Convert mqtt sub ack payload to string
+
+1.17. Add a class for mqtt subscribe message. It allows to:
+
+	Instantiate mqtt subscribe message  with mqtt fixed header, mqtt message id variable header, mqtt subscribe payload and mqtt subscribe payload;
+	Handle variable header;
+	Get payload
+
+1.18. Add a class for mqtt subscribe payload. It allows to:
+
+	Instantiate mqtt subscribe payload  with topic subscriptions list;
+	Get topic subscriptions;
+	Convert mqtt subscribe payload to string
+
+1.19. Add a class for mqtt topic subscription. It allows to:
+
+	Instantiate mqtt topic subscription  with quality of service mqtt qo;
+	Get topic name;
+	Get quality of service;
+	Convert mqtt topic subscription to string
+
+1.20. Add a class for mqtt unsub ack message. It allows to:
+
+	Instantiate mqtt unsub ack message  with mqtt fixed header, mqtt message id variable header and mqtt message id variable header;
+	Handle variable header
+
+1.21. Add a class for mqtt unsubscribe message. It allows to:
+
+	Instantiate mqtt unsubscribe message  with mqtt fixed header, mqtt message id variable header, mqtt unsubscribe payload and mqtt unsubscribe payload;
+	Handle variable header;
+	Get payload
+
+1.22. Add a class for mqtt unsubscribe payload. It allows to:
+
+	Instantiate mqtt unsubscribe payload  with topics list;
+	Get topics;
+	Convert mqtt unsubscribe payload to string
+

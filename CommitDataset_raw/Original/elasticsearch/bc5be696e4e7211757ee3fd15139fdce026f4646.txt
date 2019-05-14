@@ -1,0 +1,27 @@
+Monitoring: Fix cluster monitoring watches to prevent compilations (elastic/x-pack-elasticsearch#1944)
+
+The monitoring watches are roughly executing the same queries even when
+they run against different clusters. However the way they were created,
+where the cluster name is replaced via search & replace instead of using
+watch metadata implies, that every watch is different from a script
+compilation cache perspective. On top of that every of those watches is
+executed once a minute. So if a new node becomes master and you monitor
+three clusters, this results in a fair share of compilations in the first minute. The
+reason for the compilation is the fact, that the search input uses
+mustache for being able to add dynamic parts into a search using
+mustache.
+
+Several of those watches also need to compile more than one search
+request.
+
+The maximum default value for script compilations is only 15 and thus at
+least one watch will not be executed due to failing script compilations.
+
+This commit changes the four watches, so that the search requests are
+cacheable. This means, no matter how many clusters you monitor, there
+will be only needed four compilations for the different watches and
+that's it.
+
+Relates elastic/support-dev-help#2090
+
+Original commit: elastic/x-pack-elasticsearch@6c877421bbefcdf33d1ecf82acba05de00a1f96a

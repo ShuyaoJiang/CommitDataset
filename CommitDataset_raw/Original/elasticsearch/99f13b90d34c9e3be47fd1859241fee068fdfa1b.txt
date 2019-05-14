@@ -1,0 +1,3 @@
+SNAPSHOT: Speed up HDFS Repository Writes (#37069)
+
+* There is no point in hsyncing after every individual write since there is only value in completely written blobs for restores, this is ensures by the `SYNC` flag already and there is no need for separately invoking `hsync` after individual writes

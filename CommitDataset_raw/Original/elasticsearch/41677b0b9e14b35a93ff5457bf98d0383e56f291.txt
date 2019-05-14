@@ -1,0 +1,11 @@
+Default to no http read timeout (#27879)
+
+Elasticsearch offers a number of http requests that can take a while to
+execute. In #27713 we introduced an http read timeout that defaulted to
+30 seconds. This means that if no reads happened for 30 seconds (even
+after a request is received), the connection would be closed due to
+timeout.
+
+This commit disables the read timeout by default to allow us to evaluate
+the impact of read timeouts and to avoid introducing distruptive
+behavior.

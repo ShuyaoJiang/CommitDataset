@@ -1,0 +1,7 @@
+Only flush Watcher's bulk processor if Watcher is enabled (#38803)
+
+When shutting down Watcher, the `bulkProcessor` is null if watcher has been
+disabled in the configuration. This protects the flush and close calls with a
+check for watcher enabled to avoid a NullPointerException
+
+Resolves #38798

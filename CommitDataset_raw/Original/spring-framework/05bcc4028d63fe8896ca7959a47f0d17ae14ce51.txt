@@ -1,0 +1,13 @@
+Fix assumption about file-based Resources in PropertiesLoaderSupport (SPR-7547)
+
+When using PropertiesLoaderSupport implementations (principally
+PropertyPlaceholderConfigurer), an assumption was made that any
+Resource representing a set of properties must be file-based.  SPR-7547
+exposed the fact that if a non-file-based Resource implementation such
+as ByteArrayResource were passed in, an IllegalStateException would be thrown
+from the AbstractResource base class' implementation of getFilename().
+
+This is now patched, and PropertiesLoaderSupport implementations treat
+Resource implementations equally, regardless of file-orientation.
+
+See also SPR-7552.

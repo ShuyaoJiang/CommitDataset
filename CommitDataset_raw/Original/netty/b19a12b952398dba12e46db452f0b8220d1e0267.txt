@@ -1,0 +1,16 @@
+Fixes #3362 (Possible wrong behavior in `HttpResponseDecoder`/`HttpRequestDecoder` for large header/initline/content)
+
+Motivation:
+
+`HttpResponseDecoder` and `HttpRequestDecoder` in the event when the max configured sizes for HTTP initial line, headers or content is breached, sends a `DefaultHttpResponse` and `DefaultHttpRequest` respectively. After this `HttpObjectDecoder` gets into `BAD_MESSAGE` state and ignores any other data received on this connection.
+The combination of the above two behaviors, means that the decoded response/request are not complete (absence of sending `LastHTTPContent`). So, any code, waiting for a complete message will have to additionally check for decoder result to follow the correct semantics of HTTP.
+
+If `HttpResponseDecoder` and `HttpRequestDecoder` creates a Full* invalid message then the request/response is a complete HTTP message and hence obeys the HTTP contract.
+
+Modification:
+
+Modified `HttpRequestDecoder`, `HttpResponseDecoder`, `RtspRequestDecoder` and  `RtspResponseDecoder` to return Full* messages from `createInvalidMessage()`
+
+Result:
+
+Fixes the wrong behavior of sending incomplete messages from these codecs

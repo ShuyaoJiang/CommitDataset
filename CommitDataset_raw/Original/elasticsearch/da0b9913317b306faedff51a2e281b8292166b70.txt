@@ -1,0 +1,19 @@
+Remove `index.mapping.single_type=false` from reindex tests (#25365)
+
+* Remove the setting from the yml tests and replace with tests using
+`join` field. We can't use the setting in yml tests without lots of
+backflips but we have `ReindexParentChildTests` for the coverage.
+There weren't tests for `join` field with reindex before this. Adding
+these tests discovered #25363.
+* Remove the setting from `ReindexParentChildTests` and replace with
+`index.version.created=V_5_6_0`. This test can be entirely removed
+when legacy parent/child support is dropped from core.
+* Port the yml tests that set _parent into integ tests so they
+can set the index created version. These tests can be removed
+when we drop support for _parent in core.
+* Port a delete-by-query test for filtering based on type to an
+`ESIntegTestCase` so it can use `index.version.created=5.6.0` to
+setup documents of multiple types. This whole feature can be dropped
+when we no longer support multiple types per index.
+
+Relates to #24961

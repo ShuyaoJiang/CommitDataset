@@ -1,0 +1,5 @@
+Treat aliases as unavailable indices in delete index and update aliases api (#25524)
+
+When resolving wildcards, aliases should be treated as unavailable indices when the `ignoreAliases` option is set to `true` (currently enabled with delete index api and update aliases api). This way the `allow_no_indices` and `ignore_unavailable` options can be honoured, otherwise WildcardExpressionResolver ends up treating aliases differently and there is no way to control when an error is thrown.
+
+The default behaviour for the delete index api, which has `ignore_unavailable` set to `false` and `allow_no_indices` set to `true` by default, is to throw an error when executed against an alias, same as when it's executed against an index that does not exist.

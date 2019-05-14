@@ -1,0 +1,11 @@
+Modify state of VerifyRepositoryResponse for bwc (#30762)
+
+The VerifyRepositoryResponse class holds a DiscoveryNode[], but the
+nodes themselves are not serialized to a REST API consumer. Since we do
+not want to put all of a DiscoveryNode over the wire, be it REST or
+Transport since its unused, this change introduces a BWC compatible
+change in ser/deser of the Response. Anything 6.4 and above will
+read/write a NodeView, and anything prior will read/write a
+DiscoveryNode. Further changes to 7.0 will be introduced to remove the
+BWC shim and only read/write NodeView, and hold a List<NodeView> as the
+VerifyRepositoryResponse internal state.

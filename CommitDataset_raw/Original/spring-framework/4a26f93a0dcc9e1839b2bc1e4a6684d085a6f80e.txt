@@ -1,0 +1,16 @@
+WebClient writes Content-Length for Mono bodies
+
+In SPR-16892, the `EncoderHttpMessageWriter` has been improved to write
+`"Content-Length"` HTTP response headers if the response body is of type
+`Mono` (i.e. the actual content length is easily accessible without
+buffering a possibly large response body). That change was relying on
+the fact that the server side is using a `ChannelSendOperator` to delay
+the writing of the body until the first signal is received.
+
+This strategy is not effective on the client side, since no such channel
+operator is used for `WebClient`. This commit improves
+`EncoderHttpMessageWriter` and delays, for `Mono` HTTP message bodies
+only, the writing of the body so that we can write the
+`"Content-Length"` header information once we've got the body resolved.
+
+Issue: SPR-16949

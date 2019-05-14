@@ -1,0 +1,34 @@
+Add support for property hint
+
+Create a new section in the meta-data called "hints" where users can
+provide hints about a given property. The most basic use case for now
+is to provide a list of values that a property can have. Each value may
+have a description.
+
+This sample JSON provides a basic example for a property called `foo.mode`
+that exposes 3 values: "auto", "basic" and "advanced".
+
+```
+ "hints": [
+    {
+      "id": "foo.mode",
+      "values": [
+        {
+          "value": "auto",
+          "description": "Some smart description."
+        },
+        {
+          "name": "basic"
+        },
+        {
+          "name": "advanced"
+        }
+      ]
+    }
+]
+```
+
+This information can be read by tools (such as IDE) and offer an
+auto-completion with the list of values.
+
+Closes gh-2054

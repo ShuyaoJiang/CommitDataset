@@ -1,0 +1,13 @@
+TransportVerifyShardBeforeCloseAction should force a flush (#38401)
+
+This commit changes the `TransportVerifyShardBeforeCloseAction` so that it 
+always forces the flush of the shard. It seems that #37961 is not sufficient to 
+ensure that the translog and the Lucene commit share the exact same max 
+seq no and global checkpoint information in case of one or more noop 
+operations have been made.
+
+The `BulkWithUpdatesIT.testThatMissingIndexDoesNotAbortFullBulkRequest` 
+and `FrozenIndexTests.testFreezeEmptyIndexWithTranslogOps` test this trivial 
+situation and they both fail 1 on 10 executions.
+
+Relates to #33888

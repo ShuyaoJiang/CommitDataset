@@ -1,0 +1,15 @@
+Don't fail the deregistration promise in Http2MultiplexCodec
+
+Motivation:
+
+We deviate from the AbstractChannel implementation on deregistration by
+failing the provided promise if the channel is already deregistered. In
+contrast, AbstractChannel will always set the promise to successfully
+done.
+
+Modification:
+
+Change the
+Http2MultiplexCodec.DefaultHttp2StreamChannel.Http2ChannelUnsafe to
+always set the promise provided to deregister as done as is the
+case in AbstractChannel.

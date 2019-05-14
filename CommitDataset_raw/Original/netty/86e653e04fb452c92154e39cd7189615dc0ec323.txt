@@ -1,0 +1,11 @@
+SslHandler aggregation of plaintext data on write
+
+Motivation:
+Each call to SSL_write may introduce about ~100 bytes of overhead. The OpenSslEngine (based upon OpenSSL) is not able to do gathering writes so this means each wrap operation will incur the ~100 byte overhead. This commit attempts to increase goodput by aggregating the plaintext in chunks of <a href="https://tools.ietf.org/html/rfc5246#section-6.2">2^14</a>. If many small chunks are written this can increase goodput, decrease the amount of calls to SSL_write, and decrease overall encryption operations.
+
+Modifications:
+- Introduce SslHandlerCoalescingBufferQueue in SslHandler which will aggregate up to 2^14 chunks of plaintext by default
+- Introduce SslHandler#setWrapDataSize to control how much data should be aggregated for each write. Aggregation can be disabled by setting this value to <= 0.
+
+Result:
+Better goodput when using SslHandler and the OpenSslEngine.

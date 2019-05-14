@@ -1,0 +1,11 @@
+Fix Kotlin inner class nested configuration handling
+
+Before this commit, Kotlin inner class nested configuration
+handling thrown an IndexOutOfBoundsException due to bogus filtering
+of its constructor parameter reference to an instance of the outer
+class.
+
+This commit keep constructor parameter of type INSTANCE in order to
+throw a more meaningful NoSuchBeanDefinitionException.
+
+Issue: SPR-17222

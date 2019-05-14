@@ -1,0 +1,14 @@
+Log unhandled server exceptions in WebFlux
+
+Prior to this commit, errors unhandled by custom `WebExceptionHandler`
+and resulting in an HTTP 500 status would not be logged at ERROR level,
+giving no information to developers about the actual exception.
+
+This commit ensures that such exceptions are logged at the ERROR level
+with their exception. By the time the exception hits the
+`DefaultErrorWebExceptionHandler`, if the response is already committed
+or if the exception is due to a client disconnecting, the error is
+delegated to Framework support as Spring Boot won't be able to render an
+error page as expected.
+
+Fixes gh-15769

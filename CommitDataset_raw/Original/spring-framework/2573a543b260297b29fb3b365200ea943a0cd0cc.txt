@@ -1,0 +1,14 @@
+SPR-16936 Fix PathVariable javadoc
+
+@PathVariable's javadoc states that it supports MultiValueMap
+parameters (introduced by commit df0902), but by reading through the
+code, that does not seem to be the case (compare, e.g.,
+PathVariableMapMethodArgumentResolver to
+RequestParamMapMethodArgumentResolver).
+
+Moreover, parsing MultipleValueMap is done according to the ";"
+character, and placing such a character in a path (e.g., consider
+something like "/app/{param}/show" would just break the path.
+
+This patch fixes PathVariable's javadoc by removing the mention of
+MultiValueMap.

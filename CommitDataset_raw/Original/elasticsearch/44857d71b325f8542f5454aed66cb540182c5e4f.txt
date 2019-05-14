@@ -1,0 +1,8 @@
+Make AllocatedPersistentTask members volatile (elastic/x-pack-elasticsearch#2297)
+
+These members are default initialized on contruction and then set by the
+init() method.  It's possible that another thread accessing the object
+after init() is called could still see the null/0 values, depending on how
+the compiler optimizes the code.
+
+Original commit: elastic/x-pack-elasticsearch@668121e2747bb637c50baa23bdcf46b70b33effa

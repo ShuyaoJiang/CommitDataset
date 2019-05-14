@@ -1,0 +1,15 @@
+Prevent AspectJ from loading aspects too early
+
+Previously, AspectJ would find META-INF/aop.xml almost as soon as
+the jar was launched, and before LaunchedURLClassLoader had been
+created. This meant that AspectJ would attempt to load aspects listed
+in META-INF/aop.xml but that were package in BOOT-INF/classes and,
+therefore, could not be loaded.
+
+This commit updates the Repackager so that a META-INF/aop.xml file
+is moved into BOOT-INF/classes. This ensures that it isn't visible
+to the app class loader so it won't be loaded to early. It will
+now be loaded by LaunchedURLClassLoader which can also load the
+compiled aspects that aop.xml references.
+
+Closes gh-7587

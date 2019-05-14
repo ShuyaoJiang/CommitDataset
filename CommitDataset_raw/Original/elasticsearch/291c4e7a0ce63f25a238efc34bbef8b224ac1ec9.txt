@@ -1,0 +1,9 @@
+Fix file reading in ccr restore service (#38117)
+
+Currently we use the raw byte array length when calling the IndexInput
+read call to determine how many bytes we want to read. However, due to
+how BigArrays works, the array length might be longer than the reference
+length. This commit fixes the issue and uses the BytesRef length when
+calling read. Additionally, it expands the index follow test to index
+many more documents. These documents should potentially lead to large
+enough segment files to trigger scenarios where this fix matters.

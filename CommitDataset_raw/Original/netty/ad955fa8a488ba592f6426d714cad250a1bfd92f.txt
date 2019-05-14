@@ -1,0 +1,10 @@
+[#2371] Fix Potential data corruption in EpollSocketChannel when writing to the Channel
+
+Motivation:
+We sometimes see data corruption when writing to the EpollSocketChannel.
+
+Modifications:
+Correctly update the position of the ByteBuffer after something was written.
+
+Result:
+Fix data-corruption which could happen on partial writes

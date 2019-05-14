@@ -1,0 +1,11 @@
+Fix SpringUrl Velocity macro URI encoding
+
+Prior to this commit, the springUrl Velocity macro would only prepend
+the context to the given URL; this means that the
+ServletHttpResponse.encodeUri method is not called and neither the
+ResourceUrlProvider.
+
+This commit changes this macro to use RequestContext.getContextUrl which
+prepends the context and encodes the URI.
+
+Issue: SPR-14027

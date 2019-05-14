@@ -1,0 +1,18 @@
+Build: Pin the random seed at startup (#24990)
+
+Pins the random testing seed at build start rather than letting
+it vary with every randomized testing invocation. This is useful
+for projects where random decisions in one randomized testing run
+can effect the outcome of a second randomized testing run such as
+the full cluster restart tests.
+
+The goal isn't for tests to be able to assume that random decision
+will be the same in both tests. It is more to make sure that the
+seed printed when a test fails reproduces the appropriate random
+decisions. And pinning the seed at startup should do just that.
+
+This works by taking the key passed as a system property if one
+is passed, otherwise picking a random long and getting it into
+appropriate key format. The build just calls
+`new Random().nextLong()` to get the seed while randomized testing
+uses a Murmur3 hash of `System.nanoTime`.

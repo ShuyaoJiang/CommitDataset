@@ -1,0 +1,20 @@
+Rework ApplicationContext test helper
+
+Rename `ContextLoader` to `ApplicationContextTester` and provide
+distinct subclasses for standard, web and reactive application contexts.
+
+Context callbacks now return AssertJ compatible contexts, allowing
+tests to run directly on context. For example:
+
+	context.run((loaded) -> assertThat(loaded).hasBean("foo"));
+
+The returned context can now also represent a context that has failed
+to start (meaning that the `loadAndFail` methods are no longer needed):
+
+	context.run((loaded) -> assertThat(loaded).hasFailed());
+
+Configuration classes are loaded via the recently introduced
+`Configurations` class. This means that the tester no longer needs to
+be directly aware of auto-configuration concepts.
+
+See gh-9634

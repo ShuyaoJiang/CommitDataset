@@ -1,0 +1,7 @@
+Use CountedBitSet in LocalCheckpointTracker (#27793)
+
+The CountedBitSet can automatically release its internal bitsets when
+all bits are set to reduce memory usage. This structure can work well
+for sequence numbers as these numbers are likely to form contiguous
+ranges. This commit replaces FixedBitSet by CountedBitSet in
+LocalCheckpointTracker.

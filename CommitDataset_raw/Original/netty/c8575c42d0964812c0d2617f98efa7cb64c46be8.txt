@@ -1,0 +1,15 @@
+[#5976] Ensure we only consume as much data on wrap(...) as we can handle.
+
+Motiviation:
+
+We need to ensure we only consume as much da as we can maximal put in one ssl record to not produce a BUFFER_OVERFLOW when calling wrap(...).
+
+Modification:
+
+- Limit the amount of data that we consume based on the maximal plain text size that can be put in one ssl record
+- Add testcase to verify the fix
+- Tighten up testcases to ensure the amount of produced and consumed data in SslEngineResult matches the buffers. If not the tests will fail now.
+
+Result:
+
+Correct and conform behavior of OpenSslEngine.wrap(...) and better test coverage during handshaking in general.

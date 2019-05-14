@@ -1,0 +1,16 @@
+Explicity set permissions on files in lib of Boot distribution
+
+Previously, only the permissions for the scripts in bin/ were set. The
+permissions for the files in lib/ were not explicity set, leaving them
+with the same permissions as the source files in Gradle's cache. This
+has proven to be a little brittle when building in certain
+environments, leading to test failures. It also assumes that the
+file permissions in Gradle's cache will be appropriate for entries in
+a distribution archive. That may not always be a reasonable assumption
+to make.
+
+To avoid the above-described problems, this commit updates the copy
+spec that's used to add files to lib/ in the archive so that each
+file uses 0644 for its permissions.
+
+Closes gh-14158

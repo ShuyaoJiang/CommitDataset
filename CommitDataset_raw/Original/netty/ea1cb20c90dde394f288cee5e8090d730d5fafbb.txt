@@ -1,0 +1,10 @@
+Netutil IPv6 bugs
+
+Motivation:
+NetUtil#isValidIpV6Address and NetUtil#getIPv6ByName allowed an invalid form of mapped IPv4 addresses which lead to accepting invalid IPv6 addresses as valid.
+
+Modifications:
+- NetUtil#isValidIpV6Address and NetUtil#getIPv6ByName should only allow 7 colons for an IPv4 address if they are the first 2 characters.
+
+Result:
+More correct implementation of NetUtil#isValidIpV6Address and NetUtil#getIPv6ByName

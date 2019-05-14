@@ -1,0 +1,12 @@
+Fix JDK7 method order-dependent issues in SRCCT
+
+SpringRunnerContextCacheTests suffers from JDK7-related non-determinism
+in values returned from Class#getDeclaredMethods(), which in turn
+affects JUnit and its execution of @Test methods.
+
+This commit addresses this issue by introducing an
+OrderedMethodsSpringJUnit4ClassRunner that sorts the test methods
+alphabetically, which is actually required for
+SpringRunnerContextCacheTests to work properly.
+
+Issue: SPR-9789

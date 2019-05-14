@@ -1,0 +1,15 @@
+Add WebClient metrics support
+
+This commit adds support for Actuator Metrics for WebClient.
+This support mirrors the current behavior for `RestTemplate`, reusing
+the same metric name `"http.client.requests"` and tags.
+
+`WebClient` is instrumented by a `MetricsWebClientFilterFunction` which
+is applied by a `WebClientCustomizer`. This instrumentation happens
+automatically only if you create an instance of `WebClient` using an
+auto-configured `WebClient.Builder` bean.
+
+This infrastructure is reusing de facto the `MeterFilter` that has been
+added for `RestTemplate` in order to limit the "uri" tag cardinality.
+
+Closes gh-12228

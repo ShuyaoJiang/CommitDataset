@@ -1,0 +1,29 @@
+[Zen2] Change unsafe bootstrap nodes count to nodes list in tests (#36559)
+
+This commit modifies ESSingleNodeTestCase and ESIntegTestCase and
+several concrete test classes to use node names when bootstrapping the
+cluster.
+
+Today ClusterBootstrapService.INITIAL_MASTER_NODE_COUNT_SETTING
+setting is used to bootstrap clusters in tests. Instead, we want to use
+ClusterBootrstapService.INITIAL_MASTER_NODES_SETTING and get rid of
+the former setting eventually.
+
+There were two main problems when refactoring InternalTestCluster:
+
+1. Nodes are created one-by-one in buildNode method. And node.name
+is created in this method as well. It's not suitable for bootstrapping,
+because we need to have the names of all master eligible nodes in
+advance, before creating the node with bootstrapping configuration set.
+We address this issue by separating buildNode into two methods:
+getNodeSettings and buildNode. We first iterate over all nodes to
+get nodes settings, then change the setting for the bootstrapping node
+and then proceed with building the node.
+2. If autoManageMinMasterNodes = false, there is no way for the test to
+set the list of bootstrapping nodes because node names are not known in
+advance. This problem is solved by adding updateNodesSettings method
+to NodeConfigurationSource and ESIntegTestCase (which could be
+overridden by concrete integration test class). Once we have the list
+of settings for all nodes, the integration test class is allowed to
+update it. In our case, we update the
+ClusterBootrstapService.INITIAL_MASTER_NODES_SETTING setting.

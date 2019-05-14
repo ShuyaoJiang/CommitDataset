@@ -1,0 +1,15 @@
+Never expose user.dir to the web on directory listing
+
+Motivation:
+
+When Netty HTTP Static File Server does directory listing, it does expose the user.dir environment variable to the user. Although it doesn't a security issue, it is a bad practice to show it, and the user does expect to see the server virtual root instead, which is the absolute path as mentioned in the RFC.
+
+Modifications:
+
+the sendListing method receives a third argument, which is the requested URI, and this is what should be displayed on the page instead of the filesystem path.
+
+Result:
+
+The directory listing pages will show the virtual path as described in the URI and not the real filesystem path.
+
+Removed fallback method

@@ -1,0 +1,9 @@
+Build: Remove x-pack-api jar (elastic/x-pack-elasticsearch#3864)
+
+The api jar was added for xpack extensions. However, extensions have
+been removed in favor of using SPI, and the individual xpack jars like
+core and security are published to enable this. This commit removes the
+api jar, and switches the transport client to use the core jar (which
+the api jar was just a rename of).
+
+Original commit: elastic/x-pack-elasticsearch@58e069e66ca4712aa842f59195e78815319c0d37

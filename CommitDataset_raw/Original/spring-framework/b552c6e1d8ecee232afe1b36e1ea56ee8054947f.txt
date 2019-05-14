@@ -1,0 +1,11 @@
+Fixed potential NPE in SharedEntityManagerCreator
+
+Fix SharedEntityManagerCreator.createSharedEntityManager to correctly
+forward an empty array in case that EntityManagerFactoryInfo returns
+null from getEntityManagerInterface().
+
+Previously the var-args invocation had turned null into an array with
+a null value which caused a NullPointerException in the call to
+Proxy.newProxyInstance() further down the call stack.
+
+Issue: SPR-10678

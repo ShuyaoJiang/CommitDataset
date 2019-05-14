@@ -1,0 +1,6 @@
+Remove interning from prefix logger (#29031)
+
+This interning is completely unnecessary because we look up the marker
+by the prefix (value, not identity) anyway. This means that regardless
+of the identity of the prefix, we end up with the same marker. That is
+all that we really care about here.

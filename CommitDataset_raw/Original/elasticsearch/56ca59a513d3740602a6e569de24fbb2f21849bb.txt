@@ -1,0 +1,12 @@
+Add the ability to the follow index to follow an index in a remote cluster.
+
+The follow index api completely reuses CCS infrastructure that was exposed via:
+https://github.com/elastic/elasticsearch/pull/29495
+
+This means that the leader index parameter support the same ccs index
+to indicate that an index resides in a different cluster.
+
+I also added a qa module that smoke tests the cross cluster nature of ccr.
+The idea is that this test just verifies that ccr can read data from a
+remote leader index and that is it, no crazy randomization or indirectly
+testing other features.

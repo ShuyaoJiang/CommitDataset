@@ -1,0 +1,19 @@
+Fix unbounded expansion of cumulative buffer in SslHandler
+
+Related: #3567
+
+Motivation:
+
+SslHandler.channelReadComplete() forgets to call
+super.channelReadComplete(), which discards read bytes from the
+cumulative buffer.  As a result, the cumulative buffer can expand its
+capacity unboundedly.
+
+Modifications:
+
+Call super.channelReadComplete() instead of calling
+ctx.fireChannelReadComplete()
+
+Result:
+
+Fixes #3567

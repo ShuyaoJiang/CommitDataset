@@ -1,0 +1,13 @@
+Decouple DefaultChannelPipeline from AbstractChannel
+
+Motivation:
+
+DefaultChannelPipeline was tightly coupled to AbstractChannel which is not really needed.
+
+Modifications:
+
+Move logic of calling handlerAdded(...) for handlers that were added before the Channel was registered to DefaultChannelPipeline by making it part of the head context.
+
+Result:
+
+Less coupling and so be able to use DefaultChannelPipeline also with other Channel implementations that not extend AbstractChannel

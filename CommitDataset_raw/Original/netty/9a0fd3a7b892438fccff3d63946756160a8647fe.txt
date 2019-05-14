@@ -1,0 +1,18 @@
+Do not log on explicit no unsafe again
+
+Motivation:
+
+Users should not see a scary log message when Netty is initialized if
+Netty configuration explicitly disables unsafe. The log message that
+produces this warning was previously guarded but the guard was
+lost.
+
+Modifications:
+
+This commit brings back the guard against the scary log message if
+unsafe is explicitly disabled.
+
+Result:
+
+No log message is produced when unsafe is unavailable because Netty was
+told to not look for it.

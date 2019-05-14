@@ -1,0 +1,19 @@
+Delete SingletonImmutableList.
+
+While SingletonImmutableList allocates one fewer object, this isn't worth it on Android.  This has no effect on the MemoryTester bounds for ImmutableList itself.
+
+Currently we are deleting it in all environments, but if we liked we could delete it only in Android; its deletion does increase the MemoryTester bounds for e.g. ImmutableListMultimap, whose "sparse" configuration generates a singleton ImmutableList per key.
+
+[]Effects on ImmutableSetProGuard:
+27697 bytes => 26650
+22 classes => 21 classes
+173 methods => 165 methods
+
+Effects on ImmutableMapProGuard:
+51766 bytes => 50061 bytes
+55 classes => 53 classes
+305 methods => 293 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146683890

@@ -1,0 +1,22 @@
+Change all instances of encoded.subSequence() to use a simple start index offset, which reduces the Java memory footprint for TrieParser by at at least 130 MBs. This is because the original call to subSequence() would generate a new String on the heap for each call, where as just using an offset avoids the need to generate a new String all together.
+
+This memory enhancement was found while investigating flakiness issues for some tests which had the same root cause of: java.lang.OutOfMemoryError: GC overhead limit exceeded, mostly in the TrieParser class.
+
+100-test runs at original code:
+Memory usage
+- maximum: 503MiB (527,769,600 bytes)
+- average: 388MiB (407,225,077 bytes)
+
+100-test runs with my changes:
+Memory usage
+- maximum: 316MiB (325,271,552 bytes)
+- average: 221MiB (239,355,320 bytes)
+
+At maximum: 187 MB saved
+At average: 167 MB saved
+
+RELNOTES=Reduced heap memory usage when parsing domain names
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=188111053

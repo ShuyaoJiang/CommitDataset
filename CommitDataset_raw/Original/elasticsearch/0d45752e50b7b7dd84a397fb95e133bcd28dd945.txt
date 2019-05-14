@@ -1,0 +1,30 @@
+Fix IndexMetaData loads after rollover (#33394)
+
+When we rollover and index we write the conditions of the rollover that
+the old index met into the old index. Loading this index metadata
+requires a working `NamedXContentRegistry` that has been populated with
+parsers from the rollover infrastructure. We had a few loads that didn't
+use a working `NamedXContentRegistry` and so would fail if they ever
+encountered an index that had been rolled over. Here are the locations
+of the loads and how I fixed them:
+
+* IndexFolderUpgrader - removed entirely. It existed to support opening
+indices made in Elasticsearch 2.x. Since we only need this change as far
+back as 6.4.1 which will supports reading from indices created as far
+back as 5.0.0 we should be good here.
+* TransportNodesListGatewayStartedShards - wired the
+`NamedXContentRegistry` into place.
+* TransportNodesListShardStoreMetaData - wired the
+`NamedXContentRegistry` into place.
+* OldIndexUtils - removed entirely. It existed to support the zip based
+index backwards compatibility tests which we've since replaced with code
+that actually runs old versions of Elasticsearch.
+
+In addition to fixing the actual problem I added full cluster restart
+integration tests for rollover which would have caught this problem and
+I added an extra assertion to IndexMetaData's deserialization code which
+will trip if we try to deserialize and index's metadata without a fully
+formed `NamedXContentRegistry`. It won't catch if use the *wrong*
+`NamedXContentRegistry` but it is better than nothing.
+
+Closes #33316

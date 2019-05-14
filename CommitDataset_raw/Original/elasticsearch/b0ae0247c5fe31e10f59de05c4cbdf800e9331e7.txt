@@ -1,0 +1,5 @@
+Resolve JAVA_HOME at windows service install time (#39714)
+
+On windows, JAVA_HOME is currently resolved when the windows service is started. However, this is contrary to what our documentation states. This commit moves resolution to service install. This has the side effect of making java existence checking optional in elasticsearch-env.bat, since the rest of the service commands do not require java.
+
+closes #30720

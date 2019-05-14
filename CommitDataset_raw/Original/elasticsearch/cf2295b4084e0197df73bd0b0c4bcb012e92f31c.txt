@@ -1,0 +1,87 @@
+Add JDK11 support and enable in CI (#31644)
+
+* Upgrade bouncycastle
+
+Required to fix
+`bcprov-jdk15on-1.55.jar; invalid manifest format `
+on jdk 11
+
+* Downgrade bouncycastle to avoid invalid manifest
+
+* Add checksum for new jars
+
+* Update tika permissions for jdk 11
+
+* Mute test failing on jdk 11
+
+* Add JDK11 to CI
+
+* Thread#stop(Throwable) was removed
+
+http://mail.openjdk.java.net/pipermail/core-libs-dev/2018-June/053536.html
+
+* Disable failing tests #31456
+
+* Temprorarily disable doc tests
+
+To see if there are other failures on JDK11
+
+* Only blacklist specific doc tests
+
+* Disable only failing tests in ingest attachment plugin
+
+* Mute failing HDFS tests #31498
+
+* Mute failing lang-painless tests #31500
+
+* Fix backwards compatability builds
+
+Fix JAVA version to 10 for ES 6.3
+
+* Add 6.x to bwx -> java10
+
+* Prefix out and err from buildBwcVersion for readability
+
+```
+> Task :distribution:bwc:next-bugfix-snapshot:buildBwcVersion
+  [bwc] :buildSrc:compileJava
+  [bwc] WARNING: An illegal reflective access operation has occurred
+  [bwc] WARNING: Illegal reflective access by org.codehaus.groovy.reflection.CachedClass (file:/home/alpar/.gradle/wrapper/dists/gradle-4.5-all/cg9lyzfg3iwv6fa00os9gcgj4/gradle-4.5/lib/groovy-all-2.4.12.jar) to method java.lang.Object.finalize()
+  [bwc] WARNING: Please consider reporting this to the maintainers of org.codehaus.groovy.reflection.CachedClass
+  [bwc] WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+  [bwc] WARNING: All illegal access operations will be denied in a future release
+  [bwc] :buildSrc:compileGroovy
+  [bwc] :buildSrc:writeVersionProperties
+  [bwc] :buildSrc:processResources
+  [bwc] :buildSrc:classes
+  [bwc] :buildSrc:jar
+
+```
+
+* Also set RUNTIME_JAVA_HOME for bwcBuild
+
+So that we can make sure it's not too new for the build to understand.
+
+* Align bouncycastle dependency
+
+* fix painles array tets
+
+closes #31500
+
+* Update jar checksums
+
+* Keep 8/10 runtime/compile untill consensus builds on 11
+
+* Only skip failing tests if running on Java 11
+
+* Failures are dependent of compile java version not runtime
+
+* Condition doc test exceptions on compiler java version as well
+
+* Disable hdfs tests based on runtime java
+
+* Set runtime java to minimum supported for bwc
+
+* PR review
+
+* Add comment with ticket for forbidden apis

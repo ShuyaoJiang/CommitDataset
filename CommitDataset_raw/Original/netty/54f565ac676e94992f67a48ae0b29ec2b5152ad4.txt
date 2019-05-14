@@ -1,0 +1,17 @@
+Allow to use native transports when sun.misc.Unsafe is not present on… (#8231)
+
+* Allow to use native transports when sun.misc.Unsafe is not present on the system
+
+Motivation:
+
+We should be able to use the native transports (epoll / kqueue) even when sun.misc.Unsafe is not present on the system. This is especially important as Java11 will be released soon and does not allow access to it by default.
+
+Modifications:
+
+- Correctly disable usage of sun.misc.Unsafe when -PnoUnsafe is used while running the build
+- Correctly increment metric when UnpooledDirectByteBuf is allocated. This was uncovered once -PnoUnsafe usage was fixed.
+- Implement fallbacks in all our native transport code for when sun.misc.Unsafe is not present.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8229.

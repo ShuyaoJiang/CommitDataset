@@ -1,0 +1,13 @@
+Use an MTU-sized buffer for socket access.
+
+Previously we attempted to avoid buffers in some situations
+and create aggressive buffers in other situations. This was
+a bad policy, and meant we had some subtle performance bugs.
+The one that prompted this is that chunked uploads make
+separate network writes for the chunk size, chunk, and newline
+separators.
+
+This avoids that problem and the corresponding complexity.
+Unfortunately getting the MTU isn't a standard API until
+Java 6 / Gingerbread. I tested my own networks and saw 1500
+in use (for 3G and WiFi) and 1400 (for VPN over WiFi).

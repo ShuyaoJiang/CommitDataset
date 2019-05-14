@@ -1,0 +1,13 @@
+Log included profiles according to the processing order
+
+This commit includes some refactoring of active profiles
+processing. Previously, there was a LIFO Queue for adding active
+profiles. Profiles that were added last, were processed first.
+Because of this reverse ordering, profiles were prepended to the
+environment to preserve the order in which they were logged.
+This however didn't work for "included" profiles as they were
+prepended to the environment even though they were processed after
+the active profile. In this commit, profiles are processed in a FIFO manner
+and processed as they're found.
+
+Fixes gh-11380

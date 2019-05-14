@@ -1,0 +1,12 @@
+Remove InternalClient and InternalSecurityClient (#3054)
+
+This change removes the InternalClient and the InternalSecurityClient. These are replaced with
+usage of the ThreadContext and a transient value, `action.origin`, to indicate which component the
+request came from. The security code has been updated to look for this value and ensure the
+request is executed as the proper user. This work comes from #2808 where @s1monw suggested
+that we do this.
+
+While working on this, I came across index template registries and rather than updating them to use
+the new method, I replaced the ML one with the template upgrade framework so that we could
+remove this template registry. The watcher template registry is still needed as the template must be
+updated for rolling upgrades to work (see #2950).

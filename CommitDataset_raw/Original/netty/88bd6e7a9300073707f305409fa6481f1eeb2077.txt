@@ -1,0 +1,35 @@
+Optimize native transport for gathering writes
+
+Motivation:
+
+While benchmarking the native transport with gathering writes I noticed that it is quite slow. This is due the fact that we need to do a lot of array copies to get the buffers into the iov array.
+
+Modification:
+
+Introduce a new class calles IovArray which allows to fill buffers directly in a iov array that can be passed over to JNI without any array copies. This gives a nice optimization in terms of speed when doing gathering writes.
+
+Result:
+
+Big performance improvement when doing gathering writes. See the included benchmark...
+
+Before:
+[nmaurer@xxx]~% wrk/wrk -H 'Host: localhost' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Connection: keep-alive' -d 120 -c 256 -t 16 --pipeline 256  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    23.44ms   16.37ms 259.57ms   91.77%
+    Req/Sec   181.99k    31.69k  304.60k    78.12%
+  346544071 requests in 2.00m, 46.48GB read
+Requests/sec: 2887885.09
+Transfer/sec:    396.59MB
+
+With this change:
+[nmaurer@xxx]~% wrk/wrk -H 'Host: localhost' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Connection: keep-alive' -d 120 -c 256 -t 16 --pipeline 256  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    21.93ms   16.33ms 305.73ms   92.34%
+    Req/Sec   194.56k    33.75k  309.33k    77.04%
+  369617503 requests in 2.00m, 49.57GB read
+Requests/sec: 3080169.65
+Transfer/sec:    423.00MB

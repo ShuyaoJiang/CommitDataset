@@ -1,0 +1,19 @@
+Fix data corruption in FileRegion transfer with epoll transport
+
+Related issue: #2764
+
+Motivation:
+
+EpollSocketChannel.writeFileRegion() does not handle the case where the
+position of a FileRegion is non-zero properly.
+
+Modifications:
+
+- Improve SocketFileRegionTest so that it tests the cases where the file
+  transfer begins from the middle of the file
+- Add another jlong parameter named 'base_off' so that we can take the
+  position of a FileRegion into account
+
+Result:
+
+Improved test passes. Corruption is gone.

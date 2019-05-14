@@ -1,0 +1,21 @@
+Add dependency ordering for @ModelAttribute methods
+
+Before this change @ModelAttribute methods were not invoked in any
+particular order other than ensuring global @ControllerAdvice methods
+are called first and local @Controller methods second.
+
+This change introduces a simple algorithm that selects the next
+@ModelAttribute method to invoke by making a pass over all methods and
+looking for one that has no dependencies (i.e. @ModelAttribute
+input arguments) or has all dependencies resolved (i.e. available in
+the model). The process is repeated until no more @ModelAttribute
+methods remain.
+
+If the next @ModelAttribute method cannot be determined because all
+remaining methods have unresolved dependencies, the first available
+method is picked anyway just as before, i.e. with required
+dependencies created through the default constructor.
+
+Examples in ModelFactoryOrderingTests.
+
+Issue: SPR-6299

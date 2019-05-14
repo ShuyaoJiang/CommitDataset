@@ -1,0 +1,11 @@
+Update global checkpoint with permit after recovery
+
+After recovery completes from a primary, we now update the local
+knowledge on the primary of the global checkpoint on the recovery
+target. However if this occurs concurrently with a relocation, an
+assertion could trip that we are no longer in primary mode. As this
+local knowledge should only be tracked when we are in primary mode,
+updating this local knowledge should be done under a permit. This commit
+causes that to be the case.
+
+Relates #26666

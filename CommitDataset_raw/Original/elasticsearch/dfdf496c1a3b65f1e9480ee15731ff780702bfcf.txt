@@ -1,0 +1,7 @@
+Move the IndexDeletionPolicy to be engine internal (#24930)
+
+The `IndexDeletionPolicy` is currently instantiated by `IndexShard` and is then passed through to the engine as a parameter. That's a shame as it is really just an implementation detail and the engine already has a method to acquire a commit.
+
+This is preparing for a follow up PR that will we connect the index deletion policy with a new translog deletion policy.
+
+Relates to #10708 

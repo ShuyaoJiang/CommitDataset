@@ -1,0 +1,10 @@
+Server adapters release buffers on error/cancel
+
+Review and update Servlet and Undertow adapters to release any data
+buffers they be holding on to at the time of error or cancellation.
+
+Also remove onDiscard hooks from Reactor and Undertow request body.
+For Reactor we expect it to be handled. For Undertow there isn't
+any Reactor Core upstream for the callback to be useful.
+
+Issue: SPR-17410

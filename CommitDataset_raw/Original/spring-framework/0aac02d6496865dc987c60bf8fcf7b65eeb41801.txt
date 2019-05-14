@@ -1,0 +1,32 @@
+Introduce DirtiesContextBeforeModesTestExecutionListener
+
+SPR-12429 introduced various `BEFORE_*` modes in `@DirtiesContext`. To
+support these new modes, `DirtiesContextTestExecutionListener` (DCTEL)
+was updated to support both `BEFORE_*` and `AFTER_*` modes. However,
+there is a problem with having DCTEL support `BEFORE_*` modes since it
+is typically configured to execute after the
+`DependencyInjectionTestExecutionListener` (DITEL), and this leads to
+several undesired side effects:
+
+ - The test's `ApplicationContext` is closed by DCTEL *after*
+   dependencies have been injected into the test instance.
+
+ - Injected dependencies may therefore attempt to interact with an
+   `ApplicationContext` that is no longer _active_.
+
+ - If a test has its `ApplicationContext` injected as a dependency,
+   interaction with the context will likely fail since the context has
+   been closed.
+
+ - Any `TestExecutionListeners` registered after DCTEL will get a _new_
+   `ApplicationContext` if they invoke `getApplicationContext()` on the
+   `TestContext`.
+
+This commit fixes these issues by introducing a new
+`DirtiesContextBeforeModesTestExecutionListener` (DCBMTEL) that is
+registered by default before DITEL. The previous support for `BEFORE_*`
+modes has been moved from DCTEL to DCBMTEL. In addition, an
+`AbstractDirtiesContextTestExecutionListener` has been extracted from
+DCTEL in order to avoid code duplication.
+
+Issue: SPR-13180

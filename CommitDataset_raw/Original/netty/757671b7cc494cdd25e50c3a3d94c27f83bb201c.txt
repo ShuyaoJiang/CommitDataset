@@ -1,0 +1,23 @@
+Support empty http responses when using compression
+
+Motivation:
+
+Found a bug in that netty would generate a 20 byte body when returing a response
+to an HTTP HEAD. the 20 bytes seems to be related to the compression footer.
+
+RFC2616, section 9.4 states that responses to an HTTP HEAD MUST not return a message
+body in the response.
+
+Netty's own client implementation expected an empty response. The extra bytes lead to a
+2nd response with an error decoder result:
+java.lang.IllegalArgumentException: invalid version format: 14
+
+Modifications:
+
+Track the HTTP request method. When processing the response we determine if the response
+is passthru unnchanged. This decision now takes into account the request method and passthru
+responses related to HTTP HEAD requests.
+
+Result:
+
+Netty's http client works and better RFC conformance.

@@ -1,0 +1,27 @@
+Types removal security index template (#39705)
+
+As we are moving to single type indices,
+we need to address this change in security-related indexes.
+To address this, we are
+- updating index templates to use preferred type name `_doc`
+- updating the API calls to use preferred type name `_doc`
+
+Upgrade impact:-
+In case of an upgrade from 6.x, the security index has type
+`doc` and this will keep working as there is a single type and `_doc`
+works as an alias to an existing type. The change is handled in the
+`SecurityIndexManager` when we load mappings and settings from
+the template. Previously, we used to do a `PutIndexTemplateRequest`
+with the mapping source JSON with the type name. This has been
+modified to remove the type name from the source.
+So in the case of an upgrade, the `doc` type is updated
+whereas for fresh installs `_doc` is updated. This happens as
+backend handles `_doc` as an alias to the existing type name.
+
+An optional step is to `reindex` security index and update the
+type to `_doc`.
+
+Since we do not support the security audit log index,
+that template has been deleted.
+
+Relates: #38637

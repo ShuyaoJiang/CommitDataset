@@ -1,0 +1,14 @@
+Added SlicedAbstractByteBuf that can provide fast-path for _get* and _set* methods
+
+Motivation:
+
+SlicedByteBuf can be used for any ByteBuf implementations and so can not do any optimizations that could be done
+when AbstractByteBuf is sliced.
+
+Modifications:
+
+- Add SlicedAbstractByteBuf that can eliminate range and reference count checks for _get* and _set* methods.
+
+Result:
+
+Faster SlicedByteBuf implementations for AbstractByteBuf sub-classes.

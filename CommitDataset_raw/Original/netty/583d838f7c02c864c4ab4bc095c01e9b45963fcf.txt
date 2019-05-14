@@ -1,0 +1,21 @@
+Optimize AbstractByteBuf.getCharSequence() in US_ASCII case (#8392)
+
+* Optimize AbstractByteBuf.getCharSequence() in US_ASCII case
+
+Motivation:
+
+Inspired by https://github.com/netty/netty/pull/8388, I noticed this
+simple optimization to avoid char[] allocation (also suggested in a TODO
+here).
+
+Modifications:
+
+Return an AsciiString from AbstractByteBuf.getCharSequence() if
+requested charset is US_ASCII or ISO_8859_1 (latter thanks to
+@Scottmitch's suggestion). Also tweak unit tests not to require Strings
+and include a new benchmark to demonstrate the speedup.
+
+Result:
+
+Speed-up of AbstractByteBuf.getCharSequence() in ascii and iso 8859/1
+cases

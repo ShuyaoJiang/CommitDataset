@@ -1,0 +1,8 @@
+[bs-73] Tweak algorithm for detecting anonymous classes
+
+Apparently an anonymous class in Groovy is no anonymous in the compiled code,
+so we need another heuristic.  We now check for non-existence of public
+constructors (if there are none then there's no point regsistering that
+class with an application context).
+
+[#48718891]

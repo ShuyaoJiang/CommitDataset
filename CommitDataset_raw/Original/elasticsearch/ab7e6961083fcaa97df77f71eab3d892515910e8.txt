@@ -1,0 +1,8 @@
+TEST: Ensure merge triggered in _source retention test (#33487)
+
+We invoke force merge twice in the test to verify that recovery sources
+are pruned when the global checkpoint advanced. However, if the global
+checkpoint equals to the local checkpoint in the first force-merge, the
+second force-merge will be a noop because all deleted docs are expunged
+in the first merge already. We need to flush a new segment to make merge
+happen so we can verify that all recovery sources are pruned.

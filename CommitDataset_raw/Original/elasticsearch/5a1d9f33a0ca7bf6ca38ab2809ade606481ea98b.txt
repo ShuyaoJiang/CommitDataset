@@ -1,0 +1,6 @@
+Try if tombstone is eligable for pruning before locking on it's key (#28767)
+
+Pruning tombstones is quite expensive since we have to walk though all
+deletes in the live version map and acquire a lock on every value even though
+it's impossible to prune it. This change does a pre-check if a delete is old enough
+and if not it skips acquireing the lock.

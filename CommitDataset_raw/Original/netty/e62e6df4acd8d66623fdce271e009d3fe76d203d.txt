@@ -1,0 +1,13 @@
+Use WeakReferences for Resource Leaks
+
+Motivation:
+Phantom references are for cleaning up resources that were
+forgotten, which means they keep their referent alive.   This
+means garbage is kept around until the refqueue is drained, rather
+than when the reference is unreachable.
+
+Modification:
+Use Weak References instead of Phantoms
+
+Result:
+More punctual leak detection.

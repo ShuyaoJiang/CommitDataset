@@ -1,0 +1,19 @@
+Suggestion for supporting single header fields.
+
+Motivation:
+At the moment if you want to return a HTTP header containing multiple
+values you have to set/add that header once with the values wanted. If
+you used set/add with an array/iterable multiple HTTP header fields will
+be returned in the response.
+
+Note, that this is indeed a suggestion and additional work and tests
+should be added. This is mainly to bring up a discussion.
+
+Modifications:
+Added a flag to specify that when multiple values exist for a single
+HTTP header then add them as a comma separated string.
+In addition added a method to StringUtil to help escape comma separated
+value charsequences.
+
+Result:
+Allows for responses to be smaller.

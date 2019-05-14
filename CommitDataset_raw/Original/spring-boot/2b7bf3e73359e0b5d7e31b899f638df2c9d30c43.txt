@@ -1,0 +1,21 @@
+Fix ArrayStoreException caused by JerseyAutoConfiguration
+
+JerseyAutoConfiguration is annotated with @ConditionalOnClass. It
+references both SpringComponentProvider.class and
+ServletRegistration.class. Normally, this wouldn't be a problem as, in
+the absence of either of those classes, the configuration class bean
+will not be present in the bean factory and, therefore, its
+annotations will never be introspected using reflection.
+
+However, JerseyAutoConfiguration is a WebApplicationInitializer. This
+means that when it's deployed to a standalone container,
+JerseyAutoConfiguration is found by the container and its class is
+passed to SpringServletContainerInitializer.
+SpringServletContainerInitializer introspects every
+WebApplicationInitializer class so that it can order them. This blows
+up if Jersey's SpringComponentProvider class isn't on the classpath as
+the annotation is referencing SpringComponentProvider as a Class and
+the attempt to load it fails. The problem can be avoided by
+referencing SpringComponentProvider using a String.
+
+Fixes gh-1696

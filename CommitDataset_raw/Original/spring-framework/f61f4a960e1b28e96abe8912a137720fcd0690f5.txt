@@ -1,0 +1,10 @@
+Discover controllers based on type @RequestMapping
+
+This was supported in DefaultAnnotationHandlerMapping but not in the
+RequestMappingHandlerMapping. The specific scenario where this matters
+is a controller decorated with a JDK proxy. In this scenario the
+HandlerMapping looks at interfaces only to decide if the bean is a
+controller. The @Controller annotation is better left (and required)
+on the class.
+
+Issue: SPR-9374

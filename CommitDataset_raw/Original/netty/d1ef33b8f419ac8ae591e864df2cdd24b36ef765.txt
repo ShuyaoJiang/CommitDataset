@@ -1,0 +1,13 @@
+Change 64 to 63 in Snappy.decodeLiteral
+
+Motivation:
+
+According to https://github.com/google/snappy/blob/master/format_description.txt#L55 , Snappy.decodeLiteral should handle the cases of 60, 61, 62 and 63. However right now it processes 64 instead of 63. I believe it's a typo since `tag >> 2 & 0x3F` must be less than 64.
+
+Modifications:
+
+Use the correct value 63.
+
+Result:
+
+Snappy.decodeLiteral handles the correct case.

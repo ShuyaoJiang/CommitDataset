@@ -1,0 +1,22 @@
+Trim thread local string builder if large
+
+Motivation:
+
+A previous change allocated a new thread local string builder if it
+was getting too large. This is a good change, these string builders
+can accidentally get too large and then never shrunk and that is sort
+of a memory leak. However, the change allocates an entirely new string
+builder which is more allocations than necessary. Instead, we can trim
+the string builder if its too large, this only allocates an extra
+backing array instead of a whole new object.
+
+Modifications:
+
+If the string builder is above a threshold, we trim the string builder
+and then ensure its capacity is reasonable to we do not allocate too
+much as we start using the string builder.
+
+Result:
+
+The thread local string builder do not serve as a memory yet we do not
+allocate too many new objects.

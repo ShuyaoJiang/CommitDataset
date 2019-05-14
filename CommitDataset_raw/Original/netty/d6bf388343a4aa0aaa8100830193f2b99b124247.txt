@@ -1,0 +1,43 @@
+Prevent nepotism with generational GCs.
+
+Motivation:
+
+If a single Encoder object is promoted to the old generation then every object
+reachable from the promoted object will eventually be promoted as well. A queue
+illustrates the problem very well. Say a sequence of inserts and deletions
+generate an object graph:
+
+   A -> B -> C -> D -> E -> F -> G -> H,
+
+the head of the queue is E, the tail of the queue is H, and A, B, C, D are
+dead. If all queue nodes are in the young generation, then a young gc will
+clean up the object graph and leave us with:
+
+   E -> F -> G -> H
+
+on the other hand, if B and C were previously promoted to the old generation,
+then a young collection assumes the refernece from C to D is from a live object
+(this is a key result of generational gc, no need to mark the old generation).
+Hence the young collection assumes the refence to D is a gc root and leave us
+with the object graph:
+
+   B-> C -> D -> E -> F -> G -> H.
+
+Eventually D, E, F, G, H, and all queue nodes ever seen from this point on will
+be promoted, regardless of their global live or dead status. It is generally
+trivial to fix nepotism issues by simply breaking the reference chain after
+dequeuing a node.
+
+Currently Encoder objects do not null their references when removed from the
+hash map. We have observed a 20X increase in promoted Encoder objects due to
+nepotism.
+
+Modifications:
+
+Null before, after, and next fields when removing Encoder objects from maps.
+
+Result:
+
+Fewer promoted Encoder objects, fewer Encoder objects in the old generation,
+shorter young collection times, old collections spaced further apart (nepotism
+is just really bad). Enjoy.

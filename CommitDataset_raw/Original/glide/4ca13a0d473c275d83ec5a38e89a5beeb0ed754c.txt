@@ -1,0 +1,19 @@
+Removes Math.round() call when the argument is an integer or a long.
+
+Math.round() called with an integer or long type can result in loss of information because it coerces the argument to a float before rounding back to an int.
+
+If this CL introduces an explicit saturated cast from long to int, you may want to remove the cast if it wasn't desired. If so, please make a suggestion to remove the cast in this CL.
+
+NOTE: Review carefully. If the original code contained the pattern Math.round(a/b), there's a good chance the original author wanted a floating-point division with round-to-nearest instead of the integer division with round-to-zero that they got.
+
+This an automated fix using Error Prone ([] We intend to make this a compilation error in Blaze's Java compiler, so it is necessary to fix existing occurrences first to avoid breaking builds.
+
+More information: ​[]
+
+Tested:
+    TAP --sample for global presubmit queue
+    []
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=201592824

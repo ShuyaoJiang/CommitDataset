@@ -1,0 +1,17 @@
+ Enhance parsing of StatusCode in SAML Responses (#38628)
+
+* Enhance parsing of StatusCode in SAML Responses
+
+<Status> elements in a failed response might contain two nested
+<StatusCode> elements. We currently only parse the first one in
+order to create a message that we attach to the Exception we return
+and log. However this is generic and only gives out informarion
+about whether the SAML IDP believes it's an error with the
+request or if it couldn't handle the request for other reasons. The
+encapsulated StatusCode has a more interesting error message that
+potentially gives out the actual error as in Invalid nameid policy,
+authentication failure etc.
+
+This change ensures that we print that information also, and removes
+Message and Details fields from the message when these are not
+part of the Status element (which quite often is the case)

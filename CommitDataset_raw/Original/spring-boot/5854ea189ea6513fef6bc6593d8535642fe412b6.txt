@@ -1,0 +1,14 @@
+Make TestInterceptor thread-safe
+
+Previously, TestInterceptor used an int to keep a count of how often
+it had been called. The count was incremented on one thread and
+read on another thread. This lead to intermittent test failures as the
+field was not declared volatile and a stale value would sometimes be
+returned.
+
+This commit updates TestInterceptor to use an AtomicInteger that's
+held in a final field. This ensures that getCount() will not return
+stale values and also ensures that the count can safely be incremented
+concurrently.
+
+Closes gh-1997

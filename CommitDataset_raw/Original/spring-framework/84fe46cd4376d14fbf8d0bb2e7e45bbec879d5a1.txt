@@ -1,0 +1,14 @@
+Register prefixed path patterns with FixedVersionStrategy
+
+Prior to this change, configuring a `FixedVersionStrategy` like so
+would configure a single "/js/**" path pattern:
+
+```
+versionResourceResolver.addFixedVersionStrategy("v1.0.0","/js/**");
+```
+
+This commit makes sure that for each path pattern, its prefixed version
+is added to the map. For example, the previous configuration also
+adds "/v1.0.0/js/**".
+
+Issue: SPR-13883

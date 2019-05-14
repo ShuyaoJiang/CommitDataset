@@ -1,0 +1,27 @@
+Ignore shard started requests when primary term does not match (#37899)
+
+This commit changes the StartedShardEntry so that it also contains the 
+primary term of the shard to start. This way the master node can also 
+checks that the primary term from the start request is equal to the current 
+shard's primary term in the cluster state, and it can ignore any shard 
+started request that would concerns a previous instance of the shard that 
+would have been allocated to the same node.
+
+Such situation are likely to happen with frozen (or restored) indices and 
+the replication of closed indices, because with replicated closed indices 
+the shards will be initialized again after the index is closed and can 
+potentially be re initialized again if the index is reopened as a frozen 
+index. In such cases the lifecycle of the shards would be something like:
+* shard is STARTED
+* index is closed
+* shards is INITIALIZING (index state is CLOSED, primary term is X)
+* index is reopened
+* shards are INITIALIZING again (index state is OPENED, potentially frozen, 
+primary term is X+1)
+
+Adding the primary term to the shard started request will allow to discard 
+potential StartedShardEntry requests received by the master node if the 
+request concerns the shard with primary term X because it has been 
+moved/reinitialized in the meanwhile under the primary term X+1.
+
+Relates to #33888

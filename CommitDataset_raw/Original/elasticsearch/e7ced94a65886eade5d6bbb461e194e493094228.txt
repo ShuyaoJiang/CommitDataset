@@ -1,0 +1,10 @@
+NETWORKING: Add SSL Handler before other Handlers (#34636)
+
+* NETWORKING: Add SSL Handler before other Handlers
+
+* The only way to run into the issue in #33998 is for `Netty4MessageChannelHandler`
+to be in the pipeline while the SslHandler is not. Adding the SslHandler before any
+other handlers should ensure correct ordering here even when we handle upstream events
+in our own thread pool
+* Ensure that channels that were closed concurrently don't trip the assertion
+* Closes #33998

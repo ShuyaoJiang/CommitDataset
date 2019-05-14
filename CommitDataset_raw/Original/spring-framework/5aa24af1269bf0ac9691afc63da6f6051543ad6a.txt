@@ -1,0 +1,16 @@
+Implement SessionFactoryImplementor in SF proxies
+
+SessionFactoryBuilderSupport implementations create DisposableBean
+proxies for SessionFactory objects created using #buildSessionFactory.
+
+Prior to this change, these proxies create problems when working agaist
+SessionFactoryUtils.getDataSource(SessionFactory), because this method
+expects the given SessionFactory to implement Hibernate's
+SessionFactoryImplementor interface (which the stock SessionFactoryImpl
+does).
+
+With this change, the DisposableBean proxies created by SFBuilders
+now also implement SessionFactoryImplementor to satisfy this and
+probably other such cases.
+
+Issue: SPR-8469

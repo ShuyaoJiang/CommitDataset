@@ -1,0 +1,14 @@
+IPv6 validation fixes
+
+Motivation:
+
+`NetUtil`'s methods `isValidIpV6Address` and `getIPv6ByName` incorrectly validate some IPv6 addresses.
+
+Modifications:
+
+- `getIPv6ByName`: add checks for single colon at the start or end.
+- `isValidIpV6Address`: fix checks for the count of colons and use `endOffset` instead of `ipAddress.length()` for the cases with the brackets or '%'.
+
+Result:
+
+More correct implementation of `NetUtil#isValidIpV6Address` and `NetUtil#getIPv6ByName`.

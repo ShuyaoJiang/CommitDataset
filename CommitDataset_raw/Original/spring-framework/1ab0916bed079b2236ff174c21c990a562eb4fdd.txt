@@ -1,0 +1,14 @@
+Fix default content-type for ResourceRegion HTTP responses
+
+Prior to this commit, the `ResourceRegionHttpMessageConverter` would
+rely on the default implementation of `getDefaultContentType` to guess
+the default Content-Type of the resource region to be written to the
+HTTP response. That implementation fetches the first media type
+provided in the HTTP request "Accept" header.
+
+This behavior is not correct when converting resources and this commits
+aligns this converter with the `ResourceHttpMessageConverter` which uses
+JAF to guess the correct Content-Type of the given resource, or just
+returns "application/octet-stream" as a default value.
+
+Issue: SPR-15041

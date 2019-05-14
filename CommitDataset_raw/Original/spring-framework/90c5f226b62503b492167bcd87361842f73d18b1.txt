@@ -1,0 +1,11 @@
+Fix package cycles in spring-test
+
+Code introduced in conjunction with SPR-5243 introduced package cycles
+between the ~.test.context.web and ~.test.context.support packages. This
+was caused by the fact that ServletTestExecutionListener extended
+AbstractTestExecutionListener.
+
+To address this, ServletTestExecutionListener now implements
+TestExecutionListener directly.
+
+Issue: SPR-9924

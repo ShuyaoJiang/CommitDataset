@@ -1,0 +1,10 @@
+OpenSslEngine skip ALPN tests if OpenSsl version doesn't support ALPN
+
+Motivation:
+OpenSslEngine now tests ALPN behavior. However it is possible that OpenSSL is present, but the version does not support ALPN. This will result in test failures instead of just skipping the test.
+
+Modifications:
+- Skip ALPN tests in OpenSslEngineTest if the version of OpenSSL does not support ALPN
+
+Result:
+Tests don't fail due to unsupported feature in OpenSSL.

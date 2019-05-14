@@ -1,0 +1,8 @@
+Exclude null requestURI in MHSR.getRequestURL()
+
+This commit undoes the changes made in ec5d81e78e and ensures that the
+getRequestURL() method in MockHttpServletRequest does not include the
+String "null" for a null requestURI by first checking if the requestURI
+contains text before including it in the composed URL.
+
+Issue: SPR-10643

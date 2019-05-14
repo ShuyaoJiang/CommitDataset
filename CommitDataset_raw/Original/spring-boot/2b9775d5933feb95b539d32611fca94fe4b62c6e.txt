@@ -1,0 +1,9 @@
+Fix EhCache hit/miss ratio
+
+The hitRatio is the ratio of two windowed rates that are calculated
+independently. They are not updated or read transactionally, hence the
+ratio of the two can drift slightly from what might be expected.
+
+We now make sure that the hit or miss ratio can't be higher than 1
+
+Closes gh-3235

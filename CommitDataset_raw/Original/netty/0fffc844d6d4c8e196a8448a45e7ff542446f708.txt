@@ -1,0 +1,13 @@
+Only load native transport if running architecture match the compiled library architecture.
+
+Motivation:
+
+We should only try to load the native artifacts if the architecture we are currently running on is the same as the one the native libraries were compiled for.
+
+Modifications:
+
+Include architecture in native lib name and append the current arch when trying to load these. This will fail then if its not the same as the arch of the compiled arch.
+
+Result:
+
+Fixes [#7150].

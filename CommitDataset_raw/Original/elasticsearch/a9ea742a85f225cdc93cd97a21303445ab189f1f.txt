@@ -1,0 +1,4 @@
+Tests fix - Significant terms/text aggs  (#25499)
+
+The significance aggs return Lucene index-level statistics that when merged are assumed to be from different shards. The Aggregator unit tests assume segments can be treated as shards and thus break the significance stats and introduce double-counting of background doc frequencies. This change addresses this problem by ensuring test indexes have only one shard.
+Closes #25429

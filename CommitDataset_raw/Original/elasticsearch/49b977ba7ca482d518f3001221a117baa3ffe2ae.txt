@@ -1,0 +1,19 @@
+resolveHasher defaults to NOOP (#31723)
+
+* Default resolveFromHash to Hasher.NOOP
+
+This changes the default behavior when resolving the hashing
+algorithm from unrecognised hash strings, which was introduced in
+ #31234
+
+A hash string that doesn't start with an algorithm identifier can
+either be a malformed/corrupted hash or a plaintext password when
+Hasher.NOOP is used(against warnings).
+Do not make assumptions about which of the two is true for such
+strings and default to Hasher.NOOP. Hash verification will subsequently
+fail for malformed hashes.
+Finally, do not log the potentially malformed hash as this can very
+well be a plaintext password.
+
+Resolves #31697
+Reverts 58cf95a06f1defd31b16c831708ca32a5b445f98

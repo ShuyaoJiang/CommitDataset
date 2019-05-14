@@ -1,0 +1,21 @@
+Http2 to Http1.1 converter on new Http2 server API
+
+Motivation:
+
+http/2 and http/1.1 have similar protocols, and it's useful to be able
+to implement a single server against a single interface. There's an
+injection from http/1.1 messages to http/2 ones, so it makes sense to
+make folks program against http/1.1 and upgrade them under the hood.
+
+Modifications:
+
+added a MessageToMessageCodec<Http2StreamFrame, HttpObject> which turns
+every kind of Http2StreamFrame domain object into an HttpObject domain
+object, and then back again on the way out.  This one is specialized for
+servers, but it should be straightforward to make a symmetric one for
+clients, or else extend this one.
+
+Result:
+
+fixes #5199, and it's now simple to make your Http2MultiplexCodec speak
+Http1.1

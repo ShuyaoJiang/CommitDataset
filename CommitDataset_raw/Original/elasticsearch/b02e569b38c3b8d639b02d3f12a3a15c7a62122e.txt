@@ -1,0 +1,8 @@
+Speed up audit log testing for SQL (elastic/x-pack-elasticsearch#2721)
+
+SQL was cleaning up the audit logs *after* each test
+but this switches it to cleaning up the audit logs
+*before* each test. This is faster because we can
+generate a lot of audit logs before the first test.
+
+Original commit: elastic/x-pack-elasticsearch@71d8f7666713dc0146906cccedf32b7fc1ccd4fa

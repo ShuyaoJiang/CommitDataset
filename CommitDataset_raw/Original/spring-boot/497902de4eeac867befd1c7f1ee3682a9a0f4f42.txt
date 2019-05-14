@@ -1,0 +1,25 @@
+Only bridge JUL into SLF4J when JUL has not be customized
+
+Previously, Slf4jLoggingSystem would install SLF4JBridgeHandler into
+JUL but would only remove a single root handler that was a
+ConsoleHandler. If there were was than one root handler or the single
+root handler was of a different type, they would not be uninstalled.
+When deploying an application to Tomcat, this led to duplicate log
+messages appearing in Tomcat’s console output and to logging from
+other application or Tomcat itself being routed into an
+application-specific log file enabled using the logging.file
+configuration property.
+
+A secondary, related problem was that LogbackLoggingSystem installs a
+LevelChangePropagator so that Logback’s log level configuration is
+propagated into JUL. This meant that an individual Boot app with
+custom log level configuration could change the log levels of Tomcat
+itself and of any other applications that had been deployed to Tomcat
+and use JUL.
+
+This commit updates both Slf4jLoggingSystem and LogbackLoggingSystem
+so that they only change JUL’s configuration if it hasn’t already been
+customized. The configuration is deemed to have not been customised if
+there’s a single root handler and its a console handler.
+
+Closes gh-13470

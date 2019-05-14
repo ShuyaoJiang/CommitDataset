@@ -1,0 +1,17 @@
+Refactor Undertow WebSocket client configuration model
+
+This commit removes the statically created XnioWorker which is an
+"active" component and should not be created automatically and could
+lead to resource leaks. Instead XnioWorker is now required at
+construction aligning better with WebSocketClient#connectionBuilder
+which also does not have a "default" worker option.
+
+Since the XnioWorker is the main input for creating a ConnectionBuilder
+we now create the ConnectionBuider in a protected method and then allow
+a Consumer<ConnectionBuilder> to configure it further as opposed to the
+Function<URI, ConnectionBuilder> used previously.
+
+This commit also removes default SSL context initialization for RxNetty
+to better align with other client implementations.
+
+Issue: SPR-14527

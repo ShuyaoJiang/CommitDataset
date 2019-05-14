@@ -1,0 +1,13 @@
+Fix the websocket server example
+
+Motivation:
+As report in #2953 the websocket server example contained a bug and did therefore not work with chrome:
+A websocket extension is added to the pipeline but extensions were disallowed in the handshaker and decoder,
+which is leading the decoder to closing the connection after receiving an extension frame.
+
+Modifications:
+Allow websocket extensions in the handshaker to correctly enable the extension.
+
+Result:
+Working websocket server example
+Fixes #2953

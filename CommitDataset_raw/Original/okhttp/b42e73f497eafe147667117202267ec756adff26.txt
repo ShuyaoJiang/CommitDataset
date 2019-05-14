@@ -1,0 +1,15 @@
+Make call canceling more reliable.
+
+We had a bug where the socket-being-connected wasn't being closed when the
+application used Call.cancel(). The problem is that the SocketConnector model
+assumes the Connection doesn't want a Socket instance until it's fully
+connected.
+
+This moves the SocketConnector code back into Connection, removes a lot of
+nested try/catch blocks, and assigns a Socket instance as soon as its created.
+
+This also likely fixes some bugs where sockets weren't being closed when
+an IOException or RouteException was thrown during connection. Now we always
+close at the top level of connect() unless the connection is successful.
+
+https://github.com/square/okhttp/issues/1779

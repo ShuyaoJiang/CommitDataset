@@ -1,0 +1,18 @@
+Add the `include_type_name` option to the search and document APIs. (#29506)
+
+This commit add the `include_type_name` option to the `index`, `update`,
+`delete`, `get`, `bulk` and `search` APIs. When set to `false`, the response
+will omit the `_type` in the response. This option doesn't work if the endpoint
+contains a type. For instance, the following call would succeed:
+
+```
+GET index/_doc/1?include_type_name=false
+```
+
+But the following one would fail:
+
+```
+GET index/some_type/1?include_type_name=false
+```
+
+Relates #15613 

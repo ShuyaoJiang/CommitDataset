@@ -1,0 +1,12 @@
+Fix inconsistent synchronization in HttpTunnelServer.ServerThread
+
+Previously, ServerThread.lastHttpRequestTime was written while
+synchronized on this.httpConnections but was read without
+synchronization. This could lead to a read of the field producing the
+wrong value and cause premature connection timeout.
+
+This commit moves the call to checkNotDisconnected into a block that
+sychronizes on this.httpConnections, thereby ensuring that
+lastHttpRequestTime can be read safely.
+
+Closes gh-4668

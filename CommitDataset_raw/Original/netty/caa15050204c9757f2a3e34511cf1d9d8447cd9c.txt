@@ -1,0 +1,57 @@
+Get uploaded size while upload is in progress
+
+Proposal to fix issue #3636
+
+Motivations:
+Currently, while adding the next buffers to the decoder
+(`decoder.offer()`), there is no way to access to the current HTTP
+object being decoded since it can only be available currently once fully
+decoded by `decoder.hasNext()`.
+Some could want to know the progression on the overall transfer but also
+per HTTP object.
+While overall progression could be done using (if available) the global
+Content-Length of the request and taking into account each HttpContent
+size, the per HttpData object progression is unknown.
+
+Modifications:
+1) For HTTP object, `AbstractHttpData` has 2 protected properties named
+`definedSize` and `size`, respectively the supposely final size and the
+current (decoded until now) size.
+This provides a new method `definedSize()` to get the current value for
+`definedSize`. The `size` attribute is reachable by the `length()`
+method.
+
+Note however there are 2 different ways that currently managed the
+`definedSize`:
+a) `Attribute`: it is reset each time the value is less than actual
+(when a buffer is added, the value is increased) since the final length
+is not known (no Content-Length)
+b) `FileUpload`: it is set at startup from the lengh provided
+
+So these differences could lead in wrong perception;
+a) `Attribute`: definedSize = size always
+b) `FileUpload`: definedSize >= size always
+
+Therefore the comment tries to explain clearly the different behaviors.
+
+2) In the InterfaceHttpPostRequestDecoder (and the derived classes), I
+add a new method: `decoder.currentPartialHttpData()` which will return a
+`InterfaceHttpData` (if any) as the current `Attribute` or `FileUpload`
+(the 2 generic types), which will allow then the programmer to check
+according to the real type (instance of) the 2 methods `definedSize()`
+and `length()`.
+
+This method check if currentFileUpload or currentAttribute are null and
+returns the one (only one could be not null) that is not null.
+
+Note that if this method returns null, it might mean 2 situations:
+a) the last `HttpData` (whatever attribute or file upload) is already
+finished and therefore accessible through `next()`
+b) there is not yet any `HttpData` in decoding (body not yet parsed for
+instance)
+
+Result:
+The developper has more access and therefore control on the current
+upload.
+The coding from developper side could looks like in the example in
+HttpUloadServerHandler.

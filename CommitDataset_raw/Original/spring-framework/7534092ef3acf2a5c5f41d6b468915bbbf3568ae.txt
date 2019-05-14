@@ -1,0 +1,19 @@
+Comprensive support for empty request body
+
+This commit adds support for handling an empty request body with both
+HttpEntity where the body is not required and with @RequestBody where
+the body is required depending on the annotation's required flag.
+
+If the body is an explicit type (e.g. String, HttpEntity<String>) and
+the body is required an exception is raised before the method is even
+invoked or otherwise the body is passed in as null.
+
+If the body is declared as an async type (e.g. Mono<String>,
+HttpEntity<Mono<String>>) and is required, the error will flow through
+the async type. If not required, the async type will be passed with no
+values (i.e. empty).
+
+A notable exception is rx.Single which can only have one value or one
+error and cannot be empty. As a result currently the use of rx.Single
+to represent the request body in any form effectively implies the body
+is required.

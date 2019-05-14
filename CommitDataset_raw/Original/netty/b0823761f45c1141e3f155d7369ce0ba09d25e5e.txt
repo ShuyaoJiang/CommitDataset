@@ -1,0 +1,19 @@
+PendingWriteQueue to handle write operations with void future
+
+Motivation:
+
+Right now PendingWriteQueue.removeAndWriteAll collects all promises to
+PromiseCombiner instance which sets listener to each given promise throwing
+IllegalStateException on VoidChannelPromise which breaks while loop
+and "reports" operation as failed (when in fact part of writes might be
+actually written).
+
+Modifications:
+
+Check if the promise is not void before adding it to the PromiseCombiner
+instance.
+
+Result:
+
+PendingWriteQueue.removeAndWriteAll succesfully writes all pendings
+even in case void promise was used.

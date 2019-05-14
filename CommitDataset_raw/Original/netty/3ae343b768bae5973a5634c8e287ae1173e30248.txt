@@ -1,0 +1,11 @@
+HTTP/2 DefaultHttp2Connection recursive call fix
+
+Motivation:
+There are methods to manipulate the prioritzable count for streams which have the '0' postfix which are designed to be used during recursion.  However these methods are calling out to an external method without the '0' during the recursive process.  This is doing uneccessary conditional checks during recursion.
+
+Modifications:
+Change the decrementPrioritizableForTree to decrementPrioritizableForTree0 while in recursive method.
+Change the incrementPrioritizableForTree to incrementPrioritizableForTree0 while in recursive method.
+
+Result:
+Less overhead during recursive calls.

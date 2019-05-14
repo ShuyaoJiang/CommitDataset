@@ -1,0 +1,9 @@
+Fix Incorrect Transport Response Handler Type (#38264)
+
+* Fix Incorrect Transport Response Handler Type
+* The response type here is not empty and was always wrong but this only became visible now that 0a604e3b2496777168bb541815a8526e463ee15f was introduced
+   * As a result of 0a604e3b2496777168bb541815a8526e463ee15f we started actually handling the response
+of this request and logging/handling exceptions before that we simply dropped the classcast exception here quietly using the empty response handler
+* fix busy assert not handling `Exception`
+* Closes #38226
+* Closes #38256

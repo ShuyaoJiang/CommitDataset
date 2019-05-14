@@ -1,0 +1,27 @@
+Make ApplicationContextRequestMatcher and subclasses thread-safe
+
+Previously, when performing lazy initialisation of the context,
+ApplicationContextRequestMatcher assigned the context field before it
+called initialized. The context being non-null is used as the signal
+that it’s ok to call a subclass’s matches method. If one thread checks
+for a non-null context in between the field being assigned and
+initialized being called on another thread, matches will be called
+before the subclass is ready.
+
+This commit closes the window for the race condition by only assigning
+the context field once the subclass’s initialized method has been
+called.
+
+There is a secondary problem in each of the subclasses. Due to the use
+of double-checked locking in ApplicationContextRequestMatcher, it’s
+possible for a subclass’s matches method to be called by a thread that
+has not synchronised on the context lock that’s held when initialized
+is called and the delegate field is assigned. This means that the
+value assigned to the field may not be visible to that thread.
+
+This commit declares the delegate field of each
+ApplicationContextRequestMatcher subclass as volatile to ensure that,
+following initialisation, its value is guaranteed to be visible to
+all threads.
+
+Closes gh-12380

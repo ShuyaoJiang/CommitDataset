@@ -1,0 +1,11 @@
+Limit the number of concurrent shard requests per search request (#25632)
+
+This is a protection mechanism to prevent a single search request from
+hitting a large number of shards in the cluster concurrently. If a search is
+executed against all indices in the cluster this can easily overload the cluster
+causing rejections etc. which is not necessarily desirable. Instead this PR adds
+a per request limit of `max_concurrent_shard_requests` that throttles the number of
+concurrent initial phase requests to `256` by default. This limit can be increased per request
+and protects single search requests from overloading the cluster. Subsequent PRs can introduces
+addiontional improvemetns ie. limiting this on a `_msearch` level, making defaults a factor of
+the number of nodes or sort shards iters such that we gain the best concurrency across nodes.

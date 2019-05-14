@@ -1,0 +1,20 @@
+Clean up example execution
+
+Motivation:
+
+- example/pom.xml has quite a bit of duplication.
+- We expect that we depend on npn-boot in more than one module in the
+  near future. (e.g. handler, codec-http, and codec-http2)
+
+Modification:
+
+- Deduplicate the profiles in example/pom.xml
+- Move the build configuration related with npn-boot to the parent pom.
+- Add run-example.sh that helps a user launch an example easily
+
+Result:
+
+- Cleaner build files
+- Easier to add a new example
+- Easier to launch an example
+- Easier to run the tests that relies on npn-boot in the future

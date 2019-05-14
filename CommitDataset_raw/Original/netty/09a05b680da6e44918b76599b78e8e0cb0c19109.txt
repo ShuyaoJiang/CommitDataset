@@ -1,0 +1,14 @@
+Dont use ThreadDeathWatcher to cleanup PoolThreadCache if FastThreadLocalThread with wrapped Runnable is used
+
+Motivation:
+
+We dont need to use the ThreadDeathWatcher if we use a FastThreadLocalThread for which we wrap the Runnable and ensure we call FastThreadLocal.removeAll() once the Runnable completes.
+
+Modifications:
+
+- Dont use a ThreadDeathWatcher if we are sure we will call FastThreadLocal.removeAll()
+- Add unit test.
+
+Result:
+
+Less overhead / running theads if you only allocate / deallocate from FastThreadLocalThreads.

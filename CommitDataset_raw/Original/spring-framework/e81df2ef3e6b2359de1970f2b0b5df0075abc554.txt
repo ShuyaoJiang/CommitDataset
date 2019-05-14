@@ -1,0 +1,45 @@
+Improve @Configuration bean name discovery
+
+Prior to this commit, and based on earlier changes supporting SPR-9023,
+ConfigurationClassBeanDefinitionReader employed a simplistic strategy
+for extracting the 'value' attribute (if any) from @Configuration in
+order to determine the bean name for imported and nested configuration
+classes. An example case follows:
+
+  @Configuration("myConfig")
+  public class AppConfig { ... }
+
+This approach is too simplistic however, given that it is possible in
+'configuration lite' mode to specify a @Component-annotated class with
+@Bean methods, e.g.
+
+  @Component("myConfig")
+  public class AppConfig {
+      @Bean
+      public Foo foo() { ... }
+  }
+
+In this case, it's the 'value' attribute of @Component, not
+@Configuration, that should be consulted for the bean name. Or indeed if
+it were any other stereotype annotation meta-annotated with @Component,
+the value attribute should respected.
+
+This kind of sophisticated discovery is exactly what
+AnnotationBeanNameGenerator was designed to do, and
+ConfigurationClassBeanDefinitionReader now uses it in favor of the
+custom approach described above.
+
+To enable this refactoring, nested and imported configuration classes
+are no longer registered as GenericBeanDefinition, but rather as
+AnnotatedGenericBeanDefinition given that AnnotationBeanNameGenerator
+falls back to a generic strategy unless the bean definition in question
+is assignable to AnnotatedBeanDefinition.
+
+A new constructor accepting AnnotationMetadata
+has been added to AnnotatedGenericBeanDefinition in order to support
+the ASM-based approach in use by configuration class processing. Javadoc
+has been updated for both AnnotatedGenericBeanDefinition and its now
+very similar cousin ScannedGenericBeanDefinition to make clear the
+semantics and intention of these two variants.
+
+Issue: SPR-9023

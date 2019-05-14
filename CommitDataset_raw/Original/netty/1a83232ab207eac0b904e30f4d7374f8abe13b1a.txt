@@ -1,0 +1,13 @@
+[#3463] EpollSocketChannel.localAddress() returns always null if Native.connect() was not able to connect directly
+
+Motivation:
+
+Due a a regression that was introduced by b898bdd we failed to set the localAddress if the connect did not success directly.
+
+Modifications:
+
+Correct set localAddress in doConnect(...)
+
+Result:
+
+Be able to get the localAddress in all cases.

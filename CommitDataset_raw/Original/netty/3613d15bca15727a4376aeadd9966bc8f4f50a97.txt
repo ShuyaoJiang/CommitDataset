@@ -1,0 +1,21 @@
+Split Http2MultiplexCodec into Frame- and MultiplexCodec + Tests. Fixes #4914
+
+Motivation:
+
+Quote from issue 4914:
+"Http2MultiplexCodec currently does two things: mapping the existing h2 API to frames and managing the child channels.
+
+It would be better if the two parts were separated. This would allow less-coupled development of the HTTP/2 handlers (flow control could be its own handler, for instance) and allow applications to insert themselves between all streams and the codec, which permits custom logic and could be used, in part, to implement custom frame types.
+
+It would also greatly ease testing, as the child channel could be tested by itself without dealing with how frames are encoded on the wire."
+
+Modifications:
+
+- Split the Http2MultiplexCodec into Http2FrameCodec and Http2MultiplexCodec. The Http2FrameCodec interacts with the existing HTTP/2 callback-based API, while the Http2MulitplexCodec is completely independent of it and simply multiplexes Http2StreamFrames to the child channels. Additionally, the Http2Codec handler is introduced, which is a convenience class that simply sets up the Http2FrameCodec and Http2MultiplexCodec in the channel pipeline and removes itself.
+
+- Improved test coverage quite a bit.
+
+Result:
+
+- The original Http2MultiplexCodec is split into Http2FrameCodec and Http2MultiplexCodec.
+- More tests for higher confidence in the code.

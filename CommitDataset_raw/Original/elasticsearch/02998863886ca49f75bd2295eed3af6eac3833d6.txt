@@ -1,0 +1,15 @@
+[Tests] Use XPack Usage API to verify Monitoring exporters are disabled (elastic/x-pack-elasticsearch#2648)
+
+This commit changes the MonitoringIt and XPackRestIT tests so that the
+disableMonitoring() method now use the XPack Usage API in order to check
+that the monitoring exporters are correctly disabled. It checks at the
+beginning of the tests (all exporters must be disabled before running
+the test) and also at the end of the test.
+
+This commit also fixes a bug in MonitoringIT where the Bulk thread pool
+active queue was wrongly extracted from the response's map, forcing the
+test to always wait for 30sec.
+
+relates elastic/x-pack-elasticsearch#2459
+
+Original commit: elastic/x-pack-elasticsearch@2d349e840f3f9f42c6456f2e38820514400aab39

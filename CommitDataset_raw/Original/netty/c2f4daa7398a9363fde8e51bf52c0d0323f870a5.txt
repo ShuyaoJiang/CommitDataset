@@ -1,0 +1,15 @@
+Fix false-positives when using ResourceLeakDetector.
+
+Motivation:
+
+We need to ensure the tracked object can not be GC'ed before ResourceLeak.close() is called as otherwise we may get false-positives reported by the ResourceLeakDetector. This can happen as the JIT / GC may be able to figure out that we do not need the tracked object anymore and so already enqueue it for collection before we actually get a chance to close the enclosing ResourceLeak.
+
+Modifications:
+
+- Add ResourceLeakTracker and deprecate the old ResourceLeak
+- Fix some javadocs to correctly release buffers.
+- Add a unit test for ResourceLeakDetector that shows that ResourceLeakTracker has not the problems.
+
+Result:
+
+No more false-positives reported by ResourceLeakDetector when ResourceLeakDetector.track(...) is used.

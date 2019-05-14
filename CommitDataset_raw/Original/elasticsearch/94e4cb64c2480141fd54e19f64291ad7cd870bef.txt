@@ -1,0 +1,8 @@
+Bootstrap a new history_uuid when force allocating a stale primary (#33432)
+
+This commit ensures that we bootstrap a new history_uuid when force
+allocating a stale primary. A stale primary should never be the source
+of an operation-based recovery to another shard which exists before the
+forced-allocation.
+
+Closes #26712

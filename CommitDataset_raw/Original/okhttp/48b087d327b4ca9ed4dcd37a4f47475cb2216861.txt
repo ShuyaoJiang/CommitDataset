@@ -1,0 +1,11 @@
+Be strict and careful when parsing the response status line.
+
+The current status line parsing is lenient and sloppy; a
+holdover from an ancient version of this library. The new
+code is strict and provides a helpful message if a bogus
+status line is encountered.
+
+To make this possible the RawHeaders class needs a hint
+about whether it's looking for a request line (from an
+HTTP request) or a status line (from an HTTP response).
+The old sloppy code used the same APIs for both.

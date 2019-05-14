@@ -1,0 +1,10 @@
+JdkSslContext supported cipher suites incorrect
+
+Motivation:
+JdkSslContext builds the list of supported cipher suites, but assumes that ciphers prefixed with SSL_ and TLS_ will be interchangeable. However this is not the case and only applies to a small subset of ciphers. This results in the JdkSslContext attempting to use unsupported ciphers.
+
+Modifications:
+- When building the list of ciphers in JdkSslContext we should first check if the engine supports the TLS_ prefix cipher.
+
+Result:
+Fixes https://github.com/netty/netty/issues/7673

@@ -1,0 +1,14 @@
+Update SslHandler.java (#8564)
+
+Swallow SSL Exception "closing inbound before receiving peer's close_notify" when running on Java 11 (#8463)
+
+Motivation:
+
+When closing a inbound SSL connection before the remote peer has send a close notify, the Java JDK is trigger happy to throw an exception. This exception can be ignored since the connection is about to be closed.
+The exception wasn't printed in Java 8, based on filtering on the exception message. In Java 11 the exception message has been changed.
+
+Modifications:
+Update the if statement to also filter/swallow the message on Java 11.
+
+Result:
+On Java 11 the exception isn't printed with log levels set to debug. The old behaviour is maintained.

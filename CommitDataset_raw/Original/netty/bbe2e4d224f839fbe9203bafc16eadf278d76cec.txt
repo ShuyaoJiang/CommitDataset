@@ -1,0 +1,14 @@
+We should try to load netty-tcnative before using it in OpenSslCertificateException. (#8202)
+
+Motivation:
+
+In OpenSslCertificateException we should ensure we try to load netty-tcnative before trying to use any class from it as otherwise it may throw an error due missing linking of the native libs.
+
+Modifications:
+
+- Ensure we call OpenSsl.isAvailable() before we try to use netty-tcnative for validation
+- Add testcase.
+
+Result:
+
+No more errors causing by not loading native libs before trying to use these.

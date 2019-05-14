@@ -1,0 +1,18 @@
+Overall cleanup of codec-dns
+
+Related issue: #2688
+
+- DnsClass and DnsType
+  - Make DnsClass and DnsType implement Comparable
+  - Optimize the message generation of IllegalArgumentException,
+    by pre-populating the list of the expected parameters
+  - Move the static methods up
+  - Relax the validation rule of DnsClass so that a user can define a
+    CLASS which is not listed in the RFC 1035
+  - valueOf(int) does not throw IllegalArgumentException anymore as long
+    as the specified value is an unsigned short.
+  - Rename create() and forName() to valueOf() so that they look like a
+    real enum
+  - Rename type() and clazz() to intValue() so that they conform to our
+    naming convention
+- Add missing null checks in DnsEntry

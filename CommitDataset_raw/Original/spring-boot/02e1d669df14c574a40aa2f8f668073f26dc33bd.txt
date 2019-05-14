@@ -1,0 +1,11 @@
+Exit with a value of 1 when cd fails in the init script
+
+Exiting with 0 when cd fails is likely to be incorrectly interpreted
+as success so we should exit with a non-zero value. Ideally, the init
+script status action would exit with 4 but, at the point when
+the cd is performed, we don’t even know if we’re running as an init
+script. Exiting with 1 seems to be a reasonable compromise as it’s
+fine for the non init-script case as well as being correct for all
+init script actions other than status.
+
+See gh-4653

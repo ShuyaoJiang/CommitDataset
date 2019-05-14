@@ -1,0 +1,15 @@
+SQL: Re-enable matrix aggregations (elastic/x-pack-elasticsearch#3977)
+
+Remove functions without a backing matrix agg
+
+MatrixAgg works across multiple fields and exposing it directly in SQL
+does not work. Instead isolated functions are exposed which get folded
+and optimized into one matrix agg per field. Thus not all matrix 
+functions can be exposed in SQL, at least at this time.
+
+Instead of depending on the plugin directly, depend on the plugin client
+jar (matrix-agg-client)
+
+Remove outdated test
+
+Original commit: elastic/x-pack-elasticsearch@ec9b31bf598d67a02ec57f2110530ebf3c8a53cc

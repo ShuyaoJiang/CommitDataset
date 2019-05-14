@@ -1,0 +1,11 @@
+Remove initial_master_nodes on node restart (#37580)
+
+Some tests (e.g. testRestoreIndexWithShardsMissingInLocalGateway) were split-braining since
+being switched to Zen2 because the bootstrap setting was left around when nodes got restarted
+with data folders wiped.
+
+The test in question here was starting one node (which autobootstrapped to that single node), then
+another node. The first node was then shut down (after excluding it from the voting configuration),
+its data folder wiped, and restarted. After restart, the node had an empty data folder yet
+initial_master_nodes set to itself (i.e. same name). This made the node sometimes form a cluster of
+its own, and not rejoin the existing cluster with the other node.

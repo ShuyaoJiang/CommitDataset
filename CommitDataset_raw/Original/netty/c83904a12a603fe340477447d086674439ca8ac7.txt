@@ -1,0 +1,18 @@
+Allow to automatically trim the PoolThreadCache in a timely interval (#8941)
+
+Motivation:
+
+PooledByteBufAllocator uses a PoolThreadCache per Thread that allocates / deallocates to minimize the performance overhead. This PoolThreadCache is trimmed after X allocations to free up buffers that are not allocated for a long time. This works out quite well when the app continues to allocate but fails if the app stops to allocate frequently (for whatever reason) and so a lot of memory is wasted and not given back to the arena / freed.
+
+Modifications:
+
+- Add a ThreadExecutorMap that offers multiple methods that wrap Runnable / ThreadFactory / Executor and allow to call ThreadExecutorMap.currentEventExecutor() to get the current executing EventExecutor for the calling Thread.
+- Use these methods in the constructors of our EventExecutor implementations (which also covers the EventLoop implementations)
+- Add io.netty.allocator.cacheTrimIntervalMillis system property which can be used to specify a fixed rate / interval on which we should try to trim the PoolThreadCache for a EventExecutor that allocates.
+- Add PooledByteBufAllocator.trimCurrentThreadCache() to allow the user to trim the cache of the calling thread manually.
+- Add testcases
+- Introduce FastThreadLocal.getIfExists()
+
+Result:
+
+Allow to better / more frequently trim PoolThreadCache and so give back memory to the area / system.

@@ -1,0 +1,17 @@
+Painless: Fix caching bug and clean up addPainlessClass. (#32142)
+
+This change cleans up the addPainlessClass methods by doing the following things:
+
+* Rename many variable names to match the new conventions described in the JavaDocs 
+for PainlessLookup
+* Decouples Whitelist.Class from adding a PainlessClass directly
+* Adds a second version of addPainlessClass that is intended for use to add future 
+defaults in a follow PR
+
+This change also fixes the method and field caches by storing Classes instead of Strings 
+since it would technically be possible now that the whitelists are extendable to have 
+different Classes with the same name. It was convenient to add this change together 
+since some of the new constants are shared.
+
+Note the changes are largely mechanical again where all the code behavior should 
+remain the same.

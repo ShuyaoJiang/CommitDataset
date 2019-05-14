@@ -1,0 +1,12 @@
+Support AntPathMatch URLs in URL ResultMatchers
+
+Prior to this commit, one could only match exact URLs in redirectedUrl
+and forwardedUrl ResultMatchers. When creating a resource with
+a REST service, URLs often contain the id the new resource,
+like "/resource/12".
+
+This commit updates those ResultMatchers to support both
+exact matches and AntPath matches, using new methods.
+The former URL then can be tested against "/resource/*" in MVC tests.
+
+Issue: SPR-10789

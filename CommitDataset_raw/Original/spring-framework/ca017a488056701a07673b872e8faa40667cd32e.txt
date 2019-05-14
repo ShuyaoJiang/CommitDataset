@@ -1,0 +1,25 @@
+Introduce strategy for BeanInfo creation
+
+Before this commit, the CachedIntrospectionResults was hard-coded to
+create ExtendedBeanInfos for bean classes. The ExtendedBeanInfo support
+the JavaBeans property contract only.
+
+This commit introduces the BeanInfoFactory, a strategy for creating
+BeanInfos. Through this strategy, it is possible to support
+beans that do not necessarily implement the JavaBeans contract (i.e.
+have a different getter or setter style).
+
+BeanInfoFactories are are instantiated by the
+CachedIntrospectionResults, which looks for
+'META-INF/spring.beanInfoFactories' files on the class path. These files
+contain one or more BeanInfoFactory class names. When a BeanInfo is to
+be created, the CachedIntrospectionResults will iterate through the
+factories, asking it to create a BeanInfo for the given bean class. If
+none of the factories support it, an ExtendedBeanInfo is created as a
+default.
+
+This commit also contains a change to Property, allowing BeanWrapperImpl
+to specify the property name at construction time (as opposed to using
+Property#resolveName(), which supports the JavaBeans contract only).
+
+Issue: SPR-9677

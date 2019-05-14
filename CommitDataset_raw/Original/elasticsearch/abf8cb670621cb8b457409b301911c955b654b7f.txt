@@ -1,0 +1,7 @@
+[CCR] Cleanup pause follow action (#34183)
+
+* Change the `TransportPauseFollowAction` to extend from `TransportMasterNodeAction`
+  instead of `HandledAction`, this removes a sync cluster state api call.
+* Introduced `ResponseHandler` that removes duplicated code in `TransportPauseFollowAction` and
+  `TransportResumeFollowAction`.
+* Changed `PauseFollowAction.Request` to not use `readFrom()`.

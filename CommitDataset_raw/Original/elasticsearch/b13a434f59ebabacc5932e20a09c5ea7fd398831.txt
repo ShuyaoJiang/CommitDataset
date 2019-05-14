@@ -1,0 +1,11 @@
+Remove wrong assert in LocalCheckpointTrackerTests
+
+It's possible for the set "seqNos" to contain only the "unFinishedSeq"
+in the testConcurrentReplica test. If this is the case, the call
+`randomValueOtherThan` won't make any progress because the predicate
+will never be false.
+
+This commit removes this expectation because it's incorrect and it's no
+longer needed as we have a dedicated test to verify the contains method.
+
+Relates #33871

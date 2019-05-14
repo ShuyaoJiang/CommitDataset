@@ -1,0 +1,19 @@
+Improve multi-valued HTTP headers support
+
+Prior to this change, getting header values with `HttpHeaders` when
+headers are multi-valued would cause issues.
+For example, for a given HTTP message with headers:
+    Cache-Control: public, s-maxage=50
+    Cache-Control: max-age=42
+
+Getting a `List` of all values would return <"public", "s-maxage=50">
+and getting the header value would return "public, s-maxage=50".
+
+This commit takes now into account multi-valued HTTP headers and adds
+new getters/setters for "If-Match" and "If-Unmodified-Since" headers.
+
+Note that for ETag-related headers such as "If-Match" and
+"If-None-Match", a special parser has been implemented since ETag values
+can contain separator characters.
+
+Issue: SPR-14223, SPR-14228

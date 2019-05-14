@@ -1,0 +1,12 @@
+Make "." be the CLI's default classpath
+
+Previously, the default classpath was empty. Now, in the absence of the
+user providing a classpath via the -cp option, the default classpath
+will be ".". If the user does specify a classpath, the classpath that's
+used will be exactly what they have specified, i.e. "." will no longer
+be on the classpath unless specified by the user.
+
+The app sample integration test has been updated to verify that "." is
+only the classpath by default.
+
+Fixes #115

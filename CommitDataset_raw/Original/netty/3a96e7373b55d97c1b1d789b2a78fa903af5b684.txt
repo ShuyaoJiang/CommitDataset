@@ -1,0 +1,24 @@
+Added option to do busy-wait on epoll (#8267)
+
+Motivation:
+
+Add an option (through a SelectStrategy return code) to have the Netty event loop thread to do busy-wait on the epoll.
+
+The reason for this change is to avoid the context switch cost that comes when the event loop thread is blocked on the epoll_wait() call.
+
+On average, the context switch has a penalty of ~13usec.
+
+This benefits both:
+
+The latency when reading from a socket
+Scheduling tasks to be executed on the event loop thread.
+The tradeoff, when enabling this feature, is that the event loop thread will be using 100% cpu, even when inactive.
+
+Modification:
+
+Added SelectStrategy option to return BUSY_WAIT
+Epoll loop will do a epoll_wait() with no timeout
+Use pause instruction to hint to processor that we're in a busy loop
+Result:
+
+When enabled, minimizes impact of context switch in the critical path

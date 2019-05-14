@@ -1,0 +1,8 @@
+Enforce that java.io.tmpdir exists on startup (#28217)
+
+If the default java.io.tmpdir is used then the startup script creates
+it, but if a custom java.io.tmpdir is used then the user must ensure it
+exists before running Elasticsearch. If they forget then it can cause
+errors that are hard to understand, so this change adds an explicit
+check early in the bootstrap and reports a clear error if java.io.tmpdir
+is not an accessible directory.

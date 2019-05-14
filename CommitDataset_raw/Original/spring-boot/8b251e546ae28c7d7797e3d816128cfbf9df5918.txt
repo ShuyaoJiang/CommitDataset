@@ -1,0 +1,15 @@
+Monkey with process forking for Windoze
+
+There were several problems to fix. 1) a bug in the
+JDK (1.7 up to 7_60):
+
+https://bugs.openjdk.java.net/browse/JDK-8023130
+
+which we can work around by detecting buggy VMs and not trying
+to use inheritIO. 2) File<->URL conversion is platform dependent
+and we shouldn't make any assumptions. The problem in this case
+was that file URLs contain a ":" so they can 't be added to a
+path in UNIX, but on Windows you need the absolute path with the
+colon. Solution: use Files on the classpath for spring-boot:run.
+
+Hopefully also fixes gh-767

@@ -1,0 +1,12 @@
+Deprecate the suggest metrics (#29627)
+
+The suggest stats were folded into the search stats as part of the
+indices stats API in 5.0.0. However, the suggest metric remained as a
+synonym for the search metric for BWC reasons. This commit deprecates
+usage of the suggest metric on the indices stats API.
+
+Similarly, due to the changes to fold the suggest stats into the search
+stats, requesting the suggest index metric on the indices metric on the
+nodes stats API has produced an empty object as the response since
+5.0.0. This commit deprecates this index metric on the indices metric on
+the nodes stats API.

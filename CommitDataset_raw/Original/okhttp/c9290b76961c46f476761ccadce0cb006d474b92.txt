@@ -1,0 +1,13 @@
+Recover from REFUSED_STREAM errors in HTTP/2.
+
+This implements the following policy:
+
+ - If a REFUSED_STREAM error is received, OkHttp will retry the same stream
+   on the same socket 1x.
+ - If any other error is received, or an additional REFUSED_STREAM error is
+   received, OkHttp will retry on a different route if one exists.
+
+We may want to follow up by going through HTTP/2 error codes and deciding
+a per-code retry policy, but this should be good enough for now.
+
+Closes: https://github.com/square/okhttp/issues/2543

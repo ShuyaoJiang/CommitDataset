@@ -1,0 +1,14 @@
+Split HttpTransport in two.
+
+The new (awkwardly-named) HttpConnection class now owns the
+socket, and stays around between HTTP requests. It matches
+SpdyConnection in lifecycle: it is tied to the socket.
+
+The HTTP transport class is a dumb adapter that adapts the
+protocol-specific decisions (chunked-encoding, content-length
+stuff).
+
+This should make it possible to make significant simplifications
+to how connection recycling works: in a follow up change the
+HttpConnection class will know when it can be recycled and take
+that action automatically.

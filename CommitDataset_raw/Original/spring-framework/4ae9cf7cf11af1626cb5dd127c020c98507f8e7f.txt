@@ -1,0 +1,21 @@
+Ensure JUnit & TestNG tests run in spring-test
+
+Prior to this commit, the Gradle build configuration only executed
+TestNG-based tests and effectively disabled all JUnit-based tests in the
+spring-test module. Furthermore, TestNG-based tests were not properly
+reported in Bamboo CI builds.
+
+This commit ensures that both JUnit and TestNG tests are executed in the
+Gradle build by defining a new testNG task within the spring-test
+configuration. The test task now depends on the new testNG task.
+Furthermore, the testNG task makes use of Gradle 1.3's support for
+generating test reports for TestNG tests alongside reports for JUnit
+tests. The net effect is that all tests are executed and reportedly
+properly in Bamboo builds on the CI server.
+
+- Enabled both JUnit and TestNG tests for the spring-test module.
+- Corrected bugs in FailingBeforeAndAfterMethodsTests introduced in
+  commit 3d1b3868fe3b38f5552883f54111c53f6ee75572.
+- Deleted the now obsolete SPR-9398.txt file.
+
+Issue: SPR-9398

@@ -1,0 +1,3 @@
+Preserve index_uuid when creating QueryShardException (#32677)
+
+As part of #32608 we made sure that the fully qualified index name is taken from the query shard context whenever creating a new `QueryShardException`. That change introduced a regression as instead of setting the entire `Index` object to the exception, which holds index name and index uuid, we ended up setting only the index name (including cluster alias). With this commit we make sure that the index uuid does not get lost and we try to lower the chances that a similar bug makes it in another time. That's done by making `QueryShardContext` return the fully qualified `Index` (which also holds the uuid) rather than only the fully qualified index name.

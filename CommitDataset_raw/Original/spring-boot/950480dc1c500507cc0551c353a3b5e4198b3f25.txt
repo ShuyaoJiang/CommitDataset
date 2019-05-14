@@ -1,0 +1,12 @@
+Stop MetricsEndpoint from summing up same metrics
+
+Update `MetricsEndpoint` so that only the first matching meter is used
+when calculating the sum of of statistics.
+
+Prior this this commit the endpoint would consider all Meters. This
+caused incorrect statistics when multiple back-end systems were being
+used since the registries contained in the `CompositeMeterRegistry`
+would be  iterated, and the same effective metric would be counted more
+than once.
+
+Closes gh-14497

@@ -1,0 +1,13 @@
+Watcher: Reduce threads on non-data nodes (elastic/x-pack-elasticsearch#3932)
+
+The watcher thread pool is scaled by the number of CPUs and has by
+default up to 5x the number of cores. This is needed because we assumme
+I/O based waiting workloads for watcher. However if the node is not a
+data node, there will not be any execution of watches with the exception
+of a user calling the execute watch API on that node.
+
+This means, we can get away with just one thread, so that there is no
+need for the JVM to manage more threads on master/client or ingest only
+nodes.
+
+Original commit: elastic/x-pack-elasticsearch@b5899401d363d8816526cc731e377a246c43c78f

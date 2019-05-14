@@ -1,0 +1,8 @@
+Fix issue with parsing media types
+
+Invalid Content-Type or Accept header values previously resulted in the
+IllegalArgumentException getting propagated. After this change such
+errors are detected and generally treated as a "no match", which
+may for example result in a 406 in the case of the Accept header.
+
+Issue: SPR-9148

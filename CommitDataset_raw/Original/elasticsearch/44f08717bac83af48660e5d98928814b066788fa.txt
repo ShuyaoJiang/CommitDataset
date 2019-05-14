@@ -1,0 +1,7 @@
+[Scripting] Make Max Script Length Setting Dynamic (#35184)
+
+This changes the current script.max_size_in_bytes to be dynamic so it can be 
+set through the cluster settings API. This setting is also applied to inline scripts 
+in the compile method of ScriptService to prevent excessively long inline 
+scripts from being compiled. The script length limit is removed from Painless as 
+this is no longer necessary with the protection in compile.

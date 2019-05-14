@@ -1,0 +1,7 @@
+TEST: Fix range issue in ShardChangesActionTests
+
+We modified the way we calculate to_seqno in #32121 but did not adjust
+this test accordingly. If min_seqno equals to max_seqno, the size should be
+one instead of zero.
+
+Relates #32121

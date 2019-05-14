@@ -1,0 +1,25 @@
+Fix ref-counting when CompositeByteBuf is used with retainedSlice() (#8497)
+
+Motivation:
+
+ByteBuf.retainedSlice() and similar methods produce sliced buffers with
+an independent refcount to the buffer that they wrap.
+
+
+One of the optimizations in 10539f4dc738c48e8d63c46b72ca32906d7f40ec was
+to use the ref to the unwrapped buffer object for added slices, but this
+did not take into account the above special case when later releasing.
+
+Thanks to @rkapsi for discovering this via #8495.
+
+Modifications:
+
+Since a reference to the slice is still kept in the Component class,
+just changed Component.freeIfNecessary() to release the slice in
+preference to the unwrapped buf.
+
+Also added a unit test which reproduces the bug.
+
+Result:
+
+Fixes #8495

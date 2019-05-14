@@ -1,0 +1,6 @@
+Track deletes only in the tombstone map instead of maintaining as copy (#27868)
+
+Today we maintain a copy of every delete in the live version maps. This is unnecessary
+and might add quite some overhead if maps grow large. This change moves out the deletes
+tracking into the tombstone map only and relies on the cleaning of tombstones when deletes
+are collected.

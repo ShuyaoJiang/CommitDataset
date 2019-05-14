@@ -1,0 +1,12 @@
+Add FailureAnalyzer for Hikari
+
+Hikari can configure both an underlying Driver or DataSource. Spring Boot
+only supports the former so any attempt to trigger the creation of the
+latter will lead to an exception since the auto-configuration has set
+driver-specific field.
+
+This commit adds an analyzer that intercepts such faulty scenario and
+indicate that users should configure Hikari with an underlying DataSource
+themselves.
+
+Closes gh-6568

@@ -1,0 +1,14 @@
+Eliminate usage of releaseLater(...) to reduce memory usage during tests
+
+Motiviation:
+
+We used ReferenceCountUtil.releaseLater(...) in our tests which simplifies a bit the releasing of ReferenceCounted objects. The problem with this is that while it simplifies stuff it increase memory usage a lot as memory may not be freed up in a timely manner.
+
+Modifications:
+
+- Deprecate releaseLater(...)
+- Remove usage of releaseLater(...) in tests.
+
+Result:
+
+Less memory needed to build netty while running the tests.

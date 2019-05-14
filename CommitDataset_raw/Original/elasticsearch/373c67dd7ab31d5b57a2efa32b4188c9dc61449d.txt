@@ -1,0 +1,20 @@
+Add DirectByteBuffer strategy for transport-nio (#36289)
+
+This is related to #27260. In Elasticsearch all of the messages that we
+serialize to write to the network are composed of heap bytes. When you
+read or write to a nio socket in java, the heap memory you passed down
+must be copied to/from direct memory. The JVM internally does some
+buffering of the direct memory, however it is essentially unbounded.
+
+This commit introduces a simple mechanism of buffering and copying the
+memory in transport-nio. Each network event loop is given a 64kb
+DirectByteBuffer. When we go to read we use this buffer and copy the
+data after the read. Additionally, when we go to write, we copy the data
+to the direct memory before calling write. 64KB is chosen as this is the
+default receive buffer size we use for transport-netty4
+(NETTY_RECEIVE_PREDICTOR_SIZE).
+
+Since we only have one buffer per thread, we could afford larger.
+However, if we the buffer is large and not all of the data is flushed in
+a write call, we will do excess copies. This is something we can
+explore in the future.

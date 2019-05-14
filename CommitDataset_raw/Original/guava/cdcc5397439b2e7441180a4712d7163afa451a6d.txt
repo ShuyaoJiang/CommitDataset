@@ -1,0 +1,10 @@
+Migrate calls to Annotation.getClass() to Annotation.annotationType().
+
+Annotation.getClass() returns a proxy class generated at runtime that is not particularly useful -- it returns false for isAnnotation(), for example -- where annotationType() actually returns the type associated with the annotation (e.g. MyAnnotation.class for @MyAnnotation).
+
+Tested:
+TAP --sample for global presubmit queue
+[]
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=65806476

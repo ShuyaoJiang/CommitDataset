@@ -1,0 +1,12 @@
+Make sure that JpaProperties does not have Hibernate imports
+
+This commit removes Hibernate imports from JpaProperties so that it can
+be used with another JPA provider.
+
+This commit is a breaking change for an internal, yet public class used
+to transmit customizations provided by the user. It does not change the
+external functionality though: naming strategies defined as bean are
+still taken into account and a customizer has a chance to override it
+regardless.
+
+Closes gh-13043

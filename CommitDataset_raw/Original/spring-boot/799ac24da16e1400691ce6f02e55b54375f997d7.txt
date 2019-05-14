@@ -1,0 +1,20 @@
+Reinstate auto-config of RequestContextFilter with Jersey
+
+Previously, the auto-configuration for both Jersey and WebMvc would auto-configure
+a RequestContextFilter bean. In 2.1.0, this led to a startup failure due to the latter
+attempting to override the bean defined by the former. In addition to the override there
+were also problems with the order of the filter as Jersey uses -1 and MVC uses -105.
+
+To avoid the above-described problems, the auto-configuration of the RequestContextFilter
+was removed from JerseyAutoConfiguration in 2.1.1. Unfortunately, the broke
+request-scoped beans for those using only Jersey.
+
+This commit attempts to strike a better balance by reintroducing the auto-configuration
+of RequestContextFilter in JerseyAutoConfiguration. It will back off if the user defines
+their own filter or filter registration. WebMvcAutoConfiguration has been updated to
+back off in the same manner. This leaves the potential for ordering problems, but they
+are no worse than they were before. Furthermore, the user has the means to correct any
+problems by using the various filter ordering properties that are provided for Jersey,
+Spring Session, Spring Security, etc.
+
+Closes gh-15376

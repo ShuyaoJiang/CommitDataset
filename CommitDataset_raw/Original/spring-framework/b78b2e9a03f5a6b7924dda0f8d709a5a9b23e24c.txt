@@ -1,0 +1,11 @@
+Fix priority semantic
+
+Commit 5fe8f52 introduced a support for @Priority as an alternative to
+@Primary but it broke the semantic of the priority value. This commit
+fixes this inconsistency.
+
+As for @Order, the lowest value means the highest priority so if
+several beans are candidates for injection, the one having the lowest
+value will be used.
+
+Issue: SPR-10548

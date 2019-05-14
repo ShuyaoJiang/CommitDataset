@@ -1,0 +1,7 @@
+TEST: Avoid triggering merges in FlushIT
+
+In testSyncedFlushSkipOutOfSyncReplicas, we reindex the extra documents
+to all shards including the out-of-sync replica. However, reindexing to
+that replica can trigger merges (due to the new deletes) which cause the
+synced-flush failed. This test starts failing after we aggressively
+trigger merges segments with a large number of deletes in LUCENE-8263.

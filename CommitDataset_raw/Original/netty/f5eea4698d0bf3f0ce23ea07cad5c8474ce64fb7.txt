@@ -1,0 +1,13 @@
+Fix possible NPE in HttpCunkedInput if wrapped ChunkedInput.readChunk(...) return null.
+
+Motivation:
+
+Its completly fine for ChunkedInput.readChunk(...) to return null to indicate there is currently not any data to read. We need to handle this in HttpChunkedInput to not produce a NPE when constructing the HttpContent.
+
+Modifications:
+
+If readChunk(...) return null just return null as well.
+
+Result:
+
+No more NPE.

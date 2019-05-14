@@ -1,0 +1,10 @@
+HTTP/2 support pending data larger than Integer.MAX_VALUE
+
+Motivation:
+Currently the remote flow controller limits the maximum amount of pending data to Integer.MAX_VALUE. The overflow handling is also not very graceful in that it may lead to infinite loops, or otherwise no progress being made.
+
+Modifications:
+- StreamByteDistributor and RemoteFlowController should support pending bytes of type long.
+
+Result:
+Fixes https://github.com/netty/netty/issues/4283

@@ -1,0 +1,31 @@
+Including the setup code in the benchmark method to avoid JMH Invocation level hiccups.
+
+Motivation:
+
+The usage of Invocation level for JMH fixture methods (setup/teardown) inccurs in a significant impact in
+in the benchmark time (see org.openjdk.jmh.annotations.Level documentation).
+
+When the benchmark and the setup/teardown is too small (less than a milisecond) the Invocation level might saturate the system with
+timestamp requests and iteration synchronizations which introduce artificial latency, throughput, and scalability bottlenecks.
+
+In the HeadersBenchmark, all benchmarks take less than 100ns and the Invocation level setup offsets the measurement considerably.
+As fixture methods is defined for the entire class, this overhead also impacts every single benchmark in this class, not only
+the ones that use the emptyHttpHeaders object (cleaned in the setup).
+
+The recommended fix patch here is to include the setup/teardown code in the benchmark where the object is used.
+
+Modifications:
+
+Include the setup/teardown code in the relevant benchmark methods.
+Remove the setup/teardown method of Invocation level from the benchmark class.
+
+Result:
+
+We run all benchmarks from HeadersBenchmark 10 times with default parameter, we observe:
+- Benchmarks that were not directly affected by the fix patch, improved execution time.
+    For instance, http2Remove with (exampleHeader = THREE) had its median reported as 2x faster than the original version.
+- Benchmarks that had the setup code inserted (eg. http2AddAllFastest) did not suffer a significant punch in the execution time,
+as the benchmarks are not dominated by the clear().
+
+Environment:
+Tests run on a Computational server with CPU: E5-1660-3.3GHZ  (6 cores + HT), 64 GB RAM.

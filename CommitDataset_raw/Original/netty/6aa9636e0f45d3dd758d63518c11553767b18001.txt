@@ -1,0 +1,16 @@
+Remove the verbose:gc flag from the build
+
+Motivation:
+
+When a faulty never-ending test keeps producing a lot of garbage doing
+nothing but generating CPU load, our CI fails to detect the stalled
+build, because it determines the 'inactivity time' from console
+activity and GC keeps producing console output.
+
+Modifications:
+
+Remove the -verbose:gc flag from pom.xml
+
+Result:
+
+Stalled builds are terminated by our CI server.

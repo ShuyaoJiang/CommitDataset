@@ -1,0 +1,297 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.channel:  
+
+1.1. Add a class for channel handler adapter. It allows to:
+
+	Ensure channel handler adapter not sharable;
+	Check if channel handler adapter is sharable;
+	Handle handler added;
+	Handle handler removed;
+	Handle exception caught
+
+1.2. Add an interface declaration  for channel inbound handler. It allows to:
+
+	Registered ctx channel handler context;
+	Channel unregistered;
+	Channel active;
+	Channel inactive;
+	Channel read;
+	Handle channel read complete;
+	Handle user event triggered;
+	Channel writability changed;
+	Handle exception caught
+
+1.3. Add a class for channel inbound handler adapter. It allows to:
+
+	Registered ctx channel handler context;
+	Channel unregistered;
+	Channel active;
+	Channel inactive;
+	Channel read;
+	Handle channel read complete;
+	Handle user event triggered;
+	Channel writability changed;
+	Handle exception caught
+
+1.4. Add an interface declaration  for channel inbound invoker. It allows to:
+
+	Handle fire channel registered;
+	Get fire channel unregistered;
+	Get fire channel active;
+	Get fire channel inactive;
+	Handle fire exception caught;
+	Handle fire user event triggered;
+	Handle fire channel read;
+	Get fire channel read complete;
+	Handle fire channel writability changed
+
+1.5. Add a class for channel initializer. It allows to:
+
+	Handle init channel;
+	Registered ctx channel handler context;
+	Handle exception caught;
+	Handle handler added;
+	Handle handler removed;
+	Remove state;
+	Run
+
+1.6. Add a class for channel option. It allows to:
+
+	Handle new constant;
+	Get value of;
+	Check if channel option exists;
+	Handle new instance;
+	Instantiate channel option;
+	Validate value
+
+1.7. Add an interface declaration  for channel outbound handler. It allows to:
+
+	Handle bind;
+	Connect ctx channel handler context;
+	Disconnect ctx channel handler context;
+	Close channel outbound handler;
+	Deregister ctx channel handler context;
+	Read ctx channel handler context;
+	Write ctx channel handler context;
+	Handle flush
+
+1.8. Add a class for channel outbound handler adapter. It allows to:
+
+	Handle bind;
+	Connect ctx channel handler context;
+	Disconnect ctx channel handler context;
+	Close channel outbound handler adapter;
+	Deregister ctx channel handler context;
+	Read ctx channel handler context;
+	Write ctx channel handler context;
+	Handle flush
+
+1.9. Add an interface declaration  for channel outbound invoker. It allows to:
+
+	Get bind;
+	Connect remote address;
+	Disconnect channel outbound invoker;
+	Close channel outbound invoker;
+	Deregister channel outbound invoker;
+	Disconnect channel promise;
+	Deregister channel promise;
+	Read channel outbound invoker;
+	Write channel outbound invoker;
+	Write channel promise;
+	Handle flush;
+	Handle new promise;
+	Handle new progressive promise;
+	Handle new succeeded future;
+	Handle new failed future;
+	Void promise
+
+1.10. Add an interface declaration  for event loop. It allows to:
+
+	Get parent
+
+1.11. Add a class for event loop exception. It allows to:
+
+	Instantiate event loop exception;
+	Instantiate event loop exception  with cause throwable;
+
+2. Changes to package io.netty.channel.group:  
+
+2. Changes to package io.netty.channel.local:  
+
+2. Changes to package io.netty.channel.sctp:  
+
+2. Changes to package io.netty.channel.socket:  
+
+2. Changes to package io.netty.example.discard:  
+
+2. Changes to package io.netty.example.echo:  
+
+2. Changes to package io.netty.example.factorial:  
+
+2. Changes to package io.netty.example.http.file:  
+
+2. Changes to package io.netty.example.http.snoop:  
+
+2. Changes to package io.netty.example.http.upload:  
+
+2. Changes to package io.netty.example.http.websocketx.client:  
+
+2. Changes to package io.netty.example.http.websocketx.server:  
+
+2. Changes to package io.netty.example.objectecho:  
+
+2. Changes to package io.netty.example.portunification:  
+
+2. Changes to package io.netty.example.proxy:  
+
+2. Changes to package io.netty.example.qotm:  
+
+2. Changes to package io.netty.example.redis:  
+
+2. Changes to package io.netty.example.securechat:  
+
+2. Changes to package io.netty.example.telnet:  
+
+2. Changes to package io.netty.example.uptime:  
+
+2. Changes to package io.netty.handler.codec:  
+
+2.1. Add a class for codec exception. It allows to:
+
+	Instantiate codec exception;
+	Instantiate codec exception  with cause throwable;
+
+2.2. Add a class for corrupted frame exception. It allows to:
+
+	Instantiate corrupted frame exception;
+	Instantiate corrupted frame exception  with cause throwable;
+
+2.3. Add a class for decoder exception. It allows to:
+
+	Instantiate decoder exception;
+	Instantiate decoder exception  with cause throwable;
+
+2.4. Rename type DelimiterBasedFrameDecoder with DelimiterBasedFrameDecoder
+
+2.5. Rename type Delimiters with Delimiters
+
+2.6. Add a class for encoder exception. It allows to:
+
+	Instantiate encoder exception;
+	Instantiate encoder exception  with cause throwable;
+
+2.7. Add a class for fixed length frame decoder. It allows to:
+
+	Instantiate fixed length frame decoder;
+	Decode ctx channel handler context;
+
+2.8. Rename type LengthFieldBasedFrameDecoder with LengthFieldBasedFrameDecoder
+
+2.9. Add a class for length field prepender. It allows to:
+
+	Instantiate length field prepender;
+	Instantiate length field prepender  with byte order;
+	Encode ctx channel handler context
+
+2.10. Add a class for message to message codec. It allows to:
+
+	Accept outbound message;
+	Encode ctx channel handler context;
+	Accept inbound message;
+	Decode ctx channel handler context;
+	Instantiate message to message codec;
+	Instantiate message to message codec  with inbound message type class, outbound message type class and outbound message type class;
+	Channel read;
+	Write ctx channel handler context;
+
+2.11. Add a class for message to message decoder. It allows to:
+
+	Instantiate message to message decoder;
+	Instantiate message to message decoder  with inbound message type class;
+	Accept inbound message;
+	Channel read;
+	Decode ctx channel handler context
+
+2.12. Add a class for message to message encoder. It allows to:
+
+	Instantiate message to message encoder;
+	Instantiate message to message encoder  with outbound message type class;
+	Accept outbound message;
+	Write ctx channel handler context;
+	Write void promise;
+	Write promise combiner;
+	Encode ctx channel handler context
+
+2.13. Add a class for replaying decoder. It allows to:
+
+	Instantiate replaying decoder;
+	Instantiate replaying decoder  with initial state;
+	Handle checkpoint;
+	Get state;
+	Channel input closed;
+	Call decode
+
+2.14. Rename type TooLongFrameException with TooLongFrameException
+
+2.15. Add a class for unsupported message type exception. It allows to:
+
+	Instantiate unsupported message type exception  with expected types class;
+	Instantiate unsupported message type exception;
+	Instantiate unsupported message type exception  with cause throwable;
+	Get message
+
+3. Changes to package io.netty.handler.codec.base64:  
+
+3. Changes to package io.netty.handler.codec.bytes:  
+
+3. Changes to package io.netty.handler.codec.compression:  
+
+3. Changes to package io.netty.handler.codec.frame:  
+
+3. Changes to package io.netty.handler.codec.http:  
+
+3. Changes to package io.netty.handler.codec.http.websocketx:  
+
+3. Changes to package io.netty.handler.codec.protobuf:  
+
+3. Changes to package io.netty.handler.codec.rtsp:  
+
+3. Changes to package io.netty.handler.codec.serialization:  
+
+3. Changes to package io.netty.handler.codec.spdy:  
+
+3. Changes to package io.netty.handler.codec.string:  
+
+3. Changes to package io.netty.handler.logging:  
+
+3. Changes to package io.netty.handler.timeout:  
+
+3. Changes to package io.netty.util:  
+
+3.1. Add an interface declaration  for attribute. It allows to:
+
+	Handle key;
+	Get attribute;
+	Set value;
+	Get value;
+	Set value if absent;
+	Compare old value;
+	Remove attribute
+
+3.2. Add a class for attribute key. It allows to:
+
+	Handle new constant;
+	Get value of;
+	Check if attribute key exists;
+	Handle new instance;
+	Instantiate attribute key
+
+3.3. Add an interface declaration  for attribute map. It allows to:
+
+	Process attribute map attribute map attr;
+	Check if attribute map has attr
+

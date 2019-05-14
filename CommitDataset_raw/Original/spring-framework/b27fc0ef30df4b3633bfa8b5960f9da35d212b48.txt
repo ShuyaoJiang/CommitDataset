@@ -1,0 +1,9 @@
+Do not use Servlet 3.0 API in doOptions()
+
+Refactor FrameworkServlet.doOptions() to capture the "Allow" header
+by using a HttpServletResponseWrapper.
+
+Prior to this commit the HttpServletResponse.getHeader() method was
+used which is only available in Servlet 3.0 environments.
+
+Issue: SPR-10341

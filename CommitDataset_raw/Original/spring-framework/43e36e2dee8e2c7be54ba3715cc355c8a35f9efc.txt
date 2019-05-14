@@ -1,0 +1,19 @@
+Improve DateHeaders in MockServletRequest/Response
+
+Prior to this change, calling the `setDateHeader` method on a
+Spring Test MockHttpServletResponse instance would just store the given
+long value in a Map, not writing it as a formatted date String.
+Also, calling `getDateHeader` on a MockHttpServletRequest would not
+support date strings and could not parse those values.
+
+This can be problematic when testing features related to date headers
+such as "Expires", "If-Modified-Since", "Last-Modified", etc.
+
+This commit adds formatting and parsing capabilities to Servlet Mocks
+for date strings in HTTP headers.
+
+When formatting dates to Strings, the date format used is the one
+preferred by the HTTP RFC. When parsing date Strings, multiple date
+formats are supported for better compatibility.
+
+Issue: SPR-11912

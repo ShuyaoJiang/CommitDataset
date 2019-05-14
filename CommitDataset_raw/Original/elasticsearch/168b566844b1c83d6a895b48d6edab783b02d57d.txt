@@ -1,0 +1,16 @@
+[ML] Allow closing a job that is restoring state (elastic/x-pack-elasticsearch#1746)
+
+This change enables closing a job while it is in
+the middle of restoring its state. This is has the
+benefit of allowing users to close jobs that due to
+relocation are `opened` but they are still restoring
+state. It also helps avoiding race conditions in tests.
+
+Part of this change also includes restoring the state
+as a separate step from the process creation. This means
+we no longer block the job map while the process is
+restoring its state.
+
+relates elastic/x-pack-elasticsearch#1270
+
+Original commit: elastic/x-pack-elasticsearch@1713a4a7c4a6c458fad65d497483babc54db7218

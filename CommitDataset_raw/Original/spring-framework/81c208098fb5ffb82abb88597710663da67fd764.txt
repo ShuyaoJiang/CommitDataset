@@ -1,0 +1,20 @@
+Custom KeyGenerator
+
+This commit adds an extra parameter to the base @Cache method
+annotations: keyGenerator. This parameter holds the name of the
+KeyGenerator bean to use to compute the key for that specific
+caching endpoint.
+
+This gives therefore a third way to customize the key. These are:
+1. Default KeyGenerator (global for all endpoints)
+2. The 'key' attribute of the annotation, giving the SpEL expression to use
+3. The 'keyGenerator' attribute of the annotation
+
+The annotation attributes are therefore exclusive. Trying to specify
+them both will result in an IllegalStateException.
+
+The KeyGenerator to use for a given operation is cached on startup
+so that multiple calls to it does not resolve the instance to use over and
+over again.
+
+Issue: SPR-10629

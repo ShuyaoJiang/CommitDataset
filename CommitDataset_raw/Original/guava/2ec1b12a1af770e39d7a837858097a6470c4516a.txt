@@ -1,0 +1,8 @@
+Make common.reflect build and pass tests against both Java 7 and Java 8.
+
+In particular, Java 7 had both the TypeVariable and AnnotatedElement interfaces, which were unrelated.  In Java 8, TypeVariable extends AnnotatedElement, and gained a method getAnnotatedBounds(), returning an AnnotatedType[], where AnnotatedType was an interface introduced in Java 8.
+
+We now have TypeVariableImpl extend a class NotAnnotatedElement, which provides an implementation for AnnotatedElement where no annotations are present, and throw UnsupportedOperationException on TypeVariableImpl.getAnnotatedBounds().
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=64659484

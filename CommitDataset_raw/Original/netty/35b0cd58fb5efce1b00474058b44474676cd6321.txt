@@ -1,0 +1,11 @@
+HTTP/2 write of released buffer should not write and should fail the promise
+
+Motivation:
+HTTP/2 allows writes of 0 length data frames. However in some cases EMPTY_BUFFER is used instead of the actual buffer that was written. This may mask writes of released buffers or otherwise invalid buffer objects. It is also possible that if the buffer is invalid AbstractCoalescingBufferQueue will not release the aggregated buffer nor fail the associated promise.
+
+Modifications:
+- DefaultHttp2FrameCodec should take care to fail the promise, even if releasing the data throws
+- AbstractCoalescingBufferQueue should release any aggregated data and fail the associated promise if something goes wrong during aggregation
+
+Result:
+More correct handling of invalid buffers in HTTP/2 code.

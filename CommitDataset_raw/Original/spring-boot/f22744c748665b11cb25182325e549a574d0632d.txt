@@ -1,0 +1,12 @@
+Add support for TransactionManagerCustomizers
+
+Add a `TransactionManagerCustomizer` callback interface that can be
+used to customize auto-configured `PlatformTransactionManagers`.
+
+Also update `...transaction.*` properties under a single unified
+`spring.transaction...` key since the existing auto-configurations
+would often share a transaction manager (the technology specific
+transaction managers are `@ConditionalOnMissingBean` and may use
+a manager created by a previous auto-configuration).
+
+See gh-7561

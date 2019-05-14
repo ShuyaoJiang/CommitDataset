@@ -1,0 +1,16 @@
+Add support for ExtensionRegistryLite in ProtobufDecoder
+
+Motivation:
+
+ExtensionRegistry is a subclass of ExtensionRegistryLite.  The ProtobufDecoder
+doesn't use the registry directly, it simply passes it through to the Protobuf
+API.  The Protobuf calls in question are themselves written in terms
+ExtensionRegistryLite not ExtensionRegistry.
+
+Modifications:
+
+Require ExtensionRegistryLite instead of ExtensionRegistry in ProtobufDecoder.
+
+Result:
+
+Consumers can use ExtensionRegistryLite with ProtobufDecoder.

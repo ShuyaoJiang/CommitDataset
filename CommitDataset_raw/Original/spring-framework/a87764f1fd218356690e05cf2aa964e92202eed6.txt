@@ -1,0 +1,12 @@
+Add support for Jetty Reactive Streams HTTP client
+
+Leverage https://github.com/jetty-project/jetty-reactive-httpclient
+to add support for Jetty in WebClient via JettyClientHttpConnector.
+
+Implemented with buffer copy instead of optimized buffer wrapping
+because the latter hangs since Callback#succeeded doesn't allow
+releasing the buffer and requesting more data at different times
+(required for Mono<DataBuffer> for example).
+See https://github.com/eclipse/jetty.project/issues/2429.
+
+Issue: SPR-15092

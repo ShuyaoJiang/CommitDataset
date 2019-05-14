@@ -1,0 +1,10 @@
+Http2ConnectionHandler not flushing on writabilityChange
+
+Motivation:
+The Http2ConnectionHandler was writing pending bytes, but was not flushing. This may result in deadlock.
+
+Modifications:
+- Http2ConnectionHandler must writePendingBytes and also flush.
+
+Result:
+Data is now flushed after writabilityChange writes more data to underlying layers.

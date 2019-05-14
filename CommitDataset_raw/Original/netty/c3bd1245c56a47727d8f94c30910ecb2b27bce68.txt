@@ -1,0 +1,15 @@
+SocksCommonUtils cleanup
+
+Motivation:
+
+1. Internal class `SocksCommonUtils` contains a method `intToIp` that also exists in the `NetUtil`.
+2. A `SocksCommonUtils#ipv6toCompressedForm` is never used.
+
+Modifications:
+
+1. Replace `intToIp` method usage with `NetUtil#intToIpAddress`.
+2. Remove unused methods from `SocksCommonUtils`.
+
+Result:
+
+Less code for supports.

@@ -1,0 +1,10 @@
+Catch exception while clearing TCP conn to broker
+
+When a DISCONNECT is sent to the broker, we proactively close the TCP
+connection unless the DISCONNECT has a receipt header. Depending on
+the timing, the broker may also close the connection on its side.
+That appears to cause an exception in reactor on the CI server, e.g.:
+
+https://build.spring.io/browse/SPR-PUB-JOB1-1715/test/case/135247530
+
+This change traps the exceptions and prevents it from propagating.

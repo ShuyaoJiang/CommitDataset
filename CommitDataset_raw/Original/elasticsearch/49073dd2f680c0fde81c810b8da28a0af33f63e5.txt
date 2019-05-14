@@ -1,0 +1,8 @@
+Fail start on invalid index metadata (#37748)
+
+Node started with node.data=false and node.master=false can no longer
+start if they have index metadata. This avoids resurrecting old indexes
+into the cluster and ensures metadata is cleaned out before
+re-purposing a node that was previously master or data node.
+
+Issue #27073

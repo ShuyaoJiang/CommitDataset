@@ -1,0 +1,12 @@
+Use soft deletes to maintain doc history (#29549)
+
+Today we can use the soft-deletes feature from Lucene to maintain a
+history of a document. This change simply replaces hard-deletes by
+soft-deletes in Engine.
+
+Besides marking a document as deleted, we also index a tombstone
+associated with that delete operation. Storing delete tombstones allows
+us to have a history of sequence-based operations which can serve in
+recovery or rollback.
+
+Relates #29530

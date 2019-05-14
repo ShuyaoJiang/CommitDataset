@@ -1,0 +1,7 @@
+Avoid short circuiting when removing requests in RequestTracker
+
+Requests can be in both requests and pendingRequests. If we remove the
+request from requests and the request is in pendingRequests, the item is
+not removed from pendingRequests. If we attempt to clear the Request a
+second time it will be found in pendingRequests and will be recycled a
+second time, causing a crash.

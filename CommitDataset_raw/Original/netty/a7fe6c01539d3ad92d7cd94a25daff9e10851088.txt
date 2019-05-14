@@ -1,0 +1,13 @@
+Metrics exposed by PooledByteBufAllocator needs to be correctly synchronized
+
+Motivation:
+
+As we may access the metrics exposed of PooledByteBufAllocator from another thread then the allocations happen we need to ensure we synchronize on the PoolArena to ensure correct visibility.
+
+Modifications:
+
+Synchronize on the PoolArena to ensure correct visibility.
+
+Result:
+
+Fix multi-thread issues on the metrics

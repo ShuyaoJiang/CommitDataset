@@ -1,0 +1,10 @@
+Fix the leak in the WebSocketClientProtocolHandshakeHandler
+
+Motivation:
+The WebSocketClientProtocolHandshakeHandler never releases the received handshake response.
+
+Modification:
+Release the message in a finally block.
+
+Result:
+No more leak

@@ -1,0 +1,30 @@
+Fix a bug where Recycler's capacity can increase beyond its maximum
+
+Related: #3166
+
+Motivation:
+
+When the recyclable object created at one thread is returned at the
+other thread, it is stored in a WeakOrderedQueue.
+
+The objects stored in the WeakOrderedQueue is added back to the stack by
+WeakOrderedQueue.transfer() when the owner thread ran out of recyclable
+objects.
+
+However, WeakOrderedQueue.transfer() does not have any mechanism that
+prevents the stack from growing beyond its maximum capacity.
+
+Modifications:
+
+- Make WeakOrderedQueue.transfer() increase the capacity of the stack
+  only up to its maximum
+- Add tests for the cases where the recyclable object is returned at the
+  non-owner thread
+- Fix a bug where Stack.scavengeSome() does not scavenge the objects
+  when it's the first time it ran out of objects and thus its cursor is
+  null.
+- Overall clean-up of scavengeSome() and transfer()
+
+Result:
+
+The capacity of Stack never increases beyond its maximum.

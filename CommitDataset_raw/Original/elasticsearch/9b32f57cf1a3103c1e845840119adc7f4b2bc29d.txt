@@ -1,0 +1,7 @@
+Update jdk used by the docker builds (#37621)
+
+With the release of 11.0.2, the old URLs no longer work. This exposed a
+few small bugs in the gradle config. One was that --no-cache was not
+present in the docker build command, so it was not failing at
+first. Then once only the ext.expansions was changed and the docker
+build task was not, it was not executing it.

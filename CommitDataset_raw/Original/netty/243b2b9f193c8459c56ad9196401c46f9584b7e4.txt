@@ -1,0 +1,14 @@
+PooledByteBufAllocatorTest may has memory visiblity issues as it uses non concurrent queue
+
+Motivation:
+
+PooledByteBufAllocatorTest uses an ArrayQueue but access it from multiple threads (not concurrently but still from different threads). This may leak to memory visibility issues.
+
+Modifications:
+
+- Use a concurrent queue
+- Some cleanup
+
+Result:
+
+Non racy test code.

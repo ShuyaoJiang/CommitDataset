@@ -1,0 +1,22 @@
+Extends HttpPostRequestEncoder to support all methods except TRACE
+
+Motivation:
+
+In Netty, currently, the HttpPostRequestEncoder only supports POST, PUT, PATCH and OPTIONS, while the RFC 7231 allows with a warning that GET, HEAD, DELETE and CONNECT use a body too (but not TRACE where it is explicitely not allowed).
+The RFC in chapter 4.3 says:
+"A payload within a XXX request message has no defined semantics;
+sending a payload body on a XXX request might cause some existing
+implementations to reject the request."
+where XXX can be replaced by one of GET, HEAD, DELETE or CONNECT.
+
+Current usages, on particular in REST mode, tend to use those extra HttpMethods for such queries.
+
+So this PR proposes to remove the current restrictions, leaving only TRACE as explicitely not supported.
+
+Modification:
+
+In the constructor, where the test is done, replacing all by checking only against TRACE, and adding one test to check that all methods are supported or not.
+
+Result:
+
+Fixes #6138.

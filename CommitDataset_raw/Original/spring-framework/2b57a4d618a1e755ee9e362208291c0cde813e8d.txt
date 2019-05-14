@@ -1,0 +1,18 @@
+Add WebApplicationInitializers for Web Reactive
+
+This commit introduces three new WebApplicationInitializers for use with
+Spring Web Reactive:
+
+ - The AbstractServletHttpHandlerAdapterInitializer registers a
+ ServletHttpHandlerAdapter that wraps a user-provided HttpHandler.
+
+ - The AbstractDispatcherHandlerInitializer registers a
+ ServletHttpHandlerAdapter that wraps a DispatcherHandler (or any
+ WebHandler). The handler is provided with an application context.
+
+ - The AbstractAnnotationConfigDispatcherHandlerInitializer is a
+ subclass of the above, creating an
+ AnnotationConfigApplicationContext based no provided @Configuration
+ classes.
+
+Issue: SPR-14713

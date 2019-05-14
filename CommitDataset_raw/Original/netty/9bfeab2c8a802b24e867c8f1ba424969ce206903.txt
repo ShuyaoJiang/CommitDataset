@@ -1,0 +1,11 @@
+AbstractBootstrap can crash instead of failing promise, close #5387
+
+Motivation:
+When `ChannelFactory#newChannel` crashed, `AbstractBootstrap#initAndRegister` propagates the exception to the caller instead of failing the promise.
+
+Modifications:
+- Catch exceptions from `ChannelFactory#newChannel`.
+- Notify promise of such failure.
+
+Result:
+`AbstractBootstrap` gracefully handles connect failures.

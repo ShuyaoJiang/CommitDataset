@@ -1,0 +1,13 @@
+Always consume bytes for closed HTTP/2 streams.
+
+Motivation:
+
+The current local flow controller does not guarantee that unconsumed bytes for a closed stream will be restored to the connection window.  This may lead to degradation of the connection window over time.
+
+Modifications:
+
+Modified DefaultHttp2LocalFlowController to guarantee that any unconsumed bytes are returned to the connection window as soon as the stream is closed. We also immediately consume any bytes when receiving DATA for a closed stream.
+
+Result:
+
+Fixes #3668

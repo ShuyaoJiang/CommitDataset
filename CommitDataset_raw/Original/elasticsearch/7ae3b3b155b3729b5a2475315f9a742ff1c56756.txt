@@ -1,0 +1,18 @@
+Move repository-s3 fixture tests to QA test project (#29372)
+
+This commit moves the repository-s3 fixture test added in #29296 in a
+new `repository-s3/qa/amazon-s3` project. This new project allows the
+REST integration tests to be executed using the real S3 service when
+all the required environment variables are provided. When no env var
+is provided, then the tests are executed using the fixture added
+in #29296.
+
+The REST tests located at the `repository-s3`plugin  project now only 
+verify that the plugin is correctly loaded.
+
+The REST tests have been adapted to allow a bucket name and a base 
+path to be specified as env vars. This way it is possible to run the tests
+with different base paths (could be anything, like a CI job name or a
+branch name) without multiplicating buckets.
+
+Related to #29349

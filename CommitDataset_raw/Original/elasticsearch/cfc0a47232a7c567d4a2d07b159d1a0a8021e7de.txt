@@ -1,0 +1,9 @@
+Core: Deprecate negative epoch timestamps (#36793)
+
+Negative timestamps are currently supported in joda time. These are
+dates before epoch. However, it doesn't really make sense to have a
+negative timestamp, since this is a modern format. Any dates before
+epoch can be represented with normal date formats, like ISO8601.
+Additionally, implementing negative epoch timestamp parsing in java time
+has an edge case which would more than double the code required. This
+commit deprecates use of negative epoch timestamps.

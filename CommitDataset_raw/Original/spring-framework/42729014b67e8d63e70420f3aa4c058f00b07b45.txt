@@ -1,0 +1,12 @@
+Move namespace tests to root integration module
+
+Prior to this change, spring-beans contained its own META-INF containing
+spring.handlers and spring.schemas files in src/main/resources; it also
+had files of the same name within src/test/resources/META-INF, causing
+'duplicate resource' warnings and confusion in general.
+
+This commit moves the com.foo test package, it's associated namespace
+parsing tests and test versions of META-INF files to the root project
+and it's src/test integration testing folder.
+
+Issue: SPR-9431

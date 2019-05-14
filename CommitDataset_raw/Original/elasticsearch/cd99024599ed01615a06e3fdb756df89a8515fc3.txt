@@ -1,0 +1,12 @@
+[ML] Validate job configs before transport (elastic/x-pack-elasticsearch#1375)
+
+If invalid job configs are transported to the master node then the root
+cause of the validation exception gets reported as a remote_transport_exception,
+which is extremely confusing.
+
+This commit moves the validation of job configurations to the first node that
+handles the action.
+
+Fixes elastic/x-pack-kibana#1172
+
+Original commit: elastic/x-pack-elasticsearch@5ed59d2a6f644724f39deb6649f5a3eda7616f98

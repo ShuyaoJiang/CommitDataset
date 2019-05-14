@@ -1,0 +1,13 @@
+Add 'io.netty.tryAllocateUninitializedArray' system property which allows to allocate byte[] without memset in Java9+
+
+Motivation:
+
+Java9 added a new method to Unsafe which allows to allocate a byte[] without memset it. This can have a massive impact in allocation times when the byte[] is big. This change allows to enable this when using Java9 with the io.netty.tryAllocateUninitializedArray property when running Java9+. Please note that you will need to open up the jdk.internal.misc package via '--add-opens java.base/jdk.internal.misc=ALL-UNNAMED' as well.
+
+Modifications:
+
+Allow to allocate byte[] without memset on Java9+
+
+Result:
+
+Better performance when allocate big heap buffers and using java9.

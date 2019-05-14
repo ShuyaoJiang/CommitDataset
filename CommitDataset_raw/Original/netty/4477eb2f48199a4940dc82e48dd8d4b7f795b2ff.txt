@@ -1,0 +1,16 @@
+Fix native library loading in Windows
+
+Motivation:
+
+Windows refuses to load a .DLL file when it's opened by other process.
+Recent modification in NativeLibraryLoader causes NativeLibraryLoader to
+attempt to load a .DLL before closing its OutputStream. As a result,
+loading a .DLL file in Windows always fails.
+
+Modifications:
+
+Close the OutputStream explicitly before loading a shared library.
+
+Result:
+
+Native library loading in Windows works again.

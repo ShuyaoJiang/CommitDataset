@@ -1,0 +1,11 @@
+Fix bug in weight computation for query cache
+
+When proportioning the shared RAM bytes across the shards of the query
+cache, there's a computation that shares these bytes according to the
+relative size of the shard cache to the total size of all the shard
+caches. This computation had a bug where integer division was performed
+instead which leads to this computation often being zero. This commit
+fixes this bug by casting the numerator to a double before doing the
+division so that double division is performed.
+
+Relates #24856

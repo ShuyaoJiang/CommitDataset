@@ -1,0 +1,13 @@
+Reflective setAccessible(true) will produce scary warnings on the console when using java9+, dont do it
+
+Motivation:
+
+Reflective setAccessible(true) will produce scary warnings on the console when using java9+, while netty still works. That said users may feel uncomfortable with these warnings, we should not try to do it by default when using java9+.
+
+Modifications:
+
+Add io.netty.tryReflectionSetAccessible  system property which controls if setAccessible(...) will be used. By default it will bet set to false when using java9+.
+
+Result:
+
+Fixes [#7254].

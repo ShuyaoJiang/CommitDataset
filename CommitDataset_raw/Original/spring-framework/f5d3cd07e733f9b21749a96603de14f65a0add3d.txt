@@ -1,0 +1,18 @@
+Avoid NPE when registering a SpEL MethodFilter
+
+Attempting to register a custom MethodFilter with a
+StandardEvaluationContext after invoking setMethodResolvers() with a
+custom list of MethodResolver instances results in a
+NullPointerException. Based on the current documentation in
+StandardEvaluationContext it is unclear what the expected behavior
+should be, but either the implementation is broken, or the use case is
+unsupported. In either case, allowing a NullPointerException to be
+thrown is inappropriate.
+
+This commit documents the fact that the SpEL MethodFilter is intended to
+be used with the ReflectiveMethodResolver. Furthermore,
+StandardEvaluationContext.registerMethodFilter() now throws an
+IllegalStateException if the user attempts to set a filter after having
+registered a custom set of resolvers.
+
+Issue: SPR-9621

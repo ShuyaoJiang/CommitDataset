@@ -1,0 +1,15 @@
+Fix CCR tests that manipulate transport requests
+
+We have some CCR tests where we use mock transport send rules to control
+the behavior that we desire in these tests. Namely, we want to simulate
+an exception being thrown on the leader side, or a variety of other
+situations. These send rules were put in place between the data nodes on
+each side. However, it might not be the case that these requests are
+being sent between data nodes. For example, a request that is handled on
+a non-data master node would not be sent from a data node. And it might
+not be the case that the request is sent to a data node, as it could be
+proxied through a non-data coordinating node. This commit addresses this
+by putting these send rules in places between all nodes on each side.
+
+Closes #39011
+Closes #39201

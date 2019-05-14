@@ -1,0 +1,9 @@
+SNAPSHOTS: Allow Parallel Restore Operations (#36397)
+
+* Enable parallel restore operations
+* Add uuid to restore in progress entries to uniquely identify them
+* Adjust restore in progress entries to be a map in cluster state
+* Added tests for:
+   * Parallel restore from two different snapshots
+   * Parallel restore from a single snapshot to different indices to test uuid identifiers are correctly used by `RestoreService` and routing allocator
+   * Parallel restore with waiting for completion to test transport actions correctly use uuid identifiers

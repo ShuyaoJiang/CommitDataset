@@ -1,0 +1,11 @@
+Source-incompatible: ResponseBody methods throw IOException
+
+This is a binary-compatible change, but code that currently calls
+ResponseBody [contentLength()|byteStream()|source()|charStream()]
+that doesn't necessarily catch or declare IOException will need
+to with this change.
+
+These methods could be performing I/O (opening streams, etc.).
+Throwing IOException seems reasonable in this case.
+
+contentType() and charset() have not been changed.

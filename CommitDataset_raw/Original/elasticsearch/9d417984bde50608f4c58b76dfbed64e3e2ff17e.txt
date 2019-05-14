@@ -1,0 +1,21 @@
+[Zen2] Add warning if cluster fails to form fast enough (#35993)
+
+* Add warning if cluster fails to form fast enough
+
+Today if a leader is not discovered or elected then nodes are essentially
+silent at INFO and above, and log copiously at DEBUG and below. A short delay
+when electing a leader is not unusual, for instance if other nodes have not yet
+started, but a persistent failure to elect a leader is a problem worthy of log
+messages in the default configuration.
+
+With this change, while there is no leader each node outputs a WARN-level log
+message every 10 seconds (by default) indicating as such, describing the
+current discovery state and the current quorum(s).
+
+* Add note about whether the discovered nodes form a quorum or not
+
+* Introduce separate ClusterFormationFailureHelper
+
+... and back out the unnecessary changes elsewhere
+
+* It can be volatile

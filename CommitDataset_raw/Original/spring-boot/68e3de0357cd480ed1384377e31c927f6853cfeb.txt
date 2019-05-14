@@ -1,0 +1,15 @@
+Use name from header not alias when checking entry has expected name
+
+Previously, an entry’s potentially aliased name would be used when
+checking that it has a particular name. The alias would always be
+applied, irrespective of the name in the header. As a result, when
+there was a clashing hash and an entry with a particular index did
+not have the expected name, this would be concealed by the alias
+being applied and the name check being done with the alias.
+
+This commit reworks JarEntry to store the name in its header in
+addition to its alias, if any. When checking that the entry has the
+expected name, the unaliased name is passed in and the entry compares
+it with the name from the header rather than the alias.
+
+Closes gh-15981

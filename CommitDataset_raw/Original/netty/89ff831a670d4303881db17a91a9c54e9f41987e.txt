@@ -1,0 +1,13 @@
+[#4449] Remove registered events from eventloop before close
+
+Motivation:
+
+We need to remove all registered events for a Channel from the EventLoop before doing the actual close to ensure we not produce a cpu spin when the actual close operation is delayed or executed outside of the EventLoop.
+
+Modifications:
+
+Deregister for events for NIO and EPOLL socket implementations when SO_LINGER is used.
+
+Result:
+
+No more cpu spin.

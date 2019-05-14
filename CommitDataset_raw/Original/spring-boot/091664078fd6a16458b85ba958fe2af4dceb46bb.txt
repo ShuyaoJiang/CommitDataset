@@ -1,0 +1,20 @@
+Split up DispatcherServletConfiguration condition
+
+Prior to this commit, defining a custom `DispatcherServlet` and/or a
+`ServletRegistrationBean` with the default name would turn off
+completely the `DispatcherServletAutoConfiguration`.
+
+This commit splits this auto-configuration in two parts:
+
+- First, a `DispatcherServlet` is automatically registered if no
+instance is already defined with the default name.
+- Then, a `ServletRegistrationBean` is registered is registered if a
+`DispatcherServlet` instance exists with the default name *and* no
+`ServletRegistrationBean` exists with the default name
+
+This allows developers to register manually a `ServletRegistrationBean`
+or a `DispatcherServlet` without having to redefine the whole
+auto-configuration.
+
+Fixes gh-4893
+Closes gh-6108

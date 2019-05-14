@@ -1,0 +1,9 @@
+Implement basic `CcrRepository` restore (#36287)
+
+This is related to #35975. It implements a basic restore functionality
+for the CcrRepository. When the restore process is kicked off, it
+configures the new index as expected for a follower index. This means
+that the index has a different uuid, the version is not incremented, and
+the Ccr metadata is installed.
+
+When the restore shard method is called, an empty shard is initialized.

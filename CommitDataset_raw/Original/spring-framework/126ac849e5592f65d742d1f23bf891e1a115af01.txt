@@ -1,0 +1,26 @@
+Fix behavior of ClientResponse#bodyTo** with Void
+
+Prior to this commit, asking for a `Void` type using any of the
+`ClientResponse#bodyTo*` methods would immediately return an empty
+`Publisher` without consuming the response body.
+
+Not doing so can lead to HTTP connection pool inconsistencies and/or
+memory leaks, since:
+
+* a connection that still has a response body being written to it cannot
+be properly recycled in the connection pool
+* incoming `DataBuffer` might not be released
+
+This commit detects when `Void` types are asked as body types and in
+those cases does the following:
+
+1. Subscribe to the response body `Publisher` to allow the connection to
+be returned to the connection pool
+2. `cancel()` the body `Publisher` if the response body is not empty; in
+that case, we choose to close the connection vs. consume the whole
+response body
+
+Those changes imply that `ClientHttpResponse` and other related
+contracts don't need a `close()` method anymore.
+
+Issue: SPR-16018

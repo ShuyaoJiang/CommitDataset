@@ -1,0 +1,10 @@
+Update the javadoc for the MutableGraph/Network interfaces. Update three things:
+
+1) Remove the reference to "optional operation". This was before the mutation methods were split out into Mutable* interfaces. Now that they are, the language doesn't really make sense - if an implementation didn't support it they just wouldn't implement the Mutable interface! jrtom@ mentioned the possibility of e.g. a MutableGraph that only supports adds but not removes. This is possible, but seems relatively unlikely, and it's not like this stops them from throwing UOE. I just don't think it's worth mentioning in the javadoc any more.
+
+2) Mention what the default behavior of addEdge() is. My coworker using graph for the first time was trying to figure it out, and was frustated because he had to dive into the implementing class logic to figure it out (and it wasn't particular easy). We should just state up front what we do.
+
+3) Make it clear when addEdge() will throw an IllegalArgumentException. We no longer have to add clarifying javadoc in the implementing classes.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=127449329

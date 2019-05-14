@@ -1,0 +1,13 @@
+Fix race in ChannelReadHandler used during LocalChannel testing. (#7904)
+
+Motivation:
+
+ChannelReadHandler is used in tests added via f4d7e8de140048047299808bb7e707c15342b826. In the handler we verify the number of messages we receive per read() call but missed to sometimes reset the counter which resulted in exceptions.
+
+Modifications:
+
+Correctly reset read counter in all cases.
+
+Result:
+
+No more unexpected exceptions when running LocalChannel tests.

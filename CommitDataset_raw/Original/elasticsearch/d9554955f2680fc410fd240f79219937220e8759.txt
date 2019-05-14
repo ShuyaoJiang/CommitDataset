@@ -1,0 +1,11 @@
+make tribe-node-license validation assume snapshot context (elastic/x-pack-elasticsearch#2589)
+
+Release tests were introduced that sets the `build.snapshot`
+system property to `false` to mimic release builds. This invalidates
+the hardcoded license signatures that were signed against the
+integration test pub/priv keys. This commit modifies the
+license-validation assertions to assume the test is running against
+those test keys, and will be skipped/ignored when these assertions
+fail (which should only occur with `build.snapshot=true`)
+
+Original commit: elastic/x-pack-elasticsearch@871704a3af79cfe09ffae312964b7265f40cdd61

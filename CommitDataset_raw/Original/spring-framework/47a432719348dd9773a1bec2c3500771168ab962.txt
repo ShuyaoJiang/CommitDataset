@@ -1,0 +1,32 @@
+Add JSR-107 cache annotations support
+
+This commit adds support for the JSR-107 cache annotations alongside
+the Spring's cache annotations, that is @CacheResult, @CachePut,
+@CacheRemove and @CacheRemoveAll as well as related annotations
+@CacheDefaults, @CacheKey and @CacheValue.
+
+Spring's caching configuration infrastructure detects the presence of
+the JSR-107 API and Spring's JCache implementation. Both
+@EnableCaching and the cache namespace are able to configure the
+required JCache infrastructure when necessary. Both proxy mode
+and AspectJ mode are supported.
+
+As JSR-107 permits the customization of the CacheResolver to use for
+both regular and exception caches, JCacheConfigurer has been
+introduced as an extension of CachingConfigurer and permits to define
+those.
+
+If an exception is cached and should be rethrown, it is cloned and
+the call stack is rewritten so that it matches the calling thread each
+time. If the exception cannot be cloned, the original exception is
+returned.
+
+Internally, the interceptors uses Spring's caching abstraction by default
+with an adapter layer when a JSR-107 component needs to be called.
+This is the case for CacheResolver and CacheKeyGenerator.
+
+The implementation uses Spring's CacheManager abstraction behind the
+scene. The standard annotations can therefore be used against any
+CacheManager implementation.
+
+Issue: SPR-9616

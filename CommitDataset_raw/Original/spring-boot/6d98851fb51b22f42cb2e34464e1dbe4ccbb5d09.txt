@@ -1,0 +1,14 @@
+Use Couchbase's DiagnosticsReport to determine its health
+
+Previously, Couchbase's health was determined by retrieving the bucket info
+from the cluster info. This retrieval could take over one minute in some
+cases even when Couchbase is health. This latency is too large for a health
+check.
+
+The Couchbase team have recommended the of a Cluster#diagnostics instead.
+This provides a much lower latency view of the cluster's health. This
+commit updates CouchbaseHealthIndicator to use Cluster#diagnostics while
+retaining support, in a deprecated form, for the old info-based mechanism
+should anyone want to opt back into that in 2.0.x.
+
+Closes gh-14685

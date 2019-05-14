@@ -1,0 +1,18 @@
+Do not throw an exception when failed to get a header
+
+Motivation:
+
+It is often very expensive to instantiate an exception. TextHeader
+should not raise an exception when it failed to find a header or when
+its header value is not valid.
+
+Modification:
+
+- Change the return type of the getter methods to Integer and Long so
+  that null is returned when no header is found or its value is invalid
+- Update Javadoc
+
+Result:
+
+- Fixes #2758
+- No unnecessary instantiation of exceptions

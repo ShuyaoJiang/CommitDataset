@@ -1,0 +1,10 @@
+Also mmap cfs files for hybridfs (#38940)
+
+With this commit we add the `.cfs` file extension to the list of file
+types that are memory-mapped by hybridfs. `.cfs` files combine all files
+of a Lucene segment into a single file in order to save file handles. As
+this strategy is only used for "small" segments (less than 10% of the
+shard size), it is benefical to memory-map them instead of accessing
+them via NIO.
+
+Relates #36668

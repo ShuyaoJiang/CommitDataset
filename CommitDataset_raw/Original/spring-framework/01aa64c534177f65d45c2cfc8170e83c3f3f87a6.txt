@@ -1,0 +1,13 @@
+Simple broker sends notice after disconnect
+
+Before this change the simple broker simply removed subscriptions
+upon receiving a DISCONNECT message assuming it was a result of
+a client STOMP WebSocket session ending.
+
+However, if the server-side application sends a DISCONNECT to
+the broker in order to terminate a session, the STOMP WebSocket
+session could remain unware without any further action. This
+change ensures the simple broker sends a DISCONNECT_ACK message
+downstream whenever it receives a DISCONNECT.
+
+Issue: SPR-12288

@@ -1,0 +1,28 @@
+Fully honour local repository location configured in settings.xml
+
+Previously, DefaultRepositorySystemSessionAutoConfiguration would
+read the local repository configuration from settings.xml, but did
+not perform any property interpolation. This would leave placeholders
+such as ${user.home} as-is and result in the use of the wrong
+location. To address this, the code that reads settings.xml has been
+updated to provide the current System properties as a property
+interpolation source.
+
+RepositoryConfigurationFactory configures the local repository as a
+"remote" repository when the local repository location has been
+overridden. This allows spring grab to copy dependencies from the
+local repository into the grab output location (configured via the
+grape.root system property) rather than having to download them again.
+This logic did not consider the customization of the local repository
+location via settings.xml so the dependencies would be downloaded again.
+To address this, RepositoryConfigurationFactory has been updated to
+attempt to use the location configured in settings.xml, before falling
+back to the default location.
+
+The logic that reads settings.xml has deliberately been duplicated. It
+could have been extracted into a separate class, but this is only a
+temporary measure until gh-3275 is tackled. Duplication was deemed
+preferable to adding a new public class in 1.2.x that we’d then want to
+remove in 1.3.
+
+Closes gh-3274

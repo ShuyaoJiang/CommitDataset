@@ -1,0 +1,24 @@
+Add EventExecutor.children() in favor of iterator()
+
+Motivation:
+
+EventExecutor.iterator() is fixed to return Iterator<EventExecutor> and there's no way to change that as long as we don't extend Iterable.  However, a user should have a way to cast the returned set of executors painlessly.  Currently, it is only possible with an explicit cast like (Iterator<NioEventLoop>).
+
+Modifications:
+
+Instead, I added a new method called 'children()' which returns an immutable collection of child executors whose method signature looks like the following:
+
+    <E extends EventExecutor> Set<E> children();
+
+Result:
+
+A user can now do this:
+
+    Set<NioEventLoop> loops = group.children();
+    for (NioEventLoop l: loops) { ... }
+
+Unfortunately, this is not possible:
+
+    for (NioEventLoop l: group.children()) { ... }
+
+However, it's still a gain that a user doesn't need to down-cast explicitly and to add the '@SuppressWarnings` annotation.

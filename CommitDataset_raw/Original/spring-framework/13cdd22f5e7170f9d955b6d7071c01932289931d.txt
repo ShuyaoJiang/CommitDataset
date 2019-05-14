@@ -1,0 +1,13 @@
+Sort handler matches in ResourceUrlProvider
+
+Prior to this change, the `ResourceUrlProvider.getForLookupPath` method
+would try to match handlers using the keySet order in the
+handlerMappings Map. In case of several matches, the handler used for
+the return value could vary, since the registration order in the
+handlerMappings can't be guaranteed in the configuration.
+
+This commit now collects all matching handlers and sort them using a
+`PatternComparator`, in order to try each handler from the most specific
+mapping to the least.
+
+Issue: SPR-12647

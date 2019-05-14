@@ -1,0 +1,21 @@
+Optimize SslHandler in an OpenSslEngine-friendly way
+
+Motivation:
+
+Previous fix for the OpenSslEngine compatibility issue (#2216 and
+18b0e95659c057b126653bad2f018a8ce5385255) was to feed SSL records one by
+one to OpenSslEngine.unwrap().  It is not optimal because it will result
+in more JNI calls.
+
+Modifications:
+
+- Do not feed SSL records one by one.
+- Feed as many records as possible up to MAX_ENCRYPTED_PACKET_LENGTH
+- Deduplicate MAX_ENCRYPTED_PACKET_LENGTH definitions
+
+Result:
+
+- No allocation of intemediary arrays
+- Reduced number of calls to SSLEngine and thus its underlying JNI calls
+- A tad bit increase in throughput, probably reverting the tiny drop
+  caused by 18b0e95659c057b126653bad2f018a8ce5385255

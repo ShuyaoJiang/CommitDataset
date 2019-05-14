@@ -1,0 +1,24 @@
+Separate endpoint concerns
+
+Update endpoint code to provide cleaner separation of concerns.
+Specifically, the top level endpoint package is no longer aware of
+the fact that JMX and HTTP are ultimately used to expose endpoints.
+Caching concerns have also been abstracted behind a general purpose
+`OperationMethodInvokerAdvisor` interface.
+
+Configuration properties have been refined to further enforce
+separation. The `management.endpoint.<name>` prefix provides
+configuration for a  single endpoint (including enable and cache
+time-to-live). These  properties are now technology agnostic (they
+don't include `web` or `jmx` sub properties).
+
+The `management.endpoints.<technology>` prefix provide exposure specific
+configuration. For example, `management.endpoints.web.path-mapping`
+allow endpoint URLs to be changed.
+
+Endpoint enabled/disabled logic has been simplified so that endpoints
+can't be disabled per exposure technology. Instead a filter based
+approach is used to allow refinement of what endpoints are exposed over
+a given technology.
+
+Fixes gh-10176

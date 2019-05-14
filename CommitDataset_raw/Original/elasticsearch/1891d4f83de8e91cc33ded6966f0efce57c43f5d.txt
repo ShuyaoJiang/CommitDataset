@@ -1,0 +1,9 @@
+Check presence of multi-types before validating new mapping (#29316)
+
+Before doing any kind of validation on a new mapping, we should first do the multi-type validation in
+order to provide better error messages. For #29313, this means that the exception message will be
+Rejecting mapping update to [range_index_new] as the final mapping would have more than 1 type:
+[_doc, mytype]
+instead of
+[expected_attendees] is defined as an object in mapping [mytype] but this name is already used for
+a field in other types

@@ -1,0 +1,13 @@
+Ensure that health endpoint remains insecure without Spring Security
+
+The changes made in 6a2ac080 mean that getSecurity() on
+ManagementServerProperties will no longer return null when Spring
+Security is on the classpath. This had the unwanted side-effect of
+causing the health endpoint to hide its details when Spring Security
+was not on the classpath.
+
+This commit reinstates the previous behaviour by only considering
+the health endpoint to be secure if Spring Security is on the
+classpath and management.security.enabled is true.
+
+Closes gh-7345

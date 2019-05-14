@@ -1,0 +1,13 @@
+Watcher: Fix NPE when search input did not contain search body (elastic/x-pack-elasticsearch#1736)
+
+This came up in a forum post. An NPE was raised, when a search input
+contained a search that did not contain a body, but just specified
+indices or types.
+
+This commit allows for empty bodies, and also makes sure there are
+no null pointer exceptions by using empty bytes references otherwise.
+
+In addition a suite scoped integration test was converted to a unit
+test.
+
+Original commit: elastic/x-pack-elasticsearch@29be2976fc5ae0e0a82a9bf0b697f8fc3f65ae0a

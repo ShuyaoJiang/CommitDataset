@@ -1,0 +1,13 @@
+Use explicit JDK versions in aspects.gradle
+
+Previously aspects.gradle used the Gradle conventions for the source
+and target compatibility. This means that unless the conventions were
+updated the current JDK would be used for both source and target
+compatibilty. Since an update to build.gradle changed to configure the
+compileJava and compileTestJava tasks explicitly spring-aspects has
+been compiled with JDK 7 compatibility.
+
+This commit explicitly uses the source and target compatibility from
+spring-core to ensure that aspects.gradle is kept up to date.
+
+Issue: SPR-10161

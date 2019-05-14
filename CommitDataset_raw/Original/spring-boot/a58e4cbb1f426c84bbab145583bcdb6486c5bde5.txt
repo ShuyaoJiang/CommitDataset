@@ -1,0 +1,24 @@
+Add support for configuring Aether via settings.xml
+
+Previously, Aether's configuration was largely hard-coded making it
+impossible to configure a mirror, provide credentials for accessing
+a repository, etc.
+
+This commit adds support for configuring Aether via Maven's
+settings.xml file. The support is optional and must be enabled by
+grabbing spring-boot-maven-settings in an init script. The Aether
+instance that's used when running the application will then be
+configured using settings.xml. The settings file is expected to be
+found in ${user.home}/.m2/settings.xml.
+
+The configuration of the following items is currently supported:
+
+ - Offline
+ - Proxies
+ - Mirrors
+ - Server authentication
+ - Local repository location
+
+If the support is not enabled, settings.xml does not exist, or
+settings.xml does not configure certain things then sensible defaults
+are applied.

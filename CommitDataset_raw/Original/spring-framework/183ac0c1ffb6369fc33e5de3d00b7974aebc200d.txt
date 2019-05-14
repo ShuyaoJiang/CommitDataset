@@ -1,0 +1,24 @@
+Add value-type attrib to beans->map->entry element
+
+Previously, the <value> subelement of a map <entry> allowed one to
+specify the type of a specific map entry value. This patch allows a
+value-type attribute as well, such that instead of the following
+syntax
+
+    <entry key="x-message-ttl">
+        <value type="java.lang.Long">100</value>
+    </entry>
+    <entry key="x-ha-policy" value="all" />
+
+one can now use the more concise form
+
+    <entry key="x-message-ttl" value="100" value-type="java.lang.Long"/>
+    <entry key="x-ha-policy" value="all"/>
+
+The new value-type attribute may be used at the <map> level as well,
+indicating that all elements are of the same type.
+
+Appropriate tests have been added exercising value-type at the <map> and
+<entry> levels.
+
+Issue: SPR-9249

@@ -1,0 +1,22 @@
+Introduce CONNECT_ACK message type
+
+Previously, handling of a STOMP CONNECT message and sending of a
+CONNECTED response was performed by StompProtocolHandler if it was
+backed by SimpleBrokerMessageHandler, or left up to the real message
+broker if it was backed by StompBrokerRelayMessageHandler. This
+wasn't ideal as it should be StompProtocolHandler's job to simply map
+messages to and from the STOMP protocol, not to do part of the
+broker's job and respond directly to CONNECT.
+
+This commit introduces a new message type, CONNECT_ACK. When it
+receives a CONNECT message, SimpleBrokerMessageHandler will now
+respond with a CONNECT_ACK message that StompProtocolHandler can map
+into a STOMP CONNECTED message. The CONNECT_ACK message contains the
+CONNECT message as a header so that StompProtocolHandler has access to
+its accept-version header.
+
+StompProtocolHandler has been simplified so that a CONNECT message
+is always passed to the output channel, irrespective of whether it's
+backed by a simple broker or a real broker. The handleConnect flag,
+and the code that would set it correctly depending on the app's
+configuration, has been removed.

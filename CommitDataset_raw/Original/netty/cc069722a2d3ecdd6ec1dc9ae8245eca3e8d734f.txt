@@ -1,0 +1,15 @@
+CompositeBytebuf.copy() and copy(...) should respect the allocator
+
+Motivation:
+
+When calling CompositeBytebuf.copy() and copy(...) we currently use Unpooled to allocate the buffer. This is not really correct and may produce more GC then needed. We should use the allocator that was used when creating the CompositeByteBuf to allocate the new buffer which may be for example the PooledByteBufAllocator.
+
+Modifications:
+
+- Use alloc() to allocate the new buffer.
+- Add tests
+- Fix tests that depend on the copy to be backed by an byte-array without checking hasArray() first.
+
+Result:
+
+Fixes [#7393].

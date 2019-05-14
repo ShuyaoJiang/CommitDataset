@@ -1,0 +1,14 @@
+Separate Couchbase setup from Spring Data
+
+This commit separates the basic setup of Couchbase from Spring Data so
+that a `Bucket` and `Cluster` bucket beans are exposed even if Spring
+Data is not available.
+
+A basic setup happens if `spring.couchbase.bootstrap-hosts` is specified,
+configuring the `default` bucket with no authentication unless specified
+otherwise.
+
+If Spring Data is available, those beans are re-used by default to
+configure the `CouchbaseTemplate` and other repository-related beans.
+
+Closes gh-5347

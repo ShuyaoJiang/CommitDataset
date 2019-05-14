@@ -1,0 +1,18 @@
+Better support for HornetQ embedded broker
+
+Prior to this commit it was not safe to start several contexts
+using the HornetQAutoConfiguration in the same VM. Each context
+was trying to start their own HornetQ embedded broker by default but
+only the first was really starting. Worse, the various InVM connection
+factories were all silently connecting to the first broker.
+
+This commit introduces a new "serverId" property that is an auto-
+incremented integer by default. This identifies the server to connect
+to and allows each context to start its own embedded broker in total
+isolation of other contexts.
+
+This commits makes it possible for a context to disable its own
+embedded broker and connect to an existing one, potentially started
+by another context.
+
+Fixes gh-1063

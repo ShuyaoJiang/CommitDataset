@@ -1,0 +1,11 @@
+Improve OnBeanCondition Performance
+
+Update OnBeanCondition to use a new BeanTypeRegistry which includes
+optimized code when using a DefaultListableBeanFactory. The optimized
+version calculates bean types only once per bean and caches the result.
+
+Prior to this change the sample "pet clinic" application would spend
+400-500 milliseconds evaluating OnBeanConditions, after this change it
+spends around 120 milliseconds.
+
+Fixes gh-1803

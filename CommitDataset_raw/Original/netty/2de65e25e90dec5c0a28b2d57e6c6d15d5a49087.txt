@@ -1,0 +1,15 @@
+Set timeout for SocketSslEchoTest
+
+Motivation:
+
+We are seeing EpollSocketSslEchoTest does not finish itself while its I/O thread is busy.  Jenkins should have terminated them when the global build timeout reaches, but Jenkins seems to fail to do so.  What's more interesting is that Jenkins will start another job before the EpollSocketSslEchoTest is terminated, and Linux starts to oom-kill them, impacting the uptime of the CI service.
+
+Modifications:
+
+- Set timeout for all test cases in SocketSslEchoTest so that all SSL tests terminate themselves when they take too long.
+- Fix a bug where the epoll testsuite uses non-daemon threads which can potentially prevent JVM from quitting.
+- (Cleanup) Separate boss group and worker group just like we do for NIO/OIO transport testsuite.
+
+Result:
+
+Potentially more stable CI machine.

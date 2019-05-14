@@ -1,0 +1,10 @@
+Remove test-only customisation from TransReplAct (#40863)
+
+The `getIndexShard()` and `sendReplicaRequest()` methods in
+TransportReplicationAction are effectively only used to customise some
+behaviour in tests. However there are other ways to do this that do not cause
+such an obstacle to separating the TransportReplicationAction into its two
+halves (see #40706).
+
+This commit removes these customisation points and injects the test-only
+behaviour using other techniques.

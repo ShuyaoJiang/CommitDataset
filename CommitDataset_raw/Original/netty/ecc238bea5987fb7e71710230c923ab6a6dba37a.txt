@@ -1,0 +1,13 @@
+Only try to call SSL.setHostnameValidation(...) if needed. (#8074)
+
+Motivation:
+
+As the used OpenSSL version may not support hostname validation we should only really call SSL.setHostNameValidation(...) if we detect that its needed.
+
+Modifications:
+
+Only call SSL.setHostNameValidation if it was disabled before and now it needs to be enabled or if it was enabled before and it should be disabled now.
+
+Result:
+
+Less risk of an exception when using an OpenSSL version that does not support hostname validation.

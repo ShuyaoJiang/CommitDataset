@@ -1,0 +1,13 @@
+Add SSLEngineTest to ensure Signature Algorithms are present during KeyManager calls. (#8965)
+
+Motivation:
+
+We had a bug which could case ExtendedSSLSession.getPeerSupportedSignatureAlgorithms() return an empty array when using BoringSSL. This testcase verifies we correctly return algorithms after the fix in https://github.com/netty/netty-tcnative/pull/449.
+
+Modifications:
+
+Add testcase to verify behaviour.
+
+Result:
+
+Ensure we correctly retuen the algorithms.

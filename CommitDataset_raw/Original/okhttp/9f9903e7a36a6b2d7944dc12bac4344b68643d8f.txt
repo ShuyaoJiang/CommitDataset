@@ -1,0 +1,10 @@
+Recover from executor shutdowns gracefully. (#4365)
+
+This turns out to be pretty difficult because of the way our
+dispatcher works.
+
+Calls can be rejected either immediately when the user calls
+enqueue(), or later when a queued call is promoted.
+
+It's also awkward because we don't want to hold locks when
+calling the user's callFailed() method.

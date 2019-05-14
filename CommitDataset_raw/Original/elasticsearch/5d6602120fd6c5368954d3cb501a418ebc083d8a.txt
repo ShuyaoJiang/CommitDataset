@@ -1,0 +1,7 @@
+[Zen2] Hide not recovered state (#36224)
+
+This commit hides ClusterStates that have a STATE_NOT_RECOVERED_BLOCK from
+ClusterStateAppliers. This is needed, because some appliers, such as IngestService, rely on
+the fact, that cluster states with STATE_NOT_RECOVERED_BLOCK won't contain anything useful.
+Once the state is recovered it's fully available for the appliers. This commit also switches many of
+the remaining tests that require state persistence/recovery from Zen1 to Zen2.

@@ -1,0 +1,7 @@
+Do not swallow exception when relocating
+
+When relocating a shard before changing the state to relocated, we
+verify that a relocation is a still taking place. Yet, this can throw an
+exception if the relocation is in fact no longer valid. Sadly, we were
+swallowing the exception in this situation. This commit allows such an
+exception to bubble up after safely releasing resources.

@@ -1,0 +1,17 @@
+[CCR] Fixed follow and unfollow api url path according to design.
+
+The TODOs in the rest actions was incorrect. The problem was that
+these rest actions used `follow_index` as first named variable in the path
+under which the rest actions were registered. Other candidate rest actions that
+also have a named variable as first element in the path (but with a different
+name) get resolved as rest parameters too and passed down to the rest
+action that actually ends up getting executed.
+
+In the case of the follow index api, a `index` parameter got passed down
+to `RestFollowExistingAction`, but that param was never used. This caused the
+follow index api call to fail, because of unused http parameters.
+
+This change doesn't fixes that problem, but works around it by using
+`index` as named variable for the follow index (instead of `follow_index`).
+
+Relates to #30102

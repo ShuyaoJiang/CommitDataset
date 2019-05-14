@@ -1,0 +1,4 @@
+Make a slight tweak to the way we calculate means in StatsAccumulator. We pull out a variable for (value - mean) instead of computing it twice. This also means that we no longer need the old mean to compute the change in sumOfSquaresOfDeltas, we only need the new mean, so we can update mean directly instead of storing nextMean. We end up with the same number of temporary variables and the same calculation but one subtraction fewer and (perhaps more importantly) we do the computations in a more natural order.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=110147656

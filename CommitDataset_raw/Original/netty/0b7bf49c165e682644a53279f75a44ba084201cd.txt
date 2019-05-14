@@ -1,0 +1,26 @@
+Convert X509TrustManager into X509ExtendedTrustManager for Java 7+
+
+Motivation:
+
+Since Java 7, X509TrustManager implementation is wrapped by a JDK class
+called AbstractTrustManagerWrapper, which performs an additional
+certificate validation for Socket or SSLEngine-backed connections.
+
+This makes the TrustManager implementations provided by
+InsecureTrustManagerFactory and FingerprintTrustManagerFactory not
+insecure enough, where their certificate validation fails even when it
+should pass.
+
+Modifications:
+
+- Add X509TrustManagerWrapper which adapts an X509TrustManager into an
+  X509ExtendedTrustManager
+- Make SimpleTrustManagerFactory wrap an X509TrustManager with
+  X509TrustManagerWrapper is the provided TrustManager does not extend
+  X509ExtendedTrustManager
+
+Result:
+
+- InsecureTrustManagerFactory and FingerprintTrustManagerFactory are now
+  insecure as expected.
+- Fixes #5910

@@ -1,0 +1,13 @@
+Rework BootRun so that it does not subclass JavaExec
+
+This commit reworks BootRun so that it no longer subclasses JavaExec.
+This provides Boot with greater control of how the executed JVM is
+configured, including the possibility of using @Option to provide args
+and JVM args via the command line (gh-1176). It also allows some usage
+of convention mappings to be removed in favour of PropertyState and
+Provider (gh-9891). For users who relied up the advanced (and rather
+complex) configuration options provided by JavaExec, an escape hatch
+is provided by allowing the JavaExecSpec that's used to execute the
+JVM to be customized.
+
+Closes gh-9884

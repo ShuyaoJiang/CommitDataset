@@ -1,0 +1,15 @@
+Pass SockJS session attributes to HandshakeHandler
+
+Before this change the WebSocketTransportHandler passed
+Collections.emptyMap as attributes to the HandshakeHandler because
+it didn't matter what attributes the underlying WebSocketSession has
+since it is wrapped by the SockJsSession and that's what exposed for
+use everywhere.
+
+This change has the WebSocketTransportHandler passing the attributes
+from the SockJsSession instead since it's more accurate for the
+underlying WebSocketSession to have access to the same map instance
+and it allows the HandshakeHandler to change the attributes even if
+it doesn't need to do that today.
+
+Issue: SPR-12716

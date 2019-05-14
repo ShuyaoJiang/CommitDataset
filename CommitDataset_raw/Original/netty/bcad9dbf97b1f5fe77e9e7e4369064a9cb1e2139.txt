@@ -1,0 +1,3 @@
+Revert "Set readPending to false when ever a read is done"
+
+This reverts commit 413c7c2cd82e09dac481ea52ba2cb88ffcd58624 as it introduced an regression when edge-triggered mode is used which is true for our native transports by default. With 413c7c2cd82e09dac481ea52ba2cb88ffcd58624 included it was possible that we set readPending to false by mistake even if we would be interested in read more.

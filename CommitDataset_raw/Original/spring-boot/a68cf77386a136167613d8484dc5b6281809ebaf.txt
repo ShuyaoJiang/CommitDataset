@@ -1,0 +1,12 @@
+Upgrade to Tomcat 8.5.5
+
+As part of the upgrade, Tomcat now requires a keystore to contain
+an X.509 certificate. The two stores used in our tests have been
+updated by exporting their private keys and adding them as
+certificates. For example:
+
+$ keytool -exportcert -keystore test.jks -alias tomcat > exported
+$ keytool -importcert -keystore test.jks -file exported
+
+Closes gh-6703
+Closes gh-6657

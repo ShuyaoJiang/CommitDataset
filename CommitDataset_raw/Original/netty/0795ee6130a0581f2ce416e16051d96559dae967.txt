@@ -1,0 +1,18 @@
+Add more test cases to ZlibTest
+
+Motivation:
+
+Currently, we only test our ZlibEncoders against our ZlibDecoders. It is
+convenient to write such tests, but it does not necessarily guarantee
+their correctness. For example, both encoder and decoder might be faulty
+even if the tests pass.
+
+Modifications:
+
+Add another test that makes sure that our GZIP encoder generates the
+GZIP trailer, using the fact that GZIPInputStream raises an EOFException
+when GZIP trailer is missing.
+
+Result:
+
+More coverage for GZIP compression

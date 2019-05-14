@@ -1,0 +1,5 @@
+ClassUtils.getMostSpecificMethod uses Class.getMethod code path in case of a public method
+
+This should be significantly faster than our standard algorithm, for a very common case. Motivated by SPR-9802, even if the fix there uses a different approach, with transaction name determination not calling getMostSpecificMethod at all anymore.
+
+Issue: SPR-9802

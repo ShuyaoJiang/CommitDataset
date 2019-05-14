@@ -1,0 +1,18 @@
+Add details about what acquired the shard lock last (#38807)
+
+This adds a `details` parameter to shard locking in `NodeEnvironment`. This is
+intended to be used for diagnosing issues such as
+
+```
+  1> [2019-02-11T14:34:19,262][INFO ][o.e.c.m.MetaDataDeleteIndexService] [node_s0] [.tasks/oSYOG0-9SHOx_pfAoiSExQ] deleting index
+  1> [2019-02-11T14:34:19,279][WARN ][o.e.i.IndicesService     ] [node_s0] [.tasks/oSYOG0-9SHOx_pfAoiSExQ] failed to delete index
+  1> org.elasticsearch.env.ShardLockObtainFailedException: [.tasks][0]: obtaining shard lock timed out after 0ms
+  1> 	at org.elasticsearch.env.NodeEnvironment$InternalShardLock.acquire(NodeEnvironment.java:736) ~[main/:?]
+  1> 	at org.elasticsearch.env.NodeEnvironment.shardLock(NodeEnvironment.java:655) ~[main/:?]
+  1> 	at org.elasticsearch.env.NodeEnvironment.lockAllForIndex(NodeEnvironment.java:601) ~[main/:?]
+  1> 	at org.elasticsearch.env.NodeEnvironment.deleteIndexDirectorySafe(NodeEnvironment.java:554) ~[main/:?]
+```
+
+In the hope that we will be able to determine why the shard is still locked.
+
+Relates to #30290 as well as some other CI failures

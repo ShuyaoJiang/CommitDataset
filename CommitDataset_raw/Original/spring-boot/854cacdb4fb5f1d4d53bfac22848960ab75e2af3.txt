@@ -1,0 +1,14 @@
+Fix useStartStopDaemon in launch script and allow config via conf file
+
+Commit 5a1ee6eb added support for disabling use of start-stop-daemon
+via a placeholder in the default launch script. Unfortunately, that
+placeholder was subsequently broken in 81a47639.
+
+This commit reinstates the placeholder and adds tests to verify that all
+of the placeholders in the launch script can be replaced and that they
+have the required default values. Furthermore, it also allows the use of
+start-stop-daemon to be configured via USE_START_STOP_DAEMON in an
+app’s .conf file. This allows the configuration to be changed after the
+app has been built.
+
+Closes gh-4985

@@ -1,0 +1,21 @@
+Avoid required uri when using WebClient w/ base url
+
+This commit makes the `uri` step of the WebClient optional, so that
+users who have specified a base URL during WebClient config do not need
+to provide an empty one (i.e. `url("")`).
+
+The basic idea of this fix is that the HTTP method methods in WebClient
+(`get`, `post`, etc.) should be able to "bypass" the uri stage, and skip
+straight to defining headers, or even doing an exchange or retrieve
+(i.e. call methods on `RequestHeaderSpec` or `RequestBodySpec`).
+
+I have accomplished this by adding two new composed interfaces:
+`RequestHeadersUriSpec` and `RequestBodyUriSpec`.
+`RequestHeadersUriSpec` extends from the existing `UriSpec` and
+`RequestHeaderSpec`, while `RequestBodyUriSpec` extends from `UriSpec`
+and `RequestBodySpec`. These types are returned from the HTTP methods
+(`get`, `post` etc). The `uri` methods on these types return a plain
+`RequestHeaderSpec` and `RequestBodySpec` (i.e. types without the `uri`
+methods), so that you can call `uri` once only.
+
+Issue: SPR-15695

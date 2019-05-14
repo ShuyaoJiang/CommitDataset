@@ -1,0 +1,10 @@
+Remove timed latch await in listeners test
+
+This commit removes a timed latch await in a transport client listeners
+test. The problem with a timed wait here is that on an overloaded
+machine, the test can fail because the waiting thread was not unlatched
+quickly enough. This makes the test unnecessarily flaky. Instead, we
+should wait indefinitely and simply let the test fail by the test
+timeout if the latch is not counted down for some reason.
+
+Closes #25760

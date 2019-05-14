@@ -1,0 +1,13 @@
+Avoid null signals when resolving handler arguments
+
+Prior to this commit, resolving an argument for a WebFlux controller
+that's missing from the request and not required by the handler would
+throw a NullPointerException in some cases.
+
+This involves the conversion of the parameter (a `String` parameter type
+might not trigger this behavior) and sending a `null` within a reactive
+stream, which is illegal per the RS spec.
+
+We now rely on a `Mono.justOrEmpty()` to handle those specific cases.
+
+Issue: SPR-17050

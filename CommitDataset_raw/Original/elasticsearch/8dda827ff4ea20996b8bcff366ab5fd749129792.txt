@@ -1,0 +1,6 @@
+Don't refresh on `_flush` `_force_merge` and `_upgrade` (#27000)
+
+Today all these API calls have a sideeffect of making documents visible
+to search requests. While this is sometimes desired it's an unnecessary sideeffect
+and now that we have an internal (engine-private) index reader (#26972) we artificially
+add a refresh call for bwc. This change removes this sideeffect in 7.0.

@@ -1,0 +1,13 @@
+Use a default resolver with bootstrap.resolver(null).
+
+Motivation:
+
+`Bootstrap` has a notion of a default resolver group, but it's hidden from the public. To allow callers to reset a `Bootstrap` instance's resolver group, we could either make `DEFAULT_RESOLVER` public, or we could allow callers to pass `null` as an argument to `Bootstrap#resolver(AddressResolverGroup<?>)`. This pull request does the latter.
+
+Modifications:
+
+- Allow `Bootstrap#resolver(AddressResolverGroup<?>)` to accept `null` as an argument
+
+Result:
+
+Callers may pass `null` to `Bootstrap#resolver(AddressResolverGroup<?>)` to cause the `Bootstrap` instance to use its default resolver group.

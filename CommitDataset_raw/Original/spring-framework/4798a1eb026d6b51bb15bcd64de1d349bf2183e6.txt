@@ -1,0 +1,9 @@
+Cancel Subscription when onError is invoked internally
+
+AbstractResponseBodyProcessor.onError and
+AbstractResponseBodyFlushProcessor.onError will be invoked when:
+- The Publisher wants to signal with onError that there are failures.
+Once onError is invoked the Subscription should be considered canceled.
+- The internal implementation wants to signal with onError that there
+are failures. In this use case the implementation should invoke
+Subscription.cancel()

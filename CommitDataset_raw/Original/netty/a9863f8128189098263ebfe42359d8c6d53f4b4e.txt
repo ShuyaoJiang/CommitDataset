@@ -1,0 +1,10 @@
+Add headers to MqttMessage returned by MqttDecoder in case of DecoderException (#8219)
+
+Motivation:
+When the MqttDecoder decodes a message larger than the 'maxBytesInMessage' a DecoderException is thrown and a MqttMessage with just the failure cause is returned. Even if I can't handle the message, I might want to send an ACK so that I won't have to worry about it again.
+
+Modification:
+The DecoderException is thrown after the variableHeader is decoded. The fixed and variable headers are then added to the MqttMessage along with the failure cause.
+
+Result:
+The invalid MqttMessage will have headers if available.

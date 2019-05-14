@@ -1,0 +1,18 @@
+Refine ImportsContextCustomizer cache logic
+
+Update `ImportsContextCustomizer` so that whenever possible a more
+specific cache key is used.
+
+Prior to this commit the customizer would generate a key based on *all*
+annotations on the test class. This has repeatedly caused issues where
+test classes that should have the same cache key did not due to
+unrelated annotations.
+
+A new `DeterminableImports` interface has been added that can be
+implemented by `ImportSelector` and `ImportBeanDefinitionRegistrar`
+implementations that are able to determine their imports early. The
+existing `ImportAutoConfigurationImportSelector` and
+`AutoConfigurationPackages` classes have been retrofitted with
+this interface.
+
+Fixes gh-7953

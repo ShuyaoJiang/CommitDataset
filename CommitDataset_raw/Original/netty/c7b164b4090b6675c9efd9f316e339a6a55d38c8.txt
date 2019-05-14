@@ -1,0 +1,15 @@
+Fix sporadic assertion failure in SocketSslEchoTest
+
+Motivation:
+
+SocketSslEchoTest.testSslEcho() has a race condition where a renegotiation future can be done before:
+
+    assertThat(renegoFuture.isDone(), is(false));
+
+Modifications:
+
+Remove the offending assertion.
+
+Result:
+
+More build stability

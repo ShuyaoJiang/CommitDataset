@@ -1,0 +1,13 @@
+DefaultChannelHandlerInvoker should work with non AbstractChannelHandlerContext sub-classes.
+
+Motivation:
+
+DefaultChannelHandlerInvoker currently blindly cast to AbstractChannelHandlerContext without checking if the ChannelHandlerContext is really a sub-type of it. It should check it first and if not just use slow-path implementation.
+
+Modifications:
+
+Do instanceof check first and if it fails just create a new Runnable instance of used the cached.
+
+Result:
+
+DefaultChannelHandlerInvoker works with any ChannelHandlerContext implementations.

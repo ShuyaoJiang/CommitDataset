@@ -1,0 +1,16 @@
+Eliminate reserved 'default' profile (SPR-7778)
+
+There is no longer a reserved default profile named 'default'. Rather,
+users must explicitly specify a default profile or profiles via
+
+    ConfigurableEnvironment.setDefaultProfiles(String...)
+        - or -
+    spring.profile.default="pD1,pD2"
+
+Per above, the setDefaultProfile(String) method now accepts a variable
+number of profile names (one or more).  This is symmetrical with the
+existing setActiveProfiles(String...) method.
+
+A typical scenario might involve setting both a default profile as a
+servlet context property in web.xml and then setting an active profile
+when deploying to production.

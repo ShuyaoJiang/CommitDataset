@@ -1,0 +1,9 @@
+Security for _field_names field should not override field statistics (#33261)
+
+In Lucene 8 the statistics for a field (doc_count, sum_doc_count, ...) are
+checked and invalid values (v < 0) are rejected. Though for the _field_names
+field we hide the statistics of the field if security is enabled since
+some terms (field names) may be filtered. However this statistics are never
+used, this field is not used for ranking and cannot be used to generate
+term vectors. For these reasons this commit restores the original statistics
+for the field in order to be compliant with Lucene 8.

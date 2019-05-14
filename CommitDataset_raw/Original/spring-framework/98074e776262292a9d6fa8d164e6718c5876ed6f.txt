@@ -1,0 +1,59 @@
+Provide support for context hierarchies in the TCF
+
+Prior to this commit the Spring TestContext Framework supported creating
+only flat, non-hierarchical contexts. There was no easy way to create
+contexts with parent-child relationships.
+
+This commit addresses this issue by introducing a new @ContextHierarchy
+annotation that can be used in conjunction with @ContextConfiguration
+for declaring hierarchies of application contexts, either within a
+single test class or within a test class hierarchy. In addition,
+@DirtiesContext now supports a new 'hierarchyMode' attribute for
+controlling context cache clearing for context hierarchies.
+
+- Introduced a new @ContextHierarchy annotation.
+- Introduced 'name' attribute in @ContextConfiguration.
+- Introduced 'name' property in ContextConfigurationAttributes.
+- TestContext is now aware of @ContextHierarchy in addition to
+  @ContextConfiguration.
+- Introduced findAnnotationDeclaringClassForTypes() in AnnotationUtils.
+- Introduced resolveContextHierarchyAttributes() in ContextLoaderUtils.
+- Introduced buildContextHierarchyMap() in ContextLoaderUtils.
+- @ContextConfiguration and @ContextHierarchy may not be used as
+  top-level, class-level annotations simultaneously.
+- Introduced reference to the parent configuration in
+  MergedContextConfiguration and WebMergedContextConfiguration.
+- Introduced overloaded buildMergedContextConfiguration() methods in
+  ContextLoaderUtils in order to handle context hierarchies separately
+  from conventional, non-hierarchical contexts.
+- Introduced hashCode() and equals() in ContextConfigurationAttributes.
+- ContextLoaderUtils ensures uniqueness of @ContextConfiguration
+  elements within a single @ContextHierarchy declaration.
+- Introduced CacheAwareContextLoaderDelegate that can be used for
+  loading contexts with transparent support for interacting with the
+  context cache -- for example, for retrieving the parent application
+  context in a context hierarchy.
+- TestContext now delegates to CacheAwareContextLoaderDelegate for
+  loading contexts.
+- Introduced getParentApplicationContext() in MergedContextConfiguration
+- The loadContext(MergedContextConfiguration) methods in
+  AbstractGenericContextLoader and AbstractGenericWebContextLoader now
+  set the parent context as appropriate.
+- Introduced 'hierarchyMode' attribute in @DirtiesContext with a
+  corresponding HierarchyMode enum that defines EXHAUSTIVE and
+  CURRENT_LEVEL cache removal modes.
+- ContextCache now internally tracks the relationships between contexts
+  that make up a context hierarchy. Furthermore, when a context is
+  removed, if it is part of a context hierarchy all corresponding
+  contexts will be removed from the cache according to the supplied
+  HierarchyMode.
+- AbstractGenericWebContextLoader will set a loaded context as the
+  ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE in the MockServletContext when
+  context hierarchies are used if the context has no parent or if the
+  context has a parent that is not a WAC.
+- Where appropriate, updated Javadoc to refer to the
+  ServletTestExecutionListener, which was introduced in 3.2.0.
+- Updated Javadoc to avoid and/or suppress warnings in spring-test.
+- Suppressed remaining warnings in code in spring-test.
+
+Issue: SPR-5613, SPR-9863

@@ -1,0 +1,16 @@
+Provide default for SpringApplication main class in servlet container
+
+By default, SpringApplication attempts to deduce the application class
+by looking for a main method in the stack. This does not work when
+the application is launched by a servlet container via
+SpringBootServletInitializer as there's either no main method in the
+stack, or the main method is that of the servlet container, rather
+than the application.
+
+This commit updates SpringBootServletInitializer to configure the
+main class of the SpringApplication that it creates to be the
+application's SpringBootServletInitializer subclass. This is done
+prior to calling configure, so the main class can still be specified
+by the application if required.
+
+Closes gh-3061

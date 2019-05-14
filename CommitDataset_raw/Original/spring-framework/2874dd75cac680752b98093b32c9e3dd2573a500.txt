@@ -1,0 +1,12 @@
+Fine-tune WebFlux logging at HTTP/WebSocket level
+
+1. Use special category prefix "spring-web.reactivestreams" for logging
+of reactive streams signals in spring-web, since those are quite
+verbose would fill the logs at TRACE.
+
+2. Add and use loggers in request and websocket session implementations
+separate from reactive streams bridge for regular TRACE logging.
+
+3. Improve log messages and add where missing (e.g. for Reactor)
+
+Issue: SPR-16898

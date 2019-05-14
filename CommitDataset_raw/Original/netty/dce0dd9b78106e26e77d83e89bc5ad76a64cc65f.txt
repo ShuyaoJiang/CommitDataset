@@ -1,0 +1,15 @@
+[#3654] No need to hold lock while destroy a chunk
+
+Motiviation:
+
+At the moment we sometimes hold the lock on the PoolArena during destroy a PoolChunk. This is not needed.
+
+Modification:
+
+- Ensure we not hold the lock during destroy a PoolChunk
+- Move all synchronized usage in PoolArena
+- Cleanup
+
+Result:
+
+Less condition.

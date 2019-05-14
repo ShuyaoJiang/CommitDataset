@@ -1,0 +1,14 @@
+Ensure shared capacity is updated correctly when WeakOrderQueue is collected.
+
+Motivation:
+
+We use a shared capacity per Stack for all its WeakOrderQueue elements. These relations are stored in a WeakHashMap to allow dropping these if memory pressure arise. The problem is that we not "reclaim" previous reserved space when this happens. This can lead to a Stack which has not shared capacity left which then will lead to an AssertError when we try to allocate a new WeakOderQueue.
+
+Modifications:
+
+- Ensure we never throw an AssertError if we not have enough space left for a new WeakOrderQueue
+- Ensure we reclaim space when WeakOrderQueue is collected.
+
+Result:
+
+No more AssertError possible when new WeakOrderQueue is created and also correctly reclaim space that was reserved from the shared capacity.

@@ -1,0 +1,8 @@
+In com.google.common.reflect.Types, make the Method objects that are used as part of Java compatibility accessible.
+
+Making them accessible should not be necessary, since they are being used to access package-private methods from elsewhere in the same package. But having them not accessible trips over an unfixable race condition in App Engine. There, the security layer intercepts reflective operation and ultimately ends up invoking the Method from another package. To make this work it has to do Method.setAccessible(true) in a try/finally. But if two threads end up doing this at the same time then one may set the Method back to inaccessible just after the other has set it accessible. Making the Method always accessible avoids this problem. It is not any kind of security problem since the methods in question are harmless and the only reason they are not public is to avoid polluting the API.
+
+http://www.artima.com/weblogs/viewpost.jsp?thread=164042
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=88573029

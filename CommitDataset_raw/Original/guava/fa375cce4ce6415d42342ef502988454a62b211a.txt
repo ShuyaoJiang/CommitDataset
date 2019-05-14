@@ -1,0 +1,10 @@
+Interrupt the producer thread instead of assuming it will exit naturally.
+If the SynchronousQueue producer doesn't try to put() in time for the consumer to accept the value, it hangs forever.
+The result is a flaky test.
+
+As part of this, I've removed the producer's ability to fail the test if it's interrupted.
+That's because I need to be able to interrupt the SynchronousQueue put() operation.
+I could find a way to continue to fail on interrupts in other cases, but it doesn't seem valuable enough to be worth the trouble.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=125565652

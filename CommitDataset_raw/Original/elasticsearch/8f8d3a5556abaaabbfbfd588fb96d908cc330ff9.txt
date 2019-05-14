@@ -1,0 +1,10 @@
+[Rollup] Return empty response when aggs are missing (#32796)
+
+If a search request doesn't contain aggs (or an empty agg object),
+we should just retun an empty response.  This is how the normal search
+API works if you specify zero hits and empty aggs.
+
+The existing behavior throws an exception because it tries to send
+an empty msearch.
+
+Closes #32256

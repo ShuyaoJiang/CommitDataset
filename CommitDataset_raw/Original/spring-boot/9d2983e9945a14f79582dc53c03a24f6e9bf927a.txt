@@ -1,0 +1,11 @@
+Prevent retention of child from parent
+
+When the child is listening for parent closed events
+the parent has a reference to the listener which contains the chils.
+Thust there is a cycle of references and a GC probalem waiting to
+happen.
+
+This change breaks the cycle by making the reference to the
+child a WeakReference.
+
+Fixes gh-559

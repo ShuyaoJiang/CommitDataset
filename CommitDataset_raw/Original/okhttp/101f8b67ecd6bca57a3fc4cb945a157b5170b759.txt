@@ -1,0 +1,7 @@
+Fix flaky CallTest.recoverWhenRetryOnConnectionFailureIsTrue_HTTP2
+
+MockWebServer sometimes enforces the DISCONNECT_AFTER_REQUEST policy before the client executes exchange.finishRequest(). As a result, Http2Writer.flush() is called on a closed Http2Writer and throws. This causes a RequestFailed event to be emitted instead of the expected ResponseFailed.
+
+This change enforces the de-facto sequence in most runs, where the policy is applied only after the client finishes writing the request.
+
+Fixes https://github.com/square/okhttp/issues/4704

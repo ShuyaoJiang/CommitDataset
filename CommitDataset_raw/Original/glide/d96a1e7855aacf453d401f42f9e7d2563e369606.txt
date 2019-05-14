@@ -1,0 +1,42 @@
+Build improvements (#2426)
+
+* Update Gradle version to latest
+
+* Fix typo in dependency name (Gradle was resolving support-annotations:{26})
+
+* Bump Android Gradle Plugin version to latest stable
+
+* Remove deprecation warning during compile.
+(@SuppressWarnings("deprecation") has no effect on imports)
+
+* Force LF as the line separator to make sure checkstyle is runnable on Windows
+
+* Constrain deprecation of GlideModule to a single method (suppresses javac warning)
+
+* Make sure compiledJar's output is unique.
+archivePath was the same as jar's archivePath, which triggered a rebuild and re-proguard every time, even on incremental builds.
+
+* Move quality tool initializations near the tasks
+Extract version constant for PMD
+
+* Minor gradle improvements: warnings, Java compatiblity
+
+* Extract test JVM memory size to gradle.properties
+
+* Enable auto-completion in IDEA by using tasks.create instead of task shorthand
+
+* Reduce amount of hard-coded paths
+
+* Reduce amount of missing files when running findbugs
+
+* Add missing test for setMemoryCategory return value
+
+* Simplify JavaDoc classpath calculation
+
+* Change JavaDoc {@link}s to {@code} as they're not linkable.
+This reduces the noise during build.
+
+* Fix invalid missing references in JavaDoc.
+The equals/hashCode method doesn't exist in the classes, so need to reference the super-class.
+
+* Fix checkstyle, javadoc alignment, typo and codify class-name-like concepts.

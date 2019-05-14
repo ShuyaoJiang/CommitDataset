@@ -1,0 +1,13 @@
+Customize destruction callback for AutoCloseable beans
+
+Previously, a Bean implementing `AutoCloseable` (or `Closeable`) was
+always destroyed regardless of its bean definition. In particular, the
+documented way of disabling the destruction callback via an empty String
+did not work.
+
+AutoCloseable beans are now treated pretty much as any other bean: we
+still use the presence of the interface to optimize the check of a
+destroy method and we only auto-discover the method name to invoke if
+the inferred mode is enabled.
+
+Issue: SPR-13022

@@ -1,0 +1,5 @@
+Fix - Shutdown the ExecutorService in App so that the resources are collected and the process can finish
+
+I ran App.main(String[] args) in the 'double-checked-locking' module and the process does not terminate. This is because the executor service still has open threads. I'm not sure how the JUnit tests are run, but it seems they are handling the leftover resources themselves.
+
+Also, minor modifications to Inventory for final fields are used since there is no state change around them, and added some more meaningful printing so the example is more clearly demonstrated

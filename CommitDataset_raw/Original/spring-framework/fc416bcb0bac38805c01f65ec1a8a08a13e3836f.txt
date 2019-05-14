@@ -1,0 +1,60 @@
+Apply @Configuration BeanNameGenerator consistently
+
+Since the introduction of the AnnotationConfig(Web)ApplicationContext
+types in Spring 3.0, it has been possible to specify a custom
+bean name generation strategy via the #setBeanNameGenerator methods
+available on each of these classes.
+
+If specified, that BeanNameGenerator was delegated to the underlying
+AnnotatedBeanDefinitionReader and ClassPathBeanDefinitionScanner. This
+meant that any @Configuration classes registered or scanned directly
+from the application context, e.g. via #register or #scan methods would
+respect the custom name generation strategy as intended.
+
+However, for @Configuration classes picked up via @Import or implicitly
+registered due to being nested classes would not be aware of this
+strategy, and would rather fall back to a hard-coded default
+AnnotationBeanNameGenerator.
+
+This change ensures consistent application of custom BeanNameGenerator
+strategies in the following ways:
+
+ - Introduction of AnnotationConfigUtils#CONFIGURATION_BEAN_NAME_GENERATOR
+   singleton
+
+   If a custom BeanNameGenerator is specified via #setBeanNameGenerator
+   the AnnotationConfig* application contexts will, in addition to
+   delegating this object to the underlying reader and scanner, register
+   it as a singleton bean within the enclosing bean factory having the
+   constant name mentioned above.
+
+   ConfigurationClassPostProcessor now checks for the presence of this
+   singleton, falling back to a default AnnotationBeanNameGenerator if
+   not present. This singleton-based approach is necessary because it is
+   otherwise impossible to parameterize CCPP, given that it is
+   registered as a BeanDefinitionRegistryPostProcessor bean definition
+   in AnnotationConfigUtils#registerAnnotationConfigProcessors
+
+ - Introduction of ConfigurationClassPostProcessor#setBeanNameGenerator
+
+   As detailed in the Javadoc for this new method, this allows for
+   customizing the BeanNameGenerator via XML by dropping down to direct
+   registration of CCPP as a <bean> instead of using
+   <context:annotation-config> to enable  @Configuration class
+   processing.
+
+ - Smarter defaulting for @ComponentScan#beanNameGenerator
+
+   Previously, @ComponentScan's #beanNameGenerator attribute had a
+   default value of AnnotationBeanNameGenerator. The value is now the
+   BeanNameGenerator interface itself, indicating that the scanner
+   dedicated to processing each @ComponentScan should fall back to an
+   inherited generator, i.e. the one originally specified against the
+   application context, or the original default provided by
+   ConfigurationClassPostProcessor. This means that name generation
+   strategies will be consistent with a single point of configuration,
+   but that individual @ComponentScan declarations may still customize
+   the strategy for the beans that are picked up by that particular
+   scanning.
+
+Issue: SPR-9124

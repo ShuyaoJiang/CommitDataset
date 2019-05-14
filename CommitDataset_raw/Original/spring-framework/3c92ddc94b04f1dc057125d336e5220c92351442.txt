@@ -1,0 +1,13 @@
+Fix path matching for paths containing spaces
+
+Prior to this commit, the latest optimizations introduced in SPR-13913
+would prevent matching when patterns contained spaces. Indeed, the
+optimized path would not fully tokenize the paths nor trim the tokens,
+as the "longer" code path does.
+
+This commit disables this optimized path when the `trimTokens` option is
+set to `true`.
+
+Also, the `trimTokens` setting is now set to `false` by default.
+
+Issue: SPR-14247

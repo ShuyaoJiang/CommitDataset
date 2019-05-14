@@ -1,0 +1,12 @@
+Allow field types to optimize phrase prefix queries (#37436)
+
+This change adds a way to customize how phrase prefix queries should be created
+on field types. The match phrase prefix query is exposed in field types in order
+to allow optimizations based on the options set on the field.
+For instance the text field uses the configured prefix field (if available) to
+build a span near that mixes the original field and the prefix field on the last
+position.
+This change also contains a small refactoring of the match/multi_match query that
+simplifies the interactions between the builders.
+
+Closes #31921

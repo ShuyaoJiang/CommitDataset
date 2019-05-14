@@ -1,0 +1,10 @@
+Revert optimization in StringDecoder
+
+This commit reverts the first optimizations listed in
+fa096dc60f0e78dd1d0d061f9fb7053954a52fb4, as the default delimiters
+do vary, namely by the charset given in the message mime type.
+The mimetype charset might not be compatible with ASCII (i.e. anything
+but UTF-8 or ISO-8859-1, for instance it might be UTF-16), and will not
+successfully find the default delimiters as a consequence.
+
+Added test to indicate the bug.

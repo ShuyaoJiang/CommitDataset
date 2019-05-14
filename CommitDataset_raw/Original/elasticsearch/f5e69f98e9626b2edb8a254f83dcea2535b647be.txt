@@ -1,0 +1,16 @@
+Find and use non local IPv4 address while testing IP filtering (#40234)
+
+* Find and use non local IPv4 address while testing IP filtering
+
+For pattern "n:localhost" PatternRule#isLocalhost() matches
+any local address, loopback address.
+[Note: I think for "localhost" this should not consider IP address
+as a match when they are bound to network interfaces. It should just
+be loopback address check unless the intent is to match all local addresses.
+This class is adopted from Netty3 and I am not sure if this is intended
+behavior or maybe I am missing something]
+
+For now I have fixed this assuming the PatternRule#isLocalhost check is
+correct by avoiding use of local address to check address denied.
+
+Closes #40194

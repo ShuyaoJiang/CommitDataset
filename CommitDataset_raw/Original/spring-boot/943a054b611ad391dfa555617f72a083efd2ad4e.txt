@@ -1,0 +1,21 @@
+Remove ineffective, premature optimisation from ErrorPageFilter
+
+ErrorPageFilter contained an optimisation for looking up the path
+of an error page by exception type. For cases where there was no
+mapping for the type of the exception that was thrown but there
+was a mapping for one of its super classes, it was intended to
+speed up the lookup. Unfortunately, there was a bug in the
+implementation which meant that the optimisation had no effect.
+
+Analysis with JMH reveals that for an Exception with a deep type
+hierarchy, such as Spring Framework's UnsatisfiedDependencyException,
+and an error page mapping for Exception, searching up the hierarchy
+until a mapping is found takes 0.0000001s. With the same mapping,
+a lookup for Exception takes 0.00000001s, i.e. it's 10x faster.
+The optimisation, when correctly implemented, brings the time for
+UnsatisfiedDependencyException down to 0.00000001s and into line
+with a lookup for Exception. However, the amount of time involved is
+so small compared to the overall time spent processing a request that
+the added complexity of the optimisation is not justified.
+
+Closes gh-7010

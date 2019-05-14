@@ -1,0 +1,13 @@
+Improve YAML-based configuration of Tomcat compression
+
+Tomcat uses the strings “on” and “off” to enable and disable
+compression. YAML interprets on as true and off as false, leaving
+ServerProperties.Tomcat.compression configured with “true” and “false”
+respectively. One solution is to use “on” rather than on and “off”
+rather than off in the YAML file but users may not realise that they
+need to do so.
+
+This commit updates the connector customiser that configures compression
+to map “true” to “on” and “false” to “off”.
+
+Closes gh-2737

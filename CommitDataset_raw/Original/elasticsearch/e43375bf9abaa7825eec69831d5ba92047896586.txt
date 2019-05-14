@@ -1,0 +1,11 @@
+Security: revert to old way of merging automata (#32254)
+
+This commit reverts to the pre-6.3 way of merging automata as the
+change in 6.3 significantly impacts the performance for roles with a
+large number of concrete indices. In addition, the maximum number of
+states for security automata has been increased to 100,000 in order
+to allow users to use roles that caused problems pre-6.3 and 6.3 fixed.
+
+As an escape hatch, the maximum number of states is configurable with
+a setting so that users with complex patterns in roles can increase
+the states with the knowledge that there is more memory usage.

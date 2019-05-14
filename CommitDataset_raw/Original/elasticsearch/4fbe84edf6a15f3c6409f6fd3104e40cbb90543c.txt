@@ -1,0 +1,12 @@
+Painless: Cleanup Cache (#33963)
+
+* Adds equals/hashcode methods to the Painless* objects within the lookup package.
+* Changes the caches to use the Painless* objects as keys as well as values. This forces 
+future changes to taken into account the appropriate values for caching.
+* Deletes the existing caching objects in favor of Painless* objects. This removes a pair of 
+bugs that were not taking into account subtle corner cases related to augmented methods 
+and caching.
+* Uses the Painless* objects to check for equivalency in existing Painless* objects that 
+may have already been added to a PainlessClass. This removes a bug related to return 
+not being appropriately checked when adding methods.
+* Cleans up several error messages.

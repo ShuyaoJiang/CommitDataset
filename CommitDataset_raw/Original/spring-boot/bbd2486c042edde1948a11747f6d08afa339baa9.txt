@@ -1,0 +1,12 @@
+Run invoker plugin with a single thread to avoid build failures
+
+Running the invoker plugin with multiple threads against an empty
+Maven cache results in strange build failures where Maven claims that
+it cannot find a jar or pom file for an artifact that it should be
+able to find. It would appear that Maven is unable to cope with
+concurrent writes to its cache.
+
+This commit removes the usage of multiple threads that was introduced
+in 4e907f1.
+
+Fixes gh-2389

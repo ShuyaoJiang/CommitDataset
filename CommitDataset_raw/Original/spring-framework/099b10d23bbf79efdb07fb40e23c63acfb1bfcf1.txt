@@ -1,0 +1,17 @@
+Honor presence of @WebAppConfiguration in ServTEL
+
+The previous commit for issue SPR-11144 revealed a bug in
+ServletTestExecutionListener (STEL). Specifically, STEL acted on the
+fact that the ApplicationContext for a given TestContext was an
+instance of WebApplicationContext. This behavior could potentially
+break test code from previous releases of the Spring Framework that
+relied on a custom setup of the RequestAttributes in the
+RequestContextHolder with a custom WebApplicationContext ContextLoader.
+
+This commit addresses this issue by ensuring that STEL only comes into
+play if the test class is annotated with @WebAppConfiguration (for
+prepareTestInstance() and beforeTestMethod()) or if the TestContext
+attribute named RESET_REQUEST_CONTEXT_HOLDER_ATTRIBUTE is set to
+Boolean.TRUE (for afterTestMethod()).
+
+Issue: SPR-11144

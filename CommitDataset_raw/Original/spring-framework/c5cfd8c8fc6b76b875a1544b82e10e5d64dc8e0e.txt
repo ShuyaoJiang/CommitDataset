@@ -1,0 +1,10 @@
+Make the Kotlin bean registration API even more idiomatic
+
+Put the lambda parameter at the end and use a function
+instead of a supplier to be able to register beans like this:
+
+val context = GenericApplicationContext()
+context.registerBean(Foo::class)
+context.registerBean{ Bar(it.getBean(Foo::class)) }
+
+Issue: SPR-15118

@@ -1,0 +1,52 @@
+Correct expect header handling
+
+Motivation:
+
+Today, the HTTP codec in Netty responds to HTTP/1.1 requests containing
+an "expect: 100-continue" header and a content-length that exceeds the
+max content length for the server with a 417 status (Expectation
+Failed). This is a violation of the HTTP specification. The purpose of
+this commit is to address this situation by modifying the HTTP codec to
+respond in this situation with a 413 status (Request Entity Too
+Large). Additionally, the HTTP codec ignores expectations in the expect
+header that are currently unsupported. This commit also addresses this
+situation by responding with a 417 status.
+
+Handling the expect header is tricky business as the specification (RFC
+2616) is more complicated than it needs to be. The specification defines
+the legitimate values for this header as "100-continue" and defines the
+notion of expectatation extensions. Further, the specification defines a
+417 status (Expectation Failed) and this is where implementations go
+astray. The intent of the specification was for servers to respond with
+417 status when they do not support the expectation in the expect
+header.
+
+The key sentence from the specification follows:
+
+    The server MUST respond with a 417 (Expectation Failed) status if
+    any of the expectations cannot be met or, if there are other
+    problems with the request, some other 4xx status.
+
+That is, a server should respond with a 417 status if and only if there
+is an expectation that the server does not support (whether it be
+100-continue, or another expectation extension), and should respond with
+another 4xx status code if the expectation is supported but there is
+something else wrong with the request.
+
+Modifications:
+
+This commit modifies the HTTP codec by changing the handling for the
+expect header in the HTTP object aggregator. In particular, the codec
+will now respond with 417 status if any expectation other than
+100-continue is present in the expect header, the codec will respond
+with 413 status if the 100-continue expectation is present in the expect
+header and the content-length is larger than the max content length for
+the aggregator, and otherwise the codec will respond with 100 status.
+
+Result:
+
+The HTTP codec can now be used to correctly reply to clients that send a
+100-continue expectation with a content-length that is too large for the
+server with a 413 status, and servers that use the HTTP codec will now
+no longer ignore expectations that are not supported (any value other
+than 100-continue).

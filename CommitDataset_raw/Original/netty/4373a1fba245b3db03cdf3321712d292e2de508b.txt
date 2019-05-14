@@ -1,0 +1,19 @@
+Increase default bits for SelfSignedCertificate (#9019)
+
+Motivation:
+During OpenSsl.java initialization, a SelfSignedCertificate is created
+during the static initialization block to determine if OpenSsl
+can be used.
+
+The default key strength for SelfSignedCertificate was too low if FIPS
+mode is used and BouncyCastle-FIPS is the only available provider
+(necessary for compliance). A simple fix is to just augment the key
+strength to the minimum required about by FIPS.
+
+Modification:
+Set default key bit length to 2048 but also allow it to be dynamically set via a system property for future proofing to more stricter security compliance.
+
+Result:
+Fixes #9018
+
+Signed-off-by: Farid Zakaria <farid.m.zakaria@gmail.com>

@@ -1,0 +1,16 @@
+Allow spring.config.location to be configured via servlet context
+
+Previously, in a war deployment, the web environment’s property sources
+were initialized using the servlet context after the application’s
+configuration had been read by ConfigFileApplicationListener. This
+meant that spring.config.location configured via the servlet context
+had no effect.
+
+This commit adds a new ApplicationListener,
+ServletContextApplicationListener, that initialises the configurable
+web environment’s property sources using the servlet context. It’s
+ordered with higher precedence than ConfigFileApplicationListener to
+ensure that any properties defined in the servlet context are available
+when loading the application’s configuration.
+
+Closes gh-6801

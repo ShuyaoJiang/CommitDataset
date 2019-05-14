@@ -1,0 +1,21 @@
+Use Triple DES in JdkSslContext cipher suite list.
+
+Motivation:
+
+JdkSslContext used SSL_RSA_WITH_DES_CBC_SHA in its cipher suite list.
+OpenSslServerContext used DES-CBC3-SHA in the same place in its cipher suite
+list, which is equivalent to SSL_RSA_WITH_3DES_EDE_CBC_SHA.
+
+This means the lists were out of sync. Furthermore, using
+SSL_RSA_WITH_DES_CBC_SHA is not desirable as it uses DES, a weak cipher. Triple
+DES should be used instead.
+
+Modifications:
+
+Replace SSL_RSA_WITH_DES_CBC_SHA with SSL_RSA_WITH_3DES_EDE_CBC_SHA in
+JdkSslContext.
+
+Result:
+
+The JdkSslContext and OpenSslServerContext cipher suite lists are now in sync.
+Triple DES is used instead of DES, which is stronger.

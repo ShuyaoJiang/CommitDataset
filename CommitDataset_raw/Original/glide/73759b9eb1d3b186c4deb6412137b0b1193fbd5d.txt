@@ -1,0 +1,19 @@
+Default active resource retention false.
+
+Although Glide avoids recycling or mutating Bitmaps recovered from
+active resources via weak references, we can't prevent callers from
+doing so. If callers do mutate or recycle the Bitmaps, Glide may throw
+exceptions, show graphical errors, or experience other undefined
+behavior. Since we can't guarantee that Glide's behavior is safe, it
+doesn't make sense to default this option on.
+
+That said, recycling or mutating Bitmaps returned by Glide isn't
+strictly safe either and is generally both bad and inefficient. If
+applications use the safe and efficient RequestManager.clear method
+instead, setting this option to true will work as expected. As a result,
+we'll retain the option, but force users to opt in if they want the
+benefit.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=178704468

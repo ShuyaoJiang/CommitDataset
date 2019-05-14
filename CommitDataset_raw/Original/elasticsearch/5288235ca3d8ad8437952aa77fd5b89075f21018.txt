@@ -1,0 +1,28 @@
+Optimize the composite aggregation for match_all and range queries (#28745)
+
+This change refactors the composite aggregation to add an execution mode that visits documents in the order of the values
+present in the leading source of the composite definition. This mode does not need to visit all documents since it can early terminate
+the collection when the leading source value is greater than the lowest value in the queue.
+Instead of collecting the documents in the order of their doc_id, this mode uses the inverted lists (or the bkd tree for numerics) to collect documents
+in the order of the values present in the leading source.
+For instance the following aggregation:
+
+```
+"composite" : {
+  "sources" : [
+    { "value1": { "terms" : { "field": "timestamp", "order": "asc" } } }
+  ],
+  "size": 10
+}
+```
+... can use the field `timestamp` to collect the documents with the 10 lowest values for the field instead of visiting all documents.
+For composite aggregation with more than one source the execution can early terminate as soon as one of the 10 lowest values produces enough
+composite buckets. For instance if visiting the first two lowest timestamp created 10 composite buckets we can early terminate the collection since it
+is guaranteed that the third lowest timestamp cannot create a composite key that compares lower than the one already visited.
+
+This mode can execute iff:
+ * The leading source in the composite definition uses an indexed field of type `date` (works also with `date_histogram` source), `integer`, `long` or `keyword`.
+ * The query is a match_all query or a range query over the field that is used as the leading source in the composite definition.
+ * The sort order of the leading source is the natural order (ascending since postings and numerics are sorted in ascending order only).
+
+If these conditions are not met this aggregation visits each document like any other agg.

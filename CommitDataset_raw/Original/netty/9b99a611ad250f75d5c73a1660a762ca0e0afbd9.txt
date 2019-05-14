@@ -1,0 +1,15 @@
+[#2823] Writing DefaultFileRegion with EpollSocketChannel may cause hang
+
+Motivation:
+
+In EpollSocketchannel.doWriteFileRegion(...) we need to make sure we write until sendFile(...) returns either 0 or all is written. Otherwise we may not get notified once the Channel is writable again.
+
+This is the case as we use EPOLL_ET.
+
+Modifications:
+
+Always write until either sendFile returns 0 or all is written.
+
+Result:
+
+No more hangs when writing DefaultFileRegion can happen.

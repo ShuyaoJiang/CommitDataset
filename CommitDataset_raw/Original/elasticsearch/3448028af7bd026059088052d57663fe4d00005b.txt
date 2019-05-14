@@ -1,0 +1,12 @@
+Avoid double decrement on current query counter
+
+This commit fixes a double decrement bug on the current query
+counter. The double decrement arises in a situation when the fetch phase
+is inlined for a query that is only touching one shard. After the query
+phase succeeds we decrement the current query counter. If the fetch
+phase ultimately fails, an exception is thrown and we decrement the
+current query counter again in the catch block. We also add assertions
+that all current stats counters remain non-negative at all
+times.
+
+Relates #24922

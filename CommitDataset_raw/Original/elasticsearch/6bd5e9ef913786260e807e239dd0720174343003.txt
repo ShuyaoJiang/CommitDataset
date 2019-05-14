@@ -1,0 +1,26 @@
+Watcher: Reenable email property settings (elastic/x-pack-elasticsearch#4319)
+
+With the change of requiring to configure account settings properly by
+using affix settings, we forgot another special snowflake, namely the
+configuration of mail properties, which can be arbitrary in the
+configuration. Those properties are used when an email is sent.
+
+This commit adds a few (but not all of those) options back and removes
+the link in the documentation to refer to all of those settings.
+
+Some settings are useless, as they only change the execution
+expectations when a mail is sent, which the watch has control over.
+
+The following settings are supported
+
+* smtp.{host,port,user,password}
+* smtp.auth
+* smtp.starttls.{enable,required}
+* smtp.{timeout,connection_timeout,write_timeout}
+* smtp.{local_address,local_port}
+* smtp.send_partial
+* smtp.wait_on_quit
+
+relates elastic/x-pack-elasticsearch#4048
+
+Original commit: elastic/x-pack-elasticsearch@39d56247103a3b0cb97b397af10b71c8c236bc20

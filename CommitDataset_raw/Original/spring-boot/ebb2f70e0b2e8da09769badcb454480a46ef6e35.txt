@@ -1,0 +1,12 @@
+Make WebMvgTags use matched patterns for HTTP 404
+
+Prior to this commit, `WebMvcTags' would always mark as "NOT_FOUND" or
+"REDIRECTION" *any* exchange with responses of 404 and 3xx status, even
+if those responses are actually returned by Controller handlers.
+
+This commit checks inverts those checks and first considers if the
+"BEST_MATCHING_PATTERN_ATTRIBUTE" request attribute is present and uses
+it - then falls back to "NOT_FOUND" and "REDIRECTION" to avoid
+cardinality explosion.
+
+Fixes gh-12577

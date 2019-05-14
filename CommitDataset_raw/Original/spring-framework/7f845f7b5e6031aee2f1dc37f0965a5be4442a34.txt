@@ -1,0 +1,10 @@
+Fix failing HeaderAssertionTests
+
+Since SPR-11792, Last-Modified and ETag headers are also written in
+`HTTP 304 Not Modified` responses. This is expected as per
+https://tools.ietf.org/html/rfc7232#section-4.1 .
+
+Those tests expected "Last-Modified" to be missing in case of HTTP 304
+responses, which is not the case anymore since 953608ec .
+
+Issue: SPR-11792

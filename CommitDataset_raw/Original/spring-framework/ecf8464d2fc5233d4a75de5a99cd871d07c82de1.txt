@@ -1,0 +1,11 @@
+Replace MaxPermSize use in build scripts
+
+Since JDK 8 is required to build Spring framework 4, and permanent
+generation is gone from Java 8, to eliminate warnings about no longer
+available MaxPermSize switch, it should be removed or replaced with new
+MaxMetaspaceSize switch.
+
+This fix replaces old with new switch to limit the amount of native
+memory used for class metadata.
+
+Issue: SPR-10571

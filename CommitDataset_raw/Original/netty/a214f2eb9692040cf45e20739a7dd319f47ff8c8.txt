@@ -1,0 +1,14 @@
+Remove id from DnsQueryContextManager whenever the promise is fullfilled.
+
+Motivation:
+
+We did not handle the case when the query was cancelled which could lead to an exhausted id space. Beside this we did not not cancel the timeout on failed promises.
+
+Modifications:
+
+- Do the removal of the id from the manager in a FutureListener so its handled in all cases.
+- Cancel the timeout whenever the original promise was full-filled.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8013.

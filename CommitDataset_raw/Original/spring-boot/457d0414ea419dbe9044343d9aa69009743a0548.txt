@@ -1,0 +1,16 @@
+Make ConditionalOnBean a logical AND rather than an OR
+
+Previously ConditionalOnBean was the inverse of
+ConditionalOnMissingBean. This meant that the former was a logical OR
+while the latter was a logical AND of the requiremnts declared via the
+annotation's attributes.
+
+This commit changes the logic for ConditionalOnBean so that it is now
+a logical AND. A side-effect of this change is that more information
+about what has and has not matched must be tracked during the
+evaluation. This extra information is now used to provide more
+informative messages in the condition evaluation report that indicate
+exactly why @ConditionalOnBean or @ConditionalOnMissingBean did not
+match.
+
+Closes gh-5279

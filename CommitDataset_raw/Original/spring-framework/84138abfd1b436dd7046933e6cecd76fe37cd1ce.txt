@@ -1,0 +1,15 @@
+Avoid rejecting same-origin requests detected as CORS requests
+
+Browsers like Chrome or Safari include an Origin header for same-origin
+POST/PUT/DELETE requests, not only for cross-origin requests.
+
+Before this commit, these same-origin requests would have been detected
+as potential cross-origin requests, and rejected if the same-origin domain
+is not part of the configured allowedOrigins.
+
+This commit avoid to reject same-origin requests by reusing the logic
+introduced in Spring 4.1 for detecting reliably Websocket/SockJS
+same-origin requests with the WebUtils.isValidOrigin() method. This
+logic has been extracted in a new WebUtils.isSameOrigin() method.
+
+Issue: SPR-13206

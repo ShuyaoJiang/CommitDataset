@@ -1,0 +1,11 @@
+SQL: Fix issue with options for QUERY() and MATCH(). (#33828)
+
+Previously multiple comma separated lists of options where not
+recognized correctly which resulted in only the last of them
+to be taked into account, e.g.:
+
+For the following query:
+  SELECT * FROM test WHERE QUERY('search', 'default_field=foo', 'default_operator=and')"
+only the `default_operator=and` was finally passed to the ES query.
+
+Fixes: #32602

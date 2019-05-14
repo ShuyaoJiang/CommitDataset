@@ -1,0 +1,16 @@
+Add support of metadata generation for Endpoints
+
+This commit improves the configuration metadata annotation processor to
+explicitly handle `@Endpoint` annotated class. Adding a new endpoint on
+a project potentially creates the following keys:
+
+* `endpoints.<id>.enabled`
+* `endpoints.<id>.cache.time-to-live`
+* `endpoints.<id>.jmx.enabled`
+* `endpoints.<id>.web.enabled`
+
+Default values are extracted from the annotation type. If an endpoint
+is restricted to a given tech, properties from unrelated techs are not
+generated.
+
+Closes gh-9692

@@ -1,0 +1,11 @@
+Support attribute overrides with @ResponseStatus
+
+This commit introduces support for attribute overrides for
+@ResponseStatus when @ResponseStatus is used as a meta-annotation on
+a custom composed annotation.
+
+Specifically, this commit migrates all code that looks up
+@ResponseStatus from using AnnotationUtils.findAnnotation() to using
+AnnotatedElementUtils.findMergedAnnotation().
+
+Issue: SPR-13441

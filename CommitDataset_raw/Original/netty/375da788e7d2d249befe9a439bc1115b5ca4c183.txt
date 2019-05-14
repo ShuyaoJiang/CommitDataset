@@ -1,0 +1,13 @@
+[#2577] ChannelOutboundBuffer.addFlush() unnecessary loop through all entries on multiple calls
+
+Motivation:
+
+If ChannelOutboundBuffer.addFlush() is called multiple times and flushed != unflushed it will still loop through all entries that are not flushed yet even if it is not needed anymore as these were marked uncancellable before.
+
+Modifications:
+
+Check if new messages were added since addFlush() was called and only if this was the case loop through all entries and try to mark the uncancellable.
+
+Result:
+
+Less overhead when ChannelOuboundBuffer.addFlush() is called multiple times without new messages been added.

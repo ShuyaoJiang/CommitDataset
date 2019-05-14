@@ -1,0 +1,11 @@
+HTTP/2 Connection Listener Unchecked Exceptions
+
+Motivation:
+The DefaultHttp2Connection is not checking for RuntimeExceptions when invoking Http2Connection.Listener methods. This is a problem for a few reasons: 1. The state of DefaultHttp2Connection will be corrupted if a listener throws a RuntimeException. 2. If the first listener throws then no other listeners will be notified, which may further corrupt state that is updated as a result of listeners being notified.
+
+Modifications:
+- Document that RuntimeExceptions are not supported for Http2Connection.Listener methods, and will be logged as an error.
+- Update DefaultHttp2Connection to handle and exception for each listener that is notified, and be sure that 1 listener throwing an exception does not prevent others from being notified.
+
+Result:
+More robust DefaultHttp2Connection.

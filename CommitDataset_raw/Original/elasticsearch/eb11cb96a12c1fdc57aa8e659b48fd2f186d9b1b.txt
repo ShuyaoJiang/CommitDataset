@@ -1,0 +1,15 @@
+[Tests] Ensure that Watcher templates are created before creating alias (elastic/x-pack-elasticsearch#3956)
+
+* [Tests] Ensure that Watcher templates are created before creating alias
+
+The createWatcherIndicesOrAliases() method randomly created watcher
+indices with or without aliases. On slow machines it is possible that
+the indices get created before WatcherIndexTemplateRegistry put the
+templates. When it happens, the indices will be created without the
+right index.format value, preventing the WatcherService to start (as
+it checks the index.format before starting, in case an upgrade is
+required)
+
+relates elastic/x-pack-elasticsearch#3965
+
+Original commit: elastic/x-pack-elasticsearch@82946a2be09221e42e0bd089df14db106059b224

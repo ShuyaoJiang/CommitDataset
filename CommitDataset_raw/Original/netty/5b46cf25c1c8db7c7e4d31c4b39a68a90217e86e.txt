@@ -1,0 +1,18 @@
+Fulfill the write promise of empty HTTP/2 DATA frames sooner
+
+Motivation:
+
+DefaultHttp2ConnectionEncoder.FlowControlledData.write() does not
+complete the write promise of empty HTTP/2 DATA frames until either a
+non-DATA frame, a non-empty DATA frame or a DATA frame with endOfStream
+set. This makes the write promise of the empty DATA frame is notified
+much later than it could be.
+
+Modifications:
+
+- Notify the write promise of the empty DATA frames immediately is the
+  queue contains empty DATA frames only
+
+Result:
+
+The write promise of an empty DATA frame is notified sooner.

@@ -1,0 +1,11 @@
+Track total hits up to 10,000 by default (#37466)
+
+This commit changes the default for the `track_total_hits` option of the search request
+to `10,000`. This means that by default search requests will accurately track the total hit count
+up to `10,000` documents, requests that match more than this value will set the `"total.relation"`
+to `"gte"` (e.g. greater than or equals) and the `"total.value"` to `10,000` in the search response.
+Scroll queries are not impacted, they will continue to count the total hits accurately.
+The default is set back to `true` (accurate hit count) if `rest_total_hits_as_int` is set in the search request.
+I choose `10,000` as the default because that's also the number we use to limit pagination. This means that users will be able to know how far they can jump (up to 10,000) even if the total number of hits is not accurate.
+
+Closes #33028

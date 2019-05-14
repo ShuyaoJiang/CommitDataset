@@ -1,0 +1,3 @@
+testRecoveryAfterPrimaryPromotion: seqNo recovery doesn't require some initial indexing
+
+Previously the primary didn't update it's own local checkpoint (and thus the global checkpoint) before some indexing occurred. With recent changes the primary now properly initializes it self and thus ops recovery is possible even if no indexing has occurred.

@@ -1,0 +1,15 @@
+Upgrade to Spring Framework 5.1
+
+As of Spring Framework 5.1, we're depending on the Reactor Californium
+release train.
+Reactor Netty is now at version 0.8 and changed its artifact
+coordinates, package names and broke several APIs. Spring Framework is
+now up-to-date with those changes and this commit does the same for
+Spring Boot.
+
+Note that in that process, the `NettyServerCustomizer` has been changed
+since the former `HttpServerOptions.Builder` API is now gone from
+Reactor Netty, and we're now relying on immutable server instances
+instead of a stateful builder pattern.
+
+See gh-13321

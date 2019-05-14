@@ -1,0 +1,13 @@
+VersionResourceResolver should delegate to the chain
+
+Prior to this commit, the `VersionResourceResolver` implementations of
+`resolveUrlPathInternal` would delegate to the resolver chain but would
+never use the give result if the current request didn't match a
+configured version strategy pattern.
+
+This is a problem if the resolver supposed to resolve the resource path
+is configured after a `VersionResourceResolver` in the resolver chain;
+this means that other resolver never gets to participate in the result
+of the chain.
+
+Issue: SPR-15372

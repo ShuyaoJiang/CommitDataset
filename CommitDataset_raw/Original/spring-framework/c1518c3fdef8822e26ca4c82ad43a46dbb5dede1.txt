@@ -1,0 +1,17 @@
+Avoid exception while setting the status code of a committed response
+
+Before this commit, it was not possible to set the status code of an
+HTTP response without throwing an exception if it was already
+committed. The consequence was a lot of errors in the logs for long
+lived HTTP exchanges like Server-Sent Events for example.
+
+After this commit, ServerHttpResponse#setStatusCode() returns
+true if the operation succeeded and false if the status code has not
+been set because the response has already been committed.
+
+In term of implementation, that makes status code managed
+consistently with headers and cookies:
+AbstractServerHttpResponse#setStatusCode() stores the status
+code that will be effectively set later in the response lifecycle by
+the HTTP server via AbstractServerHttpResponse#writeStatusCode()
+when the response will be committed.

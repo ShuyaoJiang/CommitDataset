@@ -1,0 +1,6 @@
+Fsync directory after cleanup (#28604)
+
+After copying over the Lucene segments during peer recovery, we call cleanupAndVerify which removes all other files in the directory and which then calls getMetadata to check if the resulting files are a proper index. There are two issues with this:
+
+- the directory is not fsynced after the deletions, so that the call to getMetadata, which lists files in the directory, can get a stale view, possibly seeing a deleted corruption marker (which leads to the exception seen in #28435)
+- failing to delete a corruption marker should result in a hard failure, as the shard is otherwise unusable.

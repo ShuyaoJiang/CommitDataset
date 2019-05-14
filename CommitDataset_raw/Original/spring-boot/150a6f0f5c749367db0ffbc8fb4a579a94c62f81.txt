@@ -1,0 +1,9 @@
+Switch off Security Filter auto-config when spring-security-config is absent
+
+SecurityFilterAutoConfiguration uses SecurityProperties which uses
+SessionCreationPolicy from spring-security-config. This commit makes
+SecurityFilterAutoConfiguration conditional on SessionCreationPolicy,
+thereby preventing a startup failure if spring-security-web is on the
+classpath but spring-security-config is not.
+
+Closes gh-4919

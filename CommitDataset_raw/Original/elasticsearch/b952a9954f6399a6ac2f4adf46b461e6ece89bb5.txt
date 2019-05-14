@@ -1,0 +1,7 @@
+Set JAVA_HOME before forking setup commands (#29647)
+
+Today when forking setup commands we do not set JAVA_HOME. This means
+that we might not use a version of Java compatible with the version of
+Java the command is expecting to run on (for example, 5.6 nodes would
+expect JDK 8, and this is true even for their setup commands). This
+commit sets JAVA_HOME when configuring setup command tasks.

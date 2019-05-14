@@ -1,0 +1,10 @@
+Polish AbstractServerHttpResponse
+
+This commit simplifies the logic for applying beforeCommit actions
+replacing the use of chained Mono.then calls with a single
+Flux.concat.
+
+Also renamed writeStatusCode, writeHeaders, and writeCookies to
+applyStatusCode, applyHeaders, and applyCookies respectively to
+better reflect we're simply setting them on the underlying response
+(not necessarily written yet).

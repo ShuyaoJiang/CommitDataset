@@ -1,0 +1,7 @@
+Log warnings when cluster state publication failed to some nodes (#31233)
+
+If the publishing of a cluster state to a node fails, we currently only log it as debug information and 
+only on the master. This makes it hard to see the cause of (test) failures when logging is set to 
+default levels. This PR adds a warn level log on the node receiving the cluster state when it fails to 
+deserialise the cluster state and a warn level log on the master with a list of nodes for which 
+publication failed.

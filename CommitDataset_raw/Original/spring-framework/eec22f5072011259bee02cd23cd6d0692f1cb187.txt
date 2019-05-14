@@ -1,0 +1,11 @@
+Avoid duplicate flush when closing outputstream
+
+Prior to this commit, the `HttpInvokerServiceExporter` would close
+its `ObjectOutputStream`, which itself issues duplicate flushes on the
+underlying `OutputStream`. Duplicate flushes can lead to multiple,
+separate TCP packets where those should be gathered writes.
+
+This commit wraps the underying stream with a decorator that guards
+against flush calls that are duplicated with the one done in `close`.
+
+Issue: SPR-14040

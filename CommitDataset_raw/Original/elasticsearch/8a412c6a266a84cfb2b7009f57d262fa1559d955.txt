@@ -1,0 +1,19 @@
+Ensure MapperService#getAllMetaFields elements order is deterministic (#36739)
+
+MapperService#getAllMetaFields returns an array, which is created out of
+an `ObjectHashSet`. Such set does not guarantee deterministic hash
+ordering. The array returned by its toArray may be sorted differently
+at each run. This caused some repeatability issues in our tests (see #29080)
+as we pick random fields from the array of possible metadata fields,
+but that won't be repeatable if the input array is sorted differently at
+every run. Once setting the tests seed, hppc picks that up and the sorting is
+deterministic, but failures don't repeat with the seed that gets printed out
+originally (as a seed was not originally set).
+See also https://issues.carrot2.org/projects/HPPC/issues/HPPC-173.
+
+With this commit, we simply create a static sorted array that is used for
+`getAllMetaFields`. The change is in production code but really affects
+only testing as the only production usage of this method was to iterate
+through all values when parsing fields in the high-level REST client code.
+Anyways, this seems like a good change as returning an array would imply
+that it's deterministically sorted.

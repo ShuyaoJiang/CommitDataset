@@ -1,0 +1,15 @@
+Unmute, fix, refactor and zen2ify NetworkDisruptionIT (#38351)
+
+This commit unmutes NetworkDisruptionIT.
+
+It makes changes necessary for Zen2 - avoids usage of
+autoMinMasterNodes and selects cluster size, such that there is no
+need to call AddVotingExclusion.
+This test also introduces refactors a single method
+prepareDistruptedCluster to be used by both test methods.
+Unfortunately, NetworkDisruption is broken and the
+testNetworkPartitionRemovalRestoresConnections "is fixed" by
+introducing assertBusy - #38348.
+
+Relates #36205
+Relates #38348

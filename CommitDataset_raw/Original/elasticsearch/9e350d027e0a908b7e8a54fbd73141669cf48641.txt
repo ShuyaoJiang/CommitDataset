@@ -1,0 +1,16 @@
+Add BWC compatible processing to ingest date processors (#37407)
+
+The ingest date processor is currently only able to parse joda formats.
+However it is not using the existing elasticsearch classes but access
+joda directly. This means that our existing BWC layer does not notify
+the user about deprecated formats. This commit switches to use the
+exising Elasticsearch Joda methods to acquire a date format, that
+includes the BWC check and the ability to parse java 8 dates.
+
+The date parsing in ingest has also another extra feature, that the
+fallback year, when a date format without a year is used, is the current
+year, and not 1970 like usual. This is currently not properly supported
+in the DateFormatter class. As this is the only case for this feature
+and java time can take care of this using the toZonedDateTime() method,
+a workaround just for the joda time parser has been created, that can be
+removed soon again from 7.0.

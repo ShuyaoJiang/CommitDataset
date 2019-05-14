@@ -1,0 +1,13 @@
+HTTP/2 HelloWorld Client Example Bug
+
+Motivation:
+The HTTP/2 helloworld client example has 2 bugs:
+1. HttpResponseHandler has a map which is accessed from multiple threads, but the map is not thread safe.
+2. Requests are flushed and maybe completely written and the responses may be received/processed by Netty before an element is inserted into the HttpResponseHandler map. This may result in an 'unexpected message' error even though the message has actually been sent.
+
+Modifications:
+- HttpResponseHandler should use a thread safe map
+- Http2Client shouldn't flush until entries are added to the HttpResponseHandler map
+
+Result:
+Fixes https://github.com/netty/netty/issues/6165.

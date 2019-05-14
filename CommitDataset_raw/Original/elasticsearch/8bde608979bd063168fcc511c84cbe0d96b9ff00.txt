@@ -1,0 +1,14 @@
+Register CcrRepository based on settings update (#36086)
+
+This commit adds an empty CcrRepository snapshot/restore repository.
+When a new cluster is registered in the remote cluster settings, a new
+CcrRepository is registered for that cluster.
+
+This is implemented using a new concept of "internal repositories".
+RepositoryPlugin now allows implementations to return factories for
+"internal repositories". The "internal repositories" are different from
+normal repositories in that they cannot be registered through the
+external repository api. Additionally, "internal repositories" are local
+to a node and are not stored in the cluster state.
+
+The repository will be unregistered if the remote cluster is removed.

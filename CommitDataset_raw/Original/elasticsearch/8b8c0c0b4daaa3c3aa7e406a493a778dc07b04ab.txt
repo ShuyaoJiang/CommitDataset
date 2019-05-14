@@ -1,0 +1,7 @@
+Add additional shards routing info in ShardSearchRequest (#29533)
+
+This commit propagates the preference and routing of the original SearchRequest in the ShardSearchRequest.
+This information is then use to fix a bug in sliced scrolls when executed with a preference (or a routing).
+Instead of computing the slice query from the total number of shards in the index, this commit computes this number from the number of shards per index that participates in the request.
+
+Fixes #27550

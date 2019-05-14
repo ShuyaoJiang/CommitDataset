@@ -1,0 +1,13 @@
+Fix synchronization issue in StompSubProtocolHandler
+
+Two concurrent threads should not send a message on a single WebSocket
+session at the same time, for example see:
+http://docs.oracle.com/javaee/7/api/javax/websocket/RemoteEndpoint.Basic.html
+
+In StompSubProtocolHandler it is quite possible that multiple messages
+may be broadcast to a single WebSocket client concurrently.
+
+This change adds synchronization around the sending of a message to a
+specific cilent session.
+
+Issue: SPR-11023

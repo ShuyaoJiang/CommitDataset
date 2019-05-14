@@ -1,0 +1,14 @@
+Fix JsonContentAssert type safety warnings
+
+Previously, JsonContentAssert returns AbstractMapAssert from
+extractingJsonPathMapValue. This could lead to type safety warnings
+when calling one of the assert's methods with a generic varargs
+parameter such as
+contains(Entry<? extends Object, ? extends Object>...).
+
+This commit replaces the use of both AbstractMapAssert and
+AbstractListAssert with MapAssert and ListAssert respectively. These
+classes use final methods and @SafeVargs args to prevent the
+above-described problem from occurring.
+
+See gh-9675

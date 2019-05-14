@@ -1,0 +1,15 @@
+Allow to create Epoll*Channel from FileDescriptor
+
+Motivation:
+
+Sometimes it's useful to be able to create a Epoll*Channel from an existing file descriptor. This is especially helpful if you integrade some c/jni code.
+
+Modifications:
+
+- Add extra constructor to Epoll*Channel implementations that take a FileDescriptor as an argument
+- Make Rename EpollFileDescriptor to NativeFileDescriptor and make it public
+- Also ensure we obtain the correct remote/local address when create a Channel from a FileDescriptor
+
+Result:
+
+It's now possible to create a FileDescriptor and instance a Epoll*Channel via it.

@@ -1,0 +1,12 @@
+Refactor the Actuator MVC configuration to allow more customization
+
+There is a new spring.factories entry for
+org.springframework.boot.actuate.autoconfigure.EndpointWebMvcConfiguration
+which loads extra beans into the MVC config for the Actuator.
+If the management context is a child context all the beans go in the
+child (except the Spring Security filter still). A big bonus is that
+you can add WebConfigurerAdapters to configure static resources etc.
+A new component called ManagementContextResolver can be used to
+locate the ApplicationContext for the MVC endpoints.
+
+Fixes gh-3345

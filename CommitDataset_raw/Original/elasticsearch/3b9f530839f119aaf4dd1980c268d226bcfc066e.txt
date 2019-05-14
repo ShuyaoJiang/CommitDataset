@@ -1,0 +1,6 @@
+Inc store reference before refresh (#28656)
+
+If a tragic even happens while we are refreshing a searcher/reader the engine can open new files on a store that is already closed
+For instance the following CI job failed because a merge was concurrently called on a failing shard:
+https://elasticsearch-ci.elastic.co/job/elastic+elasticsearch+master+oracle-java10-periodic/84
+This change increments the ref count of the store during a refresh in order to postpone the closing after a tragic event.

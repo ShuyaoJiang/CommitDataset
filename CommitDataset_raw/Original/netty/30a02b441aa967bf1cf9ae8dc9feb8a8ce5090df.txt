@@ -1,0 +1,17 @@
+Avoid implicit allocations in Http2FrameLogger when logging is disabled (#7937)
+
+Motivation:
+
+Integer autoboxing in this class (and possibly also the varargs arrays)
+showed non-negligible CPU and garbage contribution when profiling a gRPC
+service. grpc-java currently hardcodes use of Http2FrameLogger, set at
+DEBUG level.
+
+Modifications:
+
+Wrap offending log statements in conditional blocks.
+
+Result:
+
+Garbage won't be produced by Http2FrameLogger when set to a disabled
+logging level.

@@ -1,0 +1,34 @@
+high level REST api: cancel task (#30745)
+
+* Initial commit of rest high level exposure of cancel task
+
+* fix javadocs
+
+* address some code review comments
+
+* update branch to use tasks namespace instead of cluster
+
+* High-level client: list tasks failure to not lose nodeId
+
+This commit reworks testing for `ListTasksResponse` so that random
+fields insertion can be tested and xcontent equivalence can be checked
+too. Proper exclusions need to be configured, and failures need to be
+tested separately. This helped finding a little problem, whenever there
+is a node failure returned, the nodeId was lost as it was never printed
+out as part of the exception toXContent.
+
+* added comment
+
+* merge from master
+
+* re-work CancelTasksResponseTests to separate XContent failure cases from non-failure cases
+
+* remove duplication of logic in parser creation
+
+* code review changes
+
+* refactor TasksClient to support RequestOptions
+
+* add tests for parent task id
+
+* address final PR review comments, mostly formatting and such

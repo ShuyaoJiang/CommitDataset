@@ -1,0 +1,12 @@
+Correctly enable _all for older 5.x indices
+
+When we disabled `_all` by default for indices created in 6.0, we missed adding
+a layer that would handle the situation where `_all` was not enabled in 5.x and
+then the cluster was updated to 6.0, this means that when the cluster was
+updated the `_all` field would be disabled for 5.x indices and field values
+would not be added to the `_all` field.
+
+This adds a compatibility layer for 5.x indices where we treat the default
+enabled value for the `_all` field to be `true` if unset on 5.x indices.
+
+Resolves #25068

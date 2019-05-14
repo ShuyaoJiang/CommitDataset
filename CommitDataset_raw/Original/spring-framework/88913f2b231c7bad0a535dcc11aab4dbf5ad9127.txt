@@ -1,0 +1,13 @@
+Convert CRLF (dos) to LF (unix)
+
+Prior to this change, roughly 5% (~300 out of 6000+) of files under the
+source tree had CRLF line endings as opposed to the majority which have
+LF endings.
+
+This change normalizes these files to LF for consistency going forward.
+
+Command used:
+
+$ git ls-files | xargs file | grep CRLF | cut -d":" -f1 | xargs dos2unix
+
+Issue: SPR-5608

@@ -1,0 +1,12 @@
+[CCR] Move ccr tests in core module back to ccr module (#33711)
+
+When developing ccr it is not ideal if tests are in multiple modules.
+Even the classes these tests test are in the core module, it is easier
+if these tests are in ccr module in order to avoid running the test task
+in core module. This results in running many non ccr tests.
+
+This way when developing ccr we can run locally:
+./gradlew x-pack:plugin:core:precommit x-pack:plugin:ccr:check
+
+before pushing to PR branches and be confident that the PR build passes,
+without running x-pack:plugin:core:check task.

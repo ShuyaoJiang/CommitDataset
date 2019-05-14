@@ -1,0 +1,12 @@
+DefaultPromise LateListener Logic Issues
+
+Motivation:
+The LateListener logic is prone to infinite loops and relies on being processed in the EventExecutor's thread for synchronization, but this EventExecutor may not be constant. An infinite loop can occur if the EventExecutor's execute method does not introduce a context switch in LateListener.run. The EventExecutor can be changed by classes which inherit from DefaultPromise. For example the DefaultChannelPromise will return w/e EventLoop the channel is registered to, but this EventLoop can change (re-registration).
+
+Modifications:
+- Remove the LateListener concept and instead use a single Object to maintain the listeners while still preserving notification order
+- Make the result member variable an atomic variable so it can be outside the synchronized(this) blocks
+- Cleanup/simplify existing state management code
+
+Result:
+Fixes https://github.com/netty/netty/issues/5185

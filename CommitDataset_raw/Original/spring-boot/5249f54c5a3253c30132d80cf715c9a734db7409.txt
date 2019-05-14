@@ -1,0 +1,13 @@
+Integrate @ConfigurationProperties @Beans with DataSource configuration
+
+We now have a much simpler DataSourceAutoConfiguration that binds to whatever
+DataSource concrete type it finds at runtime. To be able to quickly switch between
+Hikari and the other types of DataSource there's a minute shim for translating
+the common properties (username, password, url, driverClassName), but actually
+only url is different. The shim and also DataSource initialization is supported
+through DataSourceProperties, but the other native properties get bound directly
+through the concrete runtime type of the DataSource.
+
+The /configprops endpoint works (and is exposed in the actuator sample).
+
+Fixes gh-840, fixes gh-477, see also gh-808.

@@ -1,0 +1,25 @@
+Fix split package introduced by @EnableSpringConfigured
+
+Commit 5327a7a37d25b67ee2ae7d1ead2a3db6847767c0 moved
+@EnableSpringConfigured from beans.factory.aspectj =>
+context.annotation within the spring-aspects module. This resolved a
+package cycle but had the side-effect of causing a "split package" [1]
+problem between spring-context and spring-aspects in OSGi-based
+classloader environments because the context.annotation package now
+exists in both modules.
+
+The simplest and best solution from an OSGi perspective is to relocate
+@EnableSpringConfigured and its supporting SpringConfiguredConfiguration
+class into a new package. This commit moves both these types into
+context.annotation.aspectj, following convention with other such
+"aspectj"-qualified packages in the spring-aspects module.
+
+As with the previous move, it is presumed this change will be low-impact
+as the "spring-configured" approach to domain object injection is a
+niche feature to begin with, and @EnableSpringConfigured has existed in
+its current location only since 3.1.2 and this change is being made in
+time for 3.1.3.
+
+[1]: http://wiki.osgi.org/wiki/Split_Packages
+
+Issue: SPR-9811, SPR-9441

@@ -1,0 +1,18 @@
+Log headers with toString() instead of own impl
+
+Header has a proper toString() method implementation that provides
+proper functionality when System.out.print-ing the contents of
+the header: instead of concatenating the string values, which can
+be null, resulting in possibly "null: null" as a header option,
+the toString() method correctly replaces a null occurrence with
+the empty string.
+
+Case in point, when logging the response you'll get:
+
+    <--- HTTP 200 http://api.example.com/ (74ms)
+    null: HTTP/1.1 200 OK
+
+Which would look much better as:
+
+    <--- HTTP 200 http://localhost:8081/somtoday/rest/ (74ms)
+    HTTP/1.1 200 OK

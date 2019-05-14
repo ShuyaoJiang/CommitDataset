@@ -1,0 +1,18 @@
+Adapt to API changes in Conscrypt 1.0.0.RC11
+
+Motivation:
+
+In google/conscrypt#313 the Conscrypt.Engines class was removed in favor
+of methods directly on Conscrypt and overloading. The Conscrypt-using
+code in Netty used reflection to access the old API, that doesn't exist
+anymore. And thus recent versions of Conscrypt fail to enable things
+like ALPN with Netty.
+
+Modifications:
+
+Instead of calling Conscrypt.Engines.isConscrypt, call
+Conscrypt.isConscrypt.
+
+Result:
+
+Conscrypt detected properly at runtime.

@@ -1,0 +1,10 @@
+Properly discover endpoints that are proxied
+
+Previously to this commit, if a `@ControllerEndpoint`,
+`@RestControllerEndpoint` or `@ServletEndpoint` annotated bean was
+proxied, the endpoint wasn't properly detected.
+
+This commit makes sure that annotation retrieval works on the user class
+while preserving the get (vs. find) retrieval semantic
+
+Closes gh-12441

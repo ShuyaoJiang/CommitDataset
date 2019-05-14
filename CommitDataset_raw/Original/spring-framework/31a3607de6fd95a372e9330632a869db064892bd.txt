@@ -1,0 +1,12 @@
+Lazy resolution of the JMS message
+
+Previously, any `javax.jms.Message` was converted eagerly to the Message
+abstraction. This leads to unnecessary conversion if the Payload is not
+requested by the underlying method (i.e. if the `javax.jms.Message` is
+injected directly).
+
+This commit returns a `Message` implementation that holds the
+`javax.jms.Message` and lazily resolve the payload or the headers on
+demand (that is the first time they are requested).
+
+Issue: SPR-13777

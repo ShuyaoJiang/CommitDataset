@@ -1,0 +1,19 @@
+[#5028] Fix re-entrance issue with channelWritabilityChanged(...) and write(...)
+
+Motivation:
+
+When always triggered fireChannelWritabilityChanged() directly when the update the pending bytes in the ChannelOutboundBuffer was made from within the EventLoop. This is problematic as this can cause some re-entrance issue if the user has a custom ChannelOutboundHandler that does multiple writes from within the write(...) method and also has a handler that will intercept the channelWritabilityChanged event and trigger another write when the Channel is writable. This can also easily happen if the user just use a MessageToMessageEncoder subclass and triggers a write from channelWritabilityChanged().
+
+Beside this we also triggered fireChannelWritabilityChanged() too often when a user did a write from outside the EventLoop. In this case we increased the pending bytes of the outboundbuffer before scheduled the actual write and decreased again before the write then takes place. Both of this may trigger a fireChannelWritabilityChanged() event which then may be re-triggered once the actual write ends again in the ChannelOutboundBuffer.
+
+The third gotcha was that a user may get multiple events even if the writability of the channel not changed.
+
+Modification:
+
+- Always invoke the fireChannelWritabilityChanged() later on the EventLoop.
+- Only trigger the fireChannelWritabilityChanged() if the channel is still active and if the writability of the channel changed. No need to cause events that were already triggered without a real writability change.
+- when write(...) is called from outside the EventLoop we only increase the pending bytes in the outbound buffer (so that Channel.isWritable() is updated directly) but not cause a fireChannelWritabilityChanged(). The fireChannelWritabilityChanged() is then triggered once the task is picked up by the EventLoop as usual.
+
+Result:
+
+No more re-entrance possible because of writes from within channelWritabilityChanged(...) method and no events without a real writability change.

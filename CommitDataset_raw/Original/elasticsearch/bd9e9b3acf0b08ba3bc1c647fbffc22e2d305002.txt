@@ -1,0 +1,9 @@
+Geo Point parse error fix (#40447)
+
+When geo point parsing threw a parse exception, it did not consume
+remaining tokens from the parser. This in turn meant that
+indexing documents with malformed geo points into mappings with
+ignore_malformed=true would fail in some cases, since DocumentParser
+expects geo_point parsing to end on the END_OBJECT token.
+
+Related to #17617

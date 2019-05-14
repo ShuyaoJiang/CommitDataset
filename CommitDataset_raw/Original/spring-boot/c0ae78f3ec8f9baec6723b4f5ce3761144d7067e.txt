@@ -1,0 +1,12 @@
+Isolate Aether in a separate class loader
+
+Prior to this commit, the Aether-based GrapeEngine was loaded in the
+same class loader as the rest of Boot. This led to Aether's and its
+dependencies' types polluting the application's class path. Most
+notably, this caused problems with logging as the logging framework
+could be permaturely initialized.
+
+This commit isolates AetherGrapeEngine, Aether and its dependencies
+into a separate class loader. This is done by customizing the
+packaging of the CLI's jar file with the internal directory housing
+all of the types that will be loaded by the separate class loader.

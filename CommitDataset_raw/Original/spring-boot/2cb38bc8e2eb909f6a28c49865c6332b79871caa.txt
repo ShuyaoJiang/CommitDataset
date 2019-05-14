@@ -1,0 +1,9 @@
+Apply Log4J2LoggingSystem.FILTER to main config
+
+Update Log4J2LoggingSystem so that the FILTER is applied to the main
+configuration and not to the root logger. Prior to this commit calls
+to `logger.isErrorEnabled()` would not consider the filter and hence
+would always return `true`. This caused `SpringApplication` to silently
+swallow exceptions.
+
+Fixes gh-5271

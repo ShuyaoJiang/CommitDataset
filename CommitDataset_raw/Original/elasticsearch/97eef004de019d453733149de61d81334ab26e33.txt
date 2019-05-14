@@ -1,0 +1,12 @@
+SQL: Remove instanceof checks for field retrieval (elastic/x-pack-elasticsearch#3402)
+
+* SQL: Remove instanceof checks for field retrieval
+
+This removes the `instanceof` checks iterating through the columns determining
+what fields need to be retrieved from the ES document. It adds an interface
+`FieldExtraction` that collects the fields needed in a builder. The builder can
+then build the fields necessary from a `SearchSourceBuilder`.
+
+* Remove default implementation in favor of pushing down exception throwing
+
+Original commit: elastic/x-pack-elasticsearch@11d3d69eb1b5cb49e0541b87ea3f9c2d14540b20

@@ -1,0 +1,21 @@
+Make static resource handling consistent across embedded containers
+
+Previously, there were a number of inconsistencies in the embedded
+containers' handling of static resources. The Servlet spec requires
+that static resources can be served from the META-INF/resources/
+directory of jars nested inside a war in WEB-INF/lib/. The intention
+was also to extend this to cover jar packaging when jars are nested in
+BOOT-INF/lib/. This worked when using Tomcat as long as Jasper was on
+the classpath. If you didn't have Jasper on the classpath or you
+were using Jetty or Undertow it did not work.
+
+This commit updates the configuration of embedded Jetty, Tomcat, and
+Undertow so that all three containers handle static resources in the
+same way, serving them from jars in WEB-INF/lib/ or /BOOT-INF/lib/.
+Numerous intergration tests have been added to verify the behaviour,
+including tests for Tomcat 8.0 and 7.0 which is supported in addition
+to the default 8.5.x. Note that static resource handling only works
+with Jetty 9.3.x and 9.2 and earlier does not support nested jars (
+see https://github.com/eclipse/jetty.project/issues/518 for details).
+
+Closes gh-8299

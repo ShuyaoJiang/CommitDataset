@@ -1,0 +1,9 @@
+No mapper service and index caches for replicated closed indices (#40423)
+
+Replicated closed indices can't be indexed into or searched, and therefore don't need a shard with
+full indexing and search capabilities allocated. We can save on a lot of heap memory for those
+indices by not allocating a mapper service and caching infrastructure (which preallocates a constant
+amount per instance). Before this change, a 1GB ES instance could host 250 replicated closed
+metricbeat indices (each index with one shard). After this change, the same instance can host 7300
+replicated closed metricbeat instances (not that this would be a recommended configuration). Most
+of the remaining memory is in the cluster state and the IndexSettings object.

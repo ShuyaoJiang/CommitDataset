@@ -1,0 +1,23 @@
+OpenSslEngine: Remove renegotiation support
+
+Motivation:
+
+SSL.setState() has gone from openssl 1.1. Calling it is, and probably
+always has been, incorrect. Doing renogitation in this manner is
+potentially insecure. There have been at least two insecure
+renegotiation vulnerabilities in users of the OpenSSL library.
+
+Renegotiation is not necessary for correct operation of the TLS protocol.
+
+BoringSSL has already eliminated this functionality, and the tests
+(now deleted) were not running on BoringSSL.
+
+Modifications:
+
+If the connection setup has completed, always return that
+negotiation is not supported. Previously this was done only if we were
+the client.
+
+Remove the tests for this functionality.
+
+Fixes #6320.

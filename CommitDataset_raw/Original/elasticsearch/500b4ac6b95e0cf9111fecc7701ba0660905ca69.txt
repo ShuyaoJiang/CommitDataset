@@ -1,0 +1,11 @@
+[TEST] Improve ML security tests (elastic/x-pack-elasticsearch#2417)
+
+The changes made for elastic/x-pack-elasticsearch#2369 showed that the ML security tests were seriously
+weakened by the decision to grant many "minimal" privileges to all users
+involved in the tests.  A better solution is to override the auth header
+such that a superuser runs setup actions and assertions that work by
+querying raw documents in ways that an end user wouldn't.  Then the ML
+endpoints can be called with the privileges provided by the ML roles and
+nothing else.
+
+Original commit: elastic/x-pack-elasticsearch@4de42d9e547099f83589a59148f1f291858c01f7

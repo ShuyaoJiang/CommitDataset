@@ -1,0 +1,15 @@
+Allow relative paths within resource location path
+
+Prior to this change, location paths used for resource handling would
+not allow "non-cleaned, relative paths" such as
+`file://home/user/static/../static/`. When checking if the resolved
+resource's path starts with the location path, a mismatch would happen
+when comparing for example:
+
+* the location `file://home/user/static/../static/`
+* and the resource `file://home/user/static/resource.txt`
+
+This commit cleans the location path before comparing it to the resource
+path.
+
+Issue: SPR-12624

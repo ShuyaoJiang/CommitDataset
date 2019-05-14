@@ -1,0 +1,7 @@
+LDAP calls that create a new connection use privilegedConnect (elastic/x-pack-elasticsearch#2018)
+
+This change fixes some cases where calls to the LDAP library can result in a new connection being
+created that were not wrapped in privileged connect calls. This would result in permission denied
+errors when trying to make the connection.
+
+Original commit: elastic/x-pack-elasticsearch@182c790dd4f70ad71ade47b4475f557142674e0d

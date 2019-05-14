@@ -1,0 +1,13 @@
+Don't use VM.maxDirectMemory() on z/OS to retrieve direct memory limit. (#7886)
+
+Motivation:
+
+On z/OS netty initializes this value with 64M, even the direct accessible memory is actually unbounded.
+
+Modifications:
+
+Skip usage of VM.maxDirectMemory() on z/OS.
+
+Result:
+
+More correct direct memory limit detection. Fixes https://github.com/netty/netty/issues/7654.

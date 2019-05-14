@@ -1,0 +1,21 @@
+Execute ingest node pipeline before creating the index (#39607)
+
+Prior to this commit (and after 6.5.0), if an ingest node changes
+the _index in a pipeline, the original target index would be created.
+For daily indexes this could create an extra, empty index per day.
+
+This commit changes the TransportBulkAction to execute the ingest node
+pipeline before attempting to create the index. This ensures that the 
+only index created is the original or one set by the ingest node pipeline. 
+This was the execution order prior to 6.5.0 (#32786). 
+
+The execution order was changed in 6.5 to better support default pipelines. 
+Specifically the execution order was changed to be able to read the settings
+from the index meta data. This commit also includes a change in logic such 
+that if the target index does not exist when ingest node pipeline runs, it 
+will now pull the default pipeline (if one exists) from the settings of the 
+best matched of the index template. 
+
+Relates #32786
+Relates #32758 
+Closes #36545 

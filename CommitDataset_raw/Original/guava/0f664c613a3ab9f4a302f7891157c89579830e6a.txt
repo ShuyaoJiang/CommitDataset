@@ -1,0 +1,11 @@
+Store the CancellationException.class (as we do in other tests), not the cause of the CancellationException.
+
+The cause is null nowadays, so we were presumably never taking the if() branch at line 467.
+That meant that we weren't actually checking isCancelled().
+A comment also suggests that we could theoretically have seen test failures because it was possible for setFuture to also succeed, but I don't think we've seen that in practice. I have spent 0 seconds thinking about whether there's anything deeper to ponder here.
+
+(I noticed this while migrating to multicatch. This CL also adopts multicatch in one place where it does make sense.)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=165647160

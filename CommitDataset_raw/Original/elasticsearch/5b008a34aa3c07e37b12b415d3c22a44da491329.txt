@@ -1,0 +1,10 @@
+Ingest node - user agent, move device to an object (#38115)
+
+When the ingest node user agent parses the device field, it
+will result in a string value. To match the ecs schema
+this commit moves the value of the parsed device to an
+object with an inner field named 'name'. There are not
+any passivity concerns since this modifies an unreleased change.
+
+closes #38094
+relates #37329

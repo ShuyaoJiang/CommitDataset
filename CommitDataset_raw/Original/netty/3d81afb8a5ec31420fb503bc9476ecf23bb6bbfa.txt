@@ -1,0 +1,10 @@
+Make sure cancelled Timeouts are able to be GC'ed fast.
+
+Motivation:
+At the moment the HashedWheelTimer will only remove the cancelled Timeouts once the HashedWheelBucket is processed again. Until this the instance will not be able to be GC'ed as there are still strong referenced to it even if the user not reference it by himself/herself. This can cause to waste a lot of memory even if the Timeout was cancelled before.
+
+Modification:
+Add a new queue which holds CancelTasks that will be processed on each tick to remove cancelled Timeouts. Because all of this is done only by the WorkerThread there is no need for synchronization and only one extra object creation is needed when cancel() is executed. For addTimeout(...) no new overhead is introduced.
+
+Result:
+Less memory usage for cancelled Timeouts.

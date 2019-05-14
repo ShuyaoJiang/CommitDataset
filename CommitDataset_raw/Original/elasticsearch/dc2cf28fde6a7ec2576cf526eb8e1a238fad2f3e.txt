@@ -1,0 +1,12 @@
+Docs: Allow skipping response assertions (#34240)
+
+We generate tests from our documentation, including assertions about the
+responses returned by a particular API. But sometimes we *can't* assert
+that the response is correct because of some defficiency in our tooling.
+Previously we marked the response `// NOTCONSOLE` to skip it, but this
+is kind of odd because `// NOTCONSOLE` is really to mark snippets that
+are json but aren't requests or responses. This introduces a new
+construct to skip response assertions:
+```
+// TESTRESPONSE[skip:reason we skipped this]
+```

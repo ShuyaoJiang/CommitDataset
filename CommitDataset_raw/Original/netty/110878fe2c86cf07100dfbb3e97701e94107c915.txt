@@ -1,0 +1,22 @@
+Fixing CorsConfigTest failure under Java 8.
+
+Motivation:
+When running the build with Java 8 the following error occurred:
+
+java: reference to preflightResponseHeader is ambiguous
+  both method
+  <T>preflightResponseHeader(java.lang.CharSequence,java.lang.Iterable<T>)
+  in io.netty.handler.codec.http.cors.CorsConfig.Builder and method
+  <T>preflightResponseHeader(java.lang.String,java.util.concurrent.Callable<T>)
+  in io.netty.handler.codec.http.cors.CorsConfig.Builder match
+
+The offending class was CorsConfigTest and its shouldThrowIfValueIsNull
+which contained the following line:
+withOrigin("*").preflightResponseHeader("HeaderName", null).build();
+
+Modifications:
+Updated the offending method with to supply a type, and object array, to
+avoid the error.
+
+Result:
+After this I was able to build with Java 7 and Java 8

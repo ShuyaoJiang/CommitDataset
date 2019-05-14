@@ -1,0 +1,10 @@
+Make @Configuration classes thread-safe
+
+Refactor ConfigurationClassEnhancer so that BeanFactory instances are
+not held against CGLIB Callback objects. Enhanced @Configuration classes
+now use the BeanFactoryAware interface in order to obtain a BeanFactory.
+
+This change has the additional benefit that a static final field can
+now be used to hold all Callback instances.
+
+Issue: SPR-10307

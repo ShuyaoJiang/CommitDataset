@@ -1,0 +1,14 @@
+Watcher: Allow to defer startup for tests (elastic/x-pack-elasticsearch#3903)
+
+This commit introduces a new watcher setting to defer starting watcher
+until it has been called with the API for the first time. This is
+primarily useful in testing environments, as this ensures that watcher
+does not try to reload itself because of starting first and then
+creating watcher indices.
+
+In addition the undocumented and unused option
+xpack.watcher.start_immediately has been removed.
+
+Relates elastic/x-pack-elasticsearch#3854
+
+Original commit: elastic/x-pack-elasticsearch@2b55aec4ad32d59e5115700e5e7fd02362e88294

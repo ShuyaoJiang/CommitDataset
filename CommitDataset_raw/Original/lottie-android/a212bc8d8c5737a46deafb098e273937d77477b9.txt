@@ -1,0 +1,13 @@
+Reimplemented LottieValueAnimator (#624)
+
+This version of LottieValueAnimator replaces all of the animator looping logic with a self-managed Choreographer callback architecture. 
+
+There are two primary reasons for the change:
+1) The conversion from setting frames to setting the currentPlayTime of the value animator often led to tricky floating point and rounding issues (#491, #610)
+2) The ValueAnimator APIs and implementation have changed in different platform versions. For example, in some versions, the animator will report as running in the update callbacks and for some, it won't. (#555, #615)
+
+There are other benefits as well:
+1) Animations can now run independently of the animator duration scale setting.
+2) Frame rates are now respected. Animations will now render at the fps specified in After Effects rather than 60fps.
+
+I had to bump the minSdk to 16 to support Choreographer.

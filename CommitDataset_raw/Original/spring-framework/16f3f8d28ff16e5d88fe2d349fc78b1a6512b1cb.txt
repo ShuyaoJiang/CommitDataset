@@ -1,0 +1,19 @@
+Add close() method on HTTP client response
+
+Before this commit, there was no way to signal the HTTP client that we
+were done consuming the response. Without that, the underlying client
+library cannot know when it is safe to release the associated resources
+(e.g. the HTTP connection).
+
+This commit adds new `close()` methods on both `ClientHttpResponse`
+and `ClientResponse`. This methods is non-blocking and its behavior
+depends on the library, its configuration, HTTP version, etc.
+
+At the `WebClient` level, `close()` is called automatically if we
+consume the response body through the `ResponseSpec` or the
+`ClientResponse` itself.
+
+Note that it is *required* to call `close()` manually otherwise; not
+doing so might create resource leaks or connection issues.
+
+Issue: SPR-15920

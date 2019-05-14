@@ -1,0 +1,14 @@
+Correctly detect which protocols are supported when using OpenSSL
+
+Motivation:
+
+We failed to properly test if a protocol is supported on an OpenSSL installation and just always returned all protocols.
+
+Modifications:
+
+- Detect which protocols are supported on a platform.
+- Skip protocols in tests when not supported. This fixes a build error on some platforms introduced by [#6276].
+
+Result:
+
+Correctly return only the supported protocols

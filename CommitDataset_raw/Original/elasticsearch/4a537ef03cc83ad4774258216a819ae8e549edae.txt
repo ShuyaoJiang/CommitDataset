@@ -1,0 +1,20 @@
+Bulk operation fail to replicate operations when a mapping update times out (#30244)
+
+Starting with the refactoring in https://github.com/elastic/elasticsearch/pull/22778 (released in 5.3) we may fail to properly replicate operation when a mapping update on master fails. If a bulk
+operations needs a mapping update half way, it will send a request to the master before continuing 
+to index the operations. If that request times out or isn't acked (i.e., even one node in the cluster 
+didn't process it within 30s), we end up throwing the exception and aborting the entire bulk. This is 
+a problem because all operations that were processed so far are not replicated any more to the 
+replicas.  Although these operations were never "acked" to the user (we threw an error) it cause the 
+local checkpoint on the replicas to lag (on 6.x) and the primary and replica to diverge. 
+
+This PR does a couple of things:
+1) Most importantly, treat *any* mapping update failure as a document level failure, meaning only 
+    the relevant indexing operation will fail.
+2) Removes the mapping update callbacks from `IndexShard.applyIndexOperationOnPrimary` and 
+    similar methods for simpler execution. We don't use exceptions any more when a mapping 
+    update was successful.
+
+I think we need to do more work here (the fact that a single slow node can prevent those mappings 
+updates from being acked and thus fail operations is bad), but I want to keep this as small as I can 
+(it is already too big). 

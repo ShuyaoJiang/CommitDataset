@@ -1,0 +1,11 @@
+Correctly write pending data after ssl handshake completes. Related to [#2437]
+
+Motivation:
+When writing data from a server before the ssl handshake completes may not be written at all to the remote peer
+if nothing else is written after the handshake was done.
+
+Modification:
+Correctly try to write pending data after the handshake was complete
+
+Result:
+Correctly write out all pending data

@@ -1,0 +1,19 @@
+Configure test property sources before ConfigFileApplicationListener runs
+
+Previously, SpringBootContextLoader configured the environment with the
+test property sources using an ApplicationContextInitializer. This was
+because TestPropertySourceUtils did not provide a method to directly
+configure the environment using properties files, it had to be done
+via an application context. An unwanted side-effect of this was that
+the test property sources were not being configured before
+ConfigFileApplicationListener examined the environment to determine the
+name and locations of the files that it should be loading.
+
+This commit takes advantage of a new method that was added to
+TestPropertySourceUtils which allows properties files to be added
+directly to the environment without using an application context. This
+means that the use of the ApplicationContextInitializer can be removed
+and the test property sources can be applied to the environment before
+the application context is created.
+
+Closes gh-5728

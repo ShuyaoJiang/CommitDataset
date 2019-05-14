@@ -1,0 +1,19 @@
+Add support for splice(...)
+
+Motivation:
+
+Linux supports splice(...) to transfer data from one filedescriptor to another without
+pass data through the user-space. This allows to write high-performant proxy code or to stream
+stuff from the socket directly the the filesystem.
+
+Modification:
+
+Add AbstractEpollStreamChannel.spliceTo(...) method to support splice(...) system call
+
+Result:
+
+Splice is now supported when using the native linux transport.
+
+Conflicts:
+
+	transport-native-epoll/src/main/java/io/netty/channel/epoll/AbstractEpollStreamChannel.java

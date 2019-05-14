@@ -1,0 +1,8 @@
+Ensure LuceneChangesSnapshot reads in leaf order (#31246)
+
+Today we re-initialize DV instances while we read docs
+for the snapshot. This is caused by the fact that we sort the
+docs by seqID which causes then to be our of order. This change
+sorts documents temporarily by docID, fetches the metadata (not source)
+into a in-memory datastructure and sorts it back.
+This allows efficient reuse of DV instances.

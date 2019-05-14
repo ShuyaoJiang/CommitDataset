@@ -1,0 +1,8 @@
+[Security] Fix concrete security index name  (elastic/x-pack-elasticsearch#2905)
+
+The 5.6 Upgrade API will reindex .security to .security-6 and create a .security alias.
+But the 6.0 default was to create a .security-v6 index and a .security alias if none existed (e.g. fresh x-pack install)
+
+Having two different index names based on the method of install/upgrade complicates the code and testing, so we're unifying on the .security-6 index name that already exists in the wild.
+
+Original commit: elastic/x-pack-elasticsearch@d78f569c5fb0379d134816c0a1757a1e22a59731

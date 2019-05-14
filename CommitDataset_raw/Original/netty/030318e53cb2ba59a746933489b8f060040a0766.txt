@@ -1,0 +1,16 @@
+Read until all data is consumed when EOF is detected even if readPend… (#7961)
+
+* Read until all data is consumed when EOF is detected even if readPending is false and auto-read is disabled.
+
+Motivation:
+
+We should better always notify the user of EOF even if the user did not request any data as otherwise we may never be notified when the remote peer closes the connection. This should be ok as the amount of extra data we may read and so fire through the pipeline is limited by SO_RECVBUF.
+
+Modifications:
+
+- Always drain the socket when EOF is detected.
+- Add testcase
+
+Result:
+
+No risk for the user to be not notified of EOF.

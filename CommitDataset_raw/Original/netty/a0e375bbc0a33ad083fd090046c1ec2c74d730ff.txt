@@ -1,0 +1,10 @@
+00fc239995ce7b683993c88bb82b30dbd5fe7982 HashedWheelTimer introduced test failure
+
+Motivation:
+00fc239995ce7b683993c88bb82b30dbd5fe7982 introduced a change to HashedWheelTimerTest which attempted to wait for an explicit event notification until more timer events can be added. However HashedWheelTimer will execute the timer Runnable before removing it from the queue and decrementing the total count. This make it difficult for users to know when it is safe to add another timer task as the limit is approached.
+
+Modifications:
+- HashedWheelTimer should remove the timer Runnable before executing the task.
+
+Result:
+Users can more reliably add new timers when the limit is reached and HashedWheelTimerTest will no longer fail spuriously due to this race condition.

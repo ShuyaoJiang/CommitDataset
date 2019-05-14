@@ -1,0 +1,21 @@
+Clean up spring-jdbc tests warnings
+
+Clean up compiler warnings in the tests of spring-jdbc. This commit
+adds type parameters to all the types (mostly `List` and `Map`). In
+addition it uses Java 5 autoboxing to get rid of all of the following
+
+ * new Integer
+ * new Long
+ * new Float
+ * new Double
+ * new Boolean
+ * new String
+
+This should be unnoticeably faster since interning can be uses for
+Integer and such.
+
+After this commit the only warnings in spring-jdbc left are:
+
+* raw type warning in `MapDataSourceLookupTests`, that code would never
+  compile with generics
+* deprecation warning for `#queryForInt` and `#queryForLong`

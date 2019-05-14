@@ -1,0 +1,9 @@
+Restoring from snapshot should force generation of a new history uuid (#26694)
+
+Restoring a shard from snapshot throws the primary back in time violating assumptions and bringing the validity of global checkpoints in question. To avoid problems, we should make sure that a shard that was restored will never be the source of an ops based recovery to a shard that existed before the restore. To this end we have introduced the notion of `histroy_uuid` in #26577 and required that both source and target will have the same history to allow ops based recoveries. This PR make sure that a shard gets a new uuid after restore.
+
+As suggested by @ywelsch , I derived the creation of a `history_uuid` from the `RecoverySource` of the shard. Store recovery will only generate a uuid if it doesn't already exist (we can make this stricter when we don't need to deal with 5.x indices). Peer recovery follows the same logic (note that this is different than the approach in #26557, I went this way as it means that shards always have a history uuid after being recovered on a 6.x node and will also mean that a rolling restart is enough for old indices to step over to the new seq no model). Local shards and snapshot force the generation of a new translog uuid.
+
+Relates #10708
+Closes #26544
+

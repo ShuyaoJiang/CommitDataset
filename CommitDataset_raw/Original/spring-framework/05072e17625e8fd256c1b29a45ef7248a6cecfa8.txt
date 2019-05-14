@@ -1,0 +1,8 @@
+Expand var-args before passing to KeyGenerator
+
+Update `CacheAspectSupport` to expand any var-arg parameters before
+calling `KeyGenerator` implementations. Prior to this commit var-args
+would be passed to `KeyGenerator` implementations as a nested array,
+often causing the same key to be generated regardless of the arguments.
+
+Issue: SPR-10870

@@ -1,0 +1,17 @@
+Fix java time formatters that round up (#37604)
+
+In order to be able to parse epoch seconds and epoch milli seconds own
+java time fields had been introduced. These fields are however not
+compatible with the way that java time allows one to configure default
+fields (when a part of a timestamp cannot be read then a default value
+is added), which is used for the formatters that are rounding up to the
+next value.
+
+This commit allows java date formatters to configure its round up parsing 
+by setting default values via a consumer. By default all formats are setting 
+JavaDateFormatter.ROUND_UP_BASE_FIELDS for rounding up. The epoch
+however parsers both need to set different fields. The merged date
+formatters do not set any fields, they just append all the round up formatters.
+
+Also the formatter now properly copies the locale and the timezone, 
+fractional parsing has been set to nano seconds with proper width.

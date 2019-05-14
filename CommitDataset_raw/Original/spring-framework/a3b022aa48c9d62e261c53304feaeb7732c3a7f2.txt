@@ -1,0 +1,19 @@
+Ensure ServTEL doesn't reset ReqAttrs by accident
+
+Prior to this commit, the ServletTestExecutionListener did not
+overwrite RequestAttributes in the RequestContextHolder if the
+ApplicationContext associated with the given TestContext was not a
+WebApplicationContext; however, the ServletTestExecutionListener would
+clear the RequestAttributes after every test method execution,
+regardless of whether the context was a WebApplicationContext or not.
+This behavior breaks backwards compatibility with integration tests
+that managed the RequestAttributes in RequestContextHolder themselves.
+
+This commit addresses this issue by introducing a TestContext attribute
+named RESET_REQUEST_CONTEXT_HOLDER_ATTRIBUTE in
+ServletTestExecutionListener. This attribute is used internally within
+ServletTestExecutionListener to ensure that the RequestContextHolder is
+only cleared (i.e., reset) if the ServletTestExecutionListener actually
+populated the RequestContextHolder.
+
+Issue: SPR-11144

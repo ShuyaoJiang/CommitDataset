@@ -1,0 +1,20 @@
+[ML] Use scaling thread pool and xpack.ml.max_open_jobs cluster-wide dynamic (#39320)
+
+This change does the following:
+
+1. Makes the per-node setting xpack.ml.max_open_jobs
+   into a cluster-wide dynamic setting
+2. Changes the job node selection to continue to use the
+   per-node attributes storing the maximum number of open
+   jobs if any node in the cluster is older than 7.1, and
+   use the dynamic cluster-wide setting if all nodes are on
+   7.1 or later
+3. Changes the docs to reflect this
+4. Changes the thread pools for native process communication
+   from fixed size to scaling, to support the dynamic nature
+   of xpack.ml.max_open_jobs
+5. Renames the autodetect thread pool to the job comms
+   thread pool to make clear that it will be used for other
+   types of ML jobs (data frame analytics in particular)
+
+Closes #29809

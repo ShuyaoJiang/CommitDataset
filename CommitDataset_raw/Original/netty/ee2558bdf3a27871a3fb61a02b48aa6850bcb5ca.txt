@@ -1,0 +1,13 @@
+[#4722] Ensure the whole certificate chain is used when creating SslContext for client mode and SslProvider.OPENSSL is used
+
+Motivation:
+
+We incorrectly added the trustCertChain as certificate chain when OpenSslClientContext was created. We need to correctly add the keyCertChain.
+
+Modifications:
+
+Correctly add whole keyCertChain.
+
+Result:
+
+SSL client auth is working when usin OpenSslClientContext and more then one cert is contained in the certificate chain.

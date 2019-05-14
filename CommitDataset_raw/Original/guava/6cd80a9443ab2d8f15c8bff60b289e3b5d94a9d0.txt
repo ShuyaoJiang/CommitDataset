@@ -1,0 +1,11 @@
+Make ByteSource.read() use sizeIfKnown(), if available, to help avoid extra byte array allocations/copies.
+
+Also don't use 32 as the initial ByteArrayOutputStream size in either version of ByteStreams.toByteArray(); just seems way too small. Use the default size for buffers instead, at a minimum.
+
+Also change ConcatenatedByteSource.sizeIfKnown() to return absent if its Iterable of sources is not a Collection; this is to prevent sizeIfKnown() trying to loop over an infinite Iterable, which previous caused an infinite loop. That is also fixed in this CL; ConcatenatedByteSource.size() and sizeIfKnown() now stop and return Long.MAX_VALUE if the result would exceed that rather than going negative and continuing. But looping over an infinite Iterable in sizeIfKnown() seems potentially slow even if it will eventually stop, and as such against the spirit of sizeIfKnown(), which should be fast.
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=189589899

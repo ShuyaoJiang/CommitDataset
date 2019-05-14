@@ -1,0 +1,8 @@
+Call clone() before calling extension methods if auto clone is enabled.
+
+Otherwise when our extension methods mutate the RequestOptions we pass 
+them, the mutations create a new RequestOptions object that’s dropped
+at the end of the extension method, which causes any options applied in
+the extension method to be ignored. Cloning first matches the behavior
+of other RequestOptions methods and ensures that the RequestOptions 
+object passed into the extension method is mutable. 

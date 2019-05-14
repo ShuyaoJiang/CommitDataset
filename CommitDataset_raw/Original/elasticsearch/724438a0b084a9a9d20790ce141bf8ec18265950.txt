@@ -1,0 +1,17 @@
+[Security] Check auth scheme case insensitively (#31490)
+
+According to RFC 7617, the Basic authentication scheme name
+should not be case sensitive.
+Case insensitive comparisons are also applicable for the bearer
+tokens where Bearer authentication scheme is used as per
+RFC 6750 and RFC 7235
+
+Some Http clients may send authentication scheme names in
+different case types for eg. Basic, basic, BASIC, BEARER etc.,
+so the lack of case-insensitive check is an issue when these
+clients try to authenticate with elasticsearch.
+
+This commit adds case-insensitive checks for Basic and Bearer
+authentication schemes.
+
+Closes #31486

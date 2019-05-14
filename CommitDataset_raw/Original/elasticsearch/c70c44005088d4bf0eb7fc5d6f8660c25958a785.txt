@@ -1,0 +1,10 @@
+Adjust status on bad allocation explain requests
+
+When a user requests a cluster allocation explain in a situation where
+it does not make sense (for example, there are no unassigned shards), we
+should consider this a bad request instead of a server error. Yet, today
+by throwing an illegal state exception, these are treated as server
+errors. This commit adjusts these so that they throw illegal argument
+exceptions and are treated as bad requests.
+
+Relates #25503

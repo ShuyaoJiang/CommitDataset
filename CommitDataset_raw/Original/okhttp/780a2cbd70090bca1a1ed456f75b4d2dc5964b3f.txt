@@ -1,0 +1,6 @@
+Guard against invalid name value block headers.
+
+If a badly behaved server sends us a negative number
+of name value blocks, we should throw an IOException and
+not a RTE (which will be thrown when we try to construct an
+ArrayList with a negative size).

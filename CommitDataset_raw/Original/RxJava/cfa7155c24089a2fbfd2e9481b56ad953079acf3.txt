@@ -1,0 +1,16 @@
+Rewrite concat operation to not block on subscribe
+
+The concat operator previously blocked on calling subscribe until all the
+sequences had finished. In quite some cases this results in unwanted (and
+unexpected) behaviour, such as when prefixing an infinite Observable
+with a fixed one, for example when using startWith (which calls concat):
+someInputStream.startWith(123).subscribe(x -> print(x));
+This statement will block indefinitely if the input stream is infinite. Also
+on finite sequences it seems silly to have to wait for them to finish.
+
+In this new approach the incoming observables are put into a queue, instead
+of waiting for the whole sequence to finish. When the first observable
+completes, the next one is taken from the queue and subscribed to, and so
+on. The queue can be extended while processing the observables, and
+onCompleted is only called when both the source of observables has completed
+and all observables in the queue have been read.

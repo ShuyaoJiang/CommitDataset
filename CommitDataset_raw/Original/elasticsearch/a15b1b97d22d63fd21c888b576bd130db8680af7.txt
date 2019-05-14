@@ -1,0 +1,20 @@
+Watcher: Reduce script cache churn by checking for mustache tags (#33978)
+
+Watcher is using a lot of so called TextTemplate fields in a watch
+definition, which can use mustache to insert the watch id for example.
+For the user it is non-obvious which field is just a string field or
+which field is a text template.
+
+This also means, that for every such field, we currently do a script
+compilation, even if the field does not contain any mustache syntax.
+
+This will lead to an increased script cache churn, because those
+compiled scripts (that only contain a string), will evict other scripts.
+On top of that, this also means that an unneeded compilation has
+happened, instead of returning that string immediately.
+
+The usages of mustache templating are in all of the actions (most of the time far
+more than one compilation) as well as most of the inputs.
+
+Especially when running a lot of watches in parallel, this will reduce
+execution times and help reuse of real scripts.

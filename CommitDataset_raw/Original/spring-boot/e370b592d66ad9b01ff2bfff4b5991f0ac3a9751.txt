@@ -1,0 +1,16 @@
+Introduce defined extension point for modifying the environment
+
+The commit introduces a new extension point, EnvironmentPostProcessor,
+that can be implemented by classes that want to modify the
+environment. Implementations of EnvironmentPostProcessor are loaded
+via spring.factories and called in response to the
+ApplicationEnvironmentPreparedEvent. Application listeners that wish
+to work with the post-processed environment can continue to listen
+to ApplicationEnvironmentPreparedEvent and order themselves to
+run after EnvironmentPostProcessingApplicationListener.
+
+Existing ApplicationListeners that modify the environment have,
+where possible, been updated to implement EnvironmentPostProcessor
+instead.
+
+Closes gh-3737

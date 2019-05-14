@@ -1,0 +1,17 @@
+Swap to SslContextBuilder in examples
+
+Motivation:
+
+Using factory methods of SslContext is deprecated. Code should be using
+SslContextBuilder instead. This would have been done when the old
+methods were deprecated, but memcache and http2 examples didn't exist in
+the 4.0 branch which the PR was against.
+
+Modifications:
+
+Swap to the new construction pattern.
+
+Result:
+
+No more deprecated warnings during build of examples. Users are
+instructed to use the new pattern.

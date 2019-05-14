@@ -1,0 +1,18 @@
+Better buffer leak reporting
+
+- Remove the reference to ResourceLeak from the buffer implementations
+  and use wrappers instead:
+  - SimpleLeakAwareByteBuf and AdvancedLeakAwareByteBuf
+  - It is now allocator's responsibility to create a leak-aware buffer.
+  - Added AbstractByteBufAllocator.toLeakAwareBuffer() for easier
+    implementation
+- Add WrappedByteBuf to reduce duplication between *LeakAwareByteBuf and
+  UnreleasableByteBuf
+- Raise the level of leak reports to ERROR - because it will break the
+  app eventually
+- Replace enabled/disabled property with the leak detection level
+  - Only print stack trace when level is ADVANCED or above to avoid user
+    confusion
+- Add the 'leak' build profile, which enables highly detailed leak
+  reporting during the build
+- Remove ResourceLeakException which is unsed anymore

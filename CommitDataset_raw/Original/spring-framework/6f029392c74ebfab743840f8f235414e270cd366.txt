@@ -1,0 +1,10 @@
+Move response status processing in InvocableHandlerMethod
+
+Prior to this commit, WebFlux would look at the handler method
+annotations (`@ResponseStatus`) for each handler execution, even calling
+the expensive `synthesizeAnnotation`.
+
+This commit moves this logic to the InvocableHandlerMethod so that this
+executed once at instantiation time and for all result handlers.
+
+Issue: SPR-15227

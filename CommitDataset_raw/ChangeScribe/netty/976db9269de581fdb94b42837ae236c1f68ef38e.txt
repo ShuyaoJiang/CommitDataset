@@ -1,0 +1,366 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.example.socksproxy:  
+
+1. Changes to package io.netty.handler.codec.socksx:  
+
+1.1. Add a class for abstract socks message. It allows to:
+
+	Handle decoder result;
+	Set decoder result
+
+1.2. Add a class for socks port unification server handler. It allows to:
+
+	Instantiate socks port unification server handler;
+	Instantiate socks port unification server handler  with socks 5 server encoder;
+	Decode ctx channel handler context;
+	Log known version;
+	Log unknown version
+
+2. Changes to package io.netty.handler.codec.socksx.v4:  
+
+2.1. Add a class for abstract socks 4 message. It allows to:
+
+	Get version
+
+2.2. Add a class for default socks 4 command request. It allows to:
+
+	Instantiate default socks 4 command request  with socks 4 command type;
+	Get type;
+	Get dst addr;
+	Dst port;
+	Get user id;
+	Convert default socks 4 command request to string
+
+2.3. Add a class for default socks 4 command response. It allows to:
+
+	Instantiate default socks 4 command response  with socks 4 command status;
+	Get status;
+	Get dst addr;
+	Dst port;
+	Convert default socks 4 command response to string
+
+2.4. Add a class for socks 4 client decoder. It allows to:
+
+	Instantiate socks 4 client decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+2.5. Add a class for socks 4 client decoder test. It allows to:
+
+	Handle test;
+	Handle test socks cmd response decoder
+
+2.6. Add a class for socks 4 client encoder. It allows to:
+
+	Instantiate socks 4 client encoder;
+	Encode ctx channel handler context
+
+2.7. Add an interface declaration  for socks 4 command request. It allows to:
+
+	Get type;
+	Get user id;
+	Get dst addr;
+	Dst port
+
+2.8. Add an interface declaration  for socks 4 command response. It allows to:
+
+	Get status;
+	Get dst addr;
+	Dst port
+
+2.9. Add a class for socks 4 command status. It allows to:
+
+	Get value of;
+	Instantiate socks 4 command status;
+	Handle byte value;
+	Check if socks 4 command status is success;
+	Hash code;
+	Check if socks 4 command status equals;
+	Compare  to socks 4 command status;
+	Convert socks 4 command status to string
+
+2.10. Add a class for socks 4 command type. It allows to:
+
+	Get value of;
+	Instantiate socks 4 command type;
+	Handle byte value;
+	Hash code;
+	Check if socks 4 command type equals;
+	Compare  to socks 4 command type;
+	Convert socks 4 command type to string
+
+2.11. Add an interface declaration  for socks 4 message
+
+2.12. Add a class for socks 4 server decoder. It allows to:
+
+	Instantiate socks 4 server decoder;
+	Decode ctx channel handler context;
+	Fail out list;
+	Read string
+
+2.13. Add a class for socks 4 server decoder test. It allows to:
+
+	Handle test;
+	Handle test cmd request decoder
+
+2.14. Add a class for socks 4 server encoder. It allows to:
+
+	Instantiate socks 4 server encoder;
+	Encode ctx channel handler context
+
+3. Changes to package io.netty.handler.codec.socksx.v5:  
+
+3.1. Add a class for abstract socks 5 message. It allows to:
+
+	Get version
+
+3.2. Add a class for default socks 5 command request. It allows to:
+
+	Instantiate default socks 5 command request  with socks 5 command type, dst address type and dst address type;
+	Get type;
+	Dst addr type;
+	Get dst addr;
+	Dst port;
+	Convert default socks 5 command request to string
+
+3.3. Add a class for default socks 5 command request test. It allows to:
+
+	Handle test constructor params are not null;
+	Handle test I pv 4 correct address;
+	Handle test I pv 6 correct address;
+	Handle test IDN not exceeds 255 chars limit;
+	Handle test valid port range
+
+3.4. Add a class for default socks 5 command response. It allows to:
+
+	Instantiate default socks 5 command response  with socks 5 command status, bnd address type and bnd address type;
+	Get status;
+	Bnd addr type;
+	Bnd default socks 5 command response addr;
+	Bnd port;
+	Convert default socks 5 command response to string
+
+3.5. Add a class for default socks 5 command response test. It allows to:
+
+	Handle test constructor params are not null;
+	Handle test empty domain;
+	Handle test I pv 4 host;
+	Handle test empty bound address;
+	Handle test invalid bound address;
+	Assert byte buf equals;
+	Handle test valid port range
+
+3.6. Add a class for default socks 5 initial request. It allows to:
+
+	Instantiate default socks 5 initial request  with auth method;
+	Instantiate default socks 5 initial request  with auth methods iterable;
+	Handle auth methods;
+	Convert default socks 5 initial request to string
+
+3.7. Add a class for default socks 5 initial request test. It allows to:
+
+	Handle test constructor params are not empty
+
+3.8. Add a class for default socks 5 initial response. It allows to:
+
+	Instantiate default socks 5 initial response  with socks 5 auth method;
+	Handle auth method;
+	Convert default socks 5 initial response to string
+
+3.9. Rename type Socks5AuthResponseTest with DefaultSocks5InitialResponseTest
+
+3.10. Add a class for default socks 5 password auth request. It allows to:
+
+	Instantiate default socks 5 password auth request;
+	Username default socks 5 password auth request;
+	Get password;
+	Convert default socks 5 password auth request to string
+
+3.11. Add a class for default socks 5 password auth request test. It allows to:
+
+	Handle test constructor params are not null;
+	Handle test username or password is not ascii;
+	Handle test username or password length is less than 255 chars
+
+3.12. Add a class for default socks 5 password auth response. It allows to:
+
+	Instantiate default socks 5 password auth response  with socks 5 password auth status;
+	Get status;
+	Convert default socks 5 password auth response to string
+
+3.13. Add a class for default socks 5 password auth response test. It allows to:
+
+	Handle test constructor params are not null
+
+3.14. Add an interface declaration  for socks 5 address decoder. It allows to:
+
+	Decode address;
+
+3.15. Add an interface declaration  for socks 5 address encoder. It allows to:
+
+	Encode address;
+
+3.16. Add a class for socks 5 auth method. It allows to:
+
+	Get value of;
+	Instantiate socks 5 auth method;
+	Handle byte value;
+	Hash code;
+	Check if socks 5 auth method equals;
+	Compare  to socks 5 auth method;
+	Convert socks 5 auth method to string
+
+3.17. Add a class for socks 5 client encoder. It allows to:
+
+	Instantiate socks 5 client encoder;
+	Instantiate socks 5 client encoder  with socks 5 address encoder;
+	Address encoder;
+	Encode ctx channel handler context;
+	Encode auth method request;
+	Encode password auth request;
+	Encode command request
+
+3.18. Add an interface declaration  for socks 5 command request. It allows to:
+
+	Get type;
+	Dst addr type;
+	Get dst addr;
+	Dst port
+
+3.19. Add a class for socks 5 command request decoder. It allows to:
+
+	Instantiate socks 5 command request decoder;
+	Instantiate socks 5 command request decoder  with socks 5 address decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+3.20. Add a class for socks 5 command request decoder test. It allows to:
+
+	Handle test;
+	Handle test cmd request decoder I pv 4;
+	Handle test cmd request decoder I pv 6;
+	Handle test cmd request decoder domain
+
+3.21. Add an interface declaration  for socks 5 command response. It allows to:
+
+	Get status;
+	Bnd addr type;
+	Bnd socks 5 command response addr;
+	Bnd port
+
+3.22. Add a class for socks 5 command response decoder. It allows to:
+
+	Instantiate socks 5 command response decoder;
+	Instantiate socks 5 command response decoder  with socks 5 address decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+3.23. Add a class for socks 5 command response decoder test. It allows to:
+
+	Handle test;
+	Handle test socks cmd response decoder;
+	Handle test invalid address;
+	Handle test socks cmd response decoder including host
+
+3.24. Add a class for socks 5 command status. It allows to:
+
+	Get value of;
+	Instantiate socks 5 command status;
+	Handle byte value;
+	Check if socks 5 command status is success;
+	Hash code;
+	Check if socks 5 command status equals;
+	Compare  to socks 5 command status;
+	Convert socks 5 command status to string
+
+3.25. Add a class for socks 5 command type. It allows to:
+
+	Get value of;
+	Instantiate socks 5 command type;
+	Handle byte value;
+	Hash code;
+	Check if socks 5 command type equals;
+	Compare  to socks 5 command type;
+	Convert socks 5 command type to string
+
+3.26. Add an interface declaration  for socks 5 initial request. It allows to:
+
+	Handle auth methods
+
+3.27. Add a class for socks 5 initial request decoder. It allows to:
+
+	Instantiate socks 5 initial request decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+3.28. Add an interface declaration  for socks 5 initial response. It allows to:
+
+	Handle auth method
+
+3.29. Add a class for socks 5 initial response decoder. It allows to:
+
+	Instantiate socks 5 initial response decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+3.30. Add an interface declaration  for socks 5 message
+
+3.31. Add an interface declaration  for socks 5 password auth request. It allows to:
+
+	Username socks 5 password auth request;
+	Get password
+
+3.32. Add a class for socks 5 password auth request decoder. It allows to:
+
+	Instantiate socks 5 password auth request decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+3.33. Add a class for socks 5 password auth request decoder test. It allows to:
+
+	Handle test auth request decoder
+
+3.34. Add an interface declaration  for socks 5 password auth response. It allows to:
+
+	Get status
+
+3.35. Add a class for socks 5 password auth response decoder. It allows to:
+
+	Instantiate socks 5 password auth response decoder;
+	Decode ctx channel handler context;
+	Fail out list
+
+3.36. Add a class for socks 5 password auth response decoder test. It allows to:
+
+	Handle test;
+	Handle test socks cmd response decoder
+
+3.37. Add a class for socks 5 password auth status. It allows to:
+
+	Get value of;
+	Instantiate socks 5 password auth status;
+	Handle byte value;
+	Check if socks 5 password auth status is success;
+	Hash code;
+	Check if socks 5 password auth status equals;
+	Compare  to socks 5 password auth status;
+	Convert socks 5 password auth status to string
+
+3.38. Add a class for socks 5 server encoder. It allows to:
+
+	Instantiate socks 5 server encoder;
+	Instantiate socks 5 server encoder  with socks 5 address encoder;
+	Address encoder;
+	Encode ctx channel handler context;
+	Encode auth method response;
+	Encode password auth response;
+	Encode command response
+
+4. Changes to package io.netty.handler.proxy:  
+
+4. Changes to package io.netty.util:  
+

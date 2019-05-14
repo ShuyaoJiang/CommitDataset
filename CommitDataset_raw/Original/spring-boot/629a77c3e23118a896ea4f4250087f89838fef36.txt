@@ -1,0 +1,14 @@
+Remove ASM dependency and use Spring Core's instead
+
+Depending on ASM itself can cause problems as it can clash with other
+libraries' dependency on it. This commit updates
+spring-boot-loader-tools to depend upon spring-core and use its
+repackaged copy of ASM instead. Depending on spring-core also brings
+with it the advantage of giving access to its various bits of utility
+code.
+
+spring-boot-maven-plugin has been updated to remove its ASM
+exclusions as they will no longer clash with the version from
+spring-boot-loader-tools
+
+(59483608)

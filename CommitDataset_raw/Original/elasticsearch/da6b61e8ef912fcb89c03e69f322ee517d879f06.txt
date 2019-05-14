@@ -1,0 +1,16 @@
+Make Geo Context Mapping Parsing More Strict (#32821)
+
+Currently, if geo context is represented by something other than
+geo_point or an object with lat and lon fields, the parsing of it
+as a geo context can result in ignoring the context altogether,
+returning confusing errors such as number_format_exception or trying
+to parse the number specifying as long-encoded hash code. It would also
+fail if the geo_point was stored.
+
+This commit makes the mapping parsing more strict and will fail during
+mapping update or index creation if the geo context doesn't point to
+a geo_point field.
+
+Supersedes #32412
+
+Closes #32202

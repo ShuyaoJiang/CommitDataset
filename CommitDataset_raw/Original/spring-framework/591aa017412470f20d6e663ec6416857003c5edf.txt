@@ -1,0 +1,12 @@
+Configurable locales in MockHttpServletRequest
+
+Prior to this commit the MockHttpServletRequest constructor chain set
+the preferred local to Locale.ENGLISH. Furthermore, it was possible to
+add additional preferred locales "in front" of ENGLISH; however, it was
+not possible to delete ENGLISH from the list of preferred locales.
+
+This commit documents the fact that ENGLISH is the default preferred
+locale and makes it possible to set the list of preferred locales via a
+new setPreferredLocales(List<Locale> locales) method.
+
+Issue: SPR-9724

@@ -1,0 +1,9 @@
+Uses TransportMasterNodeAction to update shard snapshot status (#27165)
+
+Currently, we are using a plain TransportRequestHandler to post snapshot
+status messages to the master. However, it doesn't have a robust retry
+mechanism as TransportMasterNodeAction. This change migrates from
+TransportRequestHandler to TransportMasterNodeAction for the new
+versions and keeps the current implementation for the old versions.
+
+Closes #27151

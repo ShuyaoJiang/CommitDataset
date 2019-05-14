@@ -1,0 +1,17 @@
+Refine Reactor-based TCP client implementation
+
+Configure explicitly use of SynchronousDispatcher instead of the one
+used otherwise by default (RingBufferDispatcher). As a result TCP
+optations are now scoped to Netty's threads.
+
+Remove Environment field. It is no longer required to shut it down
+since we're now using SynchronousDispatcher by default.
+
+Replace connection.in() with connection.consume() when composing
+connection handling. The former creates a Stream for further composing,
+e.g. via map(), filter() but all we need is to read a message.
+
+Provide additional constructor that aceepts a pre-configured Reactor
+TcpClient instance.
+
+Issue: SPR-11531

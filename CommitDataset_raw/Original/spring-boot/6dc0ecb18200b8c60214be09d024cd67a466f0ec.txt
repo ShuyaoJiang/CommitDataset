@@ -1,0 +1,17 @@
+Add WebMvcRegistrations for custom MVC components
+
+Add `WebMvcRegistrations` which can be used to provide custom
+instances of `RequestMappingHandlerMapping`,
+`RequestMappingHandlerAdapter` and `ExceptionHandlerExceptionResolver`.
+Those instances are then used and processed by the Boot MVC
+configuration.
+
+Prior to this commit, developers could provide their custom instances
+of MVC infrstructure components such as `RequestMappingHandlerMapping`
+and `RequestMappingHandlerAdapter` only by using advanced configuration
+strategies. Those advanced configurations involved subclassing
+`WebMvcConfigurationSupport` which effectively turns off MVC
+auto-configuration in Boot.
+
+Fixes gh-5004
+Closes gh-6100

@@ -1,0 +1,18 @@
+Introduce LoggingResultHandler in Spring MVC Test
+
+Prior to this commit, the Spring MVC Test framework only provided
+support for printing debug information about the MvcResult to STDOUT.
+
+This commit introduces support for logging `MvcResult` details at
+`DEBUG` level via the Apache Commons Logging API. In addition, this
+commit introduces additional `print(..)` variants for printing debug
+information to custom output streams and writers.
+
+Specifically, `MockMvcResultHandlers` has been augmented with the
+following new static methods:
+
+ - `log()`
+ - `print(OutputStream)`
+ - `print(Writer)`
+
+Issue: SPR-13171

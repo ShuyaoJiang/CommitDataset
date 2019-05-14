@@ -1,0 +1,73 @@
+Introduce EJB-based transactional tests in the TCF
+
+This commit introduces transactional integration tests executing
+against both JUnit and TestNG in the TestContext framework (TCF) using
+@TransactionAttribute in EJBs instead of Spring’s @Transactional
+annotation.
+
+These tests disprove the claims raised in SPR-6132 by demonstrating that
+transaction support in the TCF works as expected when a transactional
+EJB method that is configured with TransactionAttribute.REQUIRES_NEW is
+invoked. Specifically:
+
+ - The transaction managed by the TCF is suspended while such an EJB
+   method is invoked.
+ - Any work performed within the new transaction for the EJB method is
+   committed after the method invocation completes.
+ - The transaction managed by the TCF is resumed and subsequently
+   either rolled back or committed as necessary based on the
+   configuration of @Rollback and @TransactionConfiguration.
+
+The configuration for the JUnit-based tests is straightforward and self
+explanatory; however, the configuration for the TestNG tests is less
+intuitive.
+
+In order for the TCF to function properly, the developer must ensure
+that test methods within a given TestNG test (whether defined locally,
+in a superclass, or somewhere else in the suite) are executed in the
+proper order. In a stand-alone test class this is straightforward;
+however, in a test class hierarchy (or test suite) with dependent
+methods, it is necessary to configure TestNG so that all methods within
+an individual test are executed in isolation from test methods in other
+tests. This can be achieved by configuring a test class to run in its
+own uniquely identified suite (e.g., by annotating each concrete
+TestNG-based test class with @Test(suiteName = "< Some Unique Suite
+Name >")).
+
+For example, without specifying a unique suite name for the TestNG
+tests introduced in this commit, test methods will be executed in the
+following (incorrect) order:
+
+ - CommitForRequiredEjbTxDaoTestNGTests.test1InitialState()
+ - CommitForRequiresNewEjbTxDaoTestNGTests.test1InitialState()
+ - RollbackForRequiresNewEjbTxDaoTestNGTests.test1InitialState()
+ - RollbackForRequiredEjbTxDaoTestNGTests.test1InitialState()
+ - CommitForRequiredEjbTxDaoTestNGTests.test2IncrementCount1()
+
+The reason for this ordering is that test2IncrementCount1() depends on
+test1InitialState(); however, the intention of the developer is that
+the tests for an individual test class are independent of those in
+other test classes. So by specifying unique suite names for each test
+class, the following (correct) ordering is achieved:
+
+ - RollbackForRequiresNewEjbTxDaoTestNGTests.test1InitialState()
+ - RollbackForRequiresNewEjbTxDaoTestNGTests.test2IncrementCount1()
+ - RollbackForRequiresNewEjbTxDaoTestNGTests.test3IncrementCount2()
+ - CommitForRequiredEjbTxDaoTestNGTests.test1InitialState()
+ - CommitForRequiredEjbTxDaoTestNGTests.test2IncrementCount1()
+ - CommitForRequiredEjbTxDaoTestNGTests.test3IncrementCount2()
+ - RollbackForRequiredEjbTxDaoTestNGTests.test1InitialState()
+ - RollbackForRequiredEjbTxDaoTestNGTests.test2IncrementCount1()
+ - RollbackForRequiredEjbTxDaoTestNGTests.test3IncrementCount2()
+ - CommitForRequiresNewEjbTxDaoTestNGTests.test1InitialState()
+ - CommitForRequiresNewEjbTxDaoTestNGTests.test2IncrementCount1()
+ - CommitForRequiresNewEjbTxDaoTestNGTests.test3IncrementCount2()
+
+See the JIRA issue for more detailed log output.
+
+Furthermore, @DirtiesContext(classMode = ClassMode.AFTER_CLASS) has
+been used in both the JUnit and TestNG tests introduced in this commit
+in order to ensure that the in-memory database is reinitialized between
+each test class.
+
+Issue: SPR-6132

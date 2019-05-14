@@ -1,0 +1,9 @@
+Make a lazy AuthenticationManager if we think it's already configured
+
+Instead of just blindly creating the default authentication manager, after
+thic change we count the beans of type GlobalAuthenticationManagerConfigurer
+and assume that if we detect more than we expect (one from Boot and one from
+Spring Security) then the user is telling us they want to configure the
+AuthenticationManager themselves.
+
+Fixes gh-1801

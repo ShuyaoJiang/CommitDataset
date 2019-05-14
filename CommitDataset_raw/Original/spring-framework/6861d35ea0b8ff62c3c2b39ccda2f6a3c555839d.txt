@@ -1,0 +1,11 @@
+Assemble iajc Ant task classpath w/ folders that exist
+
+Prior to this commit, the [ant:iajc] tasks logged numerous warnings
+regarding incorrect classpath entries. The reason is that the classpath
+was constructed with paths that do not physically exist in the file
+system (e.g., for projects that do not have test classes or test
+folders (yet)).
+
+This commit picks up where ef75bd8 left off and addresses this issue by
+assembling the runtime classpath passed to the iajc task with folders
+and JARs that actually exist in the filesystem.

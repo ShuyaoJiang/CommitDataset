@@ -1,0 +1,13 @@
+SQL: Simplify function registration and resolution (#36417)
+
+Previously, we used a CamelCase to CAMEL_CASE transformation to get the
+primary name of a function from its class name which led to some issues
+since there are functions that we don't want to be registered this way
+(e.g.: IFNULL). To simplify the logic and avoid and "magic"
+transformations in the FunctionRegistry a primary name must be provided
+explicitely for each function.
+
+The same change is applied for the function resolution (when a function
+is used in an SQL statement). There is no CamelCase to CAMEL_CASE
+transformation but only upper-casing is applied (fuNcTiOn -> FUNCTION).
+

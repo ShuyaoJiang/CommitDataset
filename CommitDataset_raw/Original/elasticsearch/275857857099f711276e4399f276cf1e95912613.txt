@@ -1,0 +1,6 @@
+Trim the JSON source in indexing slow logs (#38081)
+
+The '{' as a first character in log line is causing problems for beats when parsing plaintext logs. This can happen if the submitted document has an additional '\n' at the beginning and we are not reformatting. 
+Trimming the source part of a SlogLog solves that and keeps the logs readable.
+
+closes #38080

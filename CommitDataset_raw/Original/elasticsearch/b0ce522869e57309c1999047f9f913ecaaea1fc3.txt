@@ -1,0 +1,15 @@
+[ML] Add integration tests to check persistence (#40272)
+
+Additional checks have been added to exercise the behaviour of
+persistence on graceful close of an anomaly job. In particular:
+
+ - check that persistence does not occur for a job that is opened and
+ then immediately closed, with nothing else having happened.
+ - check that persistence occurs on graceful close of a job if it has
+ processed data.
+ - check that persistence occurs subsequent to time being manually
+ advanced - even if no additional data has been seen by the job
+ - check the edge case where persistence occurs if a job is opened, time
+ is manually advanced and then the job is closed, having seen no data.
+
+ Related to elastic/ml-cpp#393

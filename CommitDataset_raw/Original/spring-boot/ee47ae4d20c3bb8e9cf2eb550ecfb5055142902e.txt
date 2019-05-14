@@ -1,0 +1,14 @@
+Ensure that 5xx responses to unmapped requests produce a single metric
+
+Previously, each 5xx response to a request that used a path variable
+would result in a metric being recorded that contained the path
+variable. Therefore, if a different path variable was included in each
+request, a new metric would be recorded for each request. This is
+problematic as it can lead to the metrics being flooded with unwanted
+entries.
+
+This commit updates MetricsFilter to treat 5xx responses sent before
+mapping has occurred in the same way as 4xx and redirect responses.
+A single metric, counter.status.500.unmapped, is now used.
+
+Closes gh-4377

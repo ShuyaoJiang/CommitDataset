@@ -1,0 +1,11 @@
+Fix handling of paths containing parentheses
+
+This commit fixes an issue with the handling of paths containing
+parentheses on Windows. When such a path is used as a component of
+Elasticsearch home, then a later echo statement that is guarded by an if
+will fail because the parentheses in the path will be confused with the
+parentheses defining the if block. This commit fixes the issue by
+protecting this echo statement by wrapping the possibly offending path
+in quotes.
+
+Relates #26916

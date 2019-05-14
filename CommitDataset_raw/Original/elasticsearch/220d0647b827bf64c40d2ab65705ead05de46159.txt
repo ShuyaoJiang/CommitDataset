@@ -1,0 +1,14 @@
+[ML] Specify ML_ORIGIN when batch scrolling results (elastic/x-pack-elasticsearch#3125)
+
+This change applies the same pattern that was applied in elastic/x-pack-elasticsearch#3054 to the
+ML batched results iterators, which are used to scroll through ML results
+during some internal ML implementation details, such as renormalization
+and nightly maintenance.
+
+Additionally the thread context is reset before submitting the results
+processor to a thread pool, to avoid masking the problem in situations
+where the user opening the job coincidentally had workable permissions.
+
+Fixes elastic/machine-learning-cpp#438
+
+Original commit: elastic/x-pack-elasticsearch@bd1e2dc7d4741bc61e2e9aeadad44cf9764f9976

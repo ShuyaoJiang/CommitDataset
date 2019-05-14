@@ -1,0 +1,11 @@
+[ML][TEST] Make AutodetectMemoryLimitIT less fragile (#30716)
+
+These tests aim to check the set model memory limit is
+respected. Additionally, it was asserting counts of
+partition, by, over fields in an attempt to check that
+the used memory is spent meaningfully. However, this
+made the tests fragile, as changes in the ml-cpp could
+lead to CI failures.
+
+This commit removes those assertions. We are working on
+adding tests in ml-cpp that will compensate.

@@ -1,0 +1,24 @@
+Add additional class conditions for JTA auto-configuration
+
+Previously, JTA auto-configuration would fail with a variety of
+ClassNotFoundExceptions and NoClassDefFoundErrors if it was used with
+an “incomplete” classpath. This commit adds a number of classes to
+@ConditionalOnClass annotations so that the auto-configuration backs
+off gracefully in the absence of certain classes.
+
+Specifically, the following now work as expected:
+
+ - Deploying an app to a server with JTA available via JNDI when the
+   app does not use transactions
+ - Auto-configuration of Atomikos without JMS
+ - Auto-configuration of Bitronix without JMS
+
+Both XADataSourceAutoConfiguration and JndiDataSourceAutoConfiguration
+have been updated to back off in the absence of spring-jdbc; a
+dependency of DataSourceProperties which is used by both classes.
+
+Error handling in AtomikosDependsOnBeanFactoryPostProcessor and
+BitronixDependentBeanFactoryPostProcessor has been enhanced so that the
+correct dependencies are established, even in the absence of JMS.
+
+Fixes gh-1538

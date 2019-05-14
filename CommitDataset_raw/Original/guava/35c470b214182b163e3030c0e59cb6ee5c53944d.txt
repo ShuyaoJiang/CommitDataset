@@ -1,0 +1,11 @@
+Migrate users calling new LinkedHashMap(int) to
+Maps.newLinkedHashMapWithExpectedSize when it appears that that is what they
+actually want.
+
+new LinkedHashMap(int) sets the size of the internal hashtable to the given
+size, but usually callers really just want a hash table that is large enough
+for a given number of elements.  newLinkedHashMapWithExpectedSize does exactly
+that.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=91990827

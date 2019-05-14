@@ -1,0 +1,16 @@
+Removing a SeekAheadNoBackArrayException to avoid exception handling
+
+Motivation:
+
+A `SeekAheadNoBackArrayException` used as check for `ByteBuf#hasArray`. The catch of exceptions carries a large overhead on stack trace filling, and this should be avoided.
+
+Modifications:
+
+- Remove the class `SeekAheadNoBackArrayException` and replace its usage with `if` statements.
+- Use methods from `ObjectUtils` for better readability.
+- Make private methods static where it make sense.
+- Remove unused private methods.
+
+Result:
+
+Less of exception handling logic, better performance.

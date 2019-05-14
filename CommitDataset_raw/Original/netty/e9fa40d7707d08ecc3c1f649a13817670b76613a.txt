@@ -1,0 +1,13 @@
+Ensure calling ReferenceCountedOpenSslEngine.wrap(...) after closeOutbound() was called will not throw an SSLException
+
+Motivation:
+
+PR [#6238] added guards to be able to call wrap(...) / unwrap(...) after the engine was shutdown. Unfortunally one case was missed which is when closeOutbound() was called and produced some data while closeInbound() was not called yet.
+
+Modifications:
+
+Correctly guard against SSLException when closeOutbound() was called, produced data and someone calls wrap(...) after it.
+
+Result:
+
+No more SSLException. Fixes [#6260].

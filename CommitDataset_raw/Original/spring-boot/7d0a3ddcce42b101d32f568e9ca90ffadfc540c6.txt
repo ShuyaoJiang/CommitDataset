@@ -1,0 +1,15 @@
+Rename VanillaHealthIndicator to Application...
+
+Rename `VanillaHealthIndicator` to `ApplicationHealthIndicator` and
+changed the exposed bean name from `statusHealthIndicator` to
+`applicationHealthIndicator`.
+
+This provides less confusing JSON output:
+
+  {"status":"UP","application":{"status":"UP"}}
+
+vs:
+
+  {"status":"UP","status":{"status":"UP"}}
+
+Fixes gh-1291

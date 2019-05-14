@@ -1,0 +1,15 @@
+
+Add a first pass to InetAddresses.forString() that validates the
+characters, and decides which address family's parser to call.
+
+Rewrite textToNumericFormatV6 so that it allocates fewer temporary
+strings, and correctly rejects IPv6 addresses like "0:1:2:3::4:5:6:7".
+
+Also remove some validation from parseOctet/parseHextet, because
+that's now handled by the first pass.
+
+Revision created by MOE tool push_codebase.
+MOE_MIGRATION=2130
+
+
+git-svn-id: https://guava-libraries.googlecode.com/svn/trunk@441 8138a162-5c33-11de-8abc-d1c337b90d21

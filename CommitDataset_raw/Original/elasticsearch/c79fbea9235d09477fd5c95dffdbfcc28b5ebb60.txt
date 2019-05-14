@@ -1,0 +1,15 @@
+[Zen2] Implement basic cluster formation (#33668)
+
+This PR integrates the following pieces of machinery in the Coordinator:
+
+- discovery
+- pre-voting
+- randomised election scheduling
+- joining (of a new master)
+- publication of cluster state updates
+
+Together, these things are everything needed to form a cluster. We therefore
+also add the start of a test suite that allows us to assert higher-level
+properties of the interactions between all these pieces of machinery, with as
+little fake behaviour as possible. We assert one such property: "a cluster
+successfully forms".

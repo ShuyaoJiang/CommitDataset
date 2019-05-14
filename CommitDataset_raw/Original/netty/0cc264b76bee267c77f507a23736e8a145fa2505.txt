@@ -1,0 +1,13 @@
+More realistic ByteBuf allocation benchmark
+
+Motivation:
+
+Allocating a single buffer and releasing it repetitively for a benchmark will not involve the realistic execution path of the allocators.
+
+Modifications:
+
+Keep the last 8192 allocations and release them randomly.
+
+Result:
+
+We are now getting the result close to what we got with caliper.

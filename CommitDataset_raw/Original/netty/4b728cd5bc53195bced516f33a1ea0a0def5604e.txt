@@ -1,0 +1,20 @@
+Ignore some test-flakiness when using Java11+ due outstanding Java11 bug. (#7984)
+
+Motivation:
+
+Java11 disallow draining any remaining bytes from the socket if a write causes a connection reset. This should be completely safe to do. At the moment if a write is causing a connection-reset you basically loose all the pending bytes that are sitting on the socket and are waiting to be read.
+
+This happens because SocketOutputStream.write(…) may call AbstractPlainSocketImpl.setConnectionReset(…). Once this method is called any read(…) call will just throw a SocketException without even attempt to read any remaining data.
+
+This is related:
+ - https://bugs.openjdk.java.net/browse/JDK-8199329
+ - http://hg.openjdk.java.net/jdk/jdk/rev/92cca24c8807
+ - http://mail.openjdk.java.net/pipermail/net-dev/2018-May/011511.html
+
+Modifications:
+
+Tolarate if remaining bytes could not be read when using OIO.
+
+Result:
+
+Be able to build Netty and run testsuite while using Java11

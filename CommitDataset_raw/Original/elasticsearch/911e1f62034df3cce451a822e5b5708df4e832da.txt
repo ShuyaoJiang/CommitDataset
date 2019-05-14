@@ -1,0 +1,12 @@
+Handle long paths on Windows for standalone tests
+
+In some cases our Windows builds fail due to long path names that arise
+from a combination of long build job names plus long sub-project
+names. While newer versions of Windows can handle long paths, invoking
+batch scripts longer than 260 characters via cmd.exe is still
+problematic. This leads to failing integration tests because we can not
+run the commands to install plugins, create the keystore, and start the
+node. This commit handles this by converting all paths on Windows used
+to start an Elasticsearch node to short path names.
+
+Relates #26365

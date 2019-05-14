@@ -1,0 +1,16 @@
+ByteBufInputStream is always allocating a StringBuilder instance (#8347)
+
+Motivation:
+
+Avoid creating any StringBuilder instance if
+ByteBufInputStream::readLine isn't used
+
+Modifications:
+
+The StringBuilder instance is lazy allocated on demand and
+are added new test case branches to address the increased
+complexity of ByteBufInputStream::readLine
+
+Result:
+
+Reduced GC activity if ByteBufInputStream::readLine isn't used

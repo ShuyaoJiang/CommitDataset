@@ -1,0 +1,15 @@
+Use maven plugin to prevent API/ABI breakage as part of build process (#8904)
+
+
+Motivation:
+
+Netty is very widely used which can lead to a lot of pain when we break API / ABI. We should make use japicmp-maven-plugin during the build to verify we do not introduce breakage by mistake.
+
+Modifications:
+
+- Add japicmp-maven-plugin to the build process
+- Fix a method signature change in HttpProxyHandler that was flagged as a possible problem.
+
+Result:
+
+Ensure no API/ABI breakage accour between releases.

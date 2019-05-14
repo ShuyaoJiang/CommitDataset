@@ -1,0 +1,13 @@
+Fix regression in reporting leaks introduced by 3c8c7fc7e9c27f87e64aad5bd1df6c58ed8ef36e.
+
+Motivation:
+
+3c8c7fc7e9c27f87e64aad5bd1df6c58ed8ef36e introduced some changes to the ResourceLeakDetector that introduced a regression and so would always log that paranoid leak detection should be enabled even it was already.
+
+Modifications:
+
+Correctly not clear the recorded stacktraces when we process the reference queue so we can log these.
+
+Result:
+
+ResourceLeakDetector works again as expected.

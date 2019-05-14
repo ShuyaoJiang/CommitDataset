@@ -1,0 +1,12 @@
+Remove memlock suggestion from systemd service
+
+The systemd service file that ships with Elasticsearch installs on
+systemd-based systems contains a suggestion for setting LimitMEMLOCK if
+the user wants to enable bootstrap.memory_lock. However, this setting
+this in the installed service file goes against best practices for
+working with systemd, and goes against our existing documentation for
+how to set this. Therefore, we should not have this suggestion in the
+service file otherwise users might be led to think they should edit it
+there.
+
+Relates #25979

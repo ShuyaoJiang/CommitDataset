@@ -1,0 +1,11 @@
+Rework security autoconfiguration
+
+This commit combines security autoconfigurations for
+management endpoints and the rest of the application. By default,
+if Spring Security is on the classpath, it turns on @EnableWebSecurity.
+In the presence of another WebSecurityConfigurerAdapter this backs off
+completely. A default AuthenticationManager is also provided with a user
+and generated password. This can be turned off by specifying a bean of
+type AuthenticationManager, AuthenticationProvider or UserDetailsService.
+
+Closes gh-7958

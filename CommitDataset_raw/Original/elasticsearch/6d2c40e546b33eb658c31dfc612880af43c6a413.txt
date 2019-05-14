@@ -1,0 +1,73 @@
+Enforce that responses in docs are valid json (#26249)
+
+All of the snippets in our docs marked with `// TESTRESPONSE` are
+checked against the response from Elasticsearch but, due to the
+way they are implemented they are actually parsed as YAML instead
+of JSON. Luckilly, all valid JSON is valid YAML! Unfurtunately
+that means that invalid JSON has snuck into the exmples!
+
+This adds a step during the build to parse them as JSON and fail
+the build if they don't parse.
+
+But no! It isn't quite that simple. The displayed text of some of
+these responses looks like:
+```
+{
+    ...
+    "aggregations": {
+        "range": {
+            "buckets": [
+                {
+                    "to": 1.4436576E12,
+                    "to_as_string": "10-2015",
+                    "doc_count": 7,
+                    "key": "*-10-2015"
+                },
+                {
+                    "from": 1.4436576E12,
+                    "from_as_string": "10-2015",
+                    "doc_count": 0,
+                    "key": "10-2015-*"
+                }
+            ]
+        }
+    }
+}
+```
+
+Note the `...` which isn't valid json but we like it anyway and want
+it in the output. We use substitution rules to convert the `...`
+into the response we expect. That yields a response that looks like:
+```
+{
+    "took": $body.took,"timed_out": false,"_shards": $body._shards,"hits": $body.hits,
+    "aggregations": {
+        "range": {
+            "buckets": [
+                {
+                    "to": 1.4436576E12,
+                    "to_as_string": "10-2015",
+                    "doc_count": 7,
+                    "key": "*-10-2015"
+                },
+                {
+                    "from": 1.4436576E12,
+                    "from_as_string": "10-2015",
+                    "doc_count": 0,
+                    "key": "10-2015-*"
+                }
+            ]
+        }
+    }
+}
+```
+
+That is what the tests consume but it isn't valid JSON! Oh no! We don't
+want to go update all the substitution rules because that'd be huge and,
+ultimately, wouldn't buy much. So we quote the `$body.took` bits before
+parsing the JSON.
+
+Note the responses that we use for the `_cat` APIs are all converted into
+regexes and there is no expectation that they are valid JSON.
+
+Closes #26233

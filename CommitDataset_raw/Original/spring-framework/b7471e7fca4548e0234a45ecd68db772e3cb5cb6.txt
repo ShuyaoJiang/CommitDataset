@@ -1,0 +1,19 @@
+Add a Kotlin Web functional DSL
+
+This commit introduces a router DSL for RouterFunctions
+and RouterFunction in order to be able to write idiomatic
+Kotlin code as below:
+
+fun route(request: ServerRequest) = RouterFunctionDsl {
+    accept(TEXT_HTML).apply {
+            (GET("/user/") or GET("/users/")) { findAllView() }
+            GET("/user/{login}") { findViewById() }
+    }
+    accept(APPLICATION_JSON).apply {
+            (GET("/api/user/") or GET("/api/users/")) { findAll() }
+            POST("/api/user/") { create() }
+            POST("/api/user/{login}") { findOne() }
+    }
+ } (request)
+
+Issue: SPR-15065

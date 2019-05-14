@@ -1,0 +1,13 @@
+Decouple more classes from XContentBuilder and make builder strict (#29197)
+
+This commit decouples `BytesRef`, `Releaseable`, and `TimeValue` from
+XContentBuilder, and paves the way for doupling `ByteSizeValue` as well. It
+moves much of the Lucene and Joda encoding into a new SPI extension that is
+loaded by XContentBuilder to know how to encode these values.
+
+Part of doing this also allows us to make JSON encoding strict, as we no longer
+allow just any old object to be passed (in the past it was possible to get json
+that was `"field": "java.lang.Object@d8355a8"` if no one was careful about what
+was passed in).
+
+Relates to #28504

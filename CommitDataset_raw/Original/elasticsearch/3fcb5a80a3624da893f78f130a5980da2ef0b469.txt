@@ -1,0 +1,13 @@
+Remove dynamic objects from security index (#40499)
+
+The security index had a few "object" types with
+
+   "dynamic": true
+
+However, this automatically creates a mapping for each field that is
+created within those objects. This means that types are dynamically
+inferred and "locked in" for future updates.
+
+Instead we want "dynamic": false which will allow us to store a range
+of fields in these nested objects and retrieve them from the source,
+without creating mapping types for those fields.

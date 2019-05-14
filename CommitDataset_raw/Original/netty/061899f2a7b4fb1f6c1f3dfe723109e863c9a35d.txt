@@ -1,0 +1,13 @@
+Allow to remove pinning of EventExecutor for EventExecutorGroup
+
+Motivation:
+
+We pinned the EventExecutor for a Channel in DefaultChannelPipeline. Which means if the user added multiple handlers with the same EventExecutorGroup to the ChannelPipeline it will use the same EventExecutor for all of these handlers. This may be unexpected and even not what the user wants. If the user want to use the same one for all of them it can be done by obtain an EventExecutor and pass the same instance to the add methods. Because of this we should allow to not pin.
+
+Modifications:
+
+Allow to disable pinning of EventExecutor for Channel based on EventExecutorGroup via ChannelOption.
+
+Result:
+
+Less confusing and more flexible usage of EventExecutorGroup when adding ChannelHandlers to the ChannelPipeline.

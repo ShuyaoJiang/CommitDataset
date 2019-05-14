@@ -1,0 +1,12 @@
+Grant Netty necessary permissions
+
+When using the security networking implementations, the Netty jars that
+are in play are those that are loaded in the X-Pack classloader. This
+means that permissions granted to the Netty jars loaded in the
+transport-netty4 module classloader do nothing. Instead, we have to
+grant the same permissions to the Netty jars in the X-Pack
+classloader. This commit does this.
+
+Relates elastic/x-pack-elasticsearch#3247
+
+Original commit: elastic/x-pack-elasticsearch@91780597b9185ddef00a8c257f9bff85c4ea8191

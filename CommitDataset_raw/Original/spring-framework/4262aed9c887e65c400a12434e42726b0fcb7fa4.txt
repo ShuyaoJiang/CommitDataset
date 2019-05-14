@@ -1,0 +1,12 @@
+Refactor BeanFactoryLocator to use getBean(Class)
+
+Prior to this change, (Context)SingletonBeanFactoryLocator used
+BeanFactoryUtils#beanOfType(ListableBeanFactory, Class) to locate the
+bean of type BeanFactory.
+
+The more modern approach is to use BeanFactory#getBean(Class), which
+removes a dependency on ListableBeanFactory interface while at the same
+time opening the implementation up to respecting autowiring exclusions,
+primary metadata, etc.
+
+Issue: SPR-8489

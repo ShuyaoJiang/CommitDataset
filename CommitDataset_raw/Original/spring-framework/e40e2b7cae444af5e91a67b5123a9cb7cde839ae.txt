@@ -1,0 +1,11 @@
+Introduce AnnotationAwareOrderComparator#INSTANCE
+
+Prior to this change, the INSTANCE constant one could refer to on
+AnnotationAwareOrderComparator actually referred to the constant
+declared in the OrderAwareComparator superclass. Thus
+AnnotationAwareOrderComparator#INSTANCE did not actually return an
+AnnotationAwareOrderComparator but an OrderAwareComparator instead. This
+commit introduces a dedicated constant on AnnotationAwareOrderComparator
+to avoid this glitch.
+
+Issue: SPR-10038

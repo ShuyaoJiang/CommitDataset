@@ -1,0 +1,11 @@
+Document socket timeout config limitations for HttpClient
+
+This commit documents the difference between configuring the socket
+timeout on the `RequestConfig` and on the `SocketConfig`.
+
+The first one does not affect timeouts when establishing an SSL
+connection or sending a CONNECT request to a proxy. For these use cases,
+it is required to configure `SocketConfig` on the `HttpClient` instance
+directly.
+
+Issue: SPR-16697

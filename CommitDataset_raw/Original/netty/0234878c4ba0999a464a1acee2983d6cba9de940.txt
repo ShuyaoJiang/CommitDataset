@@ -1,0 +1,15 @@
+Fix the commands cache and hashCode() in SmtpCommand
+
+Motivation:
+- A `hashCode` of the SmtpCommand is recalculated on each call of `hashCode()`. Cached hash code value can be just replaced with call of `name.hashCode()`.
+- The commands cache don't work for strings: `SmtpCommand.valueOf("HELO")` returns a new instance.
+- Field `contentExpected` is redundant and can be replaced with `equals(DATA)`.
+
+Modifications:
+- Use the `name.hashCode()` as hash code result.
+- Fix a command cache: use strings as map keys.
+- Replace field `contentExpected` to using `this.equals(DATA)`.
+- Add unit tests.
+
+Result:
+More correct and clean code.

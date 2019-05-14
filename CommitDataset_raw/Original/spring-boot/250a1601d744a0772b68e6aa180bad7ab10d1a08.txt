@@ -1,0 +1,19 @@
+Add WebApplicationType.REACTIVE type
+
+This commit introduces a new variant of web applications: there are now
+Servlet based and Reactive web applications.
+The mere presence of `Servlet` and `ConfigurableWebApplicationContext`
+classes is not enough to make a difference between those variants.
+This is why the decision process is now the following:
+
+* if `DispatcherHandler` is present but not `DispatcherServlet`, the
+WebApplicationType is detected as REACTIVE
+* if `DispatcherHandler` is present and `DispatcherServlet`, this is a
+case where we consider that developers are using Spring MVC in
+combination with the reactive web client. So WebApplicationType is
+detected as SERVLET
+* if `Servlet` and `ConfigurableWebApplicationContext` are present,
+WebApplicationType is detected as SERVLET
+* if none of the above match, WebApplicationType is NONE
+
+Fixes gh-8017

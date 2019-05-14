@@ -1,0 +1,16 @@
+Fix some sloppy code in context hierarchy support
+
+* The SpringApplicationBuilder was registering the parent context initializer
+twice (not really a problem, but confusing if you are debugging).
+
+* ParentContextApplicationContextInitializer itself should have been
+checking that the current context is not the parent
+
+* The EventPublishingRunListener as a result needs to call
+setApplicationContext on any listeners that are AplicationContextAware
+
+* ParentContextCloserApplicationListener can ensure that there is
+only one of its kind per application context by implementing hashCode
+and equals
+
+Fixes gh-1142

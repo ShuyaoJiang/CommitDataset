@@ -1,0 +1,12 @@
+HTTP/2 Decoder reduce preface conditional checks
+
+Motivation:
+The DefaultHttp2ConnectionDecoder class is calling verifyPrefaceReceived() for almost every frame event at all times.
+The Http2ConnectionHandler class is calling readClientPrefaceString() on every decode event.
+
+Modifications:
+- DefaultHttp2ConnectionDecoder should not have to continuously call verifyPrefaceReceived() because it transitions boolean state 1 time for each connection.
+- Http2ConnectionHandler should not have to continuously call readClientPrefaceString() because it transitions boolean state 1 time for each connection.
+
+Result:
+- Less conditional checks for the mainstream usage of the connection.

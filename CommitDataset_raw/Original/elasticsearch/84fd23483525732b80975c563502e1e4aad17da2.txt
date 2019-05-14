@@ -1,0 +1,9 @@
+Add the Shrink Action to Index Lifecycle Management (#3491)
+
+This does the following in sequential service polls
+
+1. sets the index to read-only and runs shrink with a modified `index.lifecycle.name` setting set to `null`.
+2. checks to see if shrink is complete, if it is...
+    b. set target index's `index.lifecycle.*` settings to the original index's values.
+3. if not complete, just wait till next iteration
+4. if operating on shrunken index, delete old index and add it as an alias to shrunken index

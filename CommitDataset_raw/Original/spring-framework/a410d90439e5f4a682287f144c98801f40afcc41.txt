@@ -1,0 +1,24 @@
+Drain client response body consistenly
+
+Prior to this commit, the `DefaultClientResponse` implementation would
+handle HTTP client cases where the server response body would need to be
+consumed (pooled resources need to be released) and the body publisher
+cancelled right away. This is done to avoid reading the whole response
+body and returning the connection to the pool, now that this connection
+cannot be reused.
+
+This was done already when the `WebClient` is asked for a `Void` type
+for the response body.
+
+SPR-17054 brought a new case for that: whenever no message reader is
+able to decode the response body, an `UnsupportedMediaTypeException`
+error signal is sent. Prior to this commit, the response body would not
+be consumed and cancelled for that case.
+
+This commit refactors all those cases from the `DefaultClientResponse`
+directly into the `BodyExtractors`, since most of the logic and
+knowledge for that belongs there. We only need to only apply this
+behavior when the HTTP client is involved, as the server does not want
+this to happen.
+
+Issue: SPR-17054

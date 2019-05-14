@@ -1,0 +1,7 @@
+[Zen2] Add HandshakingTransportAddressConnector (#32643)
+
+The `PeerFinder`, introduced in #32246, needs to be able to identify, and
+connect to, a remote master node using only its `TransportAddress`. This can be
+done by opening a single-channel connection to the address, performing a
+handshake, and only then forming a full-blown connection to the node. This
+change implements this logic.

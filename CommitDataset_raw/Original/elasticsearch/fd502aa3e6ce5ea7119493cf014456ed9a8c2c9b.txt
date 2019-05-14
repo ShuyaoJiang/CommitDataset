@@ -1,0 +1,6 @@
+Makes some fields in Index Lifecycle API optional (#3687)
+
+Specifically this change makes it optional to:
+* Specify `includes`, `excludes` and `requires`maps in the allocate action as long as at least one fo the options is specified and is not an empty map
+* Specify an `after` parameter on a phase. If no `after` value is specified `TimeValue.ZERO` is used and the phase will be moved to as soon as the previous phase reports `ACTIONS COMPLETED`. `after` is always non-null when we are serialising the Phase.
+* Specify a `type` for a LifecyclePolicy. If no `type` is specified `TimeSeriesLifecycleType.INSTANCE` is used since this is currently the only production `type`. `type` is always non-null when we are serialising the LifecyclePolicy.

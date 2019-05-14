@@ -1,0 +1,10 @@
+Restore local history from translog on promotion (#33616)
+
+If a shard was serving as a replica when another shard was promoted to
+primary, then its Lucene index was reset to the global checkpoint.
+However, if the new primary fails before the primary/replica resync
+completes and we are now being promoted, we have to restore the reverted
+operations by replaying the translog to avoid losing acknowledged writes.
+
+Relates #33473
+Relates #32867

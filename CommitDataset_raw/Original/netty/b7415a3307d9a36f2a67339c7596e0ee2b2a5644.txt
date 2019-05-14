@@ -1,0 +1,22 @@
+Add a reusable ArrayList to InternalThreadLocalMap
+
+Motivation:
+
+See #3411. A reusable ArrayList in InternalThreadLocalMap can avoid allocations in the following pattern:
+
+```
+List<...> list = new ArrayList<...>();
+
+add something to list but never use InternalThreadLocalMap
+
+return list.toArray(new ...[list.size()]);
+
+```
+
+Modifications:
+
+Add a reusable ArrayList to InternalThreadLocalMap and update codes to use it.
+
+Result:
+
+Reuse a thread local ArrayList to avoid allocations.

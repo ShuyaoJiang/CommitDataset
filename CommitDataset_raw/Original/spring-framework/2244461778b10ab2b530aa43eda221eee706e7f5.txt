@@ -1,0 +1,29 @@
+Allow @ContextConfiguration to be omitted
+
+Prior to this commit, the @ContextConfiguration annotation was required
+to be present even if default XML files, Groovy scripts, or
+@Configuration classes were detected; however, in such cases the
+@ContextConfiguration was typically declared empty and therefore
+seemingly unnecessary boilerplate.
+
+This commit permits @ContextConfiguration to be omitted whenever it can
+be reasonably deduced. Consequently, integration tests such as the
+following are now supported.
+
+    @RunWith(SpringRunner.class)
+    public class MyTest {
+
+        @Autowired String myBean;
+
+        @Test public void example() { /* ... */ }
+
+        @Configuration
+        static class Config {
+
+            @Bean String myBean() {
+                return "Hello";
+            }
+        }
+    }
+
+Issue: SPR-13955

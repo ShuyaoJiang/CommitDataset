@@ -1,0 +1,14 @@
+Allow JspServlet's init parameters to be configured via the environment
+
+This commit adds support for configuring the JSP servlet’s init
+parameters via the environment using server.jsp-servlet.init-parameters.*.
+As part of this change the configuration of registerJspServlet and
+jspServletClassName have been moved onto a new type, JspServlet, and the
+existing setters on ConfigurableEmbeddedServletContainer have been 
+deprecated. In addition to providing a model for configuring the JSP
+servlet that’s consistent with the model for other configuration (SSL,
+for example), this change also means that the class name and whether or
+not the servlet is registered at all can now also be configured via the
+environment.
+
+Closes gh-2825

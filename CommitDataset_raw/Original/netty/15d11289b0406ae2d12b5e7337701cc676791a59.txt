@@ -1,0 +1,48 @@
+Fix error that causes (up to) double memory usage
+
+Motivation:
+
+PoolArena's 'normalizeCapacity' function was micro-optimized some
+time ago to remove a while loop. However, there was a change of
+behavior in the function as a result. Capacities passed into it
+that are already powers of 2 (and >= 512) are doubled in size. So
+if I ask for a buffer with a capacity of 1024, I will get back one
+that actually uses 2048 bytes (stored in maxLength).
+
+Aligning to powers of two for book keeping ease is reasonable,
+and if someone tries to expand a buffer, you might as well use some
+of the previously wasted space. However, since this distinction
+between 'easily expanded' and 'costly to expand' space is not
+supported at all by the APIs, I cannot imagine this change to
+doubling is desirable or intentional.
+
+This is especially costly when using composite buffers. They
+frequently allocate components with a capacity that is a power of
+2, and they never attempt to expand components themselves. The end
+result is that heavy use of pool-backed composite buffers wastes
+almost half of the memory pool (the smaller / initial components are
+<512 and so are not affected by the off-by-one bug).
+
+Modifications:
+
+Although I find it difficult to believe that such an optimization
+is really helpful, I left it in and fixed the off-by-one issue by
+decrementing the value at the start.
+
+I also added a simple test to both attempt to verify that the
+decrement fixes the issue without introducing any other change, and
+to make it easy for a reviewer to test the existing behavior. PoolArena
+does not seem to have much testing or testability support though so
+the test is kind of a hack and will break for unrelated changes. I
+suggest either removing it or factoring out the single non-static
+portion of normalizeCapacity so that the fragile dummy PoolArena is
+not required.
+
+Result:
+
+Pooled allocators will allocate less resources to the highly
+inefficient and undocumented buffer section between length and
+maxLength.
+
+Composite buffers of non-trivial size that are backed by pooled
+allocators will use about half as much memory.

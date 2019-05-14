@@ -1,0 +1,15 @@
+Revert deprecation of AbstractSingletonPFB and co
+
+Removed formal deprecation warnings for AbstractSingletonFactoryBean and
+its TransactionProxyFactoryBean and CacheProxyFactoryBean subclasses.
+
+This is principally because TPFB is still used by Grails and could
+conceivably be used to good effect by any third-party framework in a
+similar fashion. CPFB is new with 3.1, but similar use is predictable.
+
+Deprecations have been replaced by strong recommendations that users
+avoid these types in modern Spring applications and favor the use of
+namespaces and annotatinos, such as tx: and @Transactional (around
+since Spring 2.x) and cache: and @Cacheable.
+
+Issue: SPR-8680, SPR-8686

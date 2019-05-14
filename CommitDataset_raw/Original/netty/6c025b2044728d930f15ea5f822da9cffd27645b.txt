@@ -1,0 +1,20 @@
+Add support for SCTP 'unordered' flag.
+
+Motivation:
+
+Some SCTP applications require the SCTP unordered flag.
+This flag was not exposed by Netty so applications were unable
+to use it.
+
+Modifications:
+
+- Add unordered flag to SctpMessage.
+- {Nio,Oio}SctpChannel pass unordered flag to MessageInfo on write.
+- SctpOutboundByteStreamHandler may optionally request unordered
+  delivery for all outbound messages.
+- Added test case to SctpEchoTest using unordered flag.
+
+Result:
+
+Fixes #3698. New constructors and methods added to SctpMessage and
+SctpOutboundByteStreamHandler, but changes are backward compatible.

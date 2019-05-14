@@ -1,0 +1,14 @@
+Call FastThreadLocal.removeAll() before notify termination future of … (#8666)
+
+
+Motivation:
+
+We should try removing all FastThreadLocals for the Thread before we notify the termination. future. The user may block on the future and once it unblocks the JVM may terminate and start unloading classes.
+
+Modifications:
+
+Remove all FastThreadLocals for the Thread before notify termination future.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/6596.

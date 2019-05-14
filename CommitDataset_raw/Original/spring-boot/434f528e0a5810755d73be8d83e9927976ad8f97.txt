@@ -1,0 +1,26 @@
+Fix Gradle plugin task dependencies broken by removal of app plugin
+
+8673250 updated the plugin so that the application plugin is no longer
+applied by default. This exposed three problems:
+
+ 1. bootRepackage may run before findMainClass has run, leaving it with
+    an unknown main class.
+ 2. findMainClass may run before the classes have been built, making it
+    unable to find the main class by examining the class files
+ 3. The project's mainClassName property was still being used as a
+    convention for the bootRun task's main property. If the application
+    plugin has not be applied, then this property does not exist.
+
+The first problem has been addressed by configuring bootRepackage to
+depend on findMainClass.
+
+The second problem has been addressed by configuring the main source
+set's output as an input of findMainClass, and configuring findMainClass
+to depend on the tasks that build the output.
+
+The third problem has been addressed by only using the mainClassName
+property if it exists and its value is not null. We then fallback to
+using the mainClassName property on the project's extra properties in
+the same way. 
+
+See gh-2679

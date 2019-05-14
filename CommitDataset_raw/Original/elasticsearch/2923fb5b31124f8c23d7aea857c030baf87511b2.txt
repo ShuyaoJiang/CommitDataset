@@ -1,0 +1,8 @@
+Disallow "enabled" attribute change for types in mapping update (#33933)
+
+This commit adds a check for "enabled" attribute change for types when
+a RestPutMappingAction is received. A MappingException is thrown when
+such a change is detected.  Change are prevented in both ways: "false -> true" 
+and "true -> false".
+
+Closes #33566

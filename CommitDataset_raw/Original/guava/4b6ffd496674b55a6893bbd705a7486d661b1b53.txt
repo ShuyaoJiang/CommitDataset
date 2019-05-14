@@ -1,0 +1,9 @@
+Improve performance of nested calls to Iterables.concat() and Iterators.concat() *without* using any additional memory. This CL brings the runtime from O(D^3) to O(D^2), where D is the nesting depth of concatenation.
+
+It appears this issue was previously discussed here:
+http://code.google.com/p/google-collections/issues/detail?id=151
+
+But no work was done to fix it other than adding some javadoc to Iterators. While still not as fast as unnested concatenation (which is linear), this seems fast enough that a javadoc warning is no longer necessary - especially considering the warning was only in Iterators and not in Iterables, even though both exhibited the cubic runtime and there are 13x more calls to Iterables.concat() than Iterators.concat().
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=112701959

@@ -1,0 +1,8 @@
+Ignore waitForActiveShards when syncing leases (#39224)
+
+Adjust the retention lease sync actions so that they do not respect the
+`index.write.wait_for_active_shards` setting on an index, allowing them to sync
+retention leases even if insufficiently many shards are currently active to
+accept writes.
+
+Relates #39089

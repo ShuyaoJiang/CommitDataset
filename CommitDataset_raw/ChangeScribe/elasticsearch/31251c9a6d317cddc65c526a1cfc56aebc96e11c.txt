@@ -1,0 +1,73 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch:  
+
+1. Changes to package org.elasticsearch.http:  
+
+1.1. Add an interface declaration  for http pipelined message. It allows to:
+
+	Get sequence;
+	Compare  to o http pipelined message
+
+1.2. Add a class for http pipelined request. It allows to:
+
+	Instantiate http pipelined request  with request;
+	Get sequence;
+	Get request
+
+1.3. Add a class for http pipelining aggregator. It allows to:
+
+	Instantiate http pipelining aggregator;
+	Read request;
+	Write response;
+	Remove all inflight responses
+
+2. Changes to package org.elasticsearch.http.netty4:  
+
+2.1. Add a class for netty 4 http pipelining handler. It allows to:
+
+	Instantiate netty 4 http pipelining handler  with logger;
+	Channel read;
+	Write ctx channel handler context;
+	Close netty 4 http pipelining handler
+
+2.2. Add a class for netty 4 http response. It allows to:
+
+	Instantiate netty 4 http response  with netty 4 http request, rest status, content bytes reference and content bytes reference;
+	Add header;
+	Check if netty 4 http response contains header;
+	Get sequence;
+	Get request
+
+2.3. Add a class for netty 4 pipelining IT. It allows to:
+
+	Add mock http transport;
+	Handle test that netty http server supports pipelining;
+	Assert opaque ids  in order
+
+3. Changes to package org.elasticsearch.http.nio:  
+
+3.1. Add a class for nio http pipelining handler. It allows to:
+
+	Instantiate nio http pipelining handler  with logger;
+	Channel read;
+	Write ctx channel handler context;
+	Close nio http pipelining handler
+
+3.2. Add a class for nio http response. It allows to:
+
+	Instantiate nio http response  with nio http request, rest status, content bytes reference and content bytes reference;
+	Add header;
+	Check if nio http response contains header;
+	Get sequence;
+	Get request
+
+3.3. Add a class for nio pipelining IT. It allows to:
+
+	Add mock http transport;
+	Handle test that nio http server supports pipelining;
+	Assert opaque ids  in order
+

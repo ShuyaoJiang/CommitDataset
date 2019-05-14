@@ -1,0 +1,21 @@
+Add javadoc warning on SslContext#newHandler client-side
+
+Motivation:
+
+SslContext#newHandler currently creates underlying SSLEngine without
+enabling HTTPS endpointIdentificationAlgorithm. This behavior in
+unsecured when used on the client side.
+
+We can’t harden the behavior for now, as it would break existing
+behavior, for example tests using self signed certificates.
+
+Proper hardening will happen in a future major version when we can
+break behavior.
+
+Modifications:
+
+Add javadoc warnings with code snippets.
+
+Result:
+
+Existing unsafe behavior and workaround documented.

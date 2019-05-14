@@ -1,0 +1,17 @@
+Do not consider PortUnreachableException to require channel closure
+
+Motivation:
+
+When a datagram packet is sent to a destination where nobody actually listens to,
+the server O/S will respond with an ICMP Port Unreachable packet.
+The ICMP Port Unreachable packet is translated into PortUnreachableException by JDK.
+PortUnreachableException is not a harmful exception that prevents a user from sending a datagram.
+Therefore, we should not close a datagram channel when PortUnreachableException is caught.
+
+Modifications:
+
+- Do not close a channel when the caught exception is PortUnreachableException.
+
+Result:
+
+A datagram channel is not closed unexpectedly anymore.

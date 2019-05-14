@@ -1,0 +1,23 @@
+Support by-type lookup/injection of primitive types
+
+Allowing beans of primitive type to be looked up via getBean(Class), or
+to be injected using @Autowired or @Injected or @Resource. Prior to
+these changes, an attempt to lookup or inject a bean of, for example,
+type boolean would fail because all spring beans are Objects, regardless
+of initial type due to the way that ObjectFactory works.
+
+Now these attempts to lookup or inject primitive types work, thanks to
+simple changes in AbstractBeanFactory using ClassUtils#isAssignable
+methods instead of the built-in Class#isAssignableFrom. The former takes
+into account primitives and their object wrapper types, whereas the
+latter does not.
+
+The need to declare, look up or inject primitive-typed beans is probably
+low -- how often does one need a bean of type boolean or int after all?.
+Prior to the introduction of @Bean methods in Spring 3.0, it was not
+possible in practice to register primitive beans, so this issue never
+came up. Now that one can declare primitive-typed beans, it does make
+sense that we properly support by-type lookup and injection without
+forcing the user to work with object wrappers.
+
+Issue: SPR-8874

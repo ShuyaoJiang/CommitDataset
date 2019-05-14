@@ -1,0 +1,9 @@
+Throw NoSuchBufferException instead of returning null
+
+- Exception in this case makes a user less confusing
+- To reduce the overhead of filling the stack trace,
+  NoSuchBufferException has a public pre-constructed instance.
+  - This is necessary because codec framework sometimes need to support
+    both type of outbound buffers.
+- Fixed a bug where SpdyFrameEncoder did not handle ping messages
+- Reduced memory copy in codec embedder (EmbeddedChannel)

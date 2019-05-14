@@ -1,0 +1,10 @@
+Defer HttpHandler initialization
+
+Update `ReactiveWebServerApplicationContext` so that the `HttpHandler`
+bean is not longer created from `onRefresh`, but is instead created
+only when the server starts.
+
+Prior to this commit, the WebFlux hander would cause early
+initialization of several beans, including Jackson Modules.
+
+Closes gh-14666

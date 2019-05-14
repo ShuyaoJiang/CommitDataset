@@ -1,0 +1,13 @@
+[refactor] add Environment in BootstrapContext (#36573)
+
+There are certain BootstrapCheck checks that may need access environment-specific
+values. Watcher's EncryptSensitiveDataBootstrapCheck passes in the node's environment
+via a constructor to bypass the shortcoming in BootstrapContext. This commit
+pulls in the node's environment into BootstrapContext.
+
+Another case is found in #36519, where it is useful to check the state of the
+data-path. Since PathUtils.get and Paths.get are forbidden APIs, we rely on
+the environment to retrieve references to things like node data paths.
+
+This means that the BootstrapContext will have the same Settings used in the
+Environment, which currently differs from the Node's settings.

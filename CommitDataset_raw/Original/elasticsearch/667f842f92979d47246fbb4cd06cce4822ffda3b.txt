@@ -1,0 +1,8 @@
+Fix authentication forward compatibility (elastic/x-pack-elasticsearch#1481)
+
+The authentication object was changed in 5.4.0 in that it was conditionally signed depending on
+the version and other factors. A bug was introduced however that causes the authentication to
+actually get written with the version of the node it is being sent to even if that version is
+greater than the version of the current node, which causes rolling upgrades to fail.
+
+Original commit: elastic/x-pack-elasticsearch@a718ff8a52b8727cddf5c535c30fc144c5d1518c

@@ -1,0 +1,16 @@
+Log warning if @RequestMapping method has no explicit mapping
+
+Commit c0b52d09f57fcabd75e664b7994dea12ba28f408 introduced support for
+throwing an exception if a @RequestMapping handler method in a Spring
+MVC controller was mapped to an empty path. This had negative side
+effects for applications that intentionally mapped to an empty path,
+potentially alongside a mapping to an explicit path for the same
+handler method.
+
+This commit addresses this by logging a warning (instead of throwing an
+exception) if a @RequestMapping method is mapped only to empty paths.
+
+This commit also introduces the same support for WebFlux-based
+@RequestMapping handler methods.
+
+Closes gh-22543

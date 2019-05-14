@@ -1,0 +1,15 @@
+Set `prev` to null when setting `cursor` to `head` in `scavengeSome`.
+
+Motivation:
+
+`scavengeSome()` has a corner case: when setting `cursor` to `head`, `this.prev` may point to the tail of the  `WeakOrderQueue` linked list. Then it's possible that the following while loop will link the tail to the head, and cause endless loop.
+
+I made a reproducer in https://github.com/zsxwing/netty/commit/36522e7b72d61af8e4455162b2e33ce42194774d . The unit test will just run forever. Unfortunately, I cannot change it to a unit test because it needs to add some codes to `scavengeSome` to control the execution flow.
+
+Modification:
+
+Set `prev` to null when setting `cursor` to `head` in `scavengeSome`
+
+Result:
+
+Fixes #6153.

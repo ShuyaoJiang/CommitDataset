@@ -1,0 +1,9 @@
+make DateMathIndexExpressionsIntegrationIT more resilient (#38473)
+
+the internal cluster calls System.nanoTime() and System.currentTimeMillis() during evaluations of requests
+that need date-math index resolution. These are not mockable in these tests. As is, executing requests as-is
+in these test cases can potentially result in invalid responses when day-boundaries are hit mid test run.
+
+This change makes the test framework ignore failures due to day changes.
+
+Closes #31067.

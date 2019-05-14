@@ -1,0 +1,17 @@
+Correctly convert between openssl / boringssl and java cipher names when using TLSv1.3 (#8485)
+
+Motivation:
+
+We did not correctly convert between openssl / boringssl and java ciphers when using TLV1.3 which had different effects when either using openssl or boringssl.
+ - When using openssl and TLSv1.3 we always returned SSL_NULL_WITH_NULL_NULL as cipher name
+ - When using boringssl with TLSv1.3 we always returned an incorrect constructed cipher name which does not match what is defined by Java.
+
+Modifications:
+
+ - Add correct mappings in CipherSuiteConverter for both openssl and boringssl
+ - Add unit tests for CipherSuiteConvert
+ - Add unit in SSLEngine which checks that we do not return SSL_NULL_WITH_NULL_NULL ever and that server and client returns the same cipher name.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8477.

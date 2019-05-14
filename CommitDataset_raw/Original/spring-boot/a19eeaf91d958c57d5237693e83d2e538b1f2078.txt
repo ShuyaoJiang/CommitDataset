@@ -1,0 +1,18 @@
+DevTools should only shut down single, auto-configured DataSource
+
+Previously, there were two problems with DevTools’ DataSource
+auto-configuration:
+
+1. It did not tolerate a context with multiple DataSources
+2. It would attempt to shut down a DataSource that had not been created
+   by DataSourceAutoConfiguration and, therefore, where we could not be
+   sure of its configuration.
+
+This commit updates DevToolsDataSourceAutoConfiguration so that it backs
+off unless the context contains DataSourceProperties and a single
+DataSource created by DataSourceAutoConfiguration. This ensures that it
+can safely use DataSourceProperties to get the DataSource’s
+driver class name and accurately determine if it’s an in-memory or
+external database. Shutdown is only called for an in-memory database.
+
+Closes gh-5540

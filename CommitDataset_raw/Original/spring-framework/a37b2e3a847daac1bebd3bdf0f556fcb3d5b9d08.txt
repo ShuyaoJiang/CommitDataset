@@ -1,0 +1,10 @@
+Refactor View contract
+
+View now returns Mono<Void> rather than Flux<DataBuffer> which aligns
+more closely with the reactive HttpMessageConverter vs the Encoder.
+
+The change was prompted by the upcoming implementation of a View that
+delegates to an existing HttpMessageConverter e.g. for JSON, XML.
+
+The resulting change also brings the reactive View closer in spirit to
+the View from spring-webmvc which returns void.

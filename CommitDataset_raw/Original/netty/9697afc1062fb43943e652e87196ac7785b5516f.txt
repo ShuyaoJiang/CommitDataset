@@ -1,0 +1,14 @@
+Allow to disable reference count checks on every access of the ByteBuf
+
+Motiviation:
+
+Checking reference count on every access on a ByteBuf can have some big performance overhead depending on how the access pattern is. If the user is sure that there are no reference count errors on his side it should be possible to disable the check and so gain the max performance.
+
+Modification:
+
+- Add io.netty.buffer.bytebuf.checkAccessible system property which allows to disable the checks. Enabled by default.
+- Add microbenchmark
+
+Result:
+
+Increased performance for operations on the ByteBuf.

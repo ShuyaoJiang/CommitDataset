@@ -1,0 +1,6 @@
+fix writeIndex evaluation for aliases (#31562)
+
+AliasOrIndex.Alias#writeIndex was returning a write index when
+an alias was pointing to only one index, regardless whether `is_write_index` was
+set to `false`. This fixes that so that there is no write index in such a case
+that an alias points to only one index with `is_write_index=false`.

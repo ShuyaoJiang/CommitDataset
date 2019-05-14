@@ -1,0 +1,12 @@
+Use server.port=0 for scanning
+
+This leverages existing capabilities of teh JDK and the OS
+to grab a port at random and not have it stolen by another
+process. It's very hard to avoid that race condition in
+pure Java code, so why bother?
+
+User can set port<0 to disable autoStart of connectors (e.g.
+to start a web application context but not have it listen on
+any port). In that case the actual socket port will be set to
+0 (and therefore if it ever starts up the local port will
+be random).

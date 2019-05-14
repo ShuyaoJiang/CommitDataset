@@ -1,0 +1,41 @@
+Notify http2 error handler before closeStreamLocal on HEADERS write failure (#8332)
+
+Motivation:
+
+When writing an HTTP/2 HEADERS with END_STREAM=1, the application expects
+the stream to be closed afterward. However, the write can fail locally
+due to HPACK encoder and similar. When that happens we need to make sure
+to issue a RST_STREAM otherwise the stream can be closed locally but
+orphaned remotely. The RST_STREAM is typically handled by
+Http2ConnectionHandler.onStreamError, which will only send a RST_STREAM
+if that stream still exists locally.
+
+There are two possible flows for trailers, one handled immediately and
+one going through the flow controller. Previously they behaved
+differently, with the immedate code calling the error handler after
+closing the stream. The immediate code also used a listener for calling
+closeStreamLocal while the flow controlled code did so immediately after
+the write.
+
+The two code paths also differed in their VoidChannelPromise handling,
+but both were broken. The immediate code path called unvoid() only if
+END_STREAM=1, however it could always potentially add a listener via
+notifyLifecycleManagerOnError(). And the flow controlled code path
+unvoided incorrectly, changing the promise completion behavior. It also
+passed the wrong promise to closeStreamLocal() in FlowControlledBase.
+
+Modifications:
+
+Move closeStreamLocal handling after calls to onError. This is the
+primary change.
+
+Now call closeStreamLocal immediately instead of when the future
+completes. This is the more likely correct behavior as it matches that
+of DATA frames.
+
+Fix all the VoidChannelPromise handling.
+
+Result:
+
+Http2ConnectionHandler.onStreamError sees the same state as the remote
+and issues a RST_STREAM, properly cleaning up the stream.

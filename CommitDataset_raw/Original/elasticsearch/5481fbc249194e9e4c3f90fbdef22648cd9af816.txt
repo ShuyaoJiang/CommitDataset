@@ -1,0 +1,16 @@
+Handle missing values in painless (#30975)
+
+* Handle missing values in painless
+
+Throw an exception for `doc['field'].value`
+if this document is missing a value for the `field`.
+
+For 7.0:
+This is the default behaviour from 7.0
+
+For 6.x:
+To enable this behavior from 6.x, a user can set a jvm.option:
+ `-Des.script.exception_for_missing_value=true` on a node.
+If a user does not enable this behavior, a deprecation warning is logged on start up.
+
+Closes #29286

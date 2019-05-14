@@ -1,0 +1,13 @@
+Implement isWritable and ensureWritable on ReadOnlyByteBufferBuf (#7883)
+
+Motivation:
+
+It should be possible to write a ReadOnlyByteBufferBuf to a channel without errors. However, ReadOnlyByteBufferBuf does not override isWritable and ensureWritable, which can cause some handlers to mistakenly assume they can write to the ReadOnlyByteBufferBuf, resulting in ReadOnlyBufferException.
+
+Modification:
+
+Added isWritable and ensureWritable method overrides on ReadOnlyByteBufferBuf to indicate that it is never writable. Added tests for these methods.
+
+Result:
+
+Can successfully write ReadOnlyByteBufferBuf to a channel with an SslHandler (or any other handler which may attempt to write to the ByteBuf it receives).

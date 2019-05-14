@@ -1,0 +1,16 @@
+Make JsonObjectDecoder discard everything after stream corruption
+
+Motivation:
+
+There's no way to recover from a corrupted JSON stream. The current
+implementation will raise an infinite exception storm when a peer sends
+a large corrupted stream.
+
+Modification:
+
+Discard everything once stream corruption is detected.
+
+Result:
+
+Fixes a buffer leak
+Fixes exception storm

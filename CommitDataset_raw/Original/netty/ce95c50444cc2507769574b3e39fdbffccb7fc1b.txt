@@ -1,0 +1,13 @@
+[#5507] SingleThreadEventExecutor should reject call invoke*() from within the EventLoop.
+
+Motivation:
+
+ExecutorService.invoke*(...) methods may block by API definition. This can lead to deadlocks if called from inside the EventLoop in SingleThreadEventExecutor as it only has one Thread that does all the work.
+
+Modifications:
+
+Throw a RejectedExectionException if someone tries to call SingleThreadEventExecutor.invoke*(...) while in the EventLoop.
+
+Result:
+
+No more deadlock possible.

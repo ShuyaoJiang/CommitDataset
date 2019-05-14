@@ -1,0 +1,22 @@
+Honour endpoint.enabled:false for nested paths
+
+Previously, only invocations of /metricName/ would honour the enabled
+property and return a not found (404) response. For endpoints which
+support nested paths, access to /metricName/foo would ignore the enabled
+flag and return an OK (200) response. Furthermore, there was a comment
+in EndpointMvcAdapter that suggested that an endpoint shouldn’t be
+called when it is disabled, however this was not the case.
+
+This commit updates EndpointWebMvcAutoConfiguration and
+JolokiaAutoConfiguration to only register their MvcEndpoint beans if
+the underlying endpoint is enabled. This means that an
+EndpointMvcAdapter should not be called if its delegate is disabled,
+making the comment described above accurate.
+
+The check for the delegate being enabled has been retained so as not to
+rely upon the auto-configurations’ behaviour. The methods which handle
+nested paths (MetricsMvcEndpoint.value() and
+EnvironmentMvcEndpoint.value()) have been updated to add the same check
+for the enablement of their delegate.
+
+Fixes gh-2767

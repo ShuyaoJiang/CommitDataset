@@ -1,0 +1,6 @@
+Remove undocumented action.master.force_local setting (#29351)
+
+`action.master.force_local` was only ever used internally and never documented. It was one of those settings that were
+automatically added to a tribe node, to make sure that cluster state read operations would work locally rather than failing when trying to forward the request to the master (as the tribe node never had a master).
+
+Given that we recently removed the tribe node, we can also remove this setting.

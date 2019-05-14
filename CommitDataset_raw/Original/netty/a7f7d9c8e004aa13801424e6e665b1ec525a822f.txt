@@ -1,0 +1,10 @@
+Remove unsafe char[] access in PlatformDependent
+
+Motivation:
+PlatformDependent attempts to use reflection to get the underlying char[] (or byte[]) from String objects. This is fragile as if the String implementation does not utilize the full array, and instead uses a subset of the array, this optimization is invalid. OpenJDK6 and some earlier versions of OpenJDK7 String have the capability to use a subsection of the underlying char[].
+
+Modifications:
+- PlatformDependent should not attempt to use the underlying array from String (or other data types) via reflection
+
+Result:
+PlatformDependent hash code generation for CharSequence does not depend upon specific JDK implementation details.

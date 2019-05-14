@@ -1,0 +1,14 @@
+Add Commons Pool 2 support
+
+Deprecated CommonsPoolTargetSource (supporting commons pool 1.5+) in
+favor of CommonsPool2TargetSource with a similar contract.
+
+Commons Pool 2.x uses object equality while Commons Pool 1.x used
+identity equality. This clearly means that Commons Pool 2 behaves
+differently if several instances having the same identity according to
+their `Object#equals(Object)` method are managed in the same pool. To
+provide a smooth upgrade, a backward-compatible pool is created by
+default; use `setUseObjectEquality(boolean)` if you need the standard
+Commons Pool 2.x behavior.
+
+Issue: SPR-12532

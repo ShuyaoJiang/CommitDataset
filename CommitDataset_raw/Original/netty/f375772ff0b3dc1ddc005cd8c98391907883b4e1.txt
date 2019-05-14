@@ -1,0 +1,19 @@
+Remove OSGi import of JCTools since it is shaded.
+
+Motivation:
+
+Since netty shaded JCTools the OSGi manifest no longer is correct. It claims to
+have an optional import "org.jctools.queues;resolution:=optional,org.jctools.qu
+eues.atomic;resolution:=optional,org.jctools.util;resolution:=optional"
+However since it is shaded, this is no longer true.
+This was noticed when making JCTools a real bundle and netty resolved it as
+optional import.
+
+Modifications:
+
+Modify the generated manifest by no longer analyzing org.jctools for imports.
+A manual setting of sun.misc as optional was required.
+
+Result:
+
+Netty OSGi bundle will no longer interfere with a JCTools bundle.

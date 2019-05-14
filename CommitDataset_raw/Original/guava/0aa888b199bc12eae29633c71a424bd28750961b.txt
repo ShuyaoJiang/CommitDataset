@@ -1,0 +1,10 @@
+Fix the logging in Futures.CombinedFuture such that:
+
+1. Errors are always logged (even if they were put into the output future)
+2. If allMustSucceed is true then all failures after the first are logged
+3. if allMustSucceed is false then all failures are not logged.
+
+In the prior implementation (except for in rare races) exceptions were only logged if allMustSucceed was false.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=46470009

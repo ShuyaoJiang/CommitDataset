@@ -1,0 +1,9 @@
+Make TransportService more test-friendly (#33869)
+
+Today, TransportService uses System.currentTimeMillis() to get the current time
+to report on things like timeouts, and enqueues lambdas for future execution.
+However, in tests it is useful to be able to fake out the current time and to
+see what all these enqueued lambdas are really for. This change alters the
+situation so that we can obtain the time from the more easily-faked
+ThreadPool#relativeTimeInMillis(), and implements some friendlier toString()
+methods on the various Runnables so we can see what they are later.

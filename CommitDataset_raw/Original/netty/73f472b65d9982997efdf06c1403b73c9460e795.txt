@@ -1,0 +1,17 @@
+Fix DNS lookup hang / Remove Comodo Secure DNS
+
+Motivation:
+
+- DNS lookup sometimes hang because it does not call
+  tryToFinishResolve()
+- Comodo Secure DNS handles negative lookup incorrectly.
+
+Modifications:
+
+- Add missing tryToFinishResolve()
+- Remove Comodo Secure DNS servers from the list
+
+Result
+
+- DNS lookup does not hang on non-existent domain names
+- More reliable DnsNameResolverTest

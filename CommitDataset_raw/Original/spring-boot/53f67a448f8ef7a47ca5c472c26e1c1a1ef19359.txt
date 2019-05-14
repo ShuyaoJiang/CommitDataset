@@ -1,0 +1,19 @@
+Auto-configure Spring Security OAuth2 when detected on the classpath
+
+* Automatically spin up Authorization Server and Resource Server
+* Automatically configures method level security included OAuth2Expression handler
+* Wrote extensive unit tests verifying default behavior as well as the auto-configuration backing off when custom Authorization/Resource servers are included
+* Created org.springframework.boot.security.oauth2 subpackage to contain it
+* Can also disable either resource of authorization server completely with a single property for each
+* Print out the auto-generated secrets and other settings
+* Added spring-boot-sample-secure-oauth2 to provide a sample that can be run and poked with curl as well as some automated tests.
+* Make users ask for which servers to install by adding @Enable*
+* User has to @EnableGlobalMethodSecurity instead of using properties files
+
+Add Spring Security OAuth2 support to Spring Boot CLI
+
+* Triggered from either @EnableAuthorizationServer or @EnableResourceServer
+* Needs to have @EnableGlobalMethodSecurity to allow picking the annotation model.
+* By default, comes with import support for @PreAuthorize, @PreFilter, @PostAuthorize, and @PostFilter via a single start import
+* Also need import support for the enable annotations mentioned above.
+* Added extra test case and sample (oauth2.groovy)

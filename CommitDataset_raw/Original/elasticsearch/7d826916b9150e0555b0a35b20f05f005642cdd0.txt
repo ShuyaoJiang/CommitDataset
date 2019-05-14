@@ -1,0 +1,22 @@
+Adjust size of BigArrays in circuit breaker test
+
+With this commit we restore the previous behavior in
+`BigArraysTests#testMaxSizeExceededOnResize` but lower the sizes that
+are tested to the range between 256 bytes to 16 kB so the test does not
+produce a whole lot of garbage.
+
+The previous attempt to reduce the amount of garbage produced by that
+test was to properly size the array initially but it failed to account
+for object alignment which lead to test failures in some cases. While it
+would be possible to account for object alignment, we would need to open
+up BigArrays or directly use the underlying Lucene API which would
+require us to allocate an array upfront only to find its size (incl.
+object alignment).
+
+Instead we have fixed this issue by conservatively sizing the array
+initially (so the initial allocation will never trip the circuit
+breaker) and reduce garbage by reducing the circuit breaker's upper
+bound as described previously.
+
+Closes #33750
+Relates #34325

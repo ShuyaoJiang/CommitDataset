@@ -1,0 +1,13 @@
+[#5224] Allow to use Unsafe.reallocateMemory(...) in UnpooledUnsafeNoCleanerDirectByteBuf.
+
+Motivation:
+
+If the user uses unsafe direct buffers with no cleaner we can use Unsafe.reallocateMemory(...) as optimization when we need to expand the buffer.
+
+Modifications:
+
+Use Unsafe.relocateMemory(...) in UnpooledUnsafeNoCleanerDirectByteBuf.
+
+Result:
+
+Less expensive expanding of buffers.

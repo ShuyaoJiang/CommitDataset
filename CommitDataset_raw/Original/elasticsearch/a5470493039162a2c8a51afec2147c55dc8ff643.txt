@@ -1,0 +1,9 @@
+Security: switch to IllegalArgumentException if request cannot be serialized
+
+The commit switches the CreateTokenRequest and InvalidateTokenRequest to throw an
+IllegalArgumentException when the version the request is being serialized to does not support the
+request. This fixes test failures due to the use of the AssertingTransportInterceptor testing
+serialization with versions prior to 6.2. The IAE is an indication to the
+AssertingTranpsortInterceptor that the request does not support the version.
+
+Original commit: elastic/x-pack-elasticsearch@c73abf1bc0391173e13f44f17861b34c324010b6

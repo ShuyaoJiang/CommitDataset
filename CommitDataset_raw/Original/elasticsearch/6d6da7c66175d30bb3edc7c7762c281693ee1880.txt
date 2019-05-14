@@ -1,0 +1,7 @@
+Fix merging logic of Suggester Options (#29514)
+
+Suggester Options have a collate match field that is returned when the prune 
+option is set to true. These values should be merged together in the query 
+reduce phase, otherwise good suggestions that result in rare hits in shards with 
+results that do not arrive first may be incorrectly marked as not matching the 
+collate query.

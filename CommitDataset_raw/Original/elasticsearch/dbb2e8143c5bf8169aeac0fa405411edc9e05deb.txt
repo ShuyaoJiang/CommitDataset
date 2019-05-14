@@ -1,0 +1,5 @@
+SQL: Remove the last remaining server dependencies from jdbc (#30771)
+
+Removes the last remaining server dependencies from jdbc client. In order to do that it introduces the new project sql-shared-proto that contains only XContent-serializable classes. HTTP Client and JDBC now depend only on sql-shared-proto. I had to keep the original sql-proto project since it is used as a dependency by sql-cli and security integration tests.
+
+Relates #29856

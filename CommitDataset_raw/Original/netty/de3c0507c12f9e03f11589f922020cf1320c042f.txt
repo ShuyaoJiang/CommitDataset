@@ -1,0 +1,13 @@
+[#2762] Not expand ByteBuffer[] in ChannelOutboundBuffer
+
+Motivation:
+
+At the moment we expand the ByteBuffer[] when we have more then 1024 ByteBuffer to write and replace the stored instance in its FastThreadLocal. This is not needed and may even harm performance on linux as IOV_MAX is 1024 and so this may cause the JVM to do an array copy.
+
+Modifications:
+
+Just exit the nioBuffers() method if we can not fit more ByteBuffer in the array. This way we will pick them up on the next call.
+
+Result:
+
+Remove uncessary array copy and simplify the code.

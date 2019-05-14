@@ -1,0 +1,14 @@
+Give a handler more control over how its buffers' read bytes are discarded.
+
+This pull request adds two new handler methods: discardInboundReadBytes(ctx) and discardOutboundReadBytes(ctx) to ChannelInboundByteHandler and ChannelOutboundByteHandler respectively. They are called between every inboundBufferUpdated() and flush() respectively. Their default implementation is to call discardSomeReadBytes() on their buffers and a user can override this behavior easily. For example, ReplayingDecoder.discardInboundReadBytes() looks like the following:
+
+    @Override
+    public void discardInboundReadBytes(ChannelHandlerContext ctx) throws Exception {
+        ByteBuf in = ctx.inboundByteBuffer();
+        final int oldReaderIndex = in.readerIndex();
+        super.discardInboundReadBytes(ctx);
+        final int newReaderIndex = in.readerIndex();
+        checkpoint -= oldReaderIndex - newReaderIndex;
+    }
+
+If a handler, which has its own buffer index variable, extends ReplayingDecoder or ByteToMessageDecoder, the handler can also override discardInboundReadBytes() and adjust its index variable accordingly.

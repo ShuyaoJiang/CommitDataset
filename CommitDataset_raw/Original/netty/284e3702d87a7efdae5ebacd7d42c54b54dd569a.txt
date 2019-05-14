@@ -1,0 +1,13 @@
+Http2ConnectionHandler Builder instead of constructors
+
+Motivation:
+Using the builder pattern for Http2ConnectionHandler (and subclasses) would be advantageous for the following reasons:
+1. Provides the consistent construction afforded by the builder pattern for 'optional' arguments. Users can specify these options 1 time in the builder and then re-use the builder after this.
+2. Enforces that the Http2ConnectionHandler's internals (decoder Http2FrameListener) are initialized after construction.
+
+Modifications:
+- Add an extensible builder which can be used to build Http2ConnectionHandler objects
+- Update classes which inherit from Http2ConnectionHandler
+
+Result:
+It is easier to specify options and construct Http2ConnectionHandler objects.

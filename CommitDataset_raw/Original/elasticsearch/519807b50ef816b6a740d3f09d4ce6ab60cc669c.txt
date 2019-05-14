@@ -1,0 +1,9 @@
+[Tests] Wait for shards to be active in FullClusterRestartIT.testWatcher()
+
+The test `testWatcher()` sometimes fails because the shards are not
+active when searching in the `bwc_watch_index` or `.watcher-history`
+index. This commit ensured that no shards are relocating or initializing
+before executing the searches. It also swallows any error 503 Service
+Unavailable when expecting a given number of search hits.
+
+Original commit: elastic/x-pack-elasticsearch@b8e26e0e789014cae0cd153e11033a55dae00454

@@ -1,0 +1,10 @@
+[#2469] Correctly update indices after incomplete gathering write
+
+ Motivation:
+ When doing a gathering write we need to update the indices after the write partial completes. In the current code-base we use the wrong value when compare the expected written bytes and the actual written bytes.
+
+ Modifications:
+ Use the correct value when compare.
+
+Result:
+Indices are updated correctly and so no corruption can happen when resume writing after data was only partial written before.

@@ -1,0 +1,11 @@
+Add missing_bucket option in the composite agg (#29465)
+
+This change adds a new option to the composite aggregation named `missing_bucket`.
+This option can be set by source and dictates whether documents without a value for the
+source should be ignored. When set to true, documents without a value for a field emits
+an explicit `null` value which is then added in the composite bucket.
+The `missing` option that allows to set an explicit value (instead of `null`) is deprecated in this change and will be removed in a follow up (only in 7.x).
+This commit also changes how the big arrays are allocated, instead of reserving
+the provided `size` for all sources they are created with a small intial size and they grow
+depending on the number of buckets created by the aggregation:
+Closes #29380

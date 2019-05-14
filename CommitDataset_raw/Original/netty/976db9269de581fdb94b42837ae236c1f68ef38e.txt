@@ -1,0 +1,31 @@
+Revamp io.netty.handler.codec.socksx
+
+While implementing netty-handler-proxy, I realized various issues in our
+current socksx package. Here's the list of the modifications and their
+background:
+
+- Split message types into interfaces and default implementations
+  - so that a user can implement an alternative message implementations
+- Use classes instead of enums when a user might want to define a new
+  constant
+  - so that a user can extend SOCKS5 protocol, such as:
+    - defining a new error code
+    - defining a new address type
+- Rename the message classes
+  - to avoid abbreviated class names. e.g:
+    - Cmd -> Command
+    - Init -> Initial
+  - so that the class names align better with the protocol
+    specifications. e.g:
+    - AuthRequest -> PasswordAuthRequest
+    - AuthScheme -> AuthMethod
+- Rename the property names of the messages
+  - so that the property names align better when the field names in the
+    protocol specifications
+- Improve the decoder implementations
+  - Give a user more control over when a decoder has to be removed
+  - Use DecoderResult and DecoderResultProvider to handle decode failure
+    gracefully. i.e. no more Unknown* message classes
+- Add SocksPortUnifinicationServerHandler since it's useful to the users
+  who write a SOCKS server
+  - Cleaned up and moved from the socksproxy example

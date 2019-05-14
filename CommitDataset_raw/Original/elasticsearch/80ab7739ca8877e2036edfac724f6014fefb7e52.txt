@@ -1,0 +1,13 @@
+Move IndexLifecycleMetadata installation to put-lifecycle-action (#31346)
+
+There is a problematic scenario with x-pack-cluster master-nodes
+attempting to install custom metadata into the cluster-state and
+broadcasting that to non-x-pack-enabled nodes. Since those nodes
+are not aware of this custom metadata, their cluster-state recovery
+will be broken. This change ensures that newly-elected x-pack master
+nodes bootstrap IndexLifecycleMetadata upon the first request to
+leverage its features. This means that PutLifecycleAction is
+now responsible for installing the metadata. Since this X-Pack API
+can only be called once all nodes in the cluster have x-pack enabled,
+it is safe to assume that the cluster will appropriately handle the
+cluster-state recovery with the new set of index-lifecycle metadata.

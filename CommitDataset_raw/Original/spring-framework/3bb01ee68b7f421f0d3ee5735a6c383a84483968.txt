@@ -1,0 +1,16 @@
+Revert "Introduce (Annotation)SessionFactoryBuilder types"
+
+This commit and the several before it back out the
+SessionFactoryBuilder and AnnotationSessionFactoryBuilder types
+recently introduced in 3.1 M2. This is in light of the impending
+release of Hibernate 4.0 GA and our own support for it the new
+org.springframework.orm.hibernate4 package (not yet committed).
+
+This new package will have a similar, but far simpler, arrangement of
+a single LocalSessionFactoryBuilder and LocalSessionFactoryBean pair.
+Hibernate 3.x support will remain largely as-is, however the
+HibernateTransactionManager introduced with SPR-8076 will remain.
+
+This reverts commit 9e8259198f07e495fd32359c0e0c197bb79a2ca0.
+
+Issue: SPR-8066, SPR-7936, SPR-8076, SPR-8098, SPR-8096, SPR-7387

@@ -1,0 +1,12 @@
+Set address space limit in systemd service file
+
+We have a bootstrap check for the maximum size of the virtual memory
+address space for the Elasticsearch process. We can set this in the
+service file for Elasticsearch when installed as a service on
+systemd-based systems for a better user experience than them fumbling
+through thinking they should set this via /etc/security/limits.d (as a
+lot of pages on the Internet would tell them) not realizing that systemd
+completely ignores these for services and then trying to figure out how
+to add a unit file for the Elasticsearch service.
+
+Relates #25975

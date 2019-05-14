@@ -1,0 +1,13 @@
+[#5760] Do not change writerIndex when decode DnsPtrRecord
+
+Motivation:
+
+We need to not change the original writerIndex when decode a DnsPtrRecord as otherwise we will not be able to decode other records that follow it.
+
+Modifications:
+
+Slice the data out and so not increase the writerIndex.
+
+Result:
+
+No more problems when decoding.

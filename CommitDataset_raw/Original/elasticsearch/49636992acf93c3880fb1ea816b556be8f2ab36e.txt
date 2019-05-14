@@ -1,0 +1,10 @@
+Fail rollover if duplicated alias found in template (#28110)
+
+If a newly created index from a rollover request matches with an index 
+template whose aliases contains the rollover request alias, the alias
+will point to multiple indices. This will cause indexing requests to be 
+rejected. To avoid such situation, we make sure that there is no
+duplicated alias before creating a new index; otherwise abort and report
+an error to the caller.
+
+Closes #26976

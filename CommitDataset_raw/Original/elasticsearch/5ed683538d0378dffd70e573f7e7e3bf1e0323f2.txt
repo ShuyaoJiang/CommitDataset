@@ -1,0 +1,19 @@
+Name the log tail thread and mark it as a daemon
+
+This commit provides an explicit name for the log tail thread, otherwise
+the thread shows up with a generic name like Thread-12 in stack
+dumps. While the stack trace provides enough information to conclude
+what this thread is doing, it is better to be more explicit about the
+purpose of this thread so that that can be discerned directly from the
+name of the thread.
+
+Additionally, we mark this thread as a daemon thread. Since this thread
+is created by the main thread during node initialization it defaults to
+being a user thread. Since the JVM only exits when the only threads
+running are not user threads, if this thread were to somehow block then
+it could prevent the server JVM from exiting. As such, this thread
+should be marked as a daemon thread.
+
+Relates elastic/x-pack-elasticsearch#1969
+
+Original commit: elastic/x-pack-elasticsearch@b3761c7d91e446f034f32b28bb09cefab82eb1d4

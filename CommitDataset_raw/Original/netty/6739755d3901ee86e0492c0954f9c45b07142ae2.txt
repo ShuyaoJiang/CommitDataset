@@ -1,0 +1,14 @@
+NioEventLoop.register(...) should offload to the EventLoop if not alr… (#8612)
+
+
+Motivation:
+
+java.nio.channels.spi.AbstractSelectableChannel.register(...) need to obtain multiple locks during execution which may produce a long wait time if we currently select. This lead to multiple CI failures in the past.
+
+Modifications:
+
+Ensure the register call takes place on the EventLoop.
+
+Result:
+
+No more flacky CI test timeouts.

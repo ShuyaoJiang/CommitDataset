@@ -1,0 +1,10 @@
+Fix from_range in search_after in changes snapshot (#33335)
+
+We can have multiple documents in Lucene with the same seq_no for
+parent-child documents (or without rollback). In this case, the usage
+"lastSeenSeqNo + 1" is an off-by-one error as it may miss some
+documents. This error merely affects the `skippedOperations` contract.
+
+See: https://github.com/elastic/elasticsearch/pull/33222#discussion_r213842257
+
+Closes #33318

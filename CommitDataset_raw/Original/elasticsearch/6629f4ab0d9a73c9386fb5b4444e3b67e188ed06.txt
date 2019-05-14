@@ -1,0 +1,10 @@
+Rollback primary before recovering from translog  (#27804)
+
+Today we always recover a primary from the last commit point. However 
+with a new deletion policy, we keep multiple commit points in the
+existing store, thus we have chance to find a good starting commit
+point. With a good starting commit point, we may be able to throw away
+stale operations. This PR rollbacks a primary to a starting commit then
+recovering from translog.
+
+Relates #10708

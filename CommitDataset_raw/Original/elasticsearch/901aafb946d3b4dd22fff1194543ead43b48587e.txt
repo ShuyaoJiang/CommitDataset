@@ -1,0 +1,17 @@
+add APIs to Maintenance Mode in ILM (#31410)
+
+- POST _xpack/index_lifecycle/_stop
+   - issues a request to be placed into STOPPED mode (maintenance mode).
+     This is not immediate, since we must first verify that
+     it is safe to go from STOPPING -> STOPPED.
+- POST _xpack/index_lifecycle/_start
+   - issues a request to be placed back into RUNNING mode (immediately)
+- GET _xpack/index_lifecycle/_status
+   - get back the current mode our lifecycle management is in
+
+- update task was hardened to support uninstalled metadata
+- if no metadata is installed, the start/stop actions will install metadata
+  and proceed to try and change it (default start mode is RUNNING)
+- rename MAINTENANCE -> STOPPED, MAINTENANCE_REQUESTED -> STOPPING, NORMAL -> RUNNING
+
+follow-up to #31164.

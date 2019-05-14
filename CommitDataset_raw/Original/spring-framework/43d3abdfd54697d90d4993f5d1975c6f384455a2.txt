@@ -1,0 +1,10 @@
+Fix SockJs CorsConfiguration for forbidden origins
+
+After this commit, AbstractSockJsService uses the configured allowed
+origins when generating the CorsConfiguration instead of "*".
+
+As a consequence, forbidden origin requests still result in a 403
+response but now with no CORS headers in order to improve consistency
+between the status code and the headers.
+
+Issue: SPR-16304

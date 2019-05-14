@@ -1,0 +1,33 @@
+Move all sql integration tests into qa (elastic/x-pack-elasticsearch#2432)
+
+Builds on elastic/x-pack-elasticsearch#2403 to move all of sql's integration testing into
+qa modules with different running server configurations. The
+big advantage of this is that it allows us to test the cli and
+jdbc with security present.
+
+Creating a project that depends on both cli and jdbc and the
+server has some prickly jar hell issues because cli and jdbc
+package their dependencies in the jar. This works around it
+in a few days:
+1. Include only a single copy of the JDBC dependencies with
+careful gradle work.
+2. Do not include the CLI on the classpath at all and instead
+run it externally.
+
+I say "run it externally" rather than "fork it" because Elasticsearch
+tests aren't allowed to fork other processes. This is forbidden
+by seccomp on linux and seatbelt on osx and cannot be explicitly
+requested like additional security manager settings. So instead
+of forking the CLI process directly the tests interact with a test
+fixture that isn't bound by Elasticsearch's rules and *can* fork
+it.
+
+This forking of the CLI has a nice side effect: it forces us to
+make sure that things like security and connection strings other
+than `localhost:9200` work. The old test could and did work around
+missing features like that. The new tests cannot so I added the
+ability to set the connection string. Configuring usernames and
+passwords was also not supported but I did not add support for
+that, only created the failing test and marked it as `@AwaitsFix`.
+
+Original commit: elastic/x-pack-elasticsearch@560c6815e3e03306270a2affd758763f34613891

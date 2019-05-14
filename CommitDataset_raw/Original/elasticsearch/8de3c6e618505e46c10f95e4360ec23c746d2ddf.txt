@@ -1,0 +1,10 @@
+Ignore date ranges containing 'now' when pre-processing a percolator query (#35160)
+
+Today when a percolator query contains a date range then the query
+analyzer extracts that range, so that at search time the `percolate` query
+can exclude percolator queries efficiently that are never going to match.
+
+The problem is that if 'now' is used it is evaluated at index time.
+So the idea is to rewrite date ranges with 'now' to a match all query, 
+so that the query analyzer can't extract it and the `percolate` query 
+is  then able to evaluate 'now' at query time.

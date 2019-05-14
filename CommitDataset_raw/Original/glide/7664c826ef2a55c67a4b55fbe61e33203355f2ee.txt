@@ -1,0 +1,7 @@
+Create a CachedHashCodeArrayMap subclass to speed up EngineKey hashing.
+
+EngineKey is hashed frequently and caches its own hashCode, however for every request a new EngineKey is created and it rehashes the options and transformations. It's common to cache RequestBuilders for generating multiple requests that have the same options so a handy optimisation is to use an ArrayMap subclass that caches the hashCode to prevent recomputing it every time. This is one of the more expensive atoms in starting a glide request.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=185029279

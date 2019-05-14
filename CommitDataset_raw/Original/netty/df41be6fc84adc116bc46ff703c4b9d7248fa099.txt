@@ -1,0 +1,10 @@
+HTTP/2 Decoder validate that GOAWAY lastStreamId doesn't increase
+
+Motivation:
+The HTTP/2 RFC states in https://tools.ietf.org/html/rfc7540#section-6.8 that Endpoints MUST NOT increase the value they send in the last stream identifier however we don't enforce this when decoding GOAWAY frames.
+
+Modifications:
+- Throw a connection error if the peer attempts to increase the lastStreamId in a GOAWAY frame
+
+Result:
+RFC is more strictly enforced.

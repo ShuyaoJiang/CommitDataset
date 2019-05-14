@@ -1,0 +1,5 @@
+Introduced support for @Lazy on injection points
+
+This turned into a rather huge affair since it led to the introduction of a new AutowireCandidateResolver implementation in the spring-context module. That ACR impl is now being set through AnnotationConfigUtils; GenericApplicationContext and co do not set a default QualifierAnnotationAutowireCandidateResolver anymore (which has always been a smell anyway).  At the same time, dependency ordering has moved from AutowiredAnnotationBeanPostProcessor to DefaultListableBeanFactory itself through a "dependencyComparator" strategy, applying to constructor dependencies and lazy resolution proxies as well.
+
+Issue: SPR-10353

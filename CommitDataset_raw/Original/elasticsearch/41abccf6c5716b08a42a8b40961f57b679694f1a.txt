@@ -1,0 +1,19 @@
+Adds rewrite phase to aggregations (#25495)
+
+* Adds rewrite phase to aggregations
+
+This change adds aggregations to the rewrite performed by the `SearchSourceBuilder`. This means that `AggregationBuilder`s are able to implement a `rewrite()` method where they can return a new `AggregationBuilder` which is functionally the same but in a more primitive form. This is exactly analogous to the rewrite done by the `QueryBuilder`s.
+
+The first aggregation to implement the rewrite are the filter and filters aggregations so they can rewrite the filters they contain.
+
+Closes #17676
+
+* Removes rewrite from PipelineAggregationBuilder
+
+Rewrite is based on shard level information. Since pipeline aggregation are run in the reduce phase it doesn’t make sense to rewrite them on the shards. In fact eventually we shouldn’t be transporting them to the shards at all and should be retaining them on the coordinating node for execution in the reduce phase
+
+* Addresses review comments
+
+* addresses more review comments
+
+* Fixed imports

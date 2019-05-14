@@ -1,0 +1,26 @@
+Support single, unqualified tx manager in the TCF
+
+TransactionalTestExecutionListener currently requires that the
+PlatformTransactionManager bean be named "transactionManager" by
+default. Otherwise, the bean name can only be overridden via the
+transactionManager attribute of @TransactionConfiguration or the value
+attribute of @Transactional.
+
+However, if there is only a single PlatformTransactionManager in the
+test's ApplicationContext, then the requirement to specify the exact
+name of that bean (or to name it exactly "transactionManager") is often
+superfluous.
+
+This commit addresses this issue by refactoring the
+TransactionalTestExecutionListener so that it is comparable to the
+algorithm for determining the transaction manager used in
+TransactionAspectSupport for "production" code. Specifically, the TTEL
+now uses the following algorithm to retrieve the transaction manager.
+
+ - look up by type and qualifier from @Transactional
+ - else, look up by type and explicit name from
+   @TransactionConfiguration
+ - else, look up single bean by type
+ - else, look up by type and default name from @TransactionConfiguration
+
+Issue: SPR-9645

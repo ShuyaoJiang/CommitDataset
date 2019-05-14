@@ -1,0 +1,9 @@
+DispatcherHandler maps errors to ResponseStatusException
+
+The DispatcherHandler now has an errorMapper property that is a
+function for transforming errors. By default this property is set to an
+instance of DispatcherHandlerExceptionMapper which wraps "standard"
+framework exceptions and @ResponseStatus-annotated exceptions as
+ResponseStatusException.
+
+This makes it easy to handle the exceptions downstream uniformly.

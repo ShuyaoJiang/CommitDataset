@@ -1,0 +1,14 @@
+Support target type in JsonPath assertions
+
+This change adds support for a target type in JsonPath assertions in
+Spring MVC Test.
+
+The existing assertValue(String expression, Object expectedValue)
+transparently falls back on using an alternative JsonPath API that
+allows specifying the target type to coerce to.
+
+There is also a new overloaded method
+assertValue(String expression, Matcher<T> matcher, Class<T> targetType)
+for use with Hamcrest matchers where the target type can be specified.
+
+Issue: SPR-14498

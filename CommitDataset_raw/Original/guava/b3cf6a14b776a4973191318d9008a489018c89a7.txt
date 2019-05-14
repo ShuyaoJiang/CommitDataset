@@ -1,0 +1,6 @@
+Add a more descriptive error message when AsyncFunction.apply returns null.
+
+As it currently is, the NPE gets thrown several lines later in a very confusing function which, at first glance, should not be able to produce an NPE (since outputFuture is not @Nullable).  And since outputFuture looks like (but isn't) a field, one has to search the entire class to determine how it was set to null in the first place.  This adds a very clear message to the NPE saying that AsyncFunction may not return null.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=61228632

@@ -1,0 +1,19 @@
+[ML] Add max open jobs per node as a node attribute (elastic/x-pack-elasticsearch#2203)
+
+This commit adds the max_running_jobs setting from elasticsearch.yml
+into a node attribute called ml.max_open_jobs.  Previously there was
+an assumption that max_running_jobs would be the same for all nodes in
+the cluster.  However, during a rolling cluster restart where the value
+of the setting is being changed this clearly cannot be the case, and
+would cause unexpected/unpredictable limits to be used during the period
+when different nodes had different settings.
+
+For backwards compatibility, if another node in the cluster has not added
+its setting for max_running_jobs to the cluster state then the old
+(flawed but better than nothing) approach is applied, i.e. assume the
+remote node's setting for max_running_jobs is equal to that of the node
+deciding the job allocation.
+
+Relates elastic/x-pack-elasticsearch#2185
+
+Original commit: elastic/x-pack-elasticsearch@1e62b89183c0726b1496f52dff102033076cdab1

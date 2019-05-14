@@ -1,0 +1,13 @@
+Allow to receive a ChannelGroupFuture that will be notified once all Channels are closed.
+
+Motivation:
+
+It's useful to be able to be notified once all Channels that are part of the ChannelGroup are notified. This can for example be useful if you want to do a graceful shutdown.
+
+Modifications:
+
+- Add ChannelGroup.newCloseFuture(...) which will be notified once all Channels are notified that are part of the ChannelGroup at the time of calling.
+
+Result:
+
+Easier to be notified once all Channels within a ChannelGroup are closed.

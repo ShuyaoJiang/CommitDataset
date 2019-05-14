@@ -1,0 +1,10 @@
+Update logstash-management.json to use typeless template (#38653)
+
+This commit changes the type from "doc" to "_doc" for the
+.logstash-management template. Since this is an internally
+managed template it does not always go through the REST
+layer for it's internal representation.  The internal
+representation requires the default "_doc" type, which for
+external templates is added in the REST layer.
+
+Related #38637

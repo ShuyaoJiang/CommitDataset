@@ -1,0 +1,14 @@
+Introduce new methods in tx base test classes
+
+Recently new utility methods were added to JdbcTestUtils, and a
+JdbcTemplate was introduced in abstract transactional base classes in
+the TestContext framework. This presents an easy opportunity to make
+these new utility methods available as convenience methods in the base
+test classes.
+
+This commit introduces new countRowsInTableWhere() and dropTables()
+convenience methods in the abstract transactional base classes in the
+TestContext framework. These new methods internally delegate to methods
+of the same names in JdbcTestUtils.
+
+Issue: SPR-9665

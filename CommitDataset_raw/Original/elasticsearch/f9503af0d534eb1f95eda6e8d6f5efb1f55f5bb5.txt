@@ -1,0 +1,19 @@
+[TEST] Move test skip/blacklist assumptions out of @Before method (#25100)
+
+This commit moves the assumeFalse() calls that implement test skipping
+and blacklisting out of the @Before method of ESClientYamlSuiteTestCase.
+The problem with having them in the @Before method is that if an
+assumption triggers then the @Before methods of classes that extend
+ESClientYamlSuiteTestCase will not run, but their @After methods will.
+This can lead to inconsistencies that cause assertions in the @After
+methods and fail the test even though it was skipped/blacklisted.
+
+Instead the assumeFalse() calls are now at the beginning of the test()
+method, which runs after all @Before methods (including those in classes
+that extend ESClientYamlSuiteTestCase) have completed.  The only side
+effect is that overridden test() methods in classes that extend
+ESClientYamlSuiteTestCase which call super.test() and also do other things
+must now be designed not to consume any InternalAssumptionViolatedException
+that may be thrown by the super.test() call.
+
+Relates elastic/x-pack-elasticsearch#1650

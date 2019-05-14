@@ -1,0 +1,13 @@
+Allow Jersey-based Actuator to be used with separate management port
+
+Previously, when the Jersey-based Actuator was configure with a
+separate management port, the resulting child context would fail to
+start due to their being no ResourceConfigCustomizer beans available.
+
+This commit updates the configuration so that the customizer's are
+injected using an ObjectProvider and an empty list is used in the
+event of their being no customizer beans. This aligns the child
+context configuration class with JerseyAutoConfiguration which
+already used this approach.
+
+Closes gh-12975

@@ -1,0 +1,49 @@
+inner hits: Only access stored fields when needed
+
+Stored fields were still being accessed for nested inner hits even if the _source was not requested.
+This was done to figure out the id of the root document. However this is already known higher up the stack.
+So instead this change adds the id to the nested search context, so that it is no longer required to be fetched via the stored fields.
+
+In case the _source is large and no source is requested then hot threads like these ones would still appear:
+
+```
+100.3% (501.3ms out of 500ms) cpu usage by thread 'elasticsearch[AfXKKfq][search][T#6]'
+     2/10 snapshots sharing following 22 elements
+       org.apache.lucene.store.DataInput.skipBytes(DataInput.java:352)
+       org.apache.lucene.codecs.compressing.CompressingStoredFieldsReader.skipField(CompressingStoredFieldsReader.java:246)
+       org.apache.lucene.codecs.compressing.CompressingStoredFieldsReader.visitDocument(CompressingStoredFieldsReader.java:601)
+       org.apache.lucene.index.CodecReader.document(CodecReader.java:88)
+       org.apache.lucene.index.FilterLeafReader.document(FilterLeafReader.java:411)
+       org.elasticsearch.search.fetch.FetchPhase.loadStoredFields(FetchPhase.java:347)
+       org.elasticsearch.search.fetch.FetchPhase.createNestedSearchHit(FetchPhase.java:219)
+       org.elasticsearch.search.fetch.FetchPhase.execute(FetchPhase.java:150)
+       org.elasticsearch.search.fetch.subphase.InnerHitsFetchSubPhase.hitsExecute(InnerHitsFetchSubPhase.java:73)
+       org.elasticsearch.search.fetch.FetchPhase.execute(FetchPhase.java:166)
+       org.elasticsearch.search.fetch.subphase.InnerHitsFetchSubPhase.hitsExecute(InnerHitsFetchSubPhase.java:73)
+       org.elasticsearch.search.fetch.FetchPhase.execute(FetchPhase.java:166)
+       org.elasticsearch.search.SearchService.executeFetchPhase(SearchService.java:422)
+```
+
+and:
+
+```
+8/10 snapshots sharing following 27 elements
+       org.apache.lucene.codecs.compressing.LZ4.decompress(LZ4.java:135)
+       org.apache.lucene.codecs.compressing.CompressionMode$4.decompress(CompressionMode.java:138)
+       org.apache.lucene.codecs.compressing.CompressingStoredFieldsReader$BlockState$1.fillBuffer(CompressingStoredFieldsReader.java:531)
+       org.apache.lucene.codecs.compressing.CompressingStoredFieldsReader$BlockState$1.readBytes(CompressingStoredFieldsReader.java:550)
+       org.apache.lucene.store.DataInput.readBytes(DataInput.java:87)
+       org.apache.lucene.store.DataInput.skipBytes(DataInput.java:350)
+       org.apache.lucene.codecs.compressing.CompressingStoredFieldsReader.skipField(CompressingStoredFieldsReader.java:246)
+       org.apache.lucene.codecs.compressing.CompressingStoredFieldsReader.visitDocument(CompressingStoredFieldsReader.java:601)
+       org.apache.lucene.index.CodecReader.document(CodecReader.java:88)
+       org.apache.lucene.index.FilterLeafReader.document(FilterLeafReader.java:411)
+       org.elasticsearch.search.fetch.FetchPhase.loadStoredFields(FetchPhase.java:347)
+       org.elasticsearch.search.fetch.FetchPhase.createNestedSearchHit(FetchPhase.java:219)
+       org.elasticsearch.search.fetch.FetchPhase.execute(FetchPhase.java:150)
+       org.elasticsearch.search.fetch.subphase.InnerHitsFetchSubPhase.hitsExecute(InnerHitsFetchSubPhase.java:73)
+       org.elasticsearch.search.fetch.FetchPhase.execute(FetchPhase.java:166)
+       org.elasticsearch.search.fetch.subphase.InnerHitsFetchSubPhase.hitsExecute(InnerHitsFetchSubPhase.java:73)
+       org.elasticsearch.search.fetch.FetchPhase.execute(FetchPhase.java:166)
+       org.elasticsearch.search.SearchService.executeFetchPhase(SearchService.java:422)
+```

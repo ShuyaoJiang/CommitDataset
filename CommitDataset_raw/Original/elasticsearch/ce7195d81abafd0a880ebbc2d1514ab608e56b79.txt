@@ -1,0 +1,9 @@
+Terms aggregation should remap global ordinal buckets when a sub-aggregator is used to sort the terms (#24941)
+
+`terms` aggregations at the root level use the `global_ordinals` execution hint by default.
+When all sub-aggregators can be run in `breadth_first` mode the collected buckets for these sub-aggs are dense (remapped after the initial pruning).
+But if a sub-aggregator is not deferrable and needs to collect all buckets before pruning we don't remap global ords and the aggregator needs to deal with sparse buckets.
+Most (if not all) aggregators expect dense buckets and uses this information to allocate memories.
+This change forces the remap of the global ordinals but only when there is at least one sub-aggregator that cannot be deferred.
+
+Relates #24788

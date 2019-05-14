@@ -1,0 +1,14 @@
+Rethrow Error during retrieving remoteAddress / localAddress
+
+
+Motivation:
+
+Besides an error caused by closing socket in Windows a bunch of other errors may happen at this place which won't be somehow logged. For instance any VirtualMachineError as OutOfMemoryError will be simply ignored. The library should at least log the problem.
+
+Modification:
+
+Added logging of the throwable object.
+
+Result:
+
+Fixes #8499.

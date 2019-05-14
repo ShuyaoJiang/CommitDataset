@@ -1,0 +1,31 @@
+Add verification for websocket subprotocol on the client side.
+
+Motivation:
+
+Websocket clients can request to speak a specific subprotocol. The list of
+subprotocols the client understands are sent to the server. The server
+should select one of the protocols an reply this with the websocket
+handshake response. The added code verifies that the reponded subprotocol
+is valid.
+
+Modifications:
+
+Added verification of the subprotocol received from the server against the
+subprotocol(s) that the user requests. If the user requests a subprotocol
+but the server responds none or a non-requested subprotocol this is an
+error and the handshake fails through an exception. If the user requests
+no subprotocol but the server responds one this is also marked as an
+error.
+
+Addiontionally a getter for the WebSocketClientHandshaker in the
+WebSocketClientProtocolHandler is added to enable the user of a
+WebSocketClientProtocolHandler to extract the used negotiated subprotocol.
+
+Result:
+
+The subprotocol field which is received from a websocket server is now
+properly verified on client side and clients and websocket connection
+attempts will now only succeed if both parties can negotiate on a
+subprotocol.
+If the client sends a list of multiple possible subprotocols it can
+extract the negotiated subprotocol through the added handshaker getter (WebSocketClientProtocolHandler.handshaker().actualSubprotocol()).

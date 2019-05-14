@@ -1,0 +1,16 @@
+Fix path mapping issue in default servlet mode
+
+Prior to this commit, some requests would be wrongly mapped to "/" when:
+
+* requests ends with "//" such as "/foo/bar//"
+* the DispatcherServlet is mapped as the default ("/")
+* the app container sanitizes the servletPath
+
+In those cases, the path extraction algorithm was wrongly guessing the
+path of the current request.
+
+This commit detects if the app container sanitized the servletPath for
+the current request. If so, it uses a sanitized version of the
+requestUri to extract the path information.
+
+Issue: SPR-12372

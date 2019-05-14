@@ -1,0 +1,10 @@
+FlowControlHandlerTest invalid condition
+
+Motivation:
+FlowControlHandlerTest attempts to validate the expected contents of the underlying queue in FlowControlHandler. However the condition which triggers the check is too early and the queue contents may not yet contain all expected objects. For example a CountDownLatch is counted down in a handler's channelRead which is  after the FlowControlHandler in the pipeline. At this point if there is a thread context switch the queue may not yet contain all the expected objects and checking the queue contents is not valid.
+
+Modifications:
+- Remove checking the queues contents in FLowControlHandlerTest and instead only check the empty condition at the end of the tests
+
+Result:
+FlowControlHandlerTest won't fail due to invalid checks of the contents of the queue.

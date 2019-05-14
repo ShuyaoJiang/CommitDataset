@@ -1,0 +1,14 @@
+Correctly convert empty HttpContent to ByteBuf
+
+Motivation:
+
+93130b172a61815354267f0f3d8f5af52de39754 introduced a regression where we not "converted" an empty HttpContent to ByteBuf and just passed it on in the pipeline. This can lead to the situation that other handlers in the pipeline will see HttpContent instances which is not expected.
+
+Modifications:
+
+- Correctly convert HttpContent to ByteBuf when empty
+- Add unit test.
+
+Result:
+
+Handlers in the pipeline will see the expected message type.

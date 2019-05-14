@@ -1,0 +1,15 @@
+Fix HttpPostMultipartRequestDecoder.splitMultipartHeader() String index out of range: -1 with empty header
+
+Motivation:
+
+A Malformed empty header value (e.g. Content-Type: \r\n) will trigger a String index out of range
+while trying to parse the multi-part request, using the HttpPostMultipartRequestDecoder.
+
+Modification:
+
+Ensure that the substring() method is called passing the endValue >= valueStart.
+In case of an empty header value, the empty header value associated with the header key will be returned.
+
+Result:
+
+Fixes #7620

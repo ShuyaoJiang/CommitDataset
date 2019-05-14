@@ -1,0 +1,13 @@
+Automatically autowire a bean with one constructor
+
+Previously, if a managed bean had only one non-default constructor, we
+should still annotate it with `@Autowired` to properly use constructor
+injection. Not doing so resulted in an error as the container was
+trying to call the default (non-existing) constructor.
+
+This commit updates this behaviour to automatically applyed the
+autowiring semantic to any bean that has only one constructor. As
+before, if more than one constructor is defined, `@Autowired` must be
+specified to teach the container the constructor it has to use.
+
+Issue: SPR-12278

@@ -1,0 +1,11 @@
+Test: Change randomValueOtherThan(null, supplier) (#27901)
+
+When the first parameter of `ESTestCase#randomValueOtherThan` is `null`
+then run the supplier until it returns non-`null`. Previously,
+`randomValueOtherThan` just ran the supplier one time which was
+confusing.
+
+Unexpectedly, it looks like not tests rely on the original `null`
+handling.
+
+Closes #27821

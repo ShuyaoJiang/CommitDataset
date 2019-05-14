@@ -1,0 +1,25 @@
+Fix a lock ordering deadlock in CustomScheduler reported in https://github.com/google/guava/issues/2072
+
+The issue is that CustomScheduler uses a lock to atomically reschedule after each iteration, unfortunately this lock has inconsistent ordering with respect to the lock used by AbstractService.  In particular for a RUNNING service the following can ocurr
+
+T1:
+service.stopAsync()
+  -> AbstractService.stopAsync() [ ACQUIRE AbstractService.monitor]
+     -> AbstractService.doStop()
+        -> CustomScheduler.cancel() [ ACQUIRE CustomScheduler.lock]
+
+T2:
+CustomScheduler.reschedule() [ ACQUIRE CustomScheduler.lock]
+   (getNextSchedule throws an exception)
+  -> AbstractService.notifyFailed [ACQUIRE AbstractService.monitor]
+
+Boom deadlock!
+
+It looks like i introduced this deadlock in https://github.com/google/guava/commit/2c0727049d7e7cbbe1febf5bcf6b7a4b1860dea5 though it is possible it wasn't an issue at the time since the AbstractService implementation was different
+
+The fix was to simply move the call to notifyFailed outside the lock.
+
+I have similar concerns about the other lock in this class, but i believe it actually is safe (though we should probably remove it anyway, as per an ancient TODO)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=96113737

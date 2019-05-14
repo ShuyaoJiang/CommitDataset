@@ -1,0 +1,20 @@
+Additional configuration for leak detection
+
+Motivation:
+
+Leak detector, when it detects a leak, will print the last 5 stack
+traces that touched the ByteBuf. In some cases that might not be enough
+to identify the root cause of the leak.
+Also, sometimes users might not be interested in tracing all the
+operations on the buffer, but just the ones that are affecting the
+reference count.
+
+Modifications:
+
+Added command line properties to override default values:
+ * Allow to configure max number of stack traces to collect
+ * Allow to only record retain/release operation on buffers
+
+Result:
+Users can increase the number of stack traces to debug buffer leaks
+with lot of retain/release operations.

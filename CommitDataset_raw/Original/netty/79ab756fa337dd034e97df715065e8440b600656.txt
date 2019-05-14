@@ -1,0 +1,13 @@
+Use a single queue in UniformStreamByteDistributor
+
+Motivation:
+
+The UniformStreamByteDistributor currently processes all zero-length frames, regardless of add order. This means that we would always send HEADERS for all streams, possibly taking away bandwidth for streams that actually have data.
+
+Modifications:
+
+Empty frames are now treated the same as any other frame except that the algorithm will pop off the any empty frames at the head of the queue.
+
+Result:
+
+Empty frames require no extra processing.

@@ -1,0 +1,15 @@
+Add unescapeCsvFields to parse a CSV line and implement CombinedHttpHeaders.getAll
+
+Motivation:
+
+See #4855
+
+Modifications:
+
+Unfortunately, unescapeCsv cannot be used here because the input could be a CSV line like `"a,b",c`. Hence this patch adds unescapeCsvFields to parse a CSV line and split it into multiple fields and unescaped them. The unit tests should define the behavior of unescapeCsvFields.
+
+Then this patch just uses unescapeCsvFields to implement `CombinedHttpHeaders.getAll`.
+
+Result:
+
+`CombinedHttpHeaders.getAll` will return the unescaped values of a header.

@@ -1,0 +1,7 @@
+Ensure a JreProxySelector is applied as a fallback
+
+The issue was that the JreProxySelector was only applied
+if the existing selector was null, but that hasn't been the case
+since we added supporty for settings.xml. The strategy now is to
+fallback to a JreProxySelector if the existing one is null
+or not already a composite. Fixes gh-914.

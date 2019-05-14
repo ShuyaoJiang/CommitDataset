@@ -1,0 +1,13 @@
+Call finishConnect() before try to call read(...) / write(...) when using NIO
+
+Motivation:
+
+The JDK implementation of SocketChannel has an internal state that is tracked for its operations. Because of this we need to ensure we call finishConnect() before try to call read(...) / write(...) as otherwise it may produce a NotYetConnectedException.
+
+Modifications:
+
+First process OP_CONNECT flag.
+
+Result:
+
+No more possibility of NotYetConnectedException because OP_CONNECT is handled not early enough when processing interestedOps for a Channel.

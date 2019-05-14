@@ -1,0 +1,13 @@
+Switch build-tools to latest target version (#34746)
+
+- we already require Java 11 to build, yet we target the minimum
+supported version in build-tools ( currently 8 )
+- this is because we have some checks that are executed in a new JVM
+which could be running the minimum version.
+- For everything else it would be nice to be able to use new features,
+like the new process API.
+
+With this change, we selectively compile the few classes that need an
+older target version and move everything over to Java 10.
+Unfortunately the current Gradle version does not support 11 as a target
+version yet.

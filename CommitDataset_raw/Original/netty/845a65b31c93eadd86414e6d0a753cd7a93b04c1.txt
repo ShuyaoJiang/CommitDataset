@@ -1,0 +1,14 @@
+Nio|Epoll|KqueueEventLoop task execution might throw UnsupportedOperationException on shutdown. (#8476)
+
+Motivation:
+
+There is a racy UnsupportedOperationException instead because the task removal is delegated to MpscChunkedArrayQueue that does not support removal. This happens with SingleThreadEventExecutor that overrides the newTaskQueue to return an MPSC queue instead of the LinkedBlockingQueue returned by the base class such as NioEventLoop, EpollEventLoop and KQueueEventLoop.
+
+Modifications:
+
+- Catch the UnsupportedOperationException
+- Add unit test.
+
+Result:
+
+Fix #8475

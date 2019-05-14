@@ -1,0 +1,6 @@
+[CCR] Report error if auto follower tries auto follow a leader index with soft deletes disabled (#36886)
+
+Currently if a leader index with soft deletes disabled is auto followed then this index is silently ignored.
+This commit changes this behavior to mark these indices as auto followed and report an error, which is visible in auto follow stats. Marking the index as auto follow is important, because otherwise the auto follower will continuously try to auto follow and fail.
+
+Relates to #33007

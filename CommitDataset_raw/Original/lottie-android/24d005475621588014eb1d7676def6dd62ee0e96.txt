@@ -1,0 +1,6 @@
+Fix: Tapping on seekBar would be ignored (#760)
+
+-Change the progress by dragging the finger was working. However, tapping on the progress bar to change the progress was not.
+I merged the "progress in 1..4" condition with the checking "seekBar.isPressed", so it will be ignored when user is not pressing it.
+Also, in the animationView.addAnimatorUpdateListener, I changed the .toInt() into a .roundToInt(), because toInt() was always giving the current_number -= -1, creating a race condition that would set the seekBar to 0.
+I tested my solution on a lot of the Showcase examples and I'm confident there is no regression.

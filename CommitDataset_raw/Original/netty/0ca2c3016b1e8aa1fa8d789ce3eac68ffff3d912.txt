@@ -1,0 +1,14 @@
+Correct guard against non SSL data in ReferenceCountedOpenSslEngine
+
+Motivation:
+
+When non SSL data is passed into SSLEngine.unwrap(...) we need to throw an SSLException. This was not done at the moment. Even worse we threw an IllegalArgumentException as we tried to allocate a direct buffer with capacity of -1.
+
+Modifications:
+
+- Guard against non SSL data and added an unit test.
+- Make code more consistent
+
+Result:
+
+Correct behaving SSLEngine implementation.

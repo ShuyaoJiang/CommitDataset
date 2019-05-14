@@ -1,0 +1,10 @@
+[bs-115] Add EmbeddedServletContainerCustomizer as a callback
+
+* All instances are called before the container is started in
+ a bean post processor
+* Users still have to be careful because the customizer is
+called very early in the ApplicationContext lifecycle (e.g.
+might have to do a lookup for some dependencies instead of
+@Autowired)
+
+[Fixes #49671463] User-hook for customizing embedded servlet container

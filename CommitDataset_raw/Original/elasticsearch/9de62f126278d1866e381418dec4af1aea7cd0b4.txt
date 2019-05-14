@@ -1,0 +1,9 @@
+Increase IO direct byte buffers to 256KB (#37283)
+
+Currently we read and write 64KB at a time in the nio libraries. As a
+single byte buffer per event loop thread does not consume much memory,
+there is little reason to not increase it further. This commit increases
+the buffer to 256KB but still limits a single write to 64KB. The write
+limit could be increased, but too high of a write limit will lead to
+copying more data (if all the data is not flushed and needs to be copied
+on the next call). This is something to explore in the future.

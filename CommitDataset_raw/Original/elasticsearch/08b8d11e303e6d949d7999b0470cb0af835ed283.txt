@@ -1,0 +1,44 @@
+Add support for switching distribution for all integration tests (#30874)
+
+* remove left-over comment
+
+* make sure of the property for plugins
+
+* skip installing modules if these exist in the distribution
+
+* Log the distrbution being ran
+
+* Don't allow running with integ-tests-zip passed externally
+
+* top level x-pack/qa can't run with oss distro
+
+* Add support for matching objects in lists
+
+Makes it possible to have a key that points to a list and assert that a
+certain object is present in the list. All keys have to be present and
+values have to match. The objects in the source list may have additional
+fields.
+
+example:
+```
+  match:  { 'nodes.$master.plugins': { name: ingest-attachment }  }
+```
+
+* Update plugin and module tests to work with other distributions
+
+Some of the tests expected that the integration tests will always be ran
+with  the `integ-test-zip` distribution so that there will be no other
+plugins loaded.
+
+With this change, we check for the presence of the plugin without
+assuming exclusivity.
+
+* Allow modules to run on other distros as well
+
+To match the behavior of tets.distributions
+
+* Add and use a new `contains` assertion
+
+Replaces the  previus changes that caused `match` to do a partial match.
+
+* Implement PR review comments

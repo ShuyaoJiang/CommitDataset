@@ -1,0 +1,5 @@
+AnnotatedElementUtils consistently operates on actual annotation type if available (for performance reasons)
+
+The goal is to avoid String name comparisons in favor of annotation type identity checks wherever possible. Also, we avoid double getDeclaredAnnotations/getAnnotations checks on anything other than Classes now, since we'd just get the same result in a fresh array.
+
+Issue: SPR-13621

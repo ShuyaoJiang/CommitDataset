@@ -1,0 +1,17 @@
+Fix setBytes on read-only ByteBuffer
+
+Motivation:
+
+The method setBytes did not work correctly because read-only ByteBuffer
+does not allow access to its underlying array.
+
+Modifications:
+
+New case was added for ByteBuffer's that are not direct and do not have an array.
+These must be handled by copying the data into a temporary array. Unit test was
+added to test this case.
+
+Result:
+
+It is now possible to use read-only ByteBuffer as the source
+for the setBytes method.

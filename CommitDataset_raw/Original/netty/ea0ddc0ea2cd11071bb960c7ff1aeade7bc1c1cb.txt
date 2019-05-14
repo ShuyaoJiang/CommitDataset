@@ -1,0 +1,14 @@
+fix #6066 Support optional filename in HttpPostRequestEncoder
+
+Motivation:
+
+According to https://www.ietf.org/rfc/rfc2388.txt 4.4, filename after "content-disposition" is optional and arbitrary (does not need to match a real filename).
+
+Modifications:
+
+This change supports an extra addBodyFileUpload overload to precise the filename (default to File.getName). If empty or null this argument should be ignored during encoding.
+
+Result:
+- A backward-compatible addBodyFileUpload(String, File, String, boolean) to use file.getName() as filename.
+- A new addBodyFileUpload(String, String, File, String, boolean) overload to precise filename
+- Couple of tests for the empty use case

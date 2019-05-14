@@ -1,0 +1,10 @@
+Fix race condition in transition from UNSUBSCRIBED->COMPLETED
+
+- Ensure completion signal (normal/exception) will be delivered to
+the subscriber when transition from UNSUBSCRIBED->COMPLETED
+
+- According to the specification "Publisher.subscribe MUST call onSubscribe
+on the provided Subscriber prior to any other signals to that Subscriber" so
+ensure onComplete/onError signals will be called AFTER onSubscribe signal.
+
+Issue: SPR-16207

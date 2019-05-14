@@ -1,0 +1,38 @@
+REST: Include suppressed exceptions on failures (#29115)
+
+This modifies xcontent serialization of Exceptions to contain suppressed
+exceptions. If there are any suppressed exceptions they are included in
+the exception response by default. The reasoning here is that they are
+fairly rare but when they exist they almost always add extra useful
+information. Take, for example, the response when you specify two broken
+ingest pipelines:
+
+```
+{
+  "error" : {
+    "root_cause" : ...snip...
+    "type" : "parse_exception",
+    "reason" : "[field] required property is missing",
+    "header" : {
+      "processor_type" : "set",
+      "property_name" : "field"
+    },
+    "suppressed" : [
+      {
+        "type" : "parse_exception",
+        "reason" : "[field] required property is missing",
+        "header" : {
+          "processor_type" : "convert",
+          "property_name" : "field"
+        }
+      }
+    ]
+  },
+  "status" : 400
+}
+```
+
+Moreover, when suppressed exceptions come from 500 level errors should
+give us more useful debugging information.
+
+Closes #23392

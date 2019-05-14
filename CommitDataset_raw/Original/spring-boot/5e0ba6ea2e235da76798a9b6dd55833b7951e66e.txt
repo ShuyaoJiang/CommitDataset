@@ -1,0 +1,16 @@
+Consider jar's Class-Path attribute when getting changeable URLs
+
+To overcome command length limits on Windows, IntelliJ IDEA may launch
+an application with a single jar on the classpath that contains that
+application's actual classpath in the Class-Path attribute of its
+manifest. This would prevent DevTools restarts from working as it
+only considered the single jar's URL when identifying changeable URLs
+and ignored the URLs added to the classpath via the jar's manifest.
+
+This commit updates ChangeableUrls when it is created from a
+URLClassLoader to consider the Class-Path manifest attribute of any
+jars in the class loader's URLs. This allows the full classpath to
+be considered when identifying URLs that are changeable and that
+need to be monitored for restart triggering.
+
+Closes gh-5127

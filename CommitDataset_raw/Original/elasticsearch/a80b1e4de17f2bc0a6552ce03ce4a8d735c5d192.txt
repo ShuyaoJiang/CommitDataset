@@ -1,0 +1,12 @@
+Exit Windows scripts promptly on failure
+
+When invoking the elasticsearch-env.bat or x-pack-env.bat batch scripts
+on Windows, if these scripts exits due to an error (e.g., Java can not
+be found, or the wrong version of Java is found), then the script
+exits. Sadly, on Windows, this does not also terminate the caller,
+instead returning control. This means we have to explicitly exit so that
+is what we do in this commit.
+
+Relates elastic/x-pack-elasticsearch#2126
+
+Original commit: elastic/x-pack-elasticsearch@18645db62c1a421f8c38a056f6d8e5bfa4ba982d

@@ -1,0 +1,9 @@
+SQL: Fix MOD() for long and integer arguments (#36599)
+
+Previously, Math.floorMod was used for integers and longs
+which has different logic for negative numbers. Also, the
+priority of data types check was wrong as if one of the args
+is double the evaluation should be with doubles, then for floats,
+then longs and finally integers.
+
+Fixes: #36364

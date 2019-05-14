@@ -1,0 +1,14 @@
+RedirectViews should always use RESPONSE_STATUS_ATTRIBUTE
+
+By default, RedirectViews have http10Compatible set to true, which means
+that they use HTTP 302 as a default HTTP response status. Setting this
+property to false make RedirectViews use HTTP 303 by default.
+
+Now when set to false, RedirectViews also don't use the
+RESPONSE_STATUS_ATTRIBUTE request attribute as a response HTTP if it is
+available.
+
+This commit makes both configuration choices behave the same regarding
+this request attribute: use it as a response status if it's available.
+
+Issue: SPR-13208

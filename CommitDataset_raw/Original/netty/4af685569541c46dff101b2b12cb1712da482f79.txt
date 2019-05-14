@@ -1,0 +1,19 @@
+Remove @Deprecated for primitive WriteWaterMark getters and setters
+
+Motivation:
+
+For use cases that demand frequent updates of the write watermarks, an
+API that requires immutable WriteWaterMark objects is not ideal, as it
+implies a lot of object allocation.
+
+For example, the HTTP/2 child channel API uses write watermarks for outbound
+flow control and updates the write watermarks on every DATA frame write.
+
+Modifications:
+
+Remote @Deprecated tag from primitive getters and setters, however the corresponding
+channel options remain deprecated.
+
+Result:
+
+Primitive getters and setters for write watermarks are no longer marked @Deprecated.

@@ -1,0 +1,15 @@
+Make Persistent Tasks implementations version and feature aware (#31045)
+
+With #31020 we introduced the ability for transport clients to indicate what features they support
+in order to make sure we don't serialize object to them they don't support. This PR adapts the
+serialization logic of persistent tasks to be aware of those features and not serialize tasks that
+aren't supported. 
+
+Also, a version check is added for the future where we may add new tasks implementations and
+need to be able to indicate they shouldn't be serialized both to nodes and clients.
+
+As the implementation relies on the interface of `PersistentTaskParams`, these are no longer
+optional. That's acceptable as all current implementation have them and we plan to make
+`PersistentTaskParams` more central in the future.
+
+Relates to #30731 

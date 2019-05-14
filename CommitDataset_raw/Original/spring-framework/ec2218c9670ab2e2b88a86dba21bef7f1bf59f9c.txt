@@ -1,0 +1,9 @@
+AbstractListenerWriteFlushProcessor: Ensure the last flush will be performed
+
+When writing Publisher<Publisher<T>>, a flush operation is performed onComplete
+for every Publisher. If the flush operation is not able to be performed immediately
+it will be retried before starting to process data provided by the next Publisher.
+For the last Publisher the implementation needs to ensure that the flush will
+be performed only then whole operation will complete.
+
+Issue: SPR-15949

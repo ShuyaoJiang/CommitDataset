@@ -1,0 +1,10 @@
+Prevents tests that use Elasticsearch from polluting the filesystem
+
+By default, Elasticsearch writes it data to ./data. This led to data
+being left on the filesystem after a mvn clean which could cause
+failures when moving between branches that use different versions of
+Elasticsearch.
+
+This commit updates the tests for the Elasticsearch sample and
+the Elasticsearch auto-configuration classes to write the
+Elasticsearch data and logs into the target directory.

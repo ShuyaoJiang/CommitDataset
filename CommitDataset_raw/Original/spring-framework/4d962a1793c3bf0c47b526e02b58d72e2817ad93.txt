@@ -1,0 +1,11 @@
+Remove HttpStatus from HttpMessageConversionException
+
+HttpMessageConverter's are client and server and arguably shouldn't
+contain a server-side concept such a response status.
+
+The status field is recent, it was added to differentiate 400 vs 500
+errors with Jackson 2.9+ but there is no need for it since the same
+distinction is reflected in raising an HttpMessageNotReadableException
+vs a general HttpMessageConversionException.
+
+Issue: SPR-15516

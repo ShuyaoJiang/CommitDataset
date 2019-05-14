@@ -1,0 +1,854 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (logback.xml).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package jadx.api:  
+
+1.1. Add a class for java class. It allows to:
+
+	Instantiate java class  with class node, jadx decompiler and jadx decompiler;
+	Instantiate java class  with class node, parent java class and parent java class;
+	Get code;
+	Handle decompile;
+	Unload java class;
+	Get class node;
+	Handle load;
+	Get root decompiler;
+	Get code annotations;
+	Get usage map;
+	Convert node;
+	Get java node  at position;
+	Get definition position;
+	Get source line;
+	Get name;
+	Get full name;
+	Get package;
+	Get declaring class;
+	Get top parent class;
+	Get access info;
+	Get inner classes;
+	Get fields;
+	Get methods;
+	Get decompiled line;
+	Check if java class equals;
+	Hash code;
+	Convert java class to string
+
+1.2. Add a class for java package. It allows to:
+
+	Instantiate java package  with classes list;
+	Get name;
+	Get full name;
+	Get classes;
+	Get declaring class;
+	Get top parent class;
+	Get decompiled line;
+	Compare  to o java package;
+	Check if java package equals;
+	Hash code;
+	Convert java package to string
+
+2. Changes to package jadx.cli:  
+
+2.1. Add a class for jadx CLI. It allows to:
+
+	Handle main;
+	Get process and save;
+	Get fs case sensitivity
+
+3. Changes to package jadx.core:  
+
+3.1. Rename type Consts with Consts
+
+3.2. Add a class for jadx. It allows to:
+
+	Instantiate jadx;
+	Get passes list;
+	Get version
+
+3.3. Add a class for process class. It allows to:
+
+	Instantiate process class;
+	Handle process;
+	Get sync obj;
+	Handle process dependencies
+
+4. Changes to package jadx.core.codegen:  
+
+4.1. Add a class for annotation gen. It allows to:
+
+	Instantiate annotation gen  with cls class node, class gen and class gen;
+	Add code writer for class;
+	Add code writer for method;
+	Add code writer for field;
+	Add code writer for parameter;
+	Add I attribute node;
+	Handle format annotation;
+	Get param name;
+	Throws mth method node;
+	Get annotation default value;
+	Encode value;
+	Get string utils
+
+4.2. Rename type ClassGen with ClassGen
+
+4.3. Add a class for code gen. It allows to:
+
+	Generate cls class node;
+	Instantiate code gen
+
+4.4. Rename type InsnGen with InsnGen
+
+4.5. Add a class for method gen. It allows to:
+
+	Instantiate method gen  with class gen, mth method node and mth method node;
+	Get class gen;
+	Get name gen;
+	Get method node;
+	Add definition;
+	Add method arguments;
+	Add instructions;
+	Add fallback method code;
+	Add fallback insns;
+	Need label;
+	Get fallback method gen;
+	Get label name
+
+4.6. Add a class for region gen. It allows to:
+
+	Instantiate region gen  with mgen method gen;
+	Make region;
+	Declare vars;
+	Make simple region;
+	Make region indent;
+	Make simple block;
+	Make  if if region;
+	Connect  else if code writer;
+	Make loop;
+	Make synchronized region;
+	Make switch;
+	Make try catch;
+	Make catch block
+
+4.7. Rename type TypeGen with TypeGen
+
+5. Changes to package jadx.core.deobf:  
+
+5.1. Rename type NameMapper with NameMapper
+
+6. Changes to package jadx.core.dex.attributes:  
+
+6.1. Add a class for attr node. It allows to:
+
+	Add A flag;
+	Add attr;
+	Copy attributes  from attr node;
+	Handle init storage;
+	Unload attr node if empty;
+	Check if attr node contains;
+	Get A type;
+	Get annotation;
+	Remove A flag;
+	Remove A type;
+	Remove attr;
+	Handle clear attributes;
+	Get attributes strings list;
+	Get attributes string;
+	Check if attr node is attr storage empty
+
+6.2. Add an interface declaration  for i attribute. It allows to:
+
+	Get type
+
+6.3. Add an interface declaration  for i attribute node. It allows to:
+
+	Add A flag;
+	Add attr;
+	Copy attributes  from attr node;
+	Check if i attribute node contains;
+	Get A type;
+	Get annotation;
+	Remove A flag;
+	Remove A type;
+	Remove attr;
+	Handle clear attributes;
+	Get attributes strings list;
+	Get attributes string
+
+7. Changes to package jadx.core.dex.attributes.annotations:  
+
+7.1. Add a class for annotation. It allows to:
+
+	Instantiate annotation  with visibility, arg type, values map and values map;
+	Get visibility;
+	Get type;
+	Get annotation class;
+	Get values;
+	Get default value;
+	Convert annotation to string
+
+7.2. Add a class for annotations list. It allows to:
+
+	Instantiate annotations list  with an list;
+	Get annotations list;
+	Get size;
+	Check if annotations list is empty;
+	Get type;
+	Convert annotations list to string
+
+7.3. Add a class for method parameters. It allows to:
+
+	Instantiate method parameters;
+	Get param list;
+	Get type;
+	Convert method parameters to string
+
+8. Changes to package jadx.core.dex.info:  
+
+8.1. Rename type AccessInfo with AccessInfo
+
+8.2. Rename type ClassInfo with ClassInfo
+
+8.3. Add a class for field info. It allows to:
+
+	Instantiate field info  with decl class info, arg type and arg type;
+	Process field info field info from;
+	Process field info field info from dex;
+	Get name;
+	Get type;
+	Get decl class;
+	Get field info alias;
+	Set field info alias;
+	Get full id;
+	Get raw full id;
+	Check if field info is renamed;
+	Check if field info equals name and type;
+	Check if field info equals;
+	Hash code;
+	Convert field info to string
+
+8.4. Rename type MethodInfo with MethodInfo
+
+9. Changes to package jadx.core.dex.instructions:  
+
+9.1. Add a class for arith node. It allows to:
+
+	Instantiate arith node  with insn decoded instruction, arith op, arg type and arg type;
+	Instantiate arith node  with arith op, res register arg, insn arg, b insn arg and b insn arg;
+	Instantiate arith node  with arith op, res register arg, insn arg and insn arg;
+	Get arith node;
+	Check if arith node is same;
+	Convert arith node to string
+
+9.2. Add a class for goto node. It allows to:
+
+	Instantiate goto node;
+	Instantiate goto node  with insn type;
+	Get target;
+	Convert goto node to string
+
+9.3. Add a class for if node. It allows to:
+
+	Instantiate if node  with insn decoded instruction, if op and if op;
+	Instantiate if node  with if op, arg, arg and arg;
+	Handle narrow type by op;
+	Get if node;
+	Invert condition;
+	Change condition;
+	Handle init blocks;
+	Replace target block;
+	Get if node then block;
+	Get if node else block;
+	Get target;
+	Check if if node is same;
+	Convert if node to string
+
+9.4. Add a class for index insn node. It allows to:
+
+	Instantiate index insn node  with insn type;
+	Get index;
+	Get copy;
+	Check if index insn node is same;
+	Convert index insn node to string
+
+9.5. Rename type InsnDecoder with InsnDecoder
+
+9.6. Add a class for invoke node. It allows to:
+
+	Instantiate invoke node  with mth method info, insn decoded instruction, invoke type and invoke type;
+	Instantiate invoke node  with mth method info, invoke type and invoke type;
+	Get invoke type;
+	Get call mth;
+	Get copy;
+	Check if invoke node is same;
+	Convert invoke node to string
+
+9.7. Add a class for switch node. It allows to:
+
+	Instantiate switch node  with insn arg;
+	Get cases count;
+	Get keys;
+	Get targets;
+	Get default case offset;
+	Get target blocks;
+	Get def target block;
+	Handle init blocks;
+	Replace target block;
+	Check if switch node is same;
+	Convert switch node to string
+
+10. Changes to package jadx.core.dex.instructions.args:  
+
+10.1. Rename type InsnArg with InsnArg
+
+10.2. Add a class for insn wrap arg. It allows to:
+
+	Instantiate insn wrap arg  with insn node;
+	Get wrap insn;
+	Set parent insn;
+	Check if insn wrap arg is insn wrap;
+	Hash code;
+	Check if insn wrap arg equals;
+	Convert insn wrap arg to string
+
+10.3. Add a class for literal arg. It allows to:
+
+	Instantiate literal arg  with arg type;
+	Get literal;
+	Check if literal arg is literal;
+	Check if literal arg is integer;
+	Hash code;
+	Check if literal arg equals;
+	Convert literal arg to string
+
+10.4. Rename type RegisterArg with RegisterArg
+
+10.5. Rename type Typed with Typed
+
+11. Changes to package jadx.core.dex.instructions.mods:  
+
+11.1. Add a class for constructor insn. It allows to:
+
+	Instantiate constructor insn  with mth method node, invoke node and invoke node;
+	Instantiate constructor insn  with call mth method info, call type, instance arg and instance arg;
+	Get call mth;
+	Get instance  arg;
+	Get class type;
+	Get call type;
+	Check if constructor insn is new instance;
+	Check if constructor insn is super;
+	Check if constructor insn is this;
+	Check if constructor insn is self;
+	Check if constructor insn is same;
+	Convert constructor insn to string
+
+11.2. Add a class for ternary insn. It allows to:
+
+	Instantiate ternary insn  with if condition, result register arg, th insn arg, els insn arg and els insn arg;
+	Get condition;
+	Simplify condition;
+	Handle invert;
+	Get register args;
+	Check if ternary insn is same;
+	Convert ternary insn to string
+
+12. Changes to package jadx.core.dex.nodes:  
+
+12.1. Rename type BlockNode with BlockNode
+
+12.2. Add a class for class node. It allows to:
+
+	Instantiate class node  with dex node, cls class def and cls class def;
+	Instantiate class node  with dex node;
+	Load annotations;
+	Load static values;
+	Parse class signature;
+	Set fields types  from signature;
+	Add source filename  attr;
+	Handle load;
+	Unload class node;
+	Build cache;
+	Get super class;
+	Get interfaces;
+	Get generic map;
+	Get methods;
+	Get fields;
+	Get const field;
+	Get const field  by literal arg;
+	Search field  by id;
+	Search field;
+	Search field  by name and type;
+	Search field  by name;
+	Search method;
+	Search method  by short id;
+	Search method  by short name;
+	Search method  by id;
+	Get parent class;
+	Get top parent class;
+	Get inner classes;
+	Add inner class;
+	Check if class node is enum;
+	Check if class node is anonymous;
+	Check if class node is lambda cls;
+	Count static fields;
+	Handle mark anonymous class;
+	Get class init mth;
+	Get default constructor;
+	Get access flags;
+	Set access flags;
+	Get dex;
+	Get root;
+	Get type name;
+	Get raw name;
+	Get class info;
+	Get class node alias;
+	Get short name;
+	Get full name;
+	Get package;
+	Set code;
+	Get code;
+	Get state;
+	Set state;
+	Get dependencies;
+	Hash code;
+	Check if class node equals;
+	Convert class node to string
+
+12.3. Rename type DexNode with DexNode
+
+12.4. Add a class for field node. It allows to:
+
+	Instantiate field node  with cls class node, field and field;
+	Instantiate field node  with cls class node, field info and field info;
+	Get field info;
+	Get access flags;
+	Set access flags;
+	Get name;
+	Get field node alias;
+	Get type;
+	Set type;
+	Get parent class;
+	Get type name;
+	Get dex;
+	Get root;
+	Hash code;
+	Check if field node equals;
+	Convert field node to string
+
+12.5. Add an interface declaration  for i block. It allows to:
+
+	Get instructions
+
+12.6. Add an interface declaration  for i container. It allows to:
+
+	Handle base string
+
+12.7. Add an interface declaration  for i loadable. It allows to:
+
+	Handle load;
+	Unload i loadable
+
+12.8. Add an interface declaration  for i region. It allows to:
+
+	Get parent;
+	Set parent;
+	Get sub blocks;
+	Replace sub block
+
+12.9. Add a class for insn container. It allows to:
+
+	Instantiate insn container  with insns list;
+	Get instructions;
+	Handle base string;
+	Convert insn container to string
+
+12.10. Add a class for insn node. It allows to:
+
+	Instantiate insn node  with insn type;
+	Wrap arg;
+	Set result;
+	Add arg;
+	Set arg;
+	Attach arg;
+	Get type;
+	Get result;
+	Get arguments;
+	Get args count;
+	Get insn node arg;
+	Check if insn node contains arg;
+	Replace arg;
+	Remove arg;
+	Add reg;
+	Lit arg type;
+	Lit insn decoded instruction;
+	Offset insn node;
+	Get register args;
+	Check if insn node is const insn;
+	Reorder insn node;
+	Can reorder recursive;
+	Convert insn node to string;
+	Hash code;
+	Check if insn node equals;
+	Check if insn node is same;
+	Check if insn node is deep equals;
+	Copy common params;
+	Get copy;
+	Can throw exception
+
+12.11. Rename type MethodNode with MethodNode
+
+12.12. Add a class for root node. It allows to:
+
+	Instantiate root node  with jadx args;
+	Handle load;
+	Load resources;
+	Handle process resources;
+	Handle init class path;
+	Handle init inner classes;
+	Get classes;
+	Resolve class;
+	Search class  by name;
+	Search class  by short name;
+	Handle deep resolve method;
+	Handle deep resolve field;
+	Get dex nodes;
+	Get clsp;
+	Get errors  counter;
+	Get app package;
+	Get app res class;
+	Get string utils;
+	Get const values;
+	Get info storage;
+	Get args;
+	Get type update
+
+13. Changes to package jadx.core.dex.nodes.parser:  
+
+13.1. Add a class for annotations parser. It allows to:
+
+	Instantiate annotations parser  with cls class node;
+	Parse annotations parser;
+	Read annotation set;
+	Read annotation
+
+13.2. Rename type EncValueParser with EncValueParser
+
+13.3. Add a class for static values parser. It allows to:
+
+	Instantiate static values parser  with dex node, in section and in section;
+	Get process fields
+
+14. Changes to package jadx.core.dex.regions:  
+
+14.1. Add a class for abstract region. It allows to:
+
+	Instantiate abstract region  with parent region;
+	Get parent;
+	Set parent;
+	Replace sub block;
+	Update parent
+
+14.2. Add a class for region. It allows to:
+
+	Instantiate region  with parent region;
+	Get sub blocks;
+	Add region container;
+	Replace sub block;
+	Handle base string;
+	Convert region to string
+
+14.3. Add a class for switch region. It allows to:
+
+	Instantiate switch region  with parent region, header block node and header block node;
+	Get header;
+	Add case;
+	Set default case;
+	Get default case;
+	Get keys;
+	Get cases;
+	Get sub blocks;
+	Get branches;
+	Handle base string;
+	Convert switch region to string
+
+14.4. Add a class for synchronized region. It allows to:
+
+	Instantiate synchronized region  with parent region, insn node and insn node;
+	Get enter insn;
+	Get exit insns;
+	Get region;
+	Get sub blocks;
+	Handle base string;
+	Convert synchronized region to string
+
+15. Changes to package jadx.core.dex.trycatch:  
+
+15.1. Add a class for catch attr. It allows to:
+
+	Instantiate catch attr  with try catch block;
+	Get type;
+	Get try block;
+	Convert catch attr to string
+
+15.2. Add a class for exc handler attr. It allows to:
+
+	Instantiate exc handler attr  with try catch block, exception handler and exception handler;
+	Get type;
+	Get try block;
+	Get handler;
+	Convert exc handler attr to string
+
+15.3. Add a class for exception handler. It allows to:
+
+	Instantiate exception handler  with type class info;
+	Add catch type;
+	Add catch types;
+	Get catch types;
+	Get arg type;
+	Check if exception handler is catch all;
+	Get exception handler;
+	Get handler block;
+	Set handler block;
+	Get blocks;
+	Add block;
+	Get handler region;
+	Set handler region;
+	Get exception handler arg;
+	Set arg;
+	Set try block;
+	Get try block;
+	Check if exception handler is finally;
+	Set exception handler finally;
+	Check if exception handler equals;
+	Hash code;
+	Catch type str;
+	Convert exception handler to string
+
+15.4. Add a class for splitter block attr. It allows to:
+
+	Instantiate splitter block attr  with block node;
+	Get block;
+	Get type;
+	Convert splitter block attr to string
+
+15.5. Add a class for try catch block. It allows to:
+
+	Instantiate try catch block;
+	Get handlers;
+	Get handlers count;
+	Check if try catch block contains all handlers;
+	Add handler;
+	Remove handler;
+	Handle unbind handler;
+	Remove whole block;
+	Add insn;
+	Remove insn;
+	Remove block;
+	Get insns;
+	Get catch attr;
+	Merge mth method node;
+	Hash code;
+	Check if try catch block equals;
+	Convert try catch block to string
+
+16. Changes to package jadx.core.dex.visitors:  
+
+16.1. Add a class for abstract visitor. It allows to:
+
+	Handle init;
+	Handle visit;
+
+16.2. Add a class for class modifier. It allows to:
+
+	Handle visit;
+	Check if class modifier is empty synthetic class;
+	Handle mark anonymous class;
+	Remove synthetic fields;
+	Remove field usage  from constructor;
+	Remove synthetic methods;
+	Check if class modifier is removed class in args;
+	Modify synthetic method;
+	Remove bridge method;
+	Check synthetic wrapper;
+	Handle registers and casts only;
+	Check if class modifier is method unique;
+	Remove empty methods;
+	Check if class modifier is non default constructor exists
+
+16.3. Add a class for enum visitor. It allows to:
+
+	Handle visit;
+	Handle process enum inner cls;
+	Check if enum visitor is enum array field;
+	Get constructor insn;
+	Cast constructor insn;
+	Get const string
+
+16.4. Add a class for fallback mode visitor. It allows to:
+
+	Handle visit
+
+16.5. Add an interface declaration  for i dex tree visitor. It allows to:
+
+	Handle init;
+	Handle visit;
+
+16.6. Add a class for mod visitor. It allows to:
+
+	Handle visit;
+	Replace step;
+	Check if mod visitor is cast duplicate;
+	Remove step;
+	Handle process anonymous constructor;
+	Get args  to fields mapping;
+	Get parent insn skip move;
+	Make filled array insn;
+	Handle process move exception
+
+16.7. Add a class for save code. It allows to:
+
+	Instantiate save code;
+	Save dir file
+
+17. Changes to package jadx.core.dex.visitors.regions:  
+
+17.1. Add a class for abstract region visitor. It allows to:
+
+	Enter region;
+	Handle process block;
+	Leave region
+
+17.2. Add a class for check regions. It allows to:
+
+	Handle visit;
+	Handle process block;
+	Enter region;
+	Get block insn str
+
+17.3. Add an interface declaration  for i region visitor. It allows to:
+
+	Handle process block;
+	Enter region;
+	Leave region
+
+17.4. Rename type RegionMaker with RegionMaker
+
+17.5. Add a class for traced region visitor. It allows to:
+
+	Enter region;
+	Handle process block;
+	Handle process block traced;
+	Leave region
+
+18. Changes to package jadx.core.utils:  
+
+18.1. Rename type BlockUtils with BlockUtils
+
+18.2. Rename type ErrorsCounter with ErrorsCounter
+
+18.3. Rename type InsnUtils with InsnUtils
+
+18.4. Rename type RegionUtils with RegionUtils
+
+18.5. Rename type StringUtils with StringUtils
+
+18.6. Rename type Utils with Utils
+
+19. Changes to package jadx.core.utils.exceptions:  
+
+19.1. Add a class for codegen exception. It allows to:
+
+	Instantiate codegen exception;
+	Instantiate codegen exception  with cause throwable;
+	Instantiate codegen exception  with mth class node;
+	Instantiate codegen exception  with mth class node, throwable and throwable;
+	Instantiate codegen exception  with mth method node;
+	Instantiate codegen exception  with mth method node, throwable and throwable
+
+19.2. Add a class for decode exception. It allows to:
+
+	Instantiate decode exception;
+	Instantiate decode exception  with cause throwable;
+	Instantiate decode exception  with mth method node;
+	Instantiate decode exception  with mth method node, throwable and throwable
+
+19.3. Add a class for jadx exception. It allows to:
+
+	Instantiate jadx exception;
+	Instantiate jadx exception  with cause throwable;
+	Instantiate jadx exception  with cls class node, throwable and throwable;
+	Instantiate jadx exception  with mth method node, throwable and throwable
+
+19.4. Add a class for jadx runtime exception. It allows to:
+
+	Instantiate jadx runtime exception;
+	Instantiate jadx runtime exception  with cause throwable
+
+20. Changes to package jadx.core.utils.files:  
+
+20.1. Rename type InputFile with InputFile
+
+21. Changes to package jadx.gui:  
+
+21.1. Add a class for jadx GUI. It allows to:
+
+	Handle main;
+	Try default look and feel
+
+21.2. Add a class for jadx wrapper. It allows to:
+
+	Instantiate jadx wrapper  with jadx settings;
+	Handle open file;
+	Save dir file;
+	Get classes;
+	Get included classes;
+	Get excluded packages;
+	Add excluded package;
+	Remove excluded package;
+	Get packages;
+	Get resources;
+	Get open file;
+	Get args
+
+22. Changes to package jadx.samples:  
+
+22.1. Rename type AbstractTest with AbstractTest
+
+22.2. Rename type TestAnnotations with TestAnnotations
+
+22.3. Rename type TestArrays with TestArrays
+
+22.4. Rename type TestCF with TestCF
+
+22.5. Rename type TestCF2 with TestCF2
+
+22.6. Rename type TestCF3 with TestCF3
+
+22.7. Add a class for test conditions. It allows to:
+
+	Get test 1;
+	Get test 1 a;
+	Get test 1 b;
+	Handle test 1 c;
+	Convert test;
+	Handle test 3;
+	Test test conditions;
+	Handle test 5;
+	Handle test 6;
+	Accept test conditions;
+	Handle test run;
+	Handle main
+
+22.8. Rename type TestDeadCode with TestDeadCode
+
+22.9. Rename type TestEnum with TestEnum
+
+22.10. Rename type TestInvoke with TestInvoke
+
+22.11. Rename type TestStringProcessing with TestStringProcessing
+
+22.12. Rename type TestSwitch with TestSwitch
+
+22.13. Rename type TestTryCatch with TestTryCatch
+

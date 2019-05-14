@@ -1,0 +1,11 @@
+[TEST] Use `ensureYellowAndNoInitializingShards` in monitoring test (elastic/x-pack-elasticsearch#3768)
+
+Monitoring creates indices concurrently to the test execution. In that
+case ensureYellow might not be enough and will cause test-failures when shards
+are not active etc. This change uses a new method added in core to ensure shards
+are not initializing anymore.
+
+relates elastic/x-pack-elasticsearch#2672
+Relates to elastic/elasticsearch#28416
+
+Original commit: elastic/x-pack-elasticsearch@661e87f2eeb5119f9f94154070e1a32542f98820

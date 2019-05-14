@@ -1,0 +1,20 @@
+Prevent 7.x nodes from joining cluster with un-upgraded 6.x .security indices (elastic/x-pack-elasticsearch#2921) (elastic/x-pack-elasticsearch#2940)
+
+This is a forward-port of elastic/x-pack-elasticsearch/pull/2921.
+
+original commit message:
+
+Before this commit, a cluster with security enabled and backed by
+native-realm user permissions allowed rolled upgrades to clusters without
+upgrading the `.security` index. This resulted in the newly established
+6.0 cluster not able to register the native-realm users previously established
+in the `.security` index. In order to fix this, one would have to rely on file-based
+users to re-configure and upgrade the `.security` index. Since this state is easily
+avoidable with an upgrade, this commit rejects the joining of upgraded nodes without
+upgrading the security index beforehand.
+
+modifications:
+
+Test with 7.x vs 6.x nodes.
+
+Original commit: elastic/x-pack-elasticsearch@56f81bfb20e832a9690229da0cd33f2501d18a95

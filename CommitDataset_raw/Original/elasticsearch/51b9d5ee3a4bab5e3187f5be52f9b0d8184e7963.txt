@@ -1,0 +1,19 @@
+Be lenient when parsing build flavor and type on the wire (#40734)
+
+Today we are strict when parsing build flavor and types off the
+wire. This means that if a later version introduces a new build flavor
+or type, an older version would not be able to parse what that new
+version is sending. For a practical example of this, we recently added
+the build type "docker", and this means that in a rolling upgrade
+scenario older nodes would not be able to understand the build type that
+the newer node is sending. This breaks clusters and is bad. We do not
+normally think of adding a new enumeration value as being a
+serialization breaking change, it is just not a lesson that we have
+learned before. We should be lenient here though, so that we can add
+future changes without running the risk of breaking ourselves
+horribly. It is either that, or we have super-strict testing
+infrastructure here yet still I fear the possibility of mistakes. This
+commit changes the parsing of build flavor and build type so that we are
+still strict at startup, yet we are lenient with values coming across
+the wire. This will help avoid us breaking rolling upgrades, or clients
+that are on an older version.

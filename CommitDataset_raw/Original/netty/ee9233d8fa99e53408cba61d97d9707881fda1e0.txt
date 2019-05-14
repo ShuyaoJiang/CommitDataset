@@ -1,0 +1,11 @@
+HTTP/2 Flow Controller required memory reduction
+
+Motivation:
+Currently we allocate the full amount of state for each stream as soon as the stream is created, and keep that state until the stream is GC. The full set of state is only needed when the stream can support flow controlled frames. There is an opportunity to reduce the required amount of memory, and make memory eligible for GC sooner by only allocating what is necessary for flow control stream state.
+
+Modifications:
+
+Introduce objects which require 'less' state for local/remote flow control stream state.
+Use these new objects when streams have been created but will not transition out of idle AND when streams are no longer eligible for flow controlled frame transfer but still must persist in the priority tree.
+Result:
+Memory allocations are reduced to what is actually needed, and memory is made eligible for GC potentially sooner.

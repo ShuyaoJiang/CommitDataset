@@ -1,0 +1,22 @@
+[ML] Return statistics about forecasts as part of the jobsstats and usage API (#31647)
+
+This change adds stats about forecasts, to the jobstats api as well as xpack/_usage. The following 
+information is collected:
+
+_xpack/ml/anomaly_detectors/{jobid|_all}/_stats:
+
+ -  total number of forecasts
+ -  memory statistics (mean/min/max)
+ -  runtime statistics
+ -  record statistics
+ -  counts by status
+
+_xpack/usage
+
+ -  collected by job status as well as overall (_all):
+     -  total number of forecasts
+     -  number of jobs that have at least 1 forecast
+     -  memory, runtime, record statistics
+     -  counts by status
+
+Fixes #31395

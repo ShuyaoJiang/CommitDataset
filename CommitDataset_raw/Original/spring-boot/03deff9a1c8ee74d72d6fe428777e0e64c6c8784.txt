@@ -1,0 +1,13 @@
+Handle relative pid folder correctly in the launch script
+
+Previously, a relative PID folder was not handled correctly when
+running stop, status, or force_reload. This meant that a service
+could be started when configured to use a relative pid file, but
+then could not be stopped.
+
+The PID folder should be treated as relative to the service's jar
+file. This commit updates stop, status, and force_reload to push the
+jar file's directory so that this is now the case for those three
+commands.
+
+Closes gh-7092

@@ -1,0 +1,13 @@
+Enable support for use of encryption in Maven's settings.xml
+
+This commit updates the CLI so that it will decrypt any encrypted
+passwords in a user's Maven settings.xml file.
+
+The code that performs the decrytion has a transitive dependency on
+three types in Plexus' logging API. There are tens of different
+artifacts containing this API available in Maven Central. Rather than
+bloating the API with a dependency on a complete Plexus container,
+which could perhaps be considered the primary source, a dependency on
+a considerably smaller artifact has been introduced.
+
+Closes #574

@@ -1,0 +1,242 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. 
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.handler.codec.http.websocketx:  
+
+1. Changes to package io.netty.handler.codec.spdy:  
+
+1.1. Add a class for default spdy data frame. It allows to:
+
+	Instantiate default spdy data frame;
+	Instantiate default spdy data frame  with data byte buf;
+	Validate data byte buf;
+	Set stream id;
+	Get set last;
+	Handle content;
+	Get copy;
+	Duplicate default spdy data frame;
+	Get retained duplicate;
+	Replace content byte buf;
+	Ref cnt;
+	Retain default spdy data frame;
+	Touch default spdy data frame;
+	Handle release;
+	Convert default spdy data frame to string
+
+1.2. Add a class for default spdy go away frame. It allows to:
+
+	Instantiate default spdy go away frame;
+	Instantiate default spdy go away frame  with spdy session status;
+	Handle last good stream id;
+	Get set last good stream id;
+	Get status;
+	Set status;
+	Convert default spdy go away frame to string
+
+1.3. Add a class for default spdy headers frame. It allows to:
+
+	Instantiate default spdy headers frame;
+	Set stream id;
+	Get set last;
+	Check if default spdy headers frame is invalid;
+	Set invalid;
+	Check if default spdy headers frame is truncated;
+	Truncated default spdy headers frame;
+	Get headers;
+	Convert default spdy headers frame to string;
+	Append headers
+
+1.4. Add a class for default spdy ping frame. It allows to:
+
+	Instantiate default spdy ping frame;
+	I default spdy ping frame;
+	Set id;
+	Convert default spdy ping frame to string
+
+1.5. Add a class for default spdy rst stream frame. It allows to:
+
+	Instantiate default spdy rst stream frame;
+	Instantiate default spdy rst stream frame  with spdy stream status;
+	Set stream id;
+	Get set last;
+	Get status;
+	Set status;
+	Convert default spdy rst stream frame to string
+
+1.6. Add a class for default spdy syn reply frame. It allows to:
+
+	Instantiate default spdy syn reply frame;
+	Set stream id;
+	Get set last;
+	Set invalid;
+	Convert default spdy syn reply frame to string
+
+1.7. Add a class for default spdy syn stream frame. It allows to:
+
+	Instantiate default spdy syn stream frame;
+	Set stream id;
+	Get set last;
+	Set invalid;
+	Get associated stream id;
+	Set associated stream id;
+	Get priority;
+	Set priority;
+	Check if default spdy syn stream frame is unidirectional;
+	Set unidirectional;
+	Convert default spdy syn stream frame to string
+
+1.8. Add a class for spdy codec util. It allows to:
+
+	Instantiate spdy codec util;
+	Get unsigned short;
+	Get unsigned medium;
+	Get unsigned int;
+	Get signed int;
+	Check if spdy codec util is server id;
+	Validate header name;
+	Validate header value
+
+1.9. Add an interface declaration  for spdy data frame. It allows to:
+
+	Set stream id;
+	Get set last;
+	Handle content;
+	Get copy;
+	Duplicate spdy data frame;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain spdy data frame;
+	Touch spdy data frame;
+
+1.10. Add a class for spdy frame codec. It allows to:
+
+	Instantiate spdy frame codec  with spdy version;
+	Instantiate spdy frame codec  with spdy version, spdy header block decoder, spdy header block encoder and spdy header block encoder;
+	Handle handler added;
+	Handle operation complete;
+	Decode ctx channel handler context;
+	Handle channel read complete;
+	Handle bind;
+	Connect ctx channel handler context;
+	Disconnect ctx channel handler context;
+	Close spdy frame codec;
+	Deregister ctx channel handler context;
+	Read ctx channel handler context;
+	Handle flush;
+	Write ctx channel handler context;
+	Read data frame;
+	Read syn stream frame;
+	Read syn reply frame;
+	Read rst stream frame;
+	Read settings frame;
+	Setting spdy frame codec;
+	Read settings end;
+	Read ping frame;
+	Read go  away frame;
+	Read headers frame;
+	Read window update frame;
+	Read header block;
+	Read header block end;
+	Read frame error
+
+1.11. Add a class for spdy frame decoder. It allows to:
+
+	Instantiate spdy frame decoder  with spdy version, spdy frame decoder delegate and spdy frame decoder delegate;
+	Decode buffer;
+	Check if spdy frame decoder has flag;
+	Get next state;
+	Check if spdy frame decoder is valid frame header
+
+1.12. Add a class for spdy frame encoder. It allows to:
+
+	Instantiate spdy frame encoder  with spdy version;
+	Write control frame header;
+	Encode data frame;
+	Encode syn stream frame;
+	Encode syn reply frame;
+	Encode rst stream frame;
+	Encode settings frame;
+	Encode ping frame;
+	Encode go  away frame;
+	Encode headers frame;
+	Encode window update frame
+
+1.13. Add an interface declaration  for spdy go away frame. It allows to:
+
+	Handle last good stream id;
+	Get set last good stream id;
+	Get status;
+	Set status
+
+1.14. Add an interface declaration  for spdy headers frame. It allows to:
+
+	Check if spdy headers frame is invalid;
+	Set invalid;
+	Check if spdy headers frame is truncated;
+	Truncated spdy headers frame;
+	Get headers;
+	Set stream id;
+	Get set last
+
+1.15. Add an interface declaration  for spdy ping frame. It allows to:
+
+	I spdy ping frame;
+	Set id
+
+1.16. Add a class for spdy protocol exception. It allows to:
+
+	Instantiate spdy protocol exception;
+	Instantiate spdy protocol exception  with cause throwable;
+
+1.17. Add an interface declaration  for spdy rst stream frame. It allows to:
+
+	Get status;
+	Set status;
+	Set stream id;
+	Get set last
+
+1.18. Add an interface declaration  for spdy settings frame. It allows to:
+
+	Get ids;
+	Check if spdy settings frame is set;
+	Get value;
+	Get set value;
+	Remove value;
+	Check if spdy settings frame is persist value;
+	Set persist value;
+	Check if spdy settings frame is persisted;
+	Persisted spdy settings frame;
+	Handle clear previously persisted settings;
+	Set clear  previously persisted settings
+
+1.19. Add a class for spdy stream status. It allows to:
+
+	Get value of;
+	Instantiate spdy stream status;
+	Get code;
+	Get status phrase;
+	Hash code;
+	Check if spdy stream status equals;
+	Convert spdy stream status to string;
+	Compare  to o spdy stream status
+
+1.20. Add an interface declaration  for spdy syn reply frame. It allows to:
+
+	Set stream id;
+	Get set last;
+	Set invalid
+
+1.21. Add an interface declaration  for spdy syn stream frame. It allows to:
+
+	Get associated stream id;
+	Set associated stream id;
+	Get priority;
+	Set priority;
+	Check if spdy syn stream frame is unidirectional;
+	Set unidirectional;
+	Set stream id;
+	Get set last;
+	Set invalid
+

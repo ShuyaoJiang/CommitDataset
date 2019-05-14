@@ -1,0 +1,9 @@
+Make RestHighLevelClient Closeable and simplify its creation (#26180)
+
+By making RestHighLevelClient Closeable, its close method will close the internal low-level REST client instance by default, which simplifies the way most users interact with the high-level client.
+
+Its constructor accepts now a RestClientBuilder, which clarifies that the low-level REST client is internally created and managed.
+
+It is still possible to provide an already built `RestClient` instance, but that can only be done by subclassing `RestHighLevelClient` and calling the protected constructor that accepts a `RestClient`. In such case a consumer has also to be provided, which controls what has to be done when the high-level client gets done.
+
+Closes #26086

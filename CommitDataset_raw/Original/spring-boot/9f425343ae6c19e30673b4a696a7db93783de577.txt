@@ -1,0 +1,11 @@
+Make FileSystemWatcherTests thread-safe
+
+The list of changes is written to on one thread and read from on
+another. Without some form of sychronization this is not thread-safe.
+
+This commit makes changes a synchronized list which should guarantee
+that the reading thread can see the changes made by the writing thread.
+It also removes a redundant call to clear the list of changes at the
+start of waitsForPollingInterval.
+
+See gh-6038

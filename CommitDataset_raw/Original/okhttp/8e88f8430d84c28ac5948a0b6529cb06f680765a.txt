@@ -1,0 +1,22 @@
+Log full exception on test failure
+
+Too little information is logged today when tests fail in CI. This makes logging a little more verbose.
+
+Before:
+```
+okhttp3.internal.ws.RealWebSocketTest > unexpectedPongsDoNotInterfereWithFailureDetection FAILED
+    java.lang.AssertionError at RealWebSocketTest.java:349
+```
+
+After:
+```
+okhttp3.internal.ws.RealWebSocketTest > unexpectedPongsDoNotInterfereWithFailureDetection FAILED
+    java.lang.AssertionError:
+    Expecting:
+      <1928.0>
+    to be close to:
+      <1500.0>
+    by less than <250.0> but difference was <428.0>.
+    (a difference of exactly <250.0> being considered valid)
+        at okhttp3.internal.ws.RealWebSocketTest.unexpectedPongsDoNotInterfereWithFailureDetection(RealWebSocketTest.java:349)
+```

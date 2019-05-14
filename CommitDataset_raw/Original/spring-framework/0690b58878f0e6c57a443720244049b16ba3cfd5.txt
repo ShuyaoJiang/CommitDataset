@@ -1,0 +1,13 @@
+Predict specific object type in EhCacheFactoryBean
+
+Prior to this change, before a bean is created by EhCacheFactoryBean,
+its #getObjectType would return only an Ehcache interface. This caused
+unwanted wiring issues as described in the related JIRA issue.
+
+This fix makes use of EhCacheFactoryBean's configuration to determine
+the specific Ehcache object type even before it's created, such that
+the container is provided with as much information as possible when
+resolving dependencies. Nevertheless, users are advised to code to
+the Ehcache interface.
+
+Issue: SPR-7843

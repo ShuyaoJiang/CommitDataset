@@ -1,0 +1,9 @@
+Adds metadata to rewritten aggregations (#28185)
+
+* Adds metadata to rewritten aggregations
+
+Previous to this change, if any filters in the filters aggregation were rewritten, the rewritten version of the FiltersAggregationBuilder would not contain the metadata form the original. This is because `AbstractAggregationBuilder.getMetadata()` returns an empty map when not metadata is set.
+
+Closes #28170
+
+* Always set metadata when rewritten

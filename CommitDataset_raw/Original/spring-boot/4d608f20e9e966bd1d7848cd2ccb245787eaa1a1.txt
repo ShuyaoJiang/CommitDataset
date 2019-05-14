@@ -1,0 +1,29 @@
+Support for AuthenticationManagerBuilder injection into user code
+
+Spring Boot provides a default AuthenticatiomManager for getting
+started quickly with security and never exposing insecure
+endpoints. To override that feature as users move to the next
+stage in their project, they may have to do something slightly
+different depending on whether it is a webapp or not.
+
+In any app (web or not), providing a @Bean of type
+AuthenticationManager always works, but you don't get the benefit of
+the builder features.
+
+In a webapp the user can also extend WebSecurityConfigurerAdapter
+to provides a custom AuthenticationManager, and the preferred
+way of doing that is via a void method that is autowired with an
+AuthenticationManagerBuilder. The default AuthenticationManager is
+built in a configurer with @Order(LOWEST_PRECEDENCE - 3) so
+to override it the user's confugrer must have higher precedence
+(lower @Order).
+
+@EnableGlobalMethodSecurity can also be used in a non-webapp, and
+Spring Boot will still provide a default AuthenticationManager.
+To override it the user has to either extend
+GlobalMethodSecurityConfiguration or provide a @Bean of type
+AuthenticationManager (there's no other way to
+capture the AuthenticationManagerBuilder that doesn't happen too late
+in the beans lifecyle).
+
+Fixes gh-244

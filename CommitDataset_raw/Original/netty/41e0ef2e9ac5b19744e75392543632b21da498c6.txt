@@ -1,0 +1,6 @@
+[#441] Provide a better way to handle decoder failures
+
+* Update toString() of all HttpObject implementations
+* HttpMessageDecoder does not raise an exception but sets decoderResult property of the decoded message.
+* HttpMessageDecoder discards inbound traffic once decoding fails, by adding a new state called BAD_MESSAGE.
+* Add a test case that tests this behavior.

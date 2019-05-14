@@ -1,0 +1,18 @@
+Add helper classes to determine if aggs have a value (#36020)
+
+This adds a set of helper classes to determine if an agg "has a value". 
+This is needed because InternalAggs represent "empty" in different 
+manners according to convention. Some use `NaN`, `+/- Inf`, `0.0`, etc.
+
+A user can pass the Internal agg type to one of these helper methods
+and it will report if the agg contains a value or not, which allows the
+user to differentiate "empty" from a real `NaN`.
+
+These helpers are best-effort in some cases.  For example, several
+pipeline aggs share a single return class but use different conventions
+to mark "empty", so the helper uses the loosest definition that applies
+to all the aggs that use the class.
+
+Sums in particular are unreliable.  The InternalSum simply returns 0.0
+if the agg is empty (which is correct, no values == sum of zero).  But this
+also means the helper cannot differentiate from "empty" and `+1 + -1`.

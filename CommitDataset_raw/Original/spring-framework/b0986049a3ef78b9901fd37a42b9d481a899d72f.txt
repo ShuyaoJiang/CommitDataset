@@ -1,0 +1,11 @@
+Fix [serial] compiler warnings
+
+Fix serialization warnings by applying @SuppressWarnings("serial")
+when appropriate.
+
+In certain cases and for unknown reasons, a correctly-placed
+@SuppressWarnings("serial") annotation will fix the warning at the
+javac level (i.e. the Gradle command-line), but will produce an
+"unnecessary @SuppressWarnings" warning within Eclipse. In these
+cases, a private static final serialVersionUID field has been added
+with the default value of 1L.

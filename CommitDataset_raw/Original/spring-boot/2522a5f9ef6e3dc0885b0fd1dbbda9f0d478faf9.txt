@@ -1,0 +1,26 @@
+Call context.close() rather than shutdown hook in DevTools restart
+
+Previously, when DevTools was restarting the application it would
+use reflection to run all of the JVM's shutdown hooks. This was done
+to close any SpringApplications' application contexts. Unfortunately,
+it had the unwanted side-effect of running other shutdown hooks as
+well.
+
+The other shutdown hooks were often written with the, entirely
+reasonable, expectation that they would only be called when the JVM
+was shutting down. Calling them at another time could leave the
+hook's library in an unexpected state. One such example is Log4J2
+which was worked around in aaae4aa3 (see gh-4279). Another is the
+problem with Eureka (see gh-4097). There's no work around for this
+problem, even with reflective hackery, hence the change being made
+here.
+
+This commit updates the Restarter so that shutdown hooks are no longer
+called during a restart. This removes the chance of a restart having
+the unwanted side-effect of leaving a third-party library in a broken
+state. RestartApplicationListener now prepares the Restarter with the
+root application context, and the Restarter then closes it as part of
+the restart. The changes have been tested with an application that
+uses a single context and an application with a context hierarchy.
+
+Closes gh-4097

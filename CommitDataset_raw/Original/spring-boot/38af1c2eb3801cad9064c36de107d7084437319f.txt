@@ -1,0 +1,8 @@
+Remove @EnableAutoConfiguration from autoconfigure tests
+
+It was doing scary things (like starting elasticsearch, hornetq etc).
+There's still an outstanding question about why the context was
+not being properly closed in such a scenario (maybe one of those
+embedded servers lurking on a background thread?).
+
+See gh-1034

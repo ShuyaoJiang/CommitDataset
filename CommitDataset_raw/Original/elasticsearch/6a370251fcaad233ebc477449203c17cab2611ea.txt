@@ -1,0 +1,11 @@
+Improves handling of exceptions in Index Lifecycle (#3511)
+
+* Improves handling of exceptions in Index Lifecycle
+
+This change improves a few different aspects:
+
+* If an exception occurs executing the lifecycle of one index it is caught, logged and other indexes are still processed
+* If the lifecycle policy specified in the settings does not exist an error is logged
+* Fixes the exception when the delete action is run which occurs because Phase attempts to update the phase and action settings for the deleted index. A `LifecycleAction.indexSurvives()` method is introduced which defaults to `true` but can be overridden to indicate whether the index survives following completion of the action.
+
+* Adds test

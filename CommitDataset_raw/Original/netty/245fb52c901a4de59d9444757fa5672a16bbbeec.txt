@@ -1,0 +1,25 @@
+Provide extra info together with handshake complete event.
+
+Motivation:
+
+As described in #5734
+
+Before this change, if the server had to do some sort of setup after a
+handshake was completed based on handshake's information, the only way
+available was to wait (in a separate thread) for the handshaker to be
+added as an attribute to the channel. Too much hassle.
+
+Modifications:
+
+Handshake completed event need to be stateful now, so I've added a tiny
+class holding just the HTTP upgrade request and the selected subprotocol
+which is fired as an event after the handshake has finished.
+I've also deprecated the old enum used as stateless event and I left the
+code that fires it for backward compatibility. It should be removed in
+the next mayor release.
+
+Result:
+
+It should be much simpler now to do initialization stuff based on
+subprotocol or request headers on handshake completion. No asynchronous
+waiting needed anymore.

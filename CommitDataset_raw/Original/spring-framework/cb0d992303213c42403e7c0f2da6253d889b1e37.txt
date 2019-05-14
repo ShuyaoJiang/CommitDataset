@@ -1,0 +1,8 @@
+Refactor test HttpServer implementations
+
+Due to the static nature of JUnit parameterized test inputs, an
+HttpServer instance is re-used for all tests per test class.
+
+This commit adds lifecycle handling to AbstractHttpServer with a
+lifecycle monitor to ensure test server fields are properly
+initialized and reset after each test .

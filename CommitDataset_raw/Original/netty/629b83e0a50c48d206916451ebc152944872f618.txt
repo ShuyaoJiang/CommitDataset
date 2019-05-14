@@ -1,0 +1,14 @@
+Move QueryStringDecoder.decodeHexByte into ByteBufUtil
+
+Motivations:
+1. There are duplicated implementations of decoding hex strings. #6797
+2. ByteBufUtil.HexUtil.decodeHexDump does not handle substring start
+index properly and does not decode hex byte rigorously.
+
+Modifications:
+1. Function decodeHexByte is moved from QueryStringDecoder into ByteBufUtil.
+2. ByteBufUtil.HexUtil.decodeHexDump is changed to use decodeHexByte.
+3. Tests are Updated accordingly.
+
+Result:
+Fixed #6797 and made hex decoding functions more robust.

@@ -1,0 +1,21 @@
+Handle UTF-8 values in the keystore (#39496)
+
+* Handle UTF8 values in the keystore
+
+Our current implementation uses CharBuffer#array to get the chars
+that were decoded from the UTF-8 bytes. The backing array of
+CharBuffer is created in CharsetDecoder#decode and gets an initial
+length that is the same as the length of the ByteBuffer it decodes,
+hence the number of UTF-8 bytes.
+This works fine for the first 128 characters where each one needs
+one bytes, but for the next UTF-8 characters (other latin alphabets
+Greek, Cyrillic etc.) where we need 2 to 4 bytes per character, this
+backing char array has a larger size than the number of the actual
+chars this CharBuffer contains. Calling `array()` on it will return
+a char array that can potentially have extra null chars so the
+SecureString we get from the KeystoreWrapper, is not the same as the
+one we entered.
+
+This commit changes the behavior to use Arrays#copyOfRange to get
+the necessary chars from the CharBuffer and adds a test with
+random ( maybe not printable ) UTF-8 strings

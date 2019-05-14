@@ -1,0 +1,6 @@
+Search: Fairer balancing when routing searches by session ID (#24671)
+
+A user reported uneven balancing of load on nodes handling search requests from Kibana which supplies a session ID in a routing preference. Each shardId was selecting the same node for a given session ID because one data node had all primaries and the other data node held all replicas after cluster startup.
+This change counteracts the tendency to opt for the same node given the same user-supplied preference by incorporating shard ID in the hash of the preference key. This will help randomise node choices across shards.
+
+Closes #24642

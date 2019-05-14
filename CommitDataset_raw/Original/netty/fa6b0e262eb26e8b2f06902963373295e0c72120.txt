@@ -1,0 +1,15 @@
+Support Unicode filenames and spaces in directory listing
+
+Motivation:
+
+The HTTP Static File Server seems to ignore filenames that doesn't contains only latin characters, but these days people wish to serve files in other languages, or even include some emojis in the filename. Although these files are not displayed on the directory listing, they are accessible by HTTP requests. This fix will make such files more visible.
+
+Modifications:
+
+I've changed the ALLOWED_FILE_NAME pattern to disallow only files that starts with underline, minus or a dot (such as .htaccess), and hide other "unsafe" filenames that may be used to trigger some security issues. Other filenames, including the space character are allowed.
+
+I've also added charset encoding to the directory listing, because the browser default MAY be configured for ISO-8859-1 instead of UTF-8.
+
+Result:
+
+Directory listing will work for files that contains the space character, as well as other Unicode characters.

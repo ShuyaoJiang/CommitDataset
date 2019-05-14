@@ -1,0 +1,18 @@
+Fix broken CCR retention lease unfollow test
+
+This commit fixes a broken CCR retention lease unfollow test. The
+problem with the test is that the random subset of shards that we picked
+to disrupt would not necessarily overlap with the actual shards in
+use. We could take a non-empty subset of [0, 3] (e.g., { 2 }) when the
+only shard IDs in use were [0, 1]. This commit fixes this by taking into
+account the number of shards in use in the test.
+
+With this change, we also take measure to ensure that a successful
+branch is tested more frequently than would otherwise be the case. On
+that branch, we want to sometimes pretend that the retention lease is
+already removed. The randomness here was also sometimes selecting a
+subset of shards that did not overlap with the shards actually in use
+during the test. While this does not break the test, it is confusing and
+reduces the amount of coverage of that branch.
+
+Closes #39185

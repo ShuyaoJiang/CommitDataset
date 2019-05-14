@@ -1,0 +1,10 @@
+Align our jar URL stream handler with the JDK's
+
+Previously our handler didn't override parseURL or sameFile which
+resulted in behaviour that differed from that of the JDK's handler.
+Crucially, this would result in our JarURLConnection being passed
+a spec that didn't contain a "!/". A knock-on effect of this was
+that the connection would point to the root of the jar rather than
+the intended entry.
+
+Closes gh-7021

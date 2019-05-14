@@ -1,0 +1,6 @@
+Remove assertion from checkpoint tracker invariants
+
+This assertion is wrong because the global checkpoint on a promoted
+primary can be lagging the replicas until it catches up after through
+resyncs, ongoing indexing operations and removing the old primary from
+the in-sync set.

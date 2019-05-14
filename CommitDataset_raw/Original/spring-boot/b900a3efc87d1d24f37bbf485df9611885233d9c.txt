@@ -1,0 +1,14 @@
+Update Actuator endpoints to use custom media type
+
+Previously, the actuator's endpoints produced application/json and,
+where appropriate, also consumed application/json. Without a custom,
+versioned media type, it's impossible for us to make changes to the
+endpoints without breaking clients.
+
+This commit introduces a new media type,
+application/spring-boot.actuator.v1+json, that is now produced by
+default with application/json also being produced if requested.
+Endpoints that consume JSON will now also accept content the uses
+the new media type in addition to application/json.
+
+Closes gh-7967

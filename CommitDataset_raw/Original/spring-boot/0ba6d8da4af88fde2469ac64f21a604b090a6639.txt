@@ -1,0 +1,13 @@
+Switch to Yahoo for OIDC as Google's cert is not yet trusted by Java 11
+
+Until the fix for JDK-8209506 [1] is available in Java 11 builds,
+SSL connections to services using Google's SSL certificate do not work
+due to a lack of trust. This affects both our OAuth2 client samples
+which were using https://accounts.google.com as an OpenID Connect
+provider.
+
+This commit switches the two samples to use Yahoo in place of Google.
+
+See gh-14028
+
+[1] https://bugs.openjdk.java.net/browse/JDK-8209506

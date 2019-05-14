@@ -1,0 +1,30 @@
+We need to ensure we correct reset decoder in decodeLast() to not produce multiple LastHttpContent instances.
+
+Motivation:
+
+We missed to reset the decoder when asked for it in HttpObjectDecoder and so sometimes could produce more then one LastHttpContent in a sequence during channelInactive.
+
+This did show up as AssertionError:
+
+22:22:35.499 [nioEventLoopGroup-3-1] WARN  i.n.channel.DefaultChannelPipeline - An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.lang.AssertionError: null
+	at io.netty.handler.codec.http.HttpObjectAggregator.decode(HttpObjectAggregator.java:205) ~[classes/:na]
+	at io.netty.handler.codec.http.HttpObjectAggregator.decode(HttpObjectAggregator.java:57) ~[classes/:na]
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:89) ~[classes/:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:292) [classes/:na]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:278) [classes/:na]
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:428) [classes/:na]
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:277) [classes/:na]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInputClosed(ByteToMessageDecoder.java:343) [classes/:na]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelInactive(ByteToMessageDecoder.java:309) [classes/:na]
+	at io.netty.handler.codec.http.HttpClientCodec$Decoder.channelInactive(HttpClientCodec.java:228) [classes/:na]
+	at io.netty.channel.CombinedChannelDuplexHandler.channelInactive(CombinedChannelDuplexHandler.java:213) [classes/:na]
+        ...
+
+Modifications:
+
+Correctly reset decoder.
+
+Result:
+
+Correctly only produce one LastHttpContent per sequence.

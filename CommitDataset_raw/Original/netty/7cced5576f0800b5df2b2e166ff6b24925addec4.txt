@@ -1,0 +1,10 @@
+Http2ConnectionHandler Http2ConnectionPrefaceAndSettingsFrameWrittenEvent propagation
+
+Motivation:
+Http2ConnectionHandler uses ctx.fireUserEvent to propagate the Http2ConnectionPrefaceAndSettingsFrameWrittenEvent through the pipeline. This will propagate the event to the next inbound handler in the pipeline. If the user extends Http2ConnectionHandler the Http2ConnectionPrefaceAndSettingsFrameWrittenEvent may be missed and initialization dependent upon this event will not be run.
+
+Modifications:
+- Http2ConnectionHandler should use userEventTriggered instead of ctx.fireUserEvent
+
+Result:
+Classes that extend Http2ConnectionHandler will see the Http2ConnectionPrefaceAndSettingsFrameWrittenEvent user event.

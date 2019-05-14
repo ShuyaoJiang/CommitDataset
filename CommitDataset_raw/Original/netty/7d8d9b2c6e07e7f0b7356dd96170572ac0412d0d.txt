@@ -1,0 +1,10 @@
+Fixed NPE in WebSocket00FrameDecoder if end couldn't be found in text frame
+
+Motivation:
+When we receive an incomplete WebSocketFrame we need to make sure to wait for more data. Because we not did this we could produce a NPE.
+
+Modification:
+Make sure we not try to add null into the RecyclableArrayList
+
+Result:
+no more NPE on incomplete frames.

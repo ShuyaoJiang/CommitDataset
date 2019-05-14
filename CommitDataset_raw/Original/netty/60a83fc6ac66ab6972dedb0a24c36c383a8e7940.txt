@@ -1,0 +1,23 @@
+Fix packagine issues in all-in-one JAR
+
+Motivation:
+
+- dependencyVersionsDir property is not resolved during the build
+  process. The build doesn't fail because of this, but it creates an
+  ugly directory.
+- All-in-one JAR contains libnetty-tcnative.so, which is not part of the
+  all-in-one JAR.
+
+Modifications:
+
+- Fix an incorrect property name
+  (dependencyVersionDir -> dependencyVersionsDir)
+- Exclude libnetty-tcnative.so
+- Remove unnecessary includes in source expanding configuration
+
+Result:
+
+- Cleaner pom.xml
+- We do not ship libnetty-tcnative.so in all-in-one JAR anymore, which
+  is correct, because strictly speaking the native library belongs to
+  org.apache.tomcat.jni package.

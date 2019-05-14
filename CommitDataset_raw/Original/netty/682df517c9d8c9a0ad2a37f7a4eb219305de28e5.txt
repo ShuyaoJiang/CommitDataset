@@ -1,0 +1,17 @@
+Add OpenSslClientContext to allow creating SslEngine for client side
+
+Motivation:
+
+We only support openssl for server side at the moment but it would be also useful for client side.
+
+Modification:
+
+* Upgrade to new netty-tcnative snapshot to support client side openssl support
+* Add OpenSslClientContext which can be used to create SslEngine for client side usage
+* Factor out common logic between OpenSslClientContext and OpenSslServerContent into new abstract base class called OpenSslContext
+* Correctly detect handshake failures as soon as possible
+* Guard against segfault caused by multiple calls to destroyPools(). This can happen if OpenSslContext throws an exception in the constructor and the finalize() method is called later during GC
+
+Result:
+
+openssl can be used for client and servers now.

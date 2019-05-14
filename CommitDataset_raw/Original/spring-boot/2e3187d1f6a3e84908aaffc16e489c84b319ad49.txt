@@ -1,0 +1,9 @@
+Null values from yaml should be stored as empty string
+
+When building a flattened map, the YamlProcessor from
+Spring Framework, converts a null value to an empty string.
+We want the null value to also keep track of its origin,
+which is why this commit creates an `OriginTrackedValue`
+for an empty string if the original value is null.
+
+Fixes gh-10656

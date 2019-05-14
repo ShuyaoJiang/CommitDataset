@@ -1,0 +1,8 @@
+Always Accumulate Transport Exceptions (#25017)
+
+This removes the `accumulateExceptions()` method (and its usage) from `TransportNodesAction` and `TransportTasksAction`, forcing both transport actions to always accumulate exceptions.
+
+Without this change, some transport actions, like `TransportNodesStatsAction` would respond in very unexpected ways by returning no response due to some failure, but instead of returning an
+error the response would simply be empty: no response and no error.
+
+This results in a very trappy response structure where users can check for an error, then attempt to blindly use the response when no error is returned.

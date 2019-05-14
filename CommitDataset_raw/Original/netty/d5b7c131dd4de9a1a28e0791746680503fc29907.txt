@@ -1,0 +1,13 @@
+Correctly write single ByteBuf with memoryAddress
+
+Motivation:
+
+While optimize gathering writes I introduced a bug when writing single ByteBuf that have a memoryAddress. This regression was introduced by 88bd6e7a9300073707f305409fa6481f1eeb2077.
+
+Modifications:
+
+Correctly use the writerIndex as argument when call Native.writeAddress(...)
+
+Result:
+
+No more corruption while write single buffers.

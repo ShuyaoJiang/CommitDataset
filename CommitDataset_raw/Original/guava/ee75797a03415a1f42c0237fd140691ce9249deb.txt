@@ -1,0 +1,4 @@
+Fixed a race deadlock bug in AbstractServiceTest: when notifyStopped() is called after getStateHistory(), the latter takes the synchronization lock and also waiting on the latch; the former cannot count down the latch because it can't grab the synchronization lock. Also added missing tests for throwing exception from doStart(), doStop().
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=32768098

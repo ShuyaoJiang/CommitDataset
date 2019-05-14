@@ -1,0 +1,16 @@
+Docs: Test examples that recreate lang analyzers  (#29535)
+
+We have a pile of documentation describing how to rebuild the built in
+language analyzers and, previously, our documentation testing framework
+made sure that the examples successfully built *an* analyzer but they
+didn't assert that the analyzer built by the documentation matches the
+built in anlayzer. Unsuprisingly, some of the examples aren't quite
+right.
+
+This adds a mechanism that tests that the analyzers built by the docs.
+The mechanism is fairly simple and brutal but it seems to be working:
+build a hundred random unicode sequences and send them through the
+`_analyze` API with the rebuilt analyzer and then again through the
+built in analyzer. Then make sure both APIs return the same results.
+Each of these calls to `_anlayze` takes about 20ms on my laptop which
+seems fine.

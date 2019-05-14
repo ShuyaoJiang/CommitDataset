@@ -1,0 +1,10 @@
+Avoid duplicate script
+
+This commit avoids a script duplication: the integration test runs the
+sample instead of a copy of it in the repro directory.
+
+Also switched the sample from ActiveMQ to HornetQ as #323 revealed
+some locking on CI. Hopefully that should fix it as HornetQ is non
+persistent and can be embedded several times in the same VM.
+
+Fixes gh-1456

@@ -1,0 +1,14 @@
+Additional settings for SAML NameID policy (elastic/x-pack-elasticsearch#3969)
+
+* Additional settings for SAML NameID policy
+
+We should not be populating SPNameQualifier by default as it is
+intended to be used to specify an alternate SP EntityID rather than
+our own. Some IdPs (ADFS) fail when presented with this value.
+
+This commit
+- makes the SPNameQualifier a setting that defaults to blank
+- adds a setting for "AllowCreate"
+- documents the above
+
+Original commit: elastic/x-pack-elasticsearch@093557e88f3275d947b0103a321e40ce366c6925

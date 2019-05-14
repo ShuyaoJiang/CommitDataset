@@ -1,0 +1,14 @@
+Validate cookie name and value characters Motivation:
+
+RFC6265 specifies which characters are allowed in a cookie name and value.
+
+Netty is currently too lax, which can used for HttpOnly escaping.
+
+Modification:
+
+In ServerCookieDecoder: discard cookie key-value pairs that contain invalid characters.
+In ClientCookieEncoder: throw an exception when trying to encode cookies with invalid characters.
+
+Result:
+
+The problem described in the motivation section is fixed.

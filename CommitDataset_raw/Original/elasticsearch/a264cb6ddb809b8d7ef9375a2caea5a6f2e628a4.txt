@@ -1,0 +1,12 @@
+Refactor AutoFollowCoordinator to track leader indices per remote cluster (#36031)
+
+and replaced poll interval setting with a hardcoded poll interval.
+The hard coded interval will be removed in a follow up change to make
+use of cluster state API's wait_for_metatdata_version.
+
+Before the auto following was bootstrapped from thread pool scheduler,
+but now auto followers for new remote clusters are bootstrapped when
+a new cluster state is published.
+
+Originates from #35895
+Relates to #33007

@@ -1,0 +1,9 @@
+Fix DateFormatters.parseMillis when no timezone is given (#39100)
+
+The parseMillis method was able to work on formats without timezones by
+falling back to UTC. The Date Formatter interface did not support this, as
+the calling code was using the `Instant.from` java time API.
+
+This switches over to an internal method which adds UTC as a timezone.
+
+Closes #39067

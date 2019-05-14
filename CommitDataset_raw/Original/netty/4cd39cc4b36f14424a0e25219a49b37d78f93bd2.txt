@@ -1,0 +1,17 @@
+Filter DNS results so they only contain the expected type when multiple types are present. (#7875)
+
+Motivation:
+
+Currently, if a DNS server returns a non-preferred address type before the preferred one, then both will be returned as the result, and when only taking a single one, this usually ends up being the non-preferred type. However, the JDK requires lookups to only return the preferred type when possible to allow for backwards compatibility.
+
+To allow a client to be able to resolve the appropriate address when running on a machine that does not support IPv6 but the DNS server returns IPv6 addresses before IPv4 addresses when querying.
+
+Modification:
+
+Filter the returned records to the expected type when both types are present.
+
+Result:
+
+Allows a client to run on a machine with IPv6 disabled even when a server returns both IPv4 and IPv6 results. Netty-based code can be a drop-in replacement for JDK-based code in such circumstances.
+
+This PR filters results before returning them to respect JDK expectations.

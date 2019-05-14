@@ -1,0 +1,18 @@
+Add TLS/SSL channel close timeouts (#37246)
+
+Closing a channel using TLS/SSL requires reading and writing a
+CLOSE_NOTIFY message (for pre-1.3 TLS versions). Many implementations do
+not actually send the CLOSE_NOTIFY message, which means we are depending
+on the TCP close from the other side to ensure channels are closed. In
+case there is an issue with this, we need a timeout. This commit adds a
+timeout to the channel close process for TLS secured channels.
+
+As part of this change, we need a timer service. We could use the
+generic Elasticsearch timeout threadpool. However, it would be nice to
+have a local to the nio event loop timer service dedicated to network needs. In
+the future this service could support read timeouts, connect timeouts,
+request timeouts, etc. This commit adds a basic priority queue backed
+service. Since our timeout volume (channel closes) is very low, this
+should be fine. However, this can be updated to something more efficient
+in the future if needed (timer wheel). Everything being local to the event loop
+thread makes the logic simple as no locking or synchronization is necessary.

@@ -1,0 +1,22 @@
+ChunkedWriteHandler flushes too often
+
+Motivation:
+
+ChunkedWriteHandler queues written messages and actually writes them
+when flush is called. In its doFlush method, it needs to flush after
+each chunk is written to preserve memory. However, non-chunked messages
+(those that aren't of type ChunkedInput) are treated in the same way,
+which means that flush is called after each message is written.
+
+Modifications:
+
+Moved the call to flush() inside the if block that tests if the message
+is an instance of ChunkedInput. To ensure flush is called at least once,
+the existing boolean flushed is checked at the end of doFlush. This
+check was previously in ChunkedWriteHandler.flush(), but wasn't checked in
+other invocations of doFlush, e.g. in channelInactive.
+
+Result:
+
+When this handler is present in a pipeline, writing a series
+of non-chunked messages will be flushed as the developer intended.

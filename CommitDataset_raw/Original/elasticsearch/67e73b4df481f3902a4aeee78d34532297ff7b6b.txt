@@ -1,0 +1,12 @@
+ Combine accepting selector and socket selector (#31115)
+
+This is related to #27260. This commit combines the AcceptingSelector
+and SocketSelector classes into a single NioSelector. This change
+allows the same selector to handle both server and socket channels. This
+is valuable as we do not necessarily want a dedicated thread running for
+accepting channels.
+
+With this change, this commit removes the configuration for dedicated
+accepting selectors for the normal transport class. The accepting
+workload for new node connections is likely low, meaning that there is
+no need to dedicate a thread to this process.

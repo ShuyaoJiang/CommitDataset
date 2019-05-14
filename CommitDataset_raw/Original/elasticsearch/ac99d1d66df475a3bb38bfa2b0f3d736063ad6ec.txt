@@ -1,0 +1,8 @@
+Fix bugs in fixLag() (#34346)
+
+The hack to work around lag detection had some issues:
+- it always called runFor(), even if no lag was detected
+- it looked at the last-accepted state not the last-applied state, so missed
+  some lag situations.
+
+This fixes these issues.

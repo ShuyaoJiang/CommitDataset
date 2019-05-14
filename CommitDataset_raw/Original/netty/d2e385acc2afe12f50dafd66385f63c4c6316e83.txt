@@ -1,0 +1,16 @@
+Fix incorrect bytesBefore/indexOf() in ReplayingDecoderBuffer
+
+Motivation:
+
+bytesBefore(length, ...), bytesBefore(index, length, ...), and
+indexOf(fromIndex, toIndex,...) in ReplayingDecoderBuffer are buggy.
+They trigger 'REPLAY even when they don't need to.
+
+Modification:
+
+Implement the buggy methods properly so that REPLAYs are not triggered
+unnecessarily.
+
+Result:
+
+Correct behvaior

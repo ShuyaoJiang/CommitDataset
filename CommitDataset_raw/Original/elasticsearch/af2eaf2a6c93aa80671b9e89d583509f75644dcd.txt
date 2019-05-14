@@ -1,0 +1,7 @@
+Remove usage of `index.shrink.source.*` in 7.x (#33271)
+
+We cut over to `index.resize.source.*` but still have these constants
+being public in `IndexMetaData`. Those Settings and constants are not needed
+in 7.x while we still need to keep the keys known to private settings since
+they might be part of the index settings of old indices. We can remove that
+in 8.0. Yet, we should remove the settings to make sure they are not used again.

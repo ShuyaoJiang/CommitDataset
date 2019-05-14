@@ -1,0 +1,13 @@
+[#3888] Use 2 * cores as default minimum for pool arenas.
+
+Motivation:
+
+At the moment we use 1 * cores as default mimimum for pool arenas. This can easily lead to conditions as we use 2 * cores as default for EventLoop's when using NIO or EPOLL. If we choose a smaller number we will run into hotspots as allocation and deallocation needs to be synchronized on the PoolArena.
+
+Modifications:
+
+Change the default number of arenas to 2 * cores.
+
+Result:
+
+Less conditions when using the default settings.

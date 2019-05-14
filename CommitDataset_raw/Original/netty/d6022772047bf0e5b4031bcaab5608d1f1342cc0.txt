@@ -1,0 +1,13 @@
+Include cause that was used to notify the promise when logging an failed try to notify it.
+
+Motivation:
+
+When a promise is notified that was already added to the ChannelOutboundBuffer and we try to notify it later on we only see a warning that it was notified before. This is often not very useful as we have no idea where it was notified at all. We can do better in case it was failed before (which is most of the times the case) and just also log the cause that was used for it.
+
+Modifications:
+
+Add the cause that was used to notify the promise when we fail to notify it as part of the ChannelOutboundBuffer.
+
+Result:
+
+Easier to debug user errors.

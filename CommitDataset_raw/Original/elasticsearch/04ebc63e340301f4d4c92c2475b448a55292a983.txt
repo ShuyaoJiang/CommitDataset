@@ -1,0 +1,8 @@
+ RoutingMissingException in more like this (#33974)
+
+More like this query allows to provide identifiers of documents to be retrieved as like/unlike items. 
+It can happen that at retrieval time an error is thrown, for instance caused by missing routing value when `_routing` is set required in the mapping. 
+Instead of ignoring such error and returning no documents for the query, the error should be re-thrown and returned to users. As part of this 
+change also mget and mtermvectors are unified in the way they throw such exception like it happens in other places, so that a `RoutingMissingException` is raised.
+
+Closes #29678

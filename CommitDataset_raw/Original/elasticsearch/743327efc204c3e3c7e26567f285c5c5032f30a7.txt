@@ -1,0 +1,9 @@
+Reset replica engine to global checkpoint on promotion (#33473)
+
+When a replica starts following a newly promoted primary, it may have
+some operations which don't exist on the new primary. Thus we need to
+throw those operations to align a replica with the new primary. This can
+be done by first resetting an engine from the safe commit, then replaying
+the local translog up to the global checkpoint.
+
+Relates #32867

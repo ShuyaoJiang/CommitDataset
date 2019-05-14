@@ -1,0 +1,24 @@
+Add 32 bytes overhead per header entry when calculating headers length in HPackDecoder
+
+Motivation:
+
+According to the HTTP/2 Spec:
+
+SETTINGS_MAX_HEADER_LIST_SIZE (0x6): This advisory setting informs a
+peer of the maximum size of header list that the sender is
+prepared to accept, in octets. The value is based on the
+uncompressed size of header fields, including the length of the
+name and value in octets plus an overhead of 32 octets for each
+header field.
+
+We were accounting for the 32 bytes when encoding in HpackEncoder,
+but not when decoding in HPackDecoder.
+
+Modifications:
+
+- Add 32 bytes to the header list length for each entry when decoding
+with HPackDecoder.
+
+Result:
+
+- We account for the 32 bytes overhead by header entry in HPackDecoder

@@ -1,0 +1,4 @@
+In TypesTest, change the check for correct functioning in the presence of a SecurityManager. Previously we had a SecurityManager that refused Method.setAccessible except in a few well-known places, the intent being that one of the places it would refuse would be the use in Types.TypeVariableInvocationHandler that we wanted to test. But that proved to be fragile. Instead, we explicitly refuse that place, and we check that the refusal happened. This builds more knowledge of the implementation into the test, but should be more robust.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=94699561

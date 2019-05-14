@@ -1,0 +1,59 @@
+Support for candidate components index
+
+This commit adds a "spring-context-indexer" module that can be added to
+any project in order to generate an index of candidate components defined
+in the project.
+
+`CandidateComponentsIndexer` is a standard annotation processor that
+looks for source files with target annotations (typically `@Component`)
+and references them in a `META-INF/spring.components` generated file.
+
+Each entry in the index is the fully qualified name of a candidate
+component and the comma-separated list of stereotypes that apply to that
+candidate. A typical example of a stereotype is `@Component`. If a
+project has a `com.example.FooService` annotated with `@Component` the
+following `META-INF/spring.components` file is generated at compile time:
+
+```
+com.example.FooService=org.springframework.stereotype.Component
+```
+
+A new `@Indexed` annotation can be added on any annotation to instructs
+the scanner to include a source file that contains that annotation. For
+instance, `@Component` is meta-annotated with `@Indexed` now and adding
+`@Indexed` to more annotation types will transparently improve the index
+with additional information. This also works for interaces or parent
+classes: adding `@Indexed` on a `Repository` base interface means that
+the indexed can be queried for its implementation by using the fully
+qualified name of the `Repository` interface.
+
+The indexer also adds any class or interface that has a type-level
+annotation from the `javax` package. This includes obviously JPA
+(`@Entity` and related) but also CDI (`@Named`, `@ManagedBean`) and
+servlet annotations (i.e. `@WebFilter`). These are meant to handle
+cases where a component needs to identify candidates and use classpath
+scanning currently.
+
+If a `package-info.java` file exists, the package is registered using
+a "package-info" stereotype.
+
+Such files can later be reused by the `ApplicationContext` to avoid
+using component scan. A global `CandidateComponentsIndex` can be easily
+loaded from the current classpath using `CandidateComponentsIndexLoader`.
+
+The core framework uses such infrastructure in two areas: to retrieve
+the candidate `@Component`s and to build a default `PersistenceUnitInfo`.
+Rather than scanning the classpath and using ASM to identify candidates,
+the index is used if present.
+
+As long as the include filters refer to an annotation that is directly
+annotated with `@Indexed` or an assignable type that is directly
+annotated with `@Indexed`, the index can be used since a dedicated entry
+wil be present for that type. If any other unsupported include filter is
+specified, we fallback on classpath scanning.
+
+In case the index is incomplete or cannot be used, The
+`spring.index.ignore` system property can be set to `true` or,
+alternatively, in a "spring.properties" at the root of the classpath.
+
+Issue: SPR-11890

@@ -1,0 +1,11 @@
+Fix failure in performance build
+
+The JettySockJsIntegrationTests are enabled in the performance build
+only. Following the upgrade to Jetty 9.3 where the
+JettyRequestUpgradeStrategy is now Lifecycle as wel as
+ServletContextAware, we need to make sure the ApplicationContext
+refresh occurs after the ServletContext has been set. This change
+removes the explicit .refresh() call in the test setup and instead
+relies on the DispatcherServlet to do that, which ensures that the
+ServletContext with which it is initialized by Jetty has been set
+on the ApplicationContext before that.

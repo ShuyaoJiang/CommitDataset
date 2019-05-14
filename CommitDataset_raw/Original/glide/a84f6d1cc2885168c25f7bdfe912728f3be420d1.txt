@@ -1,0 +1,20 @@
+Avoid overflowing read buffer decoding Bitmaps.
+
+Fixes #283.
+
+We use BitmapFactory.Options#inJustDecodeBounds to
+decode the width and height of images before
+decoding the full image so that we can downsample
+large images to avoid memory pressure. To do so,
+we use mark/reset on a buffered InputStream. To
+handle images with large headers, we set a large
+(currently 5mb) mark limit. However, there's
+always the chance that that limit is insufficient
+even with a well formatted image and a bug
+free decoder. Since downsampling is typically an
+optimization, if such a failure occurs we still
+want to decode the full image, even if we can't
+obtain the dimensions. By enforcing we don't read
+beyond our limit, we ensure that the header read
+fails recoverably, so that the full image can
+still be decoded.

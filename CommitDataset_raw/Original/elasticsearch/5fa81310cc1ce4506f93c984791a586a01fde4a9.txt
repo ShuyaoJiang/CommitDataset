@@ -1,0 +1,16 @@
+[CCR] Added history uuid validation (#33546)
+
+For correctness we need to verify whether the history uuid of the leader
+index shards never changes while that index is being followed.
+
+* The history UUIDs are recorded as custom index metadata in the follow index.
+* The follow api validates whether the current history UUIDs of the leader
+  index shards are the same as the recorded history UUIDs.
+  If not the follow api fails.
+* While a follow index is following a leader index; shard follow tasks
+  on each shard changes api call verify whether their current history uuid
+  is the same as the recorded history uuid.
+
+Relates to #30086 
+
+Co-authored-by: Nhat Nguyen <nhat.nguyen@elastic.co>

@@ -1,0 +1,12 @@
+Allow an AuthenticationResult to return metadata (#34382)
+
+PR #34290 made it impossible to use thread-context values to pass
+authentication metadata out of a realm. The SAML realm used this
+technique to allow the SamlAuthenticateAction to process the parsed
+SAML token, and apply them to the access token that was generated.
+
+This new method adds metadata to the AuthenticationResult itself, and
+then the authentication service makes this result available on the
+thread context.
+
+Closes: #34332

@@ -1,0 +1,19 @@
+Send full response for unsupported websocket versions
+
+Motivation:
+
+WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse does not
+send a LastHttpContent, nor does it flush, and it doesn't send a content
+length.
+
+Modifications:
+
+Changed sendUnsupportedVersionResponse to send FullHttpResponse, to
+writeAndFlush, and to set a content length of 0. Also added a test for
+this method.
+
+Result:
+
+Upstream handlers will be able to determine the end of the response, the
+response will actually get written to the client, and the client will be
+able to determine the end of the response.

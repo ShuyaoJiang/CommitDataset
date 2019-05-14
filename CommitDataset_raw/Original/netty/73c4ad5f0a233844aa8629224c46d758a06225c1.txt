@@ -1,0 +1,12 @@
+http2: count pad length field toward flow control. Fixes #5434
+
+Motivation:
+The HTTP/2 specification requires the pad length field of DATA, HEADERS and PUSH_PROMISE frames to be counted towards the flow control window. The current implementation doesn't do so (See #5434).
+
+Furthermore, it's currently not possible to add one byte padding, as this would add the one byte pad length field as well as append one padding byte to the end of the frame.
+
+Modifications:
+Include the one byte pad length field in the padding parameter of the API. Thereby extending the allowed value range by one byte to 256 (inclusive). On the wire, a one byte padding is encoded with a pad length field with value zero and a 256 byte padding is encoded with a pad length field with value 255 and 255 bytes append to the end of the frame.
+
+Result:
+More correct padding.

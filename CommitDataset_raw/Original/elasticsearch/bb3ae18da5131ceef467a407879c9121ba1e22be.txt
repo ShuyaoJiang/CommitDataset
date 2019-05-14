@@ -1,0 +1,7 @@
+Increase coverage in SearchSortValuesTests (#36597)
+
+SearchSortValuesTests extends now `AbstractSerializingTestCase` which removes some code duplication and standardizes the way we test `fromXContent`, serialization and equals/hashcode.
+
+Also, we were never creating `SearchSortValues` through their public constructor that accept an array of `DocValueFormat` together with the array of raw sort values. That is covered now, which involved some conversion from `BytesRef` to String in the test.
+
+Also, the previous test was not using doing any equality check against the original and parsed versions in `testFromXContent` due to values being parsed with different types in some cases, which is now covered by converting those values using a new method added to `RandomObjects`. The code was already there as part of `randomStoredFieldValues`, but it is now exposed to be used in other scenarios.

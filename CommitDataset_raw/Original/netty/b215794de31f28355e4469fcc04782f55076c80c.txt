@@ -1,0 +1,31 @@
+Enforce writeSpinCount to limit resource consumption per socket (#7478)
+
+Motivation:
+The writeSpinCount currently loops over the same buffer, gathering
+write, file write, or other write operation multiple times but will
+continue writing until there is nothing left or the OS doesn't accept
+any data for that specific write. However if the OS keeps accepting
+writes there is no way to limit how much time we spend on a specific
+socket. This can lead to unfair consumption of resources dedicated to a
+single socket.
+We currently don't limit the amount of bytes we attempt to write per
+gathering write. If there are many more bytes pending relative to the
+SO_SNDBUF size we will end up building iov arrays with more elements
+than can be written, which results in extra iteration, conditionals,
+and book keeping.
+
+Modifications:
+- writeSpinCount should limit the number of system calls we make to
+write data, instead of applying to individual write operations
+- IovArray should support a maximum number of bytes
+- IovArray should support composite buffers of greater than size 1024
+- We should auto-scale the amount of data that we attempt to write per
+gathering write operation relative to SO_SNDBUF and how much data is
+successfully written
+- The non-unsafe path should also support a maximum number of bytes,
+and respect the IOV_MAX limit
+
+Result:
+Write resource consumption can be bounded and gathering writes have
+a limit relative to the amount of data which can actually be accepted
+by the socket.

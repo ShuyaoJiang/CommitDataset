@@ -1,0 +1,8 @@
+fix timeout usage in _bulk to `timeout` from `master_timeout` (elastic/x-pack-elasticsearch#3796)
+
+The HTTP Exporter in Monitoring allowed users to set a timeout parameters
+for the requests. When set, this was setting the `master_timeout` query parameter
+in Bulk Requests. The problem is that Bulk Requests do not support this type of
+timeout.
+
+Original commit: elastic/x-pack-elasticsearch@9be194006e9b9f91d9d53df7ac56d2e546306963

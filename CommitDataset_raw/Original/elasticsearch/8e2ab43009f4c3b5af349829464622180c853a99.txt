@@ -1,0 +1,7 @@
+Fix handling of dirty PID file
+
+When Elasticsearch dies during a standalone REST test we might leave a
+dirty PID file laying around. We tried to log about this, but the log
+messages contained references to undefined variables so we simply died
+instead of providing a helpful message to run clean. This commit
+addresses this issue.

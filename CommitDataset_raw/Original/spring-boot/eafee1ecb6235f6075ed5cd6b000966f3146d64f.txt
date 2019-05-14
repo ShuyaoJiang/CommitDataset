@@ -1,0 +1,17 @@
+Fix ordering of mail auto-configuration
+
+It is not possible to put `@Order` on nested `@Configuration` classes and
+there is no ordering guarantee of them anyway. Previously, we relied on
+the declaration order to check if the `test-connection` flag should apply
+to an existing `JavaMailSenderImpl`. It turns out at the
+`JavaMailSenderImpl` bean was not created at that time and so the
+evaluation was wrongly failing.
+
+To make that more explicit, that code is now in its own
+auto-configuration with an explicit `@AutoConfigureAfter` declaration.
+
+Since the JNDI support could be affected by the exact same issue, it has
+been restored to its own package private configuration class that is
+processed before the  `MailSenderAutoConfiguration` content is evaluated.
+
+Closes gh-3478

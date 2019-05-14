@@ -1,0 +1,19 @@
+Notify affixMap settings when any under the registered prefix matches (#28317)
+
+* Notify affixMap settings when any under the registered prefix matches
+
+Previously if an affixMap setting was registered, and then a completely
+different setting was applied, the affixMap update consumer would be notified
+with an empty map. This caused settings that were previously set to be unset in
+local state in a consumer that assumed it would only be called when the affixMap
+setting was changed.
+
+This commit changes the behavior so if a prefix `foo.` is registered, any
+setting under the prefix will have the update consumer notified if there are
+changes starting with `foo.`.
+
+Resolves #28316
+
+* Add unit test
+
+* Address feedback

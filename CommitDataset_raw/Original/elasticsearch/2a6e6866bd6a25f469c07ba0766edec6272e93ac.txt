@@ -1,0 +1,6 @@
+Fix floating-point error when DateProcessor parses UNIX (#24947)
+
+DateProcessor's DateFormat UNIX format parser resulted in
+a floating point rounding error when parsing certain stringed
+epoch times. Now Double.parseDouble is used, preserving the
+intented input.

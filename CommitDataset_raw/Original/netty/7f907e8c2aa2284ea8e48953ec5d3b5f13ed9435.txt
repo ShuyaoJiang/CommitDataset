@@ -1,0 +1,14 @@
+Accept ';' '\\"' in the filename of HTTP Content-Disposition header
+
+Motivation:
+HttpPostMultipartRequestDecoder threw an ArrayIndexOutOfBoundsException
+when trying to decode Content-Disposition header with filename
+containing ';' or protected \\".
+See issue #3326 and #3327.
+
+Modifications:
+Added splitMultipartHeaderValues method which cares about quotes, and
+use it in splitMultipartHeader method, instead of StringUtils.split.
+
+Result:
+Filenames can contain semicolons and protected \\".

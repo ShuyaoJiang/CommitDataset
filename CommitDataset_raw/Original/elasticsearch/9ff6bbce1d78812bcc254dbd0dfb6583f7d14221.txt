@@ -1,0 +1,38 @@
+Handle null retention leases in WaitForNoFollowersStep (#40477)
+
+In some cases the retention leases can return null, causing a
+`NullPointerException` when waiting for no followers.
+
+This wraps those so that no NPE is thrown.
+
+Here is an example failure:
+
+```
+[2019-03-26T09:24:01,368][ERROR][o.e.x.i.IndexLifecycleRunner] [node-0] policy [deletePolicy] for index [ilm-00001] failed on step [{"phase":"delete","action":"delete","name":"wait-for-shard-history-leases"}]. Moving to ERROR step
+java.lang.NullPointerException: null
+	at org.elasticsearch.xpack.core.indexlifecycle.WaitForNoFollowersStep.lambda$evaluateCondition$0(WaitForNoFollowersStep.java:60) ~[?:?]
+	at java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:267) ~[?:1.8.0_191]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193) ~[?:1.8.0_191]
+	at java.util.Spliterators$ArraySpliterator.tryAdvance(Spliterators.java:958) ~[?:1.8.0_191]
+	at java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:126) ~[?:1.8.0_191]
+	at java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:498) ~[?:1.8.0_191]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:485) ~[?:1.8.0_191]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471) ~[?:1.8.0_191]
+	at java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:1.8.0_191]
+	at java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:1.8.0_191]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:1.8.0_191]
+	at java.util.stream.ReferencePipeline.anyMatch(ReferencePipeline.java:449) ~[?:1.8.0_191]
+	at org.elasticsearch.xpack.core.indexlifecycle.WaitForNoFollowersStep.lambda$evaluateCondition$2(WaitForNoFollowersStep.java:61) ~[?:?]
+	at org.elasticsearch.action.ActionListener$1.onResponse(ActionListener.java:62) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.ContextPreservingActionListener.onResponse(ContextPreservingActionListener.java:43) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.TransportAction$1.onResponse(TransportAction.java:68) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.TransportAction$1.onResponse(TransportAction.java:64) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.ContextPreservingActionListener.onResponse(ContextPreservingActionListener.java:43) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction.onCompletion(TransportBroadcastByNodeAction.java:383) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction.onNodeResponse(TransportBroadcastByNodeAction.java:352) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction$1.handleResponse(TransportBroadcastByNodeAction.java:324) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.action.support.broadcast.node.TransportBroadcastByNodeAction$AsyncAction$1.handleResponse(TransportBroadcastByNodeAction.java:314) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.transport.TransportService$ContextRestoreResponseHandler.handleResponse(TransportService.java:1095) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+	at org.elasticsearch.transport.TransportService$DirectResponseChannel.processResponse(TransportService.java:1176) ~[elasticsearch-8.0.0-SNAPSHOT.jar:8.0.0-SNAPSHOT]
+...
+```

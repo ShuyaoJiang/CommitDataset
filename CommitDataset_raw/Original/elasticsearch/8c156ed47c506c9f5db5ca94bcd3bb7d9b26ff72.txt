@@ -1,0 +1,11 @@
+Introduce forget follower API (#39718)
+
+This commit introduces the forget follower API. This API is needed in cases that
+unfollowing a following index fails to remove the shard history retention leases
+on the leader index. This can happen explicitly through user action, or
+implicitly through an index managed by ILM. When this occurs, history will be
+retained longer than necessary. While the retention lease will eventually
+expire, it can be expensive to allow history to persist for that long, and also
+prevent ILM from performing actions like shrink on the leader index. As such, we
+introduce an API to allow for manual removal of the shard history retention
+leases in this case.

@@ -1,0 +1,14 @@
+Cancel GetDiscoveredNodesAction when bootstrapped (#36423)
+
+Today the `GetDiscoveredNodesAction` waits, possibly indefinitely, to discover
+enough nodes to bootstrap the cluster. However it is possible that the cluster
+forms before a node has discovered the expected collection of nodes, in which
+case the action will wait indefinitely despite the fact that it is no longer
+required.
+
+This commit changes the behaviour so that the action fails once a node receives
+a cluster state with a nonempty configuration, indicating that the cluster has
+been successfully bootstrapped and therefore the `GetDiscoveredNodesAction`
+need wait no longer.
+
+Relates #36380 and #36381; reverts 558f4ec27820e1a50660dc1f3437422150339af0.

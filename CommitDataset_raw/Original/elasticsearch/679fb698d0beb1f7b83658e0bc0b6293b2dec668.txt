@@ -1,0 +1,5 @@
+Zen2: Trigger join when active master detected (#34008)
+
+Triggers a join when an active master is detected. In order to avoid spamming joins, deduplicates join request based on <target, join> pair. This ensures that a new join is sent whenever the term is incremented or when a new master is found.
+
+Also changes the logging of join failures from DEBUG to INFO. These join failures should be happening rarely, and can either indicate a failed election (which should be rare) or a configuration issue.

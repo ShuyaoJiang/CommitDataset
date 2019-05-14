@@ -1,0 +1,11 @@
+Consider aliases when checking descendants
+
+Update `AliasedConfigurationPropertySource` to consider aliases in
+`containsDescendantOf`.
+
+Prior to this commit, given a source containing `example.name` with
+a defined alias of `other.name -> example.name` calling
+`containsDescendantOf("other")` would incorrectly return
+`ConfigurationPropertyState.ABSENT`.
+
+Closes gh-14967

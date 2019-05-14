@@ -1,0 +1,28 @@
+cluster formation DSL - Gradle integration -  part 2 (#32028)
+
+* Implement Version in java
+
+- This allows to move all  all .java files from .groovy.
+- Will prevent eclipse from tangling up in this setup
+- make it possible to use Version from Java
+
+* PR review comments
+
+* Cluster formation plugin with reference counting
+
+```
+> Task :plugins:ingest-user-agent:listElasticSearchClusters
+Starting cluster: myTestCluster
+   * myTestCluster: /home/alpar/work/elastic/elasticsearch/plugins/ingest-user-agent/foo
+Asked to unClaimAndStop myTestCluster, since cluster still has 1 claim it will not be stopped
+
+> Task :plugins:ingest-user-agent:testme UP-TO-DATE
+Stopping myTestCluster, since no of claims is 0
+```
+
+- Meant to auto manage the clusters lifecycle
+- Add integration test for cluster formation
+
+* Fix rebase
+
+* Change to `useCluster` method on task

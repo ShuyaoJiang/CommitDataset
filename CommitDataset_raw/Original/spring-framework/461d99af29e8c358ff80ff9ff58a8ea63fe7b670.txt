@@ -1,0 +1,16 @@
+Fix package cycles in spring-test
+
+Code introduced in conjunction with SPR-5243 introduced package cycles
+between the ~.test.context and ~.test.context.web packages. This was
+caused by the fact that ContextLoaderUtils worked directly with the
+@WebAppConfiguration and WebMergedContextConfiguration types.
+
+To address this, the following methods have been introduced in
+ContextLoaderUtils. These methods use reflection to circumvent hard
+dependencies on the @WebAppConfiguration and
+WebMergedContextConfiguration types.
+
+ - loadWebAppConfigurationClass()
+ - buildWebMergedContextConfiguration()
+
+Issue: SPR-9924

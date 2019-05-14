@@ -1,0 +1,13 @@
+Fix race-condition when closing a NioSocketChannel or EpollSocketChannel
+
+Motivation:
+
+Fix a race-condition when closing NioSocketChannel or EpollSocketChannel while try to detect if a close executor should be used and the underlying socket was already closed. This could lead to an exception that then leave the channel / in an invalid state and so could lead to side-effects like heavy CPU usage.
+
+Modifications:
+
+Catch possible socket exception while try to get the SO_LINGER options from the underlying socket.
+
+Result:
+
+No more race-condition when closing the channel is possible with bad side-effects.

@@ -1,0 +1,17 @@
+Do not return all indices if a specific alias is requested via get aliases api. (#29538)
+
+If a get alias api call requests a specific alias pattern then
+indices not having any matching aliases should not be included in the response.
+
+This is a second attempt to fix this (first attempt was #28294).
+The reason that the first attempt was reverted is because when xpack
+security is enabled then index expression (like * or _all) are resolved
+prior to when a request is processed in the get aliases transport action,
+then `MetaData#findAliases` can't know whether requested all where
+requested since it was already expanded in concrete alias names. This
+change replaces aliases(...) replaceAliases(...) method on AliasesRequests
+class and leave the aliases(...) method on subclasses. So there is a distinction
+between when xpack security replaces aliases and a user setting aliases via
+the transport or high level http client.
+
+Closes #27763

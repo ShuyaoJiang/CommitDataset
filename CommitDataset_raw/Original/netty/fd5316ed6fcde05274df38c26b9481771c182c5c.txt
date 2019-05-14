@@ -1,0 +1,11 @@
+ChunkedInput.readChunk parameter of type ByteBufAllocator
+
+Motivation:
+ChunkedInput.readChunk currently takes a ChannelHandlerContext object as a parameters. All current implementations of this interface only use this object to get the ByteBufAllocator object. Thus taking a ChannelHandlerContext as a parameter is more restrictive for users of this API than necessary.
+
+Modifications:
+- Add a new method readChunk(ByteBufAllocator)
+- Deprecate readChunk(ChannelHandlerContext) and updates all implementations to call readChunk(ByteBufAllocator)
+
+Result:
+API that only requires ByteBufAllocator to use ChunkedInput.

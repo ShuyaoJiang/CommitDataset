@@ -1,0 +1,9 @@
+[TEST] Wait for correct template version in rolling upgrade tests (elastic/x-pack-elasticsearch#1682)
+
+We wait for index templates to be installed before running tests, but
+these can get upgraded when the master node is upgraded.  If we don't
+wait again in this case then tests can fail due to the cleanup code
+being overwhelmed by pending cluster state updates that weren't waited
+for before the test.
+
+Original commit: elastic/x-pack-elasticsearch@eff0b24c116c4b8d167f7cf5782e9014fcdd0411

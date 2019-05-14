@@ -1,0 +1,16 @@
+Remove @ControllerAdvice from BasicErrorController
+
+Update the BasicErrorController so that it no longer needs to implement
+@ControllerAdvice or have an @ExceptionHandler method.
+
+A new ErrorAttributes interface is now used to obtain error details,
+the DefaultErrorAttributes implementation uses a
+HandlerExceptionResolver to obtain root exception details if the
+`javax.servlet.error.*` attributes are missing.
+
+This change also removes the need for the extract(...) method on
+ErrorController as classes such as WebRequestTraceFilter can
+now use the ErrorAttributes interface directly.
+
+See gh-839, gh-538
+Fixes gh-843

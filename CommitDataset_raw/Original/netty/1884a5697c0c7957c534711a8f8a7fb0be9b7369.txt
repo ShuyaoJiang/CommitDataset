@@ -1,0 +1,10 @@
+Avoid unnecessary IllegalStateException in ChunkedWriteHandler
+
+Motivation:
+ChunkedWriteHandler can sometimes fail to write the last chunk of a ChunkedInput due to an I/O error.  Subsequently, the ChunkedInput's associated promise is marked as failure and the connection is closed.  When the connection is closed, ChunkedWriteHandler attempts to clean up its message queue and to mark their promises as success or failure.  However, because the promise of the ChunkedInput, which was consumed completely yet failed to be written, is already marked as failure, the attempt to mark it as success fails, leading a WARN level log.
+
+Modification:
+Use trySuccess() instead of setSuccess() so that the attempt to mark a ChunkedInput as success does not raise an exception even if the promise is already done.
+
+Result:
+Fixes #2249

@@ -1,0 +1,17 @@
+Rework type generation algorithm
+
+The initial solution to gh-11512 was still using a plain `toString` that
+could potentially break with a JDK upgrade. Turns out that JDK9 actually
+uses the same type for AnnotatedType and ClassType so the trick of using
+a visitor doesn't work anymore.
+
+Retrospectively, it is quite easy to generate the full type once we have
+the DeclaredType as we already have some logic to get the qualified,
+that is raw, type and we have access to the type parameters.
+
+This commit still uses a `toString` to generate the representation of
+the type parameters but this looks much safer than trying to redo what
+such a simple `toString` should do. Also, the additional metadata that
+we could get on an ExecutableElement does not apply to them.
+
+Closes gh-11512

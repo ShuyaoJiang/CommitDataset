@@ -1,0 +1,14 @@
+[#5014] Correctly encode / decode zero-length names when encoding DnsRecords.
+
+Motivation:
+
+Zero-length names needs to be "prefixed" by the length as well when encoded into a ByteBuf. Also some servers not correctly prefix these so we should ensure we can workaround this and even decode in such case.
+
+Modifications:
+
+- Always encode the length of the name into the ByteBuf even if its zero-length.
+- If there are no readable bytes for the name just asume its an empty name to workaround dns servers that not fully respect the RFC.
+
+Result:
+
+Correctly encode zero-length names and be able to decode empty names even when the rfc is not strictly followed.

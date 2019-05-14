@@ -1,0 +1,16 @@
+Pre-populate unicast hosts files (#35136)
+
+Today when ESIntegTestCase starts some nodes it writes out the unicast hosts
+files each time a node starts its transport service. This does mean that a
+number of nodes can start and perform their first pinging round without any
+unicast hosts which, if the timing is unlucky and a lot of nodes are all
+started at the same time, can lead to a split brain as in #35052.
+
+Prior to #33554 this was unlikely to happen since the MockUncasedHostsProvider
+would always have yielded the existing hosts, so the timing would have to have
+been implausibly unlucky. Since #33554, however, it's more likely because the
+race occurs between the start of the first round of pinging and the writing of
+the unicast hosts file. It is realistic that new nodes will be configured with
+the existing nodes from startup, so this change reinstates that behaviour.
+
+Closes #35052.

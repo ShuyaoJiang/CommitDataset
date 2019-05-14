@@ -1,0 +1,15 @@
+Prevent adding newline if Base64 buffer encoded ends directly on MAX_LINE_LENGTH
+
+Motivation:
+
+We need to ensure we not add a newline if the Base64 encoded buffer ends directly on the MAX_LINE_LENGTH. If we miss to do so this produce invalid data.
+Because of this bug OpenSslServerContext and OpenSslClientContext may fail to load a cert.
+
+Modifications:
+
+- Only add NEW_LINE if we not are on the end of the dst buffer.
+- Add unit test
+
+Result:
+
+Correct result in all cases

@@ -1,0 +1,18 @@
+Set thread context classloader in a doPrivileged block
+
+Motivation:
+
+In a few classes, Netty starts a thread and then sets the context classloader of these threads
+to prevent classloader leaks. The Thread#setContextClassLoader method is a privileged method in
+that it requires permissions to be executed when there is a security manager in place. Unless
+these calls are wrapped in a doPrivileged block, they will fail in an environment with a security
+manager and restrictive policy in place.
+
+Modifications:
+
+Wrap the calls to Thread#setContextClassLoader in a AccessController#doPrivileged block.
+
+Result:
+
+After this change, the threads can set the context classloader without any errors in an
+environment with a security manager and restrictive policy in place.

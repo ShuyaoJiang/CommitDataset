@@ -1,0 +1,10 @@
+Propogate startup failures to management context
+
+Update EndpointWebMvcAutoConfiguration so that ApplicationFailedEvents
+cause the management context to close.
+
+Prior to this commit if an application failed to start (for example
+because `server.port` was already in use) the management context would
+remain open and the application would not exit.
+
+Fixes gh-5388

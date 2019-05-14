@@ -1,0 +1,14 @@
+Enable smoke-test-watcher with logging (#39169)
+
+SmokeTestWatcherTestSuiteIT.testMonitorClusterHealth has failed a few
+times with various causes (not all of which we have logs for).
+
+This change enables the test again.
+
+1. The fix from #39092 should resolve any issues in assertWatchCount
+2. In at least 1 case, getWatchHistoryEntry failed due to a
+   ResponseException, which is not caught by assertBusy.
+   This commit catches those and calls "fail" so that assertBusy will
+   sleep and retry
+3. Additional logging has been included to help diagnose any other
+   failures causes.

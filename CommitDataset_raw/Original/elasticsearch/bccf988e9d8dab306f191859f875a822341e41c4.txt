@@ -1,0 +1,33 @@
+Run active directory tests against a samba4 fixture (elastic/x-pack-elasticsearch#4067)
+
+This commit adds a Samba4 test fixture that acts as a domain controller
+and has the same contents as the cloud active directory instance that
+we previously used for tests.
+
+The tests also support reading information from environment variables
+so that they can be run against a real active directory instance in our
+CI builds.
+
+In addition, this commit also fixes a few issues that surfaced when
+making this change. The first is a change in the base DN that is
+searched when performing down-level authentication. The base DN is
+now the configuration object instead of the domain DN. This change was
+required due to the original producing unnecessary referrals, which we
+cannot easily follow when running against this test figure. Referrals
+cannot easily be followed as they are returned by the ldap server with
+an unresolvable DNS name unless the host points to the samba4 instance
+for DNS. The port returned in the referral url is the one samba is bound
+to, which differs from the port that is forwarded to the host by the
+test fixture.
+
+The other issue that is resolved by this change is the addition of
+settings that allow specifying non-standard ports for active directory.
+This is needed for down-level authentication as we may need to query
+the regular port of active directory instead of the global catalog
+port as the configuration object is not replicated to the global
+catalog.
+
+relates elastic/x-pack-elasticsearch#185
+Relates elastic/x-pack-elasticsearch#3800
+
+Original commit: elastic/x-pack-elasticsearch@883c742fbae425c70fbe3cb5a64b913336d344a1

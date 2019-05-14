@@ -1,0 +1,16 @@
+Prevent Gradle from pulling in groovy-all with the remote shell starter
+
+Sadly, Gradle handle's exclusions differently to Maven even when it's
+processing a Maven pom.
+
+In this case groovy-all is pulled in via org.crashub:crash.shell where
+we've excluded it. This is enough to prevent Maven from pulling in
+groovy-all when you depend on the remote shell starter.
+org.crashub:crash.shell is also pulled in as a transitive dependency
+of a number of other dependencies and Gradle requires each of these
+to also exclude groovy-all for it to actually be excluded.
+
+This commit adds the additional exclusions that are required to make
+Gradle's behaviour sane.
+
+Fixes gh-2257

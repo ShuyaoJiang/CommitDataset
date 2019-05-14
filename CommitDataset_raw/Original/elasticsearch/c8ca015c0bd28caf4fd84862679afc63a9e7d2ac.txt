@@ -1,0 +1,15 @@
+Check bucket metric ages point to a multi bucket agg (#26215)
+
+* Check bucket metric ages point to a multi bucket agg
+
+This adds a validation step to the BucketMetricsPipelineAggregationBuilder which ensure that the first aggregation in the `buckets_path` is a multi-bucket aggregation. It does this using a new `MultiBucketAggregationBuilder` marker interface.
+
+The change also moves the validate of pipeline aggregations to the `AggregatorFactories.build()` method so the validate can inspect sibling `AggregatorBuilder` objects rather than `AggregatorFactory` objects. Further it removes the validate from `AggregatorFactory` since this was never implemented and since aggregators only depend on their own internal state and not on other aggregators they should be validated ideally at setter time but in rare case where this is not possible the validation should be done in the `AggregationBuilder.build()` step.
+
+Closes #25775
+
+Move validate stage to happen during AggregatorFactories.Builder.build
+
+Also removes validate method from normal aggs since it was never used.
+
+* review comment fix

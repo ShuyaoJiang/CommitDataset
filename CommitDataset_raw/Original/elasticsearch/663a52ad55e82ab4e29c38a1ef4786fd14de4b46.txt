@@ -1,0 +1,13 @@
+Add useful message when no input from terminal (#29369)
+
+Today when a user runs a CLI tool with standard input closed and no tty
+attached, the result from reading is null and this usually leads to a
+null pointer exception when we try to parse this input. This arises for
+example when the user runs the plugin installer through a Docker
+container without leaving standard input open and attaching a tty
+(docker exec <container ID> bin/elasticsearch-plugin install). When we
+try to read that the user accepts the plugin requiring additional
+security permissions we will get back null. This commit addresses this
+for all cases by throwing an illegal state exception. The solution for
+the user is leave standard input open and attach a tty (or, for some
+tools, use batch mode).

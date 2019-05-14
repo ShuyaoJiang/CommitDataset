@@ -1,0 +1,26 @@
+Second try at adding MoreExecutors.platformThreadFactory().
+Now if ThreadManager.currentRequestThreadFactory() throws, we fall back to Executors.defaultThreadFactory().
+In particular, this happens when AppEngine is running in this JVM, but there is no AppEngine context for the current thread (i.e. we're "outside" appengine).
+
+*** Reason for rollback ***
+
+Roll forward after handling leaked system properties more robustly.
+
+*** Original change description ***
+
+Automated g4 rollback of changelist 35431636.
+
+*** Reason for rollback ***
+
+Breaks puppet tests, where we falsely detect the environment to be AppEngine due to system property leakage.
+
+*** Original change description ***
+
+Add MoreExecutors.platformThreadFactory(), an AppEngine-aware version of Executors#defaultThreadFactory.
+
+Update classes within c.g.c
+
+... description truncated by g4 rollback ...
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=35820196

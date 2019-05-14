@@ -1,0 +1,16 @@
+Upgrade to Log4j 2.9.1
+
+This commit uppgrade our Log4j dependency to 2.9.1. It also modifies
+ModifiedClassPathRunner so that log4j-*.jar jars are always excluded
+from the class path when using the runner. This is necessary due to
+a change in Log4j [1] which makes assumptions about the class loader
+hierarchy that do not hold true when using the modified class path
+runner. Specifically, it assumes that the system class loader should
+always be used to load providers. This is exactly what we don't want
+to happen when using the modified class path runner as it breaks the
+filtering of the class path and leads to Log4j classes being loaded
+from both the system class loader and the filtering class loader.
+
+Closes gh-10407
+
+[1] https://github.com/apache/logging-log4j2/commit/9422ca7489d545b92dda9dd357c1b057d7a2f217

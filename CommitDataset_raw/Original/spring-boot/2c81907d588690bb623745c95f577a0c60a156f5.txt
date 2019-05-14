@@ -1,0 +1,15 @@
+Flesh out and polish Embedded MongoDB auto-configuration contribution
+
+Embedded MongoDB is now auto-configured when it is on the classpath.
+The Mongo instance will listen on the port specified by the
+spring.data.mongodb.port property. If this property has a value of
+zero and randomly allocated port will be used. In such an event, the
+MongoClient created by MongoAutoConfiguration will be automatically
+configured to use the port that was allocated.
+
+By default, MongoDB 2.6.10 will be used. This can be configured using
+the spring.embedded-mongodb.version property. Mongo's sync delay
+feature is enabled by default. This can be configured using the
+spring.embedded-mongobd.features property.
+
+Closes gh-2002

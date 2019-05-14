@@ -1,0 +1,16 @@
+Add cgroup memory usage/limit to OS stats on Linux (#26166)
+
+This change adds cgroup memory usage/limit to the OS stats section of
+the node stats on Linux.  This information is useful because in Docker
+containers the standard node stats report the host memory limit, not
+taking account of extra restrictions that may have been applied to the
+container.
+
+The original idea was to store these values as Long, truncating any values
+outside the range of long.  However, this meant that in the relatively common
+case of no limit being applied, users would not see the same value in the OS
+stats as they see by querying Linux directly.  So instead the values are stored
+as String.  This change places a burden on consumers of the strings to
+convert the strings to numbers and decide what to do about extremely large
+values, but there will be very few consumers and they would need to have a
+policy for dealing with "no limit" in any case.

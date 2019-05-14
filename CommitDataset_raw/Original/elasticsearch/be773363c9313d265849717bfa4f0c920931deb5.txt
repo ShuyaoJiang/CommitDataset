@@ -1,0 +1,13 @@
+Do not fail requests on exceptions from native roles store (elastic/x-pack-elasticsearch#2857)
+
+This commit changes the handling of exceptions when retrieving roles from the native roles store.
+Previously, exceptions would have caused the request to terminate and the exception would be
+sent back to the user. This makes for a bad experience when a cluster hasn't been upgraded to the
+latest index format and anonymous access is enabled with a native role as all requests without
+preemptive basic authentication would result in an exception. The change here is to allow the
+request to continue processing. Once the security index is up to date, the roles cache is cleared
+so that the native roles can be picked up.
+
+relates elastic/x-pack-elasticsearch#2686
+
+Original commit: elastic/x-pack-elasticsearch@ef5149140f18e41a08b045f60f6debf988bfca74

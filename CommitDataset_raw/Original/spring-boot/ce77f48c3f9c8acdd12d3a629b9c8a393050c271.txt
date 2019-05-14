@@ -1,0 +1,23 @@
+Fall back to JVM's class path when TCCL is not a URLClassLoader
+
+Previously, DevTools assumed that the TCCL was a URLClassLoader
+when trying to determine the URLs that it should examine to determine
+the locations that should be watched for triggering a restart. This
+fails on Java 9 as the TCCL is not a URLClassLoader.
+
+This commit updates the logic that determines the changeable URLs to
+fall back to examining the JVM's class path when the TCCL is not a
+URLClassLoader, typically because the application is running on Java
+9. This fall back isn't a direct equivalent of the behaviour on Java 8
+as the class path of the TCCL and the class path with which the JVM
+was launched may not be the same. However, I consider the fix to be
+reasonable for two reasons:
+
+1. In reality, the class path of the TCCL and the class path with
+   which the JVM was launched are the same.
+2. There appears to be now to get the URLs on the class path of the
+   TCCL on Java 9. There is a URLClassPath field, however Java 9's
+   access restrictions prevent us from using it even if we resort to
+   reflection.
+
+Closes gh-10454

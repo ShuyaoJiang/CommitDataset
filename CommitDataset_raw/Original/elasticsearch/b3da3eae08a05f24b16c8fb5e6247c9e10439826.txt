@@ -1,0 +1,12 @@
+[ILM] Fix race condition in test (#35143)
+
+Previously, testRunStateChangePolicyWithNextStep asserted that the
+ClusterState before and after running the steps were equal. The test
+only passed due to a race condition: The latch would be triggered by the
+step execution, but the cluster state update thread would continue
+running before committing the change to the cluster state. This allowed
+the test to read the old cluster state and pass the equality check about
+99.99% of the time.
+
+The test now waits for the new cluster state to be committed before
+checking that it is _not_ equal to the old cluster state.

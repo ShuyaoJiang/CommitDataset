@@ -1,0 +1,66 @@
+Fix DefaultHttpDataFactory cleanup bug
+
+Motivation:
+
+DefaultHttpDataFactory uses HttpRequest as map keys.
+
+Because of the implementation of "hashCode"" and "equals" in DefaultHttpRequest,
+if we use normal maps, HttpDatas of different requests may end up in the same map entry,
+causing cleanup bug.
+
+Consider this example:
+- Suppose that request1 is equal to request2, causing their HttpDatas to be stored in one single map entry.
+- request1 is cleaned up first, while request2 is still being decoded.
+- Consequently request2's HttpDatas are suddenly gone, causing NPE, or worse loss of data.
+
+This bug can be reproduced by starting the HttpUploadServer example,
+then run this command:
+ab -T 'application/x-www-form-urlencoded' -n 100 -c 5 -p post.txt http://localhost:8080/form
+
+post.txt file content:
+a=1&b=2
+
+There will be errors like this:
+java.lang.NullPointerException
+        at io.netty.handler.codec.http.multipart.MemoryAttribute.getValue(MemoryAttribute.java:64)
+        at io.netty.handler.codec.http.multipart.MixedAttribute.getValue(MixedAttribute.java:243)
+        at io.netty.example.http.upload.HttpUploadServerHandler.writeHttpData(HttpUploadServerHandler.java:271)
+        at io.netty.example.http.upload.HttpUploadServerHandler.readHttpDataChunkByChunk(HttpUploadServerHandler.java:230)
+        at io.netty.example.http.upload.HttpUploadServerHandler.channelRead0(HttpUploadServerHandler.java:193)
+        at io.netty.example.http.upload.HttpUploadServerHandler.channelRead0(HttpUploadServerHandler.java:66)
+        at io.netty.channel.SimpleChannelInboundHandler.channelRead(SimpleChannelInboundHandler.java:105)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+        at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+        at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:102)
+        at io.netty.handler.codec.MessageToMessageCodec.channelRead(MessageToMessageCodec.java:111)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+        at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+        at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
+        at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+        at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+        at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1412)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+        at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+        at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:943)
+        at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:141)
+        at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:645)
+        at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:580)
+        at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:497)
+        at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:459)
+        at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+        at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+        at java.lang.Thread.run(Thread.java:748)
+
+Modifications:
+
+Keep identity of requests by using IdentityHashMap
+
+Result:
+
+DefaultHttpDataFactory is fixed.
+
+The ConcurrentHashMap is replaced with a synchronized map, but I think the performance won't be affected much in real web apps.

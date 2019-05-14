@@ -1,0 +1,10 @@
+Use holder pattern for lazy deprecation loggers
+
+In a few places we need to lazy initialize static deprecation
+loggers. This is needed to avoid touching logging before logging is
+configured, but deprecation loggers that are used in foundational
+classes like settings and parsers would be initialized before logging is
+configured. Previously we used a lazy set once pattern which is fine,
+but there's a simpler approach: the holder pattern.
+
+Relates #26218

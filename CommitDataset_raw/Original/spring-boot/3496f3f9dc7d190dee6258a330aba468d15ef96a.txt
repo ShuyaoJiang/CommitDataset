@@ -1,0 +1,9 @@
+Add marker interface for non-embedded servlet container
+
+ErrorPageFilter is itself an EmbeddedServletContainerFactory
+but it runs in a non-embedded container. Any component that assumes
+the presence of an EmbeddedServletContainerFactory implies we are
+running embedded is therefore invalid. WebSocketAutoConfiguration
+had that problem.
+
+Fixes gh-551

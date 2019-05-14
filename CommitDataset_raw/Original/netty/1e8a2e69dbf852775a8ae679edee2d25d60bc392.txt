@@ -1,0 +1,13 @@
+[#3592] Flush when writing HttpChunkedInput
+
+Motivation:
+
+We missed to flush the channel when using HttpChunkedInput (this is done when using SSL). This will result in a stale.
+
+Modifications:
+
+Replace ctx.write(...) with ctx.writeAndFlush(...)
+
+Result:
+
+Correctly working example.

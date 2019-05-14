@@ -1,0 +1,11 @@
+Fix Netty 4 multi-port test
+
+This commit fixes an issue with the Netty 4 multi-port test that a
+transport client can connect. The problem here is that in case the
+bottom of the random port range was already bound to (for example, by
+another JVM) then then transport client could not connect to the data
+node. This is because the transport client was in fact using the bottom
+of the port range only. Instead, we simply try all the ports that the
+data node might be bound to.
+
+Closes #24441

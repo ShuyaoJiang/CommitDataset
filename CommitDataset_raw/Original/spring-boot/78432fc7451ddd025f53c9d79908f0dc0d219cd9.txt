@@ -1,0 +1,13 @@
+Disable javadoc linting when building with JDK 8+
+
+Java 8 introduced new, aggressive linting of javadoc that’s enabled by
+default. The linter isn’t sufficiently configurable to allow us to tune
+it to meet the project’s conventions for javadoc so our only realistic
+option is to disable linting.
+
+This commit introduces a new profile to disable javadoc linting. To
+maintain compatibility with JDK 7, the profile is only active when the
+build’s running on JDK 8 or later.
+
+Closes gh-2233
+

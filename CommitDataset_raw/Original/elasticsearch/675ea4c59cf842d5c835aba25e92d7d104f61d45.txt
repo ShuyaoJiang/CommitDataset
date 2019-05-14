@@ -1,0 +1,6 @@
+TESTS: Remove Static Threadpool in TaskManagerTest (#36976)
+
+* The static threadpool leaks a lot of memory in these tests because it prevents things like the connect listeners from `org.elasticsearch.transport.TcpTransport#initiateConnection`
+to be GCed between tests (since they keep being referenced by the threadpool) which in turn reference channels and their underlying buffers
+  * I could not find any slowdown in executing these tests from this change, if anything they are slightly faster now on my machine
+* Relates #36906 (which may be caused by slowness from leaking memory and also becomes testable in a loop by this change)

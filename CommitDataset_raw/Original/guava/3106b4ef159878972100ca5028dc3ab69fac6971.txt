@@ -1,0 +1,19 @@
+Fix links to JSR305, and start linking to JDK 9.
+
+The main problem with the JSR305 links is that the JDK -link argument was "claiming" the javax.annotations package. This was happening for 2 reasons:
+- <detectJavaApiLink> defaults to true, so Maven adds its own -link (or -linkoffline, not sure) for the JDK. So I unset it.
+- We manually specified a -link argument, and Maven's command-line order puts -link before -linkoffline (which, oh, we're now using -- see below). So I made the JDK a -linkoffline argument, too, which is still possible when we're pulling the package-list from online.
+
+There's an additional problem, which is that Javadoc (or Maven? I forget) tries to download http://static.javadoc.io/com.google.code.findbugs/jsr305/3.0.1/, which gives an access denied error, even though it needs only the package-list file in that directory, which downloads fine. As a fix, make our own local copy of that package-info file. I've also done that for j2objc-annotations, though currently none of its annotations are @Documented, so it's not doing us much good yet.
+
+Then, in the process of switching to a manual -link for the JDK, I lost JDK links. It turns out that Javadoc doesn't like the http links to the Oracle site, even though it's fine with http links from other sites. I switched to https (and did the same for the other projects while I was there), and I posted this on https://stackoverflow.com/q/29867384/28465#comment80906399_29867384 to hopefully help anyone else in this situation. (I'll also try to ask our Java platform team about fixing the javadoc man page.)
+
+Conveniently, the switch to a manual -link also lets us choose which version of the JDK to link to. It seems like Java 9 makes the most sense...? It's true that we promise compatibility with Java 8, but I think the normal thing would be to link to the newest version. I see in particular that we linked to Java 7 from the backport. That's defensible, but it's a bit weird: The primary target for the backport is Android, and we target a "Java-6-like" version of the Android SDK. The only "Java-7-like" thing we do is use language features like the diamond operator. The Java 7 link does make sense for actual Java 7 users, but I still think we're likely better off linking to JDK 9 Javadoc and letting users look at @since when they want. This should also help in cases in which we want to link to a newer type along the lines of "If you can use java.util.function.Function, do so."
+
+(Oh, and while I was there, I added a comment to explain why we *also* need JDK sources, as I'd forgotten.)
+
+Fixes https://github.com/google/guava/issues/2965
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=173688451

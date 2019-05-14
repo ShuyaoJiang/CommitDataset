@@ -1,0 +1,12 @@
+Fix @SubscribeMapping MESSAGE response destination
+
+Prior to this commit, @SubscribeMapping mapped methods (backed with
+@SendTo* annotations, or not) would send MESSAGEs with the wrong
+destination. Instead of using the original SUBSCRIBE destination, it
+would use the lookup path computed from the configured prefixes in the
+application.
+
+This commit fixes this issue - now @SubscribeMapping MESSAGEs use the
+original SUBSCRIBE destination.
+
+Issue: SPR-11648

@@ -1,0 +1,28 @@
+[Rollup] Improve ID scheme for rollup documents (#32558)
+
+Previously, we were using a simple CRC32 for the IDs of rollup documents.
+This is a very poor choice however, since 32bit IDs leads to collisions
+between documents very quickly.
+
+This commit moves Rollups over to a 128bit ID.  The ID is a concatenation
+of all the keys in the document (similar to the rolling CRC before),
+hashed with 128bit Murmur3, then base64 encoded.  Finally, the job
+ID and a delimiter (`$`) are prepended to the ID.
+
+This gurantees that there are 128bits per-job.  128bits should
+essentially remove all chances of collisions, and the prepended
+job ID means that _if_ there is a collision, it stays "within"
+the job.
+
+BWC notes:
+
+We can only upgrade the ID scheme after we know there has been a good
+checkpoint during indexing.  We don't rely on a STARTED/STOPPED
+status since we can't guarantee that resulted from a real checkpoint,
+or other state.  So we only upgrade the ID after we have reached
+a checkpoint state during an active index run, and only after the
+checkpoint has been confirmed.
+
+Once a job has been upgraded and checkpointed, the version increments
+and the new ID is used in the future.  All new jobs use the
+new ID from the start

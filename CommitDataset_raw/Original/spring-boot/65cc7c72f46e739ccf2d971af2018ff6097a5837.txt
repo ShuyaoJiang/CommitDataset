@@ -1,0 +1,10 @@
+Harmonize JNDI lookups to enable resourceRef
+
+This commit makes sure that JMS and Mail JNDI lookups behave the same
+way as DataSource JNDI lookups by enabling the "resourceRef" flag.
+
+This will make sure to add "java:comp/env" to the lookup if the JNDI
+name doesn't already contain it. If that name does not exist, a second
+attempt to the original name will be issued automatically.
+
+Closes gh-12803

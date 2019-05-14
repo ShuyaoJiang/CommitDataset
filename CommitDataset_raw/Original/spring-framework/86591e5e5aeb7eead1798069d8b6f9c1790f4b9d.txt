@@ -1,0 +1,10 @@
+Support implicit ports in MHSR.getRequestURL()
+
+Prior to this commit, MockHttpServletRequest.getRequestURL() always
+included the server port number in the reconstructed request URL, even
+for implicit ports (i.e., 80 and 443) and negative ports.
+
+MockHttpServletRequest.getRequestURL() now omits the port number when
+reconstructing a URL that has an implicit or negative port.
+
+Issue: SPR-9726

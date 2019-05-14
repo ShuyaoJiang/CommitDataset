@@ -1,0 +1,15 @@
+Fix broken constructor chaining for FixedChannelPool class.
+
+Motivation:
+
+Only one of the three FixedChannelPool constructors checks for the constructor
+arguments. Therfore it was possible to create a pool with zero maxConnections.
+
+This change chains all constructors together, so that the last one
+in the chain always checks the validity of the arguments, regardless of the
+constructor used.
+
+Result:
+
+It is no longer possible to create a FixedChannelPool instance with invalid
+maxConnections or maxPendingAcquires parameters.

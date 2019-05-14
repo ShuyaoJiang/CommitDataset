@@ -1,0 +1,20 @@
+Move request line and status line out of RawHeaders.
+
+The request line is now standalone because it depends
+on the proxy (for full URL or not) and the connection
+(for HTTP version). I may change this later and put
+this info in the request.
+
+The status line now moves into Response. I have a
+helper class StatusLine that does the parsing. I may
+later want to hide this or make it public; I'm not
+quite sure yet!
+
+The net result is that RawHeaders is getting dumber
+and used in fewer places, which is good news. This
+change also shows nice simplifications to the
+authenticator (which needs fewer args) and to the
+tunnel builder.
+
+Also fold together HttpsEngine and HttpEngine; the
+HTTPS subclass wasn't pulling its weight.

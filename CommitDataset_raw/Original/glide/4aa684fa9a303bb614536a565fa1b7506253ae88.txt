@@ -1,0 +1,21 @@
+Disable cross fade in TransitionDrawable by default
+
+The cross fade method in TransitionDrawable controls whether or not the
+Drawable transitioned from is faded out.
+
+If cross fading is enabled, the old Drawable's alpha is animated from
+100 to 0 while the new Drawable's alpha is animated from 0 to 100. Using
+this behavior can cause performance problems on older phones and
+produces a whiteout affect in the middle of the transition where both
+Drawables are at 50% opacity but the background color behind the
+TransitionDrawable can be seen clearly.
+
+With cross fading disabled, the old Drawable's alpha is not animated and
+the new Drawable is simply faded in on top of the old Drawable.
+
+This does change the default behavior in Glide. If users prefer the old
+behavior, they can use DrawableCrossFadeFactory.Builder to re-enable
+TransitionDrawable's cross fade.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=122579678

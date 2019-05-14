@@ -1,0 +1,17 @@
+Clarify acquiring index shard permit
+
+In previous work, we refactored the delay mechanism in index shard
+operation permits to allow for async delaying of acquisition. This
+refactoring made explicit when permit acquisition is disabled whereas
+previously we were relying on an implicit condition, namely that all
+permits were acquired by the thread trying to delay acquisition. When
+using the implicit mechanism, we tried to acquire a permit and if this
+failed, we returned a null releasable as an indication that our
+operation should be queued. Yet, now we know when we are delayed and we
+should not even try to acquire a permit. If we try to acquire a permit
+and one is not available, we know that we are not delayed, and so
+acquisition should be successful. If it is not successful, something is
+deeply wrong. This commit takes advantage of this refactoring to
+simplify the internal implementation.
+
+Relates #24971

@@ -1,0 +1,14 @@
+Unwrap if necessary for MultipartHttpServletRequest
+
+Before this commit RequestPartServletServerHttpRequest simply did an
+instanceof check for MultipartHttpServletRequest. That hasn't failed
+because request wrapping typically happens in filters before the
+DispatcherServlet calls the MultipartResolver.
+
+With Spring MVC Test and the Spring Security integraiton however,
+this order is reversed since there we prepare the multipart request
+upfront, i.e. there is no actual parsing.
+
+The commit unwraps the request if necessary.
+
+Issue: SPR-13317

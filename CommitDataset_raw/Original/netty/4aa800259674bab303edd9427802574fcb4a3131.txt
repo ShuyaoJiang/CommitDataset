@@ -1,0 +1,13 @@
+Not add ChannelHandler to ChannelPipeline once the pipeline was destroyed.
+
+Motivation:
+
+ChannelPipeline will happily add a handler to a closed Channel's pipeline and will call handlerAdded(...) but will not call handlerRemoved(...).
+
+Modifications:
+
+Check if pipeline was destroyed and if so not add the handler at all but propergate an exception.
+
+Result:
+
+Fixes [#6768]

@@ -1,0 +1,11 @@
+Reduce GC pressure in JAR handler
+
+Update the JAR `Hander` so that URL `startsWith` checks produce less
+garbage. Comparisons are now performed first on the `path` rather than
+the full `toString`. URL `toString` operations produce quite a lot of
+garbage since a `StringBuilder` is always used.
+
+In addition, we now also cache the JarFile URL toString to save repeated
+calculation.
+
+Closes gh-14561

@@ -1,0 +1,14 @@
+Allow to allign allocated Buffers
+
+Motivation:
+
+64-byte alignment is recommended by the Intel performance guide (https://software.intel.com/en-us/articles/practical-intel-avx-optimization-on-2nd-generation-intel-core-processors) for data-structures over 64 bytes.
+Requiring padding to a multiple of 64 bytes allows for using SIMD instructions consistently in loops without additional conditional checks. This should allow for simpler and more efficient code.
+
+Modification:
+
+At the moment cache alignment must be setup manually. But probably it might be taken from the system. The original code was introduced by @normanmaurer https://github.com/netty/netty/pull/4726/files
+
+Result:
+
+Buffer alignment works better than miss-align cache.

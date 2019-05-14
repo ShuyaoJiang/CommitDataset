@@ -1,0 +1,69 @@
+Azure repository: Move to named configurations as we do for S3 repository
+
+We should have the same behavior for Azure repositories as we have for S3 (see #22762).
+
+Instead of:
+
+```yml
+cloud:
+    azure:
+        storage:
+            my_account1:
+                account: your_azure_storage_account1
+                key: your_azure_storage_key1
+                default: true
+            my_account2:
+                account: your_azure_storage_account2
+                key: your_azure_storage_key2
+```
+
+Support something like:
+
+```
+azure.client:
+            default:
+                account: your_azure_storage_account1
+                key: your_azure_storage_key1
+            my_account2:
+                account: your_azure_storage_account2
+                key: your_azure_storage_key2
+```
+
+Then instead of:
+
+```
+PUT _snapshot/my_backup3
+{
+    "type": "azure",
+    "settings": {
+        "account": "my_account2"
+    }
+}
+```
+
+Use:
+
+```
+PUT _snapshot/my_backup3
+{
+    "type": "azure",
+    "settings": {
+        "config": "my_account2"
+    }
+}
+```
+
+If someone uses:
+
+```
+PUT _snapshot/my_backup3
+{
+    "type": "azure"
+}
+```
+
+It will use the `default` azure repository settings.
+
+And mark as deprecated old settings.
+
+Closes #22763.

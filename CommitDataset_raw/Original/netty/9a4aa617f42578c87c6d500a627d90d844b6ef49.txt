@@ -1,0 +1,11 @@
+PlatformDependent#getClassLoader fails in restrictive classloader environment
+
+Motivation:
+https://github.com/netty/netty/pull/6042 only addressed PlatformDependent#getSystemClassLoader but getClassLoader is also called in an optional manner in some common code paths but fails to catch a general enough exception to continue working.
+
+Modifications:
+- Calls to getClassLoader which can continue if results fail should catch Throwable
+
+Result:
+More resilient code in the presense of restrictive class loaders.
+Fixes https://github.com/netty/netty/issues/6246.

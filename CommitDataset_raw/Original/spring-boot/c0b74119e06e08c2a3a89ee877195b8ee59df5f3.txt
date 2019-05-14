@@ -1,0 +1,13 @@
+Use manifest from class’s jar when defining its package
+
+Previously, when defining a package for a class, LaunchedURLClassLoader
+would use the manifest from the first location that contained the
+required package. If the package was split across multiple locations,
+this could lead to the manifest from a jar other than the one that
+contains the class being used.
+
+This commit updates LaunchedURLClassLoader so that it will use the
+manifest of the jar file that contains the class which triggered the
+definition of the package.
+
+Closes gh-5485

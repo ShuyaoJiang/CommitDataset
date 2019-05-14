@@ -1,0 +1,4 @@
+Avoid using MapRetrievalCache unless node lookup is expensive. The class constructs "CacheEntry" objects when adding to the cache, which if the cache is not used makes us slower, and even if the cache is used is roughly a wash speed-wise if map lookup is fast (e.g. a HashMap or ImmutableMap, and an object with a reasonable hashCode()).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=126874176

@@ -1,0 +1,9 @@
+Update test to correct name of metric for request that returns a 401
+
+The request is being made to '/' and, while the application does have
+a mapping for '/', that mapping is not looked for before Spring
+Security's filter rejects the request with a 401. This means that the
+request is considered to be unmapped and this is reflected in the
+metric's name.
+
+See #1331 and #1333

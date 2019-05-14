@@ -1,0 +1,8 @@
+Clear FallbackFuture.running, this used to be the behavior but it was lost when updating this method to use setFuture.
+
+This fixes: https://github.com/google/guava/issues/1937
+
+In addition to not pinning the input future, i also changed it so that a call to cancel() prior to the input completing, does not trigger a CancellationException in the listener.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=83951020

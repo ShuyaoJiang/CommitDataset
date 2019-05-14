@@ -1,0 +1,13 @@
+Ensure we use a MPMC queue in ThreadDeathWatcher as it may be used from multiple threads at the same time.
+
+Motivation:
+
+We used a MPSC queue in ThreadDeathWatcher and checked if it empty via isEmpty() from multiple threads if very unlucky. Depending on the implementation this is not safe and may even produce things like live-locks.
+
+Modifications:
+
+Change to use a MPMC queue.
+
+Result:
+
+No more risk to run into issues when multiple threads call watch(...) / unwatch(...) concurrently.

@@ -1,0 +1,19 @@
+Raise an exception when the specified cipher suite is not available
+
+Motivation:
+
+SSL_set_cipher_list() in OpenSSL does not fail as long as at least one
+cipher suite is available.  It is different from the semantics of
+SSLEngine.setEnabledCipherSuites(), which raises an exception when the
+list contains an unavailable cipher suite.
+
+Modifications:
+
+- Add OpenSsl.isCipherSuiteAvailable(String) which checks the
+  availability of a cipher suite
+- Raise an IllegalArgumentException when the specified cipher suite is
+  not available
+
+Result:
+
+Fixed compatibility

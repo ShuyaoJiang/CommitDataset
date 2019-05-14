@@ -1,0 +1,23 @@
+OCSP stapling support for Netty using netty-tcnative.
+
+https://github.com/netty/netty-tcnative/pull/215
+
+Motivation
+
+OCSP stapling (formally known as TLS Certificate Status Request extension) is alternative approach for checking the revocation status of X.509 Certificates. Servers can preemptively fetch the OCSP response from the CA's responder, cache it for some period of time, and pass it along during (a.k.a. staple) the TLS handshake. The client no longer has to reach out on its own to the CA to check the validity of a cetitficate. Some of the key benefits are:
+
+1) Speed. The client doesn't have to crosscheck the certificate.
+2) Efficiency. The Internet is no longer DDoS'ing the CA's OCSP responder servers.
+3) Safety. Less operational dependence on the CA. Certificate owners can sustain short CA outages.
+4) Privacy. The CA can lo longer track the users of a certificate.
+
+https://en.wikipedia.org/wiki/OCSP_stapling
+https://letsencrypt.org/2016/10/24/squarespace-ocsp-impl.html
+
+Modifications
+
+https://www.openssl.org/docs/man1.0.2/ssl/SSL_set_tlsext_status_type.html
+
+Result
+
+High-level API to enable OCSP stapling

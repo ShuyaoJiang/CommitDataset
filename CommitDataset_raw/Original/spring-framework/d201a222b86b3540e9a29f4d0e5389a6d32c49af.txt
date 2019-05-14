@@ -1,0 +1,12 @@
+Avoid locking in WebSocket session "close" callback
+
+When processing a "close" notification from the server make an effort
+to cancel any outstanding heartbeat but avoid going as far as acquiring
+the responseLock since the server itself may already hold a lock of its
+own leading to a potential deadlock.
+
+The heartbeat task is now also further protected with an isClosed()
+check in case the heartbeat does not get cancelled in a concurrent
+scenario.
+
+Issue: SPR-14917

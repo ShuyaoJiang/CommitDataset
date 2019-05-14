@@ -1,0 +1,14 @@
+Support distance units in GeoHashGrid aggregation precision (#26291)
+
+Currently the `precision` parameter must be a precision level
+in the range of [1,12]. In #5042 it was suggested also supporting
+distance units like "1km" to automatically approcimate the needed
+precision level. This change adds this support to the Rest API by
+making use of GeoUtils#geoHashLevelsForPrecision.
+
+Plain integer values without a unit are still treated as precision
+levels like before. Distance values that are too small to be represented
+by a precision level of 12 (values approx. less than 0.056m) are
+rejected.
+
+Closes #5042

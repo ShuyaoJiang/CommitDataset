@@ -1,0 +1,15 @@
+Add 'contains descendant of' support
+
+Update `ConfigurationPropertySource` with a `containsDescendantOf`
+method that can be used to tell if a source contains any descendants
+of the given name.
+
+The result is Optional so that sources that cannot determine a result
+may return `empty()`.
+
+The existing `IterableConfigurationPropertiesSource` has a default
+implementation that works by iterating the contained values. Most other
+sources return `empty()` with the exception of the adapted
+`RandomProperySource` with will return true for `random.*` names.
+
+See gh-9023

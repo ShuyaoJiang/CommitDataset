@@ -1,0 +1,24 @@
+WebSocket client handshaker to support "force close" after timeout (#8896)
+
+Motivation:
+
+RFC 6455 defines that, generally, a WebSocket client should not close a TCP
+connection as far as a server is the one who's responsible for doing that.
+In practice tho', it's not always possible to control the server. Server's
+misbehavior may lead to connections being leaked (if the server does not
+comply with the RFC).
+
+RFC 6455 #7.1.1 says
+
+> In abnormal cases (such as not having received a TCP Close from the server
+after a reasonable amount of time) a client MAY initiate the TCP Close.
+
+Modifications:
+
+* WebSocket client handshaker additional param `forceCloseAfterMillis`
+
+* Use 10 seconds as default
+
+Result:
+
+WebSocket client handshaker to comply with RFC. Fixes #8883.

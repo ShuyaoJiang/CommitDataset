@@ -1,0 +1,10 @@
+ByteBufUtil.writeUtf8 not consistent with String.getBytes(Charset)
+
+Motivation:
+f750d6e36c80e88fb302c99b5b7413e5649e6738 added support for surrogates in the writeUtf8 conversion. However exceptions are thrown if invalid input is detected, but the JDK (and slow path of writeUtf8) uses a replacement character and does not throw. We should behave the same way.
+
+Modificiations:
+- Don't throw in ByteBufUtil.writeUtf8, and instead use a replacement character consistent with the JDK
+
+Result:
+ByteBufUtil.writeUtf8 behavior is consistent with the JDK UTF_8 conversion.

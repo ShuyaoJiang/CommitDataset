@@ -1,0 +1,13 @@
+Ensure we not leave data in the BIO when error happens.
+
+Motivation:
+
+We need to ensure we consume all pending data in the BIO on error to correctly send the close notify for the remote peer.
+
+Modifications:
+
+Correctly force the user to call wrap(...) if there is something left in the BIO.
+
+Result:
+
+close_notify is not lost.

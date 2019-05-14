@@ -1,0 +1,21 @@
+Enhance Parent circuit breaker error message (#32056)
+
+* Enhance Parent circuit breaker error message
+
+This adds information about either the current real usage (if tracking "real"
+memory usage) or the child breaker usages to the exception message when the
+parent circuit breaker trips.
+
+The messages now look like:
+
+```
+[parent] Data too large, data for [my_request] would be [211288064/201.5mb], which is larger than the limit of [209715200/200mb], usages [request=157286400/150mb, fielddata=54001664/51.5mb, in_flight_requests=0/0b, accounting=0/0b]
+```
+
+Or when tracking real memory usage:
+
+```
+[parent] Data too large, data for [request] would be [251/251b], which is larger than the limit of [200/200b], real usage: [181/181b], new bytes reserved: [70/70b]
+```
+
+* Only call currentMemoryUsage once by returning structured object

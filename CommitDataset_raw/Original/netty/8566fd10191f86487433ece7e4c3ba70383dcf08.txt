@@ -1,0 +1,22 @@
+Add startTls parameter to SslContextBuilder
+
+Motivation:
+
+There is an incoherence in terms of API when one wants to use
+startTls: without startTls one can use the SslContextBuilder's
+method newHandler, but with startTls, the developper is forced
+to call directly the SslHandler constructor.
+
+Modifications:
+
+Introduce startTls as a SslContextBuilder parameter as well as a
+member in SslContext (and thus Jdk and OpenSsl implementations!).
+Always use this information to call the SslHandler constructor.
+Use false by default, in particular in deprecated constructors of
+the SSL implementations.
+The client Context use false by default
+
+Results:
+
+Fixes #5170 and more generally homogenise the API so that
+everything can be done via SslContextBuilder.

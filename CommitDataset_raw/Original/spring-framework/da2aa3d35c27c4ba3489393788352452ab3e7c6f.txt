@@ -1,0 +1,33 @@
+Test pom generation and update optional deps
+
+Gradle-generated poms thoroughly tested against 3.1.1 versions, with an
+eye toward making as many spring-* dependencies optional as possible.
+
+All spring-* modules now declare a Gradle dependency on any other
+spring-* module where there is a direct compile-time usage of the
+sources in that module. Previously, dependency declarations were
+minimal, letting transitive resolution do most of the work. However,
+this creates less than ideal poms and is generally not very
+informative.
+
+So for example, spring-jdbc uses spring-core, spring-beans and
+spring-tx classes directly. Therefore it has the following declarations:
+
+  compile project(":spring-core")
+  compile project(":spring-beans")
+  compile project(":spring-tx")
+
+spring-core depends on spring-asm, but spring-jdbc does not use
+spring-asm classes directly. Therefore spring-jdbc does not declare a
+dependency on spring-asm. Transitive resolution is fine in such a case.
+
+As for optional dependencies, it is a matter of degrees what
+constitutes optional. A rule of thumb is whether there are legitimate
+and likely use cases in which the module can be used without needing
+the dependency. spring-jdbc has only one compile-time dependency on
+spring-context classes, and that's in JndiDataSourceLookup. It is
+certainly reasonable to imagine using spring-jdbc without JNDI,
+therefore the spring-context dependency is declared optional as
+follows:
+
+  compile(project(":spring-context"), optional) // for JndiDataSourceLookup

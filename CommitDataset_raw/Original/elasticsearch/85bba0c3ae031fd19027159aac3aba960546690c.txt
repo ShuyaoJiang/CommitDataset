@@ -1,0 +1,12 @@
+Simplify deprecation issue levels (#36326)
+
+This commit gets rid of the 'NONE' and 'INFO' severity levels for
+deprecation issues.
+
+'NONE' is unused and does not make much sense as a severity level.
+'INFO' can be separated into two categories: Either 1) we can
+definitively tell there will be a problem with the cluster/node/index
+configuration that can be resolved prior to upgrade, in which case
+the issue should be a WARNING, or 2) we can't, because any issues would
+be at the application level, for which the user should review the
+deprecation logs and/or response headers.

@@ -1,0 +1,22 @@
+Docs: Drop inline callouts from the java API (#39932)
+
+There is a single example in the Java API docs that contains an inline
+callout that is incompatible with Asciidoctor:
+
+```
+client.prepareUpdate("ttl", "doc", "1")
+        .setScript(new Script(
+            "ctx._source.gender = \"male\"" <1> , ScriptService.ScriptType.INLINE, null, null))
+        .get();
+```
+
+This rewrites the example to use an Asciidoctor compatible end of line
+callout. It also looks nicer to me because it fits better on the page.
+
+```
+client.prepareUpdate("ttl", "doc", "1")
+        .setScript(new Script(
+            "ctx._source.gender = \"male\"", <1>
+            ScriptService.ScriptType.INLINE, null, null))
+        .get();
+```

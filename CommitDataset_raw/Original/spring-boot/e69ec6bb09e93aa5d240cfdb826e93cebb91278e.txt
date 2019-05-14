@@ -1,0 +1,12 @@
+Log classpath once environment has been prepared
+
+Previously, the classpath would be logged in response to the
+ApplicationStartedEvent. At this point, logging could be disabled
+while the logging system is being initialized, or because the
+log levels configured in the environment have not yet been applied.
+
+This commit moves the logging to happen in response to an
+ApplicationEnvironmentPreparedEvent by which point the logging
+system has been initialized and its levels have been configured.
+
+Closes gh-5313

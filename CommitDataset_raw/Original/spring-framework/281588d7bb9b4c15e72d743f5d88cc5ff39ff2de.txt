@@ -1,0 +1,29 @@
+Add SimpUserRegistry with multi-server support
+
+This change introduces SimpUserRegistry exposing an API to access
+information about connected users, their sessions, and subscriptions
+with STOMP/WebSocket messaging. Provides are methods to access users
+as well as a method to find subscriptions given a Matcher strategy.
+
+The DefaultSimpUserRegistry implementation is also a
+SmartApplicationListener which listesn for ApplicationContext events
+when users connect, disconnect, subscribe, and unsubscribe to
+destinations.
+
+The MultiServerUserRegistry implementation is a composite that
+aggregates user information from the local SimpUserRegistry as well
+as snapshots of user  on remote application servers.
+
+UserRegistryMessageHandler is used with MultiServerUserRegistry. It
+broadcats user registry information through the broker and listens
+for similar broadcasts from other servers. This must be enabled
+explicitly when configuring the STOMP broker relay.
+
+The existing UserSessionRegistry which was primiarly used internally
+to resolve a user name to session id's has been deprecated and is no
+longer used. If an application configures a custom UserSessionRegistr
+still, it will be adapted accordingly to SimpUserRegistry but the
+effect is rather limited (comparable to pre-existing functionality)
+and will not work in multi-server scenarios.
+
+Issue: SPR-12029

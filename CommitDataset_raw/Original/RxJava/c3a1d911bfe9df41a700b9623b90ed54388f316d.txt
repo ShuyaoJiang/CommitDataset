@@ -1,0 +1,17 @@
+2.x: Make CompositeExcpetion thread-safe like 1.x and also fix some issues. (#4619)
+
+Right now CompositeExcpetion has several issues:
+
+- `CompositeException(Throwable... exceptions)` doesn't deduplicate exceptions and flatten CompositeExceptions like `CompositeException(Iterable<? extends Throwable> errors)`
+- If using `CompositeException(Iterable<? extends Throwable> errors)` to create CompositeException, `suppress` cannot be used.
+- `suppress` doesn't update `cause`.
+- `suppress` doesn't deduplicate exceptions and flatten CompositeExceptions.
+- `suppress` and `Throwable.addSuppressed` are pretty confusing for Java 7+ users. Without looking at the implementation, it's hard to figure out the differences.
+
+This PR made the following changes:
+
+- Remove `CompositeException.suppress` so that it's easy to make CompositeException thread-safe.
+  - This may cause some performance lost in some path rarely happening, e.g., an excpetion is thrown from `onError`, but that's not a big deal.
+  - Since `suppress` is removed, it doesn't make sense to create an empty CompositeException, so `isEmpty` is removed and defense codes are added.
+- Defense codes for bad exceptions.
+- Deduplicate excepctions and flatten CompositeExceptions for `CompositeException(Throwable... exceptions)`.

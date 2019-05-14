@@ -1,0 +1,21 @@
+Fix package cycle in @EnableMBeanExport
+
+Prior to this commit, @EnableMBeanExport was declared in the
+jmx.export.annotation package. This makes logical sense, but
+nevertheless creates a package cycle, because @EnableMBeanExport depends
+on MBeanExportConfiguration which in turn depends on context.annotation
+types like @Configuration, @Bean, and @Role.
+
+context.annotation.config.MBeanExportBeanDefinitionParser, on the other
+hand already has dependencies on types in jmx.support. Together, this
+means that a package cycle was introduced.
+
+The solution to this is simple: move @EnableMBeanExport and friends from
+jmx.export.annotation => context.annotation. This has been the strategy
+for other @Enable annotations and for the same reasons. It also makes a
+kind of logical sense: just like you find <context:mbean-export> and
+<context:load-time-weaver> under the context: XML namespace, so too do
+you find their @Enable* counterparts under the context.annotation
+namespace.
+
+Issue: SPR-8943

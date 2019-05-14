@@ -1,0 +1,16 @@
+Work around the JVM crash that occurs when cipher suite uses GCM
+
+Motivation:
+
+For an unknown reason, JVM of JDK8 crashes intermittently when
+SslHandler feeds a direct buffer to SSLEngine.unwrap() *and* the current
+cipher suite has GCM (Galois/Counter Mode) enabled.
+
+Modifications:
+
+Convert the inbound network buffer to a heap buffer when the current
+cipher suite is using GCM.
+
+Result:
+
+JVM does not crash anymore.

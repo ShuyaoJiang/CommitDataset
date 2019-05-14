@@ -1,0 +1,10 @@
+Build: Add back explicit exclusions and remove gradle exclusions (#24879)
+
+When transitive dependencies are disable for a dependency, gradle adds a
+wildcard exclusion to the generated pom. However, some external tools
+like ivy have bugs with wildcards. This commit adds back the explicit
+generation of transitive excludes, and removes the gradle generated
+exclusions element from the pom.
+
+closes #24490
+

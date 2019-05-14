@@ -1,0 +1,14 @@
+Upgrade to Spring Data Evans
+
+The missing bean condition on the auto-configuration classes for
+Elasticsearch, Jpa, Mongo and Solr repositories have been tightened to
+look for ElasticsearchRepositoryFactoryBean, JapRepositoryFactoryBean,
+MonoRepositoryFactoryBean, and SolrRepositoryFactoryBean respectively.
+
+In Spring Data Evans, when there are multiple repository types on the
+classpath, a strict mode is entered to prevent the different
+repositories from trampling over each other. A side-effect of this is
+that for the Mongo domain types in the tests to be discovered they
+must be explicitly annotated with @Document.
+
+Closes gh-1338

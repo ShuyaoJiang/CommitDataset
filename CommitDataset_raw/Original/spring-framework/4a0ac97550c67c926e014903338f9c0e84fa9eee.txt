@@ -1,0 +1,12 @@
+Fix regression in determineTransactionManager
+
+The fix in cec26e9 for SPR-12541 actually introduced a regression
+when the interceptor is enabled on a method that does not require any
+transaction. In such a case we try to locate the default
+PlatformTransactionManager instead of just returning what we have (that
+is null).
+
+This commit updates the determineTransactionManager condition again to
+take that use case into account again.
+
+Issue: SPR-12541

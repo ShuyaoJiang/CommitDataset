@@ -1,0 +1,12 @@
+Don’t return 404 when metric or env regex matches entry with null value
+
+Previously, if a regular expression was used when calling the metrics or
+environment endpoints, a metric or property with a null value would
+result in a 404 response.
+
+This commit updates the two affected endpoints so that any metric or
+property whose name matches the regular expression but has a null value
+is ignored. This allows all of the matching metrics or properties with
+non-null values to be returned in a 200 OK response.
+
+Closes gh-4552

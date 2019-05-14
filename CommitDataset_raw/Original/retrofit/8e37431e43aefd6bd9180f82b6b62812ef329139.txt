@@ -1,0 +1,7 @@
+Eagerly consume a stream when exposing to caller.
+
+HTTP responses return an input stream wrapped in a TypedInput which we pass to the converter for deserialization as fast as the bytes come in. If we are skipping the converter (non-2xx resposne code) or returning the response directly we eagerly consume the stream to a byte[] for the caller.
+
+If the converter threw an exception while reading the stream then it is nulled out before being handed to the RetrofitError. This prevents partially read streams from being exposed.
+
+Closes #181.

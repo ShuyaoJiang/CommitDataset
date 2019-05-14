@@ -1,0 +1,12 @@
+GEO: More robust handling of ignore_malformed in geoshape parsing (#35603)
+
+Adds an XContent sub parser class that can to wrap another
+XContent parser at the beginning of an object and allow skiping
+all children in case of the parsing failure. It also uses this
+subparser to ignore the rest of the GeoJson shape if the 
+parsing fails and we need to ignore the geoshape due to the 
+ignore_malformed flag.
+
+Supersedes #34498
+
+Closes #34047

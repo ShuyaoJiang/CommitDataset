@@ -1,0 +1,8 @@
+Enable reading auto-follow patterns from x-content (#40130)
+
+This named writable was never registered, so it means that we could not
+read auto-follow patterns that were registered in the cluster
+state. This causes them to be lost on restarts, a bad bug. This commit
+addresses this by registering this named writable, and we add a basic
+CCR restart test to ensure that CCR keeps functioning properly when the
+follower is restarted.

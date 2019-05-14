@@ -1,0 +1,23 @@
+CRUD: Fix wait for refresh tests (#33973)
+
+When we implemented `refresh=wait_for` I added a test with the wrong
+name. This caused us to not run it. The test asserted that running
+several operations with `refresh=wait_for` did not fail if the index was
+`_close`d while the operations were waiting. But to be honest, failure
+here isn't that bad. The index being waited on is closed. You can't do
+anything with it any way. The most important thing is actually that
+these operations don't hang forever. Because hanging forever means that
+the resources used by the operations aren't freed.
+
+Anyway, when I noticed the error I reenabled the test. But they don't
+pass consistently because *sometimes* the operations being tested fail.
+They don't seem to hang and they always fail with "this index is closed
+so you can't do anything with it" sorts of messages.
+
+When the test started failing we disabled it again. This reenables the
+test but causes it to ignore these "index is closed" failures. We'd
+prefer they not happen at all but in the grand scheme of things they are
+fine and making sure these operations don't hang is much more important.
+
+This also updates the test to bring it more in line with my current
+understanding of the "right" way to use the low level rest client.

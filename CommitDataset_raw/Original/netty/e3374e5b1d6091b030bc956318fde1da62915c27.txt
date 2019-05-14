@@ -1,0 +1,13 @@
+Removing direct access to HTTP/2 child streams.
+
+Motivation:
+
+We've removed access to the activeStreams collection, we should do the same for the children of a stream to provide a consistent interface.
+
+Modifications:
+
+Moved Http2StreamVisitor to a top-level interface. Removed unnecessary child operations from the Http2Stream interface so that we no longer require a map structure.
+
+Result:
+
+Cleaner and more consistent interface for iterating over child streams.

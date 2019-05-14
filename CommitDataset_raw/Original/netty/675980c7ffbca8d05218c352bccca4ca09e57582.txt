@@ -1,0 +1,10 @@
+Lz4FrameEncoder incorrect usage of internalNioBuffer
+
+Motivation:
+Lz4FrameEncoder uses internalNioBuffer but always passes in a value of 0 for the index. This should be readerIndex().
+
+Modifications:
+- change 0 to readerIndex()
+
+Result:
+More correct usage of internalNioBuffer in Lz4FrameEncoder.

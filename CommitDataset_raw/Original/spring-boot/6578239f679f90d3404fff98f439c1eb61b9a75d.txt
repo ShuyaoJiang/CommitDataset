@@ -1,0 +1,30 @@
+Fix binding of Collection of enum
+
+As there is no way to copy all the converters of a `ConversionService` to
+another, `RelaxedConversionService` uses a fallback `ConversionService`
+when the user-provided one failed.
+
+That fallback is taking care of converting `String` to `Enum` in a case
+insensitive way but it has no registered converter to convert a comma
+separated String to a collection of something.
+
+Ironically, our current test suite has plenty of cases where we map a
+`String` to  a collection of enums and they all pass. This is because
+the tests do not provide a custom `ConverterService` so we end up
+immediately in the fallback scenario. Since no converter is able to
+convert the String to a collection, the property editor support of the
+binder takes care of that for us and try to convert each individual
+value.
+
+In a regular use case however, a `ConversionService` is provided and
+fails to map the collection if the String value(s) don't have the exact
+same case as the annotations they represent. Since the original
+`ConversionService` has claimed it was able to convert a collection,
+the raw `String` value is passed to the fallback converter and that one
+fails to convert the raw String.
+
+The fallback converter now registers the necessary converters to
+convert collections. Additional tests have been added to test that in
+a more explicit way.
+
+Closes gh-4322

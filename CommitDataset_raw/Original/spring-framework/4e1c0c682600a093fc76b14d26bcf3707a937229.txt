@@ -1,0 +1,10 @@
+@MessageExceptionHandler supports error signal
+
+Before this change if a controller method returned a Publisher whose
+first signal was an error, the error signal would not be delegated to
+a @MessageExceptionHandler method as expected.
+
+To make this work for now we use a package private local copy of the
+ChannelSendOperator from spring-web.
+
+See gh-21987

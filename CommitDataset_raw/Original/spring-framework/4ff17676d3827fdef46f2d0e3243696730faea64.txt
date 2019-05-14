@@ -1,0 +1,13 @@
+Avoid duplicate Content-Length headers in Netty client
+
+This commit checks that a "Content-Length" request header isn't already
+present before adding one in `Netty4ClientHttpRequestFactory`.
+`HttpMessageConverter` implementations can write that request header so
+the Netty request factory should only write that value when the header
+is missing.
+
+If that header is not written (and since we're not dealing with
+the HTTP exchange in a chunked-based fashion), the HTTP client might not
+send the request body at all.
+
+Issue: SPR-15241

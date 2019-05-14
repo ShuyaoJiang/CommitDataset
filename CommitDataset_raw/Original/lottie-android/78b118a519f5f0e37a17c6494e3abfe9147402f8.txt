@@ -1,0 +1,11 @@
+Fix sample app on Android below Lollipop (#258)
+
+It was crashing for two reasons:
+
+Some TextViews were using vector drawables as compound drawables
+Fixed by getting the drawables with AppCompatDrawableManager and
+setting them programmatically
+
+Some vector drawables are referencing other vector drawables
+(example: ic_invert references ic_invert_black)
+Fixed by calling AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)

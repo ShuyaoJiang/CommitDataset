@@ -1,0 +1,18 @@
+HTTP2: Close encoder and decoder on channelInactive and initialize clientPrefaceString on handlerAdded.
+
+Motivation:
+
+- The encoder and decoder should be closed right after the handler releases its resources.
+- The clientPrefaceString is allocated in the constructor but releases in handlerRemoved.
+  If the handler is never added to the pipeline, the clientPrefaceString will never be
+  released.
+
+Modifications:
+
+- Call encoder.close() and decoder.close() on channelInactive.
+- Release the clientPrefaceString on handlerRemoved.
+
+Result:
+
+- The encoder and decoder get closed right after the handler's resources are freed.
+- It's easier to verify that the clientPrefaceString will also get released.

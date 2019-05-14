@@ -1,0 +1,11 @@
+Avoid java.util.stream.Stream usage in hot paths
+
+Prior to this commit, profiling sessions would show that using
+`java.util.stream.Stream` in some hot code paths creates significant
+garbage.
+
+Where streams aren't really required, this commit turns those snippets
+into imperative logic  because those are likely to be called once or
+multiple times per request.
+
+Closes gh-22341

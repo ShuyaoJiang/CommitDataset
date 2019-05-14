@@ -1,0 +1,12 @@
+Update user destinations handling
+
+Before this change subscribing to a user-specific destination in STOMP
+required manually appending a unique queue suffix provided in a header
+with the CONNECTED frame.
+
+This change removes the need to do that. Instead STOMP clients can
+subscribe to "/user/queue/error" and can then begin to receive messages
+sent to "/user/{username}/queue/error" without colliding with any other
+user doing the same.
+
+Issue: SPR-11077

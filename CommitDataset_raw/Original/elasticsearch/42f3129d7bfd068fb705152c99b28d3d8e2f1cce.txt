@@ -1,0 +1,7 @@
+Allow plugins to validate cluster-state on join (#26595)
+
+Today we don't have a pluggable way to validate if the cluster state
+is compatible with the node that joins. We already apply some checks for index
+compatibility that prevents nodes to join a cluster with indices it doesn't support
+but for plugins this isn't possible. This change adds a cluster state validator that
+allows plugins to prevent a join if the cluster-state is incompatible.

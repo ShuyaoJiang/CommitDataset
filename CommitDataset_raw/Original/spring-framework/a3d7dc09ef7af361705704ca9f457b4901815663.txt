@@ -1,0 +1,9 @@
+First pass completed, with support for the standard JMS 2.0 API in our CachingConnectionFactory and support for a delivery delay setting in JmsTemplate. Note that none of this has been tested against an actual JMS 2.0 provider yet, due to no such provider being available yet.
+
+Known limitations:
+* Spring's SingleConnectionFactory and CachingConnectionFactory do not support createContext calls for JMSContext creation at this point. Note that the JMSContext model bypasses the point of a Connection/Session pool anyway; this will only really work with a native JMS 2.0 ConnectionFactory and provider-specific pooling such as in an EE environment.
+* JmsTemplate has no out-of-the-box support for send calls with an async completion listener. Note that a CompletionListener can be specified in a custom ProducerCallback implementation if really necessary.
+
+There is no special support for the simplified JMSContext API, and likely never will be: JMSContext can be used from a native ConnectionFactory directly. @Inject JMSContext isn't supported due to rather involved rules for defining and scoping the injected context which are quite at odds with the Spring way of doing these things. We strongly recommend JmsTemplate instead, or @Resource ConnectionFactory with a createContext call within a Java 7 try-with-resources clause (as shown in the specification). After all, JMSContext has primarily been designed with EE's one-session-per-connection model and JTA transactions in mind, not with Spring-style use of a native JMS provider and native JMS transactions.
+
+Issue: SPR-8197

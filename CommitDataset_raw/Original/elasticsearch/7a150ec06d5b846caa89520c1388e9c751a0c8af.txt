@@ -1,0 +1,7 @@
+Core: Combine doExecute methods in TransportAction (#31517)
+
+TransportAction currently contains 2 doExecute methods, one which takes
+a the task, and one that does not. The latter is what some subclasses
+implement, while the first one just calls the latter, dropping the given
+task. This commit combines these methods, in favor of just always
+assuming a task is present.

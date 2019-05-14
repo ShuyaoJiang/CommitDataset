@@ -1,0 +1,50 @@
+Introduce @TestPropertySource support in the TCF
+
+Spring Framework 3.1 introduced an Environment abstraction with support
+for hierarchical PropertySources that can be configured
+programmatically as well as declaratively via the @PropertySource
+annotation. However, prior to this commit, there was no way to
+declaratively configure PropertySources in integration tests in the
+Spring TestContext Framework (TCF).
+
+This commit introduces declarative support for PropertySources in the
+TCF via a new class-level @TestPropertySource annotation. This
+annotation provides two options for declaring test property sources:
+
+ - The 'locations' attribute allows developers to declare external
+   resource locations for test properties files.
+
+ - The 'properties' attribute allows developers to declare inlined
+   properties in the form of key-value pairs.
+
+Test properties files are added to the Environment before all other
+property sources and can therefore override system and application
+property sources. Similarly, inlined properties are added to the
+Environment before all other property sources and can therefore
+override system property sources, application property sources, and
+test properties files.
+
+Specifically, this commit introduces the following major changes:
+
+ - Introduced @TestPropertySource annotation along with internal
+   TestPropertySourceAttributes, MergedTestPropertySources, and
+   TestPropertySourceUtils for working with test property sources
+   within the TCF.
+
+ - All TestContextBootstrappers have been modified to support the
+   merged property resource locations and inlined properties from
+   @TestPropertySource.
+
+ - MergedContextConfiguration (and consequently the context caching
+   key) is now additionally based on the merged property resource
+   locations and inlined properties from @TestPropertySource. The same
+   applies to WebMergedContextConfiguration.
+
+ - AbstractContextLoader's prepareContext() method now adds
+   PropertySources for all resource locations and inlined properties
+   from the supplied MergedContextConfiguration to the Environment of
+   the supplied ApplicationContext. All subclasses of
+   AbstractGenericContextLoader and AbstractGenericWebContextLoader
+   therefore automatically provide support for @TestPropertySource.
+
+Issue: SPR-12051

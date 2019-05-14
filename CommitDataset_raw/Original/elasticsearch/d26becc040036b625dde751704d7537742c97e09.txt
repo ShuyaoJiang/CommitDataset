@@ -1,0 +1,6 @@
+Fix NPE when `values` is omitted on percentile_ranks agg (#26046)
+
+An array of values is required because there is no default (or
+reasonable way to set a default).  But validation for values
+only happens if it is actually set.  If the values param is omitted
+entirely than the agg builder will NPE.

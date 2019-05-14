@@ -1,0 +1,12 @@
+More context when the hostname is not verified.
+
+    Exception in thread "main" java.io.IOException: Hostname square.com not verified:
+        certificate: sha1/FBzx5Wrwa9EpylnPrsKjpBQu1RE=
+        DN: CN=square.com, OU=Information Security, O=Square Inc., STREET=1455 Market Street, L=San Francisco, ST=California, OID.2.5.4.17=94103, C=US, SERIALNUMBER=4699855, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Delaware, OID.1.3.6.1.4.1.311.60.2.1.3=US
+        subjectAltNames: [square.com, www.square.com, cash.square.com, blog.square.com]
+          at com.squareup.okhttp.Connection.upgradeToTls(Connection.java:242)
+          at com.squareup.okhttp.Connection.connect(Connection.java:155)
+          at com.squareup.okhttp.Connection.connectAndSetOwner(Connection.java:171)
+          at com.squareup.okhttp.OkHttpClient$1.connectAndSetOwner(OkHttpClient.java:119)
+
+Closes https://github.com/square/okhttp/issues/1163

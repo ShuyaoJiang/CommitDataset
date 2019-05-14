@@ -1,0 +1,16 @@
+Allowed Netty Epoll/Kqueue to work in IPv6 Only environments
+
+Motivation:
+In some environments, IPv4 may be disabled (at a kernel level).
+Google has such an environment for testing v4 -> v6 transition
+paths.  This give confidence that code is v6 ready.
+
+Modifications:
+Change native socket code to ignore failures of trying to enter
+dual stack mode.  This change has been made to Google's internal
+JDK, and will/should be upstreamed to OpenJDK eventually.
+
+Results:
+Netty works in IPv6 only environments
+
+Fixes: #6993

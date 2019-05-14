@@ -1,0 +1,14 @@
+Limit when SystemEnvironment mapping is used
+
+Update `SpringConfigurationPropertySource` so that the
+`SystemEnvironmentPropertyMapper` is only used for the "actual" system
+environment property source. This allows SystemEnvironmentProperySource
+class to be used for other purposes (for example, Spring Cloud uses it
+to as an override source providing decryption).
+
+Only property sources named `systemEnvironment` or ending with
+`-systemEnvironment` now have the `SystemEnvironmentPropertyMapper`
+applied. The `TestPropertyValues` has been retrofitted to name the
+source it adds appropriately.
+
+Fixes gh-10840

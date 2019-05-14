@@ -1,0 +1,5 @@
+* Fixed issue: NETTY-46 Excessive exception creation overhead when there are many pending write requests in a closed channel
+  * Added NioWorker.cleanUpWriteBuffer()
+* Fixed issue: NETTY-47 Channel is not closed immediately when write operation fails due to closure.
+  * Made sure to call NioWorker.close() in NioWorker.write(Un)Fair() and to call NioWorker.cleanUpWriteBuffer() in NioWorker.close();
+

@@ -1,0 +1,19 @@
+Simple refactorings in AbstractListenerWebSocketSessionSupport
+
+Dropped "Support" from the name since it not only provides support
+methods but actually implements WebSocketSession.
+
+Renamed inner classes:
+WebSocketMessagePublisher -> WebSocketReceivePublisher
+WebSocketMessageProcessor -> WebSocketSendProcessor
+
+Add protected getter for sendProcessor.
+
+Reduce scoping:
+WebSocketReceivePublisher -> private
+WebSocketSendProcessor -> protected
+WebSocketSendProcessor#setReady -> public (class is still protected)
+
+A few more method name alignments and Javadoc updates.
+
+Issue: SPR-14527

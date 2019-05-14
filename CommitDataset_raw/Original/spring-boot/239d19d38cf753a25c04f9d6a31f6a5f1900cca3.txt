@@ -1,0 +1,14 @@
+Support JNDI for JTA and JMS.
+
+Update auto-configuration for JMS and JTA to support a ConnectionFactory
+and TransactionManager exposed via JNDI.
+
+JTA configuration now attempts a simple JtaTransactionManager before
+attempting Bitronix or Atomikos configuration.
+
+The JMS auto-configuration also now attempts to find a ConnectionFactory
+from JNDI before falling back to the previous strategies. If JNDI is
+present a JndiDestinationResolver is also configured instead of the
+default DestinationResolver.
+
+See gh-947

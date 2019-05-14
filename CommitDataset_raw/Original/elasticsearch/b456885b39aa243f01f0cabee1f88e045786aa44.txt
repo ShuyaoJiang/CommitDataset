@@ -1,0 +1,9 @@
+Test: increase time to wait for tribe tests with security
+
+There have been some failures in CI due to the tribe tests with security taking too long for the
+cluster to form and the expected number of node to join. In the thread dumps of the failure, it
+can be seen that a node is still initializing and is in a method that could take a decent amount
+of time on slow machines (TokenService#computeSecretKey). This commit increases the wait time to
+allow for the node to startup and join.
+
+Original commit: elastic/x-pack-elasticsearch@2bf4c96d8fa5158ea68b5cde9263ee1707afcf90

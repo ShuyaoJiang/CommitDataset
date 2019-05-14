@@ -1,0 +1,10 @@
+Watcher: Do not pause watcher if not needed (elastic/x-pack-elasticsearch#1681)
+
+This introduces a check to only pause the execution of watcher
+when there is no metadata but there was a shard on this node before
+that inside of the ClusterStateListener.
+
+This prevents repeated logging that watcher was paused even
+though it was not necessary to call anything.
+
+Original commit: elastic/x-pack-elasticsearch@8d3a829ffb8d4829df269c0350d8bb880683dd04

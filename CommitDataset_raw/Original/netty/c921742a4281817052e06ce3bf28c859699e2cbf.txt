@@ -1,0 +1,14 @@
+Dont fire an SslHandshakeEvent if the handshake was not started at all.
+
+Motivation:
+
+We should not fire a SslHandshakeEvent if the channel is closed but the handshake was not started.
+
+Modifications:
+
+- Add a variable to SslHandler which tracks if an handshake was started yet or not and depending on this fire the event.
+- Add a unit test
+
+Result:
+
+Fixes [#7262].

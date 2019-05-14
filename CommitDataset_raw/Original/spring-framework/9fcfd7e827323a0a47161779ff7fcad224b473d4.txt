@@ -1,0 +1,24 @@
+Introduce ConfigurableEnvironment#merge
+
+Prior to this change, AbstractApplicationContext#setParent replaced the
+child context's Environment with the parent's Environment if available.
+This has the negative effect of potentially changing the type of the
+child context's Environment, and in any case causes property sources
+added directly against the child environment to be ignored. This
+situation could easily occur if a WebApplicationContext child had a
+non-web ApplicationContext set as its parent. In this case the parent
+Environment type would (likely) be StandardEnvironment, while the child
+Environment type would (likely) be StandardServletEnvironment. By
+directly inheriting the parent environment, critical property sources
+such as ServletContextPropertySource are lost entirely.
+
+This commit introduces the concept of merging an environment through
+the new ConfigurableEnvironment#merge method. Instead of replacing the
+child's environment with the parent's,
+AbstractApplicationContext#setParent now merges property sources as
+well as active and default profile names from the parent into the
+child. In this way, distinct environment objects are maintained with
+specific types and property sources preserved. See #merge Javadoc for
+additional details.
+
+Issue: SPR-9444, SPR-9439

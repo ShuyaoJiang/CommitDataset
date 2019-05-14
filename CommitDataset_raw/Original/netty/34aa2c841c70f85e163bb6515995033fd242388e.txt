@@ -1,0 +1,13 @@
+Don't use sun.misc.Unsafe when IKVM.NET is used (#9042)
+
+Motivation:
+
+IKVM.NET seems to ship a bug sun.misc.Unsafe class, for this reason we should better disable our sun.misc.Unsafe usage when we detect IKVM.NET is used.
+
+Modifications:
+
+Check if IKVM.NET is used and if so do not use sun.misc.Unsafe by default.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/9035 and https://github.com/netty/netty/issues/8916.

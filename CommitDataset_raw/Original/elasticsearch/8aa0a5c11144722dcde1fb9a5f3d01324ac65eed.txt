@@ -1,0 +1,114 @@
+Improve REST error handling when endpoint does not support HTTP verb, add OPTIONS support (#24437)
+
+* Improved REST endpoint exception handling, see #15335
+
+Also improved OPTIONS http method handling to better conform with the
+http spec.
+
+* Tidied up formatting and comments
+
+See #15335
+
+* Tests for #15335
+
+* Cleaned up comments, added section number
+
+* Swapped out tab indents for space indents
+
+* Test class now extends ESSingleNodeTestCase
+
+* Capture RestResponse so it can be examined in test cases
+
+Simple addition to surface the RestResponse object so we can run tests
+against it (see issue #15335).
+
+* Refactored class name, included feedback
+
+See #15335.
+
+* Unit test for REST error handling enhancements
+
+Randomizing unit test for enhanced REST response error handling. See
+issue #15335 for more details.
+
+* Cleaned up formatting
+
+* New constructor to set HTTP method
+
+Constructor added to support RestController test cases.
+
+* Refactored FakeRestRequest, streamlined test case.
+
+* Cleaned up conflicts
+
+* Tests for #15335
+
+* Added functionality to ignore or include path wildcards
+
+See #15335
+
+* Further enhancements to request handling
+
+Refactored executeHandler to prioritize explicit path matches. See
+#15335 for more information.
+
+* Cosmetic fixes
+
+* Refactored method handlers
+
+* Removed redundant import
+
+* Updated integration tests
+
+* Refactoring to address issue #17853
+
+* Cleaned up test assertions
+
+* Fixed edge case if OPTIONS method randomly selected as invalid method
+
+In this test, an OPTIONS method request is valid, and should not return
+a 405 error.
+
+* Remove redundant static modifier
+
+* Hook the multiple PathTrie attempts into RestHandler.dispatchRequest
+
+* Add missing space
+
+* Correctly retrieve new handler for each Trie strategy
+
+* Only copy headers to threadcontext once
+
+* Fix test after REST header copying moved higher up
+
+* Restore original params when trying the next trie candidate
+
+* Remove OPTIONS for invalidHttpMethodArray so a 405 is guaranteed in tests
+
+* Re-add the fix I already added and got removed during merge :-/
+
+* Add missing GET method to test
+
+* Add documentation to migration guide about breaking 404 -> 405 changes
+
+* Explain boolean response, pull into local var
+
+* fixup! Explain boolean response, pull into local var
+
+* Encapsulate multiple HTTP methods into PathTrie<MethodHandlers>
+
+* Add PathTrie.retrieveAll where all matching modes can be retrieved
+
+Then TrieMatchingMode can be package private and not leak into RestController
+
+* Include body of error with 405 responses to give hint about valid methods
+
+* Fix missing usageService handler addition
+
+I accidentally removed this :X
+
+* Initialize PathTrieIterator modes with Arrays.asList
+
+* Use "== false" instead of !
+
+* Missing paren :-/

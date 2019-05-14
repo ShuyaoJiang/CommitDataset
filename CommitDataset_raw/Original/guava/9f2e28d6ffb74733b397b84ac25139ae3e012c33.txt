@@ -1,0 +1,26 @@
+Automated g4 rollback of changelist 146841288.
+
+*** Reason for rollback ***
+
+Some people appear to have been depending on specific hashCode behavior?
+
+*** Original change description ***
+
+Eliminate SingletonImmutableSet, partially folding it into RegularImmutableSet.
+
+We skip allocating an all-up hash table for a singleton set, but we share implementation with the hash-based RegularImmutableSet.
+
+[]Effects on ImmutableSetProGuard:
+26650 bytes => 24854 bytes
+21 classes => 19 classes
+165 methods => 149 methods
+
+Effects on ImmutableMapProGuard:
+50050 bytes => 50176 bytes, no other changes.
+(I infer that SingletonImmutableSet wasn'...
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146925879

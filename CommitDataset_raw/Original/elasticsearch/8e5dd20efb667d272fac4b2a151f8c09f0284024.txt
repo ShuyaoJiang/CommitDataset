@@ -1,0 +1,12 @@
+[Close Index API] Refactor MetaDataIndexStateService (#36354)
+
+The commit changes how indices are closed in the MetaDataIndexStateService. 
+It now uses a 3 steps process where writes are blocked on indices to be closed, 
+then some verifications are done on shards using the TransportVerifyShardBeforeCloseAction 
+added in #36249, and finally indices states are moved to CLOSE and their routing 
+tables removed.
+
+The closing process also takes care of using the pre-7.0 way to close indices if the 
+cluster contains mixed version of nodes and a node does not support the TransportVerifyShardBeforeCloseAction. It also closes unassigned indices.
+
+Related to #33888 

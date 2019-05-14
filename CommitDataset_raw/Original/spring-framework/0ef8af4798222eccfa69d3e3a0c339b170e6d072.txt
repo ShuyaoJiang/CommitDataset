@@ -1,0 +1,9 @@
+Use .setStatus in ResponseStatusExceptionResolver
+
+Before this change ResponseStatusExceptionResolver always used
+.sendError despite the javadoc on @ResponseStatus#code. This was
+perhaps justifiable from a HandlerExceptionResolver. Nevertheless
+.setStatus should be more REST API friendly while still marking
+the response as an error.
+
+Issue: SPR-11193

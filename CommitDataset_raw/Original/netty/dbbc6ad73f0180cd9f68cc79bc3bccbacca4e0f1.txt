@@ -1,0 +1,50 @@
+Reduce the chance of RejectedExecutionException
+
+When a Netty application shuts down, a user often sees a REE
+(RejectedExecutionException).
+
+A REE is raised due to various reasons we don't have control over, such
+as:
+
+- A client connects to a server while the server is shutting down.
+
+- An event is triggered for a closed Channel while its event loop is
+  also shutting down.  Some of them are:
+  - channelDeregistered (triggered after a channel is closed)
+  - freeIn/OutboundBuffer (triggered after channelDeregistered)
+  - userEventTriggered (triggered anytime)
+
+To address this issue, a new method called confirmShutdown() has been
+added to SingleThreadEventExecutor.  After a user calls shutdown(),
+confirmShutdown() runs any remaining tasks in the task queue and ensures
+no events are triggered for last 2 seconds.  If any task are added to
+the task queue before 2 seconds passes, confirmShutdown() prevents the
+event loop from terminating by returning false.
+
+Now that SingleThreadEventExecutor needs to accept tasks even after
+shutdown(), its execute() method only rejects the task after the event
+loop is terminated (i.e. isTerminated() returns true.)  Except that,
+there's no change in semantics.
+
+SingleThreadEventExecutor also checks if its subclass called
+confirmShutdown() in its run() implementation, so that Netty developers
+can make sure they shut down their event loop impementation correctly.
+
+It also fixes a bug in AioSocketChannel, revealed by delayed shutdown,
+where an inboundBufferUpdated() event is triggered on a closed Channel
+with deallocated buffers.
+
+Caveats:
+
+Because SingleThreadEventExecutor.takeTask() does not have a notion of
+timeout, confirmShutdown() adds a dummy task (WAKEUP_TASK) to wake up
+takeTask() immediately and instead sleeps hard-coded 100ms.  I'll
+address this issue later by modifying takeTask() times out dynamically.
+
+Miscellaneous changes:
+
+SingleThreadEventExecutor.wakeup() now has the default implementation.
+Instead of interrupting the current thread, it simply adds a dummy task
+(WAKEUP_TASK) to the task queue, which is more elegant and efficient.
+NioEventLoop is the only implementation that overrides it. All other
+implementations' wakeup()s were removed thanks to this change.

@@ -1,0 +1,24 @@
+Tests and code for various SPDY close scenarios.
+
+Writing this change has led me to believe that the
+concurrency here is just plain awful, and I need to
+find a better solution than what I have. In particular,
+there are too many threads:
+ - the internal reader thread
+ - application reader threads
+ - application writer threads
+And too many locks:
+ - the SpdyWriter I/O write lock
+ - the SpdyConnection internal state lock
+ - each SpdyStream's internal state lock
+
+What's currently very wrong is the internal reader thread
+is updating state in the SpdyStream, and reading bytes from
+the network into a particular stream. It is an error to hold
+the SpdyStream's lock while reading, but we're doing it because
+we need to hold the state on the buffer, position and limit.
+We need to rethink this!
+
+Chrome doesn't run into this problem because it can 'fire and
+forget' events. We can't do that because SPDY writes need to
+throw IOExceptions if the writes fail.

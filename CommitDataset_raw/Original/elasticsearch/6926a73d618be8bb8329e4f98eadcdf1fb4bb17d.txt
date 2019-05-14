@@ -1,0 +1,13 @@
+Fix edge case in PutMappingRequestTests (#37665)
+
+The recently introduced client side PutMappingRequestTests has an edge case that
+leads to failing tests. When the "source" or the original request is `null` it
+gets rendered to xContent as an empty object, which by the test class itself is
+parsed back as an empty map. For this reason the original and the parsed request
+differ (one has an empty source, one an empty map). This fixes this edge case by
+assuming an empty map means a null source in the request. In practice the
+distinction doesn't matter because all the client side request does is write
+itself to xContent, which gives the same result regardless of whether `source`
+is null or empty.
+
+Closes #37654

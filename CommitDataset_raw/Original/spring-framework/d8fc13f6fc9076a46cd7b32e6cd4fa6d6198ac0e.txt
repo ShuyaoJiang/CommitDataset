@@ -1,0 +1,11 @@
+Fix server errors for invalid If-None-Match request headers
+
+HttpEntityMethodProcessor should not throw IllegalArgumentExceptions for
+invalid If-None-Match headers.
+
+For those cases, this commit makes sure that both
+`HttpEntityMethodProcessor` and `ServletWebRequest` have a consistent
+behavior and stop processing the request as conditional and leave the
+handler handle it.
+
+Issue: SPR-14559

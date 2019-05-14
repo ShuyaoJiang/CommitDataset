@@ -1,0 +1,14 @@
+Guard against possible segfault when OpenSslContext is gc'ed and user still hold reference to OpenSslSessionContext / OpenSslSessionStats
+
+Motivation:
+
+When the OpenSslContext is gc'ed and the user still hold a reference to OpenSslSessionContext / OpenSslSessionStats it is possible to produce a segfault when calling
+a method on any of these that tries to pass down the ctx pointer to the native methods. This is because the OpenSslContext finalizer will free the native pointer.
+
+Modifications:
+
+Change OpenSslSessionContext / OpenSslSessionContext to store a reference to OpenSslContext and so prevent the GC to collect it as long as the user has a reference to OpenSslSessionContext / OpenSslSessionContext.
+
+Result:
+
+No more sefault possible.

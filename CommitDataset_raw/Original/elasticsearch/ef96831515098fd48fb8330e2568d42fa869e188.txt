@@ -1,0 +1,15 @@
+[ML] Don't mention unrelated indices when deleting job index aliases (elastic/x-pack-elasticsearch#3160)
+
+This change fixes a problem that would cause job deletion to fail if ANY
+index had a block on it, e.g. read-only.
+
+The problem was that we were requesting the job aliases be deleted from
+ALL indices in the system due to a misunderstanding with the format of the
+get_aliases response.  This didn't usually cause any noticable effects, as
+only the ML indices would have the aliases.  But in the case of a read-only
+index it would cause an error, leading to unnecessary failure of the job
+deletion.
+
+Fixes elastic/machine-learning-cpp#428
+
+Original commit: elastic/x-pack-elasticsearch@a573f85a00c6573321cd8c7a71d949c8116daa99

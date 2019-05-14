@@ -1,0 +1,13 @@
+Conditionally htmlEscape chars based on encoding
+
+This commit adds new htmlEscape methods that take the character encoding
+as a parameter. According to specs and recommendations, the list of
+chars to be html escaped depends on the encoding used in the response.
+If the current char encoding supports chars natively, we shouldn't
+escape those; of course, reserved chars (<,>,',",&) should always be
+escaped.
+
+See: http://www.w3.org/TR/html4/sgml/entities.html#h-24.3
+See: spring-projects/spring-framework#385 by @candrews
+
+Issue: SPR-9293

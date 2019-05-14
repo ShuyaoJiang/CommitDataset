@@ -1,0 +1,20 @@
+Introduce MessageAggregator and DecoderResultProvider
+
+Motivation:
+
+We have different message aggregator implementations for different
+protocols, but they are very similar with each other.  They all stems
+from HttpObjectAggregator.  If we provide an abstract class that provide
+generic message aggregation functionality, we will remove their code
+duplication.
+
+Modifications:
+
+- Add MessageAggregator which provides generic message aggregation
+- Reimplement all existing aggregators using MessageAggregator
+- Add DecoderResultProvider interface and extend it wherever possible so
+  that MessageAggregator respects the state of the decoded message
+
+Result:
+
+Less code duplication

@@ -1,0 +1,7 @@
+HLRC: Use nonblocking entity for requests (#32249)
+
+Previously the HLRC used a blocking ByteArrayEntity, but the Request
+class also allows to set a NByteArrayEntity, and defaults to nonblocking
+when calling the createJsonEntity method. This commit cleans up all the
+uses of ByteArrayEntity in the RequestConverters to use the nonblocking
+entity.

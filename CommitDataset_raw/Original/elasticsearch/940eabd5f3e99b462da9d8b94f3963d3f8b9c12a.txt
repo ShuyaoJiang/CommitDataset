@@ -1,0 +1,9 @@
+Watcher: Add thread pool rejection to execution state (elastic/x-pack-elasticsearch#2805)
+
+The execution state of a watch did not differentiate between failures of
+the execution like a broken painless script and a thread pool rejection.
+
+This adds an own state, which allows to aggregate on such data in the
+watch history, which should ease debugging issues a bit.
+
+Original commit: elastic/x-pack-elasticsearch@351e64e14dec297c6f6b53e56c4066eab19d5c10

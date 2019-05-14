@@ -1,0 +1,21 @@
+Add dependency on opendmk_jmxremote_optional_jar for performance builds
+
+Although the jmxremote_optional JAR has been added to the build agents
+on the Bamboo CI server for the latest JDK 8 installation, that
+solution is brittle since it has to be manually installed in every new
+JDK installation. In addition, this approach will not work with JDK 9+
+since the "Extension Mechanism" has been removed beginning with JDK 9.
+
+https://docs.oracle.com/javase/10/migrate/toc.htm#JSMIG-GUID-2C896CA8-927C-4381-A737-B1D81D964B7B
+
+This commit addresses this issue by adding the following dependency to
+spring-context.
+
+// Substitute for "javax.management:jmxremote_optional:1.0.1_04" which
+// is not available on Maven Central
+testRuntime("org.glassfish.external:opendmk_jmxremote_optional_jar:1.0-b01-ea")
+
+With this change, the Spring PERFORMANCE builds now execute on JDK 8,
+9, and 11.
+
+See gh-22757

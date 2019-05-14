@@ -1,0 +1,17 @@
+Use ByteBuf#writeShort/writeMedium instead of writeBytes
+
+Motivation:
+
+1. Some encoders used a `ByteBuf#writeBytes` to write short constant byte array (2-3 bytes). This can be replaced with more faster `ByteBuf#writeShort` or `ByteBuf#writeMedium` which do not access the memory.
+2. Two chained calls of the `ByteBuf#setByte` with constants can be replaced with one `ByteBuf#setShort` to reduce index checks.
+3. The signature of method `HttpHeadersEncoder#encoderHeader` has an unnecessary `throws`.
+
+Modifications:
+
+1. Use `ByteBuf#writeShort` or `ByteBuf#writeMedium` instead of `ByteBuf#writeBytes` for the constants.
+2. Use `ByteBuf#setShort` instead of chained call of the `ByteBuf#setByte` with constants.
+3. Remove an unnecessary `throws` from `HttpHeadersEncoder#encoderHeader`.
+
+Result:
+
+A bit faster writes constants into buffers.

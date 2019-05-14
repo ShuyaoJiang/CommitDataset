@@ -1,0 +1,24 @@
+Make servlet context property source available before refresh
+
+Previously, when deploying a Spring Boot application to a container,
+the servlet context property source was not fully initialised until
+the context was refreshed. This led to a problem where a value from a
+property source with lower precedence would be seen during the early
+stages of the application starting. Once the servlet context property
+source had been initialized, its value for the property would then
+become visible effectively making it appear as if the property's
+value had changed during startup. This led to a specific problem
+with determining active profiles.
+
+If spring.profiles.active was set both in JNDI and via the servlet
+context both profiles would end up being active, rather than the
+more intuitive behaviour of the profiles made active via the servlet
+context overriding those made active via JNDI.
+
+This commit updates SpringBootServletInitializer so that it explicitly
+creates the StandardServletEnvironment and initializes its property
+sources using the servlet context. This is done before the application
+is created and run, thereby ensuring that the servlet context
+property source is available throughout the application's startup.
+
+Closes gh-9972

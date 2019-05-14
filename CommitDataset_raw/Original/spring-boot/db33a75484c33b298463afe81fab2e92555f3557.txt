@@ -1,0 +1,11 @@
+Enable transaction management consistently
+
+Previously to this commit, transaction management was only enabled when
+a `DataSource` is configured. The processing of `@Transactional`
+annotations are now enabled as long as a `PlatformTransactionManager` is
+present.
+
+Also, the `spring.aop.proxy-target-class` is now honoured if set, still
+defaulting to CGLIB mode.
+
+Closes gh-8434

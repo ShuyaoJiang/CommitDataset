@@ -1,0 +1,12 @@
+Update TestRestTemplate to apply template handler to URIs
+
+Previously, TestRestTemplate would only apply the UriTemplateHandler
+to Strings and not to URIs. When using the auto-configured
+TestRestTemplate, this prevented relative URIs from being
+made absolute using LocalHostUriTemplateHandler.
+
+The commit updates TestRestTemplate to turn URIs into Strings before
+passing them to the delegate RestTemplate. Turning them into Strings
+ensures that the delegate calls the UriTemplateHandler.
+
+Closes gh-7891

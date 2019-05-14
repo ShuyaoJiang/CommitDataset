@@ -1,0 +1,8 @@
+Ensure `doc_stats` are changing even if refresh is disabled (#27505)
+
+Today if refresh is disabled the doc stats are not updated anymore.
+In a bulk index scenario this might cause confusion since even if
+we refresh internal readers etc. doc stats are never advancing.
+This change cuts over to the internal reader that is refreshed outside
+of the external readers refresh interval but always equally `fresh` or
+`fresher` which will cause less confusion.

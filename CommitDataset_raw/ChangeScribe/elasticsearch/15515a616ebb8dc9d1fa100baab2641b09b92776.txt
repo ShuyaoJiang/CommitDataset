@@ -1,0 +1,641 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.xpack.sql.execution.search.extractor:  
+
+1. Changes to package org.elasticsearch.xpack.sql.expression:  
+
+1. Changes to package org.elasticsearch.xpack.sql.expression.function:  
+
+1. Changes to package org.elasticsearch.xpack.sql.expression.function.aggregate:  
+
+1. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar:  
+
+1. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.datetime:  
+
+1. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.math:  
+
+1.1. Add a class for binary math pipe. It allows to:
+
+	Instantiate binary math pipe  with source, expression, left pipe, right pipe, binary math operation and binary math operation;
+	Info binary math pipe;
+	Get operation;
+	Replace children;
+	Process binary math pipe binary math pipe as processor;
+	Hash code;
+	Check if binary math pipe equals
+
+2. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.string:  
+
+2.1. Add a class for binary string numeric pipe. It allows to:
+
+	Instantiate binary string numeric pipe  with source, expression, left pipe, right pipe, binary string numeric operation and binary string numeric operation;
+	Info binary string numeric pipe;
+	Get operation;
+	Replace children;
+	Process binary string numeric pipe binary string numeric pipe as processor;
+	Hash code;
+	Check if binary string numeric pipe equals
+
+2.2. Add a class for binary string numeric pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random binary string numeric expression;
+	Handle random binary string numeric operation;
+	Handle random binary string numeric pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance binary string numeric pipe;
+	Get copy
+
+2.3. Add a class for binary string string pipe. It allows to:
+
+	Instantiate binary string string pipe  with source, expression, left pipe, right pipe, binary string string operation and binary string string operation;
+	Info binary string string pipe;
+	Get operation;
+	Replace children;
+	Process binary string string pipe binary string string pipe as processor;
+	Hash code;
+	Check if binary string string pipe equals
+
+2.4. Add a class for binary string string pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random binary string string expression;
+	Handle random binary string string pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance binary string string pipe;
+	Get copy
+
+2.5. Add a class for concat function pipe. It allows to:
+
+	Instantiate concat function pipe  with source, expression, left pipe, right pipe and right pipe;
+	Info concat function pipe;
+	Replace children;
+	Process concat function pipe concat function pipe as processor;
+	Hash code;
+	Check if concat function pipe equals
+
+2.6. Add a class for concat function pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random concat function expression;
+	Handle random concat function pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance concat function pipe;
+	Get copy
+
+2.7. Add a class for insert function pipe. It allows to:
+
+	Instantiate insert function pipe  with source, expression, src pipe, start pipe, length pipe, replacement pipe and replacement pipe;
+	Replace children;
+	Resolve attributes;
+	Get supported by aggs only query;
+	Get resolved;
+	Collect fields;
+	Info insert function pipe;
+	Process insert function pipe insert function pipe as processor;
+	Get src;
+	Start insert function pipe;
+	Get length;
+	Get replacement;
+	Hash code;
+	Check if insert function pipe equals
+
+2.8. Add a class for insert function pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random insert function expression;
+	Handle random insert function pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance insert function pipe;
+	Get copy
+
+2.9. Add a class for locate function pipe. It allows to:
+
+	Instantiate locate function pipe  with source, expression, pattern pipe, src pipe, start pipe and start pipe;
+	Replace children;
+	Resolve attributes;
+	Get supported by aggs only query;
+	Get resolved;
+	Collect fields;
+	Info locate function pipe;
+	Process locate function pipe locate function pipe as processor;
+	Get src;
+	Start locate function pipe;
+	Get pattern;
+	Hash code;
+	Check if locate function pipe equals
+
+2.10. Add a class for locate function pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random locate function expression;
+	Handle random locate function pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance locate function pipe;
+	Get copy
+
+2.11. Add a class for replace function pipe. It allows to:
+
+	Instantiate replace function pipe  with source, expression, src pipe, pattern pipe, replacement pipe and replacement pipe;
+	Replace children;
+	Resolve attributes;
+	Get supported by aggs only query;
+	Get resolved;
+	Collect fields;
+	Info replace function pipe;
+	Process replace function pipe replace function pipe as processor;
+	Get src;
+	Get pattern;
+	Get replacement;
+	Hash code;
+	Check if replace function pipe equals
+
+2.12. Add a class for replace function pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random replace function expression;
+	Handle random replace function pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance replace function pipe;
+	Get copy
+
+2.13. Add a class for substring function pipe. It allows to:
+
+	Instantiate substring function pipe  with source, expression, src pipe, start pipe, length pipe and length pipe;
+	Replace children;
+	Resolve attributes;
+	Get supported by aggs only query;
+	Get resolved;
+	Collect fields;
+	Info substring function pipe;
+	Process substring function pipe substring function pipe as processor;
+	Get src;
+	Start substring function pipe;
+	Get length;
+	Hash code;
+	Check if substring function pipe equals
+
+2.14. Add a class for substring function pipe tests. It allows to:
+
+	Handle random instance;
+	Handle random substring function expression;
+	Handle random substring function pipe;
+	Handle test transform;
+	Handle test replace children;
+	Mutate instance substring function pipe;
+	Get copy
+
+3. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.whitelist:  
+
+3. Changes to package org.elasticsearch.xpack.sql.expression.gen.pipeline:  
+
+3.1. Add a class for agg extractor input. It allows to:
+
+	Instantiate agg extractor input  with source, expression, processor, context bucket extractor and context bucket extractor;
+	Info agg extractor input;
+	Process agg extractor input agg extractor input as processor;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields
+
+3.2. Rename type AggNameInput with AggNameInput
+
+3.3. Rename type AggPathInput with AggPathInput
+
+3.4. Add a class for attribute input. It allows to:
+
+	Instantiate attribute input  with source, expression, context attribute and context attribute;
+	Info attribute input;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields
+
+3.5. Add a class for attribute input tests. It allows to:
+
+	Handle test resolve attributes
+
+3.6. Add a class for binary pipe. It allows to:
+
+	Instantiate binary pipe  with source, expression, left pipe, right pipe and right pipe;
+	Replace children;
+	Get left;
+	Right binary pipe;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Get resolved;
+	Collect fields;
+	Hash code;
+	Check if binary pipe equals
+
+3.7. Add a class for common non executable input. It allows to:
+
+	Instantiate common non executable input  with source, expression, context and context;
+	Process common non executable input common non executable input as processor;
+	Resolve attributes;
+	Collect fields
+
+3.8. Add a class for constant input. It allows to:
+
+	Instantiate constant input  with source, expression and expression;
+	Info constant input;
+	Process constant input constant input as processor;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields
+
+3.9. Add a class for hit extractor input. It allows to:
+
+	Instantiate hit extractor input  with source, expression, context hit extractor and context hit extractor;
+	Info hit extractor input;
+	Process hit extractor input hit extractor input as processor;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields
+
+3.10. Add a class for leaf input. It allows to:
+
+	Instantiate leaf input  with source, expression, context and context;
+	Replace children;
+	Get context;
+	Get resolved;
+	Hash code;
+	Check if leaf input equals
+
+3.11. Add a class for non executable input. It allows to:
+
+	Instantiate non executable input  with source, expression, context and context;
+	Get resolved;
+	Process non executable input non executable input as processor
+
+3.12. Add a class for reference input. It allows to:
+
+	Instantiate reference input  with source, expression, context field extraction and context field extraction;
+	Info reference input;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields
+
+3.13. Add a class for score pipe. It allows to:
+
+	Instantiate score pipe  with source, expression and expression;
+	Info score pipe;
+	Replace children;
+	Get resolved;
+	Process score pipe score pipe as processor;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields
+
+3.14. Add a class for unary pipe. It allows to:
+
+	Instantiate unary pipe  with source, expression, child pipe, action processor and action processor;
+	Info unary pipe;
+	Replace children;
+	Get child;
+	Get action;
+	Get resolved;
+	Process unary pipe unary pipe as processor;
+	Get supported by aggs only query;
+	Resolve attributes;
+	Collect fields;
+	Hash code;
+	Check if unary pipe equals
+
+3.15. Add a class for unary pipe tests. It allows to:
+
+	Handle test supported by aggs only query;
+	Handle test resolve attributes;
+	Resolve attributes;
+	Handle test collect fields;
+	Collect fields;
+	Handle new unary processor
+
+4. Changes to package org.elasticsearch.xpack.sql.expression.gen.processor:  
+
+4.1. Rename type BinaryProcessor with BinaryProcessor
+
+4.2. Rename type BucketExtractorProcessor with BucketExtractorProcessor
+
+4.3. Rename type ChainingProcessor with ChainingProcessor
+
+4.4. Rename type ChainingProcessorTests with ChainingProcessorTests
+
+4.5. Rename type ConstantProcessor with ConstantProcessor
+
+4.6. Add a class for constant processor tests. It allows to:
+
+	Handle random constant processor;
+	Create test instance;
+	Get instance reader;
+	Mutate instance;
+	Handle test apply
+
+4.7. Rename type HitExtractorProcessor with HitExtractorProcessor
+
+4.8. Add an interface declaration  for processor. It allows to:
+
+	Get process
+
+4.9. Rename type UnaryProcessor with UnaryProcessor
+
+5. Changes to package org.elasticsearch.xpack.sql.expression.gen.script:  
+
+5.1. Rename type Agg with Agg
+
+5.2. Add a class for param. It allows to:
+
+	Instantiate param  with value;
+	Prefix param;
+	Get value;
+	Convert param to string
+
+5.3. Rename type Params with Params
+
+5.4. Rename type ParamsBuilder with ParamsBuilder
+
+5.5. Add a class for script. It allows to:
+
+	Instantiate script  with value params;
+	Prefix script
+
+5.6. Add a class for script template. It allows to:
+
+	Instantiate script template;
+	Instantiate script template  with params, output type and output type;
+	Get template;
+	Get params;
+	Handle agg paths;
+	Get output type;
+	Convert script template to painless;
+	Get bind template;
+	Hash code;
+	Check if script template equals;
+	Convert script template to string
+
+5.7. Add an interface declaration  for script weaver. It allows to:
+
+	Process script weaver script weaver as script;
+	Process script weaver script weaver as optional script;
+	Get data type;
+	Get script with foldable;
+	Get script with scalar;
+	Get script with aggregate;
+	Get script with grouping;
+	Get script with field;
+	Get process script;
+	Get format template
+
+5.8. Add a class for var. It allows to:
+
+	Instantiate var;
+	Prefix var
+
+6. Changes to package org.elasticsearch.xpack.sql.expression.predicate:  
+
+6.1. Add a class for binary operator. It allows to:
+
+	Instantiate binary operator  with source, left expression, right expression, function and function;
+	Resolve input type;
+	Swap left and right;
+	Resolve type
+
+6.2. Add a class for binary predicate. It allows to:
+
+	Instantiate binary predicate  with source, left expression, right expression, function and function;
+	Fold binary predicate;
+	Get script method name;
+	Hash code;
+	Check if binary predicate equals;
+	Get symbol;
+	Get function
+
+7. Changes to package org.elasticsearch.xpack.sql.expression.predicate.fulltext:  
+
+7. Changes to package org.elasticsearch.xpack.sql.expression.predicate.operator.arithmetic:  
+
+7.1. Add a class for add. It allows to:
+
+	Instantiate add  with source, left expression, right expression and right expression;
+	Info add;
+	Replace children
+
+7.2. Add a class for arithmetic operation. It allows to:
+
+	Instantiate arithmetic operation  with source, left expression, right expression, binary arithmetic operation and binary arithmetic operation;
+	Resolve input type;
+	Swap left and right;
+	Get data type;
+	Make pipe
+
+7.3. Rename type Arithmetics with Arithmetics
+
+7.4. Add a class for binary arithmetic pipe. It allows to:
+
+	Instantiate binary arithmetic pipe  with source, expression, left pipe, right pipe, binary arithmetic operation and binary arithmetic operation;
+	Info binary arithmetic pipe;
+	Replace children;
+	Process binary arithmetic pipe binary arithmetic pipe as processor;
+	Hash code;
+	Check if binary arithmetic pipe equals
+
+7.5. Add a class for binary arithmetic processor tests. It allows to:
+
+	Handle random processor;
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test add;
+	Handle test sub;
+	Handle test mul;
+	Handle test div;
+	Handle test mod;
+	Handle test negate;
+	Handle test tree;
+	Handle test handle null;
+	Get l
+
+7.6. Add a class for div. It allows to:
+
+	Instantiate div  with source, left expression, right expression and right expression;
+	Info div;
+	Replace children;
+	Get data type
+
+7.7. Add a class for mod. It allows to:
+
+	Instantiate mod  with source, left expression, right expression and right expression;
+	Info mod;
+	Replace children
+
+7.8. Add a class for mul. It allows to:
+
+	Instantiate mul  with source, left expression, right expression and right expression;
+	Resolve type;
+	Get data type;
+	Info mul;
+	Replace children
+
+7.9. Add a class for neg. It allows to:
+
+	Instantiate neg  with source, field expression and field expression;
+	Info neg;
+	Replace child;
+	Resolve type;
+	Fold neg;
+	Get data type;
+	Get process script;
+	Make processor
+
+7.10. Add an object creator class for sub. It allows to:
+
+	Instantiate sub  with source, left expression, right expression and right expression;
+	Info sub;
+	Replace children;
+	Resolve sub with intervals
+
+7.11. Rename type UnaryArithmeticProcessor with UnaryArithmeticProcessor
+
+8. Changes to package org.elasticsearch.xpack.sql.expression.predicate.operator.comparison:  
+
+8.1. Add a class for binary comparison. It allows to:
+
+	Instantiate binary comparison  with source, left expression, right expression, binary comparison operation and binary comparison operation;
+	Resolve input type;
+	Get canonicalize;
+	Get data type;
+	Make pipe;
+	Compare binary comparison
+
+8.2. Add a class for binary comparison pipe. It allows to:
+
+	Instantiate binary comparison pipe  with source, expression, left pipe, right pipe, binary comparison operation and binary comparison operation;
+	Info binary comparison pipe;
+	Replace children;
+	Process binary comparison pipe binary comparison pipe as processor;
+	Hash code;
+	Check if binary comparison pipe equals
+
+8.3. Add a class for binary comparison processor. It allows to:
+
+	Handle binary comparison operation;
+	Get symbol;
+	Apply binary comparison processor;
+	Convert binary comparison processor to string;
+	Instantiate binary comparison processor  with left processor, right processor, binary comparison operation and binary comparison operation;
+	Instantiate binary comparison processor  with stream input;
+	Get writeable name;
+	Get process
+
+8.4. Add a class for binary comparison processor tests. It allows to:
+
+	Handle random processor;
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test eq;
+	Handle test null eq;
+	Handle test N eq;
+	Handle test gt;
+	Handle test gte;
+	Handle test lt;
+	Handle test lte;
+	Handle test handle null;
+	Get l
+
+8.5. Add a class for comparisons. It allows to:
+
+	Instantiate comparisons;
+	E comparisons;
+	Handle nulleq;
+	Get neq;
+	Get l;
+	Get lte;
+	G comparisons;
+	Get gte;
+	I r set;
+	Compare comparisons;
+	Compare l number
+
+8.6. Add an object creator class for equals. It allows to:
+
+	Instantiate equals  with source, left expression, right expression and right expression;
+	Info equals;
+	Replace children;
+	Swap left and right;
+	Negate equals
+
+8.7. Add an object creator class for greater than. It allows to:
+
+	Instantiate greater than  with source, left expression, right expression and right expression;
+	Info greater than;
+	Replace children;
+	Swap left and right;
+	Negate greater than
+
+8.8. Add an object creator class for greater than or equal. It allows to:
+
+	Instantiate greater than or equal  with source, left expression, right expression and right expression;
+	Info greater than or equal;
+	Replace children;
+	Swap left and right;
+	Negate greater than or equal
+
+8.9. Add an object creator class for less than. It allows to:
+
+	Instantiate less than  with source, left expression, right expression and right expression;
+	Info less than;
+	Replace children;
+	Swap left and right;
+	Negate less than
+
+8.10. Add an object creator class for less than or equal. It allows to:
+
+	Instantiate less than or equal  with source, left expression, right expression and right expression;
+	Info less than or equal;
+	Replace children;
+	Swap left and right;
+	Negate less than or equal
+
+9. Changes to package org.elasticsearch.xpack.sql.expression.predicate.regex:  
+
+9.1. Add a class for like. It allows to:
+
+	Instantiate like  with source, left expression, like pattern and like pattern;
+	Info like;
+	Replace child;
+	Fold like;
+	Make processor
+
+9.2. Rename type LikePattern with LikePattern
+
+9.3. Add a class for r like. It allows to:
+
+	Instantiate r like  with source, value expression and value expression;
+	Info r like;
+	Replace child;
+	Fold r like;
+	Make processor
+
+10. Changes to package org.elasticsearch.xpack.sql.parser:  
+
+10. Changes to package org.elasticsearch.xpack.sql.plan.logical.command:  
+
+10. Changes to package org.elasticsearch.xpack.sql.plan.logical.command.sys:  
+
+10. Changes to package org.elasticsearch.xpack.sql.querydsl.agg:  
+
+10. Changes to package org.elasticsearch.xpack.sql.querydsl.container:  
+
+10. Changes to package org.elasticsearch.xpack.sql.querydsl.query:  
+
+10. Changes to package org.elasticsearch.xpack.sql.tree:  
+

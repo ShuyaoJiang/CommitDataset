@@ -1,0 +1,9 @@
+Fix empty body writing in EncoderHttpMessageWriter
+
+Prior to this commit, an bug introduced in SPR-16949 prevented
+`Mono.empty` bodies from being written to the response.
+
+This commit ensures that empty bodies still trigger the writing to the
+response and does not hang the processing of the exchange.
+
+Issue: SPR-17220

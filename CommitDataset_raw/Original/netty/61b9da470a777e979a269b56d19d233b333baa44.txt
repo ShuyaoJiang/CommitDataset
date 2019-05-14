@@ -1,0 +1,13 @@
+[#3945] Http2ConnectionHandler breaks channelReadComplete pipeline notification
+
+Motivation:
+
+Http2ConnectionHandler missed to forward channelReadComplete(...) events.
+
+Modifications:
+
+Ensure we notify the next handler in the pipeline via ctx.fireChannelReadComplete().
+
+Result:
+
+Correctly forwarding of event.

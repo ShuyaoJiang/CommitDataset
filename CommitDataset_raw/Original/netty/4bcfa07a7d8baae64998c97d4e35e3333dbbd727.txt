@@ -1,0 +1,14 @@
+Fix OpenSslCertificateException error code validation
+
+Motivation:
+
+In OpenSslCertificateException we tried to validate the supplied error code but did not correctly account for all different valid error codes and so threw an IllegalArgumentException.
+
+Modifications:
+
+- Fix validation by updating to latest netty-tcnative and use CertificateVerifier.isValid
+- Add unit tests
+
+Result:
+
+Validation of error code works as expected.

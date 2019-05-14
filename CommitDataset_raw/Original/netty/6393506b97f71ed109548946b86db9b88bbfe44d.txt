@@ -1,0 +1,17 @@
+Extract SocketAdress logic from NameResolver
+
+Motivation:
+
+As discussed in #4529, NameResolver design shouldn't be resolving SocketAddresses (or String name + port) and return InetSocketAddresses. It should resolve String names and return InetAddresses.
+This SocketAddress to InetSocketAddresses resolution is actually a different concern, used by Bootstrap.
+
+Modifications:
+
+Extract SocketAddress to InetSocketAddresses resolution concern to a new class hierarchy named AddressResolver.
+These AddressResolvers delegate to NameResolvers.
+
+Result:
+
+Better separation of concerns.
+
+Note that new AddressResolvers generate a bit more allocations because of the intermediate Promise and List<InetAddress>.

@@ -1,0 +1,21 @@
+Gather votes from all nodes (#34335)
+
+Today we accept that some nodes may vote for the wrong master in an election.
+This is mostly fine because they do end up joining the correct master in the
+end, but the lack of a vote from every follower may prevent a future desirable
+reconfiguration from taking place.
+
+The solution is to hold another election in a yet-higher term in order to
+collect a complete set of votes. Elections are somewhat disruptive so we should
+think carefully about when this election should take place. One option is to
+wait as late as possible (on the grounds that it might not ever be necessary).
+This unfortunately makes it harder to predict how an
+apparently-smoothly-running cluster will react to nodes leaving and joining.
+Instead we prefer to perform the election as soon as possible in the leader's
+term, adding "votes from all followers" to the invariants that we expect to
+hold in a stable cluster. The start of a leader's term is already a somewhat
+disrupted time for the cluster, so performing another election at this point
+does not materially change the cluster's behaviour.
+
+This change implements the logic needed to trigger a new election in order to
+satisfy this extra stabilisation condition.

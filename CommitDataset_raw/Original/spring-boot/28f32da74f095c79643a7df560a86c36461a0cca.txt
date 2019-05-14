@@ -1,0 +1,14 @@
+Don't user root path for HAL endpoints
+
+Update LinksMvcEndpoint and HalBrowserMvcEndpoint so that no longer try
+to use the `/` context path. Links are now available from `/links` and
+the HAL browser is available from `/hal`.
+
+The actuator HAL browser now works with either WebJars or the Spring
+Data version. It also now transforms the initial HTML so that the
+form is pre-populated with `/links`.
+
+When using Spring Data's HAL browser, the root includes a link to
+`/links` with a rel of `actuator`.
+
+See gh-3621

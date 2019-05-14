@@ -1,0 +1,12 @@
+Remove contentDispositionFormData with charset method
+
+The method was orginally added under SPR-14547 but the example in it
+was probably intended for use with Content-Disposition server response
+header (file dowonload) and not for a Content-Disposition header
+within the body of a multipart request.
+
+In a Spring application a multipart request is typically serialized
+by the FormHttpMessageConverter and hence the Content-Disposition is
+not explicitly set by the application.
+
+Issue: SPR-15205

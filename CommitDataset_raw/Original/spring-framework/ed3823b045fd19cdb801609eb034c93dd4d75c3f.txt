@@ -1,0 +1,18 @@
+Support generic target types in the RestTemplate
+
+This change makes it possible to use the RestTemplate to read an HTTP
+response into a target generic type object. The RestTemplate has three
+new exchange(...) methods that accept ParameterizedTypeReference -- a
+new class that enables capturing and passing generic type info.
+See the Javadoc of the three new methods in RestOperations for a
+short example.
+
+To support this feature, the HttpMessageConverter is now extended by
+GenericHttpMessageConverter, which adds a method for reading an
+HttpInputMessage to a specific generic type. The new interface
+is implemented by the MappingJacksonHttpMessageConverter and also by a
+new Jaxb2CollectionHttpMessageConverter that can read read a generic
+Collection where the generic type is a JAXB type annotated with
+@XmlRootElement or @XmlType.
+
+Issue: SPR-7023

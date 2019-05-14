@@ -1,0 +1,11 @@
+ReferenceCountedOpenSslEngineTest cleanup sequencing bug
+
+Motivation:
+ReferenceCountedOpenSslEngine depends upon the the SslContext to cleanup JNI resources. If we don't wait until the ReferenceCountedOpenSslEngine is done with cleanup before cleaning up the SslContext we may crash the JVM.
+
+Modifications:
+- Wait for the channels to close (and thus the ReferenceCountedOpenSslEngine to be cleaned up) before cleaning up the associated SslContext.
+
+Result:
+Cleanup sequencing is correct and no more JVM crash.
+Fixes https://github.com/netty/netty/issues/5692

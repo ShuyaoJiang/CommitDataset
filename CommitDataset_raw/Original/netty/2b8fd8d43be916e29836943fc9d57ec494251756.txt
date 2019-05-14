@@ -1,0 +1,13 @@
+Allow to disable caching in PooledByteBufAllocator for non FastThreadLocalThreads
+
+Motivation:
+
+If a user allocates a lot from outside the EventLoop we may end up creating a lot of caches in the PooledByteBufAllocator. This may be wasteful and so it may be useful for an other to configure that caches should only be used from within EventLoops.
+
+Modifications:
+
+Add new constructor which allows to configure the caching behaviour.
+
+Result:
+
+More flexible configuration of PooledByteBufAllocator possible

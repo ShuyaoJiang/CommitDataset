@@ -1,0 +1,9 @@
+Add debug logging to ConfigFileApplicationListener
+
+Update ConfigFileApplicationListener to include more debug level output.
+Debug messages are recorded during onApplicationEnvironmentPreparedEvent
+but not actually output until onApplicationPreparedEvent. This is
+because the logging level might not have been correctly set until the
+context is completely prepared.
+
+Fixes gh-1584

@@ -1,0 +1,27 @@
+Overhaul non-void JavaBean write method support
+
+This change revisits the implementation of ExtendedBeanInfo, simplifying
+the overall approach while also ensuring that ExtendedBeanInfo is fully
+isolated from the BeanInfo instance it wraps. This includes any existing
+PropertyDescriptors in the wrapped BeanInfo - along with being copied
+locally into ExtendedBeanInfo, each property descriptor is now also
+wrapped with our own new "simple" PropertyDescriptor variants that
+bypass the soft/weak reference management that goes on in both
+java.beans.PropertyDescriptor and java.beans.IndexedPropertyDescriptor,
+maintaining hard references to methods and bean classes instead. This
+ensures that changes we make to property descriptors, e.g. adding write
+methods, do not cause subtle conflicts during garbage collection (as was
+reported and reproduced in SPR-9702).
+
+Eliminating soft/weak reference management means that we must take extra
+care to ensure that we do not cause ClassLoader leaks by maintaining
+hard references to methods, and therefore transitively to the
+ClassLoader in which the bean class was loaded. The forthcoming
+SPR-10028 addresses this aspect.
+
+See the updated ExtendedBeanInfo Javadoc for further details.
+
+Issue: SPR-8079, SPR-8175, SPR-8347, SPR-8432, SPR-8491, SPR-8522,
+       SPR-8806, SPR-8931, SPR-8937, SPR-8949, SPR-9007, SPR-9059,
+       SPR-9414, SPR-9453, SPR-9542, SPR-9584, SPR-9677, SPR-9702,
+       SPR-9723, SPR-9943, SPR-9978, SPR-10028, SPR-10029

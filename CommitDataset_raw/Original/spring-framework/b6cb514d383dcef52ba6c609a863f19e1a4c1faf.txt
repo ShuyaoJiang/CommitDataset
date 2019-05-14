@@ -1,0 +1,70 @@
+Generate Maven Central-compatible poms
+
+Understanding Gradle pom generation
+-------------------------------------------
+
+All spring-* subprojects have had Gradle's 'maven' plugin applied to
+them. This means that one can run `gradle install`, and POMs will be
+generated according to the metadata in the build.gradle file.
+
+The 'customizePom' routine added by this commit hooks into this
+generation process in order to add elements to the pom required for
+entry into Maven Central via oss.sonatype.org[1].
+
+This pom generation happens on-the-fly during `gradle install` and
+the generated poms exist only in your local .m2 cache. Therefore,
+you will not see the poms on the source tree after this command.
+
+Handling optional and provided dependencies
+-------------------------------------------
+
+Note particularly the handling of 'optional' and 'provided'
+dependencies. Gradle does not have a first class notion for these
+concepts, nor are they significant to the actual Gradle build process,
+but they are important when publishing POMs for consumption via Maven
+Central and other Maven-compatible repositories.
+
+<optional>true</optional> indicates that a dependency need not be
+downloaded when resolving artifacts. e.g. spring-context has an
+compile-time dependency on cglib, but when a Spring user resolves
+spring-context from Maven Central, cglib should *not* automatically
+be downloaded at the same time. This is because the core functionality
+within spring-context can operate just fine without cglib on the
+classpath; it is only if the user chooses explicitly to use certain
+functionality, e.g. @Configuration classes, which do require cglib,
+that the user must declare an explicit dependency in their own build
+script on cglib.
+
+Marking these kinds of dependencies as 'optional' provides a kind of
+built in 'documentation' about which version of cglib the user should
+declare if in fact he wishes to.
+
+Spring has a great many compile-time dependencies, but in fact very
+few mandatory runtime dependencies. Therefore, *most* of Spring's
+dependencies are optional.
+
+<scope>provided</scope> is similar to 'optional', in that dependencies
+so marked should not be automatically downloaded during dependency
+resolution, but indicates rather that they are expected to have been
+provided by the user application runtime environment. For example, the
+Servlet API is in fact a required runtime dependency for spring-webmvc,
+but it is expected that it will be available via the user's servlet
+container classpath. Again, it serves here as a kind of 'documentation'
+that spring-webmvc does in fact expect the servlet api to be available,
+and furthermore which (minimum) version.
+
+This commit adds two closures named 'optional' and 'provided' as well as
+two arrays (optionalDeps, providedDeps) for tracking which dependencies
+are optional or provided. An optional dependency is declared as follows:
+
+    compile("group:artifact:version", optional)
+
+Here, the optional closure accepts the dependency argument implicitly,
+and appends it to the 'optionalDeps' array. Then, during pom generation
+(again, the customizePom routine), these arrays are interrogated, and
+pom <dependency> elements are updated with <optional>true</optional> or
+<scope>provided</scope> as appropriate. Thanks to the Spock framework
+for inspiration on this approach[2].
+
+[1] http://bit.ly/wauOqP (Sonatype's central sync requirements)
+[2] https://github.com/spockframework/spock/blob/groovy-1.7/gradle/publishMaven.gradle#L63

@@ -1,0 +1,13 @@
+Ignore Kotlin annotations when creating test context cache key
+
+Every classes that's compiled by Kotlin is annotated with
+kotlin.Metadata. The attributes of this annotation always differ so
+if they are used in the cache key, context caching will effectively
+be disabled.
+
+This commit updates the key used by ImportsContextCustomizer to
+ignore the kotlin.Metadata annotation. Additionally, to align with
+with Java where annotations in java.lang.annotation are ignored,
+annotations in kotlin.annotation are also ignored.
+
+Closes gh-7101

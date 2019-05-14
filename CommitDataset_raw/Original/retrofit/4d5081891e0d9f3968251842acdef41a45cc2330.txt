@@ -1,0 +1,17 @@
+Abstract HTTP client behind interfaces.
+
+Move the HTTP client implementation behind interfaces which allow
+for its substitution. A `Client` is a one-method class which takes a
+`Request` object, executes an HTTP request represented by it
+synchronously, and returns a `Response` object representing the HTTP
+response entirely.
+
+Since this is such a fundamental change all of the tests which interact
+with and verify the client have been rewritten from scratch.
+
+This commit also changes two behaviors which were previously present:
+
+ * Implicit, form-encoded request bodies are no longer supported. Extra
+   `@Named` params on a method is now invalid.
+ * Multi-part requests are no longer implicit. Methods which submit
+   multi-part request bodies must be annotated with `@Multipart`.

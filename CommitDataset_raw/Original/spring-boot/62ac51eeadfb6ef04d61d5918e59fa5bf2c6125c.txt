@@ -1,0 +1,23 @@
+Upgrade to the Spring Data Dijkstra release train
+
+In addition to the upgrade to Dijkstra (#743) Spring HATEOAS has been
+upgraded to 0.11.0 (#801) and Mongo's Java driver has been upgraded to
+2.12.1 (#689). In both cases this is the same version as is used by
+Dijkstra RC1.
+
+The new version of Mongo's Java driver changes the exception that's
+thrown when Mongo isn't running and a connection attempt fails. The
+Mongo sample has been updated accordingly.
+
+RepositoryRestMvcAutoConfiguration has been updated to be configured
+before JpaRepositoriesAutoConfiguration. This ensures that the
+former's transitive import of SpringDataJacksonConfiguration takes
+precedence over the latter's import of the same. This is necessary as
+RepositoryRestMvcConfiguration requires a bean that's declared by
+SpringDataJacksonConfiguration and, if JpaRepositoriesAutoConfiguration
+is processed first, its conditions may cause the import
+SpringDataJacksonConfiguration to be skipped causing instantiation
+of RepositoryRestMvcConfiguration to fail.
+
+Closes #689
+Closes #743

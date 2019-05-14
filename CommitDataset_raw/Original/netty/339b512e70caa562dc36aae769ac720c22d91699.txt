@@ -1,0 +1,13 @@
+Fix small race in DefaultChannelPipeline introduced by a729e0fcd94009905d219665bdd069eb31433b7c
+
+Motivation:
+
+There is a small race while adding handlers to the pipeline because callHandlerAddedForAllHandlers() may not be run when the user calls add* but the Channel is already registered.
+
+Modifications:
+
+Ensure we always delay handlerAdded(..) / handlerRemoved(...) until callHandlerAddedForAllHandlers() was called.
+
+Result:
+
+No more race on pipeline modifications possible.

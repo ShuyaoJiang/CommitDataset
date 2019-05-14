@@ -1,0 +1,12 @@
+Added websocket upgrade support for GlassFish 4.0
+
+Commit 2397b21096ad1c184d9f22629f74a6c44a9ba923 changed websocket
+support to use GlassFish 4.0.1 nightlies, but broke support for 4.0. In
+GlassFish 4.0.1, the package that TyrusEndpoint is located in changed.
+This commit provides an abstract handler that does all required
+GlassFish setup, but delegates to version specific upgrade handlers to
+create the final TyrusEndpoint.
+
+GlassFish 4.0 handler uses reflection to create its endpoint to prevent
+dependency issues of depending on different versions of
+tyrus-websocket-core and tyrus-container-servlet

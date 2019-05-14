@@ -1,0 +1,9 @@
+Improve the performance of mattes and masks 200-1000+%  (#201)
+
+The largest performance bottleneck for mattes and masks was the saveLayer call that redirected rendering to an offscreen buffer.
+
+Perviously, it would call saveLayer with the entire bounds of the layer. However, it now actually measures layer bounds and only saves that small region. All compositions with a mask or matte should see a very significant performance improvement. For animations with small masks or mattes on a large composition or many masks and mattes, the improvements could be even greater.
+
+Some of my test animations went from 5 to 30+ fps.
+
+Fixes #167

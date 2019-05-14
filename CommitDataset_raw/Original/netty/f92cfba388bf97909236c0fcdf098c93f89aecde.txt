@@ -1,0 +1,4 @@
+Remove DefaultCompositeByteBuf.lastAccessed and use binary search instead
+
+- Fixes #1364
+- Even if a user creates a duplicate/slice, lastAccessed was shared between the derived buffers and it's updated even by a read operation, which made multithread access impossible

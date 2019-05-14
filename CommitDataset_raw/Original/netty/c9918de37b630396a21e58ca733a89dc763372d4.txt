@@ -1,0 +1,13 @@
+http2: Make MAX_HEADER_LIST_SIZE exceeded a stream error when encoding.
+
+Motivation:
+
+The SETTINGS_MAX_HEADER_LIST_SIZE limit, as enforced by the HPACK Encoder, should be a stream error and not apply to the whole connection.
+
+Modifications:
+
+Made the necessary changes for the exception to be of type StreamException.
+
+Result:
+
+A HEADERS frame exceeding the limit, only affects a specific stream.

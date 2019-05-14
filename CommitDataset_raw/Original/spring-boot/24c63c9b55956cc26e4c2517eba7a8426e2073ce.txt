@@ -1,0 +1,31 @@
+Adopt RepositoryRestConfigurer and discourage subclassing
+
+A RepositoryRestMvcConfiguration subclass provided by a user is
+problematic in a Spring Boot application as it causes
+RepositoryRestMvcConfiguration's bean declarations to be processed
+before any auto-configuration runs.
+
+One problem that this causes is that it switches off Boot's Jackson
+auto-configuration due to RepositoryRestMvcConfiguration having
+already declared multiple ObjectMapper beans. Unlike Boot's
+auto-configured ObjectMapper, none of these ObjectMappers are marked
+as @Primary. This then leads to wiring failures due to multiple
+candidates being available.
+
+To address this problem a new RepositoryRestConfigurer abstract has been
+introduced in Spring Data Gosling. Its use is now strongly preferred
+over subclassing RepositoryRestMvcConfiguration. Note that our own
+RepositoryRestMvcConfiguration subclass remains. It is imported as part
+of auto-configuration (avoiding the ordering problems described above),
+and provides configuration properties binding for
+RepositoryRestConfiguration. However, the Jackson ObjectMapper
+configuration has been moved out into a new RepositoryRestConfigurer
+implementation.
+
+While SpringBootRepositoryRestMvcConfiguration remains, this commit
+makes it package private to discourage users from subclassing it. While
+this may break existing applications, it, coupled with the documentation
+updates, will hopefully guide them toward using
+RepositoryRestConfigurer.
+
+Closes gh-3439

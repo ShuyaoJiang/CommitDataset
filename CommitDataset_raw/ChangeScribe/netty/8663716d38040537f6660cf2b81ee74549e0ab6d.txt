@@ -1,0 +1,556 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (.gitignore, pom.xml, default.xml, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package com.sun.nio.sctp:  
+
+1.1. Add a class for abstract notification handler. It allows to:
+
+	Handle notification;
+
+1.2. Add a class for association
+
+1.3. Add a class for association change notification
+
+1.4. Add a class for message info. It allows to:
+
+	Create outgoing;
+	Get address;
+	Get stream number;
+	Get payload protocol ID;
+	Check if message info is complete;
+	Check if message info is unordered;
+	Handle unordered
+
+1.5. Add an interface declaration  for notification. It allows to:
+
+	Get association
+
+1.6. Add an interface declaration  for notification handler
+
+1.7. Add a class for peer address change notification
+
+1.8. Add a class for sctp channel. It allows to:
+
+	Handle open;
+	Instantiate sctp channel  with selector provider;
+	Get option;
+	Set option;
+	Get all local addresses;
+	Get remote addresses;
+	Get association;
+	Get bind;
+	Connect remote socket address;
+	Connect sctp channel;
+	Get bind address;
+	Unbind address;
+	Receive dst byte buffer;
+	Send src byte buffer;
+	Get supported options
+
+1.9. Add a class for sctp server channel. It allows to:
+
+	Handle open;
+	Instantiate sctp server channel  with selector provider;
+	Get option;
+	Set option;
+	Get all local addresses;
+	Get bind;
+	Get bind address;
+	Unbind address;
+	Accept sctp server channel
+
+1.10. Add an interface declaration  for sctp socket option. It allows to:
+
+	Name sctp socket option;
+	Get type
+
+1.11. Add a class for send failed notification
+
+1.12. Add a class for shutdown notification
+
+1.13. Add a class for unsupported operating system exception. It allows to:
+
+	Raise unsupported operating system exception;
+	Instantiate unsupported operating system exception;
+	Instantiate unsupported operating system exception  with cause throwable;
+
+2. Changes to package io.netty.bootstrap:  
+
+2.1. Rename type Bootstrap with Bootstrap
+
+3. Changes to package io.netty.channel:  
+
+3.1. Rename type ChannelConfig with ChannelConfig
+
+3.2. Rename type ChannelException with ChannelException
+
+3.3. Rename type ChannelFactory with ChannelFactory
+
+3.4. Rename type ChannelFuture with ChannelFuture
+
+3.5. Rename type ChannelFutureListener with ChannelFutureListener
+
+3.6. Rename type ChannelHandler with ChannelHandler
+
+3.7. Rename type ChannelHandlerContext with ChannelHandlerContext
+
+3.8. Rename type ChannelPipeline with ChannelPipeline
+
+3.9. Rename type ChannelPipelineException with ChannelPipelineException
+
+3.10. Rename type CompleteChannelFuture with CompleteChannelFuture
+
+3.11. Rename type DefaultChannelConfig with DefaultChannelConfig
+
+3.12. Rename type DefaultFileRegion with DefaultFileRegion
+
+3.13. Rename type FailedChannelFuture with FailedChannelFuture
+
+3.14. Rename type FailedChannelFutureTest with FailedChannelFutureTest
+
+3.15. Rename type FileRegion with FileRegion
+
+3.16. Rename type ServerChannel with ServerChannel
+
+3.17. Rename type SucceededChannelFuture with SucceededChannelFuture
+
+3.18. Rename type SucceededChannelFutureTest with SucceededChannelFutureTest
+
+4. Changes to package io.netty.channel.group:  
+
+4.1. Rename type ChannelGroup with ChannelGroup
+
+4.2. Rename type ChannelGroupFuture with ChannelGroupFuture
+
+4.3. Rename type ChannelGroupFutureListener with ChannelGroupFutureListener
+
+4.4. Rename type CombinedIterator with CombinedIterator
+
+4.5. Rename type DefaultChannelGroup with DefaultChannelGroup
+
+5. Changes to package io.netty.channel.local:  
+
+5.1. Rename type LocalAddress with LocalAddress
+
+5.2. Rename type LocalChannelRegistry with LocalChannelRegistry
+
+5.3. Rename type LocalServerChannel with LocalServerChannel
+
+6. Changes to package io.netty.channel.rxtx:  
+
+6.1. Rename type RXTXChannelConfig with RXTXChannelConfig
+
+6.2. Rename type RXTXDeviceAddress with RXTXDeviceAddress
+
+7. Changes to package io.netty.channel.sctp:  
+
+7.1. Rename type DefaultSctpChannelConfig with DefaultSctpChannelConfig
+
+7.2. Rename type DefaultSctpServerChannelConfig with DefaultSctpServerChannelConfig
+
+7.3. Rename type SctpChannel with SctpChannel
+
+7.4. Rename type SctpChannelConfig with SctpChannelConfig
+
+7.5. Rename type SctpNotificationHandler with SctpNotificationHandler
+
+7.6. Rename type SctpServerChannel with SctpServerChannel
+
+7.7. Rename type SctpServerChannelConfig with SctpServerChannelConfig
+
+8. Changes to package io.netty.channel.socket:  
+
+8.1. Rename type DatagramChannel with DatagramChannel
+
+8.2. Rename type DatagramChannelConfig with DatagramChannelConfig
+
+8.3. Rename type DefaultDatagramChannelConfig with DefaultDatagramChannelConfig
+
+8.4. Rename type DefaultServerSocketChannelConfig with DefaultServerSocketChannelConfig
+
+8.5. Rename type DefaultSocketChannelConfig with DefaultSocketChannelConfig
+
+8.6. Rename type ServerSocketChannel with ServerSocketChannel
+
+8.7. Rename type ServerSocketChannelConfig with ServerSocketChannelConfig
+
+8.8. Rename type SocketChannel with SocketChannel
+
+8.9. Rename type SocketChannelConfig with SocketChannelConfig
+
+9. Changes to package io.netty.channel.socket.nio:  
+
+9.1. Rename type NioDatagramChannel with NioDatagramChannel
+
+9.2. Rename type NioDatagramChannelConfig with NioDatagramChannelConfig
+
+10. Changes to package io.netty.channel.socket.oio:  
+
+10.1. Rename type OioDatagramChannel with OioDatagramChannel
+
+10.2. Rename type OioServerSocketChannel with OioServerSocketChannel
+
+10.3. Rename type OioSocketChannel with OioSocketChannel
+
+11. Changes to package io.netty.example.discard:  
+
+11.1. Rename type DiscardClient with DiscardClient
+
+11.2. Rename type DiscardClientHandler with DiscardClientHandler
+
+11.3. Rename type DiscardServer with DiscardServer
+
+11.4. Rename type DiscardServerHandler with DiscardServerHandler
+
+12. Changes to package io.netty.example.echo:  
+
+12.1. Rename type EchoClient with EchoClient
+
+12.2. Rename type EchoClientHandler with EchoClientHandler
+
+12.3. Rename type EchoServer with EchoServer
+
+12.4. Rename type EchoServerHandler with EchoServerHandler
+
+13. Changes to package io.netty.example.factorial:  
+
+13.1. Rename type BigIntegerDecoder with BigIntegerDecoder
+
+13.2. Rename type FactorialClient with FactorialClient
+
+13.3. Rename type FactorialClientHandler with FactorialClientHandler
+
+13.4. Rename type FactorialServer with FactorialServer
+
+13.5. Rename type FactorialServerHandler with FactorialServerHandler
+
+13.6. Rename type NumberEncoder with NumberEncoder
+
+14. Changes to package io.netty.example.http.file:  
+
+14.1. Rename type HttpStaticFileServer with HttpStaticFileServer
+
+14.2. Rename type HttpStaticFileServerHandler with HttpStaticFileServerHandler
+
+15. Changes to package io.netty.example.http.websocketx.client:  
+
+15.1. Rename type WebSocketClient with WebSocketClient
+
+15.2. Rename type WebSocketClientHandler with WebSocketClientHandler
+
+16. Changes to package io.netty.example.http.websocketx.server:  
+
+16.1. Rename type WebSocketServer with WebSocketServer
+
+16.2. Rename type WebSocketServerIndexPage with WebSocketServerIndexPage
+
+17. Changes to package io.netty.example.objectecho:  
+
+17.1. Rename type ObjectEchoClient with ObjectEchoClient
+
+17.2. Rename type ObjectEchoClientHandler with ObjectEchoClientHandler
+
+17.3. Rename type ObjectEchoServer with ObjectEchoServer
+
+17.4. Rename type ObjectEchoServerHandler with ObjectEchoServerHandler
+
+18. Changes to package io.netty.example.portunification:  
+
+18.1. Rename type PortUnificationServer with PortUnificationServer
+
+18.2. Rename type PortUnificationServerHandler with PortUnificationServerHandler
+
+19. Changes to package io.netty.example.proxy:  
+
+19.1. Rename type HexDumpProxy with HexDumpProxy
+
+20. Changes to package io.netty.example.qotm:  
+
+20.1. Rename type QuoteOfTheMomentClient with QuoteOfTheMomentClient
+
+20.2. Rename type QuoteOfTheMomentClientHandler with QuoteOfTheMomentClientHandler
+
+20.3. Rename type QuoteOfTheMomentServer with QuoteOfTheMomentServer
+
+20.4. Rename type QuoteOfTheMomentServerHandler with QuoteOfTheMomentServerHandler
+
+21. Changes to package io.netty.example.securechat:  
+
+21.1. Rename type SecureChatClient with SecureChatClient
+
+21.2. Rename type SecureChatClientHandler with SecureChatClientHandler
+
+21.3. Rename type SecureChatServer with SecureChatServer
+
+21.4. Rename type SecureChatServerHandler with SecureChatServerHandler
+
+22. Changes to package io.netty.example.telnet:  
+
+22.1. Rename type TelnetClient with TelnetClient
+
+22.2. Rename type TelnetClientHandler with TelnetClientHandler
+
+22.3. Rename type TelnetServer with TelnetServer
+
+22.4. Rename type TelnetServerHandler with TelnetServerHandler
+
+23. Changes to package io.netty.example.uptime:  
+
+23.1. Rename type UptimeClient with UptimeClient
+
+23.2. Rename type UptimeClientHandler with UptimeClientHandler
+
+24. Changes to package io.netty.handler.codec.base64:  
+
+24.1. Rename type Base64Decoder with Base64Decoder
+
+24.2. Rename type Base64Encoder with Base64Encoder
+
+25. Changes to package io.netty.handler.codec.bytes:  
+
+25.1. Rename type ByteArrayDecoder with ByteArrayDecoder
+
+25.2. Rename type ByteArrayDecoderTest with ByteArrayDecoderTest
+
+25.3. Rename type ByteArrayEncoder with ByteArrayEncoder
+
+25.4. Rename type ByteArrayEncoderTest with ByteArrayEncoderTest
+
+26. Changes to package io.netty.handler.codec.compression:  
+
+26.1. Rename type CompressionException with CompressionException
+
+26.2. Rename type ZlibDecoder with ZlibDecoder
+
+26.3. Rename type ZlibEncoder with ZlibEncoder
+
+26.4. Rename type ZlibUtil with ZlibUtil
+
+27. Changes to package io.netty.handler.codec.frame:  
+
+27.1. Rename type DelimiterBasedFrameDecoderTest with DelimiterBasedFrameDecoderTest
+
+27.2. Rename type LengthFieldBasedFrameDecoderTest with LengthFieldBasedFrameDecoderTest
+
+28. Changes to package io.netty.handler.codec.http:  
+
+28.1. Rename type Cookie with Cookie
+
+28.2. Rename type CookieDecoder with CookieDecoder
+
+28.3. Rename type DefaultCookie with DefaultCookie
+
+28.4. Rename type DefaultHttpMessage with DefaultHttpMessage
+
+28.5. Rename type DefaultHttpRequest with DefaultHttpRequest
+
+28.6. Rename type DefaultHttpResponse with DefaultHttpResponse
+
+28.7. Rename type HttpContentCompressor with HttpContentCompressor
+
+28.8. Rename type HttpContentDecoder with HttpContentDecoder
+
+28.9. Rename type HttpContentDecompressor with HttpContentDecompressor
+
+28.10. Rename type HttpHeaderDateFormatTest with HttpHeaderDateFormatTest
+
+28.11. Rename type HttpMessage with HttpMessage
+
+28.12. Rename type HttpRequest with HttpRequest
+
+28.13. Rename type HttpRequestDecoder with HttpRequestDecoder
+
+28.14. Rename type HttpRequestEncoder with HttpRequestEncoder
+
+28.15. Rename type HttpResponse with HttpResponse
+
+28.16. Rename type HttpResponseDecoder with HttpResponseDecoder
+
+28.17. Rename type HttpResponseEncoder with HttpResponseEncoder
+
+28.18. Rename type HttpResponseStatus with HttpResponseStatus
+
+28.19. Rename type HttpVersion with HttpVersion
+
+28.20. Rename type QueryStringDecoder with QueryStringDecoder
+
+28.21. Rename type QueryStringDecoderTest with QueryStringDecoderTest
+
+28.22. Rename type QueryStringEncoder with QueryStringEncoder
+
+29. Changes to package io.netty.handler.codec.http.websocketx:  
+
+29.1. Rename type BinaryWebSocketFrame with BinaryWebSocketFrame
+
+29.2. Rename type CloseWebSocketFrame with CloseWebSocketFrame
+
+29.3. Rename type ContinuationWebSocketFrame with ContinuationWebSocketFrame
+
+29.4. Rename type PingWebSocketFrame with PingWebSocketFrame
+
+29.5. Rename type PongWebSocketFrame with PongWebSocketFrame
+
+29.6. Rename type TextWebSocketFrame with TextWebSocketFrame
+
+29.7. Rename type WebSocket00FrameDecoder with WebSocket00FrameDecoder
+
+29.8. Rename type WebSocket00FrameEncoder with WebSocket00FrameEncoder
+
+29.9. Rename type WebSocket08FrameDecoder with WebSocket08FrameDecoder
+
+29.10. Rename type WebSocket08FrameEncoder with WebSocket08FrameEncoder
+
+29.11. Rename type WebSocket13FrameDecoder with WebSocket13FrameDecoder
+
+29.12. Rename type WebSocket13FrameEncoder with WebSocket13FrameEncoder
+
+29.13. Rename type WebSocketClientHandshaker with WebSocketClientHandshaker
+
+29.14. Rename type WebSocketClientHandshaker00 with WebSocketClientHandshaker00
+
+29.15. Rename type WebSocketClientHandshaker08 with WebSocketClientHandshaker08
+
+29.16. Rename type WebSocketClientHandshaker13 with WebSocketClientHandshaker13
+
+29.17. Rename type WebSocketClientHandshakerFactory with WebSocketClientHandshakerFactory
+
+29.18. Rename type WebSocketFrame with WebSocketFrame
+
+29.19. Rename type WebSocketHandshakeException with WebSocketHandshakeException
+
+29.20. Rename type WebSocketServerHandshaker with WebSocketServerHandshaker
+
+29.21. Rename type WebSocketServerHandshaker00 with WebSocketServerHandshaker00
+
+29.22. Rename type WebSocketServerHandshaker00Test with WebSocketServerHandshaker00Test
+
+29.23. Rename type WebSocketServerHandshaker08 with WebSocketServerHandshaker08
+
+29.24. Rename type WebSocketServerHandshaker08Test with WebSocketServerHandshaker08Test
+
+29.25. Rename type WebSocketServerHandshaker13 with WebSocketServerHandshaker13
+
+29.26. Rename type WebSocketServerHandshaker13Test with WebSocketServerHandshaker13Test
+
+29.27. Rename type WebSocketServerHandshakerFactory with WebSocketServerHandshakerFactory
+
+30. Changes to package io.netty.handler.codec.protobuf:  
+
+30.1. Rename type ProtobufDecoder with ProtobufDecoder
+
+30.2. Rename type ProtobufEncoder with ProtobufEncoder
+
+30.3. Rename type ProtobufVarint32FrameDecoder with ProtobufVarint32FrameDecoder
+
+30.4. Rename type ProtobufVarint32FrameDecoderTest with ProtobufVarint32FrameDecoderTest
+
+30.5. Rename type ProtobufVarint32LengthFieldPrepender with ProtobufVarint32LengthFieldPrepender
+
+30.6. Rename type ProtobufVarint32LengthFieldPrependerTest with ProtobufVarint32LengthFieldPrependerTest
+
+31. Changes to package io.netty.handler.codec.rtsp:  
+
+31.1. Rename type RtspMethods with RtspMethods
+
+31.2. Rename type RtspRequestDecoder with RtspRequestDecoder
+
+31.3. Rename type RtspRequestEncoder with RtspRequestEncoder
+
+31.4. Rename type RtspResponseDecoder with RtspResponseDecoder
+
+31.5. Rename type RtspResponseEncoder with RtspResponseEncoder
+
+31.6. Rename type RtspResponseStatuses with RtspResponseStatuses
+
+31.7. Rename type RtspVersions with RtspVersions
+
+32. Changes to package io.netty.handler.codec.serialization:  
+
+32.1. Rename type CachingClassResolver with CachingClassResolver
+
+32.2. Rename type ClassLoaderClassResolver with ClassLoaderClassResolver
+
+32.3. Rename type ClassResolver with ClassResolver
+
+32.4. Rename type ClassResolvers with ClassResolvers
+
+32.5. Rename type CompactObjectInputStream with CompactObjectInputStream
+
+32.6. Rename type CompactObjectOutputStream with CompactObjectOutputStream
+
+32.7. Rename type CompactObjectSerializationTest with CompactObjectSerializationTest
+
+32.8. Rename type CompatibleObjectEncoder with CompatibleObjectEncoder
+
+32.9. Rename type ObjectDecoder with ObjectDecoder
+
+32.10. Rename type ObjectDecoderInputStream with ObjectDecoderInputStream
+
+32.11. Rename type ObjectEncoder with ObjectEncoder
+
+32.12. Rename type ObjectEncoderOutputStream with ObjectEncoderOutputStream
+
+32.13. Rename type ReferenceMap with ReferenceMap
+
+32.14. Rename type SoftReferenceMap with SoftReferenceMap
+
+32.15. Rename type WeakReferenceMap with WeakReferenceMap
+
+33. Changes to package io.netty.handler.codec.string:  
+
+33.1. Rename type StringDecoder with StringDecoder
+
+33.2. Rename type StringEncoder with StringEncoder
+
+34. Changes to package io.netty.handler.ipfilter:  
+
+34.1. Rename type IpFilterRule with IpFilterRule
+
+35. Changes to package io.netty.handler.logging:  
+
+35.1. Rename type LoggingHandler with LoggingHandler
+
+36. Changes to package io.netty.handler.stream:  
+
+36.1. Rename type ChunkedFile with ChunkedFile
+
+36.2. Rename type ChunkedInput with ChunkedInput
+
+36.3. Rename type ChunkedNioFile with ChunkedNioFile
+
+36.4. Rename type ChunkedNioStream with ChunkedNioStream
+
+36.5. Rename type ChunkedStream with ChunkedStream
+
+37. Changes to package io.netty.handler.timeout:  
+
+37.1. Rename type IdleStateEvent with IdleStateEvent
+
+37.2. Rename type ReadTimeoutException with ReadTimeoutException
+
+37.3. Rename type ReadTimeoutHandler with ReadTimeoutHandler
+
+37.4. Rename type TimeoutException with TimeoutException
+
+37.5. Rename type WriteTimeoutException with WriteTimeoutException
+
+38. Changes to package io.netty.util:  
+
+38.1. Rename type CharsetUtil with CharsetUtil
+
+38.2. Rename type Timeout with Timeout
+
+38.3. Rename type Timer with Timer
+
+38.4. Rename type TimerTask with TimerTask
+
+39. Changes to package io.netty.util.internal:  
+
+39.1. Rename type StringUtil with StringUtil
+
+39.2. Rename type SystemPropertyUtil with SystemPropertyUtil
+
+39.3. Rename type ThreadLocalRandom with ThreadLocalRandom
+

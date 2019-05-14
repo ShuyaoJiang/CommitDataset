@@ -1,0 +1,8 @@
+Fixed CCR stats api serialization issues and (#33983)
+
+always use `IndicesOptions.strictExpand()` for indices options.
+
+The follow index may be closed and we still want to get stats from
+shard follow task and the whether the provided index name matches with
+follow index name is checked when locating the task itself in the ccr
+stats transport action.

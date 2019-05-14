@@ -1,0 +1,12 @@
+Introduce PreVoteCollector (#32847)
+
+An election requires a node to select a term that is higher than all
+previously-seen terms.  If nodes are too enthusiastic about starting elections
+then they can effectively excludes itself from the cluster until the leader can
+bump to a still-higher term, and if this process repeats then a single faulty
+node can prevent the cluster from making useful progress.
+
+The solution is to start the election with a pre-voting round to ensure that
+there is at least a quorum of nodes who believe there to be no leader.
+
+This also fixes up some merge issues.

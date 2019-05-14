@@ -1,0 +1,13 @@
+Expose channel count for FixedChannelPool (#8059)
+
+Motivation:
+
+We use FixedChannelPool in production, and we believe we have a leak that doesn't return sockets to the pool (but they should be closed), thus blocking us from creating new connections when we need them. I haven't confirmed this yet, but right now I have to resort to reflection to access this field which makes me sad.
+
+Modification:
+
+Expose the acquiredChannelCount field through a getter method.
+
+Result:
+
+Allows introspection of the pool size in FixedChannelPool.

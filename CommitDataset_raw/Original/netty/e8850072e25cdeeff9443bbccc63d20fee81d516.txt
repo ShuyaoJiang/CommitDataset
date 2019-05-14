@@ -1,0 +1,11 @@
+HTTP/2 DefaultHttp2RemoteFlowController frame merging with padding bug
+
+Motivation:
+DefaultHttp2RemoteFlowController does not correctly account for the padding in the event frames are merged. This causes the internal stat of DefaultHttp2RemoteFlowController to become corrupt and can result in attempting to write frames when there are none.
+
+Modifications:
+- Update DefaultHttp2RemoteFlowController to account for frame sizes not necessarily adding together.
+
+Result:
+DefaultHttp2RemoteFlowController internal state does not become corrupt when padding is present.
+Fixes https://github.com/netty/netty/issues/4573

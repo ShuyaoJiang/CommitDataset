@@ -1,0 +1,8 @@
+Make index APIs work without types. (#29479)
+
+Unlike the `indices.create`, `indices.get_mapping` and `indices.put_mapping`
+APIs, the index APIs do not need the `include_type_name` option, they can work
+work with and without types withouth knowing whether types are being used.
+
+Internally, `_doc` is used as a type if no type is provided, like for the
+`indices.put_mapping` API.

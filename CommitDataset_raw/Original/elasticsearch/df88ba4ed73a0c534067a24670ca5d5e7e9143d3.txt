@@ -1,0 +1,19 @@
+[Rollup] Don't persist state if aborting
+
+`doSaveState` can be invoked on different types of failure.  Some of
+these failures are recoverable (e.g. search exception) which just cause
+the job to reset until the next trigger time.  Other exceptions might
+be caused by an Abort request.
+
+Previously `doSaveState` assumed that the indexer state would be
+INDEXING, STOPPED or STARTED and asserted that.  But if we are ABORTING
+it failed the assertion, and in production would try to persist
+that aborting state which is not needed (and may complicate matters later).
+
+This commit removes the assertion and only tries to persist if we
+are not aborting.  If we're aborting, we just invoke the next handler
+which is likely an onFailure handler.
+
+Relates to elastic/x-pack-elasticsearch#4243
+
+Original commit: elastic/x-pack-elasticsearch@3643b7c0e4e83cc4181036307964b5856a1d084b

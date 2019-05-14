@@ -1,0 +1,22 @@
+Introduce bootJar and bootWar tasks for creating fat jars and wars
+
+Previously, the BootRepackage task would take the output of a Jar
+or War task and repackage it in a similar manner to Spring Boot's
+Maven plugin. This caused several problems in Gradle including
+broken up-to-date checks and a lack of configurability. See the issues
+referenced below for full details.
+
+This commit replaces BootRepackage with BootJar and BootWar
+for building executable jars and wars respectively. BootJar extends
+Gradle's standard Jar task and BootWar extends Gradle's standard War
+task. This means that terms of configuration, the creation of
+executable jars and wars is now as flexible as the creation of
+standards jars and wars.
+
+Closes gh-8167
+Closes gh-8099
+Closes gh-6846
+Closes gh-5861
+Closes gh-5393
+Closes gh-5259
+Closes gh-3931

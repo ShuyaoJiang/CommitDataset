@@ -1,0 +1,21 @@
+Support Jackson based XML serialization/deserialization
+
+This commit adds support for XML serialization/deserialization based on
+the jackson-dataformat-xml extension. When using @EnableWebMvc or
+<mvc:annotation-driven/>, Jackson will be used  by default instead of JAXB2
+if jackson-dataformat-xml classes are found in the classpath.
+
+This commit introduces MappingJackson2XmlHttpMessageConverter and
+MappingJackson2XmlView classes, and common parts between JSON
+and XML processing have been moved to AbstractJackson2HttpMessageConverter
+and AbstractJackson2View classes.
+
+MappingJackson2XmlView supports serialization of a single object. If the model
+contains multiple entries, MappingJackson2XmlView.setModelKey() should be
+used to specify the entry to serialize.
+
+Pretty print works in XML, but tests are not included since a Woodstox dependency
+is needed, and it is better to continue testing spring-web and spring-webmvc
+against JAXB2.
+
+Issue: SPR-11785

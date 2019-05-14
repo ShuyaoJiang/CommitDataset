@@ -1,0 +1,9 @@
+Remove commons pool 2.x workaround
+
+While working on SPR-12532, an extra IdentityWrapper was added to work
+around a backward compatible issue between commons pool 1.x and 2.x. This
+issue (POOL-283) has actually been fixed in 2.4 and their IdentityWrapper
+is using object equality so our wrapper is in the way.
+
+Looking retrospectively, the code looks all fine without the workaround
+and commons pool 2.4 or later so it has been removed.

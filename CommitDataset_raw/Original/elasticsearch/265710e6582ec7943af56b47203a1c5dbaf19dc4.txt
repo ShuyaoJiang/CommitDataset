@@ -1,0 +1,10 @@
+Better msg on unmapped principal attribute (#37805)
+
+When we can't map the principal attribute from the configured SAML
+attribute in the realm settings, we can't complete the
+authentication. We return an error to the user indicating this and
+we present them with a list of attributes we did get from the SAML
+response to point out that the expected one was not part of that
+list. This list will never contain the NameIDs though as they are
+not part of the SAMLAttribute list. So we might have a NameID but
+just with a different format.

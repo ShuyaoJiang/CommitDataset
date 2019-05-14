@@ -1,0 +1,10 @@
+Build: Add warning when bwc tests are disabled (#28585)
+
+The bwc tests can be disabled in order to facilitate commits necessary
+to older branches to maintain backcompat. A check already exists to
+ensure this flag is not left disabled too long (once a day by the
+branchConsistency check). However, it can be surprising if you try
+running bwc tests explicitly and they look like nothing is happening.
+This commit adds a warning during configuration to ensure it is clear
+the bwc tests are disabled and enforces a link to a PR which is in the
+process of being backported.

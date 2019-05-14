@@ -1,0 +1,12 @@
+Rework EndpointWebMvcAutoConfiguration port logic
+
+Update the `ManagementServerPort` detection logic to attempt direct
+property resolution before looking for a local property bean
+definition. Bean definitions provided by auto-configuration classes
+are ignored.
+
+This change allow `OnManagementMvcCondition` to use the
+`ManagementServerPort` to determine when `EndpointWebMvcConfiguration`
+should apply (removing the need to create a temporary context).
+
+See gh-3345

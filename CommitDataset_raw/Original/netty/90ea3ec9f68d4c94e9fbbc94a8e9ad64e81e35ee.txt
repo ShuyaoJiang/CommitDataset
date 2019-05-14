@@ -1,0 +1,14 @@
+Adjust tests to be able to build / test when using IBM J9 / OpenJ9 (#8900)
+
+Motivation:
+
+We should run a CI job using J9 to ensure netty also works when using different JVMs.
+
+Modifications:
+
+- Adjust PooledByteBufAllocatorTest to be able to complete faster when using a JVM which takes longer when joining Threads (this seems to be the case with J9).
+- Skip UDT tests on J9 as UDT is not supported there.
+
+Result:
+
+Be able to run CI against J9.

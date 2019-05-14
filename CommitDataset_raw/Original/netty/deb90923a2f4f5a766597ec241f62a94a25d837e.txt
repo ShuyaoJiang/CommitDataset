@@ -1,0 +1,14 @@
+Ensure PooledByteBuf.initUnpooled(...) correctly set the allocator
+
+Motivation:
+
+Commit 8dda984afe9477fa09fe166305381d9ed1afa7c4 introduced a regression which lead to the situation that the allocator is not set when PooledByteBuf.initUnpooled(...) is called. Thus it was possible that PooledByteBuf.alloc() returns null or the wrong allocator if multiple PooledByteBufAllocator are used in an application.
+
+Modifications:
+
+- Correctly set the allocator
+- Add test-case
+
+Result:
+
+Fixes [#6436].

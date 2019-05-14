@@ -1,0 +1,26 @@
+Fix expansion of static-locations array
+
+This commit fixes a NPE when the static-locations array of
+`ResourceProperties` has to be expanded as the setter is cleaning the
+values of the array and is affected by a non-intuitive behaviour of the
+binder.
+
+When the binder needs to set an element of an array and the size of the
+array isn't large enough, the binder proceeds as follows:
+
+* An array of the required size is created
+* The content of the original array is copied over
+* The setter of the property is invoked with the new array
+* The setter of the property is invoked and the returned array is
+mutated to set the requested value
+
+While one would expect the array to contain the requested value when the
+setter is invoked, this is not the case. Also, the array might contain
+null values if a value at index 8 should be set and the array has a size
+of 3.
+
+All in all, `ResourceProperties#appendSlashIfNecessary` has to account
+for `null` and an additional round of cleaning has to happen once
+binding has completed.
+
+Closes gh-12360

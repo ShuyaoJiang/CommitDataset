@@ -1,0 +1,23 @@
+Add support for Coroutines Flow
+
+Flow is a Kotlin Coroutines related cold asynchronous
+stream of the data, that emits from zero to N (where N
+can be unbounded) values and completes normally or with
+an exception.
+
+It is conceptually the Coroutines equivalent of Flux with
+an extension oriented API design, easy custom operator
+capabilities and some suspending methods.
+
+This commit leverages Flow <-> Flux interoperability
+to support Flow on controller handler method parameters
+or return values, and also adds Flow based extensions to
+WebFlux.fn. It allows to reach a point when we can consider
+Spring Framework officially supports Coroutines even if some
+additional work remains to be done like adding
+interoperability between Reactor and Coroutines contexts.
+
+Flow is currently an experimental API that is expected to
+become final before Spring Framework 5.2 GA.
+
+Close gh-19975

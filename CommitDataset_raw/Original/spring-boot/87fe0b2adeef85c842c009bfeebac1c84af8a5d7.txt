@@ -1,0 +1,37 @@
+Use a conventional delegation model in LaunchedURLClassLoader
+
+When an application is run as an executable archive with nested jars,
+the application's own classes need to be able to load classes from
+within the nested jars. This means that the application's classes need
+to be loaded by the same class loader as is used for the nested jars.
+When an application is launched with java -jar the contents of the
+jar are on the class path of the app class loader, which is the
+parent of the LaunchedURLClassLoader that is used to load classes
+from within the nested jars. If the root of the jar includes the
+application's classes, they would be loaded by the app class loader
+and, therefore, would not be able to load classes from within the
+nested jars.
+
+Previously, this problem was resolved by LaunchedURLClassLoader being
+created with a copy of all of the app class laoder's URLs and by
+using an unconventional delegation model that caused it to skip its
+parent (the app class loader) and jump straight to its root class
+loader. This ensured that the LaunchedURLClassLoader would load both
+the application's own classes and those from within any nested jars.
+Unfortunately, this unusual delegation model has proved to be
+problematic. We have seen and worked around some problems with Java
+Agents (see gh-4911 and gh-863), but there are others (see gh-4868)
+that cannot be made to work with the current delegation model.
+
+This commit reworks LaunchedURLClassLoader to use a conventional
+delegate model with the app class loader as its parent. With this
+change in place, the application's own classes need to be hidden
+from the app class loader via some other means. This is now achieved
+by packaging application classes in BOOT-INF/classes (and, for
+symmetry, nested jars are now packaged in BOOT-INF/lib). Both the
+JarLauncher and the PropertiesLauncher (which supports the executable
+jar layout) have been updated to look for classes and nested jars in
+these new locations.
+
+Closes gh-4897
+Fixes gh-4868

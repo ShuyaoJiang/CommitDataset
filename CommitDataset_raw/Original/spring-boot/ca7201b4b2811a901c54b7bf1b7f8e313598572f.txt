@@ -1,0 +1,15 @@
+Fix binding of overlapping nested maps
+
+When binding a nested map structure, RelaxedDataBinder pre-populates
+the target object with default empty maps. Previously, when these
+structures overlapped, each step in pre-population process could
+potentially overwrite what had come before it. This led to the output
+of the pre-population process being incomplete which would lead to a
+binding failure.
+
+This commit updates the pre-population process so that it checks to see
+if a property's value has already been set by an earlier step in the
+process. If it has been set, the existing value is now reused rather
+than being overwritten by a new empty map.
+
+Fixes #328

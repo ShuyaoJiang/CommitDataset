@@ -1,0 +1,10 @@
+Timed runnable should delegate to abstract runnable
+
+If timed runnable wraps an abstract runnable, then it should delegate to
+the abstract runnable otherwise force execution and handling rejections
+is dropped on the floor. Thus, timed runnable should itself be an
+abstract runnable delegating all methods to the wrapped runnable in
+cases when it is an abstract runnable. This commit causes this to be the
+case.
+
+Relates #27095

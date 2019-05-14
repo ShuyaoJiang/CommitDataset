@@ -1,0 +1,11 @@
+Test: fix security rolling upgrade tests that were failing
+
+This commit fixes the default password migration tests that had been failing reproducibly. The
+first fix skips tests using the set enabled api when running against a version prior to 5.1.2 as
+this api would otherwise trip an assertion that the xcontent builder was not closed. The second
+fix is to ensure we set the password field in the user object.
+
+relates elastic/x-pack-elasticsearch#1529
+relates elastic/x-pack-elasticsearch#1516
+
+Original commit: elastic/x-pack-elasticsearch@2f9c804309edd3a0799cb559c33e7b56f5bbbd80

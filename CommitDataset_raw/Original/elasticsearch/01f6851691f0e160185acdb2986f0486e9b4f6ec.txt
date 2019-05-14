@@ -1,0 +1,4 @@
+Serialize and expose timeout of acknowledged requests in REST layer (#26189)
+
+Due to the weird way of structuring the serialization code in AcknowledgedRequest, many request types forgot to properly serialize the request timeout, for example "index deletion", "index rollover", "index shrink", "putting pipeline", and other requests. This means that if those requests were not directly sent to the master node, the acknowledgement timeout information would be lost (and the default used instead).
+Some requests also don't properly expose the timeout mechanism in the REST layer, such as put / delete stored script. This commit fixes all that.

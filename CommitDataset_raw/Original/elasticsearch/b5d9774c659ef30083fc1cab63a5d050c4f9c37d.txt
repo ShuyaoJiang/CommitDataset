@@ -1,0 +1,13 @@
+Remove leftover doc comment on client JVM check
+
+We previously specified the -server flag to force the JVM to use the
+server JVM. This is the default on all the systems that we support when
+using a 64-bit JVM (and we no longer support 32-bit JVMs). There was
+some trouble with this flag for the Windows service since procrun did
+not understand what to do with it; as such, we had to filter this flag
+out in the service. When we migrated to parsing JVM options in Java (via
+the JVM options parser) we simplified this situation and removed
+specifying the -server flag. This commit removes a leftover statement
+that we are forcing the server JVM.
+
+Relates #28738

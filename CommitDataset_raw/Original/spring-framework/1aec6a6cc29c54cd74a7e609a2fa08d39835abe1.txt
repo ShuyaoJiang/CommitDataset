@@ -1,0 +1,12 @@
+Detect Order on target class as well
+
+Previously, the `@Order` annotation was managed in an inconsistent way
+when placed at the implementation level. For simple beans, it was
+discovered properly but wasn't for beans requiring a proxy.
+
+OrderComparator.SourceProvider now explicitly allows to return several
+order sources; the default implementation returns not only the factory
+method (if  any) but also the target class if it happens to be different
+from the class of the bean.
+
+Issue: SPR-12636

@@ -1,0 +1,5 @@
+Optimize OutputMessageBuf.drainToNextInbound/Outbound()
+
+- Return early when the buffer is empty
+- Keep only the number of byte buffers
+- Remove unnecessary null check in the loop (because we know buffer is not empty at certain point)

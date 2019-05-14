@@ -1,0 +1,7 @@
+Uses norms for exists query if enabled (#27237)
+
+* Uses norms for exists query if enabled
+
+This change means that for indexes created from 6.1.0, if normas are enabled we will not write the field name to the `_field_names` field and for an exists query we will instead use the NormsFieldExistsQuery which was added in Lucene 7.1.0. If norms are not enabled or if the index was created before 6.1.0 `_field_names` will be used as before.
+
+* Fixes tests

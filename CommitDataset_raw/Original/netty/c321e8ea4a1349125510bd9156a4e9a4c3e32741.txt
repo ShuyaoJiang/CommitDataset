@@ -1,0 +1,10 @@
+HTTP/2 outbound event after receiving go_away forces sending a go_away (#8069)
+
+Motivation:
+If the local endpoint receives a GO_AWAY frame and then tries to write a stream with a streamId higher than the last know stream ID we will throw a connection error. This results in the local peer sending a GO_AWAY frame to the remote peer, but this is not necessary as the error can be isolated to the local endpoint and communicated via the ChannelFuture return value.
+
+Modifications:
+- Instead of throwing a connection error, throw a stream error that simulates the peer receiving the stream and replying with a RST
+
+Result:
+Connections are not closed abruptly when trying to create a stream on the local endpoint after a GO_AWAY frame is received.

@@ -1,0 +1,18 @@
+Straighten out profile ordering semantics
+
+Here's what I think works best:
+
+* Any profile in the Environment before application.yml
+is processed takes precedence (i.e. it will be last in the
+list of active profiles in the live app)
+
+* Any profile in the Environment before SpringApplication
+starts takes precedence (so any added on the command line or
+with System properties come after ones added using
+the SpringApplication API)
+
+* The order of profiles in application.yml is irrelevant -
+profiles are applied in the order they come out of
+Environment.getActiveProfiles()
+
+Fixes gh-342

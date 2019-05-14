@@ -1,0 +1,11 @@
+Remove `include_type_name` in asciidoc where possible (#37568)
+
+The "include_type_name" parameter was temporarily introduced in #37285 to facilitate
+moving the default parameter setting to "false" in many places in the documentation
+code snippets. Most of the places can simply be reverted without causing errors.
+In this change I looked for asciidoc files that contained the
+"include_type_name=true" addition when creating new indices but didn't look
+likey they made use of the "_doc" type for mappings. This is mostly the case
+e.g. in the analysis docs where index creating often only contains settings. I
+manually corrected the use of types in some places where the docs still used an
+explicit type name and not the dummy "_doc" type.

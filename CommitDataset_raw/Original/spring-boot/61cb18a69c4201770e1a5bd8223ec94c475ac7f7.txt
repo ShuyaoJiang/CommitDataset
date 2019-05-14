@@ -1,0 +1,13 @@
+Use JOOQ's Spring DB name during exception translation
+
+The name of a JOOQ SQLDialect does not always match the name defined
+in sql-error-codes.xml. For example, the Postgres translator was not
+initialized correctly because in JOOQ the dialect is named
+SQLDialect.POSTGRES, but in sql-error-codes.xml the bean is named
+"PostgreSQL".
+
+This commit updates the translator to use the dialects third-party
+springDbName which ensures that it maps correctly to the entries in
+sql-error-codes.xml.
+
+Closes gh-5884

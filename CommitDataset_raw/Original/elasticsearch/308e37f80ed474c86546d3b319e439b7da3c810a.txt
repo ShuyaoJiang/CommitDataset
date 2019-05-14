@@ -1,0 +1,15 @@
+[ML] Rate limit established model memory updates (#31768)
+
+There is at most one model size stats document per bucket, but
+during lookback a job can churn through many buckets very quickly.
+This can lead to many cluster state updates if established model
+memory needs to be updated for a given model size stats document.
+
+This change rate limits established model memory updates to one
+per job per 5 seconds.  This is done by scheduling the updates 5
+seconds in the future, but replacing the value to be written if
+another model size stats document is received during the waiting
+period.  Updating the values in arrears like this means that the
+last value received will be the one associated with the job in the
+long term, whereas alternative approaches such as not updating the
+value if a new value was close to the old value would not.

@@ -1,0 +1,21 @@
+Fix OperatorFlatMapPerf.flatMapIntPassthruAsync Perf Test
+
+This test was reported broken in https://github.com/ReactiveX/RxJava/pull/2928#issuecomment-113229698
+
+Fixing by adding the use of LatchedObserver.
+
+Previously broken test results:
+
+```
+r.o.OperatorFlatMapPerf.flatMapIntPassthruAsync         1  thrpt         5   363615.622   115041.519    ops/s
+r.o.OperatorFlatMapPerf.flatMapIntPassthruAsync      1000  thrpt         5      350.204      125.773    ops/s
+r.o.OperatorFlatMapPerf.flatMapIntPassthruAsync   1000000  thrpt         5        0.319        0.184    ops/s
+```
+
+Fixed results:
+
+```
+r.o.OperatorFlatMapPerf.flatMapIntPassthruAsync         1  thrpt         5   102109.681     8709.920    ops/s
+r.o.OperatorFlatMapPerf.flatMapIntPassthruAsync      1000  thrpt         5      403.071      130.651    ops/s
+r.o.OperatorFlatMapPerf.flatMapIntPassthruAsync   1000000  thrpt         5        0.355        0.070    ops/s
+```

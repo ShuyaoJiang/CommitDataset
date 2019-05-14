@@ -1,0 +1,5 @@
+[TEST] prevent yaml tests from using raw requests (#26044)
+
+Raw requests are supported only by the java yaml test runner and were introduced to test docs snippets. Some yaml tests ended up using them (see #23497) which causes failures for other language clients. This commit migrates those yaml tests to Java tests that send requests through the Java low-level REST client, and also moves the ability to send raw requests to a special client that's only available when testing docs snippets.
+
+Closes #25694

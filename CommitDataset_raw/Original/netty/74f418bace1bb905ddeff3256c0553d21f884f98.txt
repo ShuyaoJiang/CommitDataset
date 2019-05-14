@@ -1,0 +1,24 @@
+Adding support for specifying preflight response headers.
+
+Motivation:
+
+An intermediary like a load balancer might require that a Cross Origin
+Resource Sharing (CORS) preflight request have certain headers set.
+As a concrete example the Elastic Load Balancer (ELB) requires the
+'Date' and 'Content-Length' header to be set or it will fail with a 502
+error code.
+
+This works is an enhancement of https://github.com/netty/netty/pull/2290
+
+Modifications:
+
+CorsConfig has been extended to make additional HTTP response headers
+configurable for preflight responses. Since some headers, like the
+'Date' header need to be generated each time, m0wfo suggested using a
+Callable.
+
+Result:
+
+By default, the 'Date' and 'Content-Lenght' headers will be sent in a
+preflight response. This can be overriden and users can specify
+any headers that might be required by different intermediaries.

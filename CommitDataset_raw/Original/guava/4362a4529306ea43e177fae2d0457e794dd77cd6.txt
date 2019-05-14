@@ -1,0 +1,22 @@
+Fix calls to contains(Object) and get(Object) that pass a value of apparently the wrong type.
+Tighten up some generics in other cases to make the type, which was correct after all, look more correct.
+
+BUGS:
+
+AbstractBiMapTester:
+- Fix inv.entrySet().contains(...) check, which was using the forward entry instead of the reverse.
+- Fix getMap().get(v) call to be an inv.get(v) call.
+- Use |reversed| instead of |entry| consistently for clarity.
+
+TypeToken:
+- Call map.get(K) instead of map.get(TypeCollector).
+(Presumably this was just an optimization and not necessary for correctness?)
+
+SIMPLIFICATIONS:
+
+TypeResolver:
+- forLookup always returns a (nullable) TypeVariableKey. Declare that return type instead of plain Object.
+(benyu@: I feel like we may have talked about this, with your expressing a preference for the Object type. But I can find no record of the discussion, so I could be making that up. If you do prefer Object, I won't push for the change.)
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=108994208

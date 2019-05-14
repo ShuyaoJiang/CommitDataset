@@ -1,0 +1,10 @@
+Fix test fixtures on aufs (#36105)
+
+Closes #36073
+
+The problem showed up on debian 8 which uses aufs docker storage
+driver by default as opposed to overlay2 used on other distros.
+aufs does not support acls and thus the failure.
+The --use-ntvfs option instructs samba not to rely on acls.
+From what I can tell this is an implementation detail that should not
+affect the tests ( which continue to pass )

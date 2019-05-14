@@ -1,0 +1,10 @@
+Ensure nested documents have consistent version and seq_ids (#27455)
+
+Today we index dummy values for seq_ids and version on nested documents.
+This is on the one hand trappy since users can request these values via
+inner hits and on the other hand not necessarily good for compression since
+the dummy value will likely not compress well when seqIDs are lowish.
+
+This change ensures that we share the same field values for all documents in a
+nested block. This won't have any overhead, in-fact it might be more efficient since
+we even reduce the work needed slightly.

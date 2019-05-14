@@ -1,0 +1,13 @@
+[INGEST] Interrupt the current thread if evaluation grok expressions take too long (#31024)
+
+This adds a thread interrupter that allows us to encapsulate calls to org.joni.Matcher#search()
+This method can hang forever if the regex expression is too complex.
+
+The thread interrupter in the background checks every 3 seconds whether there are threads
+execution the org.joni.Matcher#search() method for longer than 5 seconds and
+if so interrupts these threads.
+
+Joni has checks that that for every 30k iterations it checks if the current thread is interrupted and
+if so returns org.joni.Matcher#INTERRUPTED
+
+Closes #28731

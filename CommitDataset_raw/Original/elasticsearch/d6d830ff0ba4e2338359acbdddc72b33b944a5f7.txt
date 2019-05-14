@@ -1,0 +1,15 @@
+Fix logic detecting unreleased versions
+
+When partitioning version constants into released and unreleased
+versions, today we have a bug in finding the last unreleased
+version. Namely, consider the following version constants on the 6.x
+branch: ..., 5.6.3, 5.6.4, 6.0.0-alpha1, ..., 6.0.0-rc1, 6.0.0-rc2,
+6.0.0, 6.1.0. In this case, our convention dictates that: 5.6.4, 6.0.0,
+and 6.1.0 are unreleased. Today we correctly detect that 6.0.0 and 6.1.0
+are unreleased, and then we say the previous patch version is unreleased
+too. The problem is the logic to remove that previous patch version is
+broken, it does not skip alphas/betas/RCs which have been released. This
+commit fixes this by skipping backwards over pre-release versions when
+finding the previous patch version to remove.
+
+Relates #27206

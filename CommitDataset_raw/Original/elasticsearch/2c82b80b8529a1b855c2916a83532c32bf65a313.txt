@@ -1,0 +1,17 @@
+ Support PKCS#11 tokens as keystores and truststores  (#34063)
+
+This enables Elasticsearch to use the JVM-wide configured
+PKCS#11 token as a keystore or a truststore for its TLS configuration.
+The JVM is assumed to be configured accordingly with the appropriate
+Security Provider implementation that supports PKCS#11 tokens.
+For the PKCS#11 token to be used as a keystore or a truststore for an
+SSLConfiguration, the .keystore.type or .truststore.type must be
+explicitly set to pkcs11 in the configuration.
+The fact that the PKCS#11 token configuration is JVM wide implies that
+there is only one available keystore and truststore that can be used by TLS
+configurations in Elasticsearch.
+The PIN for the PKCS#11 token can be set as a truststore parameter in
+Elasticsearch or as a JVM parameter ( -Djavax.net.ssl.trustStorePassword).
+
+The basic goal of enabling PKCS#11 token support is to allow PKCS#11-NSS in
+FIPS mode to be used as a FIPS 140-2 enabled Security Provider.

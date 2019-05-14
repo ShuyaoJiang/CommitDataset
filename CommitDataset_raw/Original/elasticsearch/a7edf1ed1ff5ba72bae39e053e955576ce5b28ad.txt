@@ -1,0 +1,8 @@
+TEST: Ensure a manual flush always occur (#36188)
+
+The test testLookupSeqNoByIdInLucene fails because it expects if any
+change should be visible after a flush. However, that flush might be
+ignored if the waitIfOngoing parameter is false (the default value), and
+there is an ongoing flush triggered after merge is running.
+
+Closes #35823

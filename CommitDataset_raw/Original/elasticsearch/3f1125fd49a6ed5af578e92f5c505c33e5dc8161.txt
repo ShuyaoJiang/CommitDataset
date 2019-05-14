@@ -1,0 +1,13 @@
+Recover peers from translog, ignoring soft deletes (#38904)
+
+Today if soft deletes are enabled then we read the operations needed for peer
+recovery from Lucene. However we do not currently make any attempt to retain
+history in Lucene specifically for peer recoveries so we may discard it and
+fall back to a more expensive file-based recovery. Yet we still retain
+sufficient history in the translog to perform an operations-based peer
+recovery.
+
+In the long run we would like to fix this by retaining more history in Lucene,
+possibly using shard history retention leases (#37165). For now, however, this
+commit reverts to performing peer recoveries using the history retained in the
+translog regardless of whether soft deletes are enabled or not.

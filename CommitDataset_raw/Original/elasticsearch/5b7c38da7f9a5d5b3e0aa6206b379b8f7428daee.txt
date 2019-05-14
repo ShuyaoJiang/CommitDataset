@@ -1,0 +1,14 @@
+[ML] UpdateProcessNotifier should drain the update queue (elastic/x-pack-elasticsearch#3774)
+
+The notifier is scheduled to run once per second. Currently,
+it simply polls for the next update in the queue. However,
+when there are multiple updates queued up, there is no
+reason to wait for subsequent runs in order to execute the
+rest of the updates.
+
+This commit changes the notifier to drain the queue each time
+it runs. It then serially executes the updates.
+
+relates elastic/x-pack-elasticsearch#3769
+
+Original commit: elastic/x-pack-elasticsearch@7a433c17f272852b08f355785bc0762fca101295

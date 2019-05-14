@@ -1,0 +1,27 @@
+Support multi-line comments in SQL scripts
+
+Prior to this commit neither ResourceDatabasePopulator nor
+JdbcTestUtils properly supported multi-line comments (e.g., /* ... */).
+Secondarily there has developed a significant amount of code
+duplication in these two classes that has led to maintenance issues
+over the years.
+
+This commit addresses these issues as follows:
+
+ - Common code has been extracted from ResourceDatabasePopulator and
+   JdbcTestUtils and moved to a new ScriptUtils class in the
+   spring-jdbc module.
+
+ - Relevant test cases have been migrated from JdbcTestUtilsTests to
+   ScriptUtilsTests.
+
+ - ScriptUtils.splitSqlScript() has been modified to ignore multi-line
+   comments in scripts during processing.
+
+ - ResourceDatabasePopulator supports configuration of the start and end
+   delimiters for multi-line (block) comments.
+
+ - A new test case was added to ScriptUtilsTests for the new multi-line
+   comment support.
+
+Issue: SPR-9531

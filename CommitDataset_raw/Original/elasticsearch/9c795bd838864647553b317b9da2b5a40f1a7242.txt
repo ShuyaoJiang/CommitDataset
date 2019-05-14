@@ -1,0 +1,19 @@
+Fix cache compute if absent for expired entries
+
+When a cache entry expires, it remains in the cache (both the segment
+that it belongs to, and the LRU list) until an eviction occurs. The
+problem here is that the compute if absent implementation relies on
+there not being an association to a key that we are trying to put
+because it internally uses put if absent on the underlying segment. If
+we try to put an association for a key that has expired but not been
+evicted, then compute if absent will return as if there is nothing in
+the cache for the given key, yet no call to compute if absent will
+succeed in putting a new association for the key. To remedy this, we
+modify the internal get method for the cache to let the caller take
+action if the entry they are retrieving is expired. This allows the
+compute if absent method to take the action of evicting the entry from
+the cache, thus allowing the put if absent method used by compute if
+absent to succeed for one of the callers trying to compute if absent a
+new association.
+
+Relates #26516

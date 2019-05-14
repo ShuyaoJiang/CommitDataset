@@ -1,0 +1,17 @@
+Delay loading default ServerSocketFactory until needed
+
+ServerSocketFactory.getDefault() will load the default JVM truststore
+(typically from jre/lib/security/cacerts) as configured by JSSE
+system properties.
+
+However, a typical use case for setting a custom ServerSocketFactory is
+that the client application has loaded custom keystore or truststore
+material into their JVM, usually by creating a custom SSLContext.
+
+There's strictly no reason to initialize the default ServerSocketFactory
+until the mockwebserver has been started, allowing custom settings of the
+factory by clients and avoiding the default load attempt during class
+construction.
+
+This patch simply moves the initiatlization logic into the private start
+method to avoid the premature loading of trust store materials.

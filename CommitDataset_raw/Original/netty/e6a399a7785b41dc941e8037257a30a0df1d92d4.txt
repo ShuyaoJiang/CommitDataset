@@ -1,0 +1,16 @@
+Explicit specify hostaddress during tests to ensure testsuite pass on docker (mac)
+
+Motivation:
+
+When run the current testsuite on docker (mac) it will fail a few tests with:
+
+io.netty.channel.AbstractChannel$AnnotatedConnectException: connect(..) failed: Cannot assign requested address: /0:0:0:0:0:0:0:0%0:46607
+Caused by: java.net.ConnectException: connect(..) failed: Cannot assign requested address
+
+Modifications:
+
+Specify host explicit as done in other tests to only use ipv6 when really supported.
+
+Result:
+
+Build pass on docker as well

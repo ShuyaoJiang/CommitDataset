@@ -1,0 +1,14 @@
+Ensure we don't use a remote profile if cluster name matches (#31331)
+
+If we are running into a race condition between a node being configured
+to be a remote node for cross cluster search etc. and that node joining
+the cluster we might connect to that node with a remote profile. If that
+node now joins the cluster it connected to it as a CCS remote node we use
+the wrong profile and can't use bulk connections etc. anymore. This change
+uses the remote profile only if we connect to a node that has a different cluster
+name than the local cluster. This is not a perfect fix for this situation but
+is the safe option while potentially only loose a small optimization of using
+less connections per node which is small anyways since we only connect to a
+small set of nodes.
+
+Closes #29321

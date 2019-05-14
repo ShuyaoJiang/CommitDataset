@@ -1,0 +1,10 @@
+Use empty key-store-password if storeprovider present
+
+For tomcat, if an SslStoreProvider is configured,
+`SslStoreProviderUrlStreamHandlerFactory` stores the keyStore with an
+empty password. Previously, if a password was supplied using the
+ssl.key-store-password property, that would be the password used to
+load the keystore and the connector would fail with a
+"Password verification failed" exception.
+
+Fixes gh-11391

@@ -1,0 +1,11 @@
+Create specific exception for when snapshots are in progress (#37550)
+
+delete and close index actions threw IllegalArgumentExceptions
+when attempting to run against an index that has a snapshot
+in progress.
+
+This change introduces a dedicated SnapshotInProgressException
+for these scenarios. This is done to explicitly signal to clients that
+this is the reason the action failed, and it is a retryable error.
+
+relates to #37541.

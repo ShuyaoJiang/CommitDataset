@@ -1,0 +1,25 @@
+Exclude support in the maven plugin
+
+This commit provides several options to exclude one or more
+dependencies:
+
+* excludes allows to specify an arbitrary number of exclude sub
+  element defining the groupId and artifactId of the dependency
+  to exclude
+* excludedGroupIds defines the comma separated list of groupIds
+  to exclude
+* excludeArtifactIds defines the comma separated list of artifactIds
+  to exclude
+
+While any artifact can be excluded, this is designed to exclude
+provided-scoped dependencies that should not be bundled in the
+executable jar/war.
+
+The outcome of java -jar myapp.jar should be consistent with the run
+goal: these exclusions are therefore applied to the classpath that
+the run goal computes to launch the application.
+
+This commit also adds some integration tests and updates the
+plugin's documentation
+
+Fixes gh-649, gh-650 and gh-674

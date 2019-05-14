@@ -1,0 +1,9 @@
+Forbid negative field boosts in analyzed queries (#37930)
+
+This change forbids negative field boost in the `query_string`, `simple_query_string`
+and `multi_match` queries.
+Negative boosts are not allowed in Lucene 8 (scores must be positive).
+The backport of this change to 6x will turn the error into a deprecation warning
+in order to raise the awareness of this breaking change in 7.0.
+
+Closes #33309

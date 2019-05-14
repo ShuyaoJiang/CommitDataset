@@ -1,0 +1,11 @@
+HTTP/2 PriorityStreamByteDistributor exceptions and reentry
+
+Motivation:
+PriorityStreamByteDistributor saves exception state and attempts to reset state. This could be simplified by just throwing a connection error and closing the connection. PriorityStreamByteDistributor also does not handle or detect re-entry in the distribute method.
+
+Motivation:
+- PriorityStreamByteDistributor propagate an INTERNAL_ERROR if an exception occurs during writing
+- PriorityStreamByteDistributor to handle re-entry on the write method
+
+Result:
+PriorityStreamByteDistributor exception code state simplified, and re-entry is detected.

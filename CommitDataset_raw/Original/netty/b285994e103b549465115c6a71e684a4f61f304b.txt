@@ -1,0 +1,20 @@
+Support IPv4 default route in ipfilter.
+
+Motivation:
+
+In GitHub issue #2767 a bug was reported that the IPv4
+default route leads to the ipfilter package denying
+instead of accepting all addresses.
+
+While the issue was reported for Netty 3.9, this bug
+also applies to Netty 4 and higher.
+
+Modifications:
+
+When computing the subnet address from the CIDR prefix,
+correctly handle the case where the prefix is set to zero.
+
+Result:
+
+Ipfilter accepts all addresses when passed the
+IPv4 default route.

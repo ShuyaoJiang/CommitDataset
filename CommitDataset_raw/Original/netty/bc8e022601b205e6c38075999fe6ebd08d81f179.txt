@@ -1,0 +1,13 @@
+Added exact utf8 length estimator and exposed writeUtf8 with custom space reservation on destination buffer
+
+Motivation:
+
+To avoid eager allocation of the destination and to perform length prefixed encoding of UTF-8 string with forward only access pattern
+
+Modifications:
+
+The original writeUtf8 is modified by allowing customization of the reserved bytes on the destination buffer and is introduced an exact UTF-8 length estimator.
+
+Result:
+
+Is now possible to perform length first encoding with UTF-8 well-formed char sequences following a forward only write access pattern on the destination buffer.

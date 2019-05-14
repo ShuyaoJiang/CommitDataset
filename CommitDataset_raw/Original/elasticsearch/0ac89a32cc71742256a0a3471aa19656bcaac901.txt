@@ -1,0 +1,30 @@
+Do not optimize append-only if seen normal op with higher seqno (#28787)
+
+When processing an append-only operation, primary knows that operations 
+can only conflict with another instance of the same operation. This is
+true as the id was freshly generated. However this property doesn't hold
+for replicas. As soon as an auto-generated ID was indexed into the
+primary, it can be exposed to a search and users can issue a follow up
+operation on it. In extremely rare cases, the follow up operation can be
+arrived and processed on a replica before the original append-only
+request. In this case we can't simply proceed with the append-only
+request and blindly add it to the index without consulting the version
+map. 
+
+The following scenario can cause difference between primary and
+replica.
+
+1. Primary indexes an auto-gen-id doc. (id=X, v=1, s#=20)
+2. A refresh cycle happens on primary
+3. The new doc is picked up and modified - say by a delete by query
+   request - Primary gets a delete doc (id=X, v=2, s#=30)
+4. Delete doc is processed first on the replica (id=X, v=2, s#=30)
+5. Indexing operation arrives on the replica, since it's an auto-gen-id
+   request and the retry marker is lower, we put it into lucene without 
+   any check. Replica has a doc the primary doesn't have.
+
+To deal with a potential conflict between an append-only operation and a 
+normal operation on replicas, we need to rely on sequence numbers. This
+commit maintains the max seqno of non-append-only operations on replica
+then only apply optimization for an append-only operation only if its
+seq# is higher than the seq# of all non-append-only.

@@ -1,0 +1,10 @@
+Detect builder-style setter
+
+Previously, a setter method that was returning the current instance was
+not identified as a "setter" by the configuration processor. As a result,
+builder-style APIs were not covered by the configuration metadata.
+
+If a setter returns either void or the current class, it is now
+recognized as a valid setter.
+
+Fixes gh-1854

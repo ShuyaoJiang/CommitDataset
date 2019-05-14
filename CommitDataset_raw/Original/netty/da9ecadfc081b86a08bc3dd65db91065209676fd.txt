@@ -1,0 +1,16 @@
+Introduce bypass buffer and use it in LoggingHandler
+
+- Added ChannelBufferHolders.(inbound|outbound)BypassBuffer()
+  - The holder returned by these methods returns the next handler's
+    buffer.  When a handler's new(Inbound|Outbound)Buffer returns
+    a bypass holder, your inboundBufferUpdated() and flush()
+    implementation should check if the buffer is a bypass and should not
+    modify the content of the buffer.
+- Channel(Inbound|Outbound)?HandlerAdapter is now abstract.
+  - A user has to specify the exact inbound/outbound buffer type
+  - It's because there's no way to determine the best buffer type
+- Implemented LoggingHandler using the new API.
+  - It doesn't dump received or sent messages yet.
+- Fixed a bug where DefaultUnsafe.close() does not trigger deregister()
+- Fixed a bug where NioSocketChannel.isActive() does not return false
+  when closed

@@ -1,0 +1,19 @@
+Support new default values in WebDataBinder
+
+Prior to this commit, binding a `@ModelAttribute` object as a Controller
+handler paramater would instantiate the object and set all its
+properties, fetching data from the request. When no data is available,
+the WebDataBinder tries to bind default "empty" values:
+* Boolean.FALSE for boolean types
+* empty arrays for array types
+* null by default
+
+This commit adds the new default empty values:
+* empty Collections for Collection types
+* empty Maps for Map types
+
+Rather than using empty implementations provided by `Collections.empty`
+(which are not mutable), we're using the closest possible target type
+and real implementations, provided by the `CollectionFactory`.
+
+Issue: SPR-13502

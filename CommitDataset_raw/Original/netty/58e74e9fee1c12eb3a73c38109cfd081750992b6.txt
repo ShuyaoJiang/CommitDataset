@@ -1,0 +1,14 @@
+Support running Netty in bootstrap class loader
+
+Motivation:
+
+Fix NullPointerExceptions that occur when running netty-tcnative inside the bootstrap class loader.
+
+Modifications:
+
+- Replace loader.getResource(...) with ClassLoader.getSystemResource(...) when loader is null.
+- Replace loader.loadClass(...) with Class.forName(..., false, loader) which works when loader is both null and non-null.
+
+Result:
+
+Support running native libs in bootstrap class loader

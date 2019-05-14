@@ -1,0 +1,10 @@
+Handle the case where JDK notifies aync I/O handler immediately
+
+After some debugging, I found that JDK AIO implementation often performs
+I/O immediately from the caller thread if the caller thread is the I/O
+thread, and notifies the completion handler also immediately.  This
+commit handles such a case correctly during reads and writes.
+
+Additionally, this commit also changes SingleThreadEventExecutor to let
+it handle unexpected exceptions such as AssertionError in a robus
+manner.

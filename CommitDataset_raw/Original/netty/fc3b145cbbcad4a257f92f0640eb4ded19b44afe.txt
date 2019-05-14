@@ -1,0 +1,13 @@
+Correctly handle non IOException during read in NioServerSocketChannel
+
+Motivation:
+
+Our code was not correct in AbstractNioMessageChannel.closeOnReadError(....) which lead to the situation that we always tried to continue reading no matter what exception was thrown when using the NioServerSocketChannel. Also even on an IOException we should check if the Channel itself is still active or not and if not stop reading.
+
+Modifications:
+
+Fix closeOnReadError impl and added test.
+
+Result:
+
+Correctly stop reading on NioServerSocketChannel when error happens during read.

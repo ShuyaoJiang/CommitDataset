@@ -1,0 +1,8 @@
+Security: improve exact index matching performance (#36017)
+
+This commit improves the efficiency of exact index name matching by
+separating exact matches from those that include wildcards or regular
+expressions. Internally, exact matching is done using a HashSet instead
+of adding the exact matches to the automata. For the wildcard and
+regular expression matches, the underlying implementation has not
+changed.

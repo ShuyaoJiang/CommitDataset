@@ -1,0 +1,42 @@
+Support aggressive round-robin dns
+
+Motivation:
+
+Suppose the domain `foo.example.com` resolves to the following ip
+addresses `10.0.0.1`, `10.0.0.2`, `10.0.0.3`. Round robin DNS works by
+having each client probabilistically getting a different ordering of
+the set of target IP’s, so connections from different clients (across
+the world) would be split up across each of the addresses. Example: In
+a `ChannelPool` to manage connections to `foo.example.com`, it may be
+desirable for high QPS applications to spread the requests across all
+available network addresses. Currently, Netty’s resolver would return
+only the first address (`10.0.0.1`) to use. Let say we are making
+dozens of connections. The name would be resolved to a single IP and
+all of the connections would be made to `10.0.0.1`. The other two
+addresses would not see any connections. (they may see it later if new
+connections are made and `10.0.0.2` is the first in the list at that
+time of a subsequent resolution). In these changes, I add support to
+select a random one of the resolved addresses to use on each resolve
+call, all while leveraging the existing caching and inflight request
+detection. This way in my example, the connections would be make to
+random selections of the resolved IP addresses.
+
+Modifications:
+
+I added another method `newAddressResolver` to
+`DnsAddressResolverGroup` which can be overriden much like
+`newNameResolver`. The current functionality which creates
+`InetSocketAddressResolver` is still used. I added
+`RoundRobinDnsAddressResolverGroup` which extends
+DnsAddressResolverGroup and overrides the `newAddressResolver` method
+to return a subclass of the `InetSocketAddressResolver`. This subclass
+is called `RoundRobinInetSocketAddressResolver` and it contains logic
+that takes a `resolve` request, does a `resolveAll` under the hood, and
+returns a single element at random from the result of the `resolveAll`.
+
+Result:
+
+The existing functionality of `DnsAddressResolverGroup` is left
+unchanged. All new functionality is in the
+`RoundRobinInetSocketAddressResolver` which users will now have the
+option to use.

@@ -1,0 +1,10 @@
+DefaultPromise StackOverFlowException
+
+Motivation:
+When the ImmediateEventExecutor is in use it is possible to get a StackOverFlowException if when a promise completes a new listener is added to that promise.
+
+Modifications:
+- Protect against the case where LateListeners.run() smashes the stack.
+
+Result:
+Fixes https://github.com/netty/netty/issues/4395

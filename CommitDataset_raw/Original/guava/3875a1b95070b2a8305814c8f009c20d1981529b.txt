@@ -1,0 +1,11 @@
+Add Futures.getDone().
+
+API Review:
+https://docs.google.com/document/d/1HvGIffjs3clWLzs0SNzLSKSzlzjIIesZOt6fhedo85Y/edit
+
+Also, make immediateCancelledFuture() available under GWT, since I use it in the new tests.
+To use cancellationExceptionWithCause() from it, I had to move that method out of the server-only AbstractFuture.java and into the shared Futures.java.
+This runs somewhat counter to my effort to make Futures.java smaller. Maybe we'll want a Util/Helpers class, though I'm not quite sure what else would go in it (executeListener? currently non-static maybePropagateCancellation?).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=116279071

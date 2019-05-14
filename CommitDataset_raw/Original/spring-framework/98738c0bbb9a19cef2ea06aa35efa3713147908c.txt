@@ -1,0 +1,10 @@
+Avoid ConcurrentModificationException
+
+Removal of cached destination is now moved outside the for loop
+that removes subscriptions to avoid ConcurrentModificationException.
+
+Also since updateCache is a LinkedHashMap with accessOrder=true,
+a simple access with updateCache.get() modify the map.
+By iterating over updateCache.entrySet(), we avoid this update.
+
+Issue: SPR-11755

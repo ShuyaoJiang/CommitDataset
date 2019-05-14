@@ -1,0 +1,38 @@
+Faster event processing when epoll transport is used
+
+Motivation:
+
+Before we used a long[] to store the ready events, this had a few problems and limitations:
+ - An extra loop was needed to translate between epoll_event and our long
+ - JNI may need to do extra memory copy if the JVM not supports pinning
+ - More branches
+
+Modifications:
+
+- Introduce a EpollEventArray which allows to directly write in a struct epoll_event* and pass it to epoll_wait.
+
+Result:
+
+Better speed when using native transport, as shown in the benchmark.
+
+Before:
+[xxx@xxx wrk]$ ./wrk -H 'Connection: keep-alive' -d 120 -c 256 -t 16 -s scripts/pipeline-many.lua  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+ 16 threads and 256 connections
+ Thread Stats   Avg      Stdev     Max   +/- Stdev
+   Latency    14.56ms    8.64ms 117.15ms   80.58%
+   Req/Sec   286.17k    38.71k  421.48k    68.17%
+ 546324329 requests in 2.00m, 73.78GB read
+Requests/sec: 4553438.39
+Transfer/sec:    629.66MB
+
+After:
+[xxx@xxx wrk]$ ./wrk -H 'Connection: keep-alive' -d 120 -c 256 -t 16 -s scripts/pipeline-many.lua  http://xxx:8080/plaintext
+Running 2m test @ http://xxx:8080/plaintext
+ 16 threads and 256 connections
+ Thread Stats   Avg      Stdev     Max   +/- Stdev
+   Latency    14.12ms    8.69ms 100.40ms   83.08%
+   Req/Sec   294.79k    40.23k  472.70k    66.75%
+ 555997226 requests in 2.00m, 75.08GB read
+Requests/sec: 4634343.40
+Transfer/sec:    640.85MB

@@ -1,0 +1,8 @@
+Fix shutdown issue in AbstractScheduledService.
+
+The issue is that if stopAsync() was called after an interation had been
+executed (but before it had actually run) then we would fail to unlock
+our lock and then shutdown would hang forever.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=80236732

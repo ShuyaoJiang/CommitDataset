@@ -1,0 +1,13 @@
+Determine CompositeByteBuf implementation by using ByteBufAllocator
+
+Motivation:
+
+Currently, using a MessageAggregator in the pipeline always results in the creation of an unpooled heap CompositeByteBuf. By using the ByteBufAllocator the CompositeByteBuf will use the implementation specified by the ByteBufAllocator.
+
+Modifications:
+
+Use the ChannelHandlerContext's ByteBufAllocator to create the CompositeByteBuf for message aggregation
+
+Result:
+
+The CompositeByteBuf is now configured based on the ByteBufAllocator's settings.

@@ -1,0 +1,5 @@
+Add a scheduled translog retention check (#25622)
+
+We currently check whether translog files can be trimmed whenever we create a new translog generation or close a view. However #25294 added a long translog retention period (12h, max 512MB by default), which means translog files should potentially be cleaned up long after there isn't any indexing activity to trigger flushes/the creation of new translog files. We therefore need a scheduled background check to clean up those files once they are no longer needed.
+
+Relates to #10708 

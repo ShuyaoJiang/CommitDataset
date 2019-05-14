@@ -1,0 +1,9 @@
+Remove es.cluster_state.size hard failure (#40111)
+
+In 6.7.0 we introduced a system property to return the old behavior of
+computing and sending the compressed size of the cluster state on
+cluster state endpoints. In 7.0.0, we removed this behavior but hard
+failed usage of this system property (to clearly inform users this
+behavior is gone). In this commit, intending to target 8.0.0 only, we
+remove this detection as it should no longer be needed; that is, we now
+treat this as dead code.

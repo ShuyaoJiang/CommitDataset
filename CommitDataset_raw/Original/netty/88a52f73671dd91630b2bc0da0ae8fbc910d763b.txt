@@ -1,0 +1,11 @@
+KObjectHashMap PrimitiveIterator NPE
+
+Motivation:
+KObjectHashMap.remove(int index) attempts to move back items which may have been displaced because their spot in the hash based array was taken by another item. If this happens the nextIndex reference in PrimitiveIterator will not be updated. At this time the PrimitiveEntry will reference the incorrect index and may result in a NPE.
+
+Modifications:
+- If KObjectHashMap.remove(int index) moves entries back then PrimitiveIterator should adjust its nextIndex
+
+Result:
+PrimitiveIterator.remove() updates its internal state to reference the new nextIndex and will not NPE.
+Fixes https://github.com/netty/netty/issues/5198

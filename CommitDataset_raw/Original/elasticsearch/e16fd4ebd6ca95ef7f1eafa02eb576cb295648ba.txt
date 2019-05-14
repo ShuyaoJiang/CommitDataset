@@ -1,0 +1,11 @@
+Change missing authn message to not mention tokens (#36750)
+
+The phrase "missing authentication token" is historic and is based
+around the use of "AuthenticationToken" objects inside the Realm code.
+
+However, now that we have a TokenService and token API, this message
+would sometimes lead people in the wrong direction and they would try
+and generate a "token" for authentication purposes when they would
+typically just need a username:password Basic Auth header.
+
+This change replaces the word "token" with "credentials".

@@ -1,0 +1,11 @@
+Favor JSR-107 provider if present
+
+Previously, native cache libraries were favored over a standard JSR-107
+implementation. If a user has a working setup using JCache with one
+provider and switch to another provider, his setup may be broken if we
+happen to provide a native support for the new provider.
+
+We now consistently favor JSR-107 if it is present. Native support can
+still be enabled via the `spring.cache.type` property.
+
+Closes gh-3822

@@ -1,0 +1,15 @@
+Enable smart suffix pattern match for request mapping
+
+Following the introduction of ContentNegotiationManager that allows,
+among other things, to configure the file extensions to use for content
+negotiation, this change adds "smart" suffix pattern match that matches
+against the configured file extensions only rather than against any
+extension.
+
+Given the request mapping "/jobs/{jobName}" and one configured file
+extension ("json"), a request for "/jobs/my.job" will select the
+pattern "/jobs/{jobName}" while a request for "/jobs/my.job.json" will
+select the pattern "/jobs/{jobName}.json". Previously, both requests
+would have resulted in the pattern "/jobs/{jobName}.*".
+
+Issue: SPR-7632, SPR-8474

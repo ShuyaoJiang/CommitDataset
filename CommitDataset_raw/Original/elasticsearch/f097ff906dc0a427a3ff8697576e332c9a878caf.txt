@@ -1,0 +1,16 @@
+Ensure only 1 in-flight request to create each watcher index template (elastic/x-pack-elasticsearch#1660)
+
+The aim of this change is to prevent many identical requests to create
+watcher index templates being submitted when a cluster first starts up
+and many cluster state updates are happening.  Prior to this change, if
+watcher's original index template creation requests queued up behind other
+cluster state change requests then for each other request watcher would
+re-request creation of all its index templates.  After this change it
+uses a strategy similar to that used by ML to only have one creation
+request per index template in the cluster state change queue at any time.
+
+Relates elastic/x-pack-elasticsearch#1368
+Relates elastic/x-pack-elasticsearch#1631
+Relates elastic/x-pack-elasticsearch#1650
+
+Original commit: elastic/x-pack-elasticsearch@ad87bf3f784e30b9082538073e66810d60cdde2d

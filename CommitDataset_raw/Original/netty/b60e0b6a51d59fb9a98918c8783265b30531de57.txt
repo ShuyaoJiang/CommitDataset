@@ -1,0 +1,13 @@
+Modernize InternalLogger API and enable logging framework autodetection
+
+- Borrow SLF4J API which is the best of the best
+- InternalLoggerFactory now automatically detects the logging framework
+  using static class loading. It tries SLF4J, Log4J, and then falls back
+  to java.util.logging.
+- Remove OsgiLogger because it is very likely that OSGi container
+  already provides a bridge for existing logging frameworks
+- Remove JBossLogger because the latest JBossLogger implementation seems
+  to implement SLF4J binding
+- Upgrade SLF4J to 1.7.2
+- Remove tests for the untestable logging frameworks
+- Remove TestAny

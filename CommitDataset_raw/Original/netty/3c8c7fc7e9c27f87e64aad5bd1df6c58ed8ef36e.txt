@@ -1,0 +1,31 @@
+Reduce performance overhead of ResourceLeakDetector
+
+Motiviation:
+
+The ResourceLeakDetector helps to detect and troubleshoot resource leaks and is often used even in production enviroments with a low level. Because of this its import that we try to keep the overhead as low as overhead. Most of the times no leak is detected (as all is correctly handled) so we should keep the overhead for this case as low as possible.
+
+Modifications:
+
+- Only call getStackTrace() if a leak is reported as it is a very expensive native call. Also handle the filtering and creating of the String in a lazy fashion
+- Remove the need to mantain a Queue to store the last access records
+- Add benchmark
+
+Result:
+
+Huge decrease of performance overhead.
+
+Before the patch:
+
+Benchmark                                           (recordTimes)   Mode  Cnt     Score     Error  Units
+ResourceLeakDetectorRecordBenchmark.record                      8  thrpt   20  4358.367 ± 116.419  ops/s
+ResourceLeakDetectorRecordBenchmark.record                     16  thrpt   20  2306.027 ±  55.044  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint              8  thrpt   20  4220.979 ± 114.046  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint             16  thrpt   20  2250.734 ±  55.352  ops/s
+
+With this patch:
+
+Benchmark                                           (recordTimes)   Mode  Cnt      Score      Error  Units
+ResourceLeakDetectorRecordBenchmark.record                      8  thrpt   20  71398.957 ± 2695.925  ops/s
+ResourceLeakDetectorRecordBenchmark.record                     16  thrpt   20  38643.963 ± 1446.694  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint              8  thrpt   20  71677.882 ± 2923.622  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint             16  thrpt   20  38660.176 ± 1467.732  ops/s

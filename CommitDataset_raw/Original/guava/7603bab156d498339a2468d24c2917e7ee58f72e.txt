@@ -1,0 +1,9 @@
+Add ClassPath#getClassesRecursive().
+
+Removed ClassPath#getClasses(Package) for this subtlety in java.lang.Package's javadoc:
+"""Within each ClassLoader instance all classes from the same java package have the same Package object"""
+
+I'm afraid that someone aware of the Package API may get confused by the getClasses(Package) and think that it will only return the classes the share the "same" Package object, while in fact it's only searching by name, not Package object identity. In other words, this method has the potential to be ambiguous semantically.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=33425579

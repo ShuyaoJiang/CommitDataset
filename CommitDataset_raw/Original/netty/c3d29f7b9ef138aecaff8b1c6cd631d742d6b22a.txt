@@ -1,0 +1,16 @@
+Guard against calling malloc(0) when create ByteBuffer. (#7948)
+
+Motivation:
+
+We did not guard against the case of calling malloc(0) when creating a ByteBuffer without a Cleaner. The problem is that malloc(0) can have different behaviour, it either return a null-pointer or a valid pointer that you can pass to free.
+
+The real problem arise if Unsafe.allocateMemory(0) returns 0 and we use it as the memoryAddress of the ByteBuffer. The problem here is that native libraries test for 0 and handle it as a null-ptr. This is for example true in SSL.bioSetByteBuffer(...) which would throw a NPE when 0 is used as memoryAddress and so produced errors during SSL usage.
+
+Modifications:
+
+- Always allocate 1 byte as minimum (even if we ask for an empty buffer).
+- Add unit test.
+
+Result:
+
+No more errors possible because of malloc(0).

@@ -1,0 +1,9 @@
+Settings: Move keystore creation to plugin installation (#26329)
+
+This commit removes the keystore creation on elasticsearch startup, and
+instead adds a plugin property which indicates the plugin needs the
+keystore to exist. It does still make sure the keystore.seed exists on
+ES startup, but through an "upgrade" method that loading the keystore in
+Bootstrap calls.
+
+closes #26309

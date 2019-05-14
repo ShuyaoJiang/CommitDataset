@@ -1,0 +1,15 @@
+Add support of system-scoped dependencies
+
+In Maven land, provided and system-scope dependencies are very similar,
+the latter being an special kind that allows you to specify the path to
+the artifact rather than using the repository to locate it.
+
+Prior to this commit, the repackage goal of the maven plugin was
+inconsistent as it would repackage provided-scope dependencies but would
+ignore the system-scoped ones.
+
+This commit adds an extra boolean flag, `includeSystemScope` to control
+this behaviour. For backward compatibility reasons, its default value is
+`false`.
+
+Closes gh-2224

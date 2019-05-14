@@ -1,0 +1,9 @@
+Add some more smarts around --debug
+
+--verbose seems to be only for CLI logging (so really only
+for dependency resolution). --debug is interpreted by SpringApplication
+but up to now has been extracted and deleted from the command line
+by the CommandRunner. This change makes --debug set a System property
+*and* pass it down to the application (if used with -- separator).
+
+Fixes gh-266

@@ -1,0 +1,11 @@
+Use any index specified by .watches for Watcher (#39541)
+
+Previously, Watcher only attached its listener to indices that started
+with the prefix `.watches`, which causes Watcher to silently fail to
+schedule newly created Watches if the `.watches` alias is redirected to
+an index that does not start with `.watches`.
+
+Watcher now attaches the listener to all indices, so that Watcher can
+respond to changes in which index has the `.watches` alias.
+
+Also adjusts the tests to randomly use non-prefixed concrete indices for .watches and .triggered_watches.

@@ -1,0 +1,10 @@
+HLRC: Convert xpack methods to client side objects (#40705)
+
+This commit fixes a problem with BWC that was brought up in #40511. A
+newer version of the code was emitting a new value for an enum to an
+older version, and the older version could not handle that. It caused
+the response to error. The MainResponse is now relaxed, and will accept
+whatever values the server expose, and holds most of them as Strings
+instead of complex objects.
+
+Fixes #40511

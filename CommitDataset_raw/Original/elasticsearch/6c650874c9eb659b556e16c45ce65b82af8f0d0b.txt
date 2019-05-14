@@ -1,0 +1,10 @@
+Fix scripts when launching from bin
+
+When running a script that depends on elasticsearch-env, the
+elasticsearch-env script seeks backwards from the directory containing
+the script to find Elasticsearch home. This is done by seeking backwards
+in the path to find bin, and then going one directory above
+that. Unfortunately, if the script is started relatively from the bin
+directory, then bin will appear in the path since it is a relative
+path. This commit fixes this by making the starting path absolute before
+attempting to seek backwards.

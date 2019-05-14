@@ -1,0 +1,8 @@
+[Zen2] Add UnicastConfiguredHostsResolver (#32642)
+
+The `PeerFinder`, introduced in #32246, obtains the collection of seed
+addresses configured by the user from a `ConfiguredHostsResolver`. In reality
+this collection comes from the `UnicastHostsProvider` via a slightly
+complicated threading model that performs the resolution of hostnames to
+addresses using a dedicated `ExecutorService`. This commit introduces an
+adapter to allow the `PeerFinder` to obtain its seed addresses in this manner.

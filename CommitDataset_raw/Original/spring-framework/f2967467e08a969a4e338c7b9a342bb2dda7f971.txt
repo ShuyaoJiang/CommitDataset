@@ -1,0 +1,21 @@
+Improve writing in mock reactive request and response
+
+Before this change the write Publisher was saved and Mono.empty()
+returned from the write metohd which did not properly implement
+the write contract since no writing ("consuming") was done.
+
+This can be a problem in some cases. For example the request may appear
+to succeed even if the publisher produces an error later when
+subscribed to later after request handling completes.
+
+This commit introduces a writeHandler function in the mock request and
+response. By default it "writes" by consuming the content immediately,
+which allows it to return a Mono<Void> that properly reflects when
+writing is done, and it also caches the data so it may be replayed
+later for test assertions.
+
+For streaming scenario a custom writeHandler may be registered which
+allows the custom handling to determine how long to stream before
+cancelling so request handling may complete.
+
+Issue: SPR-14590

@@ -1,0 +1,46 @@
+fix concurrency bug in ScheduledObserver
+
+- found a concurrency bug while working on https://github.com/Netflix/Hystrix/issues/123
+- the following code would lock up occasionally due to onCompleted not being delivered:
+
+```java
+public class RunTest {
+    public static void main(String[] args) {
+        System.out.println("Starting test...");
+
+        final ArrayList<String> strings = new ArrayList<String>(200000);
+
+        int num = 10000;
+        while (true) {
+            long start = System.currentTimeMillis();
+            final AtomicInteger count = new AtomicInteger();
+            for (int i = 0; i < num; i++) {
+                new TestService1(2, 5).toObservable().forEach(new Action1<Integer>() {
+
+                    @Override
+                    public void call(Integer v) {
+                        count.addAndGet(v);
+                    }
+                });
+
+                new TestService2("hello").toObservable().forEach(new Action1<String>() {
+
+                    @Override
+                    public void call(String v) {
+                        strings.add(v);
+                    }
+
+                });
+            }
+            long time = (System.currentTimeMillis() - start);
+            long executions = num * 2;
+            System.out.println("Time: " + time + "ms for " + executions + " executions (" + (time * 1000) / executions + " microseconds)");
+            System.out.println("   Count: " + count);
+            System.out.println("   Strings: " + strings.size());
+            strings.clear();
+        }
+    }
+}
+```
+
+- Also made OperationObserveOn not use ScheduledObserver if the `ImmediateScheduler` is chosen to allow an optimization. I believe this optimization is safe because ScheduledObserver does not require knowledge of a Scheduler (such as for now()) and all we do is emit data to the Observer on a scheduler and if we know it's Immediate we can go direct and skip the enqueuing step. This allows shaving off a noticable number of microseconds per execution in the loop above.

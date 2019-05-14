@@ -1,0 +1,9 @@
+Add session attributes to SimpMessageHeaderAccessor
+
+This change exposes the WebSocketSession attributes through a message header.
+The StompSubProtocolHandler adds this to incoming messages.
+For now messaging handling  methods can access the map via @Header, e.g.:
+
+@Header(StompHeaderAccessor.SESSION_ATTRIBUTES) Map<String, Object> attrs) {
+
+Issue: SPR-11566

@@ -1,0 +1,14 @@
+HTTP/2 Buffer Leak if UTF8 Conversion Fails
+
+Motivation:
+Http2CodecUtil uses ByteBufUtil.writeUtf8 but does not account for it
+throwing an exception. If an exception is thrown because the format is
+not valid UTF16 encoded UTF8 then the buffer will leak.
+
+Modifications:
+- Make sure the buffer is released if an exception is thrown
+- Ensure call sites of the Http2CodecUtil.toByteBuf can tolerate and
+  exception being thrown
+
+Result:
+No leak if exception data can not be converted to UTF8.

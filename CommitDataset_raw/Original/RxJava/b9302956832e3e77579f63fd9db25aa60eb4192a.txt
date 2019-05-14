@@ -1,0 +1,8 @@
+groupByUntil -> groupBy
+
+This collapses groupByUntil and groupBy into a single groupBy operator. The new implementation has 2 major changes:
+
+1) It supports reactive pull backpressure.
+2) Child GroupedObservables can be unsubscribed and they will be cleaned up and then new instances for the same key can be emitted, like groupByUntil, except that now instead of passing in a special durationSelector function, the child can be composed using take/takeUntil/etc to cause an unsubscribe.
+
+If the previous non-obvious groupBy behavior is wanted, then instead of unsubscribing, it can be filtered to ignore all further data, which is what the old groupBy used to do when a child was unsubscribed.

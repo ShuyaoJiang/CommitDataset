@@ -1,0 +1,13 @@
+Allow to disable leak detection for all buffers when using UnpooledByteBufAllocator.
+
+Motivation:
+
+Sometimes it is useful to allow to disable the leak detection of buffers if the UnpooledByteBufAllocator is used. This is for example true if the app wants to leak buffers into user code but not want to put the burden on the user to always release the buffer.
+
+Modifications:
+
+Add another constructor to UnpooledByteBufAllocator that allows to completely disable leak-detection for all buffers that are allocator out of the UnpooledByteBufAllocator.
+
+Result:
+
+It's possible to disable leak-detection when the UnpooledByteBufAllocator is used.

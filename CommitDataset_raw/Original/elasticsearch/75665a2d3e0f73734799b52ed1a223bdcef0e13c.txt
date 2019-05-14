@@ -1,0 +1,14 @@
+[ML] Clean left behind model state docs (#30659)
+
+It is possible for state documents to be
+left behind in the state index. This may be
+because of bugs or uncontrollable scenarios.
+In any case, those documents may take up quite
+some disk space when they add up. This commit
+adds a step in the expired data deletion that
+is part of the daily maintenance service. The
+new step searches for state documents that
+do not belong to any of the current jobs and
+deletes them.
+
+Closes #30551

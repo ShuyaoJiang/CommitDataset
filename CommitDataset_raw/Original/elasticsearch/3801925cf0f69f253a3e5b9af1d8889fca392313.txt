@@ -1,0 +1,12 @@
+Copy retention leases under lock
+
+When adding a retention lease, we make a reference copy of the retention
+leases under lock and then make a copy of that collection outside of the
+lock. However, since we merely copied a reference to the retention
+leases, after leaving a lock the underlying collection could change on
+us. Rather, we want to copy these under lock. This commit adds a
+dedicated method for doing this, asserts that we hold a lock when we use
+this method, and changes adding a retention lease to use this method.
+
+This commit was intended to be included with #37398 but was pushed to
+the wrong branch.

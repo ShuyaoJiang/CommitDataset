@@ -1,0 +1,12 @@
+Create FilePermission lazily in JarURLConnection
+
+JarURLConnection is very performance sensitive. The change in 3772d9f
+meant that every JarURLConnection would create a FilePermission,
+irrespective of whether it was actually used.
+
+This commit updates JarURLConnection to create its FilePermission
+lazily. When there is no security manager a permission will no longer
+be created at all.
+
+Closes gh-5411
+See gh-6215

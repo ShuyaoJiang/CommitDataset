@@ -1,0 +1,13 @@
+Prevent MockSpdyPeer interfering with Android tests
+
+On Android we run the OkHttp tests as an instrumented test case.
+The default UncaughtExceptionHandler on Android will quit the
+app, causing the current test to fail.
+
+MockSpdyPeer creates a thread that fails for various reasons
+that are not related to / required for the actual test. Often the
+exception is thrown during a subsequent test.
+
+This change logs the exception but prevent it from
+propagating out of the top of the call stack. This decreases
+overall flakiness.

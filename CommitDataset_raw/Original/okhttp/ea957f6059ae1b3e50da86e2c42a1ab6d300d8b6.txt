@@ -1,0 +1,5 @@
+Fix connection leak if WebSocketListener.onOpen() throws
+
+If WebSocketListener.onOpen() throws, failWebSocket() is responsible for releasing the allocated streams. Specifically it releases this.streams. Previously WebSocketListener.onOpen() was called after the streams were allocated but before they were assigned to this.streams. As a result the streams were not allocated if WebSocketListener.onOpen() threw.
+
+Fixes part of https://github.com/square/okhttp/issues/4515.

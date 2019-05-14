@@ -1,0 +1,15 @@
+Don't cause ClassCastException if registration fails during constructing DnsNameResolver. (#8280)
+
+Motivation:
+
+We should not try to cast the Channel to a DatagramChannel as this will cause a ClassCastException.
+
+Modifications:
+
+- Do not cast
+- rethrow from constructor if we detect the registration failed.
+- Add unit test.
+
+Result:
+
+Propagate correct exception.

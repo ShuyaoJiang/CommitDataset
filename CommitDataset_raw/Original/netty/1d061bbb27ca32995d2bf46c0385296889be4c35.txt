@@ -1,0 +1,20 @@
+Hide password in exception messages of SocksAuthRequest
+
+Related: #3504
+
+Motivation:
+
+There are two places in the SocksAuthRequest constructor where an
+IllegalArgumentException is thrown with a password as part of the
+exception message.
+
+This constitutes mishandling of confidential information, which can
+compromise user privacy and is flagged as critical by security scanners.
+
+Modifications:
+
+Mask the password in the exception messages
+
+Result:
+
+No unexpected password leak

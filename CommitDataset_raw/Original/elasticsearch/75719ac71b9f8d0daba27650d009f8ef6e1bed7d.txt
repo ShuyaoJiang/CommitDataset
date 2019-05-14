@@ -1,0 +1,13 @@
+Make _id terms optional in segment containing only noop (#30409)
+
+Previously only index and delete operations are indexed into Lucene,
+therefore every segment should have both _id and _version terms as these
+operations contain both terms. However, this is no longer guaranteed
+after noop is also indexed into Lucene. A segment which contains only
+no-ops does not have neither _id or _version because a no-op does not
+contain these terms.
+
+This change adds a dummy version to no-ops and makes _id terms optional
+in PerThreadIDVersionAndSeqNoLookup.
+
+Relates #30226

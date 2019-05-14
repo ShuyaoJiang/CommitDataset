@@ -1,0 +1,35 @@
+Support abstract, bridge, & interface methods in AnnotatedElementUtils
+
+This commit introduces support for finding annotations on abstract,
+bridge, and interface methods in AnnotatedElementUtils.
+
+ - Introduced dedicated findAnnotationAttributes() methods in
+   AnnotatedElementUtils that provide first-class support for
+   processing methods, class hierarchies, interfaces, bridge methods,
+   etc.
+
+ - Introduced find/get search algorithm dichotomy in
+   AnnotatedElementUtils which is visible in the public API as well as
+   in the internal implementation. This was necessary in order to
+   maintain backwards compatibility with the existing API (even though
+   it was undocumented).
+
+ - Reverted all recent changes made to the "get semantics" search
+   algorithm in AnnotatedElementUtils in order to ensure backwards
+   compatibility, and reverted recent changes to
+   JtaTransactionAnnotationParser and SpringTransactionAnnotationParser
+   accordingly.
+
+ - Documented internal AnnotatedElementUtils.Processor<T> interface.
+
+ - Enabled failing tests and introduced
+   findAnnotationAttributesFromBridgeMethod() test in
+   AnnotatedElementUtilsTests.
+
+ - Refactored ApplicationListenerMethodAdapter.getCondition() and
+   enabled failing test in TransactionalEventListenerTests.
+
+ - AnnotationUtils.isInterfaceWithAnnotatedMethods() is now package
+   private.
+
+Issue: SPR-12738, SPR-11514, SPR-11598

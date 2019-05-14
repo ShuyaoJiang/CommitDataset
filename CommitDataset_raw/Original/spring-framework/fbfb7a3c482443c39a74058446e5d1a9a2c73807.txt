@@ -1,0 +1,15 @@
+Add PathResourceResolver conditionally
+
+The ResourceHandlerRegistration now checks if the last resolver is an
+instance of PathResourceResolver and if so it skips adding it.
+
+This change also creates and adds the VersionResourceResolver (as well
+as CssLinkTransformer) the first time any VersionStrategy is
+registered. This ensures that custom resolvers (including an extension
+of PathResourceResolver) may be added both before and after the
+VersionResourceResolver.
+
+Lastly this change renames addVersion and addVersionHash to be
+consistent with addVersionStrategy.
+
+Issue: SPR-12124

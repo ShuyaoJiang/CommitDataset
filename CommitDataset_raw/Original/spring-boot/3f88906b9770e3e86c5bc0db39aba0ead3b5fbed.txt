@@ -1,0 +1,9 @@
+Fix handling of ResponseStatusException
+
+This commit updates DefaultErrorAttributes to handle
+ResponseStatusException explicitly. This exception is used in a
+WebFlux application to signal that the processing of the query has
+failed with an HTTP status code and a reason phrase. The latter is now
+properly mapped to the `message` attribute of the response body.
+
+Closes gh-11614

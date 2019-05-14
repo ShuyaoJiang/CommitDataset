@@ -1,0 +1,12 @@
+Upgrade to Jackson 2.9.0.pr1
+
+As part of the upgrade, this commit removes the use of any API that
+has been deprecated in 2.9.0.pr1. This includes the config props
+endpoint's use of SerializationFeature.WRITE_NULL_MAP_VALUES. This
+has been replaced with configuring serialization inclusion to only
+include properties with non-null values. This means that all
+null-valued properties will no longer be serialized, not just those
+that are an entry in a map.
+
+Closes gh-8604
+Closes gh-8537

@@ -1,0 +1,33 @@
+Differentiate b/t (in)definite results in JsonPath assertions
+
+Prior to this commit, the exists() method in JsonPathExpectationsHelper
+correctly asserted that the evaluated JsonPath expression resulted in a
+value (i.e., that a non-null value exists); however, if the value was
+an empty array, the exists() method always threw an AssertionError.
+
+The existing behavior makes sense if the JsonPath expression is
+'indefinite' -- for example, if the expression uses a filter to select
+results based on a predicate for which there is no match in the JSON
+document, but the existing behavior is illogical and therefore invalid
+if the JsonPath expression is 'definite' (i.e., directly references an
+array in the JSON document that exists but happens to be empty). For
+example, prior to this commit, the following threw an AssertionError.
+
+    new JsonPathExpectationsHelper("$.arr").exists("{ 'arr': [] }");
+
+Similar arguments can be made for the doesNotExist() method.
+
+After thorough analysis of the status quo, it has become apparent that
+the existing specialized treatment of arrays is a result of the fact
+that the JsonPath library always returns an empty list if the path is
+an 'indefinite' path that does not evaluate to a specific result.
+Consult the discussion on "What is Returned When?" in the JsonPath
+documentation for details:
+
+    https://github.com/jayway/JsonPath#what-is-returned-when
+
+This commit addresses these issues by ensuring that empty arrays are
+considered existent if the JsonPath expression is definite but
+nonexistent if the expression is indefinite.
+
+Issue: SPR-13351

@@ -1,0 +1,13 @@
+CleanerJava9 should be able to do its job even with a SecurityManager installed. (#8204)
+
+Motivation:
+
+CleanerJava9 currently fails whever a SecurityManager is installed. We should make use of AccessController.doPrivileged(...) so the user can give it the correct rights.
+
+Modifications:
+
+Use doPrivileged(...) when needed.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8201.

@@ -1,0 +1,18 @@
+Improve NodeVersionAllocationDecider messages (#29356)
+
+Since #26542 the NodeVersionAllocationDecider tries to explain its NO decisions
+as follows:
+
+    ... may not support codecs or postings formats for a newer Lucene version
+
+However, this message often appears during a rolling upgrade, and experience
+has shown that it seems to cause more confusion and worry than it needs to.
+This change fixes that by removing the explanation again, reducing the message
+to a statement of fact about the respective nodes' versions.
+
+Additionally, the same wording was used for version incompatibilities when
+allocating a primary (vs its previous location) and a replica (vs its primary).
+This change separates these two cases so they can have separate, clearer
+wording.
+
+Fixes #29228

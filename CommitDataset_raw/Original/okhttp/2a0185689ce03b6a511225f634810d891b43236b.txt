@@ -1,0 +1,5 @@
+Fix flaky webSocketAndApplicationInterceptors test
+
+The 'Closing' and 'Closed' events sometimes fire before the test completes. Since they were not consumed by the test, the assertion in tearTown() that all events have been consumed failed.
+
+Fixes https://github.com/square/okhttp/issues/4382.

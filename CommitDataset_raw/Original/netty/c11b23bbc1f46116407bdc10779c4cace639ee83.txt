@@ -1,0 +1,13 @@
+Close SSLEngine when connection fails.
+
+Motivation:
+When using the JdkSslEngine, the ALPN class is used keep a reference
+to the engine.   In the event that the TCP connection fails, the
+SSLEngine is not removed from the map, creating a memory leak.
+
+Modification:
+Always close the SSLEngine regardless of if the channel became
+active.  Also, record the SSLEngine was closed in all places.
+
+Result:
+Fixes: https://github.com/grpc/grpc-java/issues/3080

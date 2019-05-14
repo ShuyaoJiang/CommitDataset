@@ -1,0 +1,13 @@
+Track max seq_no of updates or deletes on primary (#33842)
+
+This PR is the first step to use seq_no to optimize indexing operations.
+The idea is to track the max seq_no of either update or delete ops on a
+primary, and transfer this information to replicas, and replicas use it
+to optimize indexing plan for index operations (with assigned seq_no).
+
+The max_seq_no_of_updates on primary is initialized once when a primary
+finishes its local recovery or peer recovery in relocation or being
+promoted. After that, the max_seq_no_of_updates is only advanced internally
+inside an engine when processing update or delete operations.
+
+Relates #33656

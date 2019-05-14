@@ -1,0 +1,9 @@
+Always use TransitionDrawable for cross fades.
+
+RecyclerView breaks badly when you run ViewAnimation on its views 
+outside of an ItemAnimator. As a result, Glide’s cross fades are broken
+when used for loads into ImageViews in RecyclerView. Instead of using
+ViewAnimations when no placeholder is set in the cross fade, we can 
+instead default to cross fading from a transparent ColorDrawable. Using
+the ColorDrawable avoids the issues with ViewAnimations in RecyclerView
+and provides a similar looking effect.

@@ -1,0 +1,8 @@
+Remove unnecessary logger creation for doc values field data
+
+This commit removes an unnecessary logger instance creation from the
+constructor for doc values field data. This construction is expensive
+for this oft-created class because of a synchronized block in the
+constructor for the logger.
+
+Relates #27349

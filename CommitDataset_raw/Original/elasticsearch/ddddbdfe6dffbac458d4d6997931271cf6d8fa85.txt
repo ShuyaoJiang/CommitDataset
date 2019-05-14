@@ -1,0 +1,7 @@
+Reduce retention lease sync intervals (#40302)
+
+This commit adjusts the frequency with which CCR renews retention leases
+and with which primaries sync retention leases to replicas. This helps
+Lucene reclaim soft-deleted documents more aggressively, which we have
+found in some use-cases can help improve performance, and either way
+will help keep disk space under more control.

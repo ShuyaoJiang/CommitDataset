@@ -1,0 +1,10 @@
+Restore a noop _all metadata field for 6x indices (#37808)
+
+This commit restores a noop version of the AllFieldMapper that is instanciated only
+for indices created in 6x. We need this metadata field mapper to be present in this version
+in order to allow the upgrade of indices that explicitly disable _all (enabled: false).
+The mapping of these indices contains a reference to the _all field that we cannot remove
+in 7 so we'll need to keep this metadata mapper in 7x. Since indices created in 6x will not
+be compatible with 8, we'll remove this noop mapper in the next major version.
+
+Closes #37429

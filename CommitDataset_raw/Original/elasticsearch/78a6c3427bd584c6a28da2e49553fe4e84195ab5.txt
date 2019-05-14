@@ -1,0 +1,6 @@
+Optimize `terms` queries on `ip` addresses to use a `PointInSetQuery` whenever possible. (#25669)
+
+We can't do it in the general case because of prefix queries, but I believe this
+is mostly used in query strings and not in explicit `terms` queries.
+
+Closes #25667

@@ -1,0 +1,13 @@
+Fix ClassCastException and native crash when using kqueue transport. (#8665)
+
+Motivation:
+
+How we did the mapping from native code to AbstractKQueueChannel was not safe and could lead to heap corruption. This then sometimes produced ClassCastExceptions or could also lead to crashes. This happened sometimes when running the testsuite.
+
+Modifications:
+
+Use a Map for the mapping (just as we do in the native epoll transport).
+
+Result:
+
+No more heap corruption / crashes.

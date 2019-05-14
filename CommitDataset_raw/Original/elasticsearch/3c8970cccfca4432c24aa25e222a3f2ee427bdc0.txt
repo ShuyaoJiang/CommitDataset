@@ -1,0 +1,22 @@
+Serialize top-level pipeline aggs as part of InternalAggregations (#40177)
+
+We currently convert pipeline aggregators to their corresponding
+InternalAggregation instance as part of the final reduction phase.
+They arrive to the coordinating node as part of QuerySearchResult
+objects fom the shards and, despite we may incrementally reduce
+aggs (hence we may have some non-final reduce and the final
+one later) all the reduction phases happen on the same node.
+
+With CCS minimizing roundtrips though, each cluster performs its
+own non-final reduction, and then serializes the results back to
+the CCS coordinating node which will perform the final coordination.
+This breaks the assumptions made up until now around reductions
+happening all on the same node.
+
+With #40101 we have made sure that top-level pipeline aggs are not
+reduced as part of the non-final reduction. The next step is to make
+sure that they don't get lost, meaning that each coordinating node
+needs to send them back to the CCS coordinating node as part of
+the top-level `InternalAggregations` object.
+
+Closes #40059

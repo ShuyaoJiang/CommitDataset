@@ -1,0 +1,19 @@
+Ensure that local file dependencies are packaged by the Gradle plugin
+
+Prior to this commit, a dependency on a local file was not being
+packaged by the Gradle plugin. This was a regression from the behaviour
+in 0.5.0.M6 caused by the move to using a ResolvedConfiguration and
+ResolvedArtifacts (4f677bec) to gain access to an artifact's type so
+that non-jar artefacts could be filtered out. Since then, the approach
+to filtering has been changed (38585bf3) and access to an artifact's
+type is no longer needed.
+
+This commit updates ProjectLibraries to restore its use of a
+FileCollection rather than a ResolvedConfiguration when getting hold of
+the files in a configuration. This means that the resulting jar will
+now include dependencies that aren't resolved, such as those that are
+provided as local files. The filtering that is applied to the files
+is unaffected by this change and only files that are zip files will be
+included.
+
+Fixes #672

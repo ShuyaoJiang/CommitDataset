@@ -1,0 +1,14 @@
+Correctly update writability state of Http2StreamChannel created by Http2MultiplexCodec.
+
+Motivation:
+
+We missed to mark the Http2StreamChannel as writable in some cases which could lead to the situation that a Channel never becomes writable. Also when a Http2StreamChannel was created we always marked it non-writable at the beginning which means if the user will only start writing once the Channel becomes writable it will never happen as it only became writable after the first header was written.
+
+Modifications:
+
+- Correctly handle updates for writability in all cases
+- Change unit tests to cover this.
+
+Result:
+
+Fixes [#7179].

@@ -1,0 +1,18 @@
+Work around bug in crash.shell pom that causes crash.cli to go AWOL
+
+When spring-boot-docs is built on Windows, Maven logs a warning:
+
+[WARNING] The POM for org.crashub:crash.shell:jar:1.3.2 is invalid,
+transitive dependencies (if any) will not be available, enable debug
+logging for more details
+
+The build then fails as a class in crash.cli, a dependency of
+crash.shell, is unavailable. The failure’s due to a hardcoded path
+in the pom that Maven needs to be absolute and isn’t on Windows. See
+https://jira.exoplatform.org/browse/CRASH-247 for details.
+
+This commit works around the problem by explicitly declaring
+crash.shell’s one dependency directly. The warning is still logged but
+it’s now benign.
+
+Closes gh-5633

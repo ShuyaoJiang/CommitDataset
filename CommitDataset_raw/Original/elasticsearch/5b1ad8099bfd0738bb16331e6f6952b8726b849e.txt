@@ -1,0 +1,11 @@
+TEST: testDocStats should always use forceMerge (#32450)
+
+Due to the recent change in LUCENE-8263, we need to adjust the deletion
+ration to between 10% to 33% to preserve the current behavior of the
+test. However, we may need another refinement if soft-deletes is enabled
+as the actual deletes are different because of delete tombstones.
+
+This commit prefers to always execute forceMerge instead of adjusting
+the deletion ratio so that this test can focus on testing docStats.
+
+Closes #32449

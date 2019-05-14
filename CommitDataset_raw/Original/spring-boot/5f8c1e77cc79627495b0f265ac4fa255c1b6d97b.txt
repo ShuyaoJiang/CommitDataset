@@ -1,0 +1,15 @@
+Merge config from custom locations with default configuration
+
+Previously, when one or more custom locations were specified on
+@ConfigurationProperties, the configuration loaded from those locations
+was used in isolation from the default configuration provided by the
+environment. Users have been surprised by this behaviour. For example,
+it means that a placeholder used in the custom configuration will not
+be resolved against the system properties.
+
+This commit adds a new attribute, merge, to @ConfigurationProperties,
+that defaults to true. When merge is true the default property sources
+are appended to those that are loaded from the custom locations. When
+set to false the custom configuration is used in isolation.
+
+Closes #1301

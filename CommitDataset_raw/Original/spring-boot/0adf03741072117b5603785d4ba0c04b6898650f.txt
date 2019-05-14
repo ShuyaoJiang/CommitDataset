@@ -1,0 +1,14 @@
+Consider custom server.context-path when configuring dev tools endpoints
+
+Previously, the auto-configuration of DevTools’ debug, restart, and
+health handlers assumed that the server was running on its default
+context path and, if server.context-path was set to a non-default value,
+the handlers would not work as expected.
+
+This commit updates the auto-configuration of the three handlers to 
+consider the server’s context path when configuring their URIs. Now,
+when a custom server context path is used, no further configuration is
+required other than the inclusion of that context path when providing
+the remote URL as an argument to RemoteSpringApplication.
+
+Closes gh-4301

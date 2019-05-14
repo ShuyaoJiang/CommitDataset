@@ -1,0 +1,11 @@
+Ensure web containers are stopped after close
+
+Update `EmbeddedServletContainer` implementations to ensure that stop
+can be called even if start has not. This allows servers that are
+partially started during `initialize()` to still be shut down.
+
+This commit fixes a regression caused by commit 0af53b361f.
+
+See gh-8036
+Fixes gh-8224
+Closes gh-8227

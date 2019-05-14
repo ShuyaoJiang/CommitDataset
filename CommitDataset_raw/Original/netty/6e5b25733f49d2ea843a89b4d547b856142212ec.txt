@@ -1,0 +1,10 @@
+HTTP/2 Connection Preface User Event
+
+Motivation:
+If an HTTP/2 client writes data before the connection preface the peer will shutdown the socket. Depending on what is in the pipeline (SslHandler) may require different evaluation criteria to infer when the codec-http2 has written the connection preface on behalf of the client. This can lead to unnecessarily complexity and error prone/racy application code.
+
+Modifications:
+- Introduce a user event that is fired up the pipeline when codec-http2 writes the connection preface
+
+Result:
+Reliable mechanism for applications to use to know when connection preface has been written (related to https://github.com/netty/netty/issues/6272).

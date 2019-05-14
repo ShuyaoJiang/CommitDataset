@@ -1,0 +1,11 @@
+Remove the postings highlighter and make unified the default highlighter choice (#25028)
+
+This change removes the `postings` highlighter. This highlighter has been removed from Lucene master (7.x) because it behaves
+exactly like the `unified` highlighter when index_options is set to `offsets`:
+https://issues.apache.org/jira/browse/LUCENE-7815
+
+It also makes the `unified` highlighter the default choice for highlighting a field (if `type` is not provided).
+The strategy used internally by this highlighter remain the same as before, it checks `term_vectors` first, then `postings` and ultimately it re-analyzes the text.
+Ultimately it rewrites the docs so that the options that the `unified` highlighter cannot handle are clearly marked as such.
+There are few features that the `unified` highlighter is not able to handle which is why the other highlighters (`plain` and `fvh`) are still available.
+I'll open separate issues for these features and we'll deprecate the `fvh` and `plain` highlighters when full support for these features have been added to the `unified`.

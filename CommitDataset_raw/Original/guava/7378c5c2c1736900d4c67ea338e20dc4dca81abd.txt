@@ -1,0 +1,10 @@
+Fix Maps.newHashMapWithExpectedSize for JDK8.
+
+Two changes to HashMap in JDK8 have affected this test:
+- First, the table field is set lazily, so it is null until you add
+elements to the Map.
+- Second, the resize() calculations have changed in JDK8, so we adjust
+the predicted size accordingly.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=72650895

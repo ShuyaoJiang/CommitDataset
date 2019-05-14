@@ -1,0 +1,17 @@
+Register hazelcast post processor only when necessary
+
+Commit 8e0a94f introduced a post processor that adds an explicit link
+between the `HazelcastInstance` and the `EntityManagerFactory` so that
+Hazelcast is fully initialized before Hibernate actually kicks in.
+
+Unfortunately, the conditions that were implemented to register this post
+processor are wrong and any app that has both JPA and Hazelcast support
+blows up if no bean with name `hazelcastInstance` is defined.
+
+This commit fixes the situation and reworks the configuration in a
+separate auto-configuration that runs after the Hazelcast and JPA support
+and check both the presence of an `EntityManagerFactory` and a bean of
+name `hazelcastInstance`. If any of those conditions does not apply the
+post processor is no longer registered.
+
+Closes gh-4158

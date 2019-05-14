@@ -1,0 +1,17 @@
+Fix profiling naming issues (#27133)
+
+Some code-paths use anonymous classes (such as NonCollectingAggregator
+in terms agg), which messes up the display name of the profiler.  If
+we encounter an anonymous class, we need to grab the super's name.
+
+Another naming issue was that ProfileAggs were not delegating to the
+wrapped agg's name for toString(), leading to ugly display.
+
+This PR also fixes up the profile documentation.  Some of the examples were
+executing against empty indices, which shows different profile results
+than a populated index (and made for confusing examples).
+
+Finally, I switched the agg display names from the fully qualified name
+to the simple name, so that it's similar to how the query profiles work.
+
+Closes #26405

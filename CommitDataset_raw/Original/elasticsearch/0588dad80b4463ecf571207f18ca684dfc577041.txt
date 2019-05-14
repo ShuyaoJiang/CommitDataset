@@ -1,0 +1,33 @@
+Tasks: Only require task permissions (#35667)
+
+Right now using the `GET /_tasks/<taskid>` API and causing a task to opt
+in to saving its result after being completed requires permissions on
+the `.tasks` index. When we built this we thought that that was fine,
+but we've since moved towards not leaking details like "persisting task
+results after the task is completed is done by saving them into an index
+named `.tasks`." A more modern way of doing this would be to save the
+tasks into the index "under the hood" and to have APIs to manage the
+saved tasks. This is the first step down that road: it drops the
+requirement to have permissions to interact with the `.tasks` index when
+fetching task statuses and when persisting statuses beyond the lifetime
+of the task.
+
+In particular, this moves the concept of the "origin" of an action into
+a more prominent place in the Elasticsearch server. The origin of an
+action is ignored by the server, but the security plugin uses the origin
+to make requests on behalf of a user in such a way that the user need
+not have permissions to perform these actions. It *can* be made to be
+fairly precise. More specifically, we can create an internal user just
+for the tasks API that just has permission to interact with the `.tasks`
+index. This change doesn't do that, instead, it uses the ubiquitus
+"xpack" user which has most permissions because it is simpler. Adding
+the tasks user is something I'd like to get to in a follow up change.
+
+Instead, the majority of this change is about moving the "origin"
+concept from the security portion of x-pack into the server. This should
+allow any code to use the origin. To keep the change managable I've also
+opted to deprecate rather than remove the "origin" helpers in the
+security code. Removing them is almost entirely mechanical and I'd like
+to that in a follow up as well.
+
+Relates to #35573

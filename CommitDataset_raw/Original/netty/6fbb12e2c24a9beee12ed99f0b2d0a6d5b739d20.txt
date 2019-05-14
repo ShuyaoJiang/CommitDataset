@@ -1,0 +1,12 @@
+#7695 no need to manually release chunk during upload (#7696)
+
+Motivation:
+
+After #7527 fix there is no need to manually release chunks (HttpData) during file upload as they will be released on HttpPostRequestDecoder.destroy().
+
+Modification:
+
+HttpUploadServer example doesn't release chunks manually (doesn't call data.release()).
+
+Result:
+Fixes #7695 and #7689

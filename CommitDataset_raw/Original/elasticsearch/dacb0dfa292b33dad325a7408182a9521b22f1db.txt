@@ -1,0 +1,20 @@
+ShardBulkAction ignore primary response on primary (#38901)
+
+Previously, if a version conflict occurred and a previous primary
+response was present, the original primary response would be used both
+for sending to replica and back to client. This was made in the past as an
+attempt to fix issues with conflicts after relocations where a bulk request
+would experience a closed shard half way through and thus have to retry
+on the new primary. It could then fail on its own update.
+
+With sequence numbers, this leads to an issue, since if a primary is
+demoted (network partitions), it will send along the original response
+in the request. In case of a conflict on the new primary, the old
+response is sent to the replica. That data could be stale, leading to
+inconsistency between primary and replica.
+
+Relocations now do an explicit hand-off from old to new primary and
+ensures that no operations are active while doing this. Above is thus no
+longer necessary. This change removes the special handling of conflicts
+and ignores primary responses when executing shard bulk requests on the
+primary.

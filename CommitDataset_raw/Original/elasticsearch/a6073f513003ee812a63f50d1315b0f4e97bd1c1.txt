@@ -1,0 +1,14 @@
+Add docs on JNA temp directory not being noexec (#35355)
+
+If the underlying mount point for the JNA temporary directory is mounted
+noexec on Linux, then the JVM will not be able to map the native code in
+as executable. This will prevent JNA from executing and will prevent
+Elasticsearch from being able to execute some functions that rely on
+native code (e.g., memory locking, and installing system call
+filters). We do not want to get into the business of catching exceptions
+and parsing messages towards this because these exception messages can
+change on us. We also do not want to jump through a lot of hoops to
+check the underlying mount point for noexec. Instead, we will rely on
+documentation to address this problem. This commit adds to the important
+system configuration section of the docs that the JNA temporary
+directory is not on a mount point with the noexec mount option.

@@ -1,0 +1,19 @@
+Add AbstractUnsafe.annotateConnectException()
+
+Motivation:
+
+JDK's exception messages triggered by a connection attempt failure do
+not contain the related remote address in its message.  We currently
+append the remote address to ConnectException's message, but I found
+that we need to cover more exception types such as SocketException.
+
+Modifications:
+
+- Add AbstractUnsafe.annotateConnectException() to de-duplicate the
+  code that appends the remote address
+
+Result:
+
+- Less duplication
+- A transport implementor can annotate connection attempt failure
+  message more easily

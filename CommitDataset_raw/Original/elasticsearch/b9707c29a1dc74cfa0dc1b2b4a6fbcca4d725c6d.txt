@@ -1,0 +1,41 @@
+[CCR] Change get autofollow patterns API response format (#36203)
+
+The current response format is:
+
+```
+{
+    "pattern1": {
+        ...
+    },
+    "pattern2": {
+        ...
+    }
+}
+```
+
+The new format is:
+
+```
+{
+    "patterns": [
+        {
+            "name": "pattern1",
+            "pattern": {
+                ...
+            }
+        },
+        {
+            "name": "pattern2",
+            "pattern": {
+                ...
+            }
+        }
+    ]
+}
+```
+
+This format is more structured and more friendly for parsing and generating specs.
+This is a breaking change, but it is better to do this now while ccr
+is still a beta feature than later.
+
+Follow up from #36049

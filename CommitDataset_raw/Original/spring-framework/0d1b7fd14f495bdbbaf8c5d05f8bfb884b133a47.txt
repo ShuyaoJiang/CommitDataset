@@ -1,0 +1,17 @@
+Fix RequestPartServletServerHttpRequest encoding issue
+
+When using Appache Commons FileUpload, multi parts with binary data
+(i.e. that are not actual files) are saved and then accessed as
+String request parameters.
+
+Before this change however the RequestPartServletServerHttpRequest
+used a fixed encoding (UTF-8) while the parsing code in
+CommonsFileUploadSupport/Resolver used the encoding from the
+content-type header, or the request, or the FileUpload component.
+
+This change does a best effort to determine the encoding of the
+request parameter using a similar algorithm as the parsing side
+that should work the same unless the encoding comes from the
+FileUpload component which is not accessible.
+
+Issue: SPR-13096

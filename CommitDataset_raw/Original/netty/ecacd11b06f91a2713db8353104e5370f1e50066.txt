@@ -1,0 +1,11 @@
+HTTP/2 limit header accumulated size
+
+Motivation:
+The Http2FrameListener requires that the Http2FrameReader accumulate ByteBuf objects. There is currently no way to limit the amount of bytes that is accumulated.
+
+Motiviation:
+- DefaultHttp2FrameReader supports maxHeaderSize which will fail fast as soon as the maximum size is exceeded.
+- DefaultHttp2HeadersDecoder will respect the return value of endHeaderBlock() and fail if the max size is exceeded.
+
+Result:
+Frames which carry header data now respect a maximum number of bytes that can be accumulated.

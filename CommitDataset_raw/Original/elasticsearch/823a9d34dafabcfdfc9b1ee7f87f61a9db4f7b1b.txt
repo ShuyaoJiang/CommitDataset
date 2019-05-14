@@ -1,0 +1,9 @@
+[TEST] Close additional clients created while running yaml tests (#31575)
+
+We recently introduced a mechanism that allows to specify a node
+selector as part of do sections (see #31471). When a node selector that
+is not the default one is configured, a new client will be initialized
+with the same properties as the default one, but with the specified
+node selector. This commit improves such mechanism but also closing
+the additional clients being created and adding equals/hashcode impl to
+the custom node selector as they are cached into a map.

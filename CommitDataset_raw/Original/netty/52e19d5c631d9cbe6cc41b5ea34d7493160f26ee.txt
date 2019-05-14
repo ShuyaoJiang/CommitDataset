@@ -1,0 +1,16 @@
+Strip http 'expect' headers when expectation response is produced
+
+Motivation:
+
+HttpObjectAggregator differs from HttpServerExpectContinueHandler's handling
+of expect headers by not stripping the 'expect' header when a response
+is generated.
+
+Modifications:
+
+HttpObjectAggregator now removes the 'expect' header in cases where it generates
+a response.
+
+Result:
+
+Consistent and correct behavior between HttpObjectAggregator and HttpServerExpectContinueHandler.

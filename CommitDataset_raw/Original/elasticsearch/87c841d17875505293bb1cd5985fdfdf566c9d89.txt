@@ -1,0 +1,9 @@
+Include all sentences smaller than fragment_size in the unified highlighter (#28132)
+
+The unified highlighter selects a single sentence per fragment from the offset of the first highlighted term.
+This change modifies this selection and allows more than one sentence in a single fragment.
+The expansion is done forward (on the right of the matching offset), sentences are added to the current fragment iff the overall size of the fragment is smaller than the maximum length (fragment_size).
+We should also add a way to expand the left context with the surrounding sentences but this is currently avoided because the unified highlighter in Lucene uses only the first offset that matches the query to derive the start and end offset of the next fragment.
+If we expand on the left we could split multiple terms that would be grouped otherwise. Breaking this limitation implies some changes in the core of the unified highlighter.
+
+Closes #28089

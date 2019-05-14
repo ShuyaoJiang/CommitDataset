@@ -1,0 +1,13 @@
+Use addAndGet(...) as a replacement for compareAndSet(...) when tracking the direct memory usage. (#8596)
+
+Motivation:
+
+We can change from using compareAndSet to addAndGet, which emits a different CPU instruction on x86 (CMPXCHG to XADD) when count direct memory usage. This instruction is cheaper in general and so produce less overhead on the "happy path". If we detect too much memory usage we just rollback the change before throwing the Error.
+
+Modifications:
+
+Replace compareAndSet(...) with addAndGet(...)
+
+Result:
+
+Less overhead when tracking direct memory.

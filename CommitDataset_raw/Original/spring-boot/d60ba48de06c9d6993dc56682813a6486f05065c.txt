@@ -1,0 +1,6 @@
+Fix bug in RelaxedPropertyResolver with prefix ending in separator
+
+E.g. with a prefix spring.jpa.hibernate. we want naming-strategy and
+namingstrategy to be resolvable. It wasn't working before this change
+because the whole property path was being manipulated, where you
+actually need to manipulate the prefix and suffix separately.

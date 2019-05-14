@@ -1,0 +1,9 @@
+Remove redundant include from WebFluxTypeExcludeFilter
+
+For webflux, security configuration is configured via a bean of type
+`SecurityWebFilterChain` and not `ServerHttpSecurity`. We would have changed
+the include to be `SecurityWebFilterChain` but the filter only applies to
+beans registered via component scanning and not those registered in
+`@Configuration` classes, making the includes redundant.
+
+See gh-16088

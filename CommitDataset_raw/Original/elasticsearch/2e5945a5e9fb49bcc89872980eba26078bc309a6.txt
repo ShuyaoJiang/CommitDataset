@@ -1,0 +1,10 @@
+HLRC: PutUserRequest should not be closeable (#34196)
+
+The PutUserRequest implemented closeable as it assumed ownership of the
+password provided to the class. This change removes the ownership of
+the password, documents it in the javadoc, and removes the closeable
+implementation.
+
+Additionally, the intermediate bytes used for writing the password to
+XContent are now cleared. This makes the PutUserRequest consistent with
+the behavior discussed in #33509.

@@ -1,0 +1,9 @@
+Improve startup failure diagnostics
+
+A typical cause of startup failure is an incorrectly configured
+classpath. Previously the classpath used to launch the application
+wasn't easy for a user to discover. This made problem diagnosis
+difficult. This commit adds an application listener that, in the event
+of a start error, logs the thread context class loader's classpath at
+INFO level. The classpath is also logged at DEBUG level when an
+application starts successfully.

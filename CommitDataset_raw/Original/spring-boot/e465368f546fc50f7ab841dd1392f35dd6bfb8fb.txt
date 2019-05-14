@@ -1,0 +1,14 @@
+Ensure that access log is flushed periodically
+
+Previously, Tomcat’s background processing was only enabled on the
+context but access logging was configured on the engine. This means that
+the access log valve’s background processing method was never called
+and, therefore, that it wasn’t flushed periodically.
+
+This commit moves the enablement of background processing up to the
+engine, thereby ensuring that the access log is flushed periodically.
+Background processing cascades down the container hierarchy so, after
+this change, background processing will still be performed on the
+context as well.
+
+Closes gh-6646

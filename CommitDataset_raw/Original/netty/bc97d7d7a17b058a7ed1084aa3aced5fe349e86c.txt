@@ -1,0 +1,13 @@
+Fix NPE when remote address can not be obtained
+
+Motivation:
+
+In the native transport we use getpeername to obtain the remote address from the file descriptor. This may fail for various reasons in which case NULL is returned.
+
+Modifications:
+
+- Check for null when try to obtain remote / local address
+
+Result:
+
+No more NPE

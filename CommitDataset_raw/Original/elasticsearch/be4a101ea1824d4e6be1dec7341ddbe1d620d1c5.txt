@@ -1,0 +1,13 @@
+Add high-level client methods that accept RequestOptions (#31069)
+
+With #30490 we have introduced a new way to provide request options
+whenever sending a request using the high-level REST client. Before you
+could provide headers as the last argument varargs of each API method,
+now you can provide `RequestOptions` that in the future will allow to
+provide more options which can be specified per request.
+
+This commit deprecates all of the client methods that accept a `Header`
+varargs argument in favour of new methods that accept `RequestOptions`
+instead. For some API we don't even go through deprecation given that
+they were not released since they were added, hence in that case we can
+just move them to the new method.

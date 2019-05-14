@@ -1,0 +1,11 @@
+SQL: Simplify expression ID generation (elastic/x-pack-elasticsearch#3466)
+
+Replaces the `ExpressionIdGenerator` class with a static method and drops
+the `jvmId` field from the `ExpressionId` altogether because it isn't needed.
+
+We still have the potential to roll over expression ids if the server lives for
+a long time but it is quite unlikely and rolling over only matters if we roll
+over in the same query. So long as each expression id is unique to a
+particular query we're fine.
+
+Original commit: elastic/x-pack-elasticsearch@fe3d7f721686c6dc9e612698f3711ce0aab2ece9

@@ -1,0 +1,15 @@
+Snapshot fallback should consider build.snapshot
+
+When determining if a build is a snapshot build, we look for a field in
+the JAR manifest. However, when running tests, we are not running with a
+compiled core Elasticsearch JAR, we are running with the compiled core
+classes on the classpath. We have a fallback for this, we always assume
+such a situation is a snapshot build. However, when running builds with
+-Dbuild.snapshot=false, this is not the case. As such, we need to
+fallback to the value of build.snapshot. However, there are cases where
+we are not running with a compiled core Elasticsearch JAR (e.g., when
+the transport client is embedded in a web container) so we should only
+do this fallback if we are in tests. To verify we are in tests, we check
+if randomized runner is on the classpath.
+
+Relates #26554

@@ -1,0 +1,26 @@
+Issue #65: Provide distribution stats for HashedWheelTimer
+First cut at implementing a generic abstraction layer for pluggable
+metrics providers. This first cut is closely modeled after Yammer
+Metrics. It remains to be seen if it is indeed flexibel enough to
+support other providers.
+Provide a default implementation of this new abstraction layer
+based on Yammer Metrics.
+Support pluggable Monitoring Providers using Java 6's ServiceLoader.
+Use this new abstraction layer to provide stats on (a) number of
+Timeouts executed per second and (b) distribution of absolute
+deviation between scheduled and actual Timeout execution time in
+HashedWheelTimer.
+ * Interface ValueDistributionMonitor, a monitor for histograms.
+ * Interface EventRateMonitor, a monitor for measuring the rate per time
+   unit of specific events.
+ * Interface ValueMonitor, a monitor for tracking an arbitrary datum's
+   current value
+ * Interface CounterMonitor, a monitor for incrementing/decrementing a
+   long value
+ * Interface MonitorRegistry, a registry for monitors that serves as the
+   interface between Netty and concrete metrics providers as e.g. Yammer
+   Metrics.
+ * Interface MonitorRegistryFactory, to be implemented by metrics
+   providers.
+ * Document how to use Netty's new monitoring support in javadocs for
+   package io.netty.monitor.

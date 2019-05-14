@@ -1,0 +1,10 @@
+Create security bootstrap checks early to access secure settings safely (elastic/x-pack-elasticsearch#2282)
+
+We close the secure settings in core before we pull bootstrap checks.
+This means if a bootstrap check like the `TokenPassphraseBootstrapCheck`
+accesses a secure setting that late it will fail due to an exception in
+the `PKCS12KeyStore`. This change moves the bootstrap check creation
+to the plugin constructor and adds a dummy setting to the integTest
+that triggers the bootstrap checks.
+
+Original commit: elastic/x-pack-elasticsearch@2b20865d1c1a39e848b0c73d5ac9d941bd03660c

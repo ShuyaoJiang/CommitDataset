@@ -1,0 +1,13 @@
+Throw exception if KeyManagerFactory is used with OpenSslClientContext
+
+Motivation:
+
+We currently not supported using KeyManagerFactory with OpenSslClientContext and so should throw an exception if the user tries to do so. This will at least not give suprising and hard to debug problems later.
+
+Modifications:
+
+Throw exception if a user tries to construct a OpenSslClientContext with a KeyManagerFactory
+
+Result:
+
+Fail fast if the user tries to use something that is not supported.

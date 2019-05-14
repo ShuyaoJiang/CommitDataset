@@ -1,0 +1,15 @@
+Consider security in ClassUtils#getMostSpecificMethod
+
+Recent changes in ExtendedBeanInfo involve invoking
+ClassUtils#getMostSpecificMethod when determining JavaBeans get/set
+pairs; if Java security settings control disallow reflective access,
+this results in an AccessControlException.
+
+This change defends against this (comparatively rare) scenario by
+catching the exception and falling back to returning the method
+originally supplied by the user.
+
+This change was a result of noticing CallbacksSecurityTests failing
+following the ExtendedBeanInfo modifications mentioned above
+
+Issue: SPR-8949

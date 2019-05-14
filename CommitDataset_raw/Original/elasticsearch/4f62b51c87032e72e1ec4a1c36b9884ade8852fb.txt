@@ -1,0 +1,13 @@
+Use lastSyncedGlobalCheckpoint in deletion policy (#27826)
+
+Today we use the in-memory global checkpoint from SequenceNumbersService
+to clean up unneeded commit points, however the latest global checkpoint
+may haven't fsynced to the disk yet. If the translog checkpoint fsync
+failed and we already use a higher global checkpoint to clean up commit
+points, then we may have removed a safe commit which we try to keep for
+recovery.
+
+This commit updates the deletion policy using lastSyncedGlobalCheckpoint
+from Translog rather the in memory global checkpoint.
+
+Relates #27606

@@ -1,0 +1,9 @@
+Remove Cookie support from ServerHttpRequest
+
+Although ServletHttpRequest provides access to Cookies, other
+implementations may not. At the moment this was only needed
+for SockJS to check the value of the JSESSIONID cookie. This
+is now down by parsing the raw cookie values locally.
+
+If comprehensive cookie support is to be added, we should
+probably consider HttpHeaders as a potential candidate.

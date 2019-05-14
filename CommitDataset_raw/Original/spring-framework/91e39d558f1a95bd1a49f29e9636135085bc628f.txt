@@ -1,0 +1,15 @@
+Use ArrayList instead of LinkedList for known size
+
+Spring JDBC unlike other modules uses LinkedList instead of ArrayList
+in several places. There is a large body of evidence suggesting that on
+contemporary hardware ArrayList is both faster and has less overhead
+than even in degenerate cases of empty lists [3] or unknown size.
+
+There are two places in Spring JDBC where the size of the list is known
+in advance and an ArrayList of the correct final size can be created
+
+ [1] https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8011200
+ [2] http://cliffc.org/blog/2017/11/05/modern-hardware-performance-cache-lines/
+ [3] https://bugs.openjdk.java.net/browse/JDK-8011200
+
+Issue: SPR-16378

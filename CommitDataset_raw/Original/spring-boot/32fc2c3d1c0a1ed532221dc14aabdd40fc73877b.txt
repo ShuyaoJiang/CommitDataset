@@ -1,0 +1,11 @@
+Remove Boot-specifics from AetherGrapeEngine
+
+With the goal of making AetherGrapeEngine generally useful with Groovy,
+this commit removes any Boot specifics from it. Specifically, there
+is now only a single default repository: Maven Central. The
+Boot-specific Spring milestone and snapshot repositories are now added
+via @GrabResolver annotations that are added using an ASTTransformation.
+
+As part of this change, AetherGrapeEngine has also been updated to store
+its repositories using a LinkedHashSet, this ensures that the same
+repository is not used more than once while maintaining their ordering.

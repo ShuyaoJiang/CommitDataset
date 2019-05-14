@@ -1,0 +1,12 @@
+Allow copying from a field to another field that belongs to the same nested object. (#26774)
+
+The previous test was too strict and enforced that the target object was a
+parent. It has been relaxed so that fields that belong to the same nested
+object can copy to each other.
+
+The commit also improves error handling in case of multi-fields. The current
+validation works but may throw confusing error messages since it assumes that
+only object fields may introduce dots in fields names while multi fields may
+too.
+
+Closes #26763

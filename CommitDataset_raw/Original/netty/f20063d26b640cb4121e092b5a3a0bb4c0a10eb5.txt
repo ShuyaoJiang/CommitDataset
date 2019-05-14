@@ -1,0 +1,11 @@
+SslHandler#wrapNonAppData return early
+
+Motivation:
+
+SslHandler#wrapNonAppData may be able to return early if it is called from a unwrap method and the status is NEED_UNWRAP. This has been observed to occur while using the OpenSslEngine and can avoid allocation of an extra ByteBuf of size 2048.
+
+Modifications:
+- Return early from SslHandler#wrapNonAppData if NEED_UNWRAP and we are called from an unwrap method
+
+Result:
+Less buffer allocations and early return from SslHandler#wrapNonAppData.

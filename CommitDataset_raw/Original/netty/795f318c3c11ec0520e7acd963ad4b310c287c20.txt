@@ -1,0 +1,11 @@
+Use a single array in SelectedSelectionKeySet
+
+Motivation:
+SelectedSelectionKeySet currently uses 2 arrays internally and users are expected to call flip() to access the underlying array and switch the active array. However we do not concurrently use 2 arrays at the same time and we can get away with using a single array if we are careful about when we reset the elements of the array.
+
+Modifications:
+- Introduce SelectedSelectionKeySetSelector which wraps a Selector and ensures we reset the underlying SelectedSelectionKeySet data structures before we select
+- The loop bounds in NioEventLoop#processSelectedKeysOptimized can be defined more precisely because we know the real size of the underlying array
+
+Result:
+Fixes https://github.com/netty/netty/issues/6058

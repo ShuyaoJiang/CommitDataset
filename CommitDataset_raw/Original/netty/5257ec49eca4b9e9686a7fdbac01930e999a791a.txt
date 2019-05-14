@@ -1,0 +1,10 @@
+DnsNameResolverContext reuse of DnsServerAddressStream without duplicate
+
+Motivation:
+DnsServerAddressStream provides an iterator like interface but maybe expected to start at a specific point upon each new usage. If a DnsServerAddressStream is re-used in multiple independent iterations the order of iteration maybe incorrect. DnsNameResolverContext has a fallback DnsServerAddressStream reference if the cache doesn't contain a hit, but it is shared across multiple independent iterations. This may lead to undesirable DNS query order.
+
+Modifications:
+- DnsNameResolverContext#getNameServers should duplicate the default DnsServerAddressStream
+
+Result:
+Consistent iteration over the default DnsServerAddressStream in DnsNameResolverContext.

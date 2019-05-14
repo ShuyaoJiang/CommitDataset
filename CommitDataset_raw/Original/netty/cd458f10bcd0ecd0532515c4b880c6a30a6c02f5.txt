@@ -1,0 +1,18 @@
+Server returns status 431 on header size errors
+
+Motivation:
+
+Currently clients attempting to send headers that are too large recieve
+a RST frame. This makes it harder than needed for implementations on top
+of netty to handle this in a graceful way.
+
+Modifications:
+
+When the Decoder throws a StreamError of type FRAME_SIZE_ERROR, the
+Http2ConnectionHandler will now attempt to send an Http2Header with
+status 431 and endOfStream=true
+
+Result:
+
+Implementations now do not have to subclass parts of netty to handle
+431s

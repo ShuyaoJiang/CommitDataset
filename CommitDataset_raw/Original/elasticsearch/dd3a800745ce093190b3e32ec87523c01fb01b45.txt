@@ -1,0 +1,8 @@
+Fix ASN.1 encoding of "cn" OtherName in CertGen/CertUtil (elastic/x-pack-elasticsearch#2858)
+
+Certgen was generating "other name" SANs without the explicit [0] tag that is required.
+This was masked by the fact that the JRE X.509 classes always wrap the "other name" name-value in a [0] tag  (even if it already has one)
+
+Also switched to a UTF8 String from an IA5 string to match the configuration being used for testing in openssl.
+
+Original commit: elastic/x-pack-elasticsearch@1b87964ec77bf987a9676752d1648557804cb15d

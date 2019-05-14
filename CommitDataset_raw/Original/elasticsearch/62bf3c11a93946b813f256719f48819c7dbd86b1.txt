@@ -1,0 +1,17 @@
+Stop invoking non-existant syscall
+
+Today when getting ready to enter seccomp, we do some probes to ensure
+that we are really talking to seccomp, etc. One of these probes is pure
+paranoia. The paranoia was driven by a kernel bug
+(https://lkml.org/lkml/2014/7/20/222) that only impacted 32-bit x86
+kernels wherein invoking a non-existant syscall was not returning ENOSYS
+(as it should). This probe causes problems though, for example in
+containers with syscall filters, invoking a non-existant syscall will
+lead to the process being sent SIGSYS and terminated. We do not need
+this paranoid, we do not support 32-bit, and our other probes give us
+enough of a defense to ensure that we are talking to seccomp (and we
+hardcode the seccomp syscall number for platforms that we
+support). Given that this probe offers us little value, but does cause
+problems in valid use-cases, this commit removes this paranoia.
+
+Relates #27016

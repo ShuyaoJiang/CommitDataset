@@ -1,0 +1,17 @@
+Populate RequestAttributes before invoking Filters in MockMvc
+
+When using the Spring TestContext Framework (TCF) to load a
+WebApplicationContext and the Spring MVC Test Framework (MockMvc) to
+test a controller, two instances of MockHttpServletRequest will be
+created. Due to an ordering issue with regard to population of the
+RequestAttributes, it is therefore possible that a filter accesses the
+mocked request managed by the TCF, while the controller accesses the
+mocked request managed by MockMvc, and this leads to test failures if
+the controller expects data from the filter to be present in the
+request.
+
+This commit fixes this bug by ensuring that the RequestAttributes
+backed by the mocked request managed by MockMvc are stored in the
+RequestContextHolder before any filters are invoked by MockMvc.
+
+Issue: SPR-13217

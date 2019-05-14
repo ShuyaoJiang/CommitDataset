@@ -1,0 +1,13 @@
+HashedWheelTimer.newTimeout(...) may overflow
+
+Motivation:
+
+We dont protect from overflow and so the timer may fire too early if a large timeout is used.
+
+Modifications:
+
+Add overflow guard and a test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7760.

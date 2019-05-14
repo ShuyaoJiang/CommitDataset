@@ -1,0 +1,13 @@
+[#2667] Write until EAGAIN in native transport and only call setEpollOut() in this case
+
+Motivation:
+
+In the previous fix for #2667 I did introduce a bit overhead by calling setEpollOut() too often.
+
+Modification:
+
+Only call setEpollOut() if really needed and remove unused code.
+
+Result:
+
+Less overhead when saturate network.

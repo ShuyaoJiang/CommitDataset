@@ -1,0 +1,14 @@
+Ensure all tests in spring-test are executed
+
+Prior to this commit TestNG tests would only be executed by the Gradle
+build if they were located in the “testng” package. Tests in subpackages
+would therefore be omitted from the build.
+
+This commit ensures that all TestNG classes in the “testng” package and
+any of its subpackages are executed in the Gradle build.
+
+Furthermore, this commit ensures that the JUnit-based
+FailingBeforeAndAfterMethodsTests test class is executed along with the
+other JUnit tests even though it resides under the “testng” package.
+
+Issue: SPR-11338

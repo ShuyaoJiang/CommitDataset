@@ -1,0 +1,12 @@
+Detect controller methods via InitializingBean hook
+
+Previously RequestMappingHandlerMapping detected @RequestMapping
+methods through an initApplicationContext() hook. However, the
+HandlerMapping may not have been fully set up with all its
+dependencies at that point including settings like useSuffixPattern
+and others.
+
+This change moves the detection @RequestMapping methods to an
+InitializingBean.afterPropertiesSet() hook.
+
+Issue: SPR-9371

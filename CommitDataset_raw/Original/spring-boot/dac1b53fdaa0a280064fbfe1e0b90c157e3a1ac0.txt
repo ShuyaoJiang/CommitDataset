@@ -1,0 +1,8 @@
+Don't mask original exception in SpringApplication.handleError
+
+If any @Import (or @Enable*, especially @EnableScheduling) has registered
+bean *names* as ApplicationListeners, and the application context wasn't
+refreshed fully when it failed, then the listener lookup could fail and
+mask the original exception
+
+Fixes gh-253

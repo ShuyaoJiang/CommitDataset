@@ -1,0 +1,12 @@
+Change default order of AutoConfigureOrder to 0
+
+Previously, AutoConfigureOrder defaulted to Ordered.LOWEST_PRECEDENCE.
+This made is impossible for an individual auto-configuration to
+indicate that it wanted to go "last", i.e. after any
+auto-configuration classes that didn't not specify an order, or
+specified an order other than LOWEST_PRECEDENCE.
+
+This commit changes to default to 0, allowing a single
+ auto-configuration to easily indicate that it should go last.
+
+ Closes gh-10142

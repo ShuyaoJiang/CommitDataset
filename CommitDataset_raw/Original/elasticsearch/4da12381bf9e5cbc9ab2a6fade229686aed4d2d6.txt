@@ -1,0 +1,8 @@
+Remove RowSetCursor (elastic/x-pack-elasticsearch#2624)
+
+`RowSetCursor` was just like `RowSet` only it had methods that allowed
+you to scroll to the next page. We now use `RowSet#nextPageCursor` to
+get the next page in a way that doesn't require us to store state on
+the server. So we can remove `RowSetCursor` entirely now.
+
+Original commit: elastic/x-pack-elasticsearch@6a4a1efb20747720f9afb355e29ffca3e3c0b22e

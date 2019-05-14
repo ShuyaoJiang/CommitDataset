@@ -1,0 +1,19 @@
+Fix h2spec test 4.3 about invalid header block
+
+Motivation:
+
+HPackDecoder works on entire header block, we shouldn't encounter
+incomplete header fields. If we do we should treat it as
+a decoding error and according to the specification:
+
+A decoding error in a header block MUST be treated as
+a connection error (Section 5.4.1) of type COMPRESSION_ERROR.
+
+Modifications:
+
+* Check final state in HpackDecoder once we've decoded all the data.
+
+Result:
+
+* Throw a connection error if we receive incomplete header fields
+* H2spec 4.3 tests all passes

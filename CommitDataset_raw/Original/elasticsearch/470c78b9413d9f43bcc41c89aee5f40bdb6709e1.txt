@@ -1,0 +1,13 @@
+Synchronize pendingOutgoingJoins (#39900)
+
+Today we use a ConcurrentHashSet to track the in-flight outgoing joins in the
+`JoinHelper`. This is fine for adding and removing elements but not for the
+emptiness test in `isJoinPending()` which might return false if one join
+finishes just after another one starts, even though joins were pending
+throughout.
+
+As used today this is ok: it means the node was trying to join a master but
+this join attempt just finished unsuccessfully, and causes it to (rightfully)
+reject a `FollowerCheck` from the failed master. However this kind of API
+inconsistency is trappy and there is no need to be clever here, so this change
+replaces the set with a `synchronizedSet()`.

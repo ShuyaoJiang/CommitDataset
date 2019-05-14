@@ -1,0 +1,19 @@
+Fix static resource handling when run in IDE or using Maven or Gradle
+
+The changes made for gh-8299 attempted to make static resource
+handling consistent across Jetty, Tomcat, and Undertow. They did so
+for application's launched using JarLauncher or WarLauncher but did
+not consider application's launched in an IDE or using spring-boot:run
+in Maven or bootRun in Gradle.
+
+Running in an IDE or via Maven or Gradle introduces two new
+resource locations:
+
+ - Jars on the classpath with file protocol URLs (they are always
+   jar protocol URLs when using either launcher)
+ - Directories on the classpath from a project that is depended upon
+   and contains resources in META-INF/resources
+
+This commit updates the factories for all three containers to handle
+these new resources locations. The integration tests have also been
+updated.

@@ -1,0 +1,31 @@
+Reduce array allocations during CompositeByteBuf construction
+
+Motivation:
+
+Eliminate avoidable backing array reallocations when constructing
+composite ByteBufs from existing buffer arrays/Iterables. This also
+applies to the Unpooled.wrappedBuffer(...) methods.
+
+Modifications:
+
+Ensure the initial components ComponentList is sized at least as large
+as the provided buffer array/Iterable in the CompositeByteBuffer
+constructors.
+
+In single-arg Unpooled.wrappedBuffer(...) methods, set maxNumComponents
+to the count of provided buffers, rather than a fixed default of 16. It
+seems likely that most usage of these involves wrapping a list without
+subsequent modification, particularly since they return a ByteBuf rather
+than CompositeByteBuf. If a different/larger max is required there are
+already the wrappedBuffer(int, ...) variants.
+
+In fact the current behaviour could be considered inconsistent - if you
+call Unpooled.wrappedBuffer(int, ByteBuf) with a single buffer, you
+might expect to subsequently be able to add buffers to it (since you
+specified a max related to consolidation), but it will in fact return
+just a slice of the provided ByteBuf.
+
+Result:
+
+Fewer and smaller allocations in some cases when using CompositeByteBufs
+or Unpooled.wrappedBuffer(...).

@@ -1,0 +1,7 @@
+Immediately flush channel after writing to buffer (#31301)
+
+This is related to #27260. Currently when we queue a write with a
+channel we set OP_WRITE and wait until the next selection loop to flush
+the write. However, if the channel does not have a pending write, it
+is probably ready to flush. This PR implements an optimistic flush logic
+that will attempt this flush.

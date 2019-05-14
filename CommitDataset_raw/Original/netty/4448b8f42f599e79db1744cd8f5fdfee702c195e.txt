@@ -1,0 +1,17 @@
+Upgrading to Conscrypt 1.0.0.RC9. (#7044)
+
+Motivation:
+
+Starting with 1.0.0.RC9, conscrypt supports a buffer allocator.
+
+Modifications:
+
+- Updated the creation process for the engine to pass through the
+ByteBufAllocator.
+- Wrap a ByteBufAllocator with an adapter for conscrypt.
+- Added a property to optionally control whether conscrypt uses
+Netty's buffer allocator.
+
+Result:
+
+Netty+conscrypt will support using Netty's ByteBufAllocator.

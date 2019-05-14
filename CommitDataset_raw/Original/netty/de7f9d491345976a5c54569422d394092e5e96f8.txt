@@ -1,0 +1,16 @@
+Add TCP_USER_TIMEOUT
+
+Motivation:
+
+See #4174.
+
+Modifications:
+
+Modify transport-native-epoll to allow setting TCP_USER_TIMEOUT.
+
+Result:
+
+Hanging connections that are written into will get timeouted.
+
+Conflicts:
+	transport-native-epoll/src/main/java/io/netty/channel/epoll/EpollChannelOption.java

@@ -1,0 +1,27 @@
+Retain the hasAlphaBit when rotating images in TransformationUtils.
+
+This fixes a bug where camera images written with non-zero exif
+orientations are cached in Glide's disk cache as slower PNGs instead of
+JPEGs. Camera images without exif orientaiton or with 0 values for the
+exif orientation are unaffected.
+
+Images with exif orientations are always rotated by Downsampler using
+this method when they're decoded. The modified method writes the rotated
+image into a Bitmap acquired from the BitmapPool. Bitmaps in the pool
+default to having hasAlpha true because it's safer to retain
+transparency than not. The modified method previously did not update the
+newly obtained bitmap's hasAlpha flag with the value from the unrotated
+original. As a result, every image with exif orientation ended up in a
+bitmap with the hasAlpha flag set to true. In turn, BitmapEncoder would
+write all of these images to disk as PNGs because it assumes images with
+hasAlpha set to true might have transparency. Writing and reading PNGs
+is much slower than writing/reading JPEGs in general, so this causes a
+performance issue for Camera images, which, as a rule, do not have
+transparency (and have hasAlpha set to false).
+
+To avoid the performance hit, this change sets the hasAlpha flag on
+rotated Bitmaps based on the value from the original unmodified Bitmap.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=218380242

@@ -1,0 +1,11 @@
+Extract common http logic to server (#31311)
+
+This is related to #28898. With the addition of the http nio transport,
+we now have two different modules that provide http transports.
+Currently most of the http logic lives at the module level. However,
+some of this logic can live in server. In particular, some of the
+setting of headers, cors, and pipelining. This commit begins this moving
+in that direction by introducing lower level abstraction (HttpChannel,
+HttpRequest, and HttpResonse) that is implemented by the modules. The
+higher level rest request and rest channel work can live entirely in
+server.

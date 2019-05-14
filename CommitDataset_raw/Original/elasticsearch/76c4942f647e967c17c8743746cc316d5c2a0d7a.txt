@@ -1,0 +1,9 @@
+add debug logging to SimpleClusterStateIT#testIndicesOptions (#38752)
+
+testIndicesOptions fails sometimes because not all indices
+are closed in time before the next cluster-state assertion.
+This change adds debug logging to the close action, as well
+as its calls out to the MetaDataIndexStateService. This should
+help understand why things failed, next time they do.
+
+relates to #38745.

@@ -1,0 +1,7 @@
+Remove manual tracking of registered channels (#27445)
+
+This is related to #27260. Currently, every ESSelector keeps track of
+all channels that are registered with it. ESSelector is just an
+abstraction over a raw java nio selector. The java nio selector already
+tracks its own selection keys. This commit removes our tracking and
+relies on the java nio selector tracking.

@@ -1,0 +1,14 @@
+Index shard should roll generation via the engine
+
+Today when a replica shard detects a new primary shard (via a primary
+term transition), we roll the translog generation. However, the
+mechanism that we are using here is by reaching through the engine to
+the translog directly. By poking all the way through rather than asking
+the engine to manage the roll for us we miss:
+ - taking a read lock in the engine while the roll is occurring
+ - trimming unreferenced readers
+
+This commit addresses this by asking the engine to roll the translog
+generation for us.
+
+Relates #28537

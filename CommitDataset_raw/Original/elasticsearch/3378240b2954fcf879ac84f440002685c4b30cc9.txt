@@ -1,0 +1,14 @@
+Reload secure settings for plugins (#31383)
+
+Adds the ability to reread and decrypt the local node keystore.
+Commonly, the contents of the keystore, backing the `SecureSettings`,
+are not retrievable except during node initialization. This changes that
+by adding a new API which broadcasts a password to every node. The
+password is used to decrypt the local keystore and use it to populate
+a `Settings` object that is passes to all the plugins implementing the
+`ReloadablePlugin` interface. The plugin is then responsible to do
+whatever "reload" means in his case. When the `reload`handler returns,
+the keystore is closed and its contents are no longer retrievable.
+Password is never stored persistently on any node.
+Plugins that have been moded in this commit are: `repository-azure`,
+`repository-s3`, `repository-gcs` and `discovery-ec2`.

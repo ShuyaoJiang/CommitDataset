@@ -1,0 +1,21 @@
+Upgrade security index to use only one (the default) index type (elastic/x-pack-elasticsearch#1780)
+
+The .security index used several different types to differentiate the
+documents added to the index (users, reserved-users, roles, etc).  Since
+types are deprecated in 6.x, this commit changes the .security index
+access layer to only use a single type and have all documents in the
+index be of that single type.  To differentiate documents that may have
+the same id (e.g. the same user name and role name), the appropriate
+type of the document is prepended to the id.  For example, a user named
+"jdoe" will now have the document id "user-jdoe".  
+
+This commit also ensures that any native realm security index operations
+that lead to auto creation of the security index first go through the process
+of creating the internal security index (.security-v6) and creating the alias
+.security to point to the internal index. 
+
+Lastly, anytime the security index is accessed without having been
+upgraded, an exception is thrown notifying the user to use the
+upgrade API to upgrade the security index.
+
+Original commit: elastic/x-pack-elasticsearch@cc0a474aedcf729ebd57c33e08b41ffdd1f21e60

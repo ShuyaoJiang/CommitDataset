@@ -1,0 +1,13 @@
+Ensure that fat jars and wars do not corrupt UTF-8 entry names
+
+Previously, both Repackager and the Grade plugin used the JRE's
+standard ZipOutputStream when creating a fat jar or war file. This
+resulted in entry names that needed UTF-8 encoding to become
+corrupted.
+
+This commit updates both to use Commons Compress'
+ZipArchiveOutputStream and to configure the stream's encoding and
+each entry's Unix mode. This ensures that names are encoded using
+UTF-8 and can be read back in correctly by common zip tools.
+
+Closes gh-9405

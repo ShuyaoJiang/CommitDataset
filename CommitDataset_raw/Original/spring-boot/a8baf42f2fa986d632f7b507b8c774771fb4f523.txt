@@ -1,0 +1,12 @@
+Ensure that CharacterEncodingFilter is ordered first
+
+This commit makes sure that `CharacterEncodingFilter` is ordered with
+the `Ordered.HIGHEST_PRECEDENCE` and that other filters, potentially
+reading the request body, are ordered after.
+
+In this particular case, both `WebMvcMetricsFilter` and
+`ErrorPageFilter` are now ordered at `Ordered.HIGHEST_PRECEDENCE + 1` to
+avoid cases where the request body is read before the encoding
+configuration is taken into account.
+
+Closes gh-11607

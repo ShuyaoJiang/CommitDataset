@@ -1,0 +1,76 @@
+Upgrade gradle wrapper to 4.8 (#31525)
+
+* Move to Gradle 4.8 RC1
+
+* Use latest version of plugin
+
+The current does not work with Gradle 4.8 RC1
+
+* Switch to Gradle GA
+
+* Add and configure build compare plugin
+
+* add work-around for https://github.com/gradle/gradle/issues/5692
+
+* work around https://github.com/gradle/gradle/issues/5696
+
+* Make use of Gradle build compare with reference project
+
+* Make the manifest more compare friendly
+
+* Clear the manifest in compare friendly mode
+
+* Remove animalsniffer from buildscript classpath
+
+* Fix javadoc errors
+
+* Fix doc issues
+
+* reference Gradle issues in comments
+
+* Conditionally configure build compare
+
+* Fix some more doclint issues
+
+* fix typo in build script
+
+* Add sanity check to make sure the test task was replaced
+
+Relates to #31324. It seems like Gradle has an inconsistent behavior and
+the taks is not always replaced.
+
+* Include number of non conforming tasks in the exception.
+
+* No longer replace test task, create implicit instead
+
+Closes #31324. The issue has full context in comments.
+
+With this change the `test` task becomes nothing more than an alias for `utest`.
+Some of the stand alone tests that had a `test` task now have `integTest`, and a
+few of them that used to have `integTest` to run multiple tests now only
+have `check`.
+This will also help separarate unit/micro tests from integration tests.
+
+* Revert "No longer replace test task, create implicit instead"
+
+This reverts commit f1ebaf7d93e4a0a19e751109bf620477dc35023c.
+
+* Fix replacement of the test task
+
+Based on information from gradle/gradle#5730 replace the task taking
+into account the task providres.
+Closes #31324.
+
+* Only apply build comapare plugin if needed
+
+* Make sure test runs before integTest
+
+* Fix doclint aftter merge
+
+* PR review comments
+
+* Switch to Gradle 4.8.1 and remove workaround
+
+* PR review comments
+
+* Consolidate task ordering

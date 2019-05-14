@@ -1,0 +1,13 @@
+Detecting actual Channel write idleness vs. slowness
+
+Motivation
+
+The IdleStateHandler tracks write() idleness on message granularity but does not take into consideration that the client may be just slow and has managed to consume a subset of the message's bytes in the configured period of time.
+
+Modifications
+
+Adding an optional configuration parameter to IdleStateHandler which tells it to observe ChannelOutboundBuffer's state.
+
+Result
+
+Fixes https://github.com/netty/netty/issues/6150

@@ -1,0 +1,18 @@
+Rename `ChannelHandlerContext#fireUserEventTriggered()` argument from `event` to `evt` so it matches the `ChannelInboundHandler#userEventTriggered()` argument's name.
+
+Motivation
+
+When I override ChannelHandler methods I usually (always) refire events myself via
+ChannelHandlerContext instead of relieing on calling the super method (say
+`super.write(ctx, ...)`). This works great and the IDE actually auto completes/generates
+the right code for it except `#fireUserEventTriggered()` and `#userEventTriggered()`
+which have a mismatching argument names and I have to manually "intervene".
+
+Modification
+
+Rename `ChannelHandlerContext#fireUserEventTriggered()` argument from `event` to `evt`
+to match its handler counterpart.
+
+Result
+
+The IDE's auto generated code will reference the correct variable.

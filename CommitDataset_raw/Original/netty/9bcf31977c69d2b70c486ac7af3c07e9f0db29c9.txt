@@ -1,0 +1,13 @@
+Fail the connectPromise with the correct exception if the connection is refused when using the native kqueue transport.
+
+Motivation:
+
+Due a bug we happen to sometimes fail the connectPromise with a ClosedChannelException when using the kqueue transport and the remote peer refuses the connection. We need to ensure we fail it with the correct exception.
+
+Modifications:
+
+Call finishConnect() before calling close() to ensure we preserve the correct exception.
+
+Result:
+
+KQueueSocketConnectionAttemptTest.testConnectionRefused will pass always on macOS.

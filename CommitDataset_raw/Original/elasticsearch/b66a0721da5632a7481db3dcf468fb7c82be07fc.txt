@@ -1,0 +1,13 @@
+Do not open indices with broken settings
+
+Today we are lenient and we open an index if it has broken
+settings. This can happen if a user installs a plugin that registers an
+index setting, creates an index with that setting, stop their node,
+removes the plugin, and then restarts the node. In this case, the index
+will have a setting that we do not recognize yet we open the index
+anyway. This leniency is dangerous so this commit removes it. Note that
+we still are lenient on upgrades and we should really reconsider this in
+a follow-up.
+
+Relates #26995
+

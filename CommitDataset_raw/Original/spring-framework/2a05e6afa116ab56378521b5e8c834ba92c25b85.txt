@@ -1,0 +1,12 @@
+Change SpEL equality operators to use .equals
+
+Prior to this commit the SpEL operators `==` and `!=` were using the
+Java `==` comparison operator as part of their equality checking. It is
+more flexible to use the equals() method on Object.
+
+Under this commit the change to .equals() has been made and the equality
+checking code has been pushed into a common method in the Operator
+superclass. This commit also makes some tweaks to the other operator
+classes - the Float case was missing from OpGT.
+
+Issue: SPR-9194

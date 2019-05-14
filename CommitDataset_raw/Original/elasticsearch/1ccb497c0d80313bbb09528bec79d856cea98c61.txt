@@ -1,0 +1,21 @@
+Use Azure upload method instead of our own implementation (#26751)
+
+* Use Azure upload method instead of our own implementation
+
+We are not following the Azure documentation about uploading blobs to Azure storage. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-java-how-to-use-blob-storage#upload-a-blob-into-a-container
+
+Instead we are using our own implementation which might cause some troubles and rarely some blobs can be not immediately commited just after we close the stream. Using the standard implementation provided by Azure team should allow us to benefit from all the magic Azure SDK team already wrote.
+
+And well... Let's just read the doc!
+
+* Adapt integration tests to secure settings
+
+That was a missing part in #23405.
+
+* Simplify all the integration tests and *extends ESBlobStoreRepositoryIntegTestCase tests
+
+    * removes IT `testForbiddenContainerName()` as it is useless. The plugin does not create anymore the container but expects that the user has created it before registering the repository
+   * merges 2 IT classes so all IT tests are ran from one single class
+   * We don't remove/create anymore the container between each single test but only for the test suite
+
+

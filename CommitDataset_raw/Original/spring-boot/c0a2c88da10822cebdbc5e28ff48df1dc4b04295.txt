@@ -1,0 +1,18 @@
+Stop referring to optional classes in BeanDefinitionLoader’s signature
+
+Previously, BeanDefinitionLoader declared a field of type
+GroovyBeanDefinitionReader which is a GroovyObject subclass. This is
+problematic as BeanDefinitionLoader is always loaded but Groovy is an
+optional dependency. Even on a JVM where class verification is performed
+lazily, this can still cause problems if something reflectively tries
+to access the class’s declared fields. On a JVM where classes are
+verified at load time, it would be impossible to start a Spring Boot
+application without having Groovy on the classpath.
+
+This commit changes the field to be a BeanDefinitionReader, removing
+the indirect reference to GroovyObject form BeanDefinitionLoader’s
+signature. The reader is downcast to a GroovyBeanDefinitionReader in the
+body of a method body that will only be invoked when Groovy is on the
+classpath.
+
+Closes gh-5040

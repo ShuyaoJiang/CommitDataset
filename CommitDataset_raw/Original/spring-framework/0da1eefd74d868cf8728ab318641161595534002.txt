@@ -1,0 +1,13 @@
+Add default ContentTypeResolver initialization
+
+Previously AbstractMessageConverter did not have a ContentTypeResolver
+configured by default. However the Java config and XML namespace in
+spring-messaging and spring-websocket always configured one.
+
+This change ensures every AbstractMessageConverter is configured with an
+instance of DefaultContentTypeResolver by default. This makes sense since
+all the resolver does is make an attempt to find a content type to use
+for matching. If it can't it returns null and it's up to the converter
+to decide whether it can convert or not.
+
+Issue: SPR-11462

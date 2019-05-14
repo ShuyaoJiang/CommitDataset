@@ -1,0 +1,13 @@
+Correctly record creation stacktrace in ResourceLeakDetector.
+
+Motivation:
+
+We missed to correctly record the stacktrace of the creation of an ResourceLeak record. This could either have the effect to log the wrote stacktrace for creation or not log a stacktrace at all if the object was dropped on the floor after it was created.
+
+Modifications:
+
+Correctly create a Record on creation of the object.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7781.

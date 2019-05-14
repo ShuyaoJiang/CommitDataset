@@ -1,0 +1,10 @@
+Fix generation of Javadoc on Java 9
+
+This commit fixes Javadoc generation when building with Java 9. It
+upgrades the Javadoc plugin to a version that is Java 9 compatible
+(3.0.0-M1) and reworks DevTools to remove usage of @PostConstruct.
+The latter change is necessary as @PostConstruct is not visible by
+default when building with Java 9 and, therefore its usage causes
+Javadoc generation to fail.
+
+Closes gh-10029

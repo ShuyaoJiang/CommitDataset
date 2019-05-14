@@ -1,0 +1,8 @@
+Increase priority of EndpointHandlerMapping
+
+The Actuator endpoints ought to take precedence over others (since
+they are important and users can isolate them using management.contextPath
+if necessary). This change puts the @Order at -100 (well before the default
+order of the RequestMappingHandlerMapping at 0).
+
+Fixes gh-1107

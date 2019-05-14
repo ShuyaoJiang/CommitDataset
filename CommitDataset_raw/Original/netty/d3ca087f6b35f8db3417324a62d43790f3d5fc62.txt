@@ -1,0 +1,40 @@
+Propagate all exceptions when loading native code
+
+Motivation:
+There are 2 motivations, the first depends on the second:
+
+Loading Netty Epoll statically stopped working in 4.1.16, due to
+`Native` always loading the arch specific shared object.  In a
+static binary, there is no arch specific SO.
+
+Second, there are a ton of exceptions that can happen when loading
+a native library.  When loading native code, Netty tries a bunch of
+different paths but a failure in any given may not be fatal.
+
+Additionally: turning on debug logging is not always feasible so
+exceptions get silently swallowed.
+
+Modifications:
+
+* Change Epoll and Kqueue to try the static load second
+* Modify NativeLibraryLoader to record all the locations where
+  exceptions occur.
+* Attempt to use `addSuppressed` from Java 7 if available.
+
+Alternatives Considered:
+
+An alternative would be to record log messages at each failure.  If
+all load attempts fail, the log messages are printed as warning,
+else as debug. The problem with this is there is no `LogRecord` to
+create like in java.util.logging.  Buffering the args to
+logger.log() at the end of the method loses the call site, and
+changes the order of events to be confusing.
+
+Another alternative is to teach NativeLibraryLoader about loading
+the SO first, and then the static version.  This would consolidate
+the code fore Epoll, Kqueue, and TCNative.   I think this is the
+long term better option, but this PR is changing a lot already.
+Someone else can take a crack at it later
+
+Results:
+Epoll Still Loads and easier debugging.

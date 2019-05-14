@@ -1,0 +1,13 @@
+[#5770] Use heapbuffers by default when using LocalChannel and LocalServerChannel.
+
+Motivation:
+
+The local transport is used to communicate in the same JVM so we should use heap buffers.
+
+Modifications:
+
+Use heapbuffers by default if not requested otherwise.
+
+Result:
+
+No allocating of direct buffers by default when using local transport

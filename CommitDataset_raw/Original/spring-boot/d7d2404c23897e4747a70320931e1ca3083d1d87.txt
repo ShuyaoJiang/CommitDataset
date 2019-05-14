@@ -1,0 +1,15 @@
+Ensure that Tomcat does not report unstopped main thread when startup fails
+
+Following the changes made in ff99bb07, Tomcat’s WebAppClassLoader is
+set as the thread context class loader of the main thread. If Tomcat
+was stopped while the main thread was still running (typically as a 
+result of a startup failure), this had the unwanted side-effect of
+causing Tomcat to report that the application had started a thread named
+main and had failed to stop it.
+
+This commit updates TomcatEmbeddedServletContainer so that, during stop
+processing, the current thread’s context class loader is reset before
+Tomcat is stopped. This prevents Tomcat from incorrectly believe that
+the application has started and failed to stop the main thread.
+
+Closes gh-5357

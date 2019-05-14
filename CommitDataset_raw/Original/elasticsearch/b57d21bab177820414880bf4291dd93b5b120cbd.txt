@@ -1,0 +1,7 @@
+User proper write-once semantics for GCS repository (#30438)
+
+There's no need for an extra blobExists() call when writing a blob to the GCS service. GCS provides
+an option (with stronger consistency guarantees) on the insert method that guarantees that the
+blob that's uploaded does not already exist.
+
+Relates to #19749

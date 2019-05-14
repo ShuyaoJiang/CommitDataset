@@ -1,0 +1,7 @@
+Tests: If dpkg fails try and log failure (#35551)
+
+If `dpkg` fails, try and look for who has `/var/lib/dpkg/lock` open. If
+it exists and is open then return a failure with information about who
+has file open. This should help us debug #33762.
+
+Closes #34309

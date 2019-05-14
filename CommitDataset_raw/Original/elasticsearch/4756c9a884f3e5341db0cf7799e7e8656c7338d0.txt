@@ -1,0 +1,7 @@
+Fix nested query highlighting (#26305)
+
+This commit extracts the inner query in the ESToParentBlockJoinQuery for highlighting.
+This query has been added in 5.4 and breaks plain highlighting on nested queries.
+Highlighters that use postings or term vectors are not affected because they can't highlight nested documents correctly.
+
+Fixes #26230

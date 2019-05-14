@@ -1,0 +1,10 @@
+Remove special handling for _all in nodes info
+
+Today when requesting _all we return all nodes regardless of what other
+node qualifiers are in the request. This is contrary to how the
+remainder of the API behaves which acts as additive and subtractive
+based on the qualifiers and their ordering. It is also contrary to how
+the wildcard * behaves. This commit removes the special handling for
+_all so that it behaves identical to the wildcard *.
+
+Relates #28971

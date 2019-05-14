@@ -1,0 +1,14 @@
+Fixes suggestion generics (#32706)
+
+* Fixes suggestion generics
+
+This solves a compile problem in Eclipse where Eclipse could not
+resolve the generics for the options field in `PhraseSuggestion.Entry`.
+But I think this is also a good change in general because
+`PhraseSuggestion.Entry` is now declaring the specific `Option`
+implementation it requires rather than `Suggest.Entry.Option` which is
+more general and could lead to weird bugs. `CompletionSuggestion.Entry`
+and `TermSuggestion.Entry` already declare the more specific class they
+use so I think this was an oversight in `PhaseSuggestion.Entry`
+
+* iter

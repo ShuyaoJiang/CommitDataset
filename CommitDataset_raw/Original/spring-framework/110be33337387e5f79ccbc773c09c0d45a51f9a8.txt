@@ -1,0 +1,16 @@
+Honor Host header for server name/port in MckHtSrvRq
+
+Prior to this commit, the getServerName() and getServerPort() methods
+in MockHttpServletRequest simply returned the 'mocked' serverName and
+serverPort but ignored the 'Host' header entirely. Per the Servlet
+specification, however, these methods must parse the server name or
+port from the 'Host' header if it is present and otherwise fall back to
+the resolved server name or port.
+
+This commit fixes this by ensuring that getServerName() and
+getServerPort() properly parse the server's name or port from the
+'Host' header if it is present in the request. If the 'Host' header is
+not present, MockHttpServletRequest falls back to returning the
+'mocked' serverName and serverPort.
+
+Issue: SPR-12088

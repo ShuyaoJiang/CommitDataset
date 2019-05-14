@@ -1,0 +1,12 @@
+Upgrade to Logback 1.1.10
+
+In Logback 1.1.10, the logback-classic module contains a
+META-INF/services/javax.servlet.ServletContainerInitializer file that
+contains a comment. This triggers a bug in Wildfly 8 [1] that has been
+fixed [2] in Wildfly 9 and later. As a result, this commit also
+updates our Wildfly deployment test to use 9.0.2 rather than 8.2.0.
+
+Closes gh-8354
+
+[1] https://issues.jboss.org/browse/WFLY-4089
+[2] https://github.com/wildfly/wildfly/commit/fef57ebdc7f93fe975d9234dd86265b79d705ce2

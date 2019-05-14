@@ -1,0 +1,13 @@
+Copy checkpoint atomically when rolling generation (#35407)
+
+Today when rolling a transog generation we copy the checkpoint from
+`translog.ckp` to `translog-nnnn.ckp` using a simple `Files.copy()` followed by
+appropriate `fsync()` calls. The copy operation is not atomic, so if we crash
+at the wrong moment we can leave an incomplete checkpoint file on disk. In
+practice the checkpoint is so small that it's either empty or fully written.
+However, we do not correctly handle the case where it's empty when the node
+restarts.
+
+In contrast, in `recoverFromFiles()` we _do_ copy the checkpoint atomically.
+This commit extracts the atomic copy operation from `recoverFromFiles()` and
+re-uses it in `rollGeneration()`.

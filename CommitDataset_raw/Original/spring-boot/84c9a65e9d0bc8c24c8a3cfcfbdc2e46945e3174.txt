@@ -1,0 +1,14 @@
+Auto-configure Elasticsearch REST clients
+
+This commit adds auto-configuration support for both `RestClient` and
+`RestHighLevelClient` which are provided by `elasticsearch-rest-client`
+and `elasticsearch-rest-high-level-client` dependencies respectively.
+
+`RestClient` is associated with configuration properties in the
+`spring.elasticsearch.rest.*` namespace, since this is the component
+taking care of HTTP communication with the actual Elasticsearch node.
+
+`RestHighLevelClient` wraps the first one and naturally inherits that
+configuration.
+
+Closes gh-12600

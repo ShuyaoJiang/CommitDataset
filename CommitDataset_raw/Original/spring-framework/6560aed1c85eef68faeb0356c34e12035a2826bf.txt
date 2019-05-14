@@ -1,0 +1,19 @@
+Avoid JMSException in listener execution
+
+This commit avoids throwing JMSException from the listener execution
+as this is not allowed per spec. Our SessionAwareMessageListener
+gives a callback that can throw JMSException and we have "abused" it
+so far.
+
+Typical message processing goes in those 3 steps:
+* Unmarshall the javax.jms.Message to the requested type
+* Invoke the actual user method (including processing of method
+  arguments)
+* Send a reply message, if any
+
+Those three steps have been harmonized so that they don't throw a
+JMSException anymore. For the later case, introduced
+ReplyFailureException as a general exception indicating the
+reply message could not have been sent.
+
+Issue: SPR-11778

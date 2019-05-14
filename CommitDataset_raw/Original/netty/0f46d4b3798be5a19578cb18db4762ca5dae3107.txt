@@ -1,0 +1,6 @@
+Revert 25c7a783a788b04f148c56f12d6efe1e11d093cd and fix #1064 differently
+
+- Rename inbound/outboundBufferFreed to inbound/OutboundShutdown which makes more sense
+- Move DefaultChannelHandlerContext.isInbound/OutboundBufferFreed() to DefaultChannelPipeline
+- Fix a problem where invokeFreeInbound/OutboundBuffer() sets inbound/outboundShutdown too early (this was the direct cause of #1064)
+- Remove the volatile modifier - DCHC.prev/next are volatile and that's just enough

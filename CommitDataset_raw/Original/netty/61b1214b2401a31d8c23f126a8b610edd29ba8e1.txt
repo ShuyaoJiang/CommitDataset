@@ -1,0 +1,10 @@
+Fix for first issue from #1652 on computation of time to wait in AbstractTrafficShapingHandler for Netty 4
+
+Fix for first issue from #1652 on computation of time to wait in AbstractTrafficShapingHandler for Netty 4, using the same formula than in Netty 3 (wrong place for parenthese).
+Was:
+
+    (bytes * 1000 / limit - interval / 10) * 10;
+
+Becomes:
+
+    (bytes * 1000 / limit - interval) / 10 * 10;

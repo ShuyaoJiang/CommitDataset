@@ -1,0 +1,16 @@
+Make @ResponseBody method return type available for message converters
+
+This commit adds canWrite() and write() methods to the
+GenericHttpMessageConverter interface. These are type aware variants
+of the methods available in HttpMessageConverter, in order to keep
+parametrized type information when serializing objects.
+
+AbstractMessageConverterMethodProcessor now calls those type aware
+methods when the message converter implements GenericHttpMessageConverter.
+
+AbstractJackson2HttpMessageConverter and GsonHttpMessageConverter uses
+these new methods to make @ResponseBody method return type available
+for type resolution instead of just letting the JSON serializer trying
+to guess the type to use from the object to serialize.
+
+Issue: SPR-12811

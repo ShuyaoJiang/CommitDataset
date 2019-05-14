@@ -1,0 +1,15 @@
+Perform binding at creation time if possible
+
+Previously, environment binding always happened in a post processor once
+the bean has been created. Constructor binding requires to perform the
+binding at creating time so this commit performs binding at creation
+time if possible.
+
+When this happens, a special `ConfigurationPropertiesBeanDefinition` is
+created with a supplier that invokes the binder. To avoid a case where
+a bean is processed twice, the post-processor now ignores any bean that
+has already been bound to the environment.
+
+Closes gh-8762
+
+Co-authored-by: Madhura Bhave <mbhave@pivotal.io>

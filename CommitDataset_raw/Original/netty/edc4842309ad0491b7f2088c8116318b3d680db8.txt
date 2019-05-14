@@ -1,0 +1,15 @@
+Fix cookie date parsing, close #6016
+
+Motivation:
+* RFC6265 defines its own parser which is different from RFC1123 (it accepts RFC1123 format but also other ones). Basically, it's very lax on delimiters, ignores day of week and timezone. Currently, ClientCookieDecoder uses HttpHeaderDateFormat underneath, and can't parse valid cookies such as Github ones whose expires attribute looks like "Sun, 27 Nov 2016 19:37:15 -0000"
+* ServerSideCookieEncoder currently uses HttpHeaderDateFormat underneath for formatting expires field, and it's slow.
+
+Modifications:
+* Introduce HttpHeaderDateFormatter that correctly implement RFC6265
+* Use HttpHeaderDateFormatter in ClientCookieDecoder and ServerCookieEncoder
+* Deprecate HttpHeaderDateFormat
+
+Result:
+* Proper RFC6265 dates support
+* Faster ServerCookieEncoder and ClientCookieDecoder
+* Faster tool for handling headers such as "Expires" and "Date"

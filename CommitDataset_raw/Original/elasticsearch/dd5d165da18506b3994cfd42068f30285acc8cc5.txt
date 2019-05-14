@@ -1,0 +1,9 @@
+Prevent channel enqueue after selector close (#25478)
+
+This commit adds additional protection to `ESSelector` and its
+implementations to ensure that channels are not enqueued after the
+selector is closed.
+
+After a channel has been added to the queue, we check that the selector
+is open. If it is not, then we remove the channel from the queue. If the
+channel is removed successfully, we throw an `IllegalStateException`.

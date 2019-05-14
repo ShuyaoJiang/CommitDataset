@@ -1,0 +1,13 @@
+Support single quotes nested in double quotes in SQL scripts
+
+Some databases such as Oracle permit double quoted column aliases that
+contain case-sensitive characters, single quotes, and other special
+characters; however, prior to this commit, SqlScripts interpreted a
+single quote nested within double quotes as the start of a string
+literal resulting in improper parsing.
+
+This commit addresses this issue by ensuring that double quoted strings
+such as column aliases are properly parsed even when containing single
+quotes.
+
+Issue: SPR-13218

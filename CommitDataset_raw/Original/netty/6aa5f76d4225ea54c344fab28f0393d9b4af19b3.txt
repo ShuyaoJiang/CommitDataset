@@ -1,0 +1,10 @@
+HTTP/2 DelegatingDecompressorFrameListener return bytes to flow control
+
+Motivation:
+If a single DATA frame ends up being decompressed into multiple frames by DelegatingDecompressorFrameListener the flow control accounting is delayed until all frames have been decompressed. However it is possible the user may want to return bytes to the flow controller which were not included in the onDataRead return value. In this case the amount of processed bytes has not been incremented and will lead to negative value for processed bytes.
+
+Modifications:
+- Http2Decompressor.incrementProcessedBytes should be called each time onDataRead is called to ensure all bytes are accounted for at the correct time
+
+Result:
+Fixes https://github.com/netty/netty/issues/5375

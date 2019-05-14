@@ -1,0 +1,12 @@
+Improve property target name
+
+Previously, non camel case properties were wrongly resolved, i.e.
+getFOO() leading to a 'f-o-o'. While unusual, underscores can also be
+added to a property name. In that case, the hyphen should not be added
+as the binder consider this to be a single "word". Typically setFoo_Bar
+on the "something" prefix is mapped using "something.foo_bar".
+
+All these cases are now handled properly, generating the target name that
+the binder expects.
+
+Fixes gh-2118

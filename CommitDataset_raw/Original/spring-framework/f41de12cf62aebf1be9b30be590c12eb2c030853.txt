@@ -1,0 +1,13 @@
+Ensure synthesized nested annotation arrays retain correct type
+
+Prior to this commit, when a nested array of annotations was
+synthesized while adapting values within an AnnotationAttributes map,
+the array was improperly replaced with an array of type Annotation[]
+instead of an array of the concrete annotation type, which can lead to
+unexpected run-time exceptions.
+
+This commit fixes this bug by replacing annotations in the existing
+array with synthesized versions of those annotations, thereby retaining
+the original array's component type.
+
+Issue: SPR-13077

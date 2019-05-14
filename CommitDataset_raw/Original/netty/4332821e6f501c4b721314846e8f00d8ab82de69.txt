@@ -1,0 +1,13 @@
+Use common non-magic number for shutdown timeout
+
+Motivation:
+
+AbstractEventExecutor and AbstractEventExecutorGroup have hard-coded magic timeout numbers.  They should have the same timeout numbers, but it's easy to break that rule because they are hard-coded in each place.
+
+Modifications:
+
+Add package private constants to AbstractEventExecutor and let AbstractEventExecutorGroup use them.
+
+Result:
+
+Single timeout change affects two classes.

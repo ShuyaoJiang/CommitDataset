@@ -1,0 +1,27 @@
+Refactor VersionResourceResolver in strategies
+
+Prior to this commit, one of the available strategies for resolving
+resources was the PrefixResourceResolver. Reconsidering the core goal of
+this resolver and the FingerprintResourceResolver, we found that the
+true core feature is versioning static resources application-wide.
+
+This commit refactors both Resolvers by:
+* having only on VersionResourceResolver
+* that resolver takes a mapping of paths -> VersionStrategy
+* provided VersionStrategy implementations are ContentBasedVS
+  (previously FingerprintRR), FixedVS (previously PrefixRR)
+
+One can add a VersionResourceResolver like this:
+
+  Map<String, VersionStrategy> versionStrategies = new HashMap<>();
+  versionStrategies.put("/**/*.js", new PrefixVersionStrategy("prefix"));
+  versionStrategies.put("/**", new ContentBasedVersionStrategy());
+
+  VersionResourceResolver versionResolver = new VersionResourceResolver();
+  versionResolver.setVersionStrategyMap(versionStrategies);
+
+  List<ResourceResolver> resolvers = new ArrayList<ResourceResolver>();
+  resolvers.add(versionResolver);
+  resolvers.add(new PathResourceResolver());
+
+Issue: SPR-11871

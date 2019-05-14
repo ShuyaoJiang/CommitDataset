@@ -1,0 +1,13 @@
+Respect ClientAuth set via OpenSslEngine constructor
+
+Motivation:
+
+When ClientAuth is set via SslContextBuilder we pass it into the OpenSslEngine constructor. Due a bug we missed to call the correct native methods and so never enabled ClientAuth in this case.
+
+Modifications:
+
+Correctly call setClientAuth(...) in the constructor if needed.
+
+Result:
+
+client auth also works when configured via the SslContextBuilder and OPENSSL is used.

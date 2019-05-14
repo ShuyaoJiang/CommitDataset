@@ -1,0 +1,8 @@
+Fix incorrect geohash for lat 90, lon 180 (#29256)
+
+Due to special treatment for the 0xFFFFFF... value in GeoHashUtils'
+encodeLatLon method, the hashcode for lat 90, lon 180 is incorrectly
+encoded as `"000000000000"` instead of "zzzzzzzzzzzz". This commit
+removes the special treatment and fixes the issue.
+
+Closes #22163

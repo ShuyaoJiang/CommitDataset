@@ -1,0 +1,17 @@
+[#2428] Proper fix of incorrect port range check
+
+Motivation:
+
+In the Internet Protocol, the valid port number range is from 1 to 65535
+(inclusive on the both side.)  However, SocksCmdRequest and SocksCmdResponse
+refuses to construct itself when the port number 65535 is specified. Beside
+this it excepts 0 as port number which should not allowed.
+
+    Modification:
+
+* Not raise an exception when the specified port number is 65535.
+* Raise an exception when the specified port number is 0
+
+Result:
+
+Fixes #2428

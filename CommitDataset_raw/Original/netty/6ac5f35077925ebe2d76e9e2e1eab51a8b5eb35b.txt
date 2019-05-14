@@ -1,0 +1,13 @@
+Use Unsafe to read ByteBuffer.address field to make it work on Java9 as well.
+
+Motivation:
+
+Java9 does not allow changing access level via reflection by default. This lead to the situation that netty disabled Unsafe completely as ByteBuffer.address could not be read.
+
+Modification:
+
+Use Unsafe to read the address field as this works on all Java versions.
+
+Result:
+
+Again be able to use Unsafe optimisations when using Netty with Java9

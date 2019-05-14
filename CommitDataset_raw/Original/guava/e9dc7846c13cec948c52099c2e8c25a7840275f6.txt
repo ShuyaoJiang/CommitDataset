@@ -1,0 +1,9 @@
+Update open-source Guava to Truth 0.13, and tighten up tests from allOf->exactly and allFrom->exactlyAs.
+
+I started with an unconditional textual substitution.
+Then I went back and reverted false positives: EnumSet.allOf, EnumFilter.allOf, Matchers.allOf, IterablesTest.testSkip_allOf*.
+Then I reverted any tests that failed (all of which looked like they ought indeed to stay as allOf/allFrom.)
+I gave all the remaining automated changes a sanity check, and they all passed.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=48536664

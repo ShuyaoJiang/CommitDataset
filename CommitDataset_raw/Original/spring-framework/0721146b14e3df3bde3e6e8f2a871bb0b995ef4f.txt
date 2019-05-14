@@ -1,0 +1,14 @@
+Improve regex for parsing query params
+
+Previously UriComponentsBuilder used a regular expression for parsing
+query name-value pairs where both name and value were expected to not
+contain neither '&', not '='. The idea is that the presence of reserved
+characters makes it impossible to guess correctly how to parse the
+query string (e.g. a=b&c).
+
+This change relaxes the constraint on query param values, allowing them
+to contain '='. In effect '&' is the ultimate separator of name-value
+pairs, and any '=' in values is ignored. For example "q=1USD=?EUR" is
+interpreted as "q equals '1USD=?EUR'".
+
+Issue: SPR-9832

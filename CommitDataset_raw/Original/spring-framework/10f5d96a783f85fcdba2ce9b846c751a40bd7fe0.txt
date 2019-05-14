@@ -1,0 +1,15 @@
+Add XML namespace for WebSocket config
+
+This commit adds an XML namespace equivalent of @EnableWebSocket and
+@EnableWebSocketMessageBroker. Those are <websocket:handlers> and
+<websocket:message-broker> respectively.
+
+Examples can be found in the test suite.
+
+This commit also alters the way MessageHandler's subscribe to their
+respective MessageChannel's of interest. Rather than performing the
+subscriptions in configuration code, the message channels are now
+passed into MessageHandler's so they can subscribe themselves on
+startup.
+
+Issue: SPR-11063

@@ -1,0 +1,21 @@
+Rewrite shard follow node task logic (#31581)
+
+The current shard follow mechanism is complex and does not give us easy ways the have visibility into the system (e.g. why we are falling behind).
+The main reason why it is complex is because the current design is highly asynchronous. Also in the current model it is hard to apply backpressure
+other than reducing the concurrent reads from the leader shard.
+
+This PR has the following changes:
+* Rewrote the shard follow task to coordinate the shard follow mechanism between a leader and follow shard in a single threaded manner.
+  This allows for better unit testing and makes it easier to add stats.
+* All write operations read from the shard changes api should be added to a buffer instead of directly sending it to the bulk shard operations api.
+  This allows to apply backpressure. In this PR there is a limit that controls how many write ops are allowed in the buffer after which no new reads
+  will be performed until the number of ops is below that limit.
+* The shard changes api includes the current global checkpoint on the leader shard copy. This allows reading to be a more self sufficient process;
+  instead of relying on a background thread to fetch the leader shard's global checkpoint.
+* Reading write operations from the leader shard (via shard changes api) is a separate step then writing the write operations (via bulk shards operations api).
+  Whereas before a read would immediately result into a write.
+* The bulk shard operations api returns the local checkpoint on the follow primary shard, to keep the shard follow task up to date with what has been written.
+* Moved the shard follow logic that was previously in ShardFollowTasksExecutor to ShardFollowNodeTask.
+* Moved over the changes from #31242 to make shard follow mechanism resilient from node and shard failures.
+
+Relates to #30086

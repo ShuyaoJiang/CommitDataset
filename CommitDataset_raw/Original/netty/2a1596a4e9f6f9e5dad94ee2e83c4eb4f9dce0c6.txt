@@ -1,0 +1,31 @@
+Allow to configure socket option SO_BUSY_POLL (#8268)
+
+Motivation:
+
+When using Epoll based transport, allow applications to configure SO_BUSY_POLL socket option:
+
+       SO_BUSY_POLL (since Linux 3.11)
+              Sets the approximate time in microseconds to busy poll on a
+              blocking receive when there is no data.  Increasing this value
+              requires CAP_NET_ADMIN.  The default for this option is con‐
+              trolled by the /proc/sys/net/core/busy_read file.
+
+              The value in the /proc/sys/net/core/busy_poll file determines
+              how long select(2) and poll(2) will busy poll when they oper‐
+              ate on sockets with SO_BUSY_POLL set and no events to report
+              are found.
+
+              In both cases, busy polling will only be done when the socket
+              last received data from a network device that supports this
+              option.
+
+              While busy polling may improve latency of some applications,
+              care must be taken when using it since this will increase both
+              CPU utilization and power usage.
+
+Modification:
+
+Added SO_BUSY_POLL socket option
+Result:
+
+Able to configure SO_BUSY_POLL from Netty

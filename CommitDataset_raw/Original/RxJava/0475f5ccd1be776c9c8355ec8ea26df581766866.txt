@@ -1,0 +1,11 @@
+Redo/Repeat Backpressure
+
+Fix backpressure and memory leaks
+
+This now works:
+
+    public static void main(String[] args) {
+        Observable<Integer> o1 = Observable.from(1, 1).concatWith(Observable.just(-1).repeat());
+        Observable<Integer> o2 = Observable.from(2, 2, 2, 2);
+        Observable.zip(o1, o2, (a, b) -> a + b).forEach(System.out::println);
+    }

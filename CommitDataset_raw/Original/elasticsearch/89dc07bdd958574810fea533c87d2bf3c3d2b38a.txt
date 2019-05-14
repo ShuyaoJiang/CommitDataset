@@ -1,0 +1,20 @@
+ingest: better support for conditionals with simulate?verbose (#34155)
+
+This commit introduces two corrections to the way simulate?verbose
+handles conditionals on processors.
+
+1) Prior to this change when executing simulate?verbose for
+processors with conditionals that evaluate to false, that processor
+would still be displayed in the result set. What was displayed was
+correct, such that no changes to the document occurred. However, if the
+conditional evaluates to false, the processor should not even be
+displayed.
+
+2) Prior to this change when executing simulate?verbose for
+pipeline processors with conditionals, the individual steps would no
+longer be displayed. Commit e37e5df addressed the issue, but
+failed account for a conditional on the pipeline processor. Since
+a pipeline processor can introduce cycles and is effectively a
+single processor that encapsulates multiple other processors that
+are potentially guarded by a single conditional, special handling is
+needed to for pipeline and conditional pipeline processors.

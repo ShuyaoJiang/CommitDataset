@@ -1,0 +1,5 @@
+TrampolineScheduler & Unsubscribe
+
+Unsubscribing should prevent new additions to a Worker, but not prevent already scheduled work, and definitely not affect other Workers using the same thread (by modifying the ThreadLocal as it was doing).
+
+See the unit test for details of how unsubscribing 1 Worker could prevent work from being done on a completely separate Worker.

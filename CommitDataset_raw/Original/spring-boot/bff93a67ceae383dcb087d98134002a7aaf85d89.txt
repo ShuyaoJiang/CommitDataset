@@ -1,0 +1,14 @@
+Fix remote DevTools restart when a previously added class is then changed
+
+Previously, if a class was added and then changed, a restart would be triggered
+and things would behave as if the class had been deleted. This occurred
+because, when looking for additional classes that were not on the original
+classpath, only files that had been added were considered. The subsequent
+change to the class was noticed as a modified rather than an addition,
+resulting in the class being skipped.
+
+This commit updates the resource resolver to only ignore deleted files and
+consider both added files and modified files when looking for additional
+resources.
+
+Closes gh-14205

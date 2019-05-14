@@ -1,0 +1,19 @@
+Fix @Autowired+@PostConstruct+@Configuration issue
+
+A subtle issue existed with the way we relied on isCurrentlyInCreation
+to determine whether a @Bean method is being called by the container
+or by user code.  This worked in most cases, but in the particular
+scenario laid out by SPR-8080, this approach was no longer sufficient.
+
+This change introduces a ThreadLocal that contains the factory method
+currently being invoked by the container, such that enhanced @Bean
+methods can check against it to see if they are being called by the
+container or not.  If so, that is the cue that the user-defined @Bean
+method implementation should be invoked in order to actually create
+the bean for the first time.  If not, then the cached instance of
+the already-created bean should be looked up and returned.
+
+See ConfigurationClassPostConstructAndAutowiringTests for
+reproduction cases and more detail.
+
+Issue: SPR-8080

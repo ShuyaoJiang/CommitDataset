@@ -1,0 +1,16 @@
+Avoid eager formatting in pre-condition checks
+
+In general, the Spring Framework aims to construct error message
+strings only if an actual error has occurred. This seems to be the
+common pattern in the codebase and saves both CPU and memory. However,
+there are some places where eager error message formatting occurs
+unnecessarily.
+
+This commit addresses this issue in the following classes:
+AdviceModeImportSelector, AnnotationAttributes, and
+ReadOnlySystemAttributesMap.
+
+The change in ReadOnlySystemAttributesMap also avoids a potential
+NullPointerException.
+
+Issue: SPR-13007

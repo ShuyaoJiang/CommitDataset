@@ -1,0 +1,32 @@
+Exit immediately if shell scripts encounter error
+
+Today our shell scripts march on if they encounter an error during
+execution. One place that this actually causes a problem is with the
+Java version checker. What can happen is this: if the user botches their
+installation so that the JavaVersionChecker can not be found on the
+classpath, when we attempt to run the Java version checker, first an
+error message that the class can not be found is displayed, and then we
+print a message that their version of Java is not compatible; this
+happens even if they are using a Java 8 installation. The problem is
+that we should have immediately aborted when the class could not be
+loaded. Since we do not exit when the shell script encounters an error,
+we end up conflating failue to run the version check with a failed
+version check. Instead, we really should abort the moment that one of
+our scripts encounters an error. To do this, we make the following
+changes:
+ - enable set -e and set -o pipefail
+ - make the Java version checker responsible for printing the error
+   message to the console
+ - remove the exit status check from the scripts
+ - actually on Windows, we still have to check the exit status because
+   there is no equivalent of set -e
+ - when we check for daemonization, we can no longer check the exit
+   status from grep because a failed grep will abort the script;
+   instead, we move the grep execution to be the condition for the if as
+   this does not trip the set -e failure conditions
+ - we should source elasticsearch-env before doing anything, so we move
+   the definition of parse_jvm_options below sourcing elasticsearch-env
+ - we make consistent all places where we use a subshell to use
+   backticks
+
+Relates #26057

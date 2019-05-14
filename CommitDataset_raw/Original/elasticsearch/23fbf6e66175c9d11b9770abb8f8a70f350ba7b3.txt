@@ -1,0 +1,12 @@
+Completion suggestions to be reduced once instead of twice (#39255)
+
+We have been calling `reduce` against completion suggestions twice, once
+in `SearchPhaseController#reducedQueryPhase` where all suggestions get
+reduced, and once more in `SearchPhaseController#sortDocs` where we
+add the top completion suggestions to the `TopDocs` so their docs can
+be fetched. There is no need to do reduction twice. All suggestions can
+be reduced in one call, then we can filter the result and pass only the
+already reduced completion suggestions over to `sortDocs`. The small
+important detail is that `shardIndex`, which is currently used only
+to fetch suggestions hits, needs to be set before the first reduction,
+hence outside of `sortDocs` where we have been doing it until now.

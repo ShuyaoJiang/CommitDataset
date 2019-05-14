@@ -1,0 +1,7 @@
+Fix docs for fixed filename for heap dump path (#32882)
+
+The docs here incorrectly state that it is okay for a heap dump file to
+exist when heap dump path is configured to a fixed filename. This is
+incorrect, the JVM will fail to write the heap dump if a heap dump file
+already exists at the specified location (see the DumpWriter constructor
+DumpWriter::DumpWriter(const char* path) in the JVM source).

@@ -1,0 +1,9 @@
+Remove isValidIndex from SQL's Catalog interface (elastic/x-pack-elasticsearch#2195)
+
+This moves validating that each index contains only a single type
+into EsCatalog which removes a race condition and removes a method
+from the Catalog interface. Removing methods from the Catalog
+interface is nice because the fewer methods that the interface has
+the fewer have to be secured.
+
+Original commit: elastic/x-pack-elasticsearch@85cd089e4710cc11b4f9174b5f8570e5adb1a0a0

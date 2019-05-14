@@ -1,0 +1,11 @@
+Fix issue in AnnotationMethodHandlerExceptionResolver
+
+Caching of resovled exceptions introduced in SPR-7703 also introduced a
+side effect whereby if exactly one exception was previously cached, any
+other exception would appear as a match to the previously matched
+@ExceptionHandler method.
+
+This change ensures use of a fresh map when determining matching
+@ExceptionHandler methods while also updating the cache.
+
+Issue: SPR-9209

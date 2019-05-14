@@ -1,0 +1,16 @@
+Refactor merge-artifacts script to a plugin
+
+Refactor the existing merge-artifacts script to a full Gradle plugin.
+The new plugin uses a 'merge' extension in favor of Gradle 'ext'
+configuration and can be applied to all projects in a multi-module
+build.
+
+Any project that defines a 'merge.into' project will now implicitly
+receive a dependency to that project. Furthermore other projects
+with a dependency on 'merge.into' will receive a direct project
+link within the IDE. For example: 'spring-webmvc-tiles3'
+is merged into 'spring-webmvc' and 'spring-test-mvc' depends
+on 'spring-webmvc'. Within the IDE 'spring-test-mvc' will show
+dependencies to both 'spring-webmvc' and 'spring-webmvc-tiles'.
+
+Issue: SPR-10042

@@ -1,0 +1,15 @@
+Remove default passwords from reserved users (elastic/x-pack-elasticsearch#1665)
+
+This is related to elastic/x-pack-elasticsearch#1217. This PR removes the default password of
+"changeme" from the reserved users.
+
+This PR adds special behavior for authenticating the reserved users. No
+ReservedRealm user can be authenticated until its password is set. The
+one exception to this is the elastic user. The elastic user can be
+authenticated with an empty password if the action is a rest request
+originating from localhost. In this scenario where an elastic user is
+authenticated with a default password, it will have metadata indicating
+that it is in setup mode. An elastic user in setup mode is only
+authorized to execute a change password request.
+
+Original commit: elastic/x-pack-elasticsearch@e1e101a2377c1424a2baa831a49b15ff9d3772c6

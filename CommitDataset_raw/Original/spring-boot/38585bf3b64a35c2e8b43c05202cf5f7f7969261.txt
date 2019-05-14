@@ -1,0 +1,19 @@
+Omit any file that is not a zip when repackaging
+
+When repackaging an archive, the files in the resulting lib directory
+must be zip files. If they're not zip files, the resulting archive
+may fail to run (#324).
+
+The previous approach was to consider an artifact's type when deciding
+whether or not it should be packaged. The type is a string and, while
+there are a number of well-known values, it can essentially be anything.
+This caused a problem with an artifact incorrectly being identified as
+being unsuitable for inclusion (#489).
+
+This commit changes the approach. Rather than looking at an artifact's
+type, it looks at the first four bytes  of the archive's file. Only if
+these header bytes matche that of a zip file is the artifact included.
+This is a better match for the requirement that all files in lib be zip
+files.
+
+Fixes #489

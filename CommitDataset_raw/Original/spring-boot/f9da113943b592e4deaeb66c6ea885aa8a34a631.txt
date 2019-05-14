@@ -1,0 +1,9 @@
+Exclude FileEditor from binding conversion
+
+Exclude `FileEditor` from the `BindConverter` since it uses slightly
+unusual logic to create the file. Specifically, given a value of "."
+the editor will locate a `ClassPathResource` then return `getFile()`
+from that resource. For back-compatibility, binding should use the
+simpler conversion service logic.
+
+Fixes gh-12163

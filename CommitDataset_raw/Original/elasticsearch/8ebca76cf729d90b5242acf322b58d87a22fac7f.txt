@@ -1,0 +1,11 @@
+Index stale operations to Lucene to have complete history (#29679)
+
+Today, when processing out of order operations, we only add it into
+translog but skip adding into Lucene. Translog, therefore, has a
+complete history of sequence numbers while Lucene does not.
+
+Since we would like to have a complete history in Lucene, this change
+makes sure that stale operations will be added to Lucene as soft-deleted
+documents if required.
+
+Relates #29530

@@ -1,0 +1,11 @@
+[TESTS] Disable specific locales for RestrictedTrustManagerTest (#33299)
+
+Disable specific Thai and Japanese locales as Certificate expiration
+validation fails due to the date parsing of BouncyCastle (that manifests
+in a FIPS 140 JVM as this is the only place we use BouncyCastle).
+Added the locale switching logic here instead of subclassing
+ESTestCase as these are the only tests that fail for these locales and
+JVM combination.
+
+Resolves #33081
+

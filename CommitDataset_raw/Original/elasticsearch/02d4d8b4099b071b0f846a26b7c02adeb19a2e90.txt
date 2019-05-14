@@ -1,0 +1,31 @@
+MinimumMasterNodesIT changed for Zen2 (#37428)
+
+There were 5 tests in MinimumMasterNodesIT. 2 of them removed, 3 of
+them changed and renamed.
+1) testSimpleMinimumMasterNodes -> testTwoNodesNoMasterBlock. The
+flow of this test is left intact but in order to make it work on
+Zen2, additional work for the cluster bootstrapping and voting
+exclusions is needed. 
+2) testDynamicUpdateMinimumMasterNodes -> removed, there is nothing
+that corresponds to the dynamic change of the minimum master nodes
+setting.
+3) testCanNotBringClusterDown -> removed, it also plays with changing
+minimum master nodes dynamically.
+4) testMultipleNodesShutdownNonMasterNodes ->
+testThreeNodesNoMasterBlock. Previously this test was checking that
+there would be no master block, if min_master_nodes=3 and 4 nodes are
+started, then 2 nodes are brought down. Zen2 dynamically accommodates
+to the number of nodes in the cluster, so it's possible that there
+still will be a master in 2 nodes cluster. For Zen2, we start up 3
+nodes. And shut down 2 of them (w/o voting exclusions), which results
+in no master block.
+5) testCanNotPublishWithoutMinMastNodes ->
+testCanNotCommitStateThreeNodes. Test flow is not changed. But
+previously there was no check that nodes in the bigger part of
+network partition will elect the master, before healing the network
+partition. For Zen2 it does not work, because persistent setting
+addition is accepted on the old master and if it's elected new master
+again, this setting will appear in the cluster state.
+
+Also, I have a feeling that we need to remove this class, but could not
+come up with a good name.

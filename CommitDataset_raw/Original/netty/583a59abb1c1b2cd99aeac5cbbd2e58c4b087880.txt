@@ -1,0 +1,10 @@
+ByteBufUtil.compare int underflow
+
+Motivation:
+ByteBufUtil.compare uses long arithmetic but doesn't check for underflow on when converting from long to int to satisfy the Comparable interface. This will result in incorrect comparisons and violate the Comparable interface contract.
+
+Modifications:
+- ByteBufUtil.compare should protect against int underflow
+
+Result:
+Fixes https://github.com/netty/netty/issues/6169

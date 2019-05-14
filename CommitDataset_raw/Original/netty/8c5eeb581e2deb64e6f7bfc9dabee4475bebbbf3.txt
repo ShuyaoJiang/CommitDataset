@@ -1,0 +1,20 @@
+SslHandler promise completion incorrect if write doesn't immediately
+complete
+
+Motivation:
+SslHandler removes a Buffer/Promise pair from
+AbstractCoalescingBufferQueue when wrapping data. However it is possible
+the SSLEngine will not consume the entire buffer. In this case
+SslHandler adds the Buffer back to the queue, but doesn't add the
+Promise back to the queue. This may result in the promise completing
+immediately in finishFlush, and generally not correlating to the
+completion of writing the corresponding Buffer
+
+Modifications:
+- AbstractCoalescingBufferQueue#addFirst should also support adding the
+ChannelPromise
+- In the event of a handshake timeout we should immediately fail pending
+writes immediately to get a more accurate exception
+
+Result:
+Fixes https://github.com/netty/netty/issues/7378.

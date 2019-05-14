@@ -1,0 +1,13 @@
+Update exception handling
+
+Allow WebSocketHandler methods to raise an exception.
+
+By default we install ExceptionWebSocketHandlerDecorator, which logs
+unhandled exceptions and closes the session. That decorator can be
+extended or replaced.
+
+Any exceptions that remain unhandled still (i.e. no exception handling
+decorator), are caught in the lowest level before propagating to the
+WebSocket engine or a SockJS transport handler and handled the same
+way. That means default behavior is guaranteed but also fully
+customizable.

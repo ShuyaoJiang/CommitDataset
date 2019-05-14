@@ -1,0 +1,14 @@
+Do not schedule notify task if there are no listeners attached to the promise. (#8797)
+
+Motivation:
+
+If there are no listeners attached to the promise when full-filling it we do not need to schedule a task to notify.
+
+Modifications:
+
+- Don't schedule a task if there is nothing to notify.
+- Add unit tests.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8795.

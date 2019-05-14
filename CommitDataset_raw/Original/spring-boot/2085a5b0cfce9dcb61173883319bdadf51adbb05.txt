@@ -1,0 +1,9 @@
+Work around the behaviour change in latest Spring 4.2 snapshots
+
+The changes made in spring-projects/spring-framework@e403aefe cause
+SampleTomcatTwoConnectorsApplication to fail to launch. The port bean,
+typed as an int, is coerced into an Integer when the bean’s created. The
+port() method is then called, and the proxy’s bean method interceptor
+complains as it’s expecting the port bean to be an int but it’s actually
+an Integer. Changing the port() bean method’s return type to Integer
+works around the problem.

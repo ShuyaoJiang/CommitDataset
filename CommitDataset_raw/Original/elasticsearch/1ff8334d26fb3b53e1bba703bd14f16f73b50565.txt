@@ -1,0 +1,24 @@
+Fix document field equals and hash code test
+
+For the document field equals and hash code tests, we try to mutate the
+document field to intentionally produce a document field not equal to
+our provided one. We do this by randomly choosing a document field that
+has either
+ - a randomly chosen field name and the same field value as the provided
+   document field
+ - a randomly chosen field value and the same field value as the
+   provided document field
+
+If we are unlucky, it can be that the document field chosen by this
+method can be equal to the provided document field. In this case, our
+test will fail because the mutation really should be not equal. In this
+case, we should simply try the other mutation. Note that random document
+field produced by the second method can be equal to the provided
+document because it has the same field name and we can get unlucky with
+our randomly chosen field values. It is not the case that the random
+document field produced by the first method can be equal to the provided
+document field; this is because the current implementation guarantees
+that the field name length will be different guaranteeing that we have a
+different field name. Nevertheless, we fix the issue here by checking
+that our random choice gives us a non-equal document field, and assert
+that if we got unlucky the other one will work for us.

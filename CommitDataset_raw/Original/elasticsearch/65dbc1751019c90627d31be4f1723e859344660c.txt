@@ -1,0 +1,11 @@
+SQL: Fix bug caused by empty composites (#30343)
+
+When dealing with filtering, a composite aggregation might return empty
+buckets (which have been filtered) which gets sent as is to the client.
+Unfortunately this interprets the response as no more data instead of
+retrying.
+
+This now has changed and the listener keeps retrying until either the
+query has ended or data passes the filter.
+
+Fix #30292

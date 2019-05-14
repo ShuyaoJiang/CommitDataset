@@ -1,0 +1,31 @@
+Support WebSocket ServletServerContainerFB in the TCF
+
+Prior to this commit, any attempt to include a bean of type
+ServletServerContainerFactoryBean in the WebApplicationContext for an
+integration test class annotated with @WebAppConfiguration in
+conjunction the Spring TestContext Framework (TCF) would have resulted
+in an IllegalStateException stating that "A ServletContext is required
+to access the javax.websocket.server.ServerContainer instance."
+
+In such scenarios, the MockServletContext was in fact present in the
+WebApplicationContext; however there was no WebSocket ServerContainer
+stored in the ServletContext.
+
+This commit addresses this issue by introducing the following.
+
+- MockServerContainer: a private mock implementation of the
+  javax.websocket.server.ServerContainer interface.
+
+- MockServerContainerContextCustomizer: a ContextCustomizer that
+  instantiates a new MockServerContainer and stores it in the
+  ServletContext under the attribute named
+  "javax.websocket.server.ServerContainer".
+
+- MockServerContainerContextCustomizerFactory: a
+  ContextCustomizerFactory which creates a
+  MockServerContainerContextCustomizer if WebSocket support is present
+  in the classpath and the test class is annotated with
+  @WebAppConfiguration. This factory is registered by default via the
+  spring.factories mechanism.
+
+Issue: SPR-14367

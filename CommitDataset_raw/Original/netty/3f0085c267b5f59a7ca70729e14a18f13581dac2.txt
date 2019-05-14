@@ -1,0 +1,13 @@
+Do proper bounds-checking in HpackHuffmanDecoder to reduce overhead of IndexOutOfBoundsException creation
+
+Motivation:
+
+HpackHuffmanDecoder.Decoder did not do any bound-checking but just catched IndexOutOfBoundsException to detect if the array needs to grow. This can be very expensive because of fillInStackTrace()
+
+Modifications:
+
+Add proper bounds checking and grow the array if needed without catching IndexOutOfBoundsException.
+
+Result:
+
+Less overhead if the array needs to grow.

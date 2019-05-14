@@ -1,0 +1,13 @@
+Introduce allocation / pooling ratio in Recycler
+
+Motivation:
+
+At the moment the Recyler is very sensitive to allocation bursts which means that if there is a need for X objects for only one time these will most likely end up in the Recycler and sit there forever as the normal workload only need a subset of this number.
+
+Modifications:
+
+Add a ratio which sets how many objects should be pooled for each new allocation. This allows to slowly increase the number of objects in the Recycler while not be to sensitive for bursts.
+
+Result:
+
+Less unused objects in the Recycler if allocation rate sometimes bursts.

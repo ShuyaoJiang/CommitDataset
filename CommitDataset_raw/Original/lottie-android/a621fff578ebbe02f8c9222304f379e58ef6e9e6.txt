@@ -1,0 +1,9 @@
+Fixed a bug with path animations on Jellybean
+
+PointF didn't have an `equals(PointF other)` method until jb-mr2.
+Prior to that, you had to use `equals(float x, float y)`. This
+broke path animations which relied on that method.
+This commit uses the backwards compatible `equals(float x, float y)`
+method.
+
+Fixes #227

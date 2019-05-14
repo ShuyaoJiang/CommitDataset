@@ -1,0 +1,8 @@
+Fix excessive increments in soft delete policy (#38813)
+
+In this case, we were incrementing the policy too much. This means on
+every iteration we actually keep increasing the minimum retained
+sequence number, even with leases in place. It was a bug from when the
+soft deletes policy had retention leases incorporated into it. This
+commit fixes this bug by ensuring we only increment in the proper
+places, and adds careful tests for the various situations.

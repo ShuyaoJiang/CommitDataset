@@ -1,0 +1,13 @@
+Smarter CCR concurrent file chunk fetching (#38841)
+
+The previous logic for concurrent file chunk fetching did not allow for multiple chunks from the same
+file to be fetched in parallel. The parallelism only allowed to fetch chunks from different files in
+parallel. This required complex logic on the follower to be aware from which file it was already
+fetching information, in order to ensure that chunks for the same file would be fetched in sequential
+order. During benchmarking, this exhibited throughput issues when recovery came towards the end,
+where it would only be sequentially fetching chunks for the same largest segment file, with
+throughput considerably going down in a high-latency network as there was no parallelism anymore.
+
+The new logic here follows the peer recovery model more closely, and sends multiple requests for
+the same file in parallel, and then reorders the results as necessary. Benchmarks show that this
+leads to better overall throughput and the implementation is also simpler.

@@ -1,0 +1,13 @@
+Better error when first HTTP/2 frame is not SETTINGS
+
+Motivation:
+
+Bootstrap of the HTTP/2 can take a lot of paths and a lot of things can go wrong in the initial handshakes leading up to establishment of HTTP/2 between client and server. There have been many times where handshakes have failed silently, leading to very cryptic errors that are hard to debug.
+
+Modifications:
+
+Changed the HTTP/2 handler and decoder to ensure that the very first data on the wire (WRT HTTP/2) is SETTINGS/preface+SETTINGS. When this is not the case, a connection error is thrown with the bytes that were found instead.
+
+Result:
+
+Fixes #3880

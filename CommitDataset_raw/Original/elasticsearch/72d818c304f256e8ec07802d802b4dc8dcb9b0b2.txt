@@ -1,0 +1,10 @@
+Tests: Fix DateFormatter equals tests with locale (#34435)
+
+This commit removes randomization of locale for DateFormatter equals
+tests, instead using explicit locales. The test framework already
+randomizes locales, so the random choice of the second locale can
+sometimes be equal to the already chosen locale. Randomization also does
+not provide any extra protection, as the equality of DateFormatter does
+not implement equality of the locales itself.
+
+closes #34337

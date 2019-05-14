@@ -1,0 +1,18 @@
+[Tests] Change cluster scope in CorruptedFileIT and FlushIT (#37229)
+
+These tests failed on CI multiple times in the past weeks because they use a 
+test cluster with a SUITE scope that recreates nodes between tests. With such 
+a scope, nodes can be recreated in between test executions and can inherit a 
+node id from a previous test execution, while they are assigned a random data 
+path. With the successive node recreations it is possible that a newly recreated 
+node shares the same node id (but different data path) as a non recreated node.
+
+This commit changes the cluster scope of the CorruptedFileIT and FlushIT 
+tests which often fail.
+
+The failure is reproducable with :
+
+./gradlew :server:integTest -Dtests.seed=EF3A50C225CF377 
+-Dtests.class=org.elasticsearch.index.store.CorruptedFileIT 
+-Dtests.security.manager=true -Dtests.locale=th-TH-u-nu-thai-x-lvariant-TH -Dtests.timezone=America/Rio_Branco 
+-Dcompiler.java=11 -Druntime.java=8 

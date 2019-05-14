@@ -1,0 +1,13 @@
+Decode HTML entities in titles
+
+This allows page titles with HTML entities like `&amp;` to display
+properly. Before, no decoding would be performed and `&amp;` would be
+shown where an ampersand should be. Additionally, decoding entities
+prevents the following string length check from overcounting.
+
+To replicate this bug scan an image with a URL pointing to
+http://stackoverflow.com/questions/tagged/android The title displayed
+within the app will be something like:
+`Frequent &#39;android&#39; Questions - Stack Overflow` After this
+commit, the app will display the correct decoded title:
+`Frequent 'android' Questions - Stack Overflow`

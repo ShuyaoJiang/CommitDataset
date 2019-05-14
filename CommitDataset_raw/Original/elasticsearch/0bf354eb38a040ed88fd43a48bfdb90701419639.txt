@@ -1,0 +1,11 @@
+Watcher: Fix hipchat message failure serialization (elastic/x-pack-elasticsearch#3939)
+
+The current toXContent serialization of a failed hipchat message writes
+the same field called status twice and thus cannot be stored in the
+watch history.
+
+This commit ensures the field gets only written once.
+
+relates elastic/x-pack-elasticsearch#3919
+
+Original commit: elastic/x-pack-elasticsearch@fb499e8055b60ef2fdac45410da6b03ed1cfbbb4

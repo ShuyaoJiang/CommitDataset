@@ -1,0 +1,11 @@
+Do not log unsuccessful join attempt each time (#39756)
+
+When performing the test with 57 master-eligible nodes and one node
+crash, we saw messy elections, when multiple nodes were attempting to
+become master.
+JoinHelper has logged 105 long log messages with lengthy stack
+traces during one such election.
+To address this, we decided to log these messages every time only on
+debug level.
+We will log last unsuccessful join attempt (along with a timestamp)
+if any with WARN level if the cluster is failing to form.

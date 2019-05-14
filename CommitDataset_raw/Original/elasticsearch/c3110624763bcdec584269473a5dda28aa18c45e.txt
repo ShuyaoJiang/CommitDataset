@@ -1,0 +1,15 @@
+Add CoordinatorTests for empty unicast hosts list (#38209)
+
+Today we have DiscoveryDisruptionIT tests for checking that discovery can still
+work once the cluster has formed, even if the cluster is misconfigured and only
+has a single master-eligible node in its unicast hosts list. In fact with Zen2
+we can go one better: we do not need any nodes in the unicast hosts list,
+because nodes also use the contents of the last-committed cluster state for
+discovery. Additionally, the DiscoveryDisruptionIT tests were failing due to
+the overenthusiastic fault-detection timeouts.
+
+This commit replaces these tests with deterministic `CoordinatorTests` that
+verify the same behaviour. It also removes some duplication by extracting a
+test method called `testFollowerCheckerAfterMasterReelection()`
+
+Closes #37687

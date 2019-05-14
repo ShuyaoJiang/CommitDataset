@@ -1,0 +1,17 @@
+Better empty response body support in RestTemplate
+
+Prior to this change, RestTemplate returned an empty response body if:
+
+* HTTP return status 204 or 304
+* Content-length header equals 0
+
+This change adds a new condition for this, better supporting RFC7230
+section 3.4, for connections that are closed without response body:
+
+* No Content-length header
+* No Transfer-encoding: chunked header value
+* a Connection: close header value
+
+See SPR-7911 for previous efforts in that space.
+
+Issue: SPR-8016

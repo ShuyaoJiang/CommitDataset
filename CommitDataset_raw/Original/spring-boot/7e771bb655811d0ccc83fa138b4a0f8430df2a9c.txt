@@ -1,0 +1,10 @@
+Fix ParentAwareNamingStrategy and JMX auto-config
+
+Fix ParentAwareNamingStrategy to set ObjectName properties for the
+'identity' and 'context' attributes. Also update JmxAutoConfiguration
+to ensure that the ParentAwareNamingStrategy is created in each context
+and that the `mbeanExporter` bean is created. Prior to this commit the
+nested @EnableMBeanExport class always meant that the mbeanExporter
+condition never matched.
+
+Fixes gh-2243

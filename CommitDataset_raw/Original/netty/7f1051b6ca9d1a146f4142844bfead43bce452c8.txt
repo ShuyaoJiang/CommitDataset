@@ -1,0 +1,18 @@
+Include JNIEXPORT on exported symbols
+
+Motivation:
+As noticed in https://stackoverflow.com/questions/45700277/
+compilation can fail if the definition of a method doesn't
+match the declaration.  It's easy enough to add this in, and make
+it easy to compile.
+
+Modifications:
+Add JNIEXPORT to the entry points.
+
+* On Windows this adds: `__declspec(dllexport)`
+* On Mac this adds: `__attribute__((visibility("default")))`
+* On Linux (GCC 4.2+) this adds: ` __attribute__((visibility("default")))`
+* On other it doesn't add anything.
+
+Result:
+Easier compilation

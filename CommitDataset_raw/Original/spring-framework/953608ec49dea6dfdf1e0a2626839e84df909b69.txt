@@ -1,0 +1,47 @@
+Improve ETag & Last-Modifed support in WebRequest
+
+This change improves the following use cases with
+`WebRequest.checkNotModified(String etag)` and
+`WebRequest.checkNotModified(long lastModifiedTimeStamp)`:
+
+1) Allow weak comparisons for ETags
+
+Per rfc7232 section-2.3, ETags can be strong or weak;
+this change allows comparing weak forms `W/"etagvalue"` but does
+not make a difference between strong and weak comparisons.
+
+2) Allow multiple ETags in client requests
+
+HTTP clients can send multiple ETags values in a single header such as:
+`If-None-Match: "firstvalue", "secondvalue"`
+This change makes sure each value is compared to the one provided by
+the application side.
+
+3) Extended support for ETag values
+
+This change adds padding `"` to the ETag value provided by
+the application, if not already done:
+`etagvalue` => `"etagvalue"`
+
+It also supports wildcard values `*` that can be sent by HTTP clients.
+
+4) Sending validation headers for 304 responses
+
+As defined in https://tools.ietf.org/html/rfc7232#section-4.1
+`304 Not Modified` reponses must generate `Etag` and `Last-Modified`
+HTTP headers, as they would have for a `200 OK` response.
+
+5) Providing a new method to validate both Etag & Last-Modified
+
+Also, this change adds a new method
+`WebRequest.checkNotModified(String etag, long lastModifiedTimeStamp)`
+in order to support validation of both `If-None-Match` and
+`Last-Modified` headers sent by HTTP clients, if both values are
+supported by the application code.
+
+Even though this approach is recommended by the HTTP rfc (setting both
+Etag and Last-Modified headers in the response), this requires more
+application logic and may not apply to all resources produced by the
+application.
+
+Issue: SPR-11324

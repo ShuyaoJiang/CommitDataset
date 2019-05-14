@@ -1,0 +1,27 @@
+Update to latest stable jython release (#8667)
+
+Motivation:
+
+Using the latest jython release fixes some noise that is produced by an exception that is thrown when jython is terminated.
+
+Exception in thread "Jython-Netty-Client-4" Exception in thread "Jython-Netty-Client-7" Exception in thread "Jython-Netty-Client-5" java.lang.NoClassDefFoundError: org/python/netty/util/concurrent/DefaultPromise$2
+        at org.python.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:589)
+        at org.python.netty.util.concurrent.DefaultPromise.setSuccess(DefaultPromise.java:397)
+        at org.python.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:151)
+        at java.lang.Thread.run(Thread.java:748)
+Exception in thread "Jython-Netty-Client-8" java.lang.NoClassDefFoundError: org/python/netty/util/concurrent/DefaultPromise$2
+        at org.python.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:589)
+        at org.python.netty.util.concurrent.DefaultPromise.setSuccess(DefaultPromise.java:397)
+        at org.python.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:151)
+        at java.lang.Thread.run(Thread.java:748)
+Exception in thread "Jython-Netty-Client-3" java.lang.NoClassDefFoundError: org/python/netty/util/concurrent/DefaultPromise$2
+        at org.python.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:589)
+        at org.python.netty.util.concurrent.DefaultPromise.setSuccess(DefaultPromise.java:397)%
+
+Modification:
+
+Update to latest stable release.
+
+Result:
+
+Less noise during build.

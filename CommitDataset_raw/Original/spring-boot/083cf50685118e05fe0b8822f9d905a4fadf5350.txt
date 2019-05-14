@@ -1,0 +1,10 @@
+Change condition for adding @EnableWebSecurity
+
+Instead of looking for the presence of `WebSecurityConfiguration`,
+this commit checks for the presence of a `Filter` with the name
+springSecurityFilterChain. This allows users to configure the Filter
+without adding `WebSecurityConfiguration`, making it more flexible.
+`springSecurityFilterChain` is somewhat of a contract in Spring Security
+and it relies on the name being `springSecurityFilterChain`.
+
+Closes gh-10849

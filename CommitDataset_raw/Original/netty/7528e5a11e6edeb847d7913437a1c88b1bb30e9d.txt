@@ -1,0 +1,20 @@
+Use threadsafe setter on Atomic Updaters
+
+Motivation:
+The documentation for field updates says:
+
+> Note that the guarantees of the {@code compareAndSet}
+> method in this class are weaker than in other atomic classes.
+> Because this class cannot ensure that all uses of the field
+> are appropriate for purposes of atomic access, it can
+> guarantee atomicity only with respect to other invocations of
+> {@code compareAndSet} and {@code set} on the same updater.
+
+This implies that volatiles shouldn't use normal assignment; the
+updater should set them.
+
+Modifications:
+Use setter for field updaters that make use of compareAndSet.
+
+Result:
+Concurrency compliant code

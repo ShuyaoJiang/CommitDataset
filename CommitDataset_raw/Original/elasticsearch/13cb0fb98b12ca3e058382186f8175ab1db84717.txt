@@ -1,0 +1,23 @@
+Periodically try to reassign unassigned persistent tasks (#36069)
+
+Previously persistent task assignment was checked in the
+following situations:
+
+- Persistent tasks are changed
+- A node joins or leaves the cluster
+- The routing table is changed
+- Custom metadata in the cluster state is changed
+- A new master node is elected
+
+However, there could be situations when a persistent
+task that could not be assigned to a node could become
+assignable due to some other change, such as memory
+usage on the nodes.
+
+This change adds a timed recheck of persistent task
+assignment to account for such situations.  The timer
+is suspended while checks triggered by cluster state
+changes are in-flight to avoid adding burden to an
+already busy cluster.
+
+Closes #35792

@@ -1,0 +1,275 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (version.properties). 
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.cluster.routing:  
+
+1. Changes to package org.elasticsearch.common.lucene.uid:  
+
+1. Changes to package org.elasticsearch.common.settings:  
+
+1. Changes to package org.elasticsearch.index:  
+
+1. Changes to package org.elasticsearch.index.analysis:  
+
+1. Changes to package org.elasticsearch.index.engine:  
+
+1. Changes to package org.elasticsearch.index.mapper:  
+
+1. Changes to package org.elasticsearch.index.replication:  
+
+1. Changes to package org.elasticsearch.index.shard:  
+
+1. Changes to package org.elasticsearch.index.store:  
+
+1. Changes to package org.elasticsearch.index.translog:  
+
+1. Changes to package org.elasticsearch.indices.recovery:  
+
+1. Changes to package org.elasticsearch.indices.stats:  
+
+1. Changes to package org.elasticsearch.plugins:  
+
+1.1. Add an interface declaration  for engine plugin. It allows to:
+
+	Get engine factory
+
+2. Changes to package org.elasticsearch.repositories.blobstore:  
+
+2. Changes to package org.elasticsearch.snapshots:  
+
+2. Changes to package org.elasticsearch.xpack.ccr:  
+
+2.1. Add a class for ccr. It allows to:
+
+	Instantiate ccr  with settings;
+	Instantiate ccr  with settings, ccr license checker and ccr license checker;
+	Create components;
+	Get persistent tasks executor;
+	Get actions;
+	Get rest handlers;
+	Get named writeables;
+	Get named X content;
+	Get settings;
+	Get engine factory;
+	Get executor builders;
+	Get internal repositories;
+	Process ccr ccr on index module;
+	Create guice modules;
+	Get license state;
+	Mapping request validators
+
+2.2. Add a class for ccr settings. It allows to:
+
+	Get settings;
+	Instantiate ccr settings  with settings, cluster settings and cluster settings;
+	Set chunk size;
+	Set max concurrent file chunks;
+	Set max bytes size value;
+	Set recovery activity timeout;
+	Set recovery action timeout;
+	Get chunk size;
+	Get max concurrent file chunks;
+	Get rate limiter;
+	Get recovery activity timeout;
+	Get recovery action timeout
+
+2.3. Add a class for ccr tests. It allows to:
+
+	Handle test get engine factory
+
+2.4. Add a class for follow index IT. It allows to:
+
+	Handle test follow index;
+	Handle test follow non existing leader index
+
+2.5. Add a class for local state ccr. It allows to:
+
+	Instantiate local state ccr  with settings, config path and config path;
+	Get license state
+
+3. Changes to package org.elasticsearch.xpack.ccr.action:  
+
+3.1. Add a class for shard changes action tests. It allows to:
+
+	Reset node  after test;
+	Handle test get operations;
+	Handle test get operations when shard not started;
+	Handle test get operations exceed byte limit;
+	Handle test get operations always return at least one op;
+	Handle test index not found;
+	Process  on response;
+	Process  on failure;
+	Handle test shard not found;
+
+3.2. Add a class for shard changes request tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Handle test validate
+
+3.3. Add an object creator class for shard changes response tests. It allows to:
+
+	Create test instance;
+	Create blank instance
+
+3.4. Add a class for shard follow node task. It allows to:
+
+	Get renewable;
+	Instantiate shard follow node task  with parent task id, headers map, params shard follow task, scheduler bi consumer, relative time provider long supplier and relative time provider long supplier;
+	Remove eldest entry;
+	Start shard follow node task;
+	Reads shard follow node task;
+	Check if shard follow node task has read budget;
+	Writes shard follow node task;
+	Check if shard follow node task has write budget;
+	Send shard changes request;
+	Handle read response;
+	Handle fallen  behind leader shard;
+	Handle on operations fetched;
+	Handle inner handle read response;
+	Send bulk shard operations request;
+	Handle write response;
+	Maybe update mapping;
+	Maybe update settings;
+	Update mapping;
+	Update settings;
+	Handle failure;
+	Set fatal exception;
+	Compute delay;
+	Retry exception;
+	Handle inner update mapping;
+	Handle inner update settings;
+	Handle inner send bulk shard operations request;
+	Handle inner send shard changes request;
+	Schedule background retention lease renewal;
+	Handle on canceled;
+	Check if shard follow node task is stopped;
+	Get follow shard id;
+	Get status
+
+3.5. Add a class for shard follow node task status tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Assert equal instances;
+	Assert shard follow node task status tests to X content equivalence;
+	Handle random read exceptions;
+	Get instance reader
+
+3.6. Add a class for shard follow task. It allows to:
+
+	Instantiate shard follow task  with follow shard id, leader shard id, max read request size value, max write request size value, max write buffer size value, max retry delay time value, read poll timeout value, headers map and headers map;
+	Read  from stream input;
+	Instantiate shard follow task  with follow shard id, leader shard id, stream input and stream input;
+	Get remote cluster;
+	Get follow shard id;
+	Get leader shard id;
+	Get headers;
+	Get writeable name;
+	Write  to stream output;
+	Process shard follow task shard follow task from X content;
+	Convert shard follow task to X content;
+	Check if shard follow task equals;
+	Hash code;
+	Convert shard follow task to string;
+	Get minimal supported version
+
+3.7. Add a class for shard follow task tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Get instance reader
+
+4. Changes to package org.elasticsearch.xpack.ccr.action.bulk:  
+
+4.1. Add an object creator class for bulk shard operations action. It allows to:
+
+	Instantiate bulk shard operations action;
+	Handle new response
+
+4.2. Add a class for bulk shard operations request. It allows to:
+
+	Instantiate bulk shard operations request  with stream input;
+	Instantiate bulk shard operations request  with shard id, operations list and operations list;
+	Get history UUID;
+	Get operations;
+	Get max seq no  of updates or deletes;
+	Read  from stream input;
+	Write  to stream output;
+	Convert bulk shard operations request to string
+
+4.3. Add a class for bulk shard operations response. It allows to:
+
+	Get global checkpoint;
+	Set global checkpoint;
+	Get bulk shard operations response;
+	Set bulk shard operations response;
+	Instantiate bulk shard operations response;
+	Set forced refresh;
+	Read  from stream input;
+	Write  to stream output
+
+5. Changes to package org.elasticsearch.xpack.ccr.index.engine:  
+
+5.1. Add a class for following engine. It allows to:
+
+	Instantiate following engine  with engine config;
+	Validate engine config;
+	Pre flight;
+	Get indexing strategy for operation;
+	Get deletion strategy for operation;
+	Pre flight check  for no op;
+	Generate seq no  for operation on primary;
+	Handle advance max seq no of updates or deletes on primary;
+	Fill seq no gaps;
+	Assert primary incoming sequence number;
+	Assert non primary origin;
+	Assert primary can optimize add document;
+	Lookup primary term;
+	Get number  of optimized indexing;
+	Verify engine  before index closing
+
+5.2. Add an object creator class for following engine factory. It allows to:
+
+	Handle new read write engine
+
+5.3. Add a class for following engine tests. It allows to:
+
+	Set following engine tests;
+	Tear following engine tests;
+	Handle test following engine rejects non following index;
+	Handle test index seq no is maintained;
+	Test following engine tests out of order documents;
+	Run index test;
+	Handle test delete seq no is maintained;
+	Run delete test;
+	Handle test do not fill seq no gaps;
+	Get engine config;
+	Process  on failed engine;
+	Create store;
+	Create engine;
+	Get index for following;
+	Get index for primary;
+	Delete following engine tests for primary;
+	Apply operation;
+	Handle test basic optimization;
+	Handle test optimize append only;
+	Handle test optimize multiple versions;
+	Handle test optimize single doc sequentially;
+	Handle test optimize single doc concurrently;
+	Run follow test;
+	Fetch operations;
+	Get shuffle snapshot;
+	Handle total operations;
+	Handle next;
+	Close;
+	Handle test process once on primary;
+	Handle test verify shard before index closing is no op;
+	Handle test max seq no in commit user data
+
+6. Changes to package org.elasticsearch.xpack.core:  
+
+6. Changes to package org.elasticsearch.xpack.core.security.authz.privilege:  
+

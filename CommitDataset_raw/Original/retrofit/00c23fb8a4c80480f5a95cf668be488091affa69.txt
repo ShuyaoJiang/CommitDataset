@@ -1,0 +1,5 @@
+Abstract logging API.
+
+This also fixes a race condition in the RestHandler's dealing with the response of `server.getUrl()`. Theoretically the response of that invocation could change between creating the request and assembling the profiler information. Cache the result in a local variable and re-use.
+
+Closes #142.

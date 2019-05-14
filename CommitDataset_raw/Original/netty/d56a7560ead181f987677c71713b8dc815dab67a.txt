@@ -1,0 +1,15 @@
+Netty force encodes already encoded responses
+
+Motivation:
+
+Fix the regression recently introduced that causes already encoded responses to be encoded again as gzip
+
+Modification:
+
+instead of just looking for IDENTITY, anything set for Content-Encoding should be respected and left as-is
+
+added unit tests to capture this use case
+
+Result:
+
+Fixes #6784

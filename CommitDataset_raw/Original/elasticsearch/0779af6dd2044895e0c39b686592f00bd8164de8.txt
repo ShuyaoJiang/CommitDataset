@@ -1,0 +1,9 @@
+Move uid lock into LiveVersionMap (#27905)
+
+While the LiveVersionMap is an internal class that belongs to the engine we do
+rely on some external locking to enforce the desired semantics.  Yet, in tests
+we mimic the outer locking but we don't have any way to enforce or assert on
+that the lock is actually hold.  This change moves the KeyedLock inside the
+LiveVersionMap that allows the engine to access it as before but enables
+assertions in the LiveVersionMap to ensure the lock for the modifying or
+reading key is actually hold.

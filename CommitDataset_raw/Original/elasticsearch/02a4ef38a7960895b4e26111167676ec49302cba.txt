@@ -1,0 +1,9 @@
+Use system context for cluster state update tasks (#31241)
+
+This commit makes it so that cluster state update tasks always run under the system context, only
+restoring the original context when the listener that was provided with the task is called. A notable
+exception is the clusterStatePublished(...) callback which will still run under system context,
+because it's defined on the executor-level, and not the task level, and only called once for the
+combined batch of tasks and can therefore not be uniquely identified with a task / thread context.
+
+Relates #30603

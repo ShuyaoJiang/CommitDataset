@@ -1,0 +1,11 @@
+Ensure full commit id is always available
+
+Update `GitProperties` so that the `commit.id` entry is also copied to
+`commit.id.full`.
+
+Prior to this commit, when returning full details, the value of
+`commit.id` would be replaced with a `Map` containing only `abbriv` as
+a key. By  copying the value to a sub-key we ensure that it remains
+available both in the FULL and SIMPLE modes.
+
+Fixes gh-11892

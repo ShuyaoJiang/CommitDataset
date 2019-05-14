@@ -1,0 +1,10 @@
+Use ServletWrappingController for jolokia instead of Servlet
+
+We get more control over the handling and in particular the registration
+of the endpoint this way. It was practically impossible to disable the
+AgentServlet bean when in a parent context of the management server
+because of lifecyce issues - you don't know that the user wants a
+separate management server until too late.
+
+This approach also makes it possible to test with spring-test MVC
+support.

@@ -1,0 +1,17 @@
+Automated g4 rollback of changelist 151172294.
+
+*** Reason for rollback ***
+
+Suspected cause of b/36638818.
+
+*** Original change description ***
+
+Rewrite ImmutableMultiset on Java 7 in terms of the guts of HashMultiset, taking ruthless advantage of its property that it retains insertion order in the absence of removals.
+
+This avoids reimplementing yet another hash table, saves some memory -- not as much as an open-addressed table would've, but some, and still keeps us to O(1) total objects -- and saves us some code.  Of course, we've still got lots of code size reduction work to do on HashMultiset, now, but even so this still represents...
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=151734490

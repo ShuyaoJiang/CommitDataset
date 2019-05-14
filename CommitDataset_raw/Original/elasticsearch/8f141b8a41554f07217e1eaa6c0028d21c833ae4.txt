@@ -1,0 +1,10 @@
+Fix ClusterInfoServiceIT timeouts (#36758)
+
+The test testClusterInfoServiceInformationClearOnError relies on timing behavior. It sets
+InternalClusterInfoService.INTERNAL_CLUSTER_INFO_TIMEOUT_SETTING to 1s and relies on the
+fact that the stats request completes within that timeframe (which our ever-so-slow CI seems to
+violate at times). Unfortunately the logging has been misimplemented in InternalClusterInfoService,
+so the corresponding log messages showing that the requests have timed out are missing for this.
+The issue can be locally reproduced by reducing the timeout to something lower.
+
+Closes #36554

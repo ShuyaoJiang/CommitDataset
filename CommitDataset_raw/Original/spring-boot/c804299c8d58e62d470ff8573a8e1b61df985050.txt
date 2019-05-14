@@ -1,0 +1,10 @@
+Prevent Undertow from exposing classpath files
+
+Update `UndertowEmbeddedServletContainerFactory` so that the
+`ClassPathResourceManager` is no longer registered by default.
+
+Prior to this commit the resource manager would be registered whenever
+a valid document root could not be found. This had the effect of
+exposing all classpath files.
+
+Fixes gh-4015

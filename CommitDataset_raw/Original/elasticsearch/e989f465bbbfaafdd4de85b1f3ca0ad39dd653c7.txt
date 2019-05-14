@@ -1,0 +1,17 @@
+SQL: Switch is aggs only to OO (elastic/x-pack-elasticsearch#3432)
+
+Switches the "is this query aggs only?" question from pattern matching
+on the column tree to an OO-style "ask the columns if they can be aggs
+only" method.
+
+I expect this could have been less code if I was willing to define
+`supportedByAggsOnlyQuery` as `true` at the top of the
+`ProcessorDefinition` object tree and override it only on nodes
+`ReferenceInput` and `ScoreProcessorDefinition` but this feels dirty to
+me. I tend to think of a superclass as a list of questions that all the
+subclasses have to answer rather than a list of behaviors to share.
+Pulling the `return true` up saves a few lines of code but breaks my
+ability to reason about subclasses.
+
+
+Original commit: elastic/x-pack-elasticsearch@b1338543cb17cac22b5c7e086d4350520090e237

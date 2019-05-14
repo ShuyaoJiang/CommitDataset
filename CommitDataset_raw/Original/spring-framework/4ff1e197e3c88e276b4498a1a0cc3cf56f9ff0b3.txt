@@ -1,0 +1,10 @@
+Clean up spring-tx tests warnings
+
+Clean up compiler warnings in the tests of spring-tx. This commit
+adds type parameters to all the types (mostly `List` and `Map`). In
+addition it uses Java 5 autoboxing to get rid of several `new Integer`
+(except in cases where it's needed).
+
+After this commit the only warnings in spring-tx left are in
+`TransactionAttributeSourceTests`` that code would never compile with
+generics.

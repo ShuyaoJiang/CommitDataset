@@ -1,0 +1,11 @@
+Fix missing active IDs prevent advance test
+
+This commit addresses an issue in the missing active IDs prevent advance
+test from the global checkpoint tracker. The assumptions this test was
+making about reality were violated when global checkpoints were inlined
+(specifically, the component of that change where the tracker's
+knowledge of the global checkpoint was updated inline with updates to
+the tracker's knowledge of local checkpoints for an allocatio ID). The
+point of the test was to ensure that a lagging shard prevents the global
+checkpoint from advancing, so this commit rewrites the test with that in
+mind.

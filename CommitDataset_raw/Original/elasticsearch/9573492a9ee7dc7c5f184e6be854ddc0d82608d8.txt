@@ -1,0 +1,18 @@
+Test: use trial license in qa tests with security
+
+QA tests that use security need to use a trial license instead of a
+basic license. Basic licenses do not enable security so these tests are
+not running in the expected configuration. This can also lead to issues
+that seem completely unrelated such as authentication failures right
+after cluster formation.
+
+The authentication failure right after cluster formation happens since
+a request makes it past the authentication license checks and the
+request starts the authentication process. During authentication the
+cluster forms and the license is updated to a basic license, which
+disables all realms. The request that is being authenticated then tries
+to iterate over the realms, but the realms are empty and the request
+cannot be authenticated. This results in a authentication failure even
+though the credentials provided are correct.
+
+Closes #30306

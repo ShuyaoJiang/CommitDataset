@@ -1,0 +1,6 @@
+Bubble exceptions up in ClusterApplierService (#37729)
+
+Exceptions thrown by the cluster applier service's settings and cluster appliers are bubbled up, and
+block the state from being applied instead of silently being ignored. In combination with the cluster
+state publishing lag detector, this will throw a node out of the cluster that can't properly apply
+cluster state updates.

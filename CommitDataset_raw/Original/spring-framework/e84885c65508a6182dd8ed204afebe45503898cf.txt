@@ -1,0 +1,12 @@
+Update STOMP decoder to handle incomplete frames
+
+Previously, StompDecoder would throw a StompConversionException when
+it attempted to decode a Buffer that contained an incomplete frame.
+
+This commit updates StompDecoder to return null when it encounters an
+incomplete frame. It also resets the buffer, thereby allowing the
+decode to be reattempted once more data has been received.
+StompCodec's decoder function has been updated to stop attempting to
+decode a Buffer when StompDecoder returns null.
+
+Issue: SPR-11088

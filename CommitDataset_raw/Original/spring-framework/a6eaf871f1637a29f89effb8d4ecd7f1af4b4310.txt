@@ -1,0 +1,19 @@
+Fix Eclipse compilation error in Gradle plugin
+
+Prior to this commit, the following compilation error presented itself
+when importing buildSrc ('spring-build-src') into Eclipse:
+
+    Groovy:missing type for constructor call @ line 36, column 49.
+
+This commit replaces the use of the diamond operator with typical
+generics syntax in order to work around the problem. It is assumed that
+the underlying problem is to do with the Groovy compiler in use. This
+change ensures that any contributor / committer importing
+spring-framework into Eclipse has a straightforward experience without
+being required to tweak Groovy settings.
+
+If selection of the correct Groovy compilation settings can be made
+automatic, then we should of course feel free to use Java 7-style syntax
+there in the future.
+
+Note that this was *not* a problem when importing buildSrc into IDEA 12.

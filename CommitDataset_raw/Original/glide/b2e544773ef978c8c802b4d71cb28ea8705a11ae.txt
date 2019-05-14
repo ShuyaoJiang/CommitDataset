@@ -1,0 +1,15 @@
+Avoid race where Request snapshot contains null.
+
+Our implementation of toArray() called size()
+multiple times, starting with the size used for
+the array. size() in WeakHashMap removes entries
+from the map if the corresponding WeakReference 
+has been cleared. As a result, if a reference
+was added to WeakHashMap's reference queue between
+our outer call to size() and the methods in 
+toArray(), the actual number of entries might have
+been smaller than our array size, which would
+lead to one or more null entries at the end of the
+Snapshot array.
+
+Fixes #322.

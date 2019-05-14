@@ -1,0 +1,11 @@
+Build fails with java 1.8_u60
+
+Motivation:
+The alpn / npn dependency versions are dependent on java version. If a java version 1.8+ is used that is not explicitly listed in the pom file then ALPN tests will fail because the java 1.7 version of alpn will be loaded by out pom file.
+
+Modifications:
+- Ensure there is a latest version to fall back up for npn 1.7+
+- Ensure there is a latest version to fall back upon from alpn 1.8+
+
+Result:
+Build can complete despite having a newer jdk which is not listed in our pom file.

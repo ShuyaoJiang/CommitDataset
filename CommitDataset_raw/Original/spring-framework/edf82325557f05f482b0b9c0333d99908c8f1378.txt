@@ -1,0 +1,16 @@
+Avoid implicit autowiring with Kotlin secondary ctors
+
+Autowiring implicitely Kotlin primary constructors
+when there are secondary constructors has side effects
+on ConstructorResolver. It seems reasonable to
+require explicit @Autowired annotation in such case.
+
+With this commit, implicit autowiring of Kotlin
+primary constructors is only performed when there
+is a primary constructor defined alone or with
+a default constructor (define explicitly or
+generated via the kotlin-noarg compiler plugin
+or via optional constructor parameters with default
+values).
+
+Issue: SPR-16022

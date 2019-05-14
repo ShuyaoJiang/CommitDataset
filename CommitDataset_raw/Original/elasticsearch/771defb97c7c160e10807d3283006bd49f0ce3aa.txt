@@ -1,0 +1,14 @@
+Build: Add 3rd party dependencies report generation (#27727)
+
+* Adds task dependenciesInfo to BuildPlugin to generate a CSV file with dependencies information (name,version,url,license)
+* Adds `ConcatFilesTask.groovy` to concatenates multiple files into one
+* Adds task `:distribution:generateDependenciesReport` to concatenate `dependencies.csv` files into a single file (`es-dependencies.csv` by default)
+
+ # Examples:
+      $ gradle dependenciesInfo :distribution:generateDependenciesReport
+
+ ## Use `csv` system property to customize the output file path
+     $ gradle dependenciesInfo :distribution:generateDependenciesReport -Dcsv=/tmp/elasticsearch-dependencies.csv
+
+ ## When branch is not master, use `build.branch` system property to generate correct licenses URLs
+     $ gradle dependenciesInfo :distribution:generateDependenciesReport -Dbuild.branch=6.x -Dcsv=/tmp/elasticsearch-dependencies.csv

@@ -1,0 +1,15 @@
+Do not fall back to COMPATIBLE_TLS (TLSv1) by default.
+
+Insecure TLS version fallback is a compatibility workaround to connect
+to servers that do not implement TLS protocol version negotiation
+correctly; it is vulnerable to man-in-the-middle-attacks (POODLE).
+Support for TLS version fallback was removed in Firefox 37 (Mar 2015)
+and Chrome 50 (Apr 2016). As of late 2015, fewer than 0.01% of web
+servers relied on protocol fallback.
+
+After this commit, OkHttp still supports TLS version fallback, but it
+is now opt-in rather than opt-out.
+
+Existing tests for fallback functionality were modified to opt-in
+to the fallback; new tests in CallTest and URLConnectionTest
+assert that no fallback happens by default (when not opted-in).

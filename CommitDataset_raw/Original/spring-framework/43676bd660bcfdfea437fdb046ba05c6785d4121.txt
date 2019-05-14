@@ -1,0 +1,9 @@
+Deregister @Configuration CGLIB callbacks
+
+CGLIB-enhanced @Configuration subclasses now implement DisposableBean
+such that Enhancer.registerStaticCallbacks(subclass, null) is invoked
+on container shutdown. This ensures that garbage collection can work
+properly and avoids memory consumption issues for applications that
+create and destroy many application contexts within the same JVM.
+
+Issue: SPR-7901

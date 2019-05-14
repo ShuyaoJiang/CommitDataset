@@ -1,0 +1,5 @@
+Apply the interceptor tape at the time of subscription.
+
+Previously the tape would only be applied when the Observable itself was created. This is counter to what you want since the Observable is a representation of an API call but not an actual invocation.
+
+Since the tape is now applied at the time of subscription, the Observable can be long-lived while still behaving like a synchronous API call. Additionally, consumers of the Observable API that immediately called subscribe receive the same interceptor behavior since it's on the same thread.

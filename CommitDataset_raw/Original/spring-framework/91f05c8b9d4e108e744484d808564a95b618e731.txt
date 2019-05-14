@@ -1,0 +1,24 @@
+Avoid creation of unnecessary Environment objects
+
+Prior to this change, any instantiation of an
+AnnotationConfigApplicationContext would trigger the creation of three
+StandardEnvironment objects: one for the ApplicationContext, one for the
+AnnotatedBeanDefinitionReader, and one for the
+ClassPathBeanDefinitionScanner.
+
+The latter two are immediately swapped out when the ApplicationContext
+delegates its environment to these subordinate objects anyway. Not only
+is it inefficient to create these two extra Environments, it creates
+confusion when debug-level logging is turned on. From the user's
+perspective and in practice, there is only one Environment; logging
+should reflect that.
+
+This change ensures that only one Environment object is ever created for
+a given ApplicationContext. If an AnnotatedBeanDefinitionReader or
+ClassPathBeanDefinitionScanner are used in isolation, e.g. against a
+plain BeanFactory/BeanDefinitionRegistry, then they will still create
+their own local StandardEnvironment object.
+
+All public API compatibility is preserved; new constructors have been
+added where necessary to accommodate passing an Environment directly
+to ABDR ar CPBDS.

@@ -1,0 +1,11 @@
+Management Security uses Spring Realm
+
+Previously ManagementSecurityAutoConfiguration used Spring Security's
+default realm of "Realm" when authentication failed. This was confusing
+because when prompted for authentication (i.e. no credentials provided)
+the realm "Spring" was requested.
+
+This commit ensures the Realm that is used is consistent for all of of the
+security auto configuration.
+
+Fixes #2466

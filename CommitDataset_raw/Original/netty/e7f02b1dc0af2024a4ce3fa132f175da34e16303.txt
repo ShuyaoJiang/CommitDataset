@@ -1,0 +1,15 @@
+Set readPending to false when EOF is detected while issue an read
+
+Motivation:
+
+We need to set readPending to false when we detect a EOF while issue a read as otherwise we may not unregister from the Selector / Epoll / KQueue and so keep on receving wakeups.
+
+The important bit is that we may even get a wakeup for a read event but will still will only be able to read 0 bytes from the socket, so we need to be very careful when we clear the readPending. This can happen because we generally using edge-triggered mode for our native transports and because of the nature of edge-triggered we may schedule an read event just to find out there is nothing left to read atm (because we completely drained the socket on the previous read).
+
+Modifications:
+
+Set readPending to false when EOF is detected.
+
+Result:
+
+Fixes [#7255].

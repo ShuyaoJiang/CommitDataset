@@ -1,0 +1,11 @@
+TEST: Create following engines in the main thread (#33391)
+
+There are two races in the testUpdateAndReadChangesConcurrently if the
+following engines are created in the worker threads. We fixed the
+translog issue in #33352, but there is still another race with
+createStore.
+
+This commit ensures that we create all engines in the main thread.
+
+Relates #33352
+Closes #33344

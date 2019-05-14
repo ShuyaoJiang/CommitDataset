@@ -1,0 +1,12 @@
+Cleanup description new-lines for launch script
+
+Replace all new-line characters in multi-line pom descriptions before
+inserting into the launcher script. Prior to this commit the shell would
+attempt to execut the extra lines, for example:
+
+	<description>
+		A multi-line pom description that could do something terrible:
+		rm -r foo
+	</description>
+
+Closes gh-4703

@@ -1,0 +1,12 @@
+Protect against NPE when collecting annotations
+
+Update `AnnotationsPropertySource` to ensure that `null` results from
+`findMergedAnnotation` are not added to the annotation list.
+
+Prior to this commit, if `findMergedAnnotation` returned `null` then
+`AnnotationsPropertySource.collectProperties` would throw an NPE.
+Although `findMergedAnnotation` should never return `null`, we're
+best off being defensive so that bugs such as SPR-17495 won't cause
+problems.
+
+Closes gh-15175

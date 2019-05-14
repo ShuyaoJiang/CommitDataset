@@ -1,0 +1,13 @@
+Obtain MessageDigest via FastThreadLocal
+
+Motivation:
+
+Creating a new MessageDigest every time is wasteful, we should store them in FastThreadLocal.
+
+Modifications:
+
+Change WebSocketUtil to store MD5 and SHA1 MessageDigest in FastThreadLocal and use these.
+
+Result:
+
+Less overhead and less GC.

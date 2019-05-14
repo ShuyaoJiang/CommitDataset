@@ -1,0 +1,19 @@
+Eliminate Gradle 1.6 deprecation warnings
+
+Recently Spring framework build has been updated to use Gradle 1.6.
+With the new version some of the Gradle APIs have been deprecated.
+These deprecated APIs have been used by Spring build specific Gradle
+plugins, which resulted in deprecation warnings in build output.
+
+This patch changes Spring build specific Gradle plugins to use new
+Gradle APIs instead of deprecated ones.
+
+Even after this change build still produces warnings about Gradle
+deprecated APIs being used. These come from Spring shared Gradle
+plugins and other 3rd party Gradle plugins in use, like Gradle
+Artifactory Plugin (GAP), which are still not updated to Gradle 1.6.
+Related tickets for updating of these plugins to Gradle 1.6 are
+GRADLE-53 and GAP-144, and once they get resolved Spring framework
+build should further be updated.
+
+Issue: SPR-10572

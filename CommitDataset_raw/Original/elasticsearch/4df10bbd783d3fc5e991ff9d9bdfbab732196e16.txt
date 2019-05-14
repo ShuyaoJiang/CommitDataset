@@ -1,0 +1,23 @@
+SQL: Drop Node superclass from Query  (elastic/x-pack-elasticsearch#3414)
+
+SQL's `Node` class is a utility for performing tree traversal and
+rewrites using reflection. We're not big fans of the reflection part of
+that we feel that, where possible, the tree traversal should be done
+explicitly.
+
+In this case `Query`'s tree is traversed for three things:
+1. To generate the Elasticsearch `QueryBuilder`s. This uses explict tree
+traversal and I left it that way.
+2. To ehance sorts on nested fields with the filter in the nested field.
+I added `enrichNestedSort` to `Query` so each query can implement this
+on its own.
+3. To add inner hits that are not explicitly mentioned in the query
+already when they need to be fetched. I added `containsNestedField` and
+`addNestedField` to `Query` to support this.
+
+Note: The nested field code is somewhat dead because we don't support
+nested fields at the moment but SQL once did. I've tried to keep it
+mostly intact but it is difficult to know for sure if it is still
+functioning the same way that it has always functioned.
+
+Original commit: elastic/x-pack-elasticsearch@5d8a8d687a5198da1ed03596ea66cf6fc4771fce

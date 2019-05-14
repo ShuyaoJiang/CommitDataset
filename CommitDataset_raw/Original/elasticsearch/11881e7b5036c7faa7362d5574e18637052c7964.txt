@@ -1,0 +1,8 @@
+Empty GetAliases authorization fix (#34444)
+
+This fixes a bug about aliases authorization.
+That is, a user might see aliases which he is not authorized to see.
+This manifests when the user is not authorized to see any aliases
+and the `GetAlias` request is empty which normally is a marking
+that all aliases are requested. In this case, no aliases should be
+returned, but due to this bug, all aliases will have been returned.

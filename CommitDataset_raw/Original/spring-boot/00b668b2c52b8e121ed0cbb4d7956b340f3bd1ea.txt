@@ -1,0 +1,14 @@
+Only clean up logging system when root application context is closed
+
+Previously, LoggingApplicationListener would clean up the logging
+system in response to any application context with which it was
+registered being closed. This caused problems when a child context was
+closed. Specifically, closing the child context would cause any
+SLF4J-based logging systems to unregister the JUL bridge handler
+preventing an JUL logging being bridged into Logback or Log4J2.
+
+This commit updates LoggingApplicationListener so that the logging
+system is only cleaned up when a root application context is
+closed.
+
+Closes gh-4651

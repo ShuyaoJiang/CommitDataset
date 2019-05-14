@@ -1,0 +1,6 @@
+[TEST] Force LDAP connection to close at end of test (elastic/x-pack-elasticsearch#1620)
+
+This test would sometime leak threads.
+The "Timer thread for LDAPConnection" is created by the unboundid SDK - closing the connection should force the thread to terminate
+
+Original commit: elastic/x-pack-elasticsearch@bd58a17a59ebebe31bbc11af168dbcea6211806e

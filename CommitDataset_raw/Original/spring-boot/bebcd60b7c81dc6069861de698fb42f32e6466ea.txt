@@ -1,0 +1,9 @@
+Call LoggerContext.reset() during logback init
+
+Update `LogbackLoggingSystem` to call the `reset()` method on the
+`LoggerContext` before initialization.
+
+This will hopefully reset the context to prevent the same appenders
+from being accidentally added more than once.
+
+Fixes gh-1091

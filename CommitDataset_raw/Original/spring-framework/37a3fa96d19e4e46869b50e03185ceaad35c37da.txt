@@ -1,0 +1,11 @@
+Separate ResponseActions from ClientHttpRequest
+
+Before this commit RequestMatcherClientHttpRequest served both as
+API to define request expectations, i.e. ResponseActions, as well as
+the implementation of ClientHttpRequest representing actual requests.
+
+DefaultResponseActions replaces this class as a simple holder of
+expected requests and mock responses. MockRestServiceServer is then
+responsible to match request expectations and create a mock response.
+
+Issue: SPR-11365

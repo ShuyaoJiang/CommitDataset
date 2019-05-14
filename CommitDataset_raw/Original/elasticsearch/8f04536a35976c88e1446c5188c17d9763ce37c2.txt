@@ -1,0 +1,5 @@
+Add copy constructor to SearchRequest (#36641)
+
+For cross cluster search alternate execution mode (see #32125), we will need to take a search request that spans across multiple clusters (based on index prefixes e.g. cluster1:index, cluster2:index etc.) and split it into multiple search requests to be sent to each cluster. A copy constructor added to `SearchRequest` would make that easy and well maintainable in the future.
+
+Something along the same lines already happens in `BulkByScrollParallelizationHelper`, but the corresponding code went outdated as some new fields were added to `SearchRequest` which were not added to the bulk by scroll code. A copy constructor helps making the task of copying a search request maintainable over time.

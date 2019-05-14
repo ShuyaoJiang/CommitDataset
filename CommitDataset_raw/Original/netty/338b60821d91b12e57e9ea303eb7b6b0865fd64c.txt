@@ -1,0 +1,19 @@
+Do not write LastHttpContent twice in HttpStaticFileServer example
+
+Related: #3122
+
+Motivation:
+
+The HttpStaticFileServer example writes the LastHttpContent twice at the
+end of the transfer.  HttpChunkedInput already produces a
+LastHttpContent at the end of the stream, so there's no reason to write
+another.
+
+Modifications:
+
+Do not write LastHttpContent in HttpStaticFileServerHandler when
+HttpChunkedInput is used to transfer a file.
+
+Result:
+
+HttpStaticFileServer does not violates the protocol anymore.

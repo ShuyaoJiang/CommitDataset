@@ -1,0 +1,7 @@
+Fix Fast Vector Highlighter NPE on match phrase prefix (#25116)
+
+The FVH fails with an NPE when a match phrase prefix is rewritten in an empty phrase query.
+This change makes sure that the multi match query rewrites to a MatchNoDocsQuery (instead of an empty phrase query) when there is
+a single term and that term does not expand to any term in the index.
+
+Fixes #25088

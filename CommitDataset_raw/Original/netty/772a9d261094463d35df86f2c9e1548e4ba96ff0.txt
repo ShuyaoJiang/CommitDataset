@@ -1,0 +1,10 @@
+[#2349] Correctly handle cancelled ChannelPromise in DefaultChannelHandlerContext
+
+Motivation:
+At the moment an IllegalArgumentException will be thrown if a ChannelPromise is cancelled while propagate through the ChannelPipeline. This is not correct, we should just stop to propagate it as it is valid to cancel at any time.
+
+Modifications:
+Stop propagate the operation through the ChannelPipeline once a ChannelPromise is cancelled.
+
+Result:
+No more IllegalArgumentException when cancel a ChannelPromise while moving through the ChannelPipeline.

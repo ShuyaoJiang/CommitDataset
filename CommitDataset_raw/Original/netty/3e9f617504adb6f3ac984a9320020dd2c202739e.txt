@@ -1,0 +1,18 @@
+Deduplicate and simplify code in HttpPostMultipartRequestDecoder
+
+Motivation:
+
+- A `HttpPostMultipartRequestDecoder` contains two pairs of the same methods: `readFileUploadByteMultipartStandard`+`readFileUploadByteMultipart` and `loadFieldMultipartStandard`+`loadFieldMultipart`.
+- These methods use `NotEnoughDataDecoderException` to detecting not last data chunk (exception handling is very expensive).
+- These methods can be greatly simplified.
+- Methods `loadFieldMultipart` and `loadFieldMultipartStandard` has an unnecessary catching for the `IndexOutOfBoundsException`.
+
+Modifications:
+
+- Remove duplicate methods.
+- Replace handling `NotEnoughDataDecoderException` by the return of a boolean result.
+- Simplify code.
+
+Result:
+
+The code is cleaner and easier to support. Less exception handling logic.

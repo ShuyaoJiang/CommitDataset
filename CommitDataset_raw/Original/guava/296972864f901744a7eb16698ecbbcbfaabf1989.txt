@@ -1,0 +1,15 @@
+Reimplement inCompletionOrder() (courtesy lukes@).
+(Also, make it available under GWT, but possibly I could have done that without reimplementing?)
+
+This is likely to be slightly faster than what we had before. In particular, it means that a directExectur() listener for one output Future can't slow the completion of other output Futures (except to the extent that all Futures-based code is likely to be an interconnected graph in which any directExector() listener can slow any other :)).
+It also means that we complete each output Future in the same thread as the input Future completed. This shouldn't matter to most users, but it could affect people who think they know better than the directExecutor() warnings. (And the resulting improvement to parallelism is one reason for the likely performance improvement noted above, along with the removal of SerializingExecutor's locking.)
+It might also increase the chances that the output Futures actually complete in the same order as the input Futures (though there will always be the potential for races). Users shouldn't care, but it seems like a nice property to provide to the extent that we can easily enough.
+
+If nothing else, it removes the last remaining usage of SerializingExecutor from Guava, which may be nice for minimizing dex size for Android.
+That said, many Android users probably do want SerializingExecutor for their own use. But currently we don't expose ours publicly, so they have their own copy, and they could end up with both ours and theirs -- at least if they use both inCompletionOrder and their own copy, which probably no one does currently. But the long-term solution may be to expose SerializingExecutor publicly, in which case they'd be back to having only one version, and the only people who would benefit would be those who use inCompletionOrder but don't otherwise use SerializingExecutor.
+
+[]
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=149415170

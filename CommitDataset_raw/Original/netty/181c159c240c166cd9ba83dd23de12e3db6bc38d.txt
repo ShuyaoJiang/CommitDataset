@@ -1,0 +1,13 @@
+Remove unneeded calls to hasScheduledTasks() when fetching from scheduled task queue for event executors.
+
+Motivation:
+
+Currently in the single threaded and global event executors when the scheduled task queue is drained, there is a call to hasScheduledTasks(). If there are scheduled tasks then the the code polls the queue for tasks. The poll method duplicates the exact logic of hasScheduledTasks(). This involves two calls to nanoTime when one seems sufficient.
+
+Modifications:
+
+Directly poll the queue for tasks and break if the task returned is null.
+
+Result:
+
+Should be no noticeable impact on functionality. Two calls to nanoTime have been coarsened into a single call.

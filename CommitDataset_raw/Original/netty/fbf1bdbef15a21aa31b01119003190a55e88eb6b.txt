@@ -1,0 +1,21 @@
+Fix the build timeout when 'leak' profile is active
+
+Motivation:
+
+AbstractByteBufTest.testInternalBuffer() uses writeByte() operations to
+populate the sample data.  Usually, this isn't a problem, but it starts
+to take a lot of time when the resource leak detection level gets
+higher.
+
+In our CI machine, testInternalBuffer() takes more than 30 minutes,
+causing the build timeout when the 'leak' profile is active (paranoid
+level resource detection.)
+
+Modification:
+
+Populate the sample data using ThreadLocalRandom.nextBytes() instead of
+using millions of writeByte() operations.
+
+Result:
+
+Test runs much faster when leak detection level is high.

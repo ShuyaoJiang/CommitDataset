@@ -1,0 +1,17 @@
+Fix regression with raw ResponseEntity type
+
+This fix addresses a 4.1.1 regression where a raw ResponseEntity return
+value (used to return potentially a different kind of body) caused an
+exception.
+
+The regression came from the fact we now try to render a null body in
+order to give ResponseBodyAdvice a chance to substitute a different
+value. That in turn means we have to try to determine the body type
+from the method signature.
+
+This change improves the logic for extracting the generic parameter
+type to accommodate a raw ResponseEntity class. Also we avoid raising
+HttpMediaTypeNotAcceptableException if the value to be rendered is
+null.
+
+Issue: SPR-12287

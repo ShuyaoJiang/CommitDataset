@@ -1,0 +1,10 @@
+Enable using defined setups from test setup in docs (#34681)
+
+In the docs tests, we have pre-defined setups in the build.gradle file,
+and we can also define test setup sections within the doc page
+itself. Alas, these two are incompatible in that if you try to use a
+pre-defined setup alongside a test setup section, the pre-defined setup
+will be silently ignored. This commit enables pre-defined setup sections
+to be used together with test setup sections. The ordering here is that
+pre-defined setup sections will be executed first, followed by the test
+setup section.

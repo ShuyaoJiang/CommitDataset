@@ -1,0 +1,13 @@
+Don’t ack if unable to remove failing replica (#39584)
+
+Today when a replicated write operation fails to execute on a replica,
+the primary will reach out to the master to fail that replica (and mark
+it stale). We then won't ack that request until the master removes the
+failing replica; otherwise, we will lose the acked operation if the
+failed replica is still in the in-sync set. However, if a node with the
+primary is shutting down, we might ack such request even though we are
+unable to send a shard-failure request to the master. This happens
+because we ignore NodeClosedException which is triggered when the
+ClusterService is being closed.
+
+Closes #39467

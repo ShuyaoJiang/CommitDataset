@@ -1,0 +1,13 @@
+This CL fixes method calls that incorrectly ignore the return
+value. Method calls with no side-effect are pointless if you
+ignore the value returned. Also, this error is triggered if the
+return value of a method that has been annotated with
+@CheckReturnValue is ignored. This an automated fix using
+error-prone.
+
+We intend to make this a compilation error in Google's Java compiler,
+so it is necessary to fix existing occurrences first to avoid breaking
+builds.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=38025487

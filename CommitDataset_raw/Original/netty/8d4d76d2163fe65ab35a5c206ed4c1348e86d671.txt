@@ -1,0 +1,14 @@
+ReferenceCountedOpenSslEngine SSLSession.getLocalCertificates() / getLocalPrincipial() did not work when KeyManagerFactory was used. (#8560)
+
+Motivation:
+
+The SSLSession.getLocalCertificates() / getLocalPrincipial() methods did not correctly return the local configured certificate / principal if a KeyManagerFactory was used when configure the SslContext.
+
+Modifications:
+
+- Correctly update the local certificates / principial when the key material is selected.
+- Add test case that verifies the SSLSession after the handshake to ensure we correctly return all values.
+
+Result:
+
+SSLSession returns correct values also when KeyManagerFactory is used with the OpenSSL provider.

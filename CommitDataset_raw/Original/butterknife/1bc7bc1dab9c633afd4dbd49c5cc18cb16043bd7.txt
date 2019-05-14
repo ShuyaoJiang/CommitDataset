@@ -1,0 +1,74 @@
+Proper/optimized unbinder inheritance and new bind() API
+
+* Proper/optimized unbinder inheritance and new bind() API
+
+## Structure
+
+This is two parts folded into one:
+- Unbinder inheritance is now fully functional and optimized
+  - By optimized, I mean that generated classes won't generate unnecessary extra methods or unbinder classes unless absolutely necessary, avoiding a lot of generated cruft. Rules around this include:
+    - If top level, no viewbindings, just return a singleton NOP with no generated unbinder extras
+    - If top leve, has viewbindings, then it generates unbinder extras and returns the real implementation
+    - In an inheritance tree, unbinder classes and creators are only generated at the first descendant to need it
+    - Future descendants will extend from the highest available unbinder for the createUnbinder parametrization, while extending the most recent unbinder class for its Unbinder parent.
+    - viewbinding-less intermediary classes won't generate unbinder classes or createUnbinder() methods
+  - This works by analyzing the tree in the processor. After we find all the top-level classes, we recursively set up the required info in all their descendants to allow BinderClass to generate the appropriate code depending on the unbinder situation in the parent(s) it extends.
+  - There's a pretty extensive set of test classes in the unbinder package that should cover all the edge cases. Planning to add one more for viewbindings in the base class, though I've manually confirmed this works properly as well.
+- All the bind() methods now return the corresponding ViewUnbinder, rather than injecting the ViewBinder on a separate field.
+
+## Remaining work
+
+- Updating existing tests for the new API and generated code structure. This is just tedium, and I wanted to get this up for code/API review before going through all of it.
+- ViewUnbinder or go back to Unbinder?
+- `@CheckResult` on bind() calls or no?
+- You tell me?
+
+* Delete unnecessary test
+
+No longer applicable with the API change
+
+* Fix ordering of return
+
+* Fix unbinder test
+
+* ButterKnife classname
+
+* Set and LinkedHashSet
+
+* Periods and complete sentences
+
+* Static import for Truth
+
+* Use nestedClass
+
+* Proper codestyle for new unbinder test classes
+
+* ViewUnbinder -> Unbinder
+
+* Remove Unbinder parameterization
+
+* Move Unbinder to top level, rename generated unbinders to InnerUnbinder
+
+This makes Unbinder a first class citizen since people will be receiving instances of it, and also distinguishes generated inner classes to better differentiate.
+
+* Rename NOP_UNBINDER too
+
+* Check ID before assuming we can concatenate it to the field name
+
+This is done by providing a "unique" ID getter that will use the ID if there is one or "Original" if there's no binding ID
+
+* Update tests for new API and unbinder
+
+* Fix checkstyle
+
+* Target Java 7 for compiler
+
+* Move NOP_UNBINDER to Unbinder.EMPTY
+
+* Fix code styles
+
+These accidentally happened
+
+* Make InnerUnbinder classes protected
+
+* Remove unnecessary parametrization of createUnbinder return type

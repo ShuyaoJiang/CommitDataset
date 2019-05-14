@@ -1,0 +1,21 @@
+SQL: Remove ThreadLocal (elastic/x-pack-elasticsearch#3370)
+
+`ThreadLocal` variables have a tendency to complicate control flow,
+especially if these variables are "context" variables. This PR drops the
+`ThreadLocal` that SQL was using for its request context in favor of
+delaying construction of the components that need the context until what
+they need is ready.
+
+This further simplifies things by passing to components what they need
+rather than a larger context object. This is important because not all
+of the context is ready at all parts of the request. In particular we
+haven't resolved the index until long after the parsing stage, but the
+parser wants to know the time zone.
+
+This way of doing things does create a few more objects on each request
+but those objects are fairly light and should die as soon as the SQL has
+been translated to an Elasticsearch query.
+
+relates elastic/x-pack-elasticsearch#3178
+
+Original commit: elastic/x-pack-elasticsearch@8331f24399839261f9d0fbc828050c1e525bb60e

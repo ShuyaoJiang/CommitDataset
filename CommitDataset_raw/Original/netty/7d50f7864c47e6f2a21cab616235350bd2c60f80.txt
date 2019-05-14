@@ -1,0 +1,19 @@
+Implement OpenSslEngine.getSupportedCipherSuites() and get/setEnabledCipherSuites()
+
+Motivation:
+
+To make OpenSslEngine a full drop-in replacement, we need to implement
+getSupportedCipherSuites() and get/setEnabledCipherSuites().
+
+Modifications:
+
+- Retrieve the list of the available cipher suites when initializing
+  OpenSsl.
+- Improve CipherSuiteConverter to understand SRP
+- Add more test data to CipherSuiteConverterTest
+- Add bulk-conversion method to CipherSuiteConverter
+
+Result:
+
+OpenSslEngine should now be a drop-in replacement for JDK SSLEngineImpl
+for most cases.

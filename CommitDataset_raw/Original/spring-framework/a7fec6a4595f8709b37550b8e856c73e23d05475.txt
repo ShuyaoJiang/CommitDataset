@@ -1,0 +1,9 @@
+Lazily resolve the default exception CacheResolver
+
+This is a rework of 314b069 that may still lead to issue if a Cacheable
+annotated bean is inspected on startup. Instead of resolving the default
+exception CacheResolver if a cache operation is parsed, we resolve it as
+late as possible (i.e. when an exception is thrown and the relevant
+exception cache needs to be resolved)
+
+Issue: SPR-12850

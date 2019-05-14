@@ -1,0 +1,13 @@
+Add FlushConsolidationHandler which consolidates flush operations as these are expensive
+
+Motivation:
+
+Calling flush() and writeAndFlush(...) are expensive operations in the sense as both will produce a write(...) or writev(...) system call if there are any pending writes in the ChannelOutboundBuffer. Often we can consolidate multiple flush operations into one if currently a read loop is active for a Channel, as we can just flush when channelReadComplete is triggered. Consolidating flushes can give a huge performance win depending on how often is flush is called. The only "downside" may be a bit higher latency in the case of where only one flush is triggered by the user.
+
+Modifications:
+
+Add a FlushConsolidationHandler which will consolidate flushes and so improve the throughput.
+
+Result:
+
+Better performance (throughput). This is especially true for protocols that use some sort of PIPELINING.

@@ -1,0 +1,16 @@
+[Geo] Integrate Lucene's LatLonShape (BKD Backed GeoShapes) as default `geo_shape` indexing approach (#35320)
+
+This commit  exposes lucene's LatLonShape field as the
+default type in GeoShapeFieldMapper. To use the new 
+indexing approach, simply set "type" : "geo_shape" in 
+the mappings without setting any of the strategy, precision, 
+tree_levels, or distance_error_pct parameters. Note the 
+following when using the new indexing approach:
+
+* geo_shape query does not support querying by 
+MULTIPOINT.
+* LINESTRING and MULTILINESTRING queries do not 
+yet support WITHIN relation.
+* CONTAINS relation is not yet supported.
+The tree, precision, tree_levels, distance_error_pct, 
+and points_only parameters are deprecated.

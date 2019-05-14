@@ -1,0 +1,20 @@
+Do not suppress channelReadComplete() when a handler was just added
+
+Related:
+- 27a25e29f7c002eb9f4d52b52ecccb2f3a7d6b15
+
+Motivation:
+
+The commit mentioned above introduced a regression where
+channelReadComplete() event is swallowed by a handler which was added
+dynamically.
+
+Modifications:
+
+Do not suppress channelReadComplete() if the current handler's
+channelRead() method was not invoked at all, so that a just-added
+handler does not suppress channelReadComplete().
+
+Result:
+
+Regression is gone, and channelReadComplete() is invoked when necessary.

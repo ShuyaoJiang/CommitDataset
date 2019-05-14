@@ -1,0 +1,11 @@
+Leverage PathPatternParser in CORS configuration source
+
+Previously `UrlBasedCorsConfigurationSource` was relying on
+`PathMatcher` implementations for matching incoming request lookup paths
+with the configured path patterns for CORS configuration.
+
+This commit replaces the use of `PathMatcher` with a `PathPatternParser`
+that parses the string patterns into `PathPattenr` instances and allows
+for faster matching against lookup paths.
+
+Issue: SPR-15688

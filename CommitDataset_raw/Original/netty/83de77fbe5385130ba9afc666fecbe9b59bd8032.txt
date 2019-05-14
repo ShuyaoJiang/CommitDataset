@@ -1,0 +1,13 @@
+Make Native loading work better with Java 8
+
+Motivation:
+Enable static linking for Java 8.  These commits are the same as those introduced to netty tcnative.  The goal is to allow lots of JNI libraries to be statically linked together without having conflict `JNI_OnLoad` methods.
+
+Modification:
+* add JNI_OnLoad suffixes to enable static linking
+* Add static names to the list of libraries that try to be loaded
+* Enable compiling with JNI 1.8
+* Sort includes
+
+Result:
+Enable statically linked JNI code.

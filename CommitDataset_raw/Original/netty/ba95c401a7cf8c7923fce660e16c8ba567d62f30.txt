@@ -1,0 +1,18 @@
+Misc clean up
+
+Motivation:
+IntelliJ issues several warnings.
+
+Modifications:
+
+* `ClientCookieDecoder` and `ServerCookieDecoder`:
+  * `nameEnd`, `valueBegin` and `valueEnd` don't need to be initialized
+  * `keyValLoop` loop doesn't been to be labelled, as it's the most inner one (same thing for labelled breaks)
+  * Remove `if (i != headerLen)` as condition is always true
+* `ClientCookieEncoder` javadoc still mention old logic
+* `DefaultCookie`, `ServerCookieEncoder` and `DefaultHttpHeaders` use ternary ops that can be turned into simple boolean ones
+* `DefaultHeaders` uses a for(int) loop over an array. It can be turned into a foreach one as javac doesn't allocate an iterator to iterate over arrays
+* `DefaultHttp2Headers` and `AbstractByteBuf` `equal` can be turned into a single boolean statement
+Result:
+
+Cleaner code

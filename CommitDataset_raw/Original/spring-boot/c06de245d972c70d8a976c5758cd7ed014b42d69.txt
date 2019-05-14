@@ -1,0 +1,19 @@
+Allow endpoints to be mapped to /
+
+This commit removes the restriction that was added in 4a61e45 to
+prevent / from being used as the management context path when the
+management context was not using a different port
+
+The management context path can now be set to / irrespective of the
+configuration of the management port. To avoid a possible clash
+with the application's welcome page or similar, the links "endpoint"
+that is mapping to the management context path is disabled when
+the management context path is /.
+
+As part of allowing / to be used as the management context path again,
+the handling of endpoint mappings and the creation of paths for
+individual operations has been consolidated into a new EndpointMapping
+class that is used across the three (MVC, WebFlux, and Jersey)
+implementations.
+
+See gh-9898

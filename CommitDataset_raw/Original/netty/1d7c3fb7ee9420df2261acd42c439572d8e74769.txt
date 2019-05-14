@@ -1,0 +1,10 @@
+KQueue detect peer close without EVFILT_READ
+
+Motivation:
+The EPOLL transport uses EPOLLRDHUP to detect when the peer closes the write side of the socket. Currently KQueue is not able to mimic this behavior and the only way to detect if the peer has closed is to read. It may not always be appropriate to read for backpressure and other reasons at the application level.
+
+Modifications:
+- Support EVFILT_SOCK filter which provides notification when the peer closes the socket
+
+Result:
+KQueue transport has more consistent behavior with Epoll transport for detecting peer closure.

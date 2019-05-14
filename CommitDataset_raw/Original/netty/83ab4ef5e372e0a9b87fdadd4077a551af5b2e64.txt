@@ -1,0 +1,18 @@
+Explict always call ctx.read() when AUTO_READ is false and HTTP/2 is used. (#8647)
+
+Motivation:
+
+We should always call ctx.read() even when AUTO_READ is false as flow-control is enforced by the HTTP/2 protocol.
+
+See also https://tools.ietf.org/html/rfc7540#section-5.2.2.
+
+We already did this before but not explicit and only did so because of some implementation details of ByteToMessageDecoder. It's better to be explicit here to not risk of breakage later on.
+
+Modifications:
+
+- Ensure we always call ctx.read() when AUTO_READ is false
+- Add unit test.
+
+Result:
+
+No risk of staling the connection when HTTP/2 is used.

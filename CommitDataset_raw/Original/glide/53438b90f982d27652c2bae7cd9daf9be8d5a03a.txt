@@ -1,0 +1,19 @@
+Require ResourceListener in the constructor of EngineResource
+
+ResourceListener is supposed to be effectively final in EngineResource.
+It was only passed into a separate method to reduce the number of pass
+throughs. Since we're now loading resources on multiple threads, it's no
+longer trivially safe to call an additional method to set the listener.
+
+Specifically there's a race where the EngineJob exposes the Resource to
+any new requests for the same image before the Engine has a chance to
+set the ResourceListener on the EngineResource. The locking to fix this
+is complicated and would require holding multiple locks simultaneously.
+Instead this cl moves the ResourceListener into the EngineResource
+constructor and performs the necessary pass throughs to make that
+happen. Ideally this is safer and more performant than adjusting the
+locking.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=234844998

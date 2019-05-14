@@ -1,0 +1,17 @@
+Fix SocketException in NioSocketChannelUnsafe.closeExecutor()
+
+Related: #3464
+
+Motivation:
+
+When a connection attempt is failed,
+NioSocketChannelUnsafe.closeExecutor() triggers a SocketException,
+suppressing the channelUnregistered() event.
+
+Modification:
+
+Do not attempt to get SO_LINGER value when a socket is not open yet.
+
+Result:
+
+One less bug

@@ -1,0 +1,16 @@
+Ensure that background preinit has completed before refresh returns
+
+This commit is a continuation of the changes made in b85b608. It
+addresses an additional problem when testing applications where two
+contexts are refreshed in quick succession. In this scenario, it
+was possible, theoretically at least, for the first context’s background preinitialization to still be in progress and creating loggers when the
+second is refreshed and resets the logger context.
+
+This commit updates BackgroundPreinitializer so that, upon receipt of
+a ContextRefreshedEvent, it waits for preinitialization to have
+completed. In the scenario described above, this ensures that
+preinitialization has completed before the call to refresh() for the
+first context returns, thereby preventing it from running in parallel
+with the refresh of the second context.
+
+Closes gh-4871

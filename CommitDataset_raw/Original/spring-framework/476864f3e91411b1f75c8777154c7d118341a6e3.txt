@@ -1,0 +1,10 @@
+Expose handled exception as request attribute
+
+This change exposes exceptions handled in the DispatcherServlet with a
+HandlerExceptionResolver as a request attribute. This is done only when
+the resolver returns an empty ModelAndView indicating the exception was
+resolved but not view is required (e.g. status code was set). In such
+cases the exception may be useful to any handlers in an ERRPR dispatch
+by the servlet container.
+
+Issue: SPR-11686

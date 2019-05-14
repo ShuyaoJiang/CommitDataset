@@ -1,0 +1,17 @@
+Ensure multiple shaded version of the same netty artifact can be loaded as long as the shaded prefix is different (#8207)
+
+Motivation:
+
+We should support to load multiple shaded versions of the same netty artifact as netty is often used in multiple dependencies.
+
+This is related to https://github.com/netty/netty/issues/7272.
+
+Modifications:
+
+- Use -fvisibility=hidden when compiling and use JNIEXPORT for things we really want to have exported
+- Ensure fields are declared as static so these are not exported
+- Adjust testsuite-shading to use install_name_tool on MacOS to change the id of the lib. Otherwise the wrong may be used.
+
+Result:
+
+Be able to use multiple shaded versions of the same netty artifact.

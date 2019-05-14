@@ -1,0 +1,17 @@
+Fix test reproducability in AbstractBuilderTestCase setup (#32403)
+
+Currently AbstractBuilderTestCase generates certain random values in its
+`beforeTest()` method annotated with @Before only the first time that a test
+method in the suite is run while initializing the serviceHolder that we use for
+the rest of the test. This changes the values of subsequent random values
+and has the effect that when running single methods from a test suite with
+"-Dtests.method=*", the random values it sees are different from when the same
+test method is run as part of the whole test suite. This makes it hard to use
+the reproduction lines logged on failure.
+
+This change runs the inialization of the serviceHolder and the randomization 
+connected to it using the test runners master seed, so reproduction by running
+just one method is possible again.
+
+
+Closes #32400

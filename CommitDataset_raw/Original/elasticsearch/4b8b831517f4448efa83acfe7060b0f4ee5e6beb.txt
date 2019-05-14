@@ -1,0 +1,8 @@
+Remove unused reference to filePermissionsCache (#31923)
+
+Currently Role.Builder keeps a reference to the FieldPermissionsCache that is
+passed into its constructors. This seems to be unused except for passing it on
+to convertFromIndicesPrivileges() in the second ctor itself, but we don't need
+to keep the internal reference in that case, so it can be removed.
+
+Relates to #31876

@@ -1,0 +1,9 @@
+Allow access to the underlying DiskLruCache.
+
+This is needed to implement public android APIs
+android.net.HttpResponseCache.{flush,size,maxSize,close}
+as well android.net.HttpResponseCache.install.
+
+install needs to inspect the underlying DiskLruCache because
+it promises not to install a new cache if the file directory and
+size are the same as the old cache.

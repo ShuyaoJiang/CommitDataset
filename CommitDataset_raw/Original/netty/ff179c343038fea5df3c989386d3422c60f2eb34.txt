@@ -1,0 +1,16 @@
+Reduce the time taken by NetUtil and DefaultChannelId class initialization
+
+Motivation:
+
+As reported in #2331, some query operations in NetworkInterface takes much longer time than we expected.  For example, specifying -Djava.net.preferIPv4Stack=true option in Window increases the execution time by more than 4 times.  Some Windows systems have more than 20 network interfaces, and this problem gets bigger as the number of unused (virtual) NICs increases.
+
+Modification:
+
+Use NetworkInterface.getInetAddresses() wherever possible.
+Before iterating over all NICs reported by NetworkInterface, filter the NICs without proper InetAddresses.  This reduces the number of candidates quite a lot.
+NetUtil does not query hardware address of NIC in the first place but uses InetAddress.isLoopbackAddress().
+Do not call unnecessary query operations on NetworkInterface.  Just get hardware address and compare.
+
+Result:
+
+Significantly reduced class initialization time, which should fix #2331.

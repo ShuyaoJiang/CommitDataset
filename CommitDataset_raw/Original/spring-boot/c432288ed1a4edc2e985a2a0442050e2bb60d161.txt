@@ -1,0 +1,14 @@
+Migrate ApplicationContext to common hierarchy
+
+This commit migrates `AnnotationConfigReactiveWebApplicationContext`
+parent to the `GenericApplicationContext` abstraction. Any use of
+`AnnotationConfigWebApplicationContext` is also removed as it also
+inherits from the `AbstractRefreshableApplicationContext` outdated
+hierarchy.
+
+A new `AnnotationConfigServletWebApplicationContext` context is
+introduced instead, extending from `GenericApplicationContext` and
+providing the counter part of the reactive context for the Servlet-based
+web app tests.
+
+See gh-16096

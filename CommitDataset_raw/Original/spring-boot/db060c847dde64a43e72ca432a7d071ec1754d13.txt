@@ -1,0 +1,12 @@
+Ensure `QuartzDatabaseInitializer` is initialized before `Scheduler`
+
+If the auto-configured `Scheduler` instance backed by JDBC job store is
+used as a dependency in an application component, the initialization of
+`Scheduler` will be triggered before `QuartzDatabaseInitializer`. This
+will result in failure due to schema not being prepared in time for
+`Scheduler` to populate job details.
+
+This commit ensures `QuartzDatabaseInitializer` is initialized before the
+auto-configured `Scheduler` by introducing a dependency between the two.
+
+See gh-9411

@@ -1,0 +1,8 @@
+Skip some plugins service tests on Windows
+
+These tests need to be skipped. They cause plugins to be loaded which
+causes a child classloader to be opened. We do not want to add the
+permissions to be able to close a classloader solely for these tests,
+and the JARs created in the test can not be deleted on Windows until the
+classloader is closed. Since this will not happen before test teardown,
+the test will fail on Windows. So, we skip these tests.

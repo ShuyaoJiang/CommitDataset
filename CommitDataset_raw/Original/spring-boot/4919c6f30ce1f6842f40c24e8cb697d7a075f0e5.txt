@@ -1,0 +1,21 @@
+Ignore scoped targets when collecting servlet context initializer beans
+
+Previously, there were two problems with servlet context initializer
+beans that are a scoped proxy:
+
+1. When there's no explicit registration bean the target of the scoped
+   proxy is registered rather than the proxy. This meant that the
+   proxy had no effect as it was being bypassed.
+2. When there is an explicit registration bean, the registration is
+   performed twice: the faulty implicit registration described above
+   and explicit registration.
+
+A fix (SPR-14816) has been made in Spring Framework so that we can
+correctly determine the type of bean that will be produced by a
+scoped proxy's factory bean. That change, coupled with the change in
+this commit that ignored beans that are the target of a scoped proxy
+addresses both of the problems described above. A single registration
+is now performed and its the scoped proxy, rather than its target,
+that is registered.
+
+Closes gh-7150

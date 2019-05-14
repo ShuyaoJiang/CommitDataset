@@ -1,0 +1,16 @@
+Switch to a matches-none filter for security.basic.enabled=false
+
+There were some residual issues to do with the changes to the implementation
+of security.basic.enabled=false. It was a good idea to have a filetr chain
+triggered by the flag being off because it smooths the way for user-defined
+filter chains to use the Boot AuthenticationManager (as a first step at least),
+but it wasn't a goog idea to add any actual secuity features to that filter.
+E.g. if it has HSTS then even an app like Sagan that has some secure endpoints
+that it manages itself and the rest is unsecured has issues because it can't
+accept connections over HTTP even on unsecure endpoints.
+
+TODO: find a way for security.ssl_enabled=true to apply to only the user-
+defined security filter (maybe not possible or worth the effort, since they
+can inject a SecurityProperties if they need it?).
+
+See gh-928

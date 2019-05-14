@@ -1,0 +1,10 @@
+Fix NPE in GzipResourceResolver
+
+This change fixes a NullPointerException in GzipResourceResolver, which
+assumed that calls to the `resolveResource` method were made with only
+non-null values for request.
+
+This is not the case for the VersionResourceResolver, which tries to
+resolve resources that aren't requested per se by the HTTP request.
+
+Issue: SPR-13149

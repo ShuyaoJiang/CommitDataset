@@ -1,0 +1,10 @@
+SslHandler aggregation prefer copy over CompositeByteBuf
+
+Motivation:
+SslHandler will do aggregation of writes by default in an attempt to improve goodput and reduce the number of discrete buffers which must be accumulated. However if aggregation is not possible then a CompositeByteBuf is used to accumulate multiple buffers. Using a CompositeByteBuf doesn't provide any of the benefits of better goodput and in the case of small + large writes (e.g. http/2 frame header + data) this can reduce the amount of data that can be passed to writev by about half. This has the impact of increasing latency as well as reducing goodput.
+
+Modifications:
+- SslHandler should prefer copying instead of using a CompositeByteBuf
+
+Result:
+Better goodput (and potentially improved latency) at the cost of copy operations.

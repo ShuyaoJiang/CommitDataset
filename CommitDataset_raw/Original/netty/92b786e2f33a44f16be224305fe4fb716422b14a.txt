@@ -1,0 +1,13 @@
+Fix possible leak in SslHandler if wrap(...) throws.
+
+Motivation:
+
+We can end up with a buffer leak if SSLEngine.wrap(...) throws.
+
+Modifications:
+
+Correctly release the ByteBuf if SSLEngine.wrap(...) throws.
+
+Result:
+
+Fixes [#7337].

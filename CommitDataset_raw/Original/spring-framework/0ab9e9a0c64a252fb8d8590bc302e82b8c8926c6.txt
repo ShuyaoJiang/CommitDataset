@@ -1,0 +1,16 @@
+Upgrade AspectJ from 1.6.8 to 1.6.12
+
+ - Spring remains compatible against AJ version 1.6.8, but is now
+   compiling and testing against 1.6.12
+
+ - Encountered what appears to be an AJ bug introduced in 1.6.10: an
+   assertion in org.aspectj.weaver.UnresolvedType causes a false
+   negative failure when encountering org.springframework.io.Resource
+   arrays, e.g. "[org.springframework.io.Resource@xxx". This problem
+   has been reported to the AJ team and in the meantime, the recommended
+   workaround is to disable assertions either completely, or at least
+   selectively with
+
+       -disableassertions:org.aspectj.weaver.UnresolvedType
+
+Issue: SPR-7989, SPR-9272

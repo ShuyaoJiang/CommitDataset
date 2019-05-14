@@ -1,0 +1,17 @@
+Provide dependency management for JBoss Logging
+
+Several libraries that Spring Boot supports depend on JBoss Logging but
+they use a variety of versions. This means that the actual version of
+JBoss Logging that will be used depends on your build system. Gradle
+will pick the latest version that’s in the dependency graph, Maven
+will pick the version that’s nearest the root of the graph and, if two
+dependencies are equidistant, it’ll pick the version that’s pulled in
+by the dependency listed first in the pom. In short, it’s very hard to
+reason about the version of JBoss Logging that you’ll actually use at
+runtime.
+
+This commit adds dependency management for JBoss Logging so that a
+consistent version is used, irrespective of your build system or
+dependencies.
+
+Closes gh-4185

@@ -1,0 +1,10 @@
+Adds average document size to DocsStats (#27117)
+
+This change is required in order to support a size based check for the
+index rollover.
+
+The index size is estimated by sampling the existing segments only. We
+prefer using segments to StoreStats because StoreStats is not reliable
+if indexing or merging operations are in progress.
+
+Relates #27004

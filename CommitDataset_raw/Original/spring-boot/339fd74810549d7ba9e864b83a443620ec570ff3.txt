@@ -1,0 +1,13 @@
+Call ServletContextListener.contextDestroyed() when Undertow is stopped
+
+Previously, when the embedded Undertow container was stopped, the
+servlet deployment was stopped but it was not undeployed. This meant
+that contextDestroyed() callback of any registered
+ServletContextListeners was not called.
+
+This commit updates UndertowEmbeddedServletContainer to call undeploy
+on the deployment manager in addition to the existing call to stop.
+Undeploying the servlet deployment calls Undertow to drive the
+contextDestroyed callback on any registered ServletContextListeners.
+
+Closes gh-13134

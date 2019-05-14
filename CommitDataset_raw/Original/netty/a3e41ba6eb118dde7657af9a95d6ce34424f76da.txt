@@ -1,0 +1,10 @@
+HttpConversionUtils avoid intermediate collection allocation
+
+Modifications:
+HttpConversionUtil#toLowercaseMap requires an intermediate List to be allocated. This can be avoided with the recently added value iterator methods.
+
+Modifications:
+- Use HttpHeaders#valueCharSequenceIterator instead of getAll
+
+Result:
+Less intermediate object allocation and copying.

@@ -1,0 +1,7 @@
+RestClient uses system properties and system default SSLContext (#25757)
+
+This commit calls the `useSystemProperties` method on the HttpAsyncClientBuilder so that the jvm
+system properties are used. The primary reason for doing this is to ensure the builder uses the
+system default SSLContext rather than the default instance created by the http client library.
+
+Closes #23231

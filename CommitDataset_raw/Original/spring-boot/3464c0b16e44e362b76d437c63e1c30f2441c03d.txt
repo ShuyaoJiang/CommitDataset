@@ -1,0 +1,11 @@
+Ensure that Hypermedia-related auto-config works without Jackson
+
+Previously, both HypermediaAutoConfiguration and HttpMessageConverters
+assumed that if Spring HATEOAS was on the class path, then Jackson
+would be too. When this was not the case, an application would fail
+to start.
+
+This commit updates both classes to back off appropriately when
+Spring HATEOAS is on the classpath but Jackson is not.
+
+Closes gh-7434

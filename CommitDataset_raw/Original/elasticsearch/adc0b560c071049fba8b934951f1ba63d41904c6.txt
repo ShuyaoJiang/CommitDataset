@@ -1,0 +1,21 @@
+Raise a 404 exception when document source is not found (#33384) (#34083)
+
+This pull request makes the `RestGetSourceAction` return a `ResourceNotFoundException` with a proper JSON response when source or document itself is missing (see issue #33384).
+
+Here is below a sample JSON output:
+
+```
+{
+  "error": {
+    "root_cause": [
+      {
+        "type": "resource_not_found_exception",
+        "reason": "Source not found [index1]/[_doc]/[1]"
+      }
+    ],
+    "type": "resource_not_found_exception",
+    "reason": "Source not found [index1]/[_doc]/[1]"
+  },
+  "status": 404
+}
+```

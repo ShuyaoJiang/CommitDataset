@@ -1,0 +1,6 @@
+Move PeerFinder's logger to the expected package (#39412)
+
+Today the abstract `org.elasticsearch.discovery.PeerFinder` uses the logger of
+its implementation, which in production is in `o.e.cluster.coordination`. This
+turns out to be confusing and unhelpful, so with this change we move to using
+the logger that belongs to `PeerFinder`.

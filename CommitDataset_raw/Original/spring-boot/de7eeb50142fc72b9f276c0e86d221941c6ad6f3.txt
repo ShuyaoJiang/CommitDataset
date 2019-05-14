@@ -1,0 +1,11 @@
+Fix ResourceUrlEncodingFilter conditions
+
+Fix `ResourceUrlEncodingFilter` conditions which were inadvertently
+changed in commits 64f04fce and 6cc272ec and would back off if any
+`FilterRegistrationBean` was found.
+
+The updated conditions restores the behavior of Spring Boot 2.0.5 and
+allows users to directly register their own `ResourceUrlEncodingFilter`
+beans (as long as they don't use a `FilterRegistrationBean`).
+
+Fixes gh-14897

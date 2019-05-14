@@ -1,0 +1,17 @@
+Use heap buffers for Unpooled.copiedBuffer()
+
+Related issue: #2028
+
+Motivation:
+
+Some copiedBuffer() methods in Unpooled allocated a direct buffer.  An
+allocation of a direct buffer is an expensive operation, and thus should
+be avoided for unpooled buffers.
+
+Modifications:
+
+- Use heap buffers in all copiedBuffer() methods
+
+Result:
+
+Unpooled.copiedBuffers() are less expensive now.

@@ -1,0 +1,7 @@
+Avoid uid creation in ParsedDocument (#27241)
+
+The uid bytes (as the type#id) were needlessly being created even though
+they are no longer needed after the move to single type per index. This
+commit avoids creating these when parsed documents are constructed.
+
+Relates #27241

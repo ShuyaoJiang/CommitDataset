@@ -1,0 +1,13 @@
+Set some StackTraceElement on pre-instantiated static exceptions
+
+Motivation:
+
+We use pre-instantiated exceptions in various places for performance reasons. These exceptions don't include a stacktrace which makes it hard to know where the exception was thrown. This is especially true as we use the same exception type (for example ChannelClosedException) in different places. Setting some StackTraceElements will provide more context as to where these exceptions original and make debugging easier.
+
+Modifications:
+
+Set a generated StackTraceElement on these pre-instantiated exceptions which at least contains the origin class and method name. The filename and linenumber are specified as unkown (as stated in the javadocs of StackTraceElement).
+
+Result:
+
+Easier to find the origin of a pre-instantiated exception.

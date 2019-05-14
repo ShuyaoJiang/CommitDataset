@@ -1,0 +1,16 @@
+[ML] Add a detector_index field to detectors, and use it for updates (elastic/x-pack-elasticsearch#1613)
+
+Detectors now have a field called detector_index.  This is also now the
+field that needs to be supplied when updating a detector.  (Previously
+it was simply index, which was confusing.)
+
+When detectors are added to an analysis_config it will reassign
+ascending detector_index values starting from 0.  The intention is
+never to allow deletion of detectors from an analysis_config, but
+possibly to allow disabling them in the future.  This ensures that
+detector_index values in results will always tie up with detector_ids
+in the detectors that created them.
+
+relates elastic/x-pack-elasticsearch#1275
+
+Original commit: elastic/x-pack-elasticsearch@20a660b07b7f86739ad8343d586891d720662e83

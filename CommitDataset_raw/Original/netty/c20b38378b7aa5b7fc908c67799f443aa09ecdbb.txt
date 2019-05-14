@@ -1,0 +1,13 @@
+Allow manual configuration of initial HTTP/2 SETTINGS frame.
+
+Motivation:
+
+There is currently no good way to configure the initial SETTINGS frame. The individual settings can be configured on the various components, but doing this bypasses the proper setting update logic in the encoder.
+
+Modifications:
+
+Updated Http2ConnectionHandler to optionally take initial settings in the constructor. If not provided, it will default to current behavior.
+
+Result:
+
+Easy manual configuration of initial settings.

@@ -1,0 +1,8 @@
+Always destroy Vagrant boxes before tests (#28813)
+
+Today we do not destroy Vagrant boxes before tests. This is because
+constantly reprovisioning these boxes is time-consuming. Yet, not
+destroying these boxes can lead to state being left around that impacts
+subsequent test runs. To address this, we now always destroy these boxes
+before tests and provide a flag to set if this is not desired while
+iterating locally.

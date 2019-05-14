@@ -1,0 +1,7 @@
+Higlighters: Fix MultiPhrasePrefixQuery rewriting (#25103)
+
+The unified highlighter rewrites MultiPhrasePrefixQuery to SpanNearQuer even when there is a single term in the phrase.
+Though SpanNearQuery throws an exception when the number of clauses is less than 2.
+This change returns a simple PrefixQuery when there is a single term and builds the SpanNearQuery otherwise.
+
+Relates #25088

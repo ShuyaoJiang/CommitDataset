@@ -1,0 +1,27 @@
+Introduce ApplicationContextInitializer interface
+
+Designed primarily for use in conjunction with web applications
+to provide a convenient mechanism for configuring the container
+programmatically.
+
+ApplicationContextInitializer implementations are specified through the
+new "contextInitializerClasses" servlet context parameter, then detected
+and invoked by ContextLoader in its customizeContext() method.
+
+In any case, the semantics of ApplicationContextInitializer's
+initialize(ConfigurableApplicationContext) method require that
+invocation occur *prior* to refreshing the application context.
+
+ACI implementations may also implement Ordered/PriorityOrdered and
+ContextLoader will sort instances appropriately prior to invocation.
+
+Specifically, this new support provides a straightforward way to
+programmatically access the container's Environment for the purpose
+of adding, removing or otherwise manipulating PropertySource objects.
+
+See Javadoc for further details.
+
+Also note that ApplicationContextInitializer semantics overlap to
+some degree with Servlet 3.0's notion of ServletContainerInitializer
+classes. As Spring 3.1 development progresses, we'll likely see
+these two come together and further influence one another.

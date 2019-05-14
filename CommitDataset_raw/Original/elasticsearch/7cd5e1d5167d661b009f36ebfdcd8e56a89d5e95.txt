@@ -1,0 +1,13 @@
+Check cluster heath before setup-passwords (elastic/x-pack-elasticsearch#4104)
+
+Trying to setup passwords on a red cluster (or a cluster that cannot
+reach a quorum) is generally not a good idea.
+
+This commit:
+- Adds a check for RED cluster status
+- Prompts to confirm execution if the cluster is red
+- Prints out the reason/type is an error response is received
+- Increases the HTTP read timeout so that master election failures are
+  reported correctly.
+
+Original commit: elastic/x-pack-elasticsearch@4ffbda23db333faeba0ebec3b7d691c01dc58844

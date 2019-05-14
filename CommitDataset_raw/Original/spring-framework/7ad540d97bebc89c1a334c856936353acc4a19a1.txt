@@ -1,0 +1,21 @@
+Parse JPA <exclude-unlisted-classes> correctly
+
+Fix PersistenceUnitReader to correctly read <exclude-unlisted-classes>
+in both JPA 1.0 and 2.0 persistence.xml files.
+
+Prior to this commit PersistenceUnitReader would set the value of
+excludeUnlistedClasses to true when a <exclude-unlisted-classes> element
+was present, regardless of its value.
+
+The following rules are now used when parsing:
+
+- If the <exclude-unlisted-classes> element is missing the appropriate
+  default value is set (based on the JPA version).
+
+- If an empty <exclude-unlisted-classes/> element is found the
+  excludeUnlistedClasses property is set to true.
+
+- Otherwise the value of the <exclude-unlisted-classes> element is used
+  to set the excludeUnlistedClasses property.
+
+Issue: SPR-10767

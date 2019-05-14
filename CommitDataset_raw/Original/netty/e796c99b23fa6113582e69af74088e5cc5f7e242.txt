@@ -1,0 +1,15 @@
+Add unit tests for HTTP and SPDY headers
+
+Motivation:
+
+When attempting to retrieve a SPDY header using an AsciiString key, if the header was inserted using a String based key, the lookup would fail. Similarly, the lookup would fail if the header was inserted with an AsciiString key, and retrieved using a String key. This has been fixed with the header simplification commit (1a43923aa89769ae3711e0d9451abfdee4a4327c).
+
+Extra unit tests have been added to protect against this issue occurring in the future.  The tests check that a header added using String or AsciiString can be retrieved using AsciiString or String respectively.
+
+Modifications:
+
+Added more unit tests
+
+Result:
+
+Protect against issue #4053 happening again.

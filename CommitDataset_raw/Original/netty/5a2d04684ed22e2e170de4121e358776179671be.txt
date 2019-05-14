@@ -1,0 +1,10 @@
+DNS Resolver visibility into individual queries
+
+Motivation:
+A single DNS query may follow many different paths through resolver-dns. The query may fail for various reasons related to the DNS protocol, general IO errors, it may be cancelled due to the query count being exceeded, or other reasons. A query may also result in other queries as we follow the DNS protocol (e.g. redirects, CNAME, etc...). It is currently impossible to collect information about the life cycle of an individual query though resolver-dns. This information may be valuable when considering which DNS servers are preferred over others.
+
+Modifications:
+- Introduce an interface which can provide visibility into all the potential outcomes of an individual DNS query
+
+Result:
+resolver-dns provides visibility into individual DNS queries which can be used to avoid poorly performing DNS servers.

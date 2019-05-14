@@ -1,0 +1,13 @@
+Fixing CorsHandler response Content-Length
+
+Motivation:
+
+https://github.com/netty/netty/issues/7253
+
+Modifications:
+
+Adding `Content-Length: 0` to `CorsHandler.forbidden()` and `CorsHandler.handlePreflight()`
+
+Result:
+
+Contexts that are terminated by the CorsHandler will always include a Content-Length header

@@ -1,0 +1,12 @@
+Allow query caching by default again (#33328)
+
+With the introduction of the default distribution, it means that by
+default the query cache is wrapped in the security implementation of the
+query cache. This cache does not allow caching if the request does not
+carry indices permissions. Yet, this will not happen if authorization is
+not allowed, which it is not by default. This means that with the
+introduction of the default distribution, query caching was disabled by
+default! This commit addresses this by checking if authorization is
+allowed and if not, delegating to the default indices query
+cache. Otherwise, we proceed as before with security. Additionally, we
+clear the cache on license state changes.

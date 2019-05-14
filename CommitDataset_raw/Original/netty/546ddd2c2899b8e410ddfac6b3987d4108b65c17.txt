@@ -1,0 +1,17 @@
+Correctly calculate and respect if we can correctly fullfil wrap for alerts. (#7945)
+
+Motivation:
+
+We previously did not correctly take into account when we could not wrap (and so produce) the full SSL record with an alert when the SSLEngine was closed.
+
+There are two problems here:
+
+- If we call wrap(...) with an empty dst buffer after closeOutbound() was called we will not notify the user if we could not store the whole SSLRecord into the dst buffer and so we may produce incomplete SSLRecords
+
+Modifications:
+
+Add unit test which failed before.
+
+Result:
+
+Correctly handle the case when the dst buffer is not big enough and and alert needs to be produced.

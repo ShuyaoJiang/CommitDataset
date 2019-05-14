@@ -1,0 +1,8 @@
+[ILM] make alias swapping atomic (#35972)
+
+In the current implementation, there is a time between the
+ShrinkStep and the ShrinkSetAliasStep that both the source and
+target indices will be present with the same aliases. This means
+that queries to during this time will query both and return
+duplicates. This fixes that scenario by moving the alias inheritance
+to the same aliases update request as is done in ShrinkSetAliasStep

@@ -1,0 +1,11 @@
+Leak Detector disclosing when records dropped
+
+Motivation:
+ResourceLeakDetector enforces a limit as to how large the queue is allowed to grow for stack traces in order to keep memory from growing too large. However it is not always clear when records are dropped, or how many have been dropped. This can make interpreting leak reports more difficult if you assume all information is present when it may not be. Also we should increase the limit (currently 4) when running tests on the CI servers.
+
+Modifications:
+- Increase leak detector record limit on CI servers from 4 to 32.
+- Track how many records have been discarded and disclose this in the leak report.
+
+Result:
+Leak reports clarify how many records were dropped, and how to increase the limit.

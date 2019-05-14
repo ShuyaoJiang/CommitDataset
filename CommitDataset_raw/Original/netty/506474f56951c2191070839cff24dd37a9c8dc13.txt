@@ -1,0 +1,9 @@
+Overhaul pipeline implementation for clarity and memory efficiency
+
+This pull request cleans up our pipeline implementation by moving most
+inter-context traversal code to DefaultChannelHandlerContext.
+Previously, outbound traversal was done in DefaultChannelPipeline while
+inbound traversal was done in DefaultChannelHandlerContext.
+
+Also, to address the memory inefficiency issue raised in #920, all
+runnables are lazily instantiated.

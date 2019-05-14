@@ -1,0 +1,16 @@
+Prevent Jetty’s singleton shutdown thread from breaking restarts
+
+By default, Jetty uses a singleton shutdown thread, registered as a
+shutdown hook, to stop its components. This single thread breaks the
+restart logic in devtools as a second restart causes a second attempt to
+start the singleton shutdown thread which fails with an
+IllegalStateException. This processing is unnecessary in a Spring Boot
+application as the application context’s lifecycle when ensure that
+Jetty is shutdown.
+
+This commit updates the embedded Jetty container to remove its
+components from Jetty’s shutdown thread. This leaves the thread with
+no components to manage at which point it removes its registration as a
+shutdown hook.
+
+Closes gh-3343

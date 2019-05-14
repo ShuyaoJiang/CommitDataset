@@ -1,0 +1,9 @@
+stop throwing an IllegalStateException for unrecognized steps (#32212)
+
+Since the reason for a step not being found in a registry may be due to staleness of the
+registry between it and the cluster state, we do not want to throw an IllegalStateException.
+
+Staleness is something that will be self-healing after follow-up applications of the cluster state
+updates, so this is a recoverable issue that should log a warning instead of throwing an exception
+
+Closes #32181.

@@ -1,0 +1,6 @@
+[Rollup] Add new capabilities endpoint for concrete rollup indices (#30401)
+
+This introduces a new GetRollupIndexCaps API which allows the user to retrieve rollup capabilities of a specific rollup index (or index pattern). This is distinct from the existing RollupCaps endpoint.
+
+- Multiple jobs can be stored in multiple indices and point to a single target data index pattern (logstash-*). The existing API finds capabilities/config of all jobs matching that data index pattern.
+- One rollup index can hold data from multiple jobs, targeting multiple data index patterns. This new API finds the capabilities based on the concrete rollup indices.

@@ -1,0 +1,10 @@
+Prevent warning due to BPP dependency
+
+`MethodValidationPostProcessor` requires a `Validator` so we need to flag
+it as an infrastructure bean to prevent an additional log that indicates
+it won't be post-processed.
+
+We obviously don't want to post-process the `Validator` here so adding the
+additional meta-data is a good idea anyway.
+
+Closes gh-8422

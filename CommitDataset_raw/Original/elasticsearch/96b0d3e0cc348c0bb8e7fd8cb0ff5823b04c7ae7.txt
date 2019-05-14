@@ -1,0 +1,11 @@
+Script: Convert script query to a dedicated script context (#26003)
+
+This commit converts script query to use a new FilterScript context. The
+new context returns a boolean, so the error that would have previously
+happened at runtime if a non boolean was returned would now happen at
+script compilation. Also, the leniency of supporting returning a number
+and 0 mapping to false, non-zero to true is gone, but it was never
+documented. With the new context compilation will now also fail if
+special variables are used at compilation time, instead of runtime, eg
+ctx.
+

@@ -1,0 +1,20 @@
+[#3806] Setting WRITE_BUFFER_LOW_WATER_MARK before WRITE_BUFFER_HIGH_WATER_MARK results in an internal Exception
+
+Motivation:
+
+Setting the WRITE_BUFFER_LOW_WATER_MARK before WRITE_BUFFER_HIGH_WATER_MARK results in an internal Exception (appears only in the logs) if the value is larger than the default high water mark value. The WRITE_BUFFER_HIGH_WATER_MARK call appears to have no effect in this context.
+
+Setting the values in the reverse order works.
+
+Modifications:
+
+- deprecated ChannelOption.WRITE_BUFFER_HIGH_WATER_MARK and
+ChannelOption.WRITE_BUFFER_LOW_WATER_MARK.
+- add one new option called ChannelOption.WRITE_BUFFER_WATER_MARK.
+
+Result:
+The high/low water mark values limits caused by default values are removed.
+
+Setting the WRITE_BUFFER_LOW_WATER_MARK before WRITE_BUFFER_HIGH_WATER_MARK results in an internal Exception (appears only in the logs) if the value is larger than the default high water mark value. The WRITE_BUFFER_HIGH_WATER_MARK call appears to have no effect in this context.
+
+Setting the values in the reverse order works.

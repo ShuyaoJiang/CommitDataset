@@ -1,0 +1,11 @@
+Avoid blocking non-reproducible randomness in test (#36561)
+
+The security documentation test uses
+SecureRandom#getStrongInstance. This defaults to
+securerandom.strongAlgorithms=NativePRNGBlocking:SUN,DRBG:SUN which
+means a blocking implementation that reads from /dev/random. This means
+that this test can stall if the entropy on the machine is
+exhausted. Anyway, it also means that the randomness is
+non-reproducible, a thing that we try to avoid in tests. This commit
+switches to a boring randomness source to avoid the blocking, and to
+keep the test reproducible.

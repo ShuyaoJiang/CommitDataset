@@ -1,0 +1,14 @@
+Fix AppendableCharSequence.subSequence(...) where start == end. (#8798)
+
+Motivation:
+
+To conform to the CharSequence interface we need to return an empty CharSequence when start == end index and a subSequence is requested.
+
+Modifications:
+
+- Correctly handle the case where start == end
+- Add unit test
+
+Result:
+
+Fix https://github.com/netty/netty/issues/8796.

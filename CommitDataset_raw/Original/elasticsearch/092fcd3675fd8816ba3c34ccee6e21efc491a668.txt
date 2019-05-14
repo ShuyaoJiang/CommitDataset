@@ -1,0 +1,9 @@
+Test: do not check cluster stats in audit qa project
+
+This commit wraps the TestCluster in one that does not check stats to prevent tripping an
+assertion for the accounting breaker as the index audit trail is running in the background and
+will affect the value of the breakers.
+
+See elastic/x-pack-elasticsearch#157
+
+Original commit: elastic/x-pack-elasticsearch@381ebbd413d78ea7a592dd6b4c4cd32feb1b6a89

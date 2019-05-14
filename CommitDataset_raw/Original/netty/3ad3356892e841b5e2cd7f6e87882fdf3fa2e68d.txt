@@ -1,0 +1,15 @@
+Expose ByteBufAllocator metric in a more general way
+
+Motivation:
+
+PR [#6460] added a way to access the used memory of an allocator. The used naming was not very good and how things were exposed are not consistent.
+
+Modifications:
+
+- Add a new ByteBufAllocatorMetric and ByteBufAllocatorMetricProvider interface
+- Let the ByteBufAllocator implementations implement ByteBufAllocatorMetricProvider
+- Move exposed stats / metric from PooledByteBufAllocator to PooledByteBufAllocatorMetric and mark old methods as `@Deprecated`.
+
+Result:
+
+More consistent way to expose metric / stats for ByteBufAllocator

@@ -1,0 +1,15 @@
+Changed CCR internal integration tests to use a leader and follower cluster instead of a single cluster (#34344)
+
+The `AutoFollowTests` needs to restart the clusters between each tests, because
+it is using auto follow stats in assertions. Auto follow stats are only reset
+by stopping the elected master node.
+
+Extracted the `testGetOperationsBasedOnGlobalSequenceId()` test to its own test, because it just tests the shard changes api.
+
+* Renamed AutoFollowTests to AutoFollowIT, because it is an integration test.
+Renamed ShardChangesIT to IndexFollowingIT, because shard changes it the name
+of an internal api and isn't a good name for an integration test.
+
+* move creation of NodeConfigurationSource to a seperate method
+
+* Fixes issues after merge, moved assertSeqNos() and assertSameDocIdsOnShards() methods from ESIntegTestCase to InternalTestCluster, so that ccr tests can use these methods too.

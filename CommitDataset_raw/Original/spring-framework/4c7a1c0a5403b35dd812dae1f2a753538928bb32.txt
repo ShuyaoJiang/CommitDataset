@@ -1,0 +1,23 @@
+Cache by-type lookups in DefaultListableBeanFactory
+
+Prior to this change, by-type lookups using DLBF#getBeanNamesForType
+required traversal of all bean definitions within the bean factory
+in order to inspect their bean class for assignability to the target
+type. These operations are comparatively expensive and when there are a
+large number of beans registered within the container coupled with a
+large number of by-type lookups at runtime, the performance impact can
+be severe. The test introduced here demonstrates such a scenario clearly.
+
+This performance problem is likely to manifest in large Spring-based
+applications using non-singleton beans, particularly request-scoped
+beans that may be created and wired many thousands of times per second.
+
+This commit introduces a simple ConcurrentHashMap-based caching strategy
+for by-type lookups; container-wide assignability checks happen only
+once on the first by-type lookup and are afterwards cached by type
+with the values in the map being an array of all bean names assignable
+to that type. This means that at runtime when creating and autowiring
+non-singleton beans, the cost of by-type lookups is reduced to that of
+ConcurrentHashMap#get.
+
+Issue: SPR-6870

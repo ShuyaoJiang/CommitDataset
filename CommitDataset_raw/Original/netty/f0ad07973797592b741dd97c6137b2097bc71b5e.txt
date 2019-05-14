@@ -1,0 +1,12 @@
+SCTP: Reduce object allocation overhead and fix receive buffer allocation
+
+There are a couple of changes here all related to making the SCTP
+transport less garbage-heavy:
+
+- Remove the SctpNotificationEvent and just passes along the JDK NIO
+  Notification, as passing the Notification and always null inside a
+  wrapped object seemed a little bit superfluous
+- Apply @trustin's changes to receive buffer allocation to SCTP
+  transport, and also makes the SCTP transport use the configured buffer
+  allocator rather than always creating a direct buffer (which seems
+  like a bug)

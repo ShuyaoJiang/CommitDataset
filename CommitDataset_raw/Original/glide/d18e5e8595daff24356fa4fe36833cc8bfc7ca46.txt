@@ -1,0 +1,24 @@
+Automated g4 rollback of changelist 209077692.
+
+*** Reason for rollback ***
+
+All requests still end up failing.
+
+*** Original change description ***
+
+Add back assertion on empty resource classes in ResourceCacheGenerator
+
+Currently we're failing to load some images that are present in cache
+due to a race condition. I haven't had any luck looking through the code
+to see why this happens. I suspect a race of some sort. I'm hoping that
+adding the exception back in with additional logging will help me move
+forward.
+
+I'm also hoping that this change avoids the worst of the behavior in the
+bug by failing only one request, rather than all requests....
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=210027336

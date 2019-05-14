@@ -1,0 +1,18 @@
+Re-enable ignored SecurityManager-related test
+
+Prior to this change, CallbacksSecurityTests#testContainerPrivileges was
+@Ignored because it caused the build to fail under Gradle. After some
+analysis, the root cause was determined to be the fact that (a) a
+restrictive SecurityManager is active during the running of this test,
+and (b), Gradle intercepts System.out and routes it through its internal
+LogBack-based logging system. LogBack requires a call to
+Class#getClassLoader when handling logging statements, and the
+SecurityManager disallows this call, thus raising the error that fails
+the build.
+
+This commit solves the problem by eliminating the System.out.println
+call in question and removing the @Ignore annotation from the test. The
+console output was diagnostic in nature anyway, and not required for the
+successful execution of the test's assertions.
+
+Issue: SPR-10074

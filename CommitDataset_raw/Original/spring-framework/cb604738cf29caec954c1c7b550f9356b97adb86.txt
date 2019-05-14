@@ -1,0 +1,12 @@
+ResourceWebHandler uses MediaTypeFactory directly
+
+There is no need for ResourceWebHandler to go through the
+PathExtensionContentTypeResolver when MediaTypeFactory makes it easy to
+perform such lookups for a given Resource.
+
+This does not support any extensions explicitly registered through a
+WebFluxConfigurer but it would be easy enough to pass those into
+ResourceWebHandler as a simple Map<String, MediaType>, should the need
+arise.
+
+Issue: SPR-15639

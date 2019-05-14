@@ -1,0 +1,12 @@
+Fix VerifyError for SpEL ternary compilation
+
+The ternary expression node was failing to generate the
+necessary unboxing bytecode when the condition part
+of the expression returned a boxed Boolean rather than
+a primitive boolean.
+
+Also fixed here is an IllegalAccessError that was
+seen in the same expression due to generating a
+CHECKCAST bytecode for a private type.
+
+Issue: SPR-12271

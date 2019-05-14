@@ -1,0 +1,15 @@
+Send only ops after checkpoint in file-based recovery with soft-deletes (#33190)
+
+Today a file-based recovery will replay all existing translog operations
+from the primary on a replica so that that replica can have a full
+history in translog as the primary. However, with soft-deletes enabled,
+we should not do it because:
+
+1. All operations before the local checkpoint of the safe commit exist in
+the commit already.
+
+2. The number of operations before the local checkpoint may be considerable
+and requires a significant amount of time to replay on a replica.
+
+Relates #30522
+Relates #29530

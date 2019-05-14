@@ -1,0 +1,32 @@
+Fix TokenBackwardsCompatibility tests (#39252)
+
+This change
+
+- Fixes TokenBackwardsCompatibilityIT: Existing tests seemed to made
+  the assumption that in the oneThirdUpgraded stage the master node
+  will be on the old version and in the twoThirdsUpgraded stage, the
+  master node will be one of the upgraded ones. However, there is no
+  guarantee that the master node in any of the states will or will
+  not be one of the upgraded ones.
+  This class now tests:
+  - That we can generate and consume tokens before we start the
+  rolling upgrade.
+  - That we can consume tokens generated in the old cluster during
+  all the stages of the rolling upgrade.
+  - That while on a mixed cluster, when/if the master node is
+  upgraded, we can generate, consume and refresh a token
+  - That after the rolling upgrade, we can consume a token
+  generated in an old cluster and can invalidate it so that it
+  can't be used any more.
+- Ensures that during the rolling upgrade, the upgraded nodes have
+the same configuration as the old nodes. Specifically that the
+file realm we use is explicitly named `file1`. This is needed
+because while attempting to refresh a token in a mixed cluster
+we might create a token hitting an old node and attempt to refresh
+it hitting a new node. If the file realm name is not the same, the
+refresh will be seen as being made by a "different" client, and
+will, thus, fail.
+- Renames the Authentication variable we check while refreshing a
+token to be clientAuth in order to make the code more readable.
+
+Some of the above were possibly causing the flakiness of #37379

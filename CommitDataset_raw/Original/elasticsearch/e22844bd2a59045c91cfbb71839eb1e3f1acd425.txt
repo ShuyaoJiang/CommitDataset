@@ -1,0 +1,13 @@
+Allow only a fixed-size receive predictor (#26165)
+
+With this commit we simplify our network layer by only allowing to define a
+fixed receive predictor size instead of a minimum and maximum value. This also
+means that the following (previously undocumented) settings are removed:
+
+* http.netty.receive_predictor_min
+* http.netty.receive_predictor_max
+
+Using an adaptive sizing policy in the receive predictor is a very low-level
+optimization. The implications on allocation behavior are extremely hard to grasp
+(see our previous work in #23185) and adaptive sizing does not provide a lot of
+benefits (see benchmarks in #26165 for more details).

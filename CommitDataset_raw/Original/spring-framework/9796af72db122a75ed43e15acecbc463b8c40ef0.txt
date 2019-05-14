@@ -1,0 +1,9 @@
+Improve JettySockJsIntegrationTests to show real error
+
+In a recent CI build failure a test timed out waiting for a message:
+https://build.spring.io/browse/SPR-PUB-1316
+
+In fact there was a WebSocket transport failure originating in Jetty's
+WebSocket Parser. However this failure is only apparent by looking at
+the logs. This change adds a check if a transport error ocurred while
+we were waiting and throws an AssertionError.

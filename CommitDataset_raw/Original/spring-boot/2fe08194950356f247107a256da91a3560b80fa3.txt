@@ -1,0 +1,16 @@
+Isolate multiple Undertow deployments
+
+Previously, UndertowEmbeddedServletContainerFactory always used
+Undertow’s default ServletContainer. This meant that if there were two
+UndertowEmbeddedServletContainers created, they would share the same
+ServletContainer and the second one that was created would overwrite
+the deployment for the first. This resulted in a async request
+handling failing as the attempt to look up the deployment for the
+first embedded Undertow instance would incorrectly find the deployment
+for the second.
+
+This commit fixes the problem by ensuring that each 
+UndertowEmbeddedServletContainerFactory uses a separate Undertow
+ServletContainer instance.
+
+Closes gh-4329

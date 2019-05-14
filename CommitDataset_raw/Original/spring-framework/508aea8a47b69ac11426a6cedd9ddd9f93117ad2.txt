@@ -1,0 +1,18 @@
+Rework implementation of PathPattern.extractPathWithinPattern
+
+This commit changes the implementation of the PathPattern
+extractPathWithinPattern method that used an old AntPathMatcher
+derivative to a new version that integrates more closely with
+PathContainer.
+
+It also introduces consistency in a couple of areas. The javadoc
+is updated to specify this but basically:
+- the response from the extra method will have all leading
+  and trailing separators removed.
+- the response will have multiple adjacent separators within the
+  reponse reduced to just one.  (For example response would be
+  aaa/bb/cc and not aaa///bbb//cc)
+If your response would start or finish with multiple separators, they
+are all removed.
+
+Issue: SPR-16120

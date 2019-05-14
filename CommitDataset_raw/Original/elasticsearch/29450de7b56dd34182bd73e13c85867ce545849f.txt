@@ -1,0 +1,18 @@
+Cross Cluster Search: make remote clusters optional (#27182)
+
+Today Cross Cluster Search requires at least one node in each remote cluster to be up once the cross cluster search is run. Otherwise the whole search request fails despite some of the data (either local and/or remote) is available. This happens when performing the _search/shards calls to find out which remote shards the query has to be executed on. This scenario is different from shard failures that may happen later on when the query is actually executed, in case e.g. remote shards are missing, which is not going to fail the whole request but rather yield partial results, and the _shards section in the response will indicate that.
+
+This commit introduces a boolean setting per cluster called search.remote.$cluster_alias.skip_if_disconnected, set to false by default, which allows to skip certain clusters if they are down when trying to reach them through a cross cluster search requests. By default all clusters are mandatory.
+
+Scroll requests support such setting too when they are first initiated (first search request with scroll parameter), but subsequent scroll rounds (_search/scroll endpoint) will fail if some of the remote clusters went down meanwhile.
+
+The search API response contains now a new _clusters section, similar to the _shards section, that gets returned whenever one or more clusters were disconnected and got skipped:
+
+"_clusters" : {
+    "total" : 3,
+    "successful" : 2,
+    "skipped" : 1
+}
+Such section won't be part of the response if no clusters have been skipped.
+
+The per cluster skip_unavailable setting value has also been added to the output of the remote/info API.

@@ -1,0 +1,13 @@
+Provide an alternative to `spring.activemq.pool.configuration`
+
+This commit expands the support of PooledConnectionFactory so that
+binding the third party object is no longer necessary. All 3rd party
+properties are now deprecated in favour of our explicit support.
+
+The main reason behind this change is that a `connection-factory` and
+`properties` property were exposed. The former is used to set the
+`ConnectionFactory` and makes no sense as a key. The latter is
+rebuilding the underlying `ActiveMQConnectionFactory` at each call
+without reusing any existing settings.
+
+Closes gh-9837

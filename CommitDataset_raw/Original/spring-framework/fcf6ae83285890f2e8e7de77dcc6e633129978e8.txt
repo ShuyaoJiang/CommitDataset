@@ -1,0 +1,14 @@
+Fix concurrency issues in SockJS session impls
+
+This change ensures the server "WebSocketHandler" is notified of the
+opening of a session before writing the open frame to the remote
+handler. Any messages sent by the server "WebSocketHandler" while
+getting notified of the opening get cached and flushed after the open
+frame has been written.
+
+This change introduces locking in AbtractHttpSockJsSession to guard
+access to the HTTP response. The goal is to prevent contention between
+client requests to receive messages (i.e. long polling) and
+the application trying to write.
+
+Issue: SPR-11916

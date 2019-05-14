@@ -1,0 +1,13 @@
+Work around JDK7 String#substring performance regression
+
+String#substring has become significantly slower as of JDK 1.7.0_06 [1],
+such that there are performance degradations by a factor of 100-1000 in
+ResourceDatabasePopulator, especially for large SQL files.
+
+This commit works around this problem by minimizing the substring scope
+to the least amount possible to prevent unnecessary internal copying of
+strings (which seems to cause the issue).
+
+[1]: http://mail.openjdk.java.net/pipermail/core-libs-dev/2012-May/010257.html
+
+Issue: SPR-9781

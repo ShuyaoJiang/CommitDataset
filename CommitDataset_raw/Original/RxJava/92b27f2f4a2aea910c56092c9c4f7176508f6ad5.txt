@@ -1,0 +1,9 @@
+RxJavaPlugins performance enabling fix & lockdown.
+
+By using null checks and direct returns we can avoid a dynamic dispatch
+on a volatile variable which always more expensive.
+
+I've also added the `lockdown()` method to prevent any further changing
+of the plugin handlers. There is a `unlock` package-private method to
+allow testing the plugin in the locked state and then return to the
+unlocked state as other tests may want to install custom plugins.

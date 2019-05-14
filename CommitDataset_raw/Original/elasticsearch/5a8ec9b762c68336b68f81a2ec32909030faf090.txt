@@ -1,0 +1,14 @@
+Selectors operate on channel contexts (#28468)
+
+This commit is related to #27260. Currently there is a weird
+relationship between channel contexts and nio channels. The selectors
+use the context for read and writing. But the selector operates directly
+on the nio channel for registering, closing, and connecting.
+
+This commit works on improving this relationship. The selector operates
+directly on the context which wraps the low level java.nio.channels. The
+NioChannel class is simply an API that is used to interact with the
+channel (sending messages from outside the selector event loop,
+scheduling a close, adding listeners, etc). The context is only used
+internally by the channel to implement these apis and by the selector to
+perform these operations.

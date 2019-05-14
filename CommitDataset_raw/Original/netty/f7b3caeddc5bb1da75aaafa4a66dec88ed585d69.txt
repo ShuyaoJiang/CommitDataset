@@ -1,0 +1,15 @@
+OpenSslEngine option to wrap/unwrap multiple packets per call
+
+Motivation:
+The JDK SSLEngine documentation says that a call to wrap/unwrap "will attempt to consume one complete SSL/TLS network packet" [1]. This limitation can result in thrashing in the pipeline to decode and encode data that may be spread amongst multiple SSL/TLS network packets.
+ReferenceCountedOpenSslEngine also does not correct account for the overhead introduced by each individual SSL_write call if there are multiple ByteBuffers passed to the wrap() method.
+
+Modifications:
+- OpenSslEngine and SslHandler supports a mode to not comply with the limitation to only deal with a single SSL/TLS network packet per call
+- ReferenceCountedOpenSslEngine correctly accounts for the overhead of each call to SSL_write
+- SslHandler shouldn't cache maxPacketBufferSize as aggressively because this value may change before/after the handshake.
+
+Result:
+OpenSslEngine and SslHanadler can handle multiple SSL/TLS network packet per call.
+
+[1] https://docs.oracle.com/javase/7/docs/api/javax/net/ssl/SSLEngine.html

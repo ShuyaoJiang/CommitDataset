@@ -1,0 +1,9 @@
+Validate a joining node's version with version of existing cluster nodes (#25808)
+
+When a node tries to join a cluster, it goes through a validation step to make sure the node is compatible with the cluster. Currently we validation that the node can read the cluster state and that it is compatible with the indexes of the cluster. This PR adds validation that the joining node's version is compatible with the versions of existing nodes. Concretely we check that:
+
+1) The node's min compatible version is higher or equal to any node in the cluster (this prevents a too-new node from joining)
+2) The node's version is higher or equal to the min compat version of all cluster nodes (this prevents a too old join where, for example, the master is on 5.6, there's another 6.0 node in the cluster and a 5.4 node tries to join).
+3) The node's major version is at least as higher as the lowest node in the cluster. This is important as we use the minimum version in the cluster to stop executing bwc code for operations that require multiple nodes. If the nodes are already operating in "new cluster mode", we should prevent nodes from the previous major to join (even if they are wire level compatible). This does mean that if you have a very unlucky partition during the upgrade which partitions all old nodes which are also a minority / data nodes only, the may not be able to re-join the cluster. We feel this edge case risk is well worth the simplification it brings to BWC layers only going one way. This restriction only holds if the cluster state has been recovered (i.e., the cluster has properly formed).
+
+ Also, the node join validation can now selectively fail specific nodes (previously the entire batch was failed). This is an important preparation for a follow up PR where we plan to have a rejected joining node die with dignity.

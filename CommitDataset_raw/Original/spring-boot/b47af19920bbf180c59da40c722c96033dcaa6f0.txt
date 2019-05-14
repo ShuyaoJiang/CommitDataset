@@ -1,0 +1,10 @@
+Stop file watcher as soon as a change is detected
+
+The FileWatcher sometimes generates multiple events for a single change
+and if there is a slow shutdown hook the second one can come in before
+the context is closed, leaving it in a tricky state. This change
+attempts to stop the file watcher as soon as it detects a change
+(the stop() method is called in the listener, which normally happens in
+the same thread as the scan).
+
+Fixes gh-3097

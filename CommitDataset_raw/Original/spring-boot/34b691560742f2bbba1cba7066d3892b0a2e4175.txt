@@ -1,0 +1,30 @@
+Consider meta-annotations when creating an AnnotationsPropertySource
+
+Previously, meta-annotations were not considered when looking for
+annotations that may have property mappings but were considered when
+looking for a `@PropertyMapping` annotation. This led to three
+problems:
+
+1. Properties that should have been included in the property source
+   were not included
+2. Properties that were included may have had the wrong name
+3. Properties were included when they should not have been
+
+`@DataJpaTests` provided a concrete example of all three problems:
+
+1. The `replace` and `connection` attributes from
+   `@AutoConfigureTestDatabase` were not included in the property
+   source
+2. The `showSql` attribute from `@DataJpaTest` was mapped as
+   `spring.test.database.spring.jpa.show-sql`
+3. The `useDefaultFilters` attribute from `@DataJpaTest` was included
+   in the property source.
+
+This commit updates AnnotationsPropertySource to consider
+meta-annotations when looking for attributes that should be mapped.
+This addresses the first problem. Furthermore,
+AnnotationsPropertySource has been updated to no longer consider
+meta-annotations when looking for a type-level property mapping.
+This addresses the second and third problems.
+
+Closes gh-5794

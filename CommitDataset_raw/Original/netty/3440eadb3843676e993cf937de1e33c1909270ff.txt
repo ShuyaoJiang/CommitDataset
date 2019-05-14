@@ -1,0 +1,15 @@
+Http2ConnectionHandler should propagate channelActive and channelInactive events.
+
+Motivation:
+
+The Http2ConnectionHandler incorrectly doesn't propagate channelActive and channelInactive events and thus breaks the pipeline
+for other ChannelHandler.
+
+Modification:
+
+- Add calls to super.channelActive() and super.channelInactive().
+- Remove unused methods.
+
+Result:
+
+- Http2ConnectionHandler can be used with other ChannelHandlers.

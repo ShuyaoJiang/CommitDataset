@@ -1,0 +1,9 @@
+Use a single <manifestEntries> element
+
+Previously, there were two <manifestEntries> elements in the CLI's
+pom.xml. With certain versions of Maven, this appeared to cause the
+first element to be ignored in favour of the second. The problem did
+not occur when built locally with Maven 3.1.1, but did occur when built
+by Bamboo which, I believe, uses 3.0.x
+
+This commit combines the two <manifestEntries> into one.

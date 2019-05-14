@@ -1,0 +1,33 @@
+HUC regression test: disconnect in the middle of connecting.
+
+Prior to commit 084b06b48bae2b566bb1be3415b6c847d8ea3682 (OkHttp 3.4.0),
+a HttpURLConnection.disconnect() in the middle of connecting caused an
+infinite loop. HUC does not claim to be thread safe, but concurrent
+disconnect should generally be supported (it is supported by HttpEngine)
+and this bug occurred even when the disconnect() happened in the same
+thread, e.g. through the CookieJar.
+
+The infinite loop prior to that CL occurred because
+ - The loop in HttpURLConnectionImpl.java:418 did not check for the
+   disconnected state,
+ - {StreamAllocation,RetryAndFollowUpInterceptor}.recover() returns
+   true for canceled StreamAllocations/calls, but
+   StreamAllocation.newStream() immediately fails if already canceled.
+
+This bug was specific to HUC and did not affect the Call API because
+RetryAndFollowUpInterceptor's (and, in earlier OkHttp versions,
+Call.getResponse()'s) infinite loop did check the canceled case
+before proceeding.
+
+The bug existed since at least OkHttp 2.7.5, likely introduced by
+commit c358656c8799d30fd422448153e99a5dd37e298a (OkHttp 2.7.0).
+
+The new test asserts that a disconnect() while constructing the
+cookie headers leads to the new connection being aborted. It would
+also be permissible for the connection to succeed (as long as it
+doesn't deadlock like it used to), but the stricter test seems
+reasonable to ensure that any behavior change is deliberate.
+A disconnect() while accessing the Cache FileSystem has the same
+effect, but this is not covered by the added test because a
+new FileSystem wrapper class that delegates all calls would
+create code maintenance overhead.

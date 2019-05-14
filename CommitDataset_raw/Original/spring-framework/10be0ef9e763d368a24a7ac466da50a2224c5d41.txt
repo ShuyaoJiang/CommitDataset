@@ -1,0 +1,13 @@
+Clarify BeanFactory#containsBean Javadoc
+
+Previously, #containsBean Javadoc advertised that a true return value
+indicates that a call to #getBean for the same name would succeed.
+
+This is actually not the case, and has never been.  The semantics
+of #containsBean have always been to indicate whether a bean definition
+with the given name is definied or a singleton instance with the given
+name has been registered.
+
+The Javadoc now reflects this accurately.
+
+Issue: SPR-8690

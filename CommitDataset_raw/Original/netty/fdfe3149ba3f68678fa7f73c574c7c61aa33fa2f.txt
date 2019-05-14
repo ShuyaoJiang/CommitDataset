@@ -1,0 +1,50 @@
+Provide more control over DnsNameResolver.query() / Add NameResolver.resolveAll()
+
+Related issues:
+- #3971
+- #3973
+- #3976
+- #4035
+
+Motivation:
+
+1. Previously, DnsNameResolver.query() retried the request query by its
+own. It prevents a user from deciding when to retry or stop. It is also
+impossible to get the response object whose code is not NOERROR.
+
+2. NameResolver does not have an operation that resolves a host name
+into multiple addresses, like InetAddress.getAllByName()
+
+Modifications:
+
+- Changes related with DnsNameResolver.query()
+  - Make query() not retry
+    - Move the retry logic to DnsNameResolver.resolve() instead.
+  - Make query() fail the promise only when I/O error occurred or it
+    failed to get a response
+  - Add DnsNameResolverException and use it when query() fails so that
+    the resolver can give more information about the failure
+  - query() does not cache anymore.
+
+- Changes related with NameResolver.resolveAll()
+  - Add NameResolver.resolveAll()
+  - Add SimpleNameResolver.doResolveAll()
+
+- Changes related with DnsNameResolver.resolve() and resolveAll()
+  - Make DnsNameResolveContext abstract so that DnsNameResolver can
+    decide to get single or multiple addresses from it
+  - Re-implement cache so that the cache works for resolve() and
+    resolveAll()
+  - Add 'traceEnabled' property to enable/disable trace information
+
+- Miscellaneous changes
+  - Use ObjectUtil.checkNotNull() wherever possible
+  - Add InternetProtocolFamily.addressType() to remove repetitive
+    switch-case blocks in DnsNameResolver(Context)
+  - Do not raise an exception when decoding a truncated DNS response
+
+Result:
+
+- Full control over query()
+- A user can now retrieve all addresses via (Dns)NameResolver.resolveAll()
+- DNS cache works only for resolve() and resolveAll() now.

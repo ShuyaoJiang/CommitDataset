@@ -1,0 +1,17 @@
+Support ALLOW_HALF_CLOSURE channel option on Unix domain socket. (#8932)
+
+Motivation:
+
+Since DomainSocketChannel is a DuplexChannel,  which be able to shutdown input or output individually on demands, but ALLOW_HALF_CLOSURE channel option has not been supported yet.
+
+I thought this could be a missing feature of Unix domain socket, so here the PR for it.
+
+Modifications:
+
+1. Added allHalfClosure property both in  EpollDomainSocketChannelConfig and KQueueDomainSocketChannelConfig,
+2. Enabled isAllowHalfClosure method of native channel to support domain channel config,
+3. Created EpollDomainSocketShutdownOutputByPeerTest and KQueueDomainSocketShutdownOutputByPeerTest to verify the change.
+
+Result:
+
+ALLOW_HALF_CLOSURE channel option can be set with DomainSocketChannel, and no more warning of Unknown channel option 'ALLOW_HALF_CLOSURE'.

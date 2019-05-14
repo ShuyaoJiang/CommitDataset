@@ -1,0 +1,10 @@
+ObjectCleaner should continue cleaning despite exceptions
+
+Motivation:
+ObjectCleaner inovkes a Runnable which may execute user code (FastThreadLocal#onRemoval) and therefore exceptions maybe thrown. If an exception is thrown the cleanup thread will exit prematurely and we may never finish cleaning up which will result in leaks.
+
+Modifications:
+- ObjectCleaner should suppress exceptions and continue cleaning
+
+Result:
+ObjectCleaner will reliably clean despite exceptions being thrown.

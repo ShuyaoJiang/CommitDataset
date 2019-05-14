@@ -1,0 +1,17 @@
+DefaultChannelPipeline will not invoke handler if events are fired from handlerAdded
+
+Motiviation:
+DefaultChannelPipeline and AbstractChannelHandlerContext maintain state
+which indicates if a ChannelHandler should be invoked or not. However
+the state is updated to allow the handler to be invoked only after the
+handlerAdded method completes. If the handlerAdded method generates
+events which may result in other methods being invoked on that handler
+they will be missed.
+
+Modifications:
+- DefaultChannelPipeline should set the state before calling
+handlerAdded
+
+Result:
+DefaultChannelPipeline will allow events to be processed during the
+handlerAdded process.

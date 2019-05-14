@@ -1,0 +1,5 @@
+Fix check that would always be false (#6045)
+
+Checking `BlockingSubscriber.TERMINATED` (`new Object()`) against `o` would always be false since `o` is a publisher. Since `v` comes from the queue this is presumably the variable that should be checked.
+
+However the check might even be redundant with this change since that variable can only appear in the queue after the subscriber has been cancelled. I am not familiar enough with the memory model to say whether the object appearing in the queue implies the cancelled subscriber is visible.

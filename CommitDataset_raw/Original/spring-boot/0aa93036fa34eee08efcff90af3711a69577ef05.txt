@@ -1,0 +1,9 @@
+Fix secure method configuration global authentication
+
+This fixes a bug in the sample, where the AuthenticationManager it builds
+is a local one for the filter chain containing "/login", whereas it was
+expecting to override the Boot default, which is "global". The fix is
+to extract the authentication configuration out into a
+GlobalAuthenticationConfigurerAdapter.
+
+Fixes gh-699

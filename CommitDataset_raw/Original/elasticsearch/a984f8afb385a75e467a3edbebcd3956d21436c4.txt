@@ -1,0 +1,16 @@
+[CCR] Validate index privileges prior to following an index (#33758)
+
+Prior to following an index in the follow API, check whether current
+user has sufficient privileges in the leader cluster to read and
+monitor the leader index.
+
+Also check this in the create and follow API prior to creating the
+follow index.
+
+Also introduced READ_CCR cluster privilege that include the minimal
+cluster level actions that are required for ccr in the leader cluster.
+So a user can follow indices in a cluster, but not use the ccr admin APIs.
+
+Closes #33553
+
+Co-authored-by: Jason Tedor <jason@tedor.me>

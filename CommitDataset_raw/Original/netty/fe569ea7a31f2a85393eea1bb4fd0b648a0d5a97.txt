@@ -1,0 +1,13 @@
+Fix for a newly intrduced bug in #5377
+
+Motivation
+
+This bug was introduced with #5377 and affects only users who'd like to share/cache/re-use `PemPrivateKey` and `PemX509Certificate` instances.
+
+Modifications
+
+Use `ByteBuf#writeBytes(src, readerIndex, length)` so that the src's readerIndex doesn't change and can consequently be used more than once.
+
+Result
+
+It's possible to share/cache/re-use `PemPrivateKey` and `PemX509Certificate` instances as long as their refCnt remains >= 1.

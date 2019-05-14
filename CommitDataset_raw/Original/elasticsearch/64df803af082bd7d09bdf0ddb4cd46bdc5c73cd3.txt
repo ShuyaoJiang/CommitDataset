@@ -1,0 +1,12 @@
+Add a java level freeze/unfreeze API (#35353)
+
+This change adds a high level freeze API that allows to mark an
+index as frozen and vice versa. Indices must be closed in order to
+become frozen and an open but frozen index must be closed to be
+defrosted. This change also adds a index.frozen setting to
+mark frozen indices and integrates the frozen engine with the
+SearchOperationListener that resets and releases the directory
+reader after and before search phases.
+
+Relates to #34352
+Depends on #34357

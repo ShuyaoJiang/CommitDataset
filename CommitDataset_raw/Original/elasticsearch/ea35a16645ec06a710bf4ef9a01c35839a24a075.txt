@@ -1,0 +1,11 @@
+Create default ES_TMPDIR on Windows (#30325)
+
+If the elasticsearch-env bash script chooses $ES_TMPDIR
+then it also creates the directory.  This change makes
+elasticsearch-env.bat do the same thing: if %ES_TMPDIR%
+is chosen by the script then the script will ensure it
+exists, but if %ES_TMPDIR% is already set then the user
+is responsible for creating it.
+
+Relates #27609
+Relates #28217

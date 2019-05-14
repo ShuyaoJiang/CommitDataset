@@ -1,0 +1,13 @@
+Enable per origin Cors configuration (#7800)
+
+Motivation:
+
+Finer granularity when configuring CorsHandler, enabling different policies for different origins.
+
+Modifications:
+
+The CorsHandler has an extra constructor that accepts a List<CorsConfig> that are evaluated sequentially when processing a Cors request
+
+Result:
+
+The changes don't break backwards compatibility. The extra ctor can be used to provide more than one CorsConfig object.

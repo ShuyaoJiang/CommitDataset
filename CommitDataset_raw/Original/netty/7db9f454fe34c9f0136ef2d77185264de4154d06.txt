@@ -1,0 +1,14 @@
+Fix decoding null bulk string of RedisDecoder
+
+Motivation:
+
+- `RedisBulkStringAggregator` raises errors for multiple null bulk strings.
+- Null or empty bulk string has no content, but current `RedisDecoder` generates header and contents.
+
+Modifications:
+
+- Fix decoding null bulk string of `RedisDecoder` for `RedisBulkStringAggregator`.
+
+Result:
+
+- Fixes #5184.

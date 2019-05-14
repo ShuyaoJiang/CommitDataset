@@ -1,0 +1,11 @@
+ByteBufUtilTest bug
+
+Motivation:
+The logic in ByteBufUtilTest.ByteBufUtilTest is wrong. It is attempting to ensure at least 1 byte is different in the ranges that will be subsequently compared, but does so before the copy operation.
+
+Modifications:
+- Move the code which ensures there is a difference to after the copy
+- Simplify the logic which ensures there is a difference
+
+Result:
+Unit test now operates as designed.

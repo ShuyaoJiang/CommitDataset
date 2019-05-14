@@ -1,0 +1,10 @@
+OpenSslEngine encrypt more data per wrap call
+
+Motivation:
+OpenSslEngine.wrap will only encrypt at most 1 buffer per call. We may be able to encrypt multiple buffers per call.
+
+Modifications:
+- OpensslEngine.wrap should continue encrypting data until there is an error, no more data, or until the destination buffer would be overflowed.
+
+Result:
+More encryption is done per OpenSslEngine.wrap call

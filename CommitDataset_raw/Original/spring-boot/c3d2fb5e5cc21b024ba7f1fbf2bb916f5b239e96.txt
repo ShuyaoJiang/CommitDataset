@@ -1,0 +1,16 @@
+Document details of configuring Gradle to produce valid poms
+
+If a Gradle build is using the Spring Boot Gradle plugin's support for
+declaring dependencies without versions then they will be unable to
+publish Maven artifacts from the build as the Gradle-generated pom
+will fail to validate. This is because Gradle doesn't apply the
+Boot-provided dependency versions to the dependencies in the generated
+pom.
+
+This can be addressed by configuring Gradle to generate a pom that
+either imports spring-boot-dependencies into its dependency management
+or that uses spring-boot-starter-parent as its parent. This commit
+updates the documentation to document the need for this configuration
+and to provide examples of how to do so.
+
+Closes gh-1806

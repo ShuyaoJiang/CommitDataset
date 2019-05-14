@@ -1,0 +1,10 @@
+Watcher: Ignore deactivated state with execute watch API (elastic/x-pack-elasticsearch#4054)
+
+If a watch is not active, it should still be executed, if it is called
+via the execute watch API.
+
+This commit adds an additional method to the execution context to check
+for this, which returns true for a manual execution context but checks
+the watch status for the triggered one.
+
+Original commit: elastic/x-pack-elasticsearch@18f3f9e84b79dd9045c01c38bb0ef325f7158635

@@ -1,0 +1,16 @@
+UnixResolverDnsServerAddressStreamProvider default name server selection and ordering bug
+
+Motivation:
+UnixResolverDnsServerAddressStreamProvider allows the default name server address stream to be null, but there should always be a default stream to fall back to ([1] Search Strategy).
+UnixResolverDnsServerAddressStreamProvider currently shuffles the names servers are multiple are present, but the defined behavior is to try them sequentially [2].
+
+[1] Search Strategy Section - https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/resolver.5.html
+[2] DESCRIPTION/nameserver Section - https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/resolver.5.html
+
+Modifications:
+- UnixResolverDnsServerAddressStreamProvider should always use the first file provided to derive the default domain server address stream. Currently if there are multiple domain names in the file identified by the first argument of the constructor then one will be selected at random.
+- UnixResolverDnsServerAddressStreamProvider should return name servers sequentially.
+- Reduce access level on some methods which don't have known use-cases externally.
+
+Result:
+Fixes https://github.com/netty/netty/issues/6736

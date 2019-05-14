@@ -1,0 +1,10 @@
+[ML] Interrupt Grok in file structure finder timeout (#36588)
+
+The file structure finder has timeout functionality,
+but prior to this change it would not interrupt a
+single long-running Grok match attempt.
+
+This commit hooks into the ThreadWatchdog facility
+provided by the Grok library to interrupt individual
+Grok matches that may be running at the time the
+file structure finder timeout expires.

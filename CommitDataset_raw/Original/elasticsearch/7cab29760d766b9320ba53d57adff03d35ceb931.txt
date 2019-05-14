@@ -1,0 +1,42 @@
+SQL: Introduce PreAnalyze phase to resolve catalogs async (elastic/x-pack-elasticsearch#2962)
+
+SQL: Introduce PreAnalyze phase to resolve catalogs async
+
+The new preanalyze phase collects all unresolved relations and tries
+to resolve them as indices through typical async calls _before_ starting the analysis process.
+The result is loaded into a catalog which is then passed to the analyzer.
+While at it, the analyzer was made singleton and state across the engine
+is done through SqlSession#currentContext().
+
+
+Commit missing fix
+Fix typo
+Fix license
+Fix line length
+remove redundant static modifier
+Remove redundant generics type
+Rename catalogResolver instance member to indexResolver
+Fix translate action to return a response through the listener, it hangs otherwise
+IndexResolver improvements
+
+Make sure that get index requests calls are locally executed by providing local flag.
+Don't replace index/alias name with concrete index name in asCatalog response conversion. We need to preserve the original alias name for security, so it is reused in the subsequent search.
+Update roles and actions names for security tests
+Get index is now executed instead of sql get indices, and sql get indices has been removed.
+Also made cluster privileges more restrictive to make sure that cluster state calls are no longer executed.
+Fix most of the security IT tests
+indices options are now unified, always lenient. The only situation where we get authorization exception back is when the user is not authorized for the sql action (besides for which indices).
+Improve SessionContext handling
+Fix context being invalid in non-executable phases
+Make Explain & Debug command fully async
+Resolve checkstyle error about redundant modifiers
+Temporarily restore SqlGetIndicesAction
+
+SqlGetIndicesAction action is still needed in RestSqlJdbcAction (metaTable and metaColumn methods), where we can't at the moment call IndexResolver directly, as security (FLS) needs index resolver to be called as part of the execution of an indices action. Once mappings are returned filtered, delayed action and the security filter will go away, as well as SqlGetIndicesAction.
+SqlGetIndicesAction doesn't need to be a delayed action, my bad
+
+[TEST] remove unused expectSqlWithAsyncLookup and rename expectSqlWithSyncLookup to expectSqlCompositeAction
+Polish and feedback
+Add unit test for PreAnalyzer
+
+Original commit: elastic/x-pack-elasticsearch@57846ed613bde8ce1fc780cf1d9d29aca3caad20

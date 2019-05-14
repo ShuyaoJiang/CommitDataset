@@ -1,0 +1,8 @@
+[LDAP] Support explicit "dn" attribute in group search (elastic/x-pack-elasticsearch#1995)
+
+The default for group_search.attribute is to search by DN, but explicitly setting that to dn
+wouldn't work because the DN is returned in a special value in the result, and not in the attributes list.
+
+This change detects when user_attribute is set to dn and treats it the same way as the default value.
+
+Original commit: elastic/x-pack-elasticsearch@1933410a0bd0587333d160416113e2c716c4a3b5

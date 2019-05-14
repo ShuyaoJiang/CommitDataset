@@ -1,0 +1,13 @@
+Only try to obtain SO_LINGER on close if fd is still open.
+
+Motivation:
+
+When try to get SO_LINGER from a fd that is closed an Exception is thrown. We should only try to get SO_LINGER if the fd is still open otherwise an Exception is thrown that can be ignored anyway.
+
+Modifications:
+
+First check if the fd is still open before try to obtain SO_LINGER setting when get the closeExecutor. This is also the same that we do in the NIO transport.
+
+Result:
+
+No more exception when calling unsafe.close() on a channel that has a closed file descriptor.

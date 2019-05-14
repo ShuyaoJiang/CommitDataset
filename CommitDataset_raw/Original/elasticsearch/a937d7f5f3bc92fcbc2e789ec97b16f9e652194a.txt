@@ -1,0 +1,35 @@
+[CCR] Forgot missing return statement,
+
+Error was thrown if leader index had no soft deletes enabled, but it then continued creating the follower index.
+
+The test caught this bug, but very rarely due to timing issue.
+
+Build failure instance:
+
+```
+1> [2018-11-05T20:29:38,597][INFO ][o.e.x.c.LocalIndexFollowingIT] [testDoNotCreateFollowerIfLeaderDoesNotHaveSoftDeletes] before test
+  1> [2018-11-05T20:29:38,599][INFO ][o.e.c.s.ClusterSettings  ] [node_s_0] updating [cluster.remote.local.seeds] from [[]] to [["127.0.0.1:9300"]]
+  1> [2018-11-05T20:29:38,599][INFO ][o.e.c.s.ClusterSettings  ] [node_s_0] updating [cluster.remote.local.seeds] from [[]] to [["127.0.0.1:9300"]]
+  1> [2018-11-05T20:29:38,609][INFO ][o.e.c.m.MetaDataCreateIndexService] [node_s_0] [leader-index] creating index, cause [api], templates [random-soft-deletes-templat
+e, one_shard_index_template], shards [2]/[0], mappings []
+  1> [2018-11-05T20:29:38,628][INFO ][o.e.c.r.a.AllocationService] [node_s_0] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[leader-
+index][0]] ...]).
+  1> [2018-11-05T20:29:38,660][INFO ][o.e.x.c.a.TransportPutFollowAction] [node_s_0] [follower-index] creating index, cause [ccr_create_and_follow], shards [2]/[0]
+  1> [2018-11-05T20:29:38,675][INFO ][o.e.c.s.ClusterSettings  ] [node_s_0] updating [cluster.remote.local.seeds] from [["127.0.0.1:9300"]] to [[]]
+  1> [2018-11-05T20:29:38,676][INFO ][o.e.c.s.ClusterSettings  ] [node_s_0] updating [cluster.remote.local.seeds] from [["127.0.0.1:9300"]] to [[]]
+  1> [2018-11-05T20:29:38,678][INFO ][o.e.x.c.LocalIndexFollowingIT] [testDoNotCreateFollowerIfLeaderDoesNotHaveSoftDeletes] after test
+  1> [2018-11-05T20:29:38,678][INFO ][o.e.x.c.LocalIndexFollowingIT] [testDoNotCreateFollowerIfLeaderDoesNotHaveSoftDeletes] [LocalIndexFollowingIT#testDoNotCreateFoll
+owerIfLeaderDoesNotHaveSoftDeletes]: cleaning up after test
+  1> [2018-11-05T20:29:38,678][INFO ][o.e.c.m.MetaDataDeleteIndexService] [node_s_0] [follower-index/TlWlXp0JSVasju2Kr_hksQ] deleting index
+  1> [2018-11-05T20:29:38,678][INFO ][o.e.c.m.MetaDataDeleteIndexService] [node_s_0] [leader-index/FQ6EwIWcRAKD8qvOg2eS8g] deleting index
+FAILURE 0.23s J0 | LocalIndexFollowingIT.testDoNotCreateFollowerIfLeaderDoesNotHaveSoftDeletes <<< FAILURES!
+   > Throwable #1: java.lang.AssertionError:
+   > Expected: <false>
+   >      but: was <true>
+   >    at __randomizedtesting.SeedInfo.seed([7A3C89DA3BCA17DD:65C26CBF6FEF0B39]:0)
+   >    at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+   >    at org.elasticsearch.xpack.ccr.LocalIndexFollowingIT.testDoNotCreateFollowerIfLeaderDoesNotHaveSoftDeletes(LocalIndexFollowingIT.java:83)
+   >    at java.lang.Thread.run(Thread.java:748)
+```
+
+Build failure: https://elasticsearch-ci.elastic.co/job/elastic+elasticsearch+6.5+intake/46/console

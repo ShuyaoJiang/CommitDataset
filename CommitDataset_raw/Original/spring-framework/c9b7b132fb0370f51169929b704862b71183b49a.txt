@@ -1,0 +1,14 @@
+Support generic types in @RequestBody arguments
+
+This change makes it possible to declare an @RequestBody argument with
+a generic type (e.g. List<Foo>). If a GenericHttpMessageConverter
+implementation supports the method argument, then the request will be
+converted to the apropiate target type.
+
+The new GenericHttpMessageConverter is implemented by the
+MappingJacksonHttpMessageConverter and also by a new
+Jaxb2CollectionHttpMessageConverter that can read read a generic
+Collection where the generic type is a JAXB type annotated with
+@XmlRootElement or @XmlType.
+
+Issue: SPR-9570

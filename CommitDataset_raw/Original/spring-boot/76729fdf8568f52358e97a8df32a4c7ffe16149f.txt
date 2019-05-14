@@ -1,0 +1,11 @@
+Propagate RelaxedConversionService
+
+Prior to this commit, the internal BeanWrapper used by the
+RelaxedDataBinder was not using any conversion service at all. This
+commit makes sure to propagate the one that has been configured
+internally.
+
+Also a dummy call to a [foo] key seems to have been left and has
+been removed. This allows to support Enum as map key.
+
+Fixes gh-1242

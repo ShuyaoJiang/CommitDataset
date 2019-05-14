@@ -1,0 +1,21 @@
+Don't omit default values when updating routing exclusions (#33638)
+
+Exclusion setting `cluster.routing.allocation.exclude._host` default value
+is an empty string.
+
+When an exclusion setting is sent with a null value the
+o.e.c.s.Setting#innerGetRaw API return an empty string (probably to
+avoid a NullPointerException to be raised).
+
+The o.e.c.r.a.d.FilterAllocationDecider class is developed to omit
+updates of default values for exclusion setting.
+
+That's why a null exclusion setting value is translated to an empty
+string which is equals to the exclusion default value which is
+configured to be ignored.
+
+A simple fix would be to not omit default values for exclusion setting
+and keep the NullPointerException guard. This is the purpose of this
+commit.
+
+Closes #32721

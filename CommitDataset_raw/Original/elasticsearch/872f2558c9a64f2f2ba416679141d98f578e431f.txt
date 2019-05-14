@@ -1,0 +1,13 @@
+Halt OpenLDAP fixture (elastic/x-pack-elasticsearch#2929)
+
+Halt OpenLDAP fixture after :x-pack-elasticsearch:qa:openldap-tests:test
+
+Currently the OpenLDAP vagrant fixture is not halted.
+Reruning the test will fail because the new fixture instance will try to bind to
+the same host ports. Project :x-pack-elasticsearch:qa:openldap-tests:test is
+the only one using the OpenLDAP fixture from
+:x-pack-elasticsearch:test:openldap-fixture.
+
+relates elastic/x-pack-elasticsearch#2619
+
+Original commit: elastic/x-pack-elasticsearch@bea2f81b76d735db6c76d05bf59568bb05fa84be

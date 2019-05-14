@@ -1,0 +1,21 @@
+Get node ID from nodes info in REST tests (#40052)
+
+* Get master identity from nodes info in REST tests
+
+We discussed recently that the cluster state API should be considered
+"internal" and therefore our usual cast-iron stability guarantees do not hold
+for this API.
+
+However, there are a good number of REST tests that need to identify the master
+node. Today they call `GET /_cluster/state` API and extract the master node ID
+from the response. An alternative that avoids the unstable cluster state API is
+to call `GET _nodes/_master`: the master node ID is the unique key in the
+`nodes` map in the response.
+
+This change adds the ability for YAML-based REST tests to extract the unique
+key of a singleton map so that they can obtain the master node ID from the
+nodes info API instead of the cluster state API.
+
+* Allow access to an arbitrary node ID and adjust all YAML tests to use this
+
+* Warnings

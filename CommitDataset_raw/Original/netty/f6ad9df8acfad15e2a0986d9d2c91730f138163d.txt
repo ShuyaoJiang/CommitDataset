@@ -1,0 +1,11 @@
+DefaultPromise StackOverflowError protection updates
+
+Modifications:
+DefaultPromise provides a ThreadLocal queue to protect against StackOverflowError because of executors which may immediately execute runnables instead of queue them (i.e. ImmediateEventExecutor). However this may be better addressed by fixing these executors to protect against StackOverflowError instead of just fixing for a single use case. Also the most commonly used executors already provide the desired behavior and don't need the additional overhead of a ThreadLocal queue in DefaultPromise.
+
+Modifications:
+- Remove ThreadLocal queue from DefaultPromise
+- Change ImmediateEventExecutor so it maintains a queue of runnables if reentrant condition occurs
+
+Result:
+DefaultPromise StackOverflowError code is simpler, and ImmediateEventExecutor protects against StackOverflowError.

@@ -1,0 +1,13 @@
+Don't implicitly check preconditions on PUT requests
+
+Prior to this commit, the `HttpEntityMethodProcessor` would check HTTP
+conditions on non-safe requests (i.e. not GET/HEAD). This would prevent
+Controllers from returning `ResponseEntity` containing response headers
+with updated values of `"Last-Modified"` or `ETag` once the resource has
+been updated.
+
+This commit avoids those checks for non GET/HEAD requests - this code
+can still be leveraged from Controllers themselves using
+`ServletWebRequest::checkNotModified` methods.
+
+Issue: SPR-15780

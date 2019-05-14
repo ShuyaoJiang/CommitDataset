@@ -1,0 +1,14 @@
+Tests: Fix TimeThrottleIntegrationTests to not rely on shard actions (elastic/x-pack-elasticsearch#2234)
+
+These tests used to fail rarely, because during a watch execution
+one of the watcher shards was relocated resulting in a second execution
+of watch.
+
+In order to prevent this, the tests do not need to actually create any
+shards, which causes watcher potentially to be rebalanced.
+
+This simplifies and speeds up the test as well.
+
+relates elastic/x-pack-elasticsearch#1608
+
+Original commit: elastic/x-pack-elasticsearch@1cfac1145de4a4c375adf2441383734c0cdb4dd6

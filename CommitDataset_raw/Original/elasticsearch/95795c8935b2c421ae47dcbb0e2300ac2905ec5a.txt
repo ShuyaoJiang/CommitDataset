@@ -1,0 +1,13 @@
+Pass main class by environment variable (#31149)
+
+A previous refactoring of the CLI scripts migrated all of the CLI tools
+to shell to a common script, elasticsearch-cli. This approach is fine in
+Bash where it is easy to tear arguments apart but it doesn't work so
+well on Windows where quoting is insane. To avoid having to tear the
+arguments apart to separate the first argument to elasticsearch-cli from
+the remaining arguments, we instead choose a strategy where we can avoid
+tearing the arguments apart. To do this, we will instead pass the main
+class by an environment variable and then we can pass the arguments
+straight through. This will let us avoid awful quoting issues on
+Windows. This is the non-Windows side of that effort and the Windows
+side will be in a follow-up.

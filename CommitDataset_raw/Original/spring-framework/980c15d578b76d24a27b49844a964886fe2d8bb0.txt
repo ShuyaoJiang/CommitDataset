@@ -1,0 +1,19 @@
+Distinguish between different bridge method types
+
+Add BridgeMethodResolver#isJava6VisibilityBridgeMethodPair to
+distinguish between (a) bridge methods introduced in Java 6 to
+compensate for inheriting public methods from non-public superclasses
+and (b) bridge methods that have existed since Java 5 to accommodate
+return type covariance and generic parameters.
+
+In the former case, annotations should be looked up from the original
+bridged method (SPR-7900).  In the latter, the annotation should be
+looked up against the bridge method itself (SPR-8660).
+
+As noted in the Javadoc for the new method, see
+http://stas-blogspot.blogspot.com/2010/03/java-bridge-methods-explained.html
+for a useful description of the various types of bridge methods, as
+well as http://bugs.sun.com/view_bug.do?bug_id=6342411, the bug fixed in
+Java 6 resulting in the introduction of 'visibility bridge methods'.
+
+Issue: SPR-8660, SPR-7900

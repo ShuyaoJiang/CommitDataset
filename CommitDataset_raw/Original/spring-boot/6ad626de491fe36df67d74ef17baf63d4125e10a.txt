@@ -1,0 +1,10 @@
+Allows /configprops endpoint to show nested properties
+
+Including maps and lists. Beans with no metadata (in
+/META-INF/*spring-configuration-metadata.json) are just serialized
+as they come (so might have problems like cycles). Serialization
+errors are caught and rendered as an "error" for that bean. Any
+problems can be fixed by preparing metadata and specifying which
+properties are to be rendered that way.
+
+Fixes gh-1746, fixes gh-1921

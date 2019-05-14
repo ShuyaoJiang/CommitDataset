@@ -1,0 +1,15 @@
+Bubble-up exceptions from scheduler (#38317)
+
+Instead of logging warnings we now rethrow exceptions thrown inside
+scheduled/submitted tasks. This will still log them as warnings in
+production but has the added benefit that if they are thrown during
+unit/integration test runs, the test will be flagged as an error.
+
+This is a continuation of #38014
+
+Fixed NPE that caused CCR tests (IndexFollowingIT and likely others)
+to fail.
+
+schedule could bubble rejected exception to uncaught exception
+handler when not using SAME executor if thread pool is terminated.
+Now ignore rejected exception silently if executor is shutdown.

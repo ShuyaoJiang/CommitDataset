@@ -1,0 +1,24 @@
+Http2StreamFrameToHttpObjectCodec should handle 100-Continue properly
+
+Motivation:
+Http2StreamFrameToHttpObjectCodec was not properly encoding and
+decoding 100-Continue HttpResponse/Http2SettingsFrame properly. It was
+encoding 100-Continue FullHttpResponse as an Http2SettingFrame with
+endStream=true, causing the child channel to terminate. It was not
+decoding 100-Continue Http2SettingsFrame (endStream=false) as
+FullHttpResponse. This should be fixed as it would cause http2 child
+stream to prematurely close, and could cause HttpObjectAggregator to
+fail if it's in the pipeline.
+
+Modification:
+- Fixed encode() to properly encode 100-Continue FullHttpResponse as
+  Http2SettingsFrame with endStream=false
+- Reject 100-Continue HttpResponse that are NOT FullHttpResponse
+- Fixed decode() to properly decode 100-Continue Http2SettingsFrame
+  (endStream=false) as a FullHttpResponse
+- made Http2StreamFrameToHttpObjectCodec sharable so that it can b used
+  among child streams within the same Http2MultiplexCodec
+
+Result:
+Now Http2StreamFrameToHttpObjectCodec should be properly handling
+100-Continue responses.

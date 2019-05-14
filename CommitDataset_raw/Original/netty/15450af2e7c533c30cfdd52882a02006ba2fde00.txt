@@ -1,0 +1,10 @@
+DefaultHttp2FrameWriter ping payload size check
+
+Motivation:
+The HTTP/2 spec states that the ping frame length must be 8 and is otherwise an error https://tools.ietf.org/html/rfc7540#section-6.7. The DefaultHttp2FrameReader enforces this, but the DefaultHttp2FrameWriter allows invalid frames to be written. We should not allow invalid ping frames to be written to the network.
+
+Modifications:
+- DefaultHttp2FrameWriter checks the frame size to be 8, or throws an exception
+
+Result:
+Fixes https://github.com/netty/netty/issues/3721

@@ -1,0 +1,7 @@
+Avoid NPE in `more_like_this` when field has zero tokens (#30365)
+
+Fixes and edge case when using `more_like_this` where TermVectorsWriter
+could throw an NPE when a field produced zero tokens after analysis. This
+changes the implementation to use an empty list of tokens in this case.
+
+Closes #30148

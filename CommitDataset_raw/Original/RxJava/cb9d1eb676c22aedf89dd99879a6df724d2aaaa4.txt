@@ -1,0 +1,10 @@
+single: add toSingle method to Observable
+
+* closes ReactiveX/RxJava#3038
+* this method allows an observable which is guaranteed to return exactly one
+  item to be converted to a Single
+* NOTE: the semantics of this function are very similar to that of single
+* i.e. errors are passed through, more than one item results in an
+  IllegalArgumentException, completion without emission results in a
+  NoSuchElementException and exactly one item is passed through the onSuccess
+  method of SingleSubscriber

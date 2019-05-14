@@ -1,0 +1,11 @@
+Add sort and collapse info to SearchHits transport serialization (#36555)
+
+In order for CCS alternate execution mode (see #32125) to be able to do the final reduction step on the CCS coordinating node, we need to serialize additional info in the transport layer as part of the `SearchHits`, specifically:
+
+- lucene `SortField[]` which contains info about the fields that sorting was performed on and their type, which depends on mappings (that the CCS node does not know about)
+- collapse field (`String`) that field collapsing was executed on, if requested
+- collapse values (`Object[]`) that field collapsing was based on, if requested
+
+This info is needed to be able to reconstruct the `TopFieldDocs` or `CollapseFieldTopDocs` in the CCS coordinating node to feed the `mergeTopDocs` method and reduce multiple search responses received (one per cluster) into one.
+
+This commit adds such information to the `SearchHits` class. It's nullable info that is not serialized through the REST layer. `SearchPhaseController` sets such info at the end of the hits reduction phase.

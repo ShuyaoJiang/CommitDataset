@@ -1,0 +1,10 @@
+Remove TestRestTemplate constructors taking template args
+
+As discussed in gh-11872, `TestRestTemplate` constructor variants taking
+a `RestTemplate` argument are confusing since the main goal of that
+class is to mutate `RestTemplate`.
+
+This commit removes all those constructor variants and replaces them
+with `RestTemplateBuilder` arguments when possible.
+
+Closes gh-11872

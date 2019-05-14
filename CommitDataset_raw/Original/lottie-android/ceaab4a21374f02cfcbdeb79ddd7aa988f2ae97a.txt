@@ -1,0 +1,10 @@
+[Breaking] Added support for ColorFilter value callbacks (#566)
+
+This is a breaking change. All previous ColorFilter APIs have been removed and should now migrate to use the new API.
+
+To migrate:
+layer + content -> `new KeyPath(layerName, "**", contentName);`
+layer -> `new KeyPath(layerName, "**");`
+everything -> `new KeyPath("**");`
+
+It will be slightly more efficient to use a fully qualified name rather than a globbed version.

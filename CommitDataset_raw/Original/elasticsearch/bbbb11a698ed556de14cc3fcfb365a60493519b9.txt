@@ -1,0 +1,8 @@
+Painless: Fix Bindings Bug (#33274)
+
+When the change was made to the format for in the whitelist for bindings, parameters from
+both the constructor and the method were combined into a single list instead of separate 
+lists. The check for method parameters was being executed from the start of the combined 
+list rather than the correct position. The tests for bindings used a constructor and a method 
+that only used the int types so this was not caught. The test has been changed to also use 
+a double type and this issue is fixed.

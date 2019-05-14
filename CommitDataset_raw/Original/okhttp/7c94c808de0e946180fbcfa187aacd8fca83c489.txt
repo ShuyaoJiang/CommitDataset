@@ -1,0 +1,21 @@
+Make DistinguishedNameParserTest pass
+
+Change test expectations so that the test passes; no attempt was made
+to verify whether the new test expectations are more correct than the
+old ones. The purpose of this test is to ensure that any future
+behavior changes are deliberate.
+
+The expectations that this CL changes relate to invalid characters
+('<', '>') and to the handling of surrounding whitespace.
+
+Additional changes:
+ - replaced "String... expected" argument to assertCns() with
+   a nullable String expected since all but the first argument
+   is now unused. Reordered the arguments to list expected
+   first, consistent with common JUnit style.
+ - renamed methods to follow JUnit 4 style and removed reference
+   to "Cns" since only a single CN is now parsed.
+ - moved some assertions from regularCases() into emptyValues()
+   and trailingWhitespace() where those seemed like a better fit.
+ - dropped a test comment that didn't seem to make sense (any more)
+ - removed additional dead sections.

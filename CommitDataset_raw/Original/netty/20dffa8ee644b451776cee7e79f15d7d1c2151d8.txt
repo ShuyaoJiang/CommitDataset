@@ -1,0 +1,17 @@
+[#2718] Added private key decryption to JDK SSL server context.
+
+Motivation:
+
+Currently it is not possible to load an encrypted private key when
+creating a JDK based SSL server context.
+
+Modifications:
+
+- Added static method to JdkSslServerContext which handles key spec generation for (encrypted) private keys and make use of it.
+-Added tests for creating a SSL server context based on a (encrypted)
+private key.
+
+Result:
+
+It is now possible to create a JDK based SSL server context with an
+encrypted (password protected) private key.

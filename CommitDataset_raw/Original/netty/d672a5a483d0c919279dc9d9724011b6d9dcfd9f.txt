@@ -1,0 +1,15 @@
+Optimizations in QueryStringEncoder
+
+Motivation:
+
+A life cycle of QueryStringEncoder is simple: create, append params, convert to String. Current realization collect params in the list, and calculate an URI string in `toString` method. We can simplify this: don't store params to the list, and immediately append parameters to the `StringBuilder`.
+
+Modifications:
+
+- Remove list for params and remove a tuple class `Param`.
+- Use one common `StringBuilder` and append parameters into it.
+- Resolve `TODO` in the `encodeParam` method.
+
+Result:
+
+Less allocations (no `ArrayList`, no `Param` tuples). Second `toString` call is faster.

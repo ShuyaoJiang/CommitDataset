@@ -1,0 +1,14 @@
+Handle servlet startup failures consistently
+
+Ensure that all servlet containers handle servlet startup failures
+consistently and throw a `WebServerException` that wraps the original
+cause.
+
+Both Undertow and Jetty already dealt with startup failures in this
+way, but Tomcat did not. The `TomcatEmbeddedContext` has now been
+changed to no longer call `super.loadOnStartup` but instead re-implement
+a version of that method that wraps and rethrows the original exception
+(as long as `failCtxIfServletStartFails` is `true`, which it now is by
+default).
+
+Closes gh-14790

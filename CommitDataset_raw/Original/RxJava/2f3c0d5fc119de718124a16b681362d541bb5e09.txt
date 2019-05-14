@@ -1,0 +1,31 @@
+Observable.from(T) using Observable.just(T)
+
+For code like `Observable.from(1)` Improve performance from ~3.9m to 4.5+m ops/second
+
+Before;
+
+```
+r.u.PerfTransforms.flatMapTransformsUsingFrom        1  thrpt         5  3923845.687    46657.660    ops/s
+r.u.PerfTransforms.flatMapTransformsUsingFrom     1024  thrpt         5     8924.953     1983.161    ops/s
+
+r.u.PerfTransforms.flatMapTransformsUsingFrom        1  thrpt         5  3623228.857   490894.492    ops/s
+r.u.PerfTransforms.flatMapTransformsUsingFrom     1024  thrpt         5     9176.330      923.929    ops/s
+```
+
+After:
+
+```
+Benchmark                                       (size)   Mode   Samples         Mean   Mean error    Units
+r.u.PerfTransforms.flatMapTransformsUsingFrom        1  thrpt         5  4052364.587   100971.234    ops/s
+r.u.PerfTransforms.flatMapTransformsUsingFrom     1024  thrpt         5    11682.783      496.656    ops/s
+
+Benchmark                                       (size)   Mode   Samples         Mean   Mean error    Units
+r.u.PerfTransforms.flatMapTransformsUsingFrom        1  thrpt         5  4700583.987    77742.037    ops/s
+r.u.PerfTransforms.flatMapTransformsUsingFrom     1024  thrpt         5    12588.803       58.935    ops/s
+```
+
+Using this test:
+
+```
+../gradlew benchmarks '-Pjmh=-f 1 -tu s -bm thrpt -wi 5 -i 5 -r 5 -prof GC .*PerfTransforms.flatMapTransformsUsingFrom*'
+```

@@ -1,0 +1,6 @@
+Change async cancel to cancel the raw socket only.
+
+Previously we could close an SSL socket which does synchronous I/O. This
+made it unreasonable to cancel a call on a UI thread.
+
+Closes: https://github.com/square/okhttp/issues/1592

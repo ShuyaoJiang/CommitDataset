@@ -1,0 +1,13 @@
+[ML] Avoid spurious logging when deleting lookback job from the UI (elastic/x-pack-elasticsearch#3193)
+
+When you click "delete" in the UI it force-deletes the datafeed then
+force-deletes the job.  For a datafeed doing lookback, this results
+in a close followed very quickly by a kill on the autodetect process.
+Depending on thread scheduling this could cause a lot of spurious
+errors and exception traces to be logged.
+
+This change prevents the log spam in this scenario.
+
+relates elastic/x-pack-elasticsearch#3149
+
+Original commit: elastic/x-pack-elasticsearch@091240f32ad993553b2d55700797b5e0809175b0

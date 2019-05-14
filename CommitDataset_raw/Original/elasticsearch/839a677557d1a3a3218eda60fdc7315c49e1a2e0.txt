@@ -1,0 +1,8 @@
+Do not override named S3 client credentials (#33793)
+
+In cases when mixed secure S3 client credentials and insecure S3 client
+credentials were used (that is, those defined on the repository), we
+were overriding the credentials from the repository using insecure
+settings to all the repositories. This commit fixes this by not mixing
+up repositories that use insecure settings with those that use secure
+settings.

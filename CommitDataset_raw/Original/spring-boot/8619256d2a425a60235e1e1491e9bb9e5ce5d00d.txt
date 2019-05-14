@@ -1,0 +1,15 @@
+Clean up the logging system later in context close processing
+
+Previously, the logging system was cleaned up in response to the
+root context's ContextClosedEvent being received. This event is
+published early in a context's close processing. As a result, the
+logging system is in cleaned up state while, for example, disposable
+beans are being destroyed.
+
+This commit reworks the logic that triggers logging system clean up
+to use a disposable bean instead. Disposable beans are called in
+reverse-registration order. The logging clean up bean is registered as
+early as possible so that it should be the last disposable bean to
+be called.
+
+Closes gh-11676

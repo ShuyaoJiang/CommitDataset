@@ -1,0 +1,14 @@
+[ML] Account for gaps in data counts after job is reopened (#30294)
+
+This commit fixes an issue with the data diagnostics were
+empty buckets are not reported even though they should. Once
+a job is reopened, the diagnostics do not get initialized from
+the current data counts (especially the latest record timestamp).
+The result is that if the data that is sent have a time gap compared
+to the previous ones, that gap is not accounted for in the empty bucket
+count.
+
+This commit fixes that by initializing the diagnostics with the current
+data counts.
+
+Closes #30080

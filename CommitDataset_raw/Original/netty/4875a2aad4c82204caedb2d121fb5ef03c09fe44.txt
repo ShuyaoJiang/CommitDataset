@@ -1,0 +1,11 @@
+Immediate caching the strings wrapped to AsciiString
+
+Motivation:
+The `AsciiString#toString` method calculate string value and cache it into field. If an `AsciiString` created from the `String` value, we can avoid rebuilding strings if we cache them immediately when creating `AsciiString`. It would be useful for constants strings, which already stored in the JVMs string table, or in cases where an unavoidable `#toString `method call is assumed.
+
+Modifications:
+- Add new static method `AsciiString#cache(String)` which save string value into cache field.
+- Apply a "benign" data race in the `#hashCode` and `#toString` methods.
+
+Result:
+Less memory usage in some `AsciiString` use cases.

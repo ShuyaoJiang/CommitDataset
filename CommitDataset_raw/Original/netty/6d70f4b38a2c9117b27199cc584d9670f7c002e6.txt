@@ -1,0 +1,13 @@
+Guard against re-entrance in PendingWriteQueue.removeAndWriteAll()
+
+Motivation:
+
+PendingWriteQueue should guard against re-entrant writes once removeAndWriteAll() is run.
+
+Modifications:
+
+Continue writing until queue is empty.
+
+Result:
+
+Correctly guard against re-entrance.

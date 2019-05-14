@@ -1,0 +1,14 @@
+Include frame-pointer to improve epoll flamegraph tracing
+
+Motivation:
+
+When attempting to flamegraph netty w/ epoll it was noticed the stacks are lost going from
+java to epoll lib.
+
+Modifications:
+
+added the -fno-omit-framepointer flag to compiler flags to ensure the fp is kept intact
+
+Result:
+
+Flamegraphs will now show native code in the same stack as java code using perf-java-flames

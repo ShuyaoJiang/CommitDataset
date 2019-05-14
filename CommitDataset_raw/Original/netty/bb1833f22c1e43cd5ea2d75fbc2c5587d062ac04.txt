@@ -1,0 +1,16 @@
+Fix Java9SslEngine implementation of ApplicationProtocolAccessor and so fix ApplicationProtocolNegationHandler
+
+Motivation:
+
+Java9SslEngine did not correctly implement ApplicationProtocolAccessor and so returned an empty String when no extension was used while the interface contract is to return null. This lead to the situation that ApplicationProtocolNegationHandler did not correct work.
+
+Modifications:
+
+- Rename ApplicationProtocolAccessor.getApplicationProtocol() to getNegotiatedApplicationProtocol() which resolves the clash with the method exposed by Java9s SSLEngine.
+- Correctly implement getNegotiatedApplicationProtocol() for Java9Sslengine
+- Add delegate in Java9Sslengine.getApplicationProtocol() which is provided by Java9
+- Adjust tests to test the correct behaviour.
+
+Result:
+
+Fixes [#7251].

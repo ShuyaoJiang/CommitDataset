@@ -1,0 +1,9 @@
+Update the full cluster restart tests to be more generic (elastic/x-pack-elasticsearch#2107)
+
+The full cluster restart tests are currently geared towards the 5.6 -> 6.0 upgrade and have some
+issues when the versions are changed to 6.x -> 7.0. One issue is a real code issue in that the
+security code always expects the mappings to have the same version as the version of the node, but
+we no longer update the mappings on the security index during a rolling upgrade. We know look at
+the index format to determine if the index is up to date.
+
+Original commit: elastic/x-pack-elasticsearch@14c1c72ff63c839d0c67858bc4cad8be8301137d

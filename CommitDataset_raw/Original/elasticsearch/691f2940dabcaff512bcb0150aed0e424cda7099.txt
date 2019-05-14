@@ -1,0 +1,17 @@
+Remove running outside of distribution check
+
+This commit removes a legacy check against running bin/elasticsearch
+that is not produced from a distribution. This check exists for legacy
+reasons, namely when bin/elasticsearch previously sat in the root of the
+Elasticsearch repository. In this old scenario, someone might clone the
+repository, see the bin folder and try to run bin/elasticsearch without
+first production a distribution. Today, this is unlikely since
+bin/elasticsearch now sits in
+distribution/src/main/resources/bin/elasticsearch so first, bin is no
+longer in the root of the repository, and second, the src indicates this
+is source and not already for production. Moreover, our README in the
+root of the repository provides clear instructions for getting started:
+either download a distribution or build one from source. In the name of
+simplicity, we therefore remove this legacy check.
+
+Relates #25960

@@ -1,0 +1,9 @@
+Merge: Strip content length in requests with "transparent" gzip handling
+
+Original AOSP/libcore commit from Brian Carlstrom:
+We need to strip both the Content-Length and the Content-Encoding
+for such requests. In such requests, it will be the length of the
+compressed response. We hide the fact that compression is taking place
+from clients, so we shouldn't give them the content length either.
+
+Change-Id: I80713ab33143945c5e2656f478d83cc9e60226a8

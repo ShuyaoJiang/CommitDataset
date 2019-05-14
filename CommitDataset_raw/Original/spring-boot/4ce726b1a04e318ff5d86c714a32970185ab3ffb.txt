@@ -1,0 +1,15 @@
+Auto-configure WebClient.Builder
+
+This commit adds a new customizer interface for applying
+configuration changes to `WebClient.Builder` beans:
+`WebClientCustomizer`.
+
+The new WebClient auto-configuration will make available, as a
+prototype scoped bean, `WebClient.Builder` instances.
+Once injected, developers can use those to create `WebClient`
+instances to be used in their application.
+
+`WebClientCustomizer` beans are sorted according to their
+`Order` and then applied to the builder instances.
+
+Closes gh-9522

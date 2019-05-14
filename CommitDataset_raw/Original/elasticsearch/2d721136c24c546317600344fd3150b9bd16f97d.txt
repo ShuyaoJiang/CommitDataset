@@ -1,0 +1,3 @@
+Adds logic to cancel job if master is un-elected (#3613)
+
+A node can stop being the master node whilst it is running, e.g. if it can’t access `minimumMasterNodes` number of master eligible nodes. Because of this we need logic in `IndexLifecycleService` that cancels the scheduled job if the node is no longer master and re-adds the job if the node becomes master again.

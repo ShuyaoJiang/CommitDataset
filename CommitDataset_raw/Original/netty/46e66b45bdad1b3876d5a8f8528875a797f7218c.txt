@@ -1,0 +1,10 @@
+DnsNameResovlerContext#followCname sending extra queries
+
+Motivation:
+When following a CNAME response DnsNameResovlerContext may issue a A and AAAA query. However the DnsNameResolverContext would have already issued a A and AAAA query to get the CNAME response, and this may result in 2 additional A/AAAA queries per CNAME response.
+
+Modifications:
+- DnsNameResovlerContext#followCname shouldn't issue 2 queries, but instead just a single query with the same record type as the original query
+
+Result:
+No more duplicate queries as a result of CNAME responses.

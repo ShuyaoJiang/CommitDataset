@@ -1,0 +1,5 @@
+Remove RestGetAllMappingsAction (#31129)
+
+We currently have a specific REST action to retrieve all indices and types mappings, which used internally the get index API. This doesn't seem to be required anymore though as the existing RestGetMappingAction could as well take the requests with no indices and types specified.
+
+This commit removes the RestGetAllMappingsAction in favour of using RestGetMappingAction also for requests that don't specify indices nor types.

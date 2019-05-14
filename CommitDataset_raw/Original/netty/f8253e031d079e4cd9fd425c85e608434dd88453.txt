@@ -1,0 +1,6 @@
+Fix #239: IdleStateHandler starts two timers
+
+1) Do not rely on ChannelPipeline.isAttached() to ensure initialize() is
+called once.
+2) Fix a race condition where initialize() can schedule timeouts after
+destroy() is called.

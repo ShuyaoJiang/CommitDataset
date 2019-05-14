@@ -1,0 +1,17 @@
+Add an animation executor to decode GIF frames on.
+
+Our normal source executor is often used to load data from networks. Glide’s default networking library runs all networking operations on Glide’s source executor. OkHttp runs the initial connection on its own
+thread pool, but we still read and write the body of each request to our ache on Glide’s source executor. Even libraries like Volley that buffer
+the entire request into memory will still require a few hundred milliseconds of Glide’s source executor’s time to write the request to 
+cache.
+
+Scrolling through a list of images will enqueue a large number of requests. If each request is relatively time consuming, it’s likely that
+all of Glide’s source executor threads will end up blocked for 
+significant periods of time, even if the longer requests are lower priority. Using a different executor for GIF frames and other animations
+lets us avoid junk during playback. 
+
+Unfortunately there is a CPU and memory hit to using an additional executor. I’ve tried to limit that here by using only one or two threads
+and a cached thread pool so that few threads are created and are only
+created when an animation is actually run.
+
+Fixes #899

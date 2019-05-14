@@ -1,0 +1,9 @@
+Fix Concurrent Snapshot Ending And Stabilize Snapshot Finalization (#38368)
+
+* The problem in #38226 is that in some corner cases multiple calls to `endSnapshot` were made concurrently, leading to non-deterministic behavior (`beginSnapshot` was triggering a repository finalization while one that was triggered by a `deleteSnapshot` was already in progress)
+   * Fixed by:
+      * Making all `endSnapshot` calls originate from the cluster state being in a "completed" state (apart from on short-circuit on initializing an empty snapshot). This forced putting the failure string into `SnapshotsInProgress.Entry`.
+      * Adding deduplication logic to `endSnapshot`
+* Also:
+  * Streamlined the init behavior to work the same way (keep state on the `SnapshotsService` to decide which snapshot entries are stale)
+* closes #38226 

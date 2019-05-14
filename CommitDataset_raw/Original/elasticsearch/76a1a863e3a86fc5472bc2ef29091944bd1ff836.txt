@@ -1,0 +1,8 @@
+TEST: stop assertSeqNos if shards movement (#33875)
+
+Currently, assertSeqNos assumes that the cluster is stable at the end of
+the test (i.e., no more shard movement). However, this assumption does
+not always hold. In these cases, we can stop the assertion instead of
+failing a test.
+
+Closes #33704

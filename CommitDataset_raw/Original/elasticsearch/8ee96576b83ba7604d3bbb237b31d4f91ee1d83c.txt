@@ -1,0 +1,7 @@
+Add an exception throw if waiting on transport port file fails (#37574)
+
+In the ClusterConfiguration class of the build source, there is an Ant waitfor block 
+that runs to ensure that the seed node's transport ports file is created before 
+trying to read it. If the wait times out, the file read fails with not much helpful info. 
+This just adds a timeout property to the waitfor block and throws a descriptive 
+exception instead.

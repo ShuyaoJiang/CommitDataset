@@ -1,0 +1,18 @@
+Add accounting circuit breaker and track segment memory usage (#27116)
+
+* Add accounting circuit breaker and track segment memory usage
+
+This commit adds a new circuit breaker "accounting" that is used for tracking
+the memory usage of non-request-tied memory users. It also adds tracking for the
+amount of Lucene segment memory used by a shard as a user of the new circuit
+breaker.
+
+The Lucene segment memory is updated when the shard refreshes, and removed when
+the shard relocates away from a node or is deleted. It should also be noted that
+all tracking for segment memory uses `addWithoutBreaking` so as not to fail the
+shard if a limit is reached.
+
+The `accounting` breaker has a default limit of 100% and will contribute to the
+parent breaker limit.
+
+Resolves #27044

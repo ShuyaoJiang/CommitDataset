@@ -1,0 +1,6 @@
+Close raw channel when bind / connect fails (#25840)
+
+Currently we are failing to close socket channels when the initial bind
+or connect operation fails. This leaves the file descriptor hanging
+around. This closes the channel when an exception occurs during bind or
+connect.

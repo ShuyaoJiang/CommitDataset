@@ -1,0 +1,25 @@
+Fixed several issues with HttpContentDecoder
+
+Motivation:
+
+HttpContentDecoder had the following issues:
+- For chunked content, the decoder set invalid "Content-Length" header
+	with length of the first decoded chunk.
+- Decoding of FullHttpRequests put both the original conent and decoded
+	content into output. As result, using HttpObjectAggregator before the
+	decoder lead to errors.
+- Requests with "Expect: 100-continue" header were not acknowleged:
+	the decoder didn't pass the header message down the handler's chain
+	until content is received. If client expected "100 Continue" response,
+	deadlock happened.
+
+Modification:
+
+- Invalid "Content-Length" header is removed; handlers down the chain can either
+	rely on LastHttpContent message or ask HttpObjectAggregator to add the header.
+- FullHttpRequest is split into HttpRequest and HttpContent (decoded) parts.
+- Header (HttpRequest) part of request is sent down the chain as soon as it's received.
+
+Result:
+
+The issues are fixed, unittest is added.

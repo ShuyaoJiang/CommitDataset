@@ -1,0 +1,9 @@
+Exclude jcl-over-slf4j from tiles-core dependency
+
+tiles-core-3 brings in a dependency on jcl-overl-slf4 which causes
+an slf4j delegation loop as explained at [1] when tests run inside
+Eclipse. Other modules that depend on tiles-core like
+(tiles-servlet, tiles-jsp) have also had the exclusion added since
+they seem to bring it in as well.
+
+[1] http://www.slf4j.org/codes.html#jclDelegationLoop

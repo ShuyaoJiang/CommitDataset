@@ -1,0 +1,14 @@
+Handshake timeout may never be scheduled if handshake starts via a flush or starttls is used. (#8494)
+
+Motivation:
+
+We did not correctly schedule the handshake timeout if the handshake was either started by a flush(...) or if starttls was used.
+
+Modifications:
+
+- Correctly setup timeout in all cases
+- Add unit tests.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8493.

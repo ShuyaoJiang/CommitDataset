@@ -1,0 +1,7 @@
+Make CCR QA tests build again (#33113)
+
+Welp, I broke this. I merged a change to auto-discover the CCR QA tests
+by making :x-pack:plugin:ccr:check auto-discover the check tasks in the
+qa sub-project. Yet, the check tasks for these sub-projects did not
+depend on the necessary test tasks (as we were previously doing this
+directly from the ccr build file. This commit fixes this!

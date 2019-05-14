@@ -1,0 +1,15 @@
+[#3785] Correctly handle connection refused with native transport
+
+Motivation:
+
+Due a bug we not correctly handled connection refused errors and so failed the connect promise with the wrong exception.
+Beside this we some times even triggered fireChannelActive() which is not correct.
+
+Modifications:
+
+- Add testcase
+- correctly detect connect errors
+
+Result:
+
+Correct and consistent handling.

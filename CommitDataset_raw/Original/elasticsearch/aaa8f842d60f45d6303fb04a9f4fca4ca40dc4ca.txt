@@ -1,0 +1,15 @@
+Remove BouncyCastle dependency from runtime (#32193)
+
+* Remove BouncyCastle dependency from runtime
+
+This commit introduces a new gradle  project that contains
+ the classes that have a dependency on BouncyCastle. For 
+the default distribution, It builds  a jar from those and
+ in puts it in a subdirectory of lib
+ (/tools/security-cli) along with the BouncyCastle jars. 
+This directory is then passed in the
+ES_ADDITIONAL_CLASSPATH_DIRECTORIES of the CLI tools 
+that use these classes.
+
+BouncyCastle is removed as a runtime dependency (remains
+as a compileOnly one) from x-pack core and x-pack security.

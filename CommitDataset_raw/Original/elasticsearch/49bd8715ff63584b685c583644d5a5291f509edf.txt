@@ -1,0 +1,15 @@
+Inject Unfollow before Rollover and Shrink (#37625)
+
+We inject an Unfollow action before Shrink because the Shrink action
+cannot be safely used on a following index, as it may not be fully
+caught up with the leader index before the "original" following index is
+deleted and replaced with a non-following Shrunken index. The Unfollow
+action will verify that 1) the index is marked as "complete", and 2) all
+operations up to this point have been replicated from the leader to the
+follower before explicitly disconnecting the follower from the leader.
+
+Injecting an Unfollow action before the Rollover action is done mainly
+as a convenience: This allow users to use the same lifecycle policy on
+both the leader and follower cluster without having to explictly modify
+the policy to unfollow the index, while doing what we expect users to
+want in most cases.

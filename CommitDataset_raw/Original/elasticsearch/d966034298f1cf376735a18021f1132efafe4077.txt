@@ -1,0 +1,9 @@
+Scripting: Deprecate index lookup (#24691)
+
+This commit adds a deprecation warning if `_index` is used in scripts.
+It is emitted each time a script is invoked, but not per document. There
+is no test because constructing a LeafIndexLookup is quite difficult,
+but the deprecation warning does show up in IndexLookupIT, there is just
+no way to assert warnings in integ tests.
+
+relates #19359

@@ -1,0 +1,11 @@
+Tests: Remove watcher ensureWachterStarted/Stopped methods (elastic/x-pack-elasticsearch#3798)
+
+Tests have been failing because of out of order cluster state processing
+or because of stopping/starting was still in progress. Current tests do
+not do further stop/start tries after the first leading to potential
+being stuck in an unwanted state. This commit removes the methods
+checking for the state being started or stopped in favor of using the
+stopWatcher/startWatcher methods which now check if the desired state is
+reached and otherwise issue another start/stop command.
+
+Original commit: elastic/x-pack-elasticsearch@97b3232a6ad6c52e6f1f80533c75b43968e883e9

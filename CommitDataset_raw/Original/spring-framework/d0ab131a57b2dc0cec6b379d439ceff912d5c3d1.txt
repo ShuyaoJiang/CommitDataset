@@ -1,0 +1,11 @@
+Add BigDecimal support for SpEl numeric operations
+
+Prior to this change, SpEL supported numeric operations for int, float,
+ect. `new java.math.BigDecimal('0.1') > 0` evaluated to false
+(BigDecimal is truncated to int)
+
+This commit introduces support for BigDecimal operations for all
+mathematical operators. `new java.math.BigDecimal('0.1') > 0` now
+evaluates to true (the comparison is made with BigDecimals)
+
+Issue: SPR-9164

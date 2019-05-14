@@ -1,0 +1,12 @@
+Build: allow the amount of time we wait for a node to be configured (#28403)
+
+This commit allows for configuration of the amount of time we wait for a node to startup. This is needed as some QA tests with plugins and tribe timeout when starting the tribe
+node. Even regular node startup time with plugins is starting to approach the limit of 30 seconds.
+
+Additionally, this commit provides better feedback when a wait has failed. The code checks to
+ensure all expected files exist for each node; if they do not then we consider the wait task as
+having failed. Prior to this change, when there was one or more missing file the build would
+continue and attempt to execute the wait condition that typically makes an HTTP request to the
+cluster. The output of this type of failure does include which files exist and which do not but
+this change makes it clearer that the actual HTTP call did not time out, but the failure was before
+the call was even made.

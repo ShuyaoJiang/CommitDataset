@@ -1,0 +1,10 @@
+OpenSslEngine remove unecessary rejectRemoteInitiatedRenegation call
+
+Motivation:
+OpenSslEngine calls rejectRemoteInitiatedRenegation in a scenario where the number of handshakes has not been observed to change. The number of handshakes has only been observed to change after readPlaintextData is called.
+
+Modifications:
+- Remove the call to rejectRemoteInitiatedRenegation before calls to readPlaintextData
+
+Result:
+Less code.

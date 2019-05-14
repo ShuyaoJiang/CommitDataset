@@ -1,0 +1,14 @@
+AbstractByteBuf.setCharSequence(...) must not expand buffer
+
+Motivation:
+
+AbstractByteBuf.setCharSequence(...) must not expand the buffer if not enough writable space is present in the buffer to be consistent with all the other set operations.
+
+Modifications:
+
+- Ensure we only exand the buffer on writeCharSequence(...) but not on setCharSequence(...)
+- Add unit tests.
+
+Result:
+
+Consistent and correct behavior.

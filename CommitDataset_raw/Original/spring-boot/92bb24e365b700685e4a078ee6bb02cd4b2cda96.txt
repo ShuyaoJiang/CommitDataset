@@ -1,0 +1,13 @@
+Avoid synchronizing on this and use an internal monitor instead
+
+Where possible, code that previously synchronized on this (or on the
+class in the case of static methods) has been updated to use an
+internal monitor object instead. This allows the locking model that's
+employed to be an implementation detail rather than part of the
+class's API.
+
+Classes that override a synchronized method continue to declare
+the overriding method as synchronized. This ensures that locking
+is consistent across the superclass and its subclass.
+
+Closes gh-6262

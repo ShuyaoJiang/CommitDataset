@@ -1,0 +1,8 @@
+Fix a number of test failures running the backport under JDK5.
+
+- Sets.testPowerSetIteration seemed to be relying on the order of elements in a HashSet.
+- ImmutableSortedSetTest.testDifferentComparator_serialization was relying on Collections.reverseOrder() deserializing to the singleton instance of it.
+- ImmutableSortedMultisetTest.testCopyOfDefensiveCopy and testCopyOfSortedDefensiveCopy were relying on the JDK calling toArray(), while JDK5 is calling toArray(T[]).
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=59749873

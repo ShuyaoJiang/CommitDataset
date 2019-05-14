@@ -1,0 +1,7 @@
+Early termination with index sorting should not set terminated_early in the response (#26597)
+
+Early termination with index sorting always return the best top N in the response but set the flag `terminated_early`
+in the response. This can be confusing because we use the same flag for `terminate_after` which on the contrary returns partial results.
+This change removes the flag when results are not partial (early termination due to index sorting) and keeps it only when `terminate_after` is used.
+
+Closes #26408

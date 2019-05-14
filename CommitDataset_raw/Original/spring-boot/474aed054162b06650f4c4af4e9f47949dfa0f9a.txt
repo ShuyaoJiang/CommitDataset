@@ -1,0 +1,20 @@
+Make context available when handling refresh failure
+
+Previously, if SpringApplication.run failed due to the refresh of the
+application context throwing an exception, the application context
+would not be available during run failure handling. This meant that
+null was passed to any SpringApplicationRunListeners, however the
+javadoc for the finished method does not indicate that it is possible
+for null to be passed in. In addition to the possibility of a
+NullPointerException, a side-effect of this behaviour was that the
+auto-configuration report was not produced when refresh fails, making
+it useless as a tool for diagnosing refresh failures.
+
+This commit updates SpringApplication to take a reference to the
+application context as early as possible and, crucially, before it
+has been refreshed. This means that refresh no longer has to succeed for
+the context to be passed to any SpringApplicationRunListeners and that
+they will now receive an inactive context, rather than a null context in
+the event of a refresh failure.
+
+Closes gh-5325

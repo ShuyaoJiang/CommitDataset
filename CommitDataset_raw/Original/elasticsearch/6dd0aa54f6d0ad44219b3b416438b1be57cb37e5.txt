@@ -1,0 +1,24 @@
+Integrates soft-deletes into Elasticsearch (#33222)
+
+This PR integrates Lucene soft-deletes(LUCENE-8200) into Elasticsearch.
+Highlight works in this PR include:
+
+- Replace hard-deletes by soft-deletes in InternalEngine
+- Use _recovery_source if _source is disabled or modified (#31106)
+- Soft-deletes retention policy based on the global checkpoint (#30335)
+- Read operation history from Lucene instead of translog (#30120)
+- Use Lucene history in peer-recovery (#30522)
+
+Relates #30086
+Closes #29530
+
+---
+These works have been done by the whole team; however, these individuals
+(lexical order) have significant contribution in coding and reviewing:
+
+Co-authored-by: Adrien Grand jpountz@gmail.com
+Co-authored-by: Boaz Leskes b.leskes@gmail.com
+Co-authored-by: Jason Tedor jason@tedor.me
+Co-authored-by: Martijn van Groningen martijn.v.groningen@gmail.com
+Co-authored-by: Nhat Nguyen nhat.nguyen@elastic.co
+Co-authored-by: Simon Willnauer simonw@apache.org

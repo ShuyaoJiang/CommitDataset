@@ -1,0 +1,10 @@
+Disallow all extensions in actuator endpoints (except .json)
+
+Along with the recent change in Spring to use content-disposition
+"inline" (which prevents the download), it also makes sense to limit
+the extensions allowed by the actuator endpoints. Really there *is*
+no extension for these endpoints, but since all of them explicitly
+produce JSON we can add .json for browsers as a convenience in case
+the app would otherwise choose to send XML.
+
+Fixes gh-4402

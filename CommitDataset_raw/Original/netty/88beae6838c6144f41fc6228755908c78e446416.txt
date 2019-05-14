@@ -1,0 +1,20 @@
+Fix premature cancelation of pending frames in HTTP2 Flow Control.
+
+Motivation:
+
+If HEADERS or DATA frames are pending due to a too small flow control
+window, a frame with the END_STREAM flag set will wrongfully cancel
+all pending frames (including itself).
+
+Also see grpc/grpc-java#145
+
+Modifications:
+
+The transition of the stream state to CLOSE / HALF_CLOSE due to a
+set END_STREAM flag is delayed until the frame with the flag is
+actually written to the Channel.
+
+Result:
+
+Flow control works correctly. Frames with END_STREAM flag will no
+longer cancel their preceding frames.

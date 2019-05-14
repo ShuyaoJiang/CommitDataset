@@ -1,0 +1,32 @@
+Remove spring-asm and inline ASM 4 into spring-core
+
+ASM 4.0 is generally compatibile with Java 7 classfiles, particularly
+including 'invokedynamic' instructions. This is important when
+considering that Spring's component-scanning support is internally
+ASM-based and it is increasingly likely that component classes having
+invokedynamic instructions may be encountered and read by ASM.
+This upgrade, then, is primarily preventive in nature.
+
+Changes include:
+
+ - upgrade from ASM 2.2.3 to ASM 4.0
+
+ - adapt to ASM API changes as necessary throughout spring-core,
+   resulting in no impact to the public Spring API.
+
+ - remove dedicated spring-asm module
+
+ - use new :spring-core:asmRepackJar task to repackage
+   org.objectweb.asm => org.springframework.asm as per usual and write
+   repackaged classes directly into spring-core jar
+
+The choice to eliminate the spring-asm module altogether and instead
+inline the repackaged classes directly into spring-core is first to
+eliminate an otherwise unnecessary second jar. spring-core has a
+non-optional dependency on spring-asm meaning it is always on the
+application classpath. This change simplifies that situation by
+consoliding two jars into one. The second reason for this choice is in
+anticipation of upgrading CGLIB to version 3 and inlining it into
+spring-core as well. See subsequent commit for details.
+
+Issue: SPR-9669

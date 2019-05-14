@@ -1,0 +1,11 @@
+Extract message serialization from `TcpTransport` (#37034)
+
+This commit introduces a NetworkMessage class. This class has two
+subclasses - InboundMessage and OutboundMessage. These messages can
+be serialized and deserialized independent of the transport. This allows
+more granular testing. Additionally, the serialization mechanism is now
+a simple Supplier. This builds the framework to eventually move the
+serialization of transport messages to the network thread. This is the
+one serialization component that is not currently performed on the
+network thread (transport deserialization and http serialization and
+deserialization are all on the network thread).

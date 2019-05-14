@@ -1,0 +1,23 @@
+Fix #1190
+
+Before this fix, splitting a single character input string with a
+Splitter.onPattern instance created with a zero-width regex pattern,
+would have caused the input string to be dropped from the output,
+resulting in an empty iterable being returned rather than a single
+element one.
+
+This fix ensures that the input passes through untouched.
+
+For example, whereas before in this code snippet, 'words' would have
+been initialized as an empty iterable...
+
+   String string = "f";
+   Iterable<String> words =
+       Splitter.on(Pattern.compile("\\b")).split(string);
+   // words is empty!
+
+Fixes #2615, #2086
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=137723825

@@ -1,0 +1,20 @@
+Fix detection of property setter
+
+Previously, the meta-data annotation processor was taking the first
+setter that match the property name it has to handle. Contrary to
+getters that are enforced by a return type (no argument), multiple
+setter candidates may exist.
+
+If a property's type got narrowed over time, the original setter may
+have been marked as Deprecated. As the annotation processor takes the
+first setter that matches based on the name only, it may pick up the
+deprecated one and therefore mark the property as being (wrongly)
+deprecatede in the meta-data.
+
+It turns out that checking for the actual type of the setter parameter
+brought a side effect: some primitive properties may use the primitive
+or the Wrapper counter part. This commit not only look at the proper
+setter based on the type but also fallback on the wrapper (or) primitive
+if necessary.
+
+Closes gh-4338

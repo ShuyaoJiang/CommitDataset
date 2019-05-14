@@ -1,0 +1,5 @@
+Update MultipartBuilder to support content length.
+
+In order to track content length we need to convert the headers and boundary of a part to a Buffer eagerly. The length of this Buffer plus what each part's RequestBody reports allows tracking what the overall content length will be. The presence of any streaming body means the length of the entire multipart request is unknown.
+
+Common parts of the boundary and header have been changed to raw byte[] to save the cost of allocation and UTF-8 encoding.

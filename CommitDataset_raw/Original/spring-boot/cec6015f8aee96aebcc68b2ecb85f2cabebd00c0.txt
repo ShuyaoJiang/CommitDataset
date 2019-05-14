@@ -1,0 +1,14 @@
+Cope with null server or management port when creating curie provider
+
+Previously, a NullPointerException would occur if
+endpoints.docs.curies.enabled was true and the default value was being
+used for either server.port or management.port.
+
+EndpointWebMvcHypermediaManagementContextConfiguration has been
+restructured to ensure that the DocsMvcEndpoint bean is defined before
+the condition on its existence is evaluated. Previously this was
+dependant on the class’s bean methods being processed in a particular
+ordering, something that would be ok when using ASM but would vary when
+using reflection.
+
+Closes gh-6584

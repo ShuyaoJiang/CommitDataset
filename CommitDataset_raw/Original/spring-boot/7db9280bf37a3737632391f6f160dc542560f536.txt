@@ -1,0 +1,13 @@
+Rename the default BuildInfo task to bootBuildInfo
+
+Previously, the default BuildInfo task created by the DSL was called
+buildInfo. Due to Gradle's lack of namespacing for tasks, this meant
+there was a slight risk that it could clash with another task. It
+also didn't following the naming used by Boot's run task which is
+named bootRun.
+
+This commit renames the default BuildInfo task to bootBuildInfo to
+match bootRun and to hopefully avoid clashes with tasks from other
+plugins.
+
+Closes gh-5518

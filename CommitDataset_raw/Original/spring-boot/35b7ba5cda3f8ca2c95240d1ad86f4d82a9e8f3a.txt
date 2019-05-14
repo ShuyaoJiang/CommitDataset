@@ -1,0 +1,17 @@
+Deprecate http.mappers.* properties
+
+The http.mappers.* configuration properties assumed that the mapping
+was JSON (on of the property names was jsonPrettyPrint) and also only
+exposed a small subset of the configuration options supported by
+Jackson (and GSON). The property names implied that it would configure
+all HTTP mapping, however it was ignored by GsonAutoConfiguration.
+
+This commit deprecates the support for http.mappers.* in favour of
+configuring Jackson or Gson instead. Jackson can be configured
+declaratively using the spring.jackson.* properties or programtically.
+Gson can be configured programatically by using a GsonBuilder to
+create a Gson instance with the desired configuration.
+gh-1946 has been opened to add support for declarative configuration
+of Gson.
+
+Closes gh-1945

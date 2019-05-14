@@ -1,0 +1,10 @@
+Add indirection to avoid runtime dependency on MVC in templates
+
+Velocity and Freemarker share some common properties so the base class for
+configuring their properties makes some sense. Unfortunately the implementation
+pulls in Spring MVC at runtime because of the signature of one method (that
+would never be called). We can fix that in a number of ways, but the least
+disruptive is probably to change the signature of that method and only refer
+to the concrete template view resolver type if the method is called.
+
+Fixes gh-1437

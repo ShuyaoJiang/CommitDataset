@@ -1,0 +1,12 @@
+Remove unwanted printing of stack trace from the Launcher
+
+Previously, the Launcher would call ex.printStackTrace for any
+exception that was thrown when launching the application. This was
+unnecessary as the stack trace should already have been logged by
+the application when it failed to start.
+
+This commit removes the call to ex.printStackTrace, thereby allowing
+an exception to be logged only once or not at all after successful
+failure analysis.
+
+Closes gh-5358

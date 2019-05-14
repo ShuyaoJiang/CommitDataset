@@ -1,0 +1,7 @@
+Ensure date parsing BWC compatibility (#37929)
+
+In order to retain BWC this changes the java date formatters to be able to
+parse nanoseconds resolution, even if only milliseconds are supported.
+This used to work on joda time as well so that a user could store a date
+like `2018-10-03T14:42:44.613469+0000` and then just loose the precision
+on anything lower than millisecond level.

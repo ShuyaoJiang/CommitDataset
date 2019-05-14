@@ -1,0 +1,14 @@
+Allow to call AbstractDiskHttpData.setContent(Unpooled.EMPTY_BUFFER) multiple times. (#7890)
+
+Motivation:
+
+It should be possible to call setContent(Unpooled.EMPTY_BUFFER) multiple times just like its possible to do the same with a non empty buffer.
+
+Modifications:
+
+- Correctly reset underlying storage if called multiple times.
+- Add tests
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/6418

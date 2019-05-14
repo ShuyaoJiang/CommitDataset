@@ -1,0 +1,12 @@
+Enable security automaton caching (#34028)
+
+Building automatons can be costly. For the most part we cache things
+that use automatons so the cost is limited.
+However:
+- We don't (currently) do that everywhere (e.g. we don't cache role
+  mappings)
+- It is sometimes necessary to clear some of those caches which can
+  cause significant CPU overhead and processing delays.
+
+This commit introduces a new cache in the Automatons class to avoid
+unnecesarily recomputing automatons.

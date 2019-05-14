@@ -1,0 +1,8 @@
+Use the correct bounds for saveLayer calls (#1023)
+
+f027871b112a63502ffabb446331bcae411ec6aa was supposed to dramatically improve the performance of masks and mattes by only saving the intersection bounds of content with their masks mattes. However, one additional line of code was left in and undid all of that work:
+https://github.com/airbnb/lottie-android/commit/f027871b112a63502ffabb446331bcae411ec6aa#diff-1dfdb6e89340ceb7e433b6e150edb39bR171
+
+Removing that line wasn't sufficient though. There were a few bugs in getBounds() that were caught and resolved thanks to the Happo tests in this PR.
+
+Animations with masks and mattes should perform 2-10x better after this change.

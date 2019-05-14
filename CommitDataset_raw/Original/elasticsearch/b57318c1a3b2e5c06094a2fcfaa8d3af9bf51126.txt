@@ -1,0 +1,14 @@
+Execute watcher lifecycle changes in order (elastic/x-pack-elasticsearch#4437)
+
+This change updates the WatcherLifecycleService to have its own single
+thread executor that is used for lifecycle changes in order to have a
+guarantee for the order that the changes are executed in.
+
+Previously, a runnable would be submitted to the generic threadpool for
+each lifecycle change that is needed. There was no guarantee of
+ordering for these changes and no checks to see if a state change was
+already in flight.
+
+Relates elastic/x-pack-elasticsearch#4429
+
+Original commit: elastic/x-pack-elasticsearch@14b73381dbaa7208384a1526c07406290ab0598f

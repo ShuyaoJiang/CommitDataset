@@ -1,0 +1,11 @@
+Move ingest-geoip default databases out of config (#36949)
+
+Today the default databases bundled with ingest-geoip are treated as
+configuration files that we unbundle into the Elasticsearch
+configuration directory. This can cause problems for users using our
+Docker images if they bind mount over the configuration
+directory. Additionally, it creates complexity when trying to convert
+ingest-geoip to a module. This commit moves these databases out of the
+configuration directory and instead loads from the plugin
+directory. Further, custom databases can still be put into the
+configuration directory.

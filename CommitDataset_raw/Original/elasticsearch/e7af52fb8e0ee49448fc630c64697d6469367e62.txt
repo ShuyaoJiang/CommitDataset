@@ -1,0 +1,15 @@
+[ML] Let core ES stop the native controller when ML is disabled (elastic/x-pack-elasticsearch#1704)
+
+This changes part of the logic that was added in elastic/x-pack-elasticsearch#644 and extended
+in elastic/x-pack-elasticsearch#1495 so that when ML is disabled we never try to communicate with
+the native controller during node shutdown.
+
+The original reason for needing to communicate with the native controller
+when ML is disabled was the problem of elastic/prelert-legacy#803.
+However, this was fixed in a better way in elastic/elasticsearch#24579.
+Now there is considerable benefit in never talking to the native
+controller from the plugin code when ML is disabled, because it means
+anyone suffering some obscure problem with ML can disable it without
+running the risk of uncovering some other obscure problem with shutdown.
+
+Original commit: elastic/x-pack-elasticsearch@9d329483a73d5a66cc578f7e9ee9d87294e591fb

@@ -1,0 +1,21 @@
+Use same InetAddress for client and server in endpoint tests
+
+Previously, the server was created with out an explicitly configured
+address. This lead to it using any local address which will prefer
+IPv6 (::0) if it's available. By contrast, the client was created
+with a base URL that specified localhost as the host. This meant the
+the client would prefer to connect to IPv4. Normally this wouldn't
+cause a problem as nothing would be listening on the port in the IPv4
+stack so the client would then connect to the server being tested
+using the IPv6 stack. However, if another process was listening to the
+port in the IPv4 stack, the client would connect to the wrong server.
+This could lead to an unexpected 404 response (if the wrong server
+was an HTTP server) or a hang if it was not.
+
+There's a chance, although I think it's unlikely, that the problem
+described above is the cause of gh-10569. I think it's unlikely as
+the hang tracked by gh-10569 only occurs when running the WebFlux
+endpoint integration tests using Reactor Netty. If it was the problem
+described above, there's no reason that I can think of why we
+wouldn't have also seen it with the Web MVC endpoint integration
+tests.

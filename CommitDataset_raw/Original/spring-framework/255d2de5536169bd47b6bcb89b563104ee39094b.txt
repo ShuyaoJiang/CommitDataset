@@ -1,0 +1,10 @@
+Add client Request/Response impl. for Reactor-Net
+
+This commit introduces the `ClientHttpRequest` and `ClientHttpResponse`
+implementations for the Reactor-Net HTTP client. This client is already
+based on the `Flux` and `Mono` contracts.
+
+This commit also adds a `AbstractClientHttpRequest` to support the
+`ClientHttpRequest` implementations; it mirrors the
+`AbstractServerHttpResponse` contract with a `beforeCommit` to register
+`Supplier`s that should be notified before the request is committed.

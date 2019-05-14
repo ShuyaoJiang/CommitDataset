@@ -1,0 +1,14 @@
+Allow to validate sni hostname with underscore (#8150)
+
+Motivation:
+
+We should allow to also validate sni hostname which contains for example underscore when using our native SSL impl. The JDK implementation does this as well.
+
+Modifications:
+
+- Construct the SNIHostName via byte[] and not String.
+- Add unit test
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8144.

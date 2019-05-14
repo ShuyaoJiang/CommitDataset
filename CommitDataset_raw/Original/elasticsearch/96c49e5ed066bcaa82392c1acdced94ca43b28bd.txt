@@ -1,0 +1,8 @@
+[CCR] Improve shard follow task's retryable error handling (#33371)
+
+Improve failure handling of retryable errors by retrying remote calls in
+a exponential backoff like manner. The delay between a retry would not be
+longer than the configured max retry delay. Also retryable errors will be
+retried indefinitely.
+
+Relates to #30086

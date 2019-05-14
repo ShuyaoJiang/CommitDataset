@@ -1,0 +1,29 @@
+Support classes AND locations in @ContextConfiguration
+
+Prior to this commit, the Spring TestContext Framework did not support
+the declaration of both 'locations' and 'classes' within
+@ContextConfiguration at the same time.
+
+This commit addresses this in the following manner:
+
+ - ContextConfigurationAttributes no longer throws an
+   IllegalArgumentException if both 'locations' and 'classes' are
+   supplied to its constructor.
+
+ - Concrete SmartContextLoader implementations now validate the
+   supplied MergedContextConfiguration before attempting to load the
+   ApplicationContext. See validateMergedContextConfiguration().
+
+ - Introduced tests for hybrid context loaders like the one used in
+   Spring Boot. See HybridContextLoaderTests.
+
+ - Updated the Testing chapter of the reference manual so that it no
+   longer states that locations and classes cannot be used
+   simultaneously, mentioning Spring Boot as well.
+
+ - The Javadoc for @ContextConfiguration has been updated accordingly.
+
+ - Added hasLocations(), hasClasses(), and hasResources() convenience
+   methods to MergedContextConfiguration.
+
+Issue: SPR-11634

@@ -1,0 +1,69 @@
+Don't try to put back MemoryRegionCache.Entry objects into the Recycler when recycled because of a finalizer. (#8955)
+
+Motivation:
+
+In MemoryRegionCache.Entry we use the Recycler to reduce GC pressure and churn. The problem is that these will also be recycled when the PoolThreadCache is collected and finalize() is called. This then can have the effect that we try to load class but the WebApp is already stoped.
+
+This will produce an stacktrace like this on Tomcat:
+
+```
+19-Mar-2019 15:53:21.351 INFO [Finalizer] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load [java.util.WeakHashMap]. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+ java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [java.util.WeakHashMap]. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1383)
+	at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForClassLoading(WebappClassLoaderBase.java:1371)
+	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1224)
+	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1186)
+	at io.netty.util.Recycler$3.initialValue(Recycler.java:233)
+	at io.netty.util.Recycler$3.initialValue(Recycler.java:230)
+	at io.netty.util.concurrent.FastThreadLocal.initialize(FastThreadLocal.java:188)
+	at io.netty.util.concurrent.FastThreadLocal.get(FastThreadLocal.java:142)
+	at io.netty.util.Recycler$Stack.pushLater(Recycler.java:624)
+	at io.netty.util.Recycler$Stack.push(Recycler.java:597)
+	at io.netty.util.Recycler$DefaultHandle.recycle(Recycler.java:225)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache$Entry.recycle(PoolThreadCache.java:478)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache.freeEntry(PoolThreadCache.java:459)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache.free(PoolThreadCache.java:430)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache.free(PoolThreadCache.java:422)
+	at io.netty.buffer.PoolThreadCache.free(PoolThreadCache.java:279)
+	at io.netty.buffer.PoolThreadCache.free(PoolThreadCache.java:270)
+	at io.netty.buffer.PoolThreadCache.free(PoolThreadCache.java:241)
+	at io.netty.buffer.PoolThreadCache.finalize(PoolThreadCache.java:230)
+	at java.lang.System$2.invokeFinalize(System.java:1270)
+	at java.lang.ref.Finalizer.runFinalizer(Finalizer.java:102)
+	at java.lang.ref.Finalizer.access$100(Finalizer.java:34)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:217)
+```
+
+Beside this we also need to ensure we not try to lazy load SizeClass when the finalizer is used as it may not be present anymore if the ClassLoader is already destroyed.
+
+This would produce an error like:
+
+```
+20-Mar-2019 11:26:35.254 INFO [Finalizer] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load [io.netty.buffer.PoolArena$1]. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+ java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load [io.netty.buffer.PoolArena$1]. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1383)
+	at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForClassLoading(WebappClassLoaderBase.java:1371)
+	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1224)
+	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1186)
+	at io.netty.buffer.PoolArena.freeChunk(PoolArena.java:287)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache.freeEntry(PoolThreadCache.java:464)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache.free(PoolThreadCache.java:429)
+	at io.netty.buffer.PoolThreadCache$MemoryRegionCache.free(PoolThreadCache.java:421)
+	at io.netty.buffer.PoolThreadCache.free(PoolThreadCache.java:278)
+	at io.netty.buffer.PoolThreadCache.free(PoolThreadCache.java:269)
+	at io.netty.buffer.PoolThreadCache.free(PoolThreadCache.java:240)
+	at io.netty.buffer.PoolThreadCache.finalize(PoolThreadCache.java:229)
+	at java.lang.System$2.invokeFinalize(System.java:1270)
+	at java.lang.ref.Finalizer.runFinalizer(Finalizer.java:102)
+	at java.lang.ref.Finalizer.access$100(Finalizer.java:34)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:217)
+```
+
+Modifications:
+
+- Only try to put the Entry back into the Recycler if the PoolThredCache is not destroyed because of the finalizer.
+- Only try to access SizeClass if not triggered by finalizer.
+
+Result:
+
+No IllegalStateException anymoe when a webapp is reloaded in Tomcat that uses netty and uses the PooledByteBufAllocator.

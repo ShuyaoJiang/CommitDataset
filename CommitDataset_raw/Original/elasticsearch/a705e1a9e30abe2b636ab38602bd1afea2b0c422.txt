@@ -1,0 +1,9 @@
+Add byte array pooling to nio http transport (#31349)
+
+This is related to #28898. This PR implements pooling of bytes arrays
+when reading from the wire in the http server transport. In order to do
+this, we must integrate with netty reference counting. That manner in
+which this PR implements this is making Pages in InboundChannelBuffer
+reference counted. When we accessing the underlying page to pass to
+netty, we retain the page. When netty releases its bytebuf, it releases
+the underlying pages we have passed to it.

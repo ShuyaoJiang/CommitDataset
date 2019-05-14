@@ -1,0 +1,12 @@
+Build: Use environment variables for credentials (elastic/x-pack-elasticsearch#4058)
+
+The credentials now get injected via environment variables, so that
+external services can pull those.
+
+As soon as the specified environment variables are set, the tests are run. No need to check for the @Network annotation
+
+This also introduces new secret store settings for the secure settings in order to be sure to not leak them in the configuration files, that get dumped.
+
+Relates elastic/x-pack-elasticsearch#3800
+
+Original commit: elastic/x-pack-elasticsearch@a2cfb9cb86a51a03cb8b226d5aec383a479640ff

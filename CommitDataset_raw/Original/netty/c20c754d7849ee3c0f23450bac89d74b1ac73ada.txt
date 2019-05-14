@@ -1,0 +1,13 @@
+Fail build when Illegal reflective access is detected (#8933)
+
+Motivation:
+
+We want to make the experience as smooth as possible for our users when using Java9+ and so should ensure we do not produce any 'Illegal reflective access' errors when using netty.
+
+Modifications:
+
+Add jvmArgs when running our tests that will deny reflective access and so will fail the build at the end due not be able to load some classes.
+
+Result:
+
+Ensure we do not produce any illegal refelctive access errors when using java9+

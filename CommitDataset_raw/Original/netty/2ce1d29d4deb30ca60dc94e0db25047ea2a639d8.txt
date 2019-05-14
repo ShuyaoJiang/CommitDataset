@@ -1,0 +1,13 @@
+Elliminated some buggy behavior when using a KeyManagerFactory with OpenSslServerContext.
+
+Motivation:
+
+PR #5493 added support for KeyManagerFactories when using the OpenSsl context. This commit corrects a bug causing a NullPointerException that occurs when using a KeyManagerFactory without a certificate chain and private key.
+
+Modifications:
+
+Removes assertNotNull() assertions which were causing a certificate chain and private key to be required even when using a KeyManagerFactory. Also removed a redundant call to buildKeyManagerFactory() which was also causing a exception when a KeyManagerFactory is provided but a certificate chain and private key is not.
+
+Result:
+
+A KeyManagerFactory can now be used in the OpenSslServerContext without an independent certificate chain and private key.

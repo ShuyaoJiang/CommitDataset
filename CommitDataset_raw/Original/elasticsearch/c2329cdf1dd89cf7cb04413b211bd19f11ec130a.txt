@@ -1,0 +1,7 @@
+[ILM] reduce time restriction on IndexLifecycleExplainResponse (#35954)
+
+step times were set. The assumption was that these are always set.
+Tests passed, which led me to believe this was true. There is a time
+when shrunk indices have their step phase/action/step details set,
+but with no time information (in the CopyExecutionStateStep).
+Explain API fails for these

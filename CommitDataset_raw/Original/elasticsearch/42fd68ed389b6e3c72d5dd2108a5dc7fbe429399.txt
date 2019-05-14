@@ -1,0 +1,28 @@
+Use GatewayMetaState in CoordinatorTests rarely (#36897)
+
+This commit adds one more underlying implementation of MockPersistedState.
+Previously only InMemoryPersistentState was used, not GatewayMetaState
+is used rarely.
+When adding GatewayMetaState support the main question was: do we want to
+emulate exceptions as we do today in MockPersistedState before
+delegating to GatewayMetaState or do we want these exceptions to
+propagate from the lower level, i.e. file system exceptions?
+On the one hand, lower level exception propagation is already tested in
+GatewayMetaStateTests, so this won't improve the coverage.
+On the other hand, the benefit of low-level exceptions is to see how all these
+components work in conjunction. Finally, we abandoned the idea of low-level
+exceptions because we don't have a way to deal with IOError today in
+CoordinatorTests, but hacking GatewayMetaState not to throw
+IOError seems unnatural.
+So MockPersistedState rarely throws an exception before delegating to
+GatewayMetaState, which is not supposed to throw the exception.
+
+This commit required two changes:
+
+Move GatewayMetaStateUT to upper-level from
+GatewayMetaStatePersistedStateTests, because otherwise, it's not easy
+to construct GatewayMetaState instance in CoordinatorTests.
+Move addition of STATE_NOT_RECOVERED_BLOCK from GatewayMetaState
+constructor to GatewayMetaState.applyClusterUpdaters, because
+CoordinatorTests class assumes that there is no such block and most of
+them fail.

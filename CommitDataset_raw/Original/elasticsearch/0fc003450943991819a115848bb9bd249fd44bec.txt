@@ -1,0 +1,17 @@
+Test: remove outdated logic for file writing in security tests (elastic/x-pack-elasticsearch#3947)
+
+This commit removes some outdated logic in the SecurityTestUtils class
+for writing files and creating directories. A long, long time ago there
+was a global cluster for tests that was used across suites and because
+of this there were calls to delete files if they already existed. The
+global cluster has been removed, so we no longer need the code that
+deletes the content of a directory if it already exists.
+
+Additionally, the file writing used in SecurityTestUtils did not use
+atomic moves when possible and this commit changes the code such that a
+temp file is written and we try to atomically move it to the correct
+path; if atomic moves are not supported a regular move is performed.
+
+relates elastic/x-pack-elasticsearch#3912
+
+Original commit: elastic/x-pack-elasticsearch@973fcfe2e19529e85d82fd732641d5ab2f9bd07d

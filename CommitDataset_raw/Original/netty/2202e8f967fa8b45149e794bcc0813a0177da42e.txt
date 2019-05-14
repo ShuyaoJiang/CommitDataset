@@ -1,0 +1,42 @@
+Revamp the Http2ConnectionHandler builder API
+
+Related: #4572
+
+Motivation:
+
+- A user might want to extend Http2ConnectionHandler and define his/her
+  own static inner Builder class that extends
+  Http2ConnectionHandler.BuilderBase. This introduces potential
+  confusion because there's already Http2ConnectionHandler.Builder. Your
+  IDE will warn about this name duplication as well.
+- BuilderBase exposes all setters with public modifier. A user's Builder
+  might not want to expose them to enforce it to certain configuration.
+  There's no way to hide them because it's public already and they are
+  final.
+- BuilderBase.build(Http2ConnectionDecoder, Http2ConnectionEncoder)
+  ignores most properties exposed by BuilderBase, such as
+  validateHeaders, frameLogger and encoderEnforceMaxConcurrentStreams.
+  If any build() method ignores the properties exposed by the builder,
+  there's something wrong.
+- A user's Builder that extends BuilderBase might want to require more
+  parameters in build(). There's no way to do that cleanly because
+  build() is public and final already.
+
+Modifications:
+
+- Make BuilderBase and Builder top-level so that there's no duplicate
+  name issue anymore.
+  - Add AbstractHttp2ConnectionHandlerBuilder
+  - Add Http2ConnectionHandlerBuilder
+  - Add HttpToHttp2ConnectionHandlerBuilder
+- Make all builder methods in AbstractHttp2ConnectionHandlerBuilder
+  protected so that a subclass can choose which methods to expose
+- Provide only a single build() method
+  - Add connection() and codec() so that a user can still specify
+    Http2Connection or Http2Connection(En|De)coder explicitly
+  - Implement proper state validation mechanism so that it is prevented
+    to invoke conflicting setters
+
+Result:
+
+Less confusing yet flexible builder API

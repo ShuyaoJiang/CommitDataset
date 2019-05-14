@@ -1,0 +1,16 @@
+Collect and display build information
+
+This commit updates the Maven plugin to generate a
+`META-INF/boot/build.properties` file with various build-specific
+settings (group, artifact, name, version and build time). Additionally,
+the plugin can be configured to write an arbitrary number of additional
+properties.
+
+A new `BuildProperties` bean is automatically exposed when such a file is
+present. If that bean is present, an `InfoContributor` is automatically
+created to expose that information under the `build` key.
+
+As for the git contributor, it is possible to only display the core
+settings or everything using the `management.info.build.mode` property.
+
+See gh-2559

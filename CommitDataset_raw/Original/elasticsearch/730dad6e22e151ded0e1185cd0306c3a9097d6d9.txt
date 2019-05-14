@@ -1,0 +1,7 @@
+Use default discovery implementation for single-node discovery (#40036)
+
+Switches "discovery.type: single-node" from using a separate implementation for single-node discovery to using the existing standard discovery implementation, with two small adaptions:
+
+-  auto-bootstrapping, but requiring initial_master_nodes not to be set.
+- not actively pinging other nodes using the Peerfinder
+- not allowing other nodes to join its single-node cluster (if they have e.g. been set up using regular discovery and connect to the single-disco node).

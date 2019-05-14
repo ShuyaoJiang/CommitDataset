@@ -1,0 +1,10 @@
+HLRC: Forbid all Elasticsearch logging infra (#32784)
+
+All of the Elasticsearch logging infrastructure relies on log4j but we
+don't want the high level rest client to rely on log4j2. All of its
+logging goes through commons-logging because our dependencies drag in
+commons logging already. Anyway, this bans direct use of Elasticsearch's
+logging infrastructure in the high level REST client. It is still
+possible to use it indirectly though and there isn't anything we can
+really do about that until we split the high level rest client from
+Elasticsearch's server jar.

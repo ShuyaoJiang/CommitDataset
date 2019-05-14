@@ -1,0 +1,18 @@
+Reduce SpEL compilation restrictions on mathematical expressions
+
+Prior to this change the SpEL compiler would not compile mathematical
+expressions where the operands were of differing types (e.g. int
+and double). This required the expression writer to do the conversion
+in the expression text. For example:
+
+T(Integer).valueOf(someInt).doubleValue()/35d
+
+With this commit the restriction is lifted and it is more like Java
+so that you can simply do someInt/35d. The mathematical operators
+affected are divide/plus/minus/multiply and modulus. This change
+involved removing some guards so that the exitTypeDescriptor (the
+trigger for whether compilation is allowed) is set more frequently
+and enhancing bytecode generation to perform more sophisticated
+conversion/coercion automatically.
+
+Issue: SPR-12789

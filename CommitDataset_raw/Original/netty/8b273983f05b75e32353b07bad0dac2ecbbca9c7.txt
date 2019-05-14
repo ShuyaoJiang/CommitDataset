@@ -1,0 +1,16 @@
+Load Conscrypt method via reflection only once
+
+Motivation:
+
+The code did reflection every method call which made the code slower and
+harder to read with additional cases to consider.
+
+Modifications:
+
+Instead of loading the method and then throwing it away, save the Method
+reference instead of the Class reference. Then also use more precise
+exception handling for the method invocation.
+
+Result:
+
+Simpler, speedier code.

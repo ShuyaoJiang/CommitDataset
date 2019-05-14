@@ -1,0 +1,11 @@
+[ML] Account for the possibility of no ML metadata existing (elastic/x-pack-elasticsearch#1648)
+
+We try to install empty ML metadata as soon as possible after startup
+if none exists.  However, this still leaves a short gap when the cluster
+is active with no ML metadata.  To avoid problems, functions that use
+the ML metadata should treat this situation as equivalent to having
+empty ML metadata.
+
+relates elastic/x-pack-elasticsearch#1643
+
+Original commit: elastic/x-pack-elasticsearch@8f0e00cda8a64e8876c123b73ad37ae9a465e170

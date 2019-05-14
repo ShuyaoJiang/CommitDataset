@@ -1,0 +1,12 @@
+Add "request.id" to file audit logs  (#35536)
+
+This generates a synthesized "id" for each incoming request that is
+included in the audit logs (file only).
+This id can be used to correlate events for the same request (e.g.
+authentication success with access granted).
+
+This request.id is specific to the audit logs and is not used for any
+other purpose
+
+The request.id is consistent across nodes if a single request requires
+execution on multiple nodes (e.g. search acros multiple shards).

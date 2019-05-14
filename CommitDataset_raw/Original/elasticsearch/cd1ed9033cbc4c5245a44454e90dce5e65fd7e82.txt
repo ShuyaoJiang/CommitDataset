@@ -1,0 +1,20 @@
+Fix bug in BucketMetrics path traversal (#30632)
+
+When processing a top-level sibling pipeline, we destructively sublist
+the path by assigning back onto the same variable.  But if aggs are
+specified such:
+
+A. Multi-bucket agg in the first entry of our internal list
+B. Regular agg as the immediate child of the multi-bucket in A
+C. Regular agg with the same name as B at the top level, listed as the
+   second entry in our internal list
+D. Finally, a pipeline agg with the path down to B
+
+We'll get class cast exception.  The first agg will sublist the path
+from [A,B] to [B], and then when we loop around to check agg C,
+the sublisted path [B] matches the name of C and it fails.
+
+The fix is simple: we just need to store the sublist in a new object
+so that the old path remains valid for the rest of the aggs in the loop
+
+Closes #30608

@@ -1,0 +1,15 @@
+Allow to free direct buffers on java9 again
+
+Motivation:
+
+Java9 adds a new method to Unsafe which allows to free direct ByteBuffer via the cleaner without the need to use an commandline arguments.
+
+Modifications:
+
+- Add Cleaner interface
+- Add CleanerJava9 which will be used when using Java9+ and take care of release direct ByteBuffer
+- Let Cleaner0 implement Cleaner
+
+Result:
+
+Be able to free direct ByteBuffer on Java9+ again without any commandline arguments.

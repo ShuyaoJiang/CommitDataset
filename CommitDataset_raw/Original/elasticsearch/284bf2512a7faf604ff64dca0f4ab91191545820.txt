@@ -1,0 +1,11 @@
+Fix rolling upgrade test dependency
+
+The rolling upgrade nodes need a keystore for SSL configuration but
+there was no dependency on the task that copies the keystore into the
+output directory for the nodes to pick up as an extra configuration
+file. This commit addresses this by adding such a dependency. To do
+this, we need to break the dependency of the keystore copy task on the
+REST spec copy task; this is not an issue since the dependency was for
+convenience of ordering the task and not actually needed.
+
+Original commit: elastic/x-pack-elasticsearch@fddbc06e9ffc0df0eeda67f2d547ef71e52f7d80

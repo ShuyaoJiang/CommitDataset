@@ -1,0 +1,9 @@
+Set isolation to DEFAULT for JPA transaction manager
+
+Also logs a warning about the fact that locks may not be taken when
+starting a Job. JPA and Batch don't really work that well together
+in general so it's probably not worth a lot of effort to work aoround
+this. If anyone needs to they should create a custom JpaDialect
+(and a BatchConfigurer).
+
+Fixes gh-197

@@ -1,0 +1,11 @@
+Fix SnappyFramedDecoder issues
+
+- Checksum header was being incorrectly read due to incorrect order of
+  shift and masking operations.
+- Length field of 1-byte copy was being incorrectly interpreted due to a
+  typo in the binary mask used to extract it.
+- Use ByteBuf.readUnsignedByte() instead of readByte() & 0xff
+- Use bitwise-OR wherever possible
+- Use EmbeddedByteChannel to test
+- Use ByteBuf comparison instead of array comparison
+- Work done by @lw346 and then revised by @trustin

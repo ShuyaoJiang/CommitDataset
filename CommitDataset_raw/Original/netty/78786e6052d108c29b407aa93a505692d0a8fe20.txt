@@ -1,0 +1,13 @@
+Remove unnecessary instantiation of HttpResponseStatus
+
+Motivation:
+- In the `HttpResponseStatus#equals` checks only status code. No need to create new instance of `HttpResponseStatus` for comparison with response status.
+- The RFC says: `the HTTP version and reason phrase aren't important` [1].
+
+Modifications:
+Use comparison by status code without creating new `HttpResponseStatus`.
+
+Result:
+Less allocations, more clear code.
+
+[1] https://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-00

@@ -1,0 +1,33 @@
+Introduce Supplier<String> support in Assert util
+
+Prior to this commit, utility methods in
+org.springframework.util.Assert accepted String arguments for custom
+error messages. Such Strings are evaluated (e.g., concatenated)
+eagerly, and for performance reasons, it was therefore not always
+possible to make use of these utility methods. Consequently, there are
+several places in the code base that "inline" identical functionality
+in order to lazily evaluate error message concatenation and avoid an
+unnecessary performance penalty. This leads to verbose code like the
+following.
+
+if (!contextPath.startsWith("/")) {
+    throw new IllegalArgumentException("contextPath '" + contextPath +
+    "' must start with '/'.");
+}
+if (contextPath.endsWith("/")) {
+    throw new IllegalArgumentException("contextPath '" + contextPath +
+    "' must not end with '/'.");
+}
+
+This commit addresses this shortcoming by introducing Supplier<String>
+variants of all utility methods in org.springframework.util.Assert that
+allow custom error messages to be evaluated lazily via a lambda
+expression that is only evaluated if the assertion fails. This results
+in a simplification of the previous examples as follows.
+
+Assert.isTrue(contextPath.startsWith("/"), () -> "contextPath '" +
+    contextPath + "' must start with '/'.");
+Assert.isTrue(!contextPath.endsWith("/"), () -> "contextPath '" +
+    contextPath + "' must not end with '/'.");
+
+Issue: SPR-14450

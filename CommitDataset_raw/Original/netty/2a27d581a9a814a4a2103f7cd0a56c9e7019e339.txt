@@ -1,0 +1,13 @@
+Ensure close caused by write will happen before write promise is notified
+
+Motiviation:
+
+We need to ensure the actual close to the transport takes place before the promsie of the write is notified that triggered it. This is needed as otherwise Channel.isActive(), isOpen() and isWritable() may return true even if the Channel should be closed already.
+
+Modifications:
+
+- Ensure the close takes place first
+
+Result:
+
+ChannelFutureListener will see the correct state of the Channel.

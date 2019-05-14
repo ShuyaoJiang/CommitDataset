@@ -1,0 +1,13 @@
+Use long for http2 ping payload.
+
+Motivation:
+
+At the moment we use a ByteBuf as the payload for a http2 frame. This complicates life-time management a lot with no real gain and also may produce more objects then needed. We should just use a long as it is required to be 8 bytes anyway.
+
+Modifications:
+
+Use long for ping payloads.
+
+Result:
+
+Fixes [#7629].

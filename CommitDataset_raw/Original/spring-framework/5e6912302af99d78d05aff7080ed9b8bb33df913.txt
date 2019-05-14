@@ -1,0 +1,26 @@
+Introduce "Aware" superinterface
+
+All existing *Aware interfaces have been refactored to extend this
+new marker interface, serving two purposes:
+
+    * Easy access to a type hierarchy that can answer the question
+      "What *Aware interfaces are available?", without requiring
+      text-based searches. Also clearly excludes false positives like
+      TargetClassAware and ParamAware, which while similarly named,
+      are not semantically similar to traditional *Aware interfaces
+      in Spring.
+
+    * Minor potential performance improvements in
+      AbstractAutowireCapableBeanFactory and
+      ApplicationContextAwareProcessor. Both have blocks of sequential
+      instanceof checks in order to invoke any *Aware interface callback
+      methods. For a bean that implements none of these interfaces,
+      the whole sequence can be avoided by guarding first with
+          if (bean instanceof Aware) {
+              ...
+          }
+
+Implementors of custom *Aware-style interfaces (and presumably
+the BeanPostProcessors that handle them), are encouraged to refactor to
+extending this interface for consistency with the framework as well as
+the points above.

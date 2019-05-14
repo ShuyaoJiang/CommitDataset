@@ -1,0 +1,24 @@
+Enhances get snapshots API to allow retrieving repository index only (#24477)
+
+Currently, the get snapshots API (e.g. /_snapshot/{repositoryName}/_all)
+provides information about snapshots in the repository, including the
+snapshot state, number of shards snapshotted, failures, etc.  In order
+to provide information about each snapshot in the repository, the call
+must read the snapshot metadata blob (`snap-{snapshot_uuid}.dat`) for
+every snapshot.  In cloud-based repositories, this can be expensive,
+both from a cost and performance perspective.  Sometimes, all the user
+wants is to retrieve all the names/uuids of each snapshot, and the
+indices that went into each snapshot, without any of the other status
+information about the snapshot.  This minimal information can be
+retrieved from the repository index blob (`index-N`) without needing to
+read each snapshot metadata blob.
+
+This commit enhances the get snapshots API with an optional `verbose`
+parameter.  If `verbose` is set to false on the request, then the get
+snapshots API will only retrieve the minimal information about each
+snapshot (the name, uuid, and indices in the snapshot), and only read
+this information from the repository index blob, thereby giving users
+the option to retrieve the snapshots in a repository in a more
+cost-effective and efficient manner.
+
+Closes #24288

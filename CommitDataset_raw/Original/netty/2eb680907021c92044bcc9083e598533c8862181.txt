@@ -1,0 +1,19 @@
+Correct OSGi manifests in source jars
+
+Related: #3886
+
+Motivation:
+
+We were including OSGi manifests in sources/javadoc JARs, and OSGi
+container treats them as correct dependencies when resolving from OBR
+repository, which is incorrect. Runtime fails with non-descriptive
+ClassNotFoundException as a result.
+
+Modifications:
+
+- Do not include the OSGi manifests in sources/javadoc JARs
+- Include Eclipse-related manifest entries in sources/javadoc JARs
+
+Result:
+
+Better OSGi compatibility

@@ -1,0 +1,13 @@
+Remove synchronized (ReferenceCountedOpenSslContext.class) blocks
+
+Motivation:
+
+We had some useless synchronized (ReferenceCountedOpenSslContext.class) blocks in our code which could slow down concurrent collecting and creating of ReferenceCountedOpenSslContext instances. Beside this we missed a few guards.
+
+Modifications:
+
+Use ReadWriteLock to correctly guard. A ReadWriteLock was choosen as SSL.newSSL(...) will be called from multiple threads all the time so using synchronized would be worse and there would be no way for the JIT to optimize it away
+
+Result:
+
+Faster concurrent creating and collecting of ReferenceCountedOpenSslContext instances and correctly guard in all cases.

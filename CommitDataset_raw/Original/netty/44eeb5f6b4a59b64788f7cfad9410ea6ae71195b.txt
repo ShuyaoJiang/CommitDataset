@@ -1,0 +1,21 @@
+Fix intermittent test failure in LoggingHandlerTest
+
+Motivation:
+
+LoggingHandlerTest sometimes failure due to unexpected log messages
+logged due to the automatic reclaimation of thread-local objects.
+
+  Expectation failure on verify:
+    Appender.doAppend([DEBUG] Freed 3 thread-local buffer(s) from thread: nioEventLoopGroup-23-0): expected: 1, actual: 0
+    Appender.doAppend([DEBUG] Freed 9 thread-local buffer(s) from thread: nioEventLoopGroup-23-1): expected: 1, actual: 0
+    Appender.doAppend([DEBUG] Freed 2 thread-local buffer(s) from thread: nioEventLoopGroup-23-2): expected: 1, actual: 0
+    Appender.doAppend([DEBUG] Freed 4 thread-local buffer(s) from thread: nioEventLoopGroup-26-0): expected: 1, actual: 0
+    Appender.doAppend(matchesLog(expected: ".+CLOSE$", got: "[id: 0xembedded, embedded => embedded] CLOSE")): expected: 1, actual: 0
+
+Modifications:
+
+Add the mock appender to the related logger only
+
+Result:
+
+No more intermittent test failures

@@ -1,0 +1,16 @@
+Small performance improvements
+
+Motivation:
+
+Found performance issues via FindBugs and PMD.
+
+Modifications:
+
+- Removed unnecessary boxing/unboxing operations in DefaultTextHeaders.convertToInt(CharSequence) and DefaultTextHeaders.convertToLong(CharSequence). A boxed primitive is created from a string, just to extract the unboxed primitive value.
+- Added a static modifier for DefaultHttp2Connection.ParentChangedEvent class. This class is an inner class, but does not use its embedded reference to the object which created it. This reference makes the instances of the class larger, and may keep the reference to the creator object alive longer than necessary.
+- Added a static compiled Pattern to avoid compile it each time it is used when we need to replace some part of authority.
+- Improved using of StringBuilders.
+
+Result:
+
+Performance improvements.

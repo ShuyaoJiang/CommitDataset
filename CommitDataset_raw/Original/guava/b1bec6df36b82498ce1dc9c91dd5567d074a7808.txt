@@ -1,0 +1,12 @@
+Some enhancements for Futures.transform and Futures.catching
+ * extract a template method and 2 subclasses from CatchingFuture and ChainingListenableFuture.  This will allow us to eliminate asAsyncFunction() and 2 allocations per transform
+ * make CatchingFuture implement Runnable and save a Runnable allocation
+ * have CatchingFuture/ChainingListenableFuture clear all their fields on cancel, which should prevent pinning the transformers
+ * have rejectionPropagatingRunnable short circuit for directExecutor() which should save 2 allocations for users who prefer to pass directExecutor() explicitly
+ * have Futures.catching use the rejected execution exception logic when it makes sense
+
+https://github.com/google/guava/issues/1995
+https://github.com/google/guava/issues/2013
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=94954378

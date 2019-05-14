@@ -1,0 +1,8 @@
+Polish FileSystemWatcher and improve its thread safety
+
+- Limit shared state between FileSystemWatcher and the watching thread
+- Use a private monitor rather than synchronizing on this
+- Use a Runnable implementation rather than subclassing Thread
+- Synchronize consistently when reading and writing state
+
+Closes gh-6039

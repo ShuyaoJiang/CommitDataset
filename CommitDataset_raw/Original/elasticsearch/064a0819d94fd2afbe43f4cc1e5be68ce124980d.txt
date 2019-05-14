@@ -1,0 +1,9 @@
+Cleanup: Remove HaltedClock (elastic/x-pack-elasticsearch#3731)
+
+java.time features it's own halted clock, called a fixed clock, we can
+use that one.
+
+On top of that the watcher xcontent parser does not need a clock at all,
+just a timestamp when parsing happened.
+
+Original commit: elastic/x-pack-elasticsearch@2061aeffe164a6e919e62e31b2f190ce78224340

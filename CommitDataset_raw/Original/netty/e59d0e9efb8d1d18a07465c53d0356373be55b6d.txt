@@ -1,0 +1,24 @@
+Introduce CodecOutputList to reduce overhead of encoder/decoder
+
+Motivation:
+
+99dfc9ea799348430a1c25776ce30a95bc10a1ff introduced some code that will more frequently try to forward messages out of the list of decoded messages to reduce latency and memory footprint. Unfortunally this has the side-effect that RecycleableArrayList.clear() will be called more often and so introduce some overhead as ArrayList will null out the array on each call.
+
+Modifications:
+
+- Introduce a CodecOutputList which allows to not null out the array until we recycle it and also allows to access internal array with extra range checks.
+- Add benchmark that add elements to different List implementations and clear them
+
+Result:
+
+Less overhead when decode / encode messages.
+
+Benchmark                                     (elements)   Mode  Cnt         Score        Error  Units
+CodecOutputListBenchmark.arrayList                     1  thrpt   20  24853764.609 ± 161582.376  ops/s
+CodecOutputListBenchmark.arrayList                     4  thrpt   20  17310636.508 ± 930517.403  ops/s
+CodecOutputListBenchmark.codecOutList                  1  thrpt   20  26670751.661 ± 587812.655  ops/s
+CodecOutputListBenchmark.codecOutList                  4  thrpt   20  25166421.089 ± 166945.599  ops/s
+CodecOutputListBenchmark.recyclableArrayList           1  thrpt   20  24565992.626 ± 210017.290  ops/s
+CodecOutputListBenchmark.recyclableArrayList           4  thrpt   20  18477881.775 ± 157003.777  ops/s
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 246.748 sec - in io.netty.handler.codec.CodecOutputListBenchmark

@@ -1,0 +1,6 @@
+Treat ack timeout more like a publish timeout (#31303)
+
+This commit changes the ack timeout mechanism so that its behavior is closer to the publish
+timeout, i.e., it only comes into play after committing a cluster state. This ensures for example that
+an index creation request with a low (ack) timeout value does not return before the cluster state
+that contains information about the newly created index is even committed.

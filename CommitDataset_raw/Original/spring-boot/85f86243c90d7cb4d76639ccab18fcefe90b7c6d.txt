@@ -1,0 +1,11 @@
+Order class filter checks and exit early
+
+Update the logic in `OnClassCondition` so that filtering exits on the
+first missing class. Also refactor the implementation to save
+unnecessary `Set` creation when there is just a single class to check.
+
+The `AutoConfigureAnnotationProcessor` has also been updated to order
+classes so that any starting `org.springframework` are considered last.
+The assumption being that other classes are more likely to be missing.
+
+Closes gh-12131

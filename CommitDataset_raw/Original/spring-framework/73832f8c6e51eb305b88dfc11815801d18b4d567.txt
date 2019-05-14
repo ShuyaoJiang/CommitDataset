@@ -1,0 +1,11 @@
+Support inferred base package for @ComponentScan
+
+Prior to this change, @ComponentScan required the declaration of
+exactly one of the #value, #basePackage or #basePackageClasses
+attributes in order to determine which package(s) to scan.
+
+This commit introduces support for base package inference, relaxing the
+above requirement and falling back to scanning the package in which the
+@ComponentScan-annotated class is declared.
+
+Issue: SPR-9586

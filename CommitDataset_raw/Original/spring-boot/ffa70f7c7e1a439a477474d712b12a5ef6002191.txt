@@ -1,0 +1,10 @@
+[bs-239] Race condition in embedded container contexts
+
+I'll mark this as fixing the bug in tracker, but it might benefit
+from some re-working at some point. The basic idea is to use
+our old friend ContextRefreshedEvent to start the server listening
+for connections. Delaying and making public the start() method from the
+EmbeddedServletContainer doesn't help because you need the server to
+start in order to get a ServletContext for Spring.
+
+[Fixes #53538787]

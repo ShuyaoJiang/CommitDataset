@@ -1,0 +1,2217 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (checkstyle_suppressions.xml, version.properties, rest-high-level-signatures.txt, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch:  
+
+1. Changes to package org.elasticsearch.action:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.allocation:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.reroute:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.state:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.stats:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.rollover:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.settings.put:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.shrink:  
+
+1. Changes to package org.elasticsearch.action.bulk:  
+
+1.1. Add a class for bulk primary execution context. It allows to:
+
+	Instantiate bulk primary execution context  with bulk shard request, primary index shard and primary index shard;
+	Find next non aborted;
+	Check if bulk primary execution context is aborted;
+	Handle advance;
+	Assert invariants;
+	Get current;
+	Get bulk shard request;
+	Get execution result;
+	Get retry counter;
+	Check if bulk primary execution context is operation executed;
+	Check if bulk primary execution context requires waiting for mapping update;
+	Check if bulk primary execution context requires immediate retry;
+	Check if bulk primary execution context is completed;
+	Check if bulk primary execution context is initial;
+	Check if bulk primary execution context has more operations to execute;
+	Get concrete index;
+	Get location  to sync;
+	Get current item;
+	Get primary;
+	Set request  to execute;
+	Get request  to execute;
+	Handle mark as requiring mapping update;
+	Reset bulk primary execution context for execution for retry;
+	Handle mark operation as no op;
+	Fail cause exception on mapping update;
+	Handle mark operation as executed;
+	Handle mark as completed;
+	Build shard response;
+
+1.2. Add a class for bulk primary execution context tests. It allows to:
+
+	Handle test aborted skipped;
+	Generate random request;
+	Handle test translog location
+
+2. Changes to package org.elasticsearch.action.index:  
+
+2. Changes to package org.elasticsearch.action.ingest:  
+
+2. Changes to package org.elasticsearch.action.search:  
+
+2. Changes to package org.elasticsearch.action.support:  
+
+2. Changes to package org.elasticsearch.action.support.master:  
+
+2. Changes to package org.elasticsearch.action.update:  
+
+2. Changes to package org.elasticsearch.bootstrap:  
+
+2. Changes to package org.elasticsearch.client:  
+
+2.1. Add a class for index lifecycle client. It allows to:
+
+	Instantiate index lifecycle client  with rest high level client;
+	Get lifecycle policy;
+	Get lifecycle policy async;
+	Put lifecycle policy;
+	Put lifecycle policy async;
+	Delete lifecycle policy;
+	Delete lifecycle policy async;
+	Remove index lifecycle policy;
+	Remove index lifecycle policy async;
+	Start ILM;
+	Start ILM  async start ILM request;
+	Stop ILM;
+	Get lifecycle management status;
+	Handle lifecycle management status async;
+	Stop ILM  async stop ILM request;
+	Explain lifecycle;
+	Explain lifecycle async;
+	Retry lifecycle policy;
+	Retry lifecycle policy async
+
+2.2. Add a class for index lifecycle IT. It allows to:
+
+	Handle test remove index lifecycle policy;
+	Handle test start stop ILM;
+	Handle test explain lifecycle;
+	Handle test delete lifecycle;
+	Handle test put lifecycle;
+	Handle test get multiple lifecycle policies;
+	Handle test retry lifecycle step
+
+2.3. Add a class for machine learning client. It allows to:
+
+	Instantiate machine learning client  with rest high level client;
+	Put job;
+	Put job async;
+	Get job;
+	Get job async;
+	Get job stats;
+	Get job stats  async get job stats request;
+	Delete expired data;
+	Delete expired data async;
+	Delete job;
+	Delete job async;
+	Handle open job;
+	Handle open job async;
+	Close job;
+	Close job async;
+	Handle flush job;
+	Handle flush job async;
+	Forecast job;
+	Forecast job async;
+	Delete forecast;
+	Delete forecast  async delete forecast request;
+	Delete model snapshot;
+	Delete model snapshot async;
+	Revert model snapshot;
+	Revert model snapshot async;
+	Put datafeed;
+	Put datafeed async;
+	Update datafeed;
+	Update datafeed async;
+	Datafeed get datafeed request;
+	Get datafeed async;
+	Delete datafeed;
+	Delete datafeed async;
+	Start datafeed;
+	Start datafeed async;
+	Stop datafeed;
+	Stop datafeed async;
+	Get datafeed stats;
+	Get preview datafeed;
+	Get datafeed stats  async get datafeed stats request;
+	Handle preview datafeed async;
+	Update job;
+	Update job async;
+	Get buckets;
+	Get buckets  async get buckets request;
+	Get categories;
+	Get categories  async get categories request;
+	Get model snapshots;
+	Get model snapshots  async get model snapshots request;
+	Update model snapshot;
+	Update model snapshot async;
+	Get overall buckets;
+	Get overall buckets  async get overall buckets request;
+	Get records;
+	Get records  async get records request;
+	Post data;
+	Post data async;
+	Get calendars;
+	Get calendars  async get calendars request;
+	Get influencers;
+	Get influencers  async get influencers request;
+	Put calendar;
+	Put calendar async;
+	Put calendar job;
+	Put calendar job async;
+	Delete calendar job;
+	Delete calendar job async;
+	Delete calendar;
+	Delete calendar async;
+	Get calendar events;
+	Get calendar events  async get calendar events request;
+	Process machine learning client machine learning client post calendar event;
+	Process machine learning client machine learning client post calendar event async;
+	Delete calendar event;
+	Delete calendar event async;
+	Put filter;
+	Put filter async;
+	Get filter;
+	Get filter async;
+	Update filter;
+	Update filter async;
+	Delete filter;
+	Delete filter async;
+	Get ml info;
+	Get ml info async;
+	Find file structure;
+	Find file structure async;
+	Set upgrade mode;
+	Set upgrade mode async
+
+2.4. Add a class for machine learning IT. It allows to:
+
+	Clean machine learning IT;
+	Handle test put job;
+	Handle test get job;
+	Handle test delete job given wait for completion is true;
+	Handle test delete job given wait for completion is false;
+	Handle test open job;
+	Handle test close job;
+	Handle test flush job;
+	Handle test get job stats;
+	Handle test forecast job;
+	Handle test post data;
+	Handle test update job;
+	Handle test put datafeed;
+	Handle test update datafeed;
+	Handle test get datafeed;
+	Handle test delete datafeed;
+	Handle test start datafeed;
+	Handle test stop datafeed;
+	Handle test get datafeed stats;
+	Handle test preview datafeed;
+	Convert test delete expired data given nothing;
+	Create expired data;
+	Handle test delete expired data;
+	Handle test delete forecast;
+	Wait machine learning IT for forecast to complete;
+	Exists machine learning IT;
+	Handle test put calendar;
+	Handle test put calendar job;
+	Handle test delete calendar job;
+	Handle test get calendars;
+	Handle test delete calendar;
+	Handle test get calendar event;
+	Handle test post calendar event;
+	Handle test delete calendar event;
+	Handle test put filter;
+	Handle test get filters;
+	Handle test update filter;
+	Handle test delete filter;
+	Handle test get ml info;
+	Handle random valid job id;
+	Build job  for expired data tests;
+	Build job;
+	Put job;
+	Handle open job;
+	Wait machine learning IT for job to close;
+	Start datafeed;
+	Update model snapshot timestamp;
+	Create and put datafeed;
+	Create model snapshot;
+	Create model snapshots;
+	Handle test delete model snapshot;
+	Handle test update model snapshot;
+	Handle test revert model snapshot;
+	Handle test find file structure;
+	Handle test enable upgrade mode
+
+2.5. Add a class for migration client. It allows to:
+
+	Instantiate migration client  with rest high level client;
+	Get deprecation info;
+	Get deprecation info async
+
+2.6. Add a class for migration IT. It allows to:
+
+	Handle test get deprecation info;
+	Check completion status
+
+3. Changes to package org.elasticsearch.client.documentation:  
+
+3.1. Add a class for migration client documentation IT. It allows to:
+
+	Handle test get deprecation info;
+	Process  on response;
+	Process  on failure
+
+4. Changes to package org.elasticsearch.cluster:  
+
+4. Changes to package org.elasticsearch.cluster.routing:  
+
+4. Changes to package org.elasticsearch.cluster.routing.allocation:  
+
+4. Changes to package org.elasticsearch.cluster.service:  
+
+4. Changes to package org.elasticsearch.common.component:  
+
+4. Changes to package org.elasticsearch.common.joda:  
+
+4. Changes to package org.elasticsearch.common.logging:  
+
+4. Changes to package org.elasticsearch.common.settings:  
+
+4. Changes to package org.elasticsearch.common.time:  
+
+4.1. Add an interface declaration  for date math parser. It allows to:
+
+	Parse now long supplier;
+
+5. Changes to package org.elasticsearch.common.xcontent:  
+
+5. Changes to package org.elasticsearch.discovery:  
+
+5. Changes to package org.elasticsearch.document:  
+
+5. Changes to package org.elasticsearch.example.customsuggester:  
+
+5.1. Add a class for custom suggester. It allows to:
+
+	Handle inner execute
+
+5.2. Add a class for custom suggester client yaml test suite IT. It allows to:
+
+	Instantiate custom suggester client yaml test suite IT  with client yaml test candidate;
+	Get parameters
+
+5.3. Add a class for custom suggester plugin. It allows to:
+
+	Get suggesters
+
+5.4. Add a class for custom suggestion builder. It allows to:
+
+	Instantiate custom suggestion builder;
+	Instantiate custom suggestion builder  with stream input;
+	Do write  to stream output;
+	Handle inner to X content;
+	Get writeable name;
+	Equals other custom suggestion builder;
+	Do hash code;
+	Process custom suggestion builder custom suggestion builder from X content;
+	Build query shard context
+
+5.5. Add a class for custom suggestion context. It allows to:
+
+	Instantiate custom suggestion context  with query shard context, options map and options map
+
+6. Changes to package org.elasticsearch.example.realm:  
+
+6. Changes to package org.elasticsearch.gateway:  
+
+6. Changes to package org.elasticsearch.gradle:  
+
+6.1. Add a class for export elasticsearch build resources task. It allows to:
+
+	Instantiate export elasticsearch build resources task;
+	Get output dir;
+	Get resources;
+	Get resources classpath;
+	Set output dir;
+	Get copy;
+	Do export
+
+6.2. Add a class for export elasticsearch build resources task IT. It allows to:
+
+	Test up  to date with sources configured;
+	Handle test implicit task dependency copy;
+	Handle test implicit task dependency input file of other;
+	Handle test incorrect usage
+
+7. Changes to package org.elasticsearch.gradle.test:  
+
+7. Changes to package org.elasticsearch.grok:  
+
+7. Changes to package org.elasticsearch.http.nio:  
+
+7. Changes to package org.elasticsearch.index:  
+
+7. Changes to package org.elasticsearch.index.engine:  
+
+7. Changes to package org.elasticsearch.index.mapper:  
+
+7. Changes to package org.elasticsearch.index.query:  
+
+7.1. Add a class for query shard exception tests. It allows to:
+
+	Handle test create from query shard context;
+	Handle test create from index
+
+8. Changes to package org.elasticsearch.index.reindex:  
+
+8. Changes to package org.elasticsearch.index.replication:  
+
+8. Changes to package org.elasticsearch.index.shard:  
+
+8. Changes to package org.elasticsearch.index.store:  
+
+8. Changes to package org.elasticsearch.index.translog:  
+
+8. Changes to package org.elasticsearch.indices.recovery:  
+
+8. Changes to package org.elasticsearch.ingest:  
+
+8. Changes to package org.elasticsearch.integration:  
+
+8. Changes to package org.elasticsearch.join.query:  
+
+8. Changes to package org.elasticsearch.license:  
+
+8. Changes to package org.elasticsearch.node:  
+
+8. Changes to package org.elasticsearch.painless:  
+
+8.1. Add a class for context example tests. It allows to:
+
+	Handle test ingest processor script;
+	Handle test script fields script;
+	Handle test filter script;
+	Handle test min should match script
+
+9. Changes to package org.elasticsearch.painless.antlr:  
+
+9. Changes to package org.elasticsearch.painless.lookup:  
+
+9. Changes to package org.elasticsearch.painless.node:  
+
+9. Changes to package org.elasticsearch.painless.spi:  
+
+9. Changes to package org.elasticsearch.percolator:  
+
+9. Changes to package org.elasticsearch.plugins:  
+
+9. Changes to package org.elasticsearch.rest.action:  
+
+9. Changes to package org.elasticsearch.rest.action.cat:  
+
+9. Changes to package org.elasticsearch.script:  
+
+9. Changes to package org.elasticsearch.script.expression:  
+
+9. Changes to package org.elasticsearch.search:  
+
+9. Changes to package org.elasticsearch.search.aggregations.bucket.histogram:  
+
+9. Changes to package org.elasticsearch.search.aggregations.bucket.terms:  
+
+9. Changes to package org.elasticsearch.search.aggregations.support.values:  
+
+9. Changes to package org.elasticsearch.search.collapse:  
+
+9. Changes to package org.elasticsearch.search.fetch.subphase:  
+
+9. Changes to package org.elasticsearch.search.internal:  
+
+9. Changes to package org.elasticsearch.search.profile.query:  
+
+9. Changes to package org.elasticsearch.search.query:  
+
+9. Changes to package org.elasticsearch.search.suggest:  
+
+9. Changes to package org.elasticsearch.search.suggest.phrase:  
+
+9. Changes to package org.elasticsearch.search.suggest.term:  
+
+9. Changes to package org.elasticsearch.smoketest:  
+
+9. Changes to package org.elasticsearch.snapshots:  
+
+9. Changes to package org.elasticsearch.test:  
+
+9. Changes to package org.elasticsearch.test.rest.yaml:  
+
+9. Changes to package org.elasticsearch.test.rest.yaml.section:  
+
+9. Changes to package org.elasticsearch.transport.nio:  
+
+9. Changes to package org.elasticsearch.upgrades:  
+
+9.1. Add a class for rollup ID upgrade IT
+
+9.2. Add a class for watcher restart IT. It allows to:
+
+	Handle test watcher restart;
+	Ensure watcher stopped;
+	Ensure watcher started
+
+10. Changes to package org.elasticsearch.xpack.core:  
+
+10. Changes to package org.elasticsearch.xpack.core.indexlifecycle:  
+
+10.1. Add a class for abstract action test case. It allows to:
+
+	Convert test;
+	Check if abstract action test case is safe action;
+	Handle test is safe action;
+
+10.2. Add a class for abstract step test case. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test hashcode and equals;
+	Handle random step key;
+	Handle test step name not error
+
+10.3. Add a class for allocate action. It allows to:
+
+	Parse X content parser;
+	Instantiate allocate action  with number of replicas integer, include map, exclude map, require map and require map;
+	Instantiate allocate action  with stream input;
+	Get number  of replicas;
+	Include allocate action;
+	Exclude allocate action;
+	Require allocate action;
+	Write  to stream output;
+	Get writeable name;
+	Convert allocate action to X content;
+	Check if allocate action is safe action;
+	Convert allocate action to steps;
+	Convert allocate action to step keys;
+	Hash code;
+	Check if allocate action equals;
+	Convert allocate action to string
+
+10.4. Add a class for allocate action tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Handle random instance;
+	Get instance reader;
+	Mutate instance;
+	Test all maps null or empty;
+	Handle test invalid number of replicas;
+	Handle random map;
+	Convert test
+
+10.5. Add a class for allocation routed step info tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test equals and hashcode;
+	Copy instance;
+	Mutate instance
+
+10.6. Add a class for allocation routed step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test condition met;
+	Handle test condition met only one copy allocated;
+	Convert test condition not met due;
+	Handle test execute allocate not complete;
+	Handle test execute allocate not complete only one copy allocated;
+	Handle test execute allocate unassigned;
+	Handle test execute replicas not allocated on single node;
+	Handle test execute index missing;
+	Assert allocate status
+
+10.7. Add a class for cluster state action step. It allows to:
+
+	Instantiate cluster state action step  with step key, next step key and next step key;
+	Perform action
+
+10.8. Add a class for delete action. It allows to:
+
+	Parse X content parser;
+	Instantiate delete action;
+	Instantiate delete action  with stream input;
+	Write  to stream output;
+	Get writeable name;
+	Convert delete action to X content;
+	Check if delete action is safe action;
+	Convert delete action to steps;
+	Convert delete action to step keys;
+	Hash code;
+	Check if delete action equals;
+	Convert delete action to string
+
+10.9. Add a class for delete action tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Get instance reader;
+	Convert test
+
+10.10. Add a class for delete step. It allows to:
+
+	Instantiate delete step  with step key, next step key, client and client;
+	Perform index meta data during no snapshot;
+	Handle index survives
+
+10.11. Add a class for delete step tests. It allows to:
+
+	Handle setup;
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test index survives;
+	Handle test deleted;
+	Process  on response;
+	Process  on failure;
+	Handle test exception thrown;
+	Answer invocation on mock;
+
+10.12. Add a class for error step. It allows to:
+
+	Instantiate error step  with step key
+
+10.13. Add a class for error step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test invalid step key;
+	Handle test step name not error
+
+10.14. Add a class for force merge action. It allows to:
+
+	Parse X content parser;
+	Instantiate force merge action;
+	Instantiate force merge action  with stream input;
+	Get max num segments;
+	Write  to stream output;
+	Get writeable name;
+	Check if force merge action is safe action;
+	Convert force merge action to X content;
+	Convert force merge action to steps;
+	Convert force merge action to step keys;
+	Hash code;
+	Check if force merge action equals;
+	Convert force merge action to string
+
+10.15. Add a class for force merge action tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Handle random instance;
+	Mutate instance;
+	Get instance reader;
+	Handle test missing max num segments;
+	Handle test invalid negative segment number;
+	Convert test
+
+10.16. Add a class for force merge step. It allows to:
+
+	Instantiate force merge step  with step key, next step key, client and client;
+	Get max num segments;
+	Perform action;
+	Hash code;
+	Check if force merge step equals
+
+10.17. Add a class for force merge step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test perform action complete;
+	Process  on response;
+	Process  on failure;
+	Handle test perform action throws exception;
+
+10.18. Add a class for initialize policy context step. It allows to:
+
+	Instantiate initialize policy context step  with step step key, next step key and next step key;
+	Perform action
+
+10.19. Add a class for initialize policy context step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test add creation date;
+	Handle test do nothing;
+	Get index lifecycle date
+
+10.20. Add an interface declaration  for lifecycle action. It allows to:
+
+	Convert lifecycle action to steps;
+	Convert lifecycle action to step keys;
+	Check if lifecycle action is safe action
+
+10.21. Add a class for lifecycle policy. It allows to:
+
+	Instantiate lifecycle policy  with phases map;
+	Instantiate lifecycle policy  with stream input;
+	Instantiate lifecycle policy  with lifecycle type, phases map and phases map;
+	Parse X content parser;
+	Write  to stream output;
+	Get name;
+	Get type;
+	Get phases;
+	Convert lifecycle policy to X content;
+	Convert lifecycle policy to steps;
+	Check if lifecycle policy is action safe;
+	Validate policy name;
+	Hash code;
+	Check if lifecycle policy equals;
+	Convert lifecycle policy to string
+
+10.22. Add a class for lifecycle policy metadata. It allows to:
+
+	Parse X content parser;
+	Instantiate lifecycle policy metadata  with lifecycle policy, headers map and headers map;
+	Instantiate lifecycle policy metadata  with stream input;
+	Get headers;
+	Get policy;
+	Get name;
+	Get version;
+	Get modified date;
+	Get modified date string;
+	Convert lifecycle policy metadata to X content;
+	Write  to stream output;
+	Hash code;
+	Check if lifecycle policy metadata equals
+
+10.23. Add a class for lifecycle policy metadata tests. It allows to:
+
+	Handle setup;
+	Get named writeable registry;
+	X content registry;
+	Do parse instance;
+	Create test instance;
+	Get instance reader;
+	Mutate instance
+
+10.24. Add a class for lifecycle policy tests. It allows to:
+
+	Do parse instance;
+	Get named writeable registry;
+	X content registry;
+	Create test instance;
+	Handle random timeseries lifecycle policy with all phases;
+	Handle random timeseries lifecycle policy;
+	Handle random test lifecycle policy;
+	Mutate instance;
+	Get instance reader;
+	Handle test first and last steps;
+	Convert test;
+	Handle test is action safe;
+	Handle test validate policy name
+
+10.25. Add a class for lifecycle settings
+
+10.26. Add an interface declaration  for lifecycle type. It allows to:
+
+	Get ordered phases;
+	Get next phase name;
+	Get previous phase name;
+	Get ordered actions;
+	Get next action name;
+	Validate phases collection
+
+10.27. Add a class for mock action. It allows to:
+
+	Parse X content parser;
+	Instantiate mock action;
+	Instantiate mock action  with steps list;
+	Instantiate mock action  with stream input;
+	Convert mock action to X content;
+	Get writeable name;
+	Get steps;
+	Check if mock action is safe action;
+	Convert mock action to steps;
+	Convert mock action to step keys;
+	Write  to stream output;
+	Hash code;
+	Check if mock action equals
+
+10.28. Add a class for mock action tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Get instance reader;
+	Mutate instance;
+	Handle random step key;
+	Convert test
+
+10.29. Add a class for mock step. It allows to:
+
+	Instantiate mock step  with step key, next step step key and next step step key;
+	Instantiate mock step  with other step;
+	Instantiate mock step  with stream input;
+	Read optional next step key;
+	Write  to stream output
+
+10.30. Add a class for phase. It allows to:
+
+	Parse X content parser;
+	Instantiate phase  with minimum age time value, actions map and actions map;
+	Instantiate phase  with stream input;
+	Write  to stream output;
+	Get minimum age;
+	Get name;
+	Get actions;
+	Convert phase to X content;
+	Hash code;
+	Check if phase equals;
+	Convert phase to string
+
+10.31. Add a class for phase tests. It allows to:
+
+	Handle setup;
+	Create test instance;
+	Handle random test phase;
+	Do parse instance;
+	Get instance reader;
+	Get named writeable registry;
+	X content registry;
+	Mutate instance;
+	Handle test default after
+
+10.32. Add a class for read only action. It allows to:
+
+	Parse X content parser;
+	Instantiate read only action;
+	Instantiate read only action  with stream input;
+	Get writeable name;
+	Convert read only action to X content;
+	Write  to stream output;
+	Check if read only action is safe action;
+	Convert read only action to steps;
+	Convert read only action to step keys;
+	Hash code;
+	Check if read only action equals;
+	Convert read only action to string
+
+10.33. Add a class for read only action tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Get instance reader;
+	Convert test
+
+10.34. Add a class for rollover action. It allows to:
+
+	Parse X content parser;
+	Instantiate rollover action  with max size value, max age time value and max age time value;
+	Instantiate rollover action  with stream input;
+	Write  to stream output;
+	Get writeable name;
+	Get max size;
+	Get max age;
+	Get rollover action;
+	Convert rollover action to X content;
+	Check if rollover action is safe action;
+	Convert rollover action to steps;
+	Convert rollover action to step keys;
+	Hash code;
+	Check if rollover action equals;
+	Convert rollover action to string
+
+10.35. Add a class for rollover action tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Handle random instance;
+	Get instance reader;
+	Mutate instance;
+	Handle test no conditions;
+	Convert test
+
+10.36. Add a class for rollover step. It allows to:
+
+	Instantiate rollover step  with step key, next step key, client and client;
+	Perform action;
+	Hash code;
+	Check if rollover step equals
+
+10.37. Add a class for rollover step tests. It allows to:
+
+	Handle setup;
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Assert rollover index request;
+	Handle test perform action;
+	Answer invocation on mock;
+	Process  on response;
+	Process  on failure;
+	Handle test perform action with indexing complete;
+	Handle test perform action failure;
+	Handle test perform action invalid null or empty alias;
+	Convert test perform action alias does not point;
+
+10.38. Add a class for segment count step info tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test equals and hashcode;
+	Copy instance;
+	Mutate instance
+
+10.39. Add a class for segment count step tests. It allows to:
+
+	Create random instance;
+	Make meta;
+	Mutate instance;
+	Copy instance;
+	Handle test is condition met;
+	Process  on response;
+	Process  on failure;
+	Handle test is condition fails;
+	Handle test throws exception;
+
+10.40. Add a class for set single node allocate step. It allows to:
+
+	Instantiate set single node allocate step  with step key, next step key, client and client;
+	Perform action
+
+10.41. Add a class for set single node allocate step tests. It allows to:
+
+	Handle setup;
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Assert settings request contains value  from update settings request;
+	Handle test perform action no attrs;
+	Handle test perform action attrs all nodes valid;
+	Handle test perform action attrs some nodes valid;
+	Handle test perform action attrs no nodes valid;
+	Handle test perform action attrs request fails;
+	Answer invocation on mock;
+	Process  on response;
+	Process  on failure;
+	Handle test perform action attrs no shard;
+	Assert node selected;
+	Assert no valid node;
+
+10.42. Add a class for shrink action. It allows to:
+
+	Parse X content parser;
+	Instantiate shrink action;
+	Instantiate shrink action  with stream input;
+	Get number  of shards;
+	Write  to stream output;
+	Get writeable name;
+	Convert shrink action to X content;
+	Check if shrink action is safe action;
+	Convert shrink action to steps;
+	Convert shrink action to step keys;
+	Check if shrink action equals;
+	Hash code;
+	Convert shrink action to string
+
+10.43. Add a class for shrink action tests. It allows to:
+
+	Do parse instance;
+	Create test instance;
+	Handle random instance;
+	Mutate instance;
+	Get instance reader;
+	Handle test non positive shard number;
+	Handle test perform action with skip;
+	Handle test perform action without skip;
+	Convert test;
+	Check if shrink action tests is safe action
+
+10.44. Add a class for shrink set alias step. It allows to:
+
+	Instantiate shrink set alias step  with step key, next step key, client and client;
+	Get shrunk index prefix;
+	Perform index meta data during no snapshot;
+	Handle index survives;
+	Hash code;
+	Check if shrink set alias step equals
+
+10.45. Add a class for shrink set alias step tests. It allows to:
+
+	Handle setup;
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test perform action;
+	Answer invocation on mock;
+	Process  on response;
+	Process  on failure;
+	Handle test perform action failure;
+
+10.46. Add a class for shrink step. It allows to:
+
+	Instantiate shrink step  with step key, next step key, client and client;
+	Get number  of shards;
+	Get shrunk index prefix;
+	Perform action;
+	Hash code;
+	Check if shrink step equals
+
+10.47. Add a class for shrink step tests. It allows to:
+
+	Handle setup;
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test perform action;
+	Answer invocation on mock;
+	Process  on response;
+	Process  on failure;
+	Handle test perform action not complete;
+	Handle test perform action failure;
+
+10.48. Add a class for shrunk shards allocated step info tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test equals and hashcode;
+	Copy instance;
+	Mutate instance
+
+10.49. Add a class for shrunk shards allocated step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test condition met;
+	Handle test condition not met because of active;
+	Handle test condition not met because of shrunk index doesnt exist yet
+
+10.50. Add a class for shrunken index check step info tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test equals and hashcode;
+	Copy instance;
+	Mutate instance
+
+10.51. Add a class for shrunken index check step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test condition met;
+	Handle test condition not met because not same shrunken index;
+	Handle test condition not met because source index exists;
+	Handle test illegal state
+
+10.52. Add a class for step key tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Do parse instance;
+	Mutate instance
+
+10.53. Add a class for terminal policy step. It allows to:
+
+	Instantiate terminal policy step  with step key, next step key and next step key
+
+10.54. Add an object creator class for terminal policy step tests. It allows to:
+
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test instance
+
+10.55. Add a class for test lifecycle type. It allows to:
+
+	Instantiate test lifecycle type;
+	Write  to stream output;
+	Get writeable name;
+	Validate phases collection;
+	Get ordered phases;
+	Get next phase name;
+	Get previous phase name;
+	Get ordered actions;
+	Get next action name
+
+10.56. Add a class for timeseries lifecycle type. It allows to:
+
+	Instantiate timeseries lifecycle type;
+	Write  to stream output;
+	Get writeable name;
+	Get ordered phases;
+	Get next phase name;
+	Get previous phase name;
+	Get ordered actions;
+	Get next action name;
+	Validate phases collection
+
+10.57. Add a class for timeseries lifecycle type tests. It allows to:
+
+	Handle test validate phases;
+	Handle test validate hot phase;
+	Handle test validate warm phase;
+	Handle test validate cold phase;
+	Handle test validate delete phase;
+	Handle test get ordered phases;
+	Handle test unfollow injections;
+	Check if timeseries lifecycle type tests is unfollow injected;
+	Handle test get ordered actions invalid phase;
+	Handle test get ordered actions hot;
+	Handle test get ordered actions warm;
+	Handle test get ordered actions cold;
+	Handle test get ordered actions delete;
+	Handle test get next phase name;
+	Handle test get previous phase name;
+	Handle test get next action name;
+	Assert next action name;
+	Assert invalid action;
+	Convert action names  to actions;
+	Assert next phase name;
+	Assert previous phase name;
+	Check if timeseries lifecycle type tests is sorted;
+	Get test action
+
+10.58. Add a class for update rollover lifecycle date step. It allows to:
+
+	Instantiate update rollover lifecycle date step  with step key, next step key, fallback time supplier and fallback time supplier;
+	Perform action;
+	Hash code;
+	Check if update rollover lifecycle date step equals
+
+10.59. Add a class for update rollover lifecycle date step tests. It allows to:
+
+	Create random instance;
+	Create random instance  with fallback time;
+	Mutate instance;
+	Copy instance;
+	Handle test perform action;
+	Handle test perform action before rollover happened;
+	Handle test perform action with no rollover alias setting;
+	Handle test perform action with indexing complete
+
+10.60. Add a class for update settings step. It allows to:
+
+	Instantiate update settings step  with step key, next step key, client, settings and settings;
+	Perform action;
+	Get settings;
+	Hash code;
+	Check if update settings step equals
+
+10.61. Add a class for update settings step tests. It allows to:
+
+	Handle setup;
+	Create random instance;
+	Mutate instance;
+	Copy instance;
+	Handle test perform action;
+	Answer invocation on mock;
+	Process  on response;
+	Process  on failure;
+	Handle test perform action failure;
+
+11. Changes to package org.elasticsearch.xpack.core.indexlifecycle.action:  
+
+11.1. Add an object creator class for delete lifecycle request tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Mutate instance
+
+11.2. Add an object creator class for delete lifecycle response tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Mutate instance
+
+11.3. Add an object creator class for explain lifecycle action. It allows to:
+
+	Instantiate explain lifecycle action;
+	Handle new response
+
+11.4. Add an object creator class for get lifecycle request tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Mutate instance
+
+11.5. Add an object creator class for get lifecycle response tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Get named writeable registry;
+	Mutate instance
+
+11.6. Add a class for move to step request tests. It allows to:
+
+	Handle setup;
+	Create test instance;
+	Create blank instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Mutate instance
+
+11.7. Add an object creator class for move to step response tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Mutate instance
+
+11.8. Add a class for put lifecycle request tests. It allows to:
+
+	Handle setup;
+	Create test instance;
+	Create blank instance;
+	Do parse instance;
+	Get named writeable registry;
+	X content registry;
+	Handle supports unknown fields;
+	Mutate instance
+
+11.9. Add an object creator class for put lifecycle response tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Mutate instance
+
+11.10. Add a class for retry request tests. It allows to:
+
+	Create test instance;
+	Mutate instance;
+	Create blank instance
+
+11.11. Add an object creator class for retry response tests. It allows to:
+
+	Create test instance;
+	Create blank instance;
+	Mutate instance
+
+11.12. Add an object creator class for start ILM action. It allows to:
+
+	Instantiate start ILM action;
+	Handle new response
+
+11.13. Add an object creator class for stop ILM action. It allows to:
+
+	Instantiate stop ILM action;
+	Handle new response
+
+12. Changes to package org.elasticsearch.xpack.core.ml.job.config:  
+
+12. Changes to package org.elasticsearch.xpack.core.ml.job.messages:  
+
+12. Changes to package org.elasticsearch.xpack.core.rollup:  
+
+12. Changes to package org.elasticsearch.xpack.core.rollup.job:  
+
+12.1. Add a class for date histogram group config. It allows to:
+
+	Instantiate date histogram group config  with date histogram interval;
+	Instantiate date histogram group config  with date histogram interval, delay date histogram interval and delay date histogram interval;
+	Instantiate date histogram group config  with stream input;
+	Write  to stream output;
+	Convert date histogram group config to X content;
+	Get field;
+	Get interval;
+	Get delay;
+	Get time zone;
+	Rounding date histogram group config;
+	Validate mappings;
+	Check if date histogram group config equals;
+	Hash code;
+	Convert date histogram group config to string;
+	Process date histogram group config date histogram group config from X content;
+
+12.2. Add a class for date histogram group config serializing tests. It allows to:
+
+	Do parse instance;
+	Get instance reader;
+	Create test instance;
+	Handle test validate no mapping;
+	Handle test validate nomatching field;
+	Handle test validate field wrong type;
+	Handle test validate field mixture types;
+	Handle test validate field matching not aggregatable;
+	Handle test validate matching field;
+	Handle test validate week;
+	Handle test bwc serialization
+
+12.3. Add a class for histogram group config. It allows to:
+
+	Instantiate histogram group config;
+	Instantiate histogram group config  with stream input;
+	Get interval;
+	Get fields;
+	Validate mappings;
+	Convert histogram group config to X content;
+	Write  to stream output;
+	Check if histogram group config equals;
+	Hash code;
+	Convert histogram group config to string;
+	Process histogram group config histogram group config from X content
+
+12.4. Add a class for histogram group config serializing tests. It allows to:
+
+	Do parse instance;
+	Get instance reader;
+	Create test instance;
+	Handle test validate no mapping;
+	Handle test validate nomatching field;
+	Handle test validate field wrong type;
+	Handle test validate field matching not aggregatable;
+	Handle test validate matching field
+
+12.5. Add a class for metric config serializing tests. It allows to:
+
+	Do parse instance;
+	Get instance reader;
+	Create test instance;
+	Handle test validate no mapping;
+	Handle test validate nomatching field;
+	Handle test validate field wrong type;
+	Handle test validate field matching not aggregatable;
+	Handle test validate date field unsupported metric;
+	Handle test validate matching field
+
+13. Changes to package org.elasticsearch.xpack.core.security:  
+
+13. Changes to package org.elasticsearch.xpack.core.security.action.user:  
+
+13. Changes to package org.elasticsearch.xpack.core.security.authc:  
+
+13. Changes to package org.elasticsearch.xpack.core.security.support:  
+
+13. Changes to package org.elasticsearch.xpack.core.security.user:  
+
+13. Changes to package org.elasticsearch.xpack.indexlifecycle:  
+
+13.1. Add a class for execute steps update task. It allows to:
+
+	Instantiate execute steps update task  with index, start step, policy steps registry, index lifecycle runner, now supplier and now supplier;
+	Get policy;
+	Get index;
+	Get start step;
+	Get next step key;
+	Execute current state;
+	Handle cluster state processed;
+	Process execute steps update task execute steps update task on failure;
+	Move cluster state to error step
+
+13.2. Add a class for execute steps update task tests. It allows to:
+
+	Prepare state;
+	Get setup index policy;
+	Handle test never execute non cluster state step;
+	Handle test success then failure unset next key;
+	Handle test execute until first non cluster state step;
+	Handle test execute invalid start step;
+	Handle test execute incomplete wait step no info;
+	Handle test execute incomplete wait step with info;
+	Handle test on failure;
+	Handle test cluster action step throws exception;
+	Handle test cluster wait step throws exception;
+	Set state  to key
+
+13.3. Add a class for index lifecycle. It allows to:
+
+	Instantiate index lifecycle  with settings;
+	Get clock;
+	Create guice modules;
+	Get settings;
+	Create components;
+	Get named writeables;
+	Get named X content;
+	Get rest handlers;
+	Get actions;
+	Close index lifecycle
+
+13.4. Add a class for index lifecycle feature set. It allows to:
+
+	Instantiate index lifecycle feature set  with settings, X pack license state, cluster service and cluster service;
+	Name index lifecycle feature set;
+	Get description;
+	Handle available;
+	Get enabled;
+	Handle native code info;
+	Handle usage
+
+13.5. Add a class for index lifecycle metadata tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Get instance reader;
+	Get named writeable registry;
+	X content registry;
+	Mutate instance;
+	Make test changes;
+	Diff reader;
+	Handle test minimum supported version;
+	Handle testcontext;
+
+13.6. Add a class for index lifecycle runner. It allows to:
+
+	Instantiate index lifecycle runner  with steps registry, cluster service, thread pool, now supplier and now supplier;
+	Check if index lifecycle runner is ready to transition to this phase;
+	Run periodic step;
+	Process  on response;
+	Process  on failure;
+	Maybe run async action;
+	Run policy  after state change;
+	Get current step key;
+	Get current step;
+	Move cluster state  to step;
+	Move cluster state  to next step;
+	Move cluster state  to error step;
+	Move cluster state  to failed step;
+	Move execution state  to next step;
+	Handle new cluster state with lifecycle state;
+	Add step info  to cluster state;
+	Move index to step;
+	Move index to error step;
+	Set step info;
+	Remove policy  for indexes;
+	Remove policy  for index;
+	Handle mark policy does not exist
+
+13.7. Add a class for index lifecycle service. It allows to:
+
+	Instantiate index lifecycle service  with settings, client, cluster service, thread pool, clock, now supplier, named X content registry and named X content registry;
+	Maybe run async action;
+	Move cluster state  to step;
+	Move cluster state  to failed step;
+	Process index lifecycle service index lifecycle service on master;
+	Off master;
+	Executor name;
+	Update poll interval;
+	Get scheduler;
+	Get scheduled job;
+	Maybe schedule job;
+	Handle cluster changed;
+	Apply cluster state;
+	Cancel job;
+	Get triggered;
+	Trigger policies;
+	Close index lifecycle service;
+	Submit operation mode update;
+	Check if index lifecycle service is cluster service stopped or closed
+
+13.8. Add a class for index lifecycle service tests. It allows to:
+
+	Prepare services;
+	Handle cleanup;
+	Handle test stopped mode skip;
+	Handle test requested stop on shrink;
+	Handle test requested stop on safe action;
+	Handle test triggered different job
+
+13.9. Add a class for lifecycle policy client tests. It allows to:
+
+	Handle test execute with headers async no headers;
+	Handle test execute with headers async wrong headers;
+	Handle test execute with headers async with headers
+
+13.10. Add a class for lifecycle policy security client. It allows to:
+
+	Instantiate lifecycle policy security client  with client, headers map and headers map;
+	Close lifecycle policy security client;
+	Execute action
+
+13.11. Add a class for lockable lifecycle type. It allows to:
+
+	Get ordered phases;
+	Get next phase name;
+	Get previous phase name;
+	Get ordered actions;
+	Get next action name;
+	Validate phases collection;
+	Get writeable name;
+	Write  to stream output
+
+13.12. Add a class for move to error step update task. It allows to:
+
+	Instantiate move to error step update task  with index, current step step key, cause exception, now supplier and now supplier;
+	Get index;
+	Get policy;
+	Get current step key;
+	Get cause;
+	Execute current state;
+	Process move to error step update task move to error step update task on failure
+
+13.13. Add a class for move to error step update task tests. It allows to:
+
+	Handle setup cluster state;
+	Handle test execute successfully moved;
+	Handle test execute noop different step;
+	Handle test execute noop different policy;
+	Handle test on failure;
+	Set state policy;
+	Set state  to key
+
+13.14. Add a class for move to next step update task. It allows to:
+
+	Instantiate move to next step update task  with index, current step step key, next step step key, now supplier, state change consumer and state change consumer;
+	Get index;
+	Get policy;
+	Get current step key;
+	Get next step key;
+	Execute current state;
+	Handle cluster state processed;
+	Process move to next step update task move to next step update task on failure
+
+13.15. Add a class for move to next step update task tests. It allows to:
+
+	Handle setup cluster state;
+	Handle test execute successfully moved;
+	Handle test execute different current step;
+	Handle test execute different policy;
+	Handle test execute successful move with invalid next step;
+	Handle test on failure;
+	Set state policy;
+	Set state  to key
+
+13.16. Add a class for operation mode update task. It allows to:
+
+	Instantiate operation mode update task  with operation mode;
+	Get operation mode;
+	Execute current state;
+	Process operation mode update task operation mode update task on failure
+
+13.17. Add a class for operation mode update task tests. It allows to:
+
+	Handle test execute;
+	Handle test execute with empty metadata;
+	Assert move;
+	Assert no move;
+	Update current mode
+
+13.18. Add a class for policy steps registry. It allows to:
+
+	Instantiate policy steps registry  with named X content registry, client and client;
+	Instantiate policy steps registry  with lifecycle policy map, first step map, step map, named X content registry, client and client;
+	Get lifecycle policy map;
+	Get first step map;
+	Get step map;
+	Update cluster state;
+	Parse steps  from phase;
+	Step index meta data;
+	Exists step step key;
+	Handle policy exists;
+	Get first step;
+	Get index age  for phase
+
+13.19. Add a class for policy steps registry tests. It allows to:
+
+	Handle empty meta data;
+	Handle test get first step;
+	Handle test get first step unknown policy;
+	Handle test get step;
+	Handle test get step error step;
+	Handle test get step unknown policy;
+	Handle test get step for index with no phase gets initialization step;
+	Handle test get step unknown step key;
+	Convert test update from nothing;
+	Handle test update changed policy;
+	Handle test update policy but no phase change index steps dont change
+
+13.20. Add a class for random step info. It allows to:
+
+	Instantiate random step info  with random string supplier;
+	Convert random step info to X content;
+	Hash code;
+	Check if random step info equals;
+	Convert random step info to string
+
+13.21. Add a class for set step info update task tests. It allows to:
+
+	Handle setup cluster state;
+	Handle test execute successfully set;
+	Get random step info;
+	Handle test execute noop different step;
+	Handle test execute noop different policy;
+	Handle test on failure;
+	Set state policy;
+	Set state  to key
+
+13.22. Add a class for time value schedule. It allows to:
+
+	Instantiate time value schedule  with interval time value;
+	Get interval;
+	Handle next scheduled time after;
+	Hash code;
+	Check if time value schedule equals
+
+13.23. Add a class for time value schedule tests. It allows to:
+
+	Create random instance;
+	Create random time value;
+	Set up start and interval;
+	Handle test hashcode and equals;
+	Handle test next scheduled time first trigger not reached;
+	Handle test next scheduled time at first interval;
+	Handle test next scheduled time at start time;
+	Handle test next scheduled time after first trigger;
+	Handle test invalid interval
+
+14. Changes to package org.elasticsearch.xpack.indexlifecycle.action:  
+
+14.1. Add a class for rest delete lifecycle action. It allows to:
+
+	Instantiate rest delete lifecycle action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.2. Add a class for rest explain lifecycle action. It allows to:
+
+	Instantiate rest explain lifecycle action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.3. Add a class for rest get lifecycle action. It allows to:
+
+	Instantiate rest get lifecycle action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.4. Add a class for rest get status action. It allows to:
+
+	Instantiate rest get status action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.5. Add a class for rest move to step action. It allows to:
+
+	Instantiate rest move to step action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.6. Add a class for rest put lifecycle action. It allows to:
+
+	Instantiate rest put lifecycle action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.7. Add a class for rest retry action. It allows to:
+
+	Instantiate rest retry action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.8. Add a class for rest start ILM action. It allows to:
+
+	Instantiate rest start ILM action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.9. Add a class for rest stop action. It allows to:
+
+	Instantiate rest stop action  with settings, rest controller and rest controller;
+	Get name;
+	Prepare request
+
+14.10. Add a class for transport delete lifecycle action. It allows to:
+
+	Instantiate transport delete lifecycle action  with transport service, cluster service, thread pool, action filters, index name expression resolver and index name expression resolver;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Execute current state;
+	Check block
+
+14.11. Add a class for transport explain lifecycle action. It allows to:
+
+	Instantiate transport explain lifecycle action  with transport service, cluster service, thread pool, action filters, index name expression resolver, named X content registry and named X content registry;
+	Handle new response;
+	Get executor;
+	Check block;
+	Do master operation
+
+14.12. Add a class for transport get lifecycle action. It allows to:
+
+	Instantiate transport get lifecycle action  with transport service, cluster service, thread pool, action filters, index name expression resolver and index name expression resolver;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Check block
+
+14.13. Add a class for transport get status action. It allows to:
+
+	Instantiate transport get status action  with transport service, cluster service, thread pool, action filters, index name expression resolver and index name expression resolver;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Check block
+
+14.14. Add a class for transport move to step action. It allows to:
+
+	Instantiate transport move to step action  with transport service, cluster service, thread pool, action filters, index name expression resolver, index lifecycle service and index lifecycle service;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Execute current state;
+	Handle cluster state processed;
+	Check block
+
+14.15. Add a class for transport put lifecycle action. It allows to:
+
+	Instantiate transport put lifecycle action  with transport service, cluster service, thread pool, action filters, index name expression resolver and index name expression resolver;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Execute current state;
+	Check block
+
+14.16. Add a class for transport retry action. It allows to:
+
+	Instantiate transport retry action  with transport service, cluster service, thread pool, action filters, index name expression resolver, index lifecycle service and index lifecycle service;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Execute current state;
+	Handle cluster state processed;
+	Check block
+
+14.17. Add a class for transport start ILM action. It allows to:
+
+	Instantiate transport start ILM action  with transport service, cluster service, thread pool, action filters, index name expression resolver and index name expression resolver;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Execute current state;
+	Check block
+
+14.18. Add a class for transport stop ILM action. It allows to:
+
+	Instantiate transport stop ILM action  with transport service, cluster service, thread pool, action filters, index name expression resolver and index name expression resolver;
+	Get executor;
+	Handle new response;
+	Handle master operation;
+	Execute current state;
+	Check block
+
+15. Changes to package org.elasticsearch.xpack.ml:  
+
+15. Changes to package org.elasticsearch.xpack.ml.action:  
+
+15. Changes to package org.elasticsearch.xpack.ml.datafeed:  
+
+15. Changes to package org.elasticsearch.xpack.ml.integration:  
+
+15.1. Add a class for job results provider IT. It allows to:
+
+	Create components;
+	Handle test multiple simultaneous job creations;
+	Handle test get calandar by job id;
+	Handle test update calendar;
+	Handle test remove job from calendar;
+	Get calendars;
+	Update calendar;
+	Get calendar;
+	Handle test scheduled events;
+	Handle test scheduled events for job with group;
+	Build scheduled event;
+	Handle test get autodetect params;
+	Get autodetect params;
+	Get scheduled events  for job;
+	Create job;
+	Create analysis config;
+	Handle index scheduled events;
+	Handle index data counts;
+	Process  on response;
+	Process  on failure;
+	Handle index filters;
+	Handle index model size stats;
+	Handle index model snapshot;
+	Handle index quantiles;
+	Handle index calendars
+
+16. Changes to package org.elasticsearch.xpack.ml.job:  
+
+16. Changes to package org.elasticsearch.xpack.ml.job.persistence:  
+
+16.1. Add a class for job results provider. It allows to:
+
+	Instantiate job results provider  with client, settings and settings;
+	Check job for left over documents;
+	Process  on response;
+	Process  on failure;
+	Create job result index;
+	Get latest index mappings;
+	Add terms and aliases;
+	Get violated field count limit;
+	Count fields;
+	Update index mapping  with term fields;
+	Handle data counts;
+	Create latest data counts search;
+	Get autodetect params;
+	Create doc id search;
+	Parse autodetect param search hit;
+	Parse search hit;
+	Handle buckets via internal client;
+	Handle buckets;
+	Expand buckets;
+	Handle new batched buckets iterator;
+	Handle new batched records iterator;
+	Expand bucket;
+	Handle bucket records;
+	Handle category definitions;
+	Augment category definition with grok pattern;
+	Handle records;
+	Handle influencers;
+	Handle new batched influencers iterator;
+	Get model snapshot;
+	Handle model snapshots;
+	Get model plot;
+	Handle model size stats;
+	Search single result;
+	Create latest model size stats search;
+	Get established memory usage;
+	Get scheduled events for job;
+	Get scheduled events;
+	Get forecast request stats;
+	Get forecast stats;
+	Update calendar;
+	Handle calendars;
+	Remove job  from calendars;
+	Handle calendar;
+	Handle latest model size stats;
+	Map auth failure
+
+16.2. Add a class for job results provider tests. It allows to:
+
+	Handle test create job results index;
+	Process  on response;
+	Process  on failure;
+	Handle test create job with existing index;
+	Handle test create job related indicies creates alias because index name is set;
+	Handle test buckets one bucket no interim;
+	Handle test buckets one bucket interim;
+	Handle test buckets using builder;
+	Handle test bucket no bucket no expand;
+	Handle test bucket one bucket no expand;
+	Handle test records;
+	Handle test records using builder;
+	Handle test bucket records;
+	Handle testexpand bucket;
+	Handle test category definitions;
+	Handle test category definition;
+	Handle test influencers no interim;
+	Handle test influencers with interim;
+	Handle test model snapshots;
+	Handle test violated field count limit;
+	Handle test count fields;
+	Create bucket  at epoch time;
+	Create provider;
+	Create search response;
+	Get mocked client
+
+17. Changes to package org.elasticsearch.xpack.ml.job.process:  
+
+17.1. Add a class for process builder utils. It allows to:
+
+	Instantiate process builder utils;
+	Add object if not null;
+	Add time value if not null;
+	Handle model config file present
+
+18. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect:  
+
+18.1. Add a class for autodetect builder tests. It allows to:
+
+	Set up tests;
+	Handle test build autodetect command;
+	Handle test build autodetect command default time field;
+	Handle test build autodetect command given persist model state;
+	Handle autodetect builder
+
+19. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.output:  
+
+19. Changes to package org.elasticsearch.xpack.ml.job.process.normalizer:  
+
+19.1. Add a class for normalizer builder. It allows to:
+
+	Instantiate normalizer builder  with environment, bucket span integer and bucket span integer;
+	Build normalizer builder
+
+19.2. Add a class for normalizer builder tests. It allows to:
+
+	Handle test build normalizer command
+
+20. Changes to package org.elasticsearch.xpack.monitoring.collector.cluster:  
+
+20. Changes to package org.elasticsearch.xpack.monitoring.exporter.http:  
+
+20. Changes to package org.elasticsearch.xpack.restart:  
+
+20. Changes to package org.elasticsearch.xpack.rollup:  
+
+20. Changes to package org.elasticsearch.xpack.rollup.action:  
+
+20. Changes to package org.elasticsearch.xpack.rollup.config:  
+
+20. Changes to package org.elasticsearch.xpack.rollup.job:  
+
+20. Changes to package org.elasticsearch.xpack.rollup.rest:  
+
+20. Changes to package org.elasticsearch.xpack.security:  
+
+20. Changes to package org.elasticsearch.xpack.security.action.filter:  
+
+20. Changes to package org.elasticsearch.xpack.security.action.saml:  
+
+20. Changes to package org.elasticsearch.xpack.security.action.user:  
+
+20. Changes to package org.elasticsearch.xpack.security.audit:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.esnative:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.file:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.kerberos:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.ldap:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.ldap.support:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.pki:  
+
+20. Changes to package org.elasticsearch.xpack.security.authc.support.mapper:  
+
+20. Changes to package org.elasticsearch.xpack.security.authz:  
+
+20. Changes to package org.elasticsearch.xpack.security.ingest:  
+
+20. Changes to package org.elasticsearch.xpack.security.rest.action:  
+
+20. Changes to package org.elasticsearch.xpack.security.rest.action.user:  
+
+20. Changes to package org.elasticsearch.xpack.security.transport:  
+
+20. Changes to package org.elasticsearch.xpack.security.transport.nio:  
+
+20. Changes to package org.elasticsearch.xpack.security.user:  
+
+20.1. Add a class for user serialization tests. It allows to:
+
+	Convert test write;
+	Handle test system user read and write;
+	Handle test system user fails read;
+	Handle test X pack user read and write;
+	Handle test fake internal user serialization;
+	Handle test reserved user serialization
+
+21. Changes to package org.elasticsearch.xpack.sql.analysis.analyzer:  
+
+21. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar:  
+
+21. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.string:  
+
+21.1. Add a class for binary string function. It allows to:
+
+	Instantiate binary string function  with source, left expression, right expression and right expression;
+	Get operation;
+	Resolve type;
+	Resolve second parameter input type;
+	Fold binary string function;
+	Get script method name;
+	Get script with field;
+	Hash code;
+	Check if binary string function equals
+
+21.2. Add a class for binary string numeric function. It allows to:
+
+	Instantiate binary string numeric function  with source, left expression, right expression and right expression;
+	Get operation;
+	Resolve second parameter input type;
+	Make pipe;
+	Get data type
+
+21.3. Add a class for binary string numeric processor. It allows to:
+
+	Handle binary string numeric operation;
+	Apply count number;
+	Instantiate binary string numeric processor  with left processor, right processor, binary string numeric operation and binary string numeric operation;
+	Instantiate binary string numeric processor  with stream input;
+	Get writeable name;
+	Do process
+
+21.4. Add a class for binary string numeric processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test left function with valid input;
+	Handle test left function with edge cases;
+	Handle test left function input validation;
+	Test right function  with valid input;
+	Test right function  with edge cases;
+	Test right function input validation;
+	Handle test repeat function with valid input;
+	Handle test repeat function with edge cases;
+	Handle test repeat function inputs validation
+
+21.5. Add a class for binary string string function. It allows to:
+
+	Instantiate binary string string function  with source, left expression, right expression and right expression;
+	Resolve second parameter input type;
+	Get data type
+
+21.6. Add a class for binary string string processor. It allows to:
+
+	Handle binary string string operation;
+	Apply binary string string processor;
+	Instantiate binary string string processor  with stream input;
+	Instantiate binary string string processor  with left processor, right processor, binary string string operation and binary string string operation;
+	Get writeable name;
+	Do process
+
+21.7. Add a class for binary string string processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test position function with valid input;
+	Handle test position function with edge cases;
+	Handle test position function inputs validation
+
+21.8. Add a class for concat. It allows to:
+
+	Instantiate concat  with source, source 1 expression, source 2 expression and source 2 expression;
+	Resolve type;
+	Make pipe;
+	Handle nullable;
+	Handle foldable;
+	Fold concat;
+	Replace children;
+	Info concat;
+	Get script with field;
+	Get data type
+
+21.9. Add a class for concat function processor. It allows to:
+
+	Instantiate concat function processor  with source 1 processor, source 2 processor and source 2 processor;
+	Instantiate concat function processor  with stream input;
+	Get process;
+	Do process;
+	Get writeable name;
+	Check if concat function processor equals;
+	Hash code;
+	Write stream output
+
+21.10. Add a class for concat processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test concat function with valid input;
+	Handle test concat function with edge cases;
+	Handle test concat function inputs validation
+
+21.11. Add a class for insert. It allows to:
+
+	Instantiate insert  with source, src expression, start expression, length expression, replacement expression and replacement expression;
+	Resolve type;
+	Handle foldable;
+	Fold insert;
+	Make pipe;
+	Info insert;
+	Process insert insert as script;
+	Process insert insert as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+21.12. Add a class for insert function processor. It allows to:
+
+	Instantiate insert function processor  with source processor, start processor, length processor, replacement processor and replacement processor;
+	Instantiate insert function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Check if insert function processor equals;
+	Hash code;
+	Get source;
+	Start insert function processor;
+	Get length;
+	Get replacement;
+	Get writeable name
+
+21.13. Add a class for insert processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test insert with valid inputs;
+	Handle test insert with edge cases;
+	Handle test insert inputs validation
+
+21.14. Add a class for left. It allows to:
+
+	Instantiate left  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Info left
+
+21.15. Add a class for locate. It allows to:
+
+	Instantiate locate  with source, pattern expression, src expression, start expression and start expression;
+	Resolve type;
+	Make pipe;
+	Info locate;
+	Handle foldable;
+	Fold locate;
+	Process locate locate as script;
+	Process locate locate as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+21.16. Add a class for locate function processor. It allows to:
+
+	Instantiate locate function processor  with pattern processor, source processor, start processor and start processor;
+	Instantiate locate function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Check if locate function processor equals;
+	Hash code;
+	Get pattern;
+	Get source;
+	Start locate function processor;
+	Get writeable name
+
+21.17. Add a class for locate processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test locate function with valid input;
+	Handle test locate function with edge cases inputs;
+	Handle test locate function validating inputs
+
+21.18. Add a class for position. It allows to:
+
+	Instantiate position  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Make pipe;
+	Info position
+
+21.19. Add a class for repeat. It allows to:
+
+	Instantiate repeat  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Info repeat
+
+21.20. Add a class for replace. It allows to:
+
+	Instantiate replace  with source, src expression, pattern expression, replacement expression and replacement expression;
+	Resolve type;
+	Make pipe;
+	Info replace;
+	Handle foldable;
+	Fold replace;
+	Process replace replace as script;
+	Process replace replace as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+21.21. Add a class for replace function processor. It allows to:
+
+	Instantiate replace function processor  with source processor, pattern processor, replacement processor and replacement processor;
+	Instantiate replace function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Check if replace function processor equals;
+	Hash code;
+	Get source;
+	Get pattern;
+	Get replacement;
+	Get writeable name
+
+21.22. Add a class for replace processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test replace function with valid input;
+	Handle test replace function with edge cases;
+	Handle test replace function inputs validation
+
+21.23. Add a class for right. It allows to:
+
+	Instantiate right  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Info right
+
+21.24. Add a class for substring. It allows to:
+
+	Instantiate substring  with source, src expression, start expression, length expression and length expression;
+	Resolve type;
+	Make pipe;
+	Handle foldable;
+	Fold substring;
+	Info substring;
+	Process substring substring as script;
+	Process substring substring as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+21.25. Add a class for substring function processor. It allows to:
+
+	Instantiate substring function processor  with source processor, start processor, length processor and length processor;
+	Instantiate substring function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Get source;
+	Start substring function processor;
+	Get length;
+	Check if substring function processor equals;
+	Hash code;
+	Get writeable name
+
+21.26. Add a class for substring processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test substring function with valid input;
+	Handle test substring function with edge cases;
+	Handle test substring function inputs validation
+
+22. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.whitelist:  
+
+22. Changes to package org.elasticsearch.xpack.watcher.execution:  
+

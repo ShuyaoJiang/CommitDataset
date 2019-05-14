@@ -1,0 +1,9 @@
+Remove @Lazy injection for HttpMessageConverters
+
+This commit turns a lazy injection point for `HttpMessageConverters`
+into an `ObjectProvider`-backed injection.
+
+This allows to lazily rely on that bean without creating for it; in some
+environments, such proxy creation can lead to issues like SPR-16990.
+
+See gh-13785

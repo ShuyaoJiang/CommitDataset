@@ -1,0 +1,9 @@
+Async Snapshot Repository Deletes (#40144)
+
+Motivated by slow snapshot deletes reported in e.g. #39656 and the fact that these likely are a contributing factor to repositories accumulating stale files over time when deletes fail to finish in time and are interrupted before they can complete. 
+
+* Makes snapshot deletion async and parallelizes some steps of the delete process that can be safely run concurrently via the snapshot thread poll
+   * I did not take the biggest potential speedup step here and parallelize the shard file deletion because that's probably better handled by moving to bulk deletes where possible (and can still be parallelized via the snapshot pool where it isn't). Also, I wanted to keep the size of the PR manageable. 
+* See https://github.com/elastic/elasticsearch/pull/39656#issuecomment-470492106
+* Also, as a side effect this gives the `SnapshotResiliencyTests` a little more coverage for master failover scenarios (since parallel access to a blob store repository during deletes is now possible since a delete isn't a single task anymore).
+* By adding a `ThreadPool` reference to the repository this also lays the groundwork to parallelizing shard snapshot uploads to improve the situation reported in #39657 

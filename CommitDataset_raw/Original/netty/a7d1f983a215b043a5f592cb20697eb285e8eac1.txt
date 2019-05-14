@@ -1,0 +1,14 @@
+[#2761] Proper work-around for data-corruption caused by cached ByteBuffers
+
+Motivation:
+
+The previous fix did disable the caching of ByteBuffers completely which can cause performance regressions. This fix makes sure we use nioBuffers() for all writes in NioSocketChannel and so prevent data-corruptions. This is still kind of a workaround which will be replaced by a more fundamental fix later.
+
+Modifications:
+
+- Revert 4059c9f3549753119576a287492dd70ae4742988
+- Use nioBuffers() for all writes to prevent data-corruption
+
+Result:
+
+No more data-corruption but still retain the original speed.

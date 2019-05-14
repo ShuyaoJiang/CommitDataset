@@ -1,0 +1,13 @@
+Call debugData.retain() before we forward the frame to the pipeline
+
+Motivation:
+
+We need to call debugData.retain() before we forward the frame to the pipeline as ByteToMessageDecoder will call release() on the buffer.
+
+Modifications:
+
+Correctly retain debugData and fix the unit test to test for it.
+
+Result:
+
+No more IllegalReferenceCountException when using the Http2FrameCodec.

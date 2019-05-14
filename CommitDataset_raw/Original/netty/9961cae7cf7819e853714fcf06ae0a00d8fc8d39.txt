@@ -1,0 +1,17 @@
+Use a forked exec-maven-plugin instead of maven-antrun-plugin
+
+Motivation:
+
+maven-antrun-plugin does not redirect stdin, and thus it's impossible to
+run interactive examples such as securechat-client and telnet-client.
+org.codehaus.mojo:exec-maven-plugin redirects stdin, but it buffers
+stdout and stderr, and thus an application output is not flushed timely.
+
+Modifications:
+
+Deploy a forked version of exec-maven-plugin which flushes output
+buffers in a timely manner.
+
+Result:
+
+Interactive examples work.  Launches faster than maven-antrun-plugin.

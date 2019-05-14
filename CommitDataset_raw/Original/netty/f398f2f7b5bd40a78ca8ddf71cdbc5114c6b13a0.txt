@@ -1,0 +1,18 @@
+Fire channelReadComplete() in EpollDatagramChannel
+
+Related: #3274
+
+Motivation:
+
+channelReadComplete() event is not triggered after reading successfully
+in EpollDatagramChannel.
+
+Modifications:
+
+- Trigger exceptionCaught() event for read failure only once for less
+  noise
+- Trigger channelReadComplete() event at the end of the read.
+
+Result:
+
+Fix #3274

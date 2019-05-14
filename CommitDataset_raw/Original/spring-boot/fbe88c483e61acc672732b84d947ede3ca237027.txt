@@ -1,0 +1,8 @@
+Prevent rabbitmq starter to bring webflux on the classpath
+
+This commit excludes `com.rabbitmq:http-client` from `spring-rabbit` as
+the former brings spring webflux for an optional feature. This also
+prevents Spring Boot to consider that a web server should be started as
+all the necessary pieces are unexpectedly present.
+
+Closes gh-12853

@@ -1,0 +1,11 @@
+ShardFollowNodeTask should fetch operation once (#32455)
+
+Today ShardFollowNodeTask might fetch some operations more than once.
+This happens because we ask the leading for up to max_batch_count
+operations (instead of the left-over size) for the left-over request.
+The leading then can freely respond up to the max_batch_count, and at
+the same time, if one of the previous requests completed, we might issue
+another read request whose range overlaps with the response of the
+left-over request.
+
+Closes #32453

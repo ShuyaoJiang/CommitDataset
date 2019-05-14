@@ -1,0 +1,12 @@
+Fix health indicator auto-configuration order
+
+Previously, the health auto-configuration `AutoconfigureOrder` entry for
+couchbase was referring to the standard couchbase auto-configuration that
+is not responsible to configure the `CouchbaseOperations` bean. Yet, the
+health indicator implementation was relying on the presence of such a
+bean.
+
+This commit fixes the `AutoconfigureOrder` entry so that it refers to
+`CouchbaseDataAutoConfiguration` now.
+
+Closes gh-7543

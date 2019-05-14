@@ -1,0 +1,16 @@
+Fixes IndiceOptionsTests to serialise correctly (#30644)
+
+* Fixes IndiceOptionsTests to serialise correctly
+
+Previous to this change `IndicesOptionsTests.testSerialisation()` would
+select a complete random version for both the `StreamOutput` and the
+`StreamInput`. This meant that the output could be selected as 7.0+
+while the input was selected as <7.0 causing the stream to be written
+in the new format and read in teh old format (or vica versa). This
+change splits the two cases into different test methods ensuring that
+the Streams are at least on compatibile versions even if they are on
+different versions.
+
+* Use same random version for input and output streams
+server/src/test/java/org/elasticsearch/action/support/IndicesOptionsTest
+s.java

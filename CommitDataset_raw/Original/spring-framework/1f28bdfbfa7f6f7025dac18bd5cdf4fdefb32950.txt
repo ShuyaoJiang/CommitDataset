@@ -1,0 +1,16 @@
+Fix SpEL JavaBean compliance
+
+Before this fix ReflectivePropertyAccessor was not able to find write
+method for valid property name that has first character in lower case
+and second character in upper case. Write method lookup would always
+convert first character of property name to upper case which is not
+compliant with JavaBean specification. As consequence this caused an
+unwanted behavior in SpEL when obtaining values of expressions that
+reference such JavaBean properties.
+
+As of this change, write method lookup skips conversion of property
+name first character to upper case when property name is longer than
+one character and second character is in upper case. This also fixes
+mentioned bug in SpEL value resolution.
+
+Issue: SPR-9123

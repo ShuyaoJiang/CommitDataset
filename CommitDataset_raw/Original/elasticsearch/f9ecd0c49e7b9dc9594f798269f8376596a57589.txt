@@ -1,0 +1,43 @@
+[Zen2] Write manifest file (#35049)
+
+Elasticsearch node is responsible for storing cluster metadata. 
+There are 2 types of metadata: global metadata and index metadata. 
+`GatewayMetaState` implements `ClusterStateApplier` and receives all 
+`ClusterStateChanged` events and is responsible for storing modified 
+metadata to disk. 
+
+When new `ClusterStateChanged` event is received, `GatewayMetaState` 
+checks if global metadata has changed and if it's the case writes new 
+global metadata to disk. After that `GatewayMetaState` checks if index 
+metadata has changed or there are new indices assigned to this node and 
+if it's the case writes new index metadata to disk. Atomicity of global 
+metadata and index metadata writes is ensured by `MetaDataStateFormat` 
+class.
+
+Unfortunately, there is no atomicity when more than one metadata changes
+(global and index, or metadata for two indices). And atomicity is 
+important for Zen2 correctness.
+This commit adds atomicity by adding a notion of manifest file, 
+represented by `MetaState` class. `MetaState` contains pointers to
+current metadata.
+More precisely, it stores global state generation as long and map from 
+`Index` to index metadata generation as long. Atomicity of writes for 
+manifest file is ensured by `MetaStateFormat` class.
+
+The algorithm of writing changes to the disk would be the following:
+
+1. Write global metadata state file to disk and remember
+it's generation.
+2. For each new/changed index write state file to disk and remember
+it's generation. For each not-changed index use generation from 
+previous manifest file. If index is removed or this node is no longer
+responsible for this index - forget about the index.
+3. Create `MetaState` object using previously remembered generations and
+write it to disk.
+4. Remove old state files for global metadata, indices metadata and 
+manifest.
+
+Additonally new implementation relies on enhanced `MetaDataStateFormat` 
+failure semantics, `applyClusterState` throws IOException, whose 
+descendant `WriteStateException` could be (and should be in Zen2) 
+explicitly handled.

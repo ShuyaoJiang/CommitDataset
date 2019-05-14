@@ -1,0 +1,5 @@
+Simplify the Translog constructor by always expecting an existing translog (#28676)
+
+Currently the Translog constructor is capable both of opening an existing translog and creating a
+new one (deleting existing files). This PR separates these two into separate code paths. The
+constructors opens files and a dedicated static methods creates an empty translog.

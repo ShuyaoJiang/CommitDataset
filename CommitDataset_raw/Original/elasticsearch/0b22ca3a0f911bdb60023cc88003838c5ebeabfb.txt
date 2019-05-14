@@ -1,0 +1,10 @@
+Core: Deprecate use of scientific notation in epoch time parsing (#36691)
+
+The joda epoch parsing code currently supports passing epoch time as a
+number in scientific notation. However, no systems appear to exist which
+output timestamps in scientific notation. In java time, it is
+particularly complex to implement scientific notation timestamp parsing
+within a DateTimeFormatter. This commit adds a deprecation warning when
+the epoch time parsers in joda parse scientific notation, so that it can
+be removed when switching to java time.
+joda are passed a time in scientific notation.

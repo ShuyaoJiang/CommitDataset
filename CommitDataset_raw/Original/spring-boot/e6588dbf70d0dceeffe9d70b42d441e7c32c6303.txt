@@ -1,0 +1,9 @@
+Make LOGGING_SYSTEM_BEAN_NAME public
+
+Since the `LoggingSystem` may be retrieved very early during the context
+initialization, we should do a lookup by name even if only one instance
+of that bean is ultimately expected in the context.
+
+The constant defining the bean name is now public to ease that use case.
+
+Closes gh-4584

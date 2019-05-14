@@ -1,0 +1,17 @@
+Allow engine to recover from translog upto a seqno (#33032)
+
+This change allows an engine to recover from its local translog up to
+the given seqno. The extended API can be used in these use cases:
+
+When a replica starts following a new primary, it resets its index to
+the safe commit, then replays its local translog up to the current
+global checkpoint (see #32867).
+
+When a replica starts a peer-recovery, it can initialize the
+start_sequence_number to the persisted global checkpoint instead of the
+local checkpoint of the safe commit. A replica will then replay its
+local translog up to that global checkpoint before accepting remote
+translog from the primary. This change will increase the chance of
+operation-based recovery. I will make this in a follow-up.
+
+Relates #32867

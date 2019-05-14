@@ -1,0 +1,9 @@
+Upgrade to Netty 4.1.25.Final (#31232)
+
+This commit upgrades us to Netty 4.1.25. This upgrade is more
+challenging than past upgrades, all because of a new object cleaner
+thread that they have added. This thread requires an additional security
+permission (set context class loader, needed to avoid leaks in certain
+scenarios). Additionally, there is not a clean way to shutdown this
+thread which means that the thread can fail thread leak control during
+tests. As such, we have to filter this thread from thread leak control.

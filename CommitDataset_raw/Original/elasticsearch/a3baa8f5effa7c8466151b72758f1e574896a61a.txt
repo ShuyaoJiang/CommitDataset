@@ -1,0 +1,11 @@
+Freezing an index should increase its index settings version (#37813)
+
+When an index is frozen, two index settings are updated (index.frozen and 
+index.search.throttled) but the settings version is left unchanged and does 
+not reflect the settings update. This commit change the 
+TransportFreezeIndexAction so that it also increases the settings version 
+when an index is frozen/unfrozen.
+
+This issue has been caught while working on the replication of closed 
+indices (#3388) in which index metadata for a closed index are updated 
+to frozen metadata and this specific assertion tripped.

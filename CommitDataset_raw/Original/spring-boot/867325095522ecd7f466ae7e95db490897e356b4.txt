@@ -1,0 +1,30 @@
+Make use of Gradle's application plugin optional when using Boot plugin
+
+Previously, the Spring Boot Gradle plugin would always apply the
+application plugin to a project. It then piggy-backed on the application
+plugin’s mainClassName and applicationDefaultJvmArgs properties for the
+configuration of the bootRun task.
+
+This commit updates the Spring Boot Gradle plugin so that it no longer
+applies the application plugin. If the user applies the application
+plugin then its configuration will be used, but it’s a no longer
+requirement.
+
+Users who do not need the application plugin, but who were using the
+mainClassName or applicationDefaultJvmArgs properties will need to
+change their builds as a result of this change as those properties will
+no longer exist. As before, the mainClassName can be configured on the
+springBoot extension:
+
+springBoot {
+	mainClassName 'com.example.YourApplication'
+}
+
+The applicationDefaultJvmArgs property can be used, but it must now be
+declared with the project's ext block. For example:
+
+ext {
+	applicationDefaultJvmArgs = [ '-Dcom.example.property=true' ]
+}
+
+Closes gh-2679

@@ -1,0 +1,15 @@
+Ensure CompositeByteBuf.addComponent* handles buffer in consistent way and not causes leaks
+
+Motivation:
+
+At the moment we have two problems:
+ - CompositeByteBuf.addComponent(...) will not add the supplied buffer to the CompositeByteBuf if its empty, which means it will not be released on CompositeByteBuf.release() call. This is a problem as a user will expect everything added will be released (the user not know we not added it).
+ - CompositeByteBuf.addComponents(...) will either add no buffers if none is readable and so has the same problem as addComponent(...) or directly release the ByteBuf if at least one ByteBuf is readable. Again this gives inconsistent handling and may lead to memory leaks.
+
+Modifications:
+
+ - Always add the buffer to the CompositeByteBuf and so release it on release call.
+
+Result:
+
+Consistent handling and no buffer leaks.

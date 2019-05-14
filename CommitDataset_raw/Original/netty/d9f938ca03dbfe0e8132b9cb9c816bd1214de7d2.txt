@@ -1,0 +1,13 @@
+[#4828] OpenSslContext throws UnsupportedOperationException when Unsafe not available
+
+Motivation:
+
+OpenSslContext constructor fails with a UnsupportedOperationException if Unsafe is not present on the system.
+
+Modifications:
+
+Make OpenSslContext work also when Unsafe is not present by fallback to using JNI to get the memory address.
+
+Result:
+
+Using OpenSslContext also works on systems without Unsafe.

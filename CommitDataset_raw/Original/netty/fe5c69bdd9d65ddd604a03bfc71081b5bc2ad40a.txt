@@ -1,0 +1,10 @@
+DnsNameResolverContext#followCname only uses first name server
+
+Motivation:
+When following a CNAME it is possible there are multiple name servers to query against. However DnsNameResolverContext#followCname explicitly only uses the first name server address when attempting the query. This may lead to resolution failures because we didn't try all the available name servers.
+
+Modifications:
+DnsNameResolverContext#followCname should not just try the first name server, but it should try all name servers
+
+Result:
+More complete CNAME resolution.

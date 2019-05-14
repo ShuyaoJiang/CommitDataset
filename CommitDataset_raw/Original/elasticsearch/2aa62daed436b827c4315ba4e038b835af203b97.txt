@@ -1,0 +1,12 @@
+Introduce resizable inbound byte buffer (#27551)
+
+This is related to #27563. In order to interface with java nio, we must
+have buffers that are compatible with ByteBuffer. This commit introduces
+a basic ByteBufferReference to easily allow transferring bytes off the
+wire to usage in the application.
+
+Additionally it introduces an InboundChannelBuffer. This is a buffer
+that can internally expand as more space is needed. It is designed to
+be integrated with a page recycler so that it can internally reuse pages.
+The final piece is moving all of the index work for writing bytes to a
+channel into the WriteOperation.

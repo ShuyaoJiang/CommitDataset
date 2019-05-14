@@ -1,0 +1,9 @@
+Revert ParsingPathMatcher concurrency checks
+
+`PathPatternParser` is now thread-safe and creates a new internal parser
+for each `parse` call, since this operation is cheap.
+This commit removes the `ThreadLocal` based instances of
+`PathPatternParser` in `ParsingPathMatcher` which are not required
+anymore.
+
+Issue: SPR-15246

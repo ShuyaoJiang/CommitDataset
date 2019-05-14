@@ -1,0 +1,14 @@
+Reduce GC produced by native DatagramChannel implementations when in connected mode. (#8806)
+
+Motivation:
+
+In the native code EpollDatagramChannel / KQueueDatagramChannel creates a DatagramSocketAddress object for each received UDP datagram even when in connected mode as it uses the recvfrom(...) / recvmsg(...)  method. Creating these is quite heavy in terms of allocations as internally, char[], String, Inet4Address, InetAddressHolder, InetSocketAddressHolder, InetAddress[], byte[] objects are getting generated when constructing the object. When in connected mode we can just use regular read(...) calls which do not need to allocate all of these.
+
+Modifications:
+
+- When in connected mode use read(...) and NOT recvfrom(..) / readmsg(...) to reduce allocations when possible.
+- Adjust tests to ensure read works as expected when in connected mode.
+
+Result:
+
+Less allocations and GC when using native datagram channels in connected mode. Fixes https://github.com/netty/netty/issues/8770.

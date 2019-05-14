@@ -1,0 +1,13 @@
+Test that LaunchedURLClassLoader works when thread is interrupted
+
+Previously, RandomAccessDataFile used a semaphore and acquired it
+interruptibly. This meant that an interrupted thread was unable to
+access the file. Notably, this would prevent LaunchedURLClassLoader from
+loading classes or resources on an interrupted thread.
+
+The previous commit (937f857) updates RandomAccessDataFile to acquire
+the semaphore uninterruptibly. This commit adds a test to
+LaunchedURLClassLoader to verify that it can now load a resource from
+an interrupted thread.
+
+Closes gh-6683

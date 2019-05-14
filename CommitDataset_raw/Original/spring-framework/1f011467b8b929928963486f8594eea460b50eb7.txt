@@ -1,0 +1,35 @@
+Introduce Kotlin functional bean definition DSL
+
+As a follow-up of the ApplicationContext Kotlin extensions, close to
+the Kotlin functional WebFlux DSL and partially inspired of the
+Groovy/Scala bean configuration DSL, this commit introduces a
+lightweight Kotlin DSL for functional bean declaration.
+
+It allows declaring beans as following:
+
+beans {
+	bean<Foo>()
+	profile("bar") {
+		bean<Bar>("bar", scope = Scope.PROTOTYPE)
+	}
+	environment({ it.activeProfiles.contains("baz") }) {
+		bean { Baz(it.ref()) }
+		bean { Baz(it.ref("bar")) }
+	}
+}
+
+Advantages compared to Regular ApplicationContext API are:
+ - No exposure of low-level ApplicationContext API
+ - Focused DSL easier to read, but also easier to write with a fewer
+   entries in the auto-complete
+ - Declarative syntax instead of functions with verbs like registerBeans
+   while still allowing programmatic registration of beans if needed
+ - Such DSL is idiomatic in Kotlin
+ - No need to have an ApplicationContext instance to write how you
+   register your beans since beans { } DSL is conceptually a
+   Consumer<GenericApplicationContext>
+
+This DSL effectively replaces ApplicationContext Kotlin extensions as
+the recommended way to register beans in a functional way with Kotlin.
+
+Issue: SPR-15755

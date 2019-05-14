@@ -1,0 +1,10 @@
+HTTP/2 DefaultHttp2Connection NPE
+
+Motivation:
+If while iterating the active streams a close operation occurs this will be queued and process after the iteration has completed to avoid a concurrent modification exception. However it is possible that during the iteration the stream which was closed could have been removed from the priority tree and its parent would be set to null. Then after the iteration completes the close operation will attempt to dereference the parent and results in a NPE.
+
+Modifications:
+- pending close operations should verify the stream's parent is not null before processing the event
+
+Result:
+No More NPE.

@@ -1,0 +1,13 @@
+Restrict ETag generation in ShallowEtagHeaderFilter
+
+Prior to this commit, all 2xx HTTP responses were eligible for ETag
+generation in ShallowEtagHeaderFilter. In some cases, this would use
+CPU resources for no reason since HTTP clients would not use ETags.
+
+This commit is an optimization and restricts ETags generation in cases
+where (all conditions must be met):
+- response has a 2xx status
+- request is a GET
+- response does not contain "no-store" in its "Cache-Control" header
+
+Issue: SPR-11110

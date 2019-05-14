@@ -1,0 +1,12 @@
+Fix problem with MatchNoDocsQuery in disjunction queries (#35726)
+
+Queries across multiple fields generate MatchNoDocsQuerys for fields that are
+unmapped. In certain situation this can lead to erroneous behaviour,
+for example when an umapped field is used in a query_string query across
+several fields. If some of the tokens in the query string get eliminated by an
+analyzer on the mapped fields, the same token will currently generate
+MatchNoDocsQuerys combined into a disjunction, which in turn
+leads to no matches in the overall query. Instead we should simply not add
+MatchNoDocsQuerys to those disjunctions.
+
+Closes #34708

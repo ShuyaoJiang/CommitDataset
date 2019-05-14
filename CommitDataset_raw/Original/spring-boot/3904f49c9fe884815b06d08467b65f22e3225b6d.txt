@@ -1,0 +1,13 @@
+Configure ServletContext before initializing S…C…Initializer beans
+
+Previously, the ServletContext was configured after any
+ServletContextInitializer beans had been initialized. This meant that
+any configuration class that provided such a bean would be initialized
+before the ServletContext was configured. If the configuration class
+used the ServletContext in its initializtaion that it would see it in
+its default, unconfigured state.
+
+This commit reworks the configuration of the ServletContext so that
+it happens before any ServletContextInitializer beans are initialized.
+
+Closes gh-10699

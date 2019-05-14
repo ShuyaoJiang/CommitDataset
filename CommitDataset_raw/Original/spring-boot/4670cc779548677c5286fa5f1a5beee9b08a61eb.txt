@@ -1,0 +1,13 @@
+Relax use of spring.session.store-type
+
+This commit makes the "spring.session.store-type" property optional,
+adding an additional check when it is not present that validates only
+one supported implementation is available on the classpath.
+
+As Spring Session has been modularized, the chance that multiple
+implementations are available on the classpath are lower. When only
+one implementation is present, we attempt to auto-configure it. When
+more than one implementation is present and no session store is
+configured, a NonUniqueSessionRepositoryException is thrown.
+
+Closes gh-9863

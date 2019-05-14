@@ -1,0 +1,14 @@
+Stop using assertSeededHashFunctionEquals for goodFastHash.
+The problem is that goodFastHash(n) is sometimes equal to goodFastHash(m) even when n and m are different.
+Basically, the value is rounded up to a multiple of 128.
+(It's a size, not a seed as it is for the other Hashing methods.)
+
+Currently the test passes because of the specific values that the test Random generates.
+However, which specific numbers are used for goodFastHash is dependent on the order in which the Hashing methods are tested, which is dependent on the JVM.
+The methods are reordered with the latest JDK7 build, breaking the test (at least in Guava, which has a slightly different set of methods than internally).
+
+We could "fix" this by sorting the methods before testing them, but the fundamental problem is that assertSeededHashFunctionEquals makes sense for seeds but not sizes.
+(This basic fact is hinted at by a comment that already existed in the test.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=60202745

@@ -1,0 +1,14 @@
+DnsNameResolver should respect /etc/resolv.conf and /etc/resolver
+
+Motivation:
+The JDK uses gethostbyname for blocking hostname resoltuion. gethostbyname can be configured on Unix systems according to [1][2]. This may impact the name server that is used to resolve particular domains or just override the default fall-back resolver. DnsNameResolver currently ignores these configuration files which means the default resolution behavior is different than the JDK. This may lead to unexpected resolution failures which succeed when using the JDK's resolver.
+
+Modifications:
+- Add an interface which can override what DnsServerAddressStream to use for a given hostname
+- Provide a Unix specific implementation of this interface and implement [1][2]. Some elements may be ignored sortlist, timeout, etc...
+
+Result:
+DnsNameResolver behaves more like the JDK resolver by default.
+
+[1] https://linux.die.net/man/5/resolver
+[2] https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man5/resolver.5.html

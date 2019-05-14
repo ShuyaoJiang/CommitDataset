@@ -1,0 +1,24 @@
+[ML] Kill autodetect on force close and isolated node rejoining (elastic/x-pack-elasticsearch#1742)
+
+Prior to this change, if the persistent tasks framework noticed that a
+job was running on a node that was isolated but has rejoined the cluster
+then it would close that job.  This was not ideal, because then the job
+would persist state from the autodetect process that was isolated.  This
+commit changes the behaviour to kill the autodetect process associated
+with such a job, so that it does not interfere with the autodetect process
+that is running on the node where the persistent tasks framework thinks it
+should be running.
+
+In order to achieve this a change has also been made to the behaviour of
+force-close.  Previously this would result in the autodetect process being
+gracefully shut down asynchronously to the force-close request.  However,
+the mechanism by which this happened was the same as the mechanism for
+cancelling tasks that end up running on more than one node due to nodes
+becoming isolated from the cluster.  Therefore, force-close now also kills
+the autodetect process rather than gracefully stopping it.  The documentation
+has been changed to reflect this.  It should not be a problem as force-close
+is supposed to be a last resort for when normal close fails.
+
+relates elastic/x-pack-elasticsearch#1186
+
+Original commit: elastic/x-pack-elasticsearch@578c9443715381217b6172b8e438ad25528acede

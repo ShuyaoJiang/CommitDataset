@@ -1,0 +1,57 @@
+Introduce jdiff Gradle task
+
+The new jdiff task generates a report of API differences between the
+current version (i.e. the value of `version` in gradle.properties) and
+any older version of the framework, as specified by -DOLD_VERSION at
+the command line, or defaulting to `previousVersion` in
+gradle.properties.
+
+Running the command requires a separate clone directory pinned to the
+desired old version, as specified by -DOLD_VERSION_ROOT at the command
+line. This creates challenges from a build automation perspective,
+largely because Gradle doesn't (yet) have APIs for working with Git.
+
+This task may be further automated and included in nightly CI runs, but
+in the meantime, a number of reports back to 3.1.3.RELEASE have been
+generated manually and uploaded to [1], where one can now find the
+following entries in the directory listing:
+
+ - 3.1.3.RELEASE_to_3.2.0.RC1
+ - 3.2.0.M1_to_3.2.0.M2
+ - 3.2.0.M2_to_3.2.0.RC1
+ - 3.2.0.RC1_to_3.2.0.BUILD-SNAPSHOT
+
+Ideally, the final entry there would be kept up-to-date on a daily
+basis - again we may revisit doing so in the future. Going forward,
+reports will be generated and uploaded manually on an as needed basis
+and as part of the release process.
+
+The goal of these reports are as follows:
+
+ - to ease the process of ensuring backward compatibility
+
+ - to aid in code reviews, particularly when reviewing large pull
+   requests
+
+ - to ease the process of creating migration guides for project
+   maintainers, i.e. to help us remember what's changed
+
+ - to allow ambitious end-users to discover what's been changing at the
+   API level without without needing to wait for detailed "what's new in
+   version X" and/or migration guide documentation
+
+See documentation in jdiff.gradle for usage details.
+
+Note that the jdiff-1.1.1 distribution as downloaded from [2] has been
+added wholesale to the source tree under gradle/jdiff instead of
+uploading JDiff jars to repo.springsource.org as we would normally do.
+This is due to some unfortunate limitations in the implementation of the
+jdiff ant task that require a phisical JDIFF_HOME directory. Checking in
+the jars and various resources represents the simplest and most
+pragmatic solution to this problem, though ambitious contributors are
+free to do what's necessary to arrive at a more elegant arrangement.
+
+[1]: http://static.springframework.org/spring-framework/docs
+[2]: http://sourceforge.net/projects/javadiff/files/latest/download
+
+Issue: SPR-9957

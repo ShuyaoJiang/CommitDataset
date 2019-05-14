@@ -1,0 +1,10 @@
+HTTP/2 stream removed from map before onStreamClosed called
+
+Motivation:
+The interface contract of Http2Connection.Listener.onStreamClosed says that the stream will be removed from the active stream map, and not necessarily the stream map. If the channel becomes inactive we may remove from the stream map before calling onStreamClosed.
+
+Modifications:
+- Don't remove from the stream map during iteration until after onStreamClosed is called
+
+Result:
+Expectations of onStreamClosed interface are not violated

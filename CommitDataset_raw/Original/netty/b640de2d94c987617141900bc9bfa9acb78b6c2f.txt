@@ -1,0 +1,10 @@
+Epoll Shutdown Input Exception Handling
+
+Motivation:
+If ChannelOption.ALLOW_HALF_CLOSURE is true and the shutdown input operation fails we should not propagate this exception, and instead consider this socket's read as half closed.
+
+Modifications:
+- AbstractEpollChannel.shutdownInput should not propagate exceptions when attempting to shutdown the input, but instead should just close the socket
+
+Result:
+Users expecting a ChannelInputShutdownEvent will get this event even if the socket is already shutdown, and the shutdown operation fails.

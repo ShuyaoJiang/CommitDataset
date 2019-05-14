@@ -1,0 +1,10 @@
+fix CI build
+
+Prior to this commit, AnnotatedJCacheableService contained an annotated
+method demonstrating a failure scenario. This could break depending on
+the order of the methods array as AopUtils creates the proxy if the
+pointcut matches by checking each method.
+
+On the CI server, the first method was this invalid use case so
+checking if the proxy has to be created lead to an unexpected
+exception. This scenario has been moved to its own private class now.

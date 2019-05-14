@@ -1,0 +1,18 @@
+Don't forward to welcome page that won't exist due to custom mapping
+
+Previously, WelcomePageHandlerMapping would forward to index.html.
+This assumed that the static path pattern was always /**. If it had
+been customised to, for example, /foo/**, then the forward would still
+be to index.html and a 404 would result as the page is actually
+available at /foo/index.html.
+
+At first glance, it would appear that the forward should be made to
+foo/index.html. However, as it's a forward rather than a redirect,
+any relative URLs in the index.html page would then be resolved using
+/ whereas they should be resolved using /foo/. This could be addressed
+by using a redirect rather than a forward, but we don't want to do
+that as it's more invasive and would require a roundtrip back to the
+client. Instead, this commit simply stops performing the forward when
+the static path pattern is not /**.
+
+Closes gh-8788

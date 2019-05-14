@@ -1,0 +1,17 @@
+Simplify number of shards setting (#30783)
+
+This is code that was leftover from the move to one shard by
+default. Here in index metadata we were preserving the default number of
+shards settings independently of the area of code where we set this
+value on an index that does not explicitly have an number of shards
+setting. This took into consideration the es.index.max_number_of_shards
+system property, and was used in search requests to set the default
+maximum number of concurrent shard requests. We set the default there
+based on the default number of shards so that in a one-node case a
+search request could concurrently hit all shards on an index with the
+defaults. Now that we default to one shard, we expect fewer shards in
+clusters and this adjustment of the node count as the max number of
+concurrent shard requests is no longer needed. This commit then changes
+the default number of shards settings to be consistent with the value
+used when an index is created, and removes the now unneeded adjustment
+in search requests.

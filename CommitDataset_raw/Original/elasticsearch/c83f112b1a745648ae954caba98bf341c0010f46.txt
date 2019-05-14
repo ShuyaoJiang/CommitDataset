@@ -1,0 +1,5 @@
+Stop responding to ping requests before master abdication (#27329)
+
+When the current master node is shutting down, it sends a leave request to the other nodes so that they can eagerly start a fresh master election. Unfortunately, it was still possible for the master node that was shutting down to respond to ping requests, possibly influencing the election decision as it still appeared as an active master in the ping responses. This commit ensures that UnicastZenPing does not respond to ping requests once it's been closed. ZenDiscovery.doStop() continues to ensure that the pinging component is first closed before it triggers a master election.
+
+Closes #27328

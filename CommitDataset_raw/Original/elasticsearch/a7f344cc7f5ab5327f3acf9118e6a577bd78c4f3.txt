@@ -1,0 +1,7 @@
+Use ByteBuffer#slice in BytesReference wrapper (#36862)
+
+Currently the ByteBufferReference does not duplicate the buffer.
+This means that any changes to the buffer's limit or position will
+impact the reference. This can lead to unexpected behavior. This commit
+uses the ByteBuffer#slice method to ensure that the reference retains
+its own ByteBuffer.

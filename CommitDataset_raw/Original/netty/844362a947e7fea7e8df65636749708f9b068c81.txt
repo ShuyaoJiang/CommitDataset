@@ -1,0 +1,18 @@
+User-definable thread model via ChannelHandlerInvoker
+
+Motivation:
+
+While the default thread model provided by Netty is reasonable enough for most applications, some users might have a special requirement for the thread model.  Here are a few examples:
+
+- A user might want to invoke handlers from the caller thread directly, assuming that his or her application is completely asynchronous and does not make any invocation from non-I/O thread.  In this case, the default invoker implementation will only add the overhead of checking if the current thread is an I/O thread or not.
+- A user might want to invoke handlers from different threads depending on the type of events flexibly.
+
+Modifications:
+
+- Backport 132af3a485015ff912bd567a47881814d2ce1828 which is a fix for #1912
+  - Add a new interface called 'ChannelHandlerInvoker' that performs the invocation of event handler methods.
+  - Add pipeline manipulation methods that accept ChannelHandlerInvoker
+- The differences from the original commit:
+  - Separated the irrelevant changes out
+  - Channel.eventLoop is null until the registration is complete in this branch, so Channel.Unsafe.invoker() doesn't work before registration.
+  - Deregistration is not gone in this branch, so the methods related with deregistration were added to ChannelHandlerInvoker

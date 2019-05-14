@@ -1,0 +1,9 @@
+Lock down Engine.Searcher (#34363)
+
+`Engine.Searcher` is non-final today which makes it error prone
+in the case of wrapping the underlying reader or lucene `IndexSearcher`
+like we do in `IndexSearcherWrapper`. Yet, there is no subclass of it yet
+that would be dramatic to just drop on the floor. With the start of development
+of frozen indices this changed since in #34357 functionality was added to
+a subclass which would be dropped if a `IndexSearcherWrapper` is installed on an index.
+This change locks down the `Engine.Searcher` to prevent such a functionality trap.

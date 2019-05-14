@@ -1,0 +1,5 @@
+Revised scheduling lifecycle integration
+
+ScheduledAnnotationBeanPostProcessor uses getBean(Class) for TaskScheduler/ScheduledExecutorService retrieval, allowing for a scheduler bean to be flagged as primary, and for a TaskScheduler bean to override a ScheduledExecutorService bean.
+
+ContextLifecycleScheduledTaskRegistrar hooks into SmartInitializingSingleton's afterSingletonsInstantiated callback instead of ContextRefreshedEvent, as a natural consequence of SmartInitializingSingleton's introduction in Spring Framework 4.1 GA.

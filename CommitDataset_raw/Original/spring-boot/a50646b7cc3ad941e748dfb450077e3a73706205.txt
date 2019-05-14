@@ -1,0 +1,11 @@
+Fix repackaging of jars with non-default compression configuration
+
+Previously, if a jar that used custom compression configuration was
+repackaged, a failure may occur if an entry in the repackaged jar had
+a different compressed size to the entry in the source jar.
+
+This commit updates JarWriter to clear the input entry's compressed
+size (by setting it to -1) so that the repackaged entry's compressed
+size does not have to match that of the input entry.
+
+Closes gh-13720

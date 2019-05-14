@@ -1,0 +1,16 @@
+Revert workaround in test for Java 11 as it produces a connection-reset as expected now. (#7951)
+
+Motivation:
+
+We added a workaround for Java 11 as it not produced a connect-reset when SO_LINGER with 0 was set and NIO was used. This was fixed in the latest ea release of Java 11:
+
+ - http://hg.openjdk.java.net/jdk/jdk/rev/ea54197f4fe4
+ - https://bugs.openjdk.java.net/browse/JDK-8203059
+
+Modifications:
+
+Revert workaround.
+
+Result:
+
+Test that Java 11 behave the same way as earlier Java versions again.

@@ -1,0 +1,30 @@
+Back port HTTP/2 codec from master to 4.1
+
+Motivation:
+
+HTTP/2 codec was implemented in master branch.
+Since, master is not yet stable and will be some time before it gets released, backporting it to 4.1, enables people to use the codec with a stable netty version.
+
+Modification:
+
+The code has been copied from master branch as is, with minor modifications to suit the `ChannelHandler` API in 4.x.
+Apart from that change, there are two backward incompatible API changes included, namely,
+
+- Added an abstract method:
+
+  `public abstract Map.Entry<CharSequence, CharSequence> forEachEntry(EntryVisitor<CharSequence> visitor)
+            throws Exception;`
+
+to `HttpHeaders` and implemented the same in `DefaultHttpHeaders` as a delegate to the internal `TextHeader` instance.
+
+- Added a method:
+
+`FullHttpMessage copy(ByteBuf newContent);`
+
+in `FullHttpMessage` with the implementations copied from relevant places in the master branch.
+
+- Added missing abstract method related to setting/adding short values to `HttpHeaders`
+
+Result:
+
+HTTP/2 codec can be used with netty 4.1

@@ -1,0 +1,22 @@
+Fix context and window sizes sides. (#8395)
+
+Motivation:
+
+As mentioned in RFC 7692 :
+
+The "server_no_context_takeover" Extension Parameter should be used on server side for compression and on client side for decompression.
+
+The "client_no_context_takeover" Extension Parameter should be used on client side for compression and on server side for decompression.
+
+Right now, in PerMessageDeflateClientExtensionHandshaker, the decoder uses clientNoContext instead of serverNoContext and the encoder uses serverNoContext instead of clientNoContext.
+
+The same inversion is present in PerMessageDeflateServerExtensionHandshaker: the decoder uses
+serverNoContext instead of clientNoContext, while the encoder uses serverNoContext instead of clientNoContext. Besides the context inversion, the sliding window sizes seem to be inversed as well.
+
+Modification:
+
+Inverse clientNoContext with serverNoContext and clientWindowSize with serverWindowSize for both the Decoder and Encoder in PerMessageDeflateServerExtensionHandshaker and PerMessageDeflateClientExtensionHandshaker.
+
+Result:
+
+This fixes the decompression fail in the case that one of the contexts is set and the other one is not.

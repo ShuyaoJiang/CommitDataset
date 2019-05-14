@@ -1,0 +1,8 @@
+Add NioTransport threads to thread name checks (#25477)
+
+We have various assertions that check we never block on transport
+threads. This commit adds the thread names for the NioTransport to
+these assertions.
+
+With this change I had to fix two places where we were calling blocking
+methods from the transport threads.

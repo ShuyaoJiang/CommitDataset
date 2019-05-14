@@ -1,0 +1,10 @@
+SQL: Enhance checks for inexact fields (#39427)
+
+For functions: move checks for `text` fields without underlying `keyword`
+fields or with many of them (ambiguity) to the type resolution stage.
+
+For Order By/Group By: move checks to the `Verifier` to catch early
+before `QueryTranslator` or execution.
+
+Closes: #38501
+Fixes: #35203 

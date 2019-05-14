@@ -1,0 +1,13 @@
+Initialize sequence numbers on a shrunken index
+
+Bringing together shards in a shrunken index means that we need to
+address the start of history for the shrunken index. The problem here is
+that sequence numbers before the maximum of the maximum sequence numbers
+on the source shards can collide in the target shards in the shrunken
+index. To address this, we set the maximum sequence number and the local
+checkpoint on the target shards to this maximum of the maximum sequence
+numbers. This enables correct document-level semantics for documents
+indexed before the shrink, and history on the shrunken index will
+effectively start from here.
+
+Relates #25321

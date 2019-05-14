@@ -1,0 +1,16 @@
+Register all packages where @EnableAutoConfiguration is used
+
+Previously, when @EnableAutoConfiguration was used in multiple packages,
+the last @EnableAutoConfiguration that was processed would
+win and only its package would be stored as an auto-configuration
+package.
+
+This commit updates AutoConfigurationPackages to allow multiple package
+name registrations. AutoConfigurationPackages.set(…) has been altered to
+augment the constructor arguments of the BeanDefinition registered for
+the initial call to the method so that the packages handed to the method
+call will be added to the bean definition and not replace the previous
+ones. The method has been renamed register(…) to reflect the changed
+behavior.
+
+Closes gh-1994

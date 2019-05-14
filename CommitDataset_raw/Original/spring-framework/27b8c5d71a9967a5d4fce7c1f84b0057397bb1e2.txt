@@ -1,0 +1,20 @@
+Resolve build script plugins via http vs https
+
+The build script should work against http anyway; use of https here was
+an oversight. Changing it now is in response to the following build
+failure experienced by a user on his initial attempt to build from
+source (with --info output):
+
+  09:02:09.437 [ERROR] [org.gradle.BuildExceptionReporter] Caused
+  by: javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated
+  ...
+  Cause: Could not GET
+  https://repo.springsource.org/plugins-snapshot/org/springframework/
+  build/gradle/docbook-reference-plugin/0.1.2-SNAPSHOT/maven-metadata.xml
+
+The actual cause is unknown at this time, but worth noting that upon
+switching the url to http, the following log message was issued:
+
+  Forcing close on abandoned resource: Http GET Resource:
+  http://repo.springsource.org/plugins-snapshot/org/springframework/
+  build/gradle/docbook-reference-plugin/0.1.2-SNAPSHOT/maven-metadata.xml

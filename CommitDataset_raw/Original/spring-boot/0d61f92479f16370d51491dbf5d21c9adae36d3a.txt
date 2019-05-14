@@ -1,0 +1,12 @@
+Ignore URI when local.mongo.port is set
+
+This commit makes sure that if `local.mongo.port` is set, a `MongoClient`
+on the embedded MongoDB instance is created. When an embedded instance
+is detected, only the `host` property is used and the `uri` is ignored if
+set.
+
+This makes sure that the auto-configured `MongoClient` automatically
+switches to the embedded server, even if a production uri has been
+specified.
+
+Closes gh-8219

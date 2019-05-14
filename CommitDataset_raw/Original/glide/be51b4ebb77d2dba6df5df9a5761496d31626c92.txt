@@ -1,0 +1,11 @@
+Use the requested config, not the previous config in SizeConfigStrategy.
+
+Previously we'd use the config of the Bitmap that we happened to pull
+from the pool instead of the config we'd requested. This isn't
+frequently an issue because we only allow cross config re-use in a few
+cases and we also need a size match. However, it's clearly incorrect to
+ignore the requested config and can cause crashes.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=217896479

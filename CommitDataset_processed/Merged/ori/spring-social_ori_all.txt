@@ -1,0 +1,1004 @@
+Handle exceptions while fetching access token by redirecting to the connection status page
+Merge pull request #195 from coveord/fix-null-authentication-returned
+polish
+Do not throw DataAccessException in SocialUserDetailsService (github issue #173)
+linked in class name updates
+Polishing while porting to .NET
+added service provider impl section
+First, unproven, pass at supporting OAuth 1.0 and 1.0a differently.
+more naming improvements after analysis
+polish
+cleaned up docs
+renamed stub to mock for consistency; unsupported operation exception on unimplemented mock methods
+Merge thymeleaf support back into spring-social-web
+javadoc
+Merge pull request #50 from habuma/master
+Changelog update
+Filled in changelog.txt and readme.txt
+Extract a session strategy so that cross-request storage can be pluggable. (SOCIAL-314)
+broke out separate implementing service provider chapter
+Reference doc updates
+Removed H2 console servlet from Facebook showcase
+Reorganized OAuth stuff into distinct packages for OAuth 1, OAuth 2, and general OAuth. It was getting too confusing with them all in one package.
+persisting connections
+Refactored social authentication service property to be set by overridable method call instead of clumsy String class name reference.
+Delay setting of application URL until after ConnectSupport is created. SOCIAL-432
+polish of oauth1 api template support: favor shorter variable name, favor calculated attribute, fix whitespace
+collapsed httpclient into support and made package-private to ease migration in social 1.1
+Re-added createAccessGrant() and createAccessToken() methods. Made AccessGrant and OAuthToken non-final.
+completed impl section for m3
+Removed references to Gowalla in reference docs
+updated docs
+Doc updates
+Merge branch 'master' of github.com:SpringSource/spring-social
+Release version 1.0.0.RC1
+polishing
+Added OAuth 2 access token tests for both spec-style and Facebook-style grants.
+Cleaned out some deprecated method usage from spring-test-mvc
+duplicate connection handling and tests
+Upgrade to Gradle 1.11
+Merge pull request #164 from codeconsole/sessionStrategyFix
+Merge pull request #212 from micheljung/master
+Expand size of access token, refresh token, and secret fields. SOCIAL-465
+Remove Thymeleaf Spring 3 support
+Sync'd up Facebook showcase with recent framework changes. (Note that there's still a problem with OAuth2Template that prevents this showcase from working correctly.)
+Redesigned Java configuration. (SOCIAL-399)
+Merge branch 'signin-with' into connect
+Temporarily commented out a non-working JavaDoc configuration detail. Will need to revisit to do it correctly later.
+Updated readme.txt to include submodule init details for when the --recursive was not initially used
+complete jdbc-based connection repository impl
+Cleanup warnings
+renamed provider to connect package across all apis; split out facebook.web
+SOCIAL-292, SOCIALFB-96: Polish and hooks for configuring custom attributes such as a Facebook application namespace.
+Updated GitHub showcase sample to sync up with recent changes in framework.
+oauth 2 description
+ServiceProviderUser --> UserProfile
+connection repository tests
+Merge pull request #215 from arthurc/connection-repo-impls-public
+Address most build warnings. (SOCIAL-418)
+chapter 2 doc updates
+Ignoring target
+Test Polish
+Removed Gowalla, LinkedIn, and TripIt modules.
+Merge branch 'master' of github.com:SpringSource/spring-social
+Encode consumer and token secrets when creating the signature key
+Merge branch 'master' of github.com:SpringSource/spring-social
+Wrote some reference docs...need to revisit the service provider stuff, as it has changed some.
+made naming more concise after analysis
+Repackaging of Facebook module
+Updating the redirectToProvider() method to use a relative redirect rather than absolute - if ConnectController isn't at the root (e.g. in /foo) it seems to sometimes still redirect to /connect rather than /foo/connect (debugging showed that request.getContextPath() was coming up empty sometimes, and as a result a relativel redirect was not done).
+Set model attribute after redirect to indicate provider error while establishing connection
+Merge pull request #113 from michaellavelle/configurable-api-helper-bean
+renamed social client to social core; several other updates
+Return redirect URL from SignInAdapter and redirect to it in ProviderSignInController if it's not null. In this way it's possible for the SignInAdapter implementation to tell PSIC to redirect to the original target URL when the user was forced to sign in. SOCIAL-227
+SOCIAL-292: Fixed improper naming of scoped proxy and proxied beans. Removed local ScopedProxyUtils in favor of the one in Spring Social AOP
+Fixes #234 - Check to see if existing authentication object is anonymous
+polish
+Test OAuth2Template's exchangeForAccess() using mock server
+updated db field names to match model
+Merge pull request #34 from OpenSourceAgility/connection_sign_up
+polish
+Removed config subproject's own StubConnectionRepository and reuse the one from the client subproject's tests.
+merged master
+polish
+Added TripIt example to showcase and verified that the OAuth 1.0 fix works.
+simplified oauth2 client interceptor
+Added a Spring-context-based service provider factory and corresponding configuration element.
+Added a 2nd Facebook showcase sample to help drive out differences in OAuth 2 support and tweaked AbstractServiceProvider to handle Facebook's idiosyncrasies
+Honor scope parameter in SocialAuthenticationFilter. SOCIAL-389
+Build against latest milestone and (temporarily) ignore tests breaking due to work on SPR-14790
+Merge pull request #168 from okohub/feature-user-profile
+Actually use injected session strategy instead of HTTP session.
+Build against Spring Framework 5.0.0.RC2
+moved parameters for building an OAuth2 authorization url into an object
+restored ConnectionSignUp
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Fixed typos and API changes in reference documentation.
+title polish
+Updated README to reflect the new build process.
+Add missing headers
+Converted to new submodule-free Gradle build
+Merge branch 'master' of github.com:SpringSource/spring-social
+Use a buffering request factory with Facebook so that the error handler can do repeated reads on the body to determine if there's an error.
+Fix findPrimaryConnection() on in-memory connection repository to return null if no connection found.
+fix bug in SocialAuthenticationFilter
+Removed a lingering pom.xml file
+Update changelog
+Reworked how applicationUrl property is used to construct callback URL
+final sections of impl chapter
+SOCIAL-293: Added some tests to assert that property placeholders work with @EnableSomeProvider annotations.
+Re-instated manual parsing of request token response since the content type in the response could be anything and may not trigger the form-encoded message converter.
+Applied response extractors to Twitter module (with a small amount of duplication...will address later).
+Updated dependencies; Spring 3.1.1's ClientHttpResponse has a new getRawStatusCode() method that must be implemented.
+Steps toward simpler XML configuration
+Updated the build script to display a useful error message in response to an error I encountered when I first pulled the project (I hadn't done clone --recursive, and got a Gradle-related noclassdef as a result)
+Process the authentication callback when neither the oauth_token or code parameter is given, likely indicating that the user denied authorization with the provider.
+Polish
+use SocialAuthenticationRegistry in SocialAuthenticationFitler to
+moved service api adapter to root package to avoid tangle
+Add ability to carry access token as query parameter for providers that don't support Authorization header. SOCIAL-396
+added possibility to remove SignInAttempt
+More repackaging work in Facebook. Now with no tangles.
+optionaly update existing connections after auth success
+Converted to multi-module Maven build and fixed a few loose ends in anticipation of release
+updated chapter 3 names
+Workaround for SOCIAL-53: Jetty doesn't like <description> within <tag-file>. Commented out <description> so that Spring Social can be used in applications deployed to Jetty.
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+polish
+Github class name updates
+updated chapter 3 names
+updated names
+Added TripItTemplate and TwitterTemplate documentation. Also performed some API cleanup in TwitterOperations.
+Reference docs
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+typo
+[artifactory-release] Release version 1.1.0.M4
+Change to FacebookInitTag to pull API Key from environment property.
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Merge branch 'master' of github.com:SpringSource/spring-social
+Initial work for SOCIAL-43: Customization of SQL queries. At this point it works, but I'm considering renaming the query properties.
+Add setRequestFactory() on templates to enable custom settings such as proxy configuration.
+Updgrade to Jackson 2. SOCIAL-362
+Update copyright to 2015
+First cut at Java-configuration support and refactoring out common configuration details to be shared between Java-config can XML-config.
+Fix deprecation warning for Thymeleaf dialect.
+Added assertions of require constructor args and properties in OAuth templates
+Updated changelog
+Set version to 1.0.1.BUILD-SNAPSHOT
+Added ability to refresh a token to OAuth2Operations/OAuth2Template
+configure default connectionAddedRedirectUrl for filter
+Exception hierarchy
+Made SigningUtils non-static so that it could be injected with a fixed-value timestamp/nonce generator in tests.
+Adjusted FacebookTemplate to use URI-based RestTemplate methods and not String templates
+Removed Guava test dependency
+Set 1.0.0.M2 release version
+SocialAuthenticationFilter fails authentication if user denies authorization at provider. (SOCIAL-387)
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Support OAuth 1.0 in addition to 1.0a in generic connection factory. SOCIAL-396
+steps to supporting a new service provider
+Merge pull request #156 from f-lopes/SOCIAL-401
+Merge pull request #53 from habuma/master
+Merge pull request #180 from vidulkeyt/Oauth2_state_control
+Handle H2's new 23505 error code as a DuplicateKeyException.
+changelog.txt
+force UserDetails to remember userId
+Fixed TripItTemplate.getUpcomingTrips() exception when there are no upcoming trips. Also changed to use Jackson mixins for parsing instead of Map-based parsing.
+Maven-ized the showcase samples
+Set more cache-controlling headers to prevent caching of connection status pages. SOCIAL-224
+Merge pull request #102 from habuma/master
+Repackaged implementations...until I come up with a better home for them.
+Update copyright to 2014
+changelog.txt
+moved tests where they are designed to be located
+Changes to ConnectController and ServiceProvider to support OAuth2 web server flow. Also added a minimal Gowalla template and sample to help drive out OAuth 2 work.
+Fixed formatting in reference docs
+Updated dependencies and dependency documentation
+Edits to connecting chapter
+Facebook API docs
+[artifactory-release] Next development version
+javadoc warnings
+Merge branch 'master' into android-m3
+connection factory tests
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Update version to 1.1.0.BUILD-SNAPSHOT
+fixed some bugs
+Added basic GitHub provider, template, and showcase.
+Swapped Facebook showcase samples so that the main sample is the same kind of sample as the other showcase samples and the facebook-showcase-2 sample is the XFBML/JS example. Still considering a new/better name for the XFBML/JS example.
+Minor improvement of OAuth2AuthenticationServiceTest to better test the how a redirect URL is created.
+Fixed incorrect package name in reference document. SOCIAL-304
+Adjusted TwitterTemplate to use URI-based RestOperations
+Ensured that all code has Apache license header and added some missing package-info.java files.
+Added package-info.java files
+Merge branch 'master' of github.com:SpringSource/spring-social
+fix for change of method name
+Added subclassing hooks to ConnectController to handle various redirect scenarios proposed in the forums and in SOCIAL-238.
+Fixed test dependency in config module
+fix unit test and bugs
+Polish
+Increment version to 1.1.0.BUILD-SNAPSHOT
+polish
+update
+put webmvc back to web
+Moved test data
+Upgrade to Spring 5.0RC1 and Spring Security 5.0M1
+Update version to 1.0.0.BUILD-SNAPSHOT
+Moved RestTemplate mock server test framework into its own module
+Fixed bug resulting from FB's inconsistency in how comment likes are returned
+tests
+Lookup user info for purposes of display on the home page after signin. Also some polish.
+Adjusted Facebook showcase to match recent changes in Spring Social.
+Added missing listOperations() to TwitterApi
+Added some distribution details to pom.xml in preparation for nightly builds.
+[artifactory-release] Next development version
+Lazily create ListTemplate so that when testing the mock server can be setup before looking up the profile ID
+Updated changelog
+Renamed *Operations interfaces to *Api. Expose clientId and secret in service providers.
+Allow some flexibility in an access token's expires_in type. Although the spec hints that it should be numeric, it never explicitly says that it must be numeric. Consequently, if the authorization server returns expires_in as a JSON string, OAuth2Template should be flexible enough to handle it. SOCIAL-269
+polish
+social-web cleanup
+Fixed NPE when adding client additional parameters to custom authorization parameters
+Build against Spring 5.0.0.M3
+SOCIAL-447: Fix OAuth2 redirect url when server is behind a proxy
+Tweaked build to use new shared gradle build module
+Resolved merge conflicts
+Inlined setInterceptor() method in ProtectedResourceClientFactory as a replacement for the kludgy Object parameter fix for Spring 3.0
+Fleshed out most of the signin-with chapter in the reference docs.
+connect framework api docs
+Further additions to Facebook API, including groups, albums, photos, videos, and events
+Added a reason to RevokedAuthorizationException
+Verifying Facebook cookie signature
+Merge pull request #49 from habuma/master
+Removed references to config namespace and module from overview.
+Fixed duplicate ID problem breaking documentation build
+Fixing HTTP 500 occuring from IllegalArgumentException from non existent provider on signing in
+facebook-showcase
+Updated GitHub showcase to work with the new service provider framework. Works with the connect flow at this point, but the registration flow still needs some work.
+Made OAuth1Template fields private and minimized the set of message converters used by RestTemplate in OAuth1Template.
+step 1 complete
+Add .travis.yml
+ConnectInterceptor.preConnect() contributes to authorization URL parameters
+use of Provider to support serialization in SignInAttempt session objects
+Added type multi-connection query method
+Added test for handling of exceptions while fetching OAuth2 access token
+readme
+When an application URL is given, use the entire application URL to construct the callback URL.
+spring social overview update
+service provider framework overview
+Merge branch 'master' into security
+added connection signup command
+Fixed tests failing due to irrelevant array/list ordering.
+Added impl guidance for service api adapter
+Remove trailing slash when extracting provider ID from path. SOCIAL-427
+url form encoding on auth url as per spec
+Merge PR 130 to fix SOCIAL-432
+changelog.txt
+minimizing reflection calls in HttpComponentsClient
+Add missing session stratgey to SocialAuthenticationFilter
+Adjusted .gitignore to ignore generated Eclipse files
+Update dependency versions in reference documentation.
+moved service provider locator back and made package private
+Removed MalformedUrlException being thrown from setApplicationUrl()
+updated api
+Fixed transposed parameters in OAuth1Template
+Consolidated OAuth 1.0 and OAuth 1.0a differences under a single set of OAuth 1 classes.
+Extract dependency versions to gradle.properties
+Removed config module, as it no longer provided significant value.
+Replaced another deprecated method.
+Update changelog
+Polish
+Combined non-static ProviderSignInUtil methods into ProviderSignInUtils. SOCIAL-314
+Updated dependencies, including Spring to 3.2.1
+merge
+Added test to cover case where ConnectionSignUp returns an implicitly signed up user ID
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Merge pull request #51 from habuma/master
+oauth1 service provider tests
+Upgrade to Spring 4.0.0
+Added some more functionality around the features of the Facebook and Twitter APIs. Also added examples of how to write connect interceptors.
+Copyright update sweep
+Remove Thymeleaf 2 support.
+First pass at doing signin-with connect flow. It works, but needs some refinement.
+Merged OAuth templates into authorizers. The template only had one method and it was only being used in the authorizer anyway. Can always extract later if we decide that they provide some value on their own.
+Merge branch 'master' of github.com:SpringSource/spring-social
+Merge pull request #235 from codeconsole/security-anonymous-support
+Test removal of connections through ConnectController
+Reference docs
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Release version 1.0.0.RC3
+Update next build version
+Lazily create RestTemplate to ensure all properties are set.
+Started work to bring Twitter sample up to speed with most recent changes, but unfinished at this point.
+javadoc improvements
+Set version back to 1.0.0.BUILD-SNAPSHOT post-1.0.0.RC2
+Changlog update
+added service provider connection / connection factory locator
+Tidied up a few problem areas.
+Consolidated TwitterErrorHandler and TwitterResponseStatusCodeTranslator
+Restructured remaining provider modules to match Facebook and Twitter modules
+memento
+Partial work on centralizing calls to Twitter's REST API so that error handling can also be handled in one place. Still a WIP at this point.
+Fixed an errant provider configuration in the showcase and cleaned up an overlooked showcase sample.
+Changed Facebook init tag's apiKey attribute to appId to be consistent with the JS API's FB.init()
+Documented FacebookTemplate
+Added subclassing hook for configuring the RestTemplate used by the API bindings
+Refined .gitignore
+javadoc
+Working pass at signin with Twitter or Facebook...non-ideal at this point
+added failureHandler
+Update build to use newest dependency management plugin
+Polish
+Update dependency versions; revert build version to 1.1.3
+service api to just api
+Reintroduce constructor to UserProfile to preserve backward compatibility. See #166
+Use BeanServiceProviderFactory in Twitter showcase.
+SOCIAL-373: provide a way to override the ConnectController success url.
+Repackaging
+More reference doc work
+Changed references to samples that were renamed
+convenience constructors
+polish
+Update dependencies; stronger enforcement of state parameter checks
+Polish
+decoupled core from test module; moved stub connection repository to test; put all test types under social package; collapsed resources into src/main/java for simplification
+initial commit
+step 2 in progress
+Eliminated redundant code between XML and Java configuration support classes.
+service provider establishing connections
+Merge pull request #56 from habuma/master
+Using COALESCE instead of IFNULL for Postgres 8.4 support.
+Add subclassing hook to ProviderConfigurationSupport to allow the constructor args of ApiHelper bean to be configurable
+Enabling a ConnectionSignUp to indicate that a local user account could not be created (perhaps not enough information is available from the provider such as email address) by returning null from execute method.
+updated facebook connect class names
+Removed Eclipse project files from .gitignore
+Add support for app provided 'state' parameter
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Added the handler for GET /connect back to ConnectController
+connection repository polishing: added isConnected tester; throw exception now on findPrimaryConnection empty result
+Moved most of the account package out of Greenhouse and into Spring Social
+Formatting polish
+Reverted Serializable change. See comments on SOCIAL-268.
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Added a FacebookSigninController to use access token in cookie for signin.
+Add SessionUserIdSource. SOCIAL-468
+Partial fix for Facebook connection problem: Request was being sent as JSON because the request parameters were being given to RestTemplate as a Map. They need to be form-encoded, thus they should be given to RestTemplate as a MultiValueMap.
+Bump Spring dependency back to 5.0.0.BUILD-SNAPSHOT
+Reference docs
+Merge pull request #125 from royclarkson/SOCIAL-416
+added my changes
+polish
+SOCIAL-255: Added ProviderSignInInterceptor and calls to interceptors during ProviderSignInController's sign-in flow. Does not address cases where PSIC must redirect to application-defined signup process.
+changelog.txt
+Handle DuplicateConnectionException, placing signal in request that view can use to display informative message.
+Placed a TODO in the signin documentation to cover the deferred connect-after-signup flow stuff.
+Fix class name in JavaDoc
+Updated OAuth2Template to support client-side Facebook auth flow
+Bump version to 1.1.1.BUILD-SNAPSHOT (Overdue)
+authenticate url should be null
+polish
+Merge branch 'master' of github.com:SpringSource/spring-social
+added setter
+Merge pull request #4 from straxus/patch-1
+renamed social client to social core; several other updates
+Cleaned up unnecessary repositories from build.gradle
+Merge branch 'session-decouple'
+typo
+enhanced sign signature; simplified design
+Update changelog.txt to include 1.0.3
+First shot at new showcase, including Twitter sample and a very basic Spring Security setup.
+Revised ConnectController documentation and added a section to cover the register-then-connect flow.
+Fix broken MultiValueMap implementations.
+polish
+Build reference docs from asciidoc. SOCIAL-410
+Merge branch 'master' of github.com:SpringSource/spring-social
+Update changelog
+Test against latest Spring release and snapshot
+Handle non-numeric string values for expires_in as if they were null. SOCIAL-269
+Initial steps toward breaking Spring Social into more cohesive submodules
+polished connect-web; collapsed sign-in package into connect.web for simplicity; factored out common ConnectSupport
+polish
+polish
+Add Thymeleaf dialect for Spring Social. SOCIAL-398
+Test OAuth2Template's exchangeForAccess() using mock server
+Renamed Twitter sample to twitter-showcase for consistency reasons and so that it can be expanded to show off other features. Also adjusted to match latest Spring Social changes.
+Moved social configuration into its own module
+Merge branch 'master' into security
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+connectionStatusRedirect() now uses servlet path when constructing redirect path so that ConnectController can work when DispatcherServlet is mapped to something other than the default servlet path. SOCIAL-258
+final sections of impl chapter
+Reference docs
+Since there's only one provider in the Twitter example, the abstract serviceProvider bean is unnecessary. Simplified example by removing it.
+More OAuth2 authorization parameters cleanup
+polish
+don't invalidate security context if adding connection failed
+Set the Authorization header, not add it, to avoid duplicate Authorization header entries.
+Added forAuthenticatedUser() method to enable client to know if the TwitterTemplate is configured with OAuth credentials.
+polish
+Initial work for Facebook page operations
+Address some deprecations
+Renamed SignInControllerGateway to SignInControllerService
+Use custom Facebook OAuth 2 template to account for ways that Facebook doesn't adhere to the OAuth 2 spec
+update date
+removed fork of 3.1 rest tempalte capability; added protected resource client factories; added http request impl support; 3.0.x compat still a wip in this new framework
+- allow simpler configuration of postLoginUrl
+Defensively initialize RestTemplate's interceptors if null. SOCIAL-430
+Updated Spring dependency to 3.0.4.RELEASE
+Moved SigningUtilsTest to core module.
+Added default constructor for InsufficientPermissionsException for times when the required permission is unknown.
+polish
+Created an OAuth1EnabledRestTemplateFactory to produce a ready-to-go RestTemplate given just a provider ID
+SOCIAL-308: Added logging to determine if miscommunicated provider errors is still a problem and, if so, what's triggering the problem.
+configurable scope property
+Resolve build warnings
+Merge pull request #152 from molindo/151-custom-oauth-params
+fixed after merging
+Twitter API usage doc
+Polish
+Wrote most of the connect documentation. FacebookConnectController still needs to be documented, though.
+Set version back to 1.1.0.BUILD-SNAPSHOT
+Added a bit of JavaDoc and moved the generic OAuthEnabledRestTemplateFactory class into the generic OAuth package.
+Merge branch 'master' of github.com:SpringSource/spring-social
+SOCIAL-292: New first pass: Merged in most recent changes in master branch and handle twitter/facebook connection factories. Will likely extract these elements to provider modules later.
+Add security configurers for adding SocialAuthenticationFilter via JavaConfig. SOCIAL-388
+Handle DuplicateConnectionException in ConnectController (unfinished).
+Rethrow DuplicateKeyException when creating a connection as ConnectionAlreadyExistsException so that the JDBC-specific exception doesn't leak past the AccountConnectionRepository abstraction.
+Handle signature differences between the 3.1M2 and 3.1RC1 versions of RestTemplate.setInterceptors() to work with either. (SOCIAL-247)
+Added configuration elements for JDBC-backed service provider factory and connection repository, to further simplify configuration.
+Cleanup
+Handle signature differences between the 3.1M2 and 3.1RC1 versions of RestTemplate.setInterceptors() to work with either. (SOCIAL-247)
+Polish
+changelog
+Added link to Spring Social home page in readme.txt
+polish of oauth clients based on spec research
+Renamed social exceptions and made them unchecked.
+Moved tests that were previously housed in spring-social-test into spring-social-core.
+Upgraded to Spring Framework 3.1.0.M1 and Spring Security 3.1.0.RC1. Also a few fixes to showcase pages.
+Merge, added DeferredConnectionDetails
+Fixed #95
+Add prefixing of UserConnection table name to support qualifying with a schema
+Cleanup tweeks to the twitter connect sample
+added client password flow authentication
+Polish on Facebook APIs
+Merge pull request #55 from habuma/master
+more naming improvements after analysis
+configurable connection cardinality (one-to-one, one-to-many, ...) per
+Copyright update sweep
+Merged PR 126
+Re-instated manual parsing of request token response since the content type in the response could be anything and may not trigger the form-encoded message converter.
+Handle signature differences between the 3.1M2 and 3.1RC1 versions of RestTemplate.setInterceptors() to work with either. (SOCIAL-247)
+Remove note about adding ApplicationContext as shared object in SpringSocialConfigurer
+merging from master
+updated docs
+Merge 1.1.3 branch
+public ServiceProvider API extraction
+Spring Social carries its own auto-configuration
+polish
+First steps toward API polishing: Started decoupling TwitterOperations/TwitterTemplate from SS-OAuth. Added some tests. Renamed some classes.
+Release version 1.0.2.RELEASE
+renamed methods that throw exceptions to get from find; added findPrimaryConnection that returns null
+factored out http component api dependency to inner class to prevent class not found exceptions in eagerly class verification environments; polishing
+Change error constants to be protected so that subclasses of ConnectController can use them. SOCIAL-462
+Refactored social authentication service property to be set by overridable method call instead of clumsy and non-typesafe String name reference.
+polish
+Merge branch 'master' of github.com:SpringSource/spring-social
+Added plugin to generate application.properties from active profile
+Added back test resources; accidental removal
+Restructured FB tests.
+made ServiceProviderUser part of SPI; added native displayName, profileUrl, and imageUrl to Connection object
+polish
+client http request factory support polishing
+Update references to legacy URLs to support spring.io
+Fix merge conflict
+force UserDetails to remember userId
+ProviderSignInController handles multiple matching connections by redirecting to the signup URL with a signInError parameter indicating the problem.
+Fixed typo in the message for InsufficientPermissionException.
+Enable setting of post-signin URL in SpringSocialConfigurer. SOCIAL-424
+facebook/twitter provider user profile impl
+Renamed packages in client module to be more succinct.
+Added external repository so that we can resolve Scribe from that location until Pablo gets Scribe pushed into Central
+Partial work moving away from untyped Map/List JSON mapping.
+Resolve merge conflict
+Cleaned up readme.txt
+Reference docs
+changed addSignInAttempt(..) to replace existing, alwasy redirect to signup url
+Build against Spring Security 5.0.0.M2
+Polish and JavaDoc
+OAuthXParameters refactoring
+callbackUrl()
+Changed applicationUrl from java.net.URL to String
+SOCIAL-355: Make Connection Serializable
+Minor updates to signin chapter to reflect signin controller dependency changes.
+Remove test that doesn't make sense.
+[artifactory-release] Release version 1.1.0.M2
+Fix snapshot dependency to Spring Framework 4.1.6
+fix integer overflow in AccessGrant
+New Java-based configuration style.
+Updated changelog.txt
+Eliminated LowLevelTwitterApi as it no longer did much useful beyond what you get from RestTemplate
+Clarified use of getConnection() in JavaDoc for ProviderSignInUtils
+Initial work on testing ConnectController using spring-test-mvc
+Exception hierarchy
+Gradle-ified Spring Social build
+Start v1.2.0
+Removed all extractors in favor of Jackson mixins and/or object deserializers
+Merge pull request #144 from soursop/all-trust-selector
+Return redirect URL from SignInAdapter and redirect to it in ProviderSignInController if it's not null. In this way it's possible for the SignInAdapter implementation to tell PSIC to redirect to the original target URL when the user was forced to sign in. SOCIAL-227
+removed sign-in flow from connect controller
+Merge pull request #54 from habuma/master
+Added readme.txt file to explain how to clone, pull submodules, and build.
+First pass at a social connect namespace, enabling configuration of service providers in Spring config.
+Parameterized SignInService
+Adjusted signin.xml to match rename of SignInControllerGateway to SignInService
+changed SignInAdapter signature to accept a NativeWebRequest to limit direct dependency on servlet API
+Reset build version to 1.0.0.BUILD-SNAPSHOT
+polish
+Build against Boot 2.0.0.RC2
+Polish
+Add in-memory implementation of connection repositories. SOCIAL-361
+Merge in OAuth 1.0 fix
+Merge branch 'master' of github.com:SpringSource/spring-social
+Write custom service provider section, plus a few edits
+Extracted common bits of FacebookWebArgumentResolver and FacebookSigninController into FacebookCookieParser. Also consolidated FacebookAccessToken and FacebookUserId into FacebookCookieValue.
+changelog.txt
+added convenience constructor
+Merge pull request #211 from petrdvorak/master
+Moved sub-API implementations into a support package
+Merge branch 'master' of github.com:SpringSource/spring-social
+more naming improvements after analysis
+chapter 1 and 2 name updates
+Add ability to set a default authorization scope to be used if not otherwise specified in ConnectController/ProviderSignInController flow.
+polish
+Added default constructor for InsufficientPermissionsException for times when the required permission is unknown.
+Change expiresIn parameter from Integer to Long to avoid overflows. SOCIAL-356
+service api factory initial commit
+updated api to match docs
+Added getUserProfileImage() to UserOperations. Uses Apache HttpComponents to follow redirect, if HttpComponents is available.
+Fixed a few miscellaneous problems in the showcase sample
+Facebook error handling
+First bit of work on extending the Facebook API binding
+Update db schema shown in asciidoc
+Renamed FeedEntry to Post for consistency with Facebook docs.
+Fixed typo
+Upgrade to Jackson 2. SOCIAL-362
+update to 1.0.3
+updated changelog.txt
+Merge branch 'master' of github.com:SpringSource/spring-social
+Polish
+Consolidated UserIdSource with UserIdExtractor and moved to core project.
+favor appId over apiKey though we should consider if this is correct
+updated docs
+Filled out test for FacebookTemplate using mock rest server.
+Added some tests around ConnectionKey's equals(), hashCode(), and toString() methods as well as fixed symmetric bug in equals()
+Added setRequestFactory() to OAuth templates
+SOCIAL-292: Fixed bug in creation of UsersConnectionRepository bean that prevented API binding beans from properly being created. The XML config now works as expected, although there's likely room for polish in the implementation.
+[artifactory-release] Next development version
+Polish
+Fixed merge conflicts
+Handle OAuth 2 authorization callback errors in ProviderSignInController. SOCIAL-358
+Remove deprecated method from OAuth2Operations
+javadoc warnings
+step 2 in progress
+Merged test resources in under test/java
+Merge branch 'master' into security
+Merge branch 'master' of github.com:SpringSource/spring-social
+When exploring social APIs, I sometimes write toy tests to poke at them. I keep these tests in an exploration package, but don't want to commit them. This commit adds the exploration test package to gitignore.
+Fixed NullPointerException in SocialAuthenticationFilter due to the filterProcessesUrl property not being initialized
+Removed Eclipse metadata
+Document the encoding expectations
+Unified new social/security signin with original ProviderSignInController code by reusing ProviderSignInAttempt instead of SignInAttempts.
+added interceptor initial impl
+Polish
+Fix 3.0.x compatibility issue by removing references to ClientHttpRequestInterceptor from method signature and only using it conditionally in static initializer.
+package update
+Fix for OAuth 1.0a callback ambiguity
+Suppressed some unchecked warnings in TwitterTemplateTest and added my exploration test package to .gitignore
+Merge branch 'facebook-m3' into twitter-m3
+testing apis
+Capture OAuth 2 error callback details and present as a Map in the model. SOCIAL-358
+ConnectionKey implements Serializable. SOCIAL-225.
+Merge pull request #154 from codelirium/master
+SOCIAL-352: Added ability to set ConnectionSignUp in XML and JavaConfig configuration support.
+Made Scribe and S2OAuth dependencies optional
+oauth 1
+Renamed *ApiAdapter to *Adapter
+Interim commit to resolve merge issues
+Add Javadoc for PR #113 and polish
+Fixed OAuth 1.0 callback parameter to match the OAuth 1.0 spec (and indirectly TripIt's requirements).
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+renamed provider to connect package across all apis; split out facebook.web
+Select Scribe/S2OAuth signer based on what's available in the classpath, favoring S2OAuth if both are available.
+Merge branch 'master' of github.com:habuma/spring-social
+Assert that OAuth1 credentials are not given as null.
+map service provider registry tests
+Updated to newest gradle wrapper
+Reorg'd Facebook API tests
+Flattening FB API
+removed codec dependency in favor of spring security crypto
+redirect fix
+SOCIAL-355: Fix for OAuth1Connection
+renamed credentials to authorization for consistency; polish
+Reworked test for ProviderSignInController and handle provider errors encountered during connection process.
+Fix JavaDoc warnings/errors
+Removed samples from main repository. Moved to separate samples repository at http://git.springsource.org/spring-social/samples
+Update Gradle wrapper to 1.10
+Carry the provider ID in API exceptions
+ProviderSignInControllerTest
+Merge branch 'master' of github.com:SpringSource/spring-social
+changelog.txt
+Release version 1.0.1.RELEASE
+Readme/changelog update
+polish
+More edits for the reference doc
+Polish
+Enable new Spring Security integration to work with new JavaConfig feature.
+Reference docs
+Updated changelog
+Set providerId in alternate constructor for ApiException. SOCIAL-426
+naming updates
+Polish
+Moved test schema to new package
+SOCIAL-328: Renamed ApiExceptionHandlingFilter to ReconnectFilter to better express its purpose.
+oauth 2 connection factory tests
+More JSON parsing mixin work
+Set Cache-Control: no-cache header in ConnectController for connection status pages. SOCIAL-224
+Revert Spring Security and HttpComponents dependencies to most current point versions consistent with Spring Social 1.1.2 dependencies.
+polish
+Merged PR #158; added parity between AbstractOAuth2ApiBinding and AbstractOAuth1ApiBinding
+Changed 'BEARER' to 'Bearer' for OAuth2 Authorization header. SOCIAL-272
+Merge branch 'master' of github.com:SpringSource/spring-social
+Add generic/configurable connection factory and service provider implementations. SOCIAL-396
+Added JBoss release repository to showcase pom.xml.
+Updated reference docs to refer to new URLs for snapshot and milestone repositories.
+Added tests for OAuth1Template using mock REST server
+updated api
+Reorganization of reference docs
+Fixed unrecognized actions field problem on Post
+Removed hooks for creating access grant/token that don't make sense to keep given the finality of the AccessGrant and OAuthToken classes
+SOCIAL-292: Create connection factories as beans (not direct instances) so that property placeholder support will work for their attributes.
+typo
+Adapted Twitter showcase to use new service provider stuff.
+getServiceApi() --> getApi()
+Fix JavaDoc warning
+SOCIAL-292: Fixed scoped proxying of beans configured by the new elements.
+Add configuration support for in-memory connection repository. SOCIAL-361
+Initial work to more gracefully handle errors that occur during the OAuth2 connection flow. SOCIALFB-47 and SOCIALFB-48
+Set Cache-Control: no-cache header in ConnectController for connection status pages. SOCIAL-224
+ConnectionKey implements Serializable. SOCIAL-225.
+renamed AbstractOAuthParameters to ParameterMap and made concrete; added default constructor for convenient construction; fixed bug related to shared OAuth1Parameters.NONE instance and mutability
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Wrote a very rough set of information into the service providers chapter of the reference documentation.
+Added GitHubTemplate and GowallaTemplate documentation.
+Polish and JavaDocs
+polish
+Polish
+updated ProviderSignInAccount to desired signature; moved ServiceProviderLocator to core so it can be reused
+inject scoped proxies; javadoc
+Documented OAuth template hook methods
+updated facebook package to use new interceptor; removed mock test code as json reading/writing was not being tested with this approach
+Merged pull request #21: JSP tags for connected/not-connected conditional rendering
+updated for rc1
+Renamed *CredentialsException to *AuthorizationException
+Merge pull request #52 from habuma/master
+Added in AWS plugin
+Merge branch 'master' of github.com:SpringSource/spring-social
+Use a by-name convention to wire a provider with a connection factory rather than by-type autowiring. Also greatly simplified most of the provider config element parsers by pushing common stuff into the abstract base class.
+polish
+Fixed broken test resource problem introduced in a previous commit. Renamed test config XML file.
+Merge branch 'master' into AutoReconnect
+Testing commit rights
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Re-enabled some tests
+polish
+Fixed link in reference document. SOCIAL-249
+code review: spring 3.0.x compat
+SOCIAL-349: Copy request parameters into OAuth parameters to be able to support non-standard parameters in authorization URL.
+Moved schema file to src/main/resources. Per http://www.gradle.org/0.9.2/docs/userguide/java_plugin.html#N119CA, the project layout for Gradle is still consistent with Maven. And, non-Java files in src/main/java will *not* be included in the resulting JAR.
+Extract Thymeleaf 2 support into separate module and add new module for Thymeleaf 3. (Fixes #207)
+Changed multi user match error parameter to error=multiple_users.
+polish
+polish
+Reference doc refinement
+updated changelog.txt
+Removed /connect path from ConnectController.
+Fixed NPE caused when returning null for boolean
+Flattening FB API
+Some more response extractor work
+fixed possible NPE
+SOCIAL-292: Extracted Twitter-specific config into Spring Social Twitter
+renamed to ConnectionRepository#findAccountIdByConnectionAccessToken; added javadoc
+my changes
+Removed @Anywhere-based signin-with-Twitter code in favor of the OAuth1-flow-based signin with Twitter.
+initial ServiceProvider/connect m3 refactoring commit
+added TODOs
+Add extension point to decorate RestTemplate or other parts
+initial jdbc connection repository test
+polish
+Update connection after provider sign in. SOCIAL-222
+SOCIAL-259: Allow callback URL to be explicitly configured instead of relying on calculation from current request. Also make callbackUrl() protected to allow for overriding when neither calculation nor explicit specification are sufficient.
+Update version to 1.0.2.BUILD-SNAPSHOT
+Update dependencies
+Revisited connectionStatusRedirect code after discussing with Rossen. Now supports extension mapping of DispatcherServlet.
+Cleanup of some unused code and a bit more JavaDoc.
+javadoc
+Polish
+Merge branch 'master' of github.com:SpringSource/spring-social
+fixed javadoc warnings
+Fix for handling either JSON or form-encoded access token results from providers.
+removed unused import
+Verified that FB signature stuff works with showcase. Also cleaned up a wayward println()
+Renamed ApiTemplate to AbstractOAuth(1|2)ApiTemplate. Made ProtectedResourceClientFactory package private. Polish
+Test for ClientHttpRequestFactorySelector
+Fixed old reference to JdbcMultiUserConnectionRepository.sql. SOCIAL-318
+#151 added method to customize parameters
+handle empty result by access token endpoint, fixes #203
+Merge branch 'AutoReconnect'
+updated service provider spi portion
+javadoc
+Merged in Spring Security integration work.
+Check for null providerUsers parameter in JdbcConnectionRepository#findConnectionsToUsers to safeguard against NPE. SOCIAL-283
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Set 1.0.0.M3 project version
+Merged authorizer and oauth template
+Supporting HttpComponents client 4.0 and 4.1 for use on Android.
+twitter class name updates
+Sync-point commit. At this point, both FacebookTemplate and TwitterTemplate should work without being given an access token. Still some cleanup needed.
+More reference doc work
+moved resources together with source for simplicity
+Handle signature differences between the 3.1M2 and 3.1RC1 versions of RestTemplate.setInterceptors() to work with either. (SOCIAL-247)
+Sync'd up with changes in latest spring-test-mvc snapshot
+Upgrade to Gradle 1.4
+updated docs: replaced tabs with spaces in program listings; updated out of date connect interceptor signature
+Removed unnecessary (and unused) URL parameter in tweet method
+Updated sample dependencies to use Spring 3.1.0 snapshot
+Upgraded to latest version of Scribe (1.0.8) which includes the fix for some improperly escaped characters, including the asterisk issue described in SOCIAL-59 and GREENHOUSE-471
+Fixed links to Javadoc and reference docs
+SOCIAL-292: Initial commit of <social:jdbc-connection-repository> element. Still kinda hack-ish in how the user ID is handled, but it works.
+Initial steps toward Spring 5.0
+authenticateUrl bug
+Provider signin doc
+Removed old showcase examples.
+service api adapter javadocs
+Removed configureJsonMessageConverter, replaced with hooks to build the message converters needed by the API bindings
+Add in-memory implementation of connection repositories. SOCIAL-361
+generated hashCode, equals and toString for ConnectionData
+Merged in API changes
+polishing and javadoc
+Combined connect and core modules into new client module
+Log response body on token fetch error. SOCIAL-466
+Bump to Spring 5, Spring Security 5M5, and other dependency updates.
+Added test for ConnectController.oauth1Callback()'s happy case
+Exception hierarchy
+url form encoding on auth url as per spec
+Added email to TripItProfile and updated service API adapters to fill out the ServiceProviderUserProfile
+Update changelog.txt
+Add an id attribute to the service provider element so that the bean ID can be set.
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Deprecate GrantType enum and methods that accept it as a parameter. SOCIAL-391
+Removed extra constructors on OAuth2Template for option to use parameter-based client authentication. Use setUseParametersForClientAuthentication() after construction instead.
+Merge pull request #157 from HenokT/master
+Updated signin chapter to refer to ProviderSignInUtils
+Merge branch 'psi-multi'
+sign in bridge
+Cleanup tweeks to the twitter connect sample
+Changelog update
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Update dependency versions for H2, Spring Security, and Thymeleaf
+Polish
+Fix ConnectedAttrProcessor to work with both thymeleaf-spring3 and thymeleaf-spring4. SOCIAL-417
+Removed implicit auth code. Focus on explicit auth.
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Doc updates
+ Introduced ProviderApiException into exception hierarchy to represent things that could go wrong while consuming a provider's API.
+Polishing while porting to .NET
+exposed ProviderSignInAttempt#getUser to support sign-up form pre-population
+Update version to 1.1.0.BUILD-SNAPSHOT
+Fixed documentation to match SignInAdapter interface. SOCIAL-273
+Filled out Gowalla, LinkedIn, and TripIt template tests using mock REST server
+Added scope and additional parameters to AccessGrant
+favor appId over apiKey though we should consider if this is correct
+Tweaked .gitignore to ignore Eclipse metadata in samples folder.
+Merge branch 'master' of github.com:SpringSource/spring-social
+Partial work on Facebook showcase
+SOCIAL-292: Create API binding beans
+factored out oauth client; decoupled from ClientHttpRequest
+Moved TwitterErrorHandler into support package
+Updated Gowalla showcase to use recent changes in framework.
+pushed service api adapter down to register via connection factory per provider model
+Updated Gowalla showcase to use new service provider framework
+refactor social security code
+Documentation fix: Use user ID, not access token, to find connections during signin.
+added spring-social-test module
+throw exception if explicit auth fails
+Fixed distribution zip to include JAR
+bean factory service provider factory
+merged latest M3 updates
+Switched to Spring Framework 3.0.5.RELEASE
+SOCIAL-292: Added a Fake provider implementation for testing purposes.
+Changelog update
+Exception hierarchy
+Reference doc updates
+api polish
+polishing
+Tweaked service provider intro.
+Added signup functionality to showcase
+Further work on the new submodule-less Gradle build
+More refinement of the showcase sample
+inital commit of provider sign-in controller
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Make sure that the Authentication object in attemptAuthService method is returned when the user is already authenticated.
+Removed broken test...needs to be revisited with a better testing strategy.
+Reanmed connect-web module to webmvc module and adjusted samples to work with recent refactorings.
+Polish
+SOCIAL-292: Extracted Facebook-specific config into Spring Social Facebook
+Whitespace
+Removed Spring 3.0-compatibility (SOCIAL-286) and added support for client authentication via HTTP Basic, per the latest OAuth2 drafts (SOCIAL-320).
+chapter 2 doc updates
+polishing
+Formatting polish and update to show how to use <facebook:init> tag.
+Merge branch 'master' into security
+Implemented Spring 3.0 compatibility
+refresh impl
+Renamed <service-provider> attributes to app-key and app-secret
+changed boolean oauth1 version specification to OAuth1Version enum for clarity
+when you work in test envirment, you could setting AllTrustClient to
+Polish
+shouldn't throw exception
+Merge branch 'master' of github.com:SpringSource/spring-social
+Changed AccessGrant to be constructed with token expiry time instead of expires_in.
+added unit tests
+Set more cache-controlling headers to prevent caching of connection status pages. SOCIAL-224
+Merge PR #123
+Added Facebook to the Spring Social Showcase mix. Needs some work around site navigation, but it works.
+only one failure url in SpringSocialConfigurer, fixec javadoc param name
+polish
+SOCIAL-299: Pass and receive state parameter in OAuth2 flow.
+Polish
+redirect to configurable signupUrl (default "/signup") for yet unknown
+favor appId over apiKey though we should consider if this is correct
+Changed UsersConnectionRepository.findUserIdWithConnection() to return a list of user IDs matching the given connection rather than a single matching ID.
+Removed the use of Java 1.6 byte encoding methods for compatibility with older versions of Android. SOCIAL-138
+Construct RestTemplate with a culled set of message converters. SOCIAL-423
+Started reconciling duplicate consumer token services implementation.
+Removed Spring 3.0 support in OAuth 1 code. (SOCIAL-286)
+JavaDoc polish
+Merge pull request #190 from molindo/simplify-setting-failure-url
+no final
+Flattening FB API
+Reference documentation updates
+Complete SocialAuthenticationFilter Java configuration
+collapsed util package into support
+Pass list into RestTemplate.setInterceptors() with latest Spring 3.1 snapshots (SOCIAL-247).
+Use thymeleaf-spring5 to align with Spring Framework version
+Added note to reference documentation regarding potential imcompatibility of schema. SOCIAL-257
+OAuth1Parameters and OAuth2Parameters no longer extend LinkedMultiValueMap
+First pass at Spring 3.0 compatibility.
+Renamed SignInControllerService to SignInService as was originally intended.
+Documentation updates
+proper key generation handling
+Update changelog.txt
+Updated changelog
+Bump to Spring Security 5.0.0.BUILD-SNAPSHOT and Java 1.8
+Reference docs
+Fixed parameter overwriting problem in SigningUtils. Added URIBuilder to help with construction of form-encoded URIs
+Deferred connection details are all now placed into the session and picked up there by ConnectController.
+Cleaned out old Gradle build stuff.
+SOCIAL-292: Added a SpringSecurity implementation of UserIdSource. Updated Gradle wrapper to 1.1.
+working with connection identity
+Unified DuplicateTweetException and DuplicateStatusException into a common DuplicateStatusException
+Release version 1.0.0.RELEASE
+SOCIAL-292: Extracted common namespace handler code into an abstract class that providers can override.
+More ref doc additions
+Reinstated relative redirects in ConnectController
+added ServiceApiAdater#fetchUserProfile, impls pending
+Accept context-relative paths for signup URL in SocialAuthenticationFilter. SOCIAL-390
+Partial work on the signin chapter (unfinished) and a bit more Facebook API examples.
+Moved EventInviteeMixin to the JSON support package where it belongs
+Added subclassing hook to be able to configure the Jackson message converter without having to look for it in the list of all converters. Also added ByteArrayHttpMessageConverter as one of the pre-registered message converters; it will be needed in most any API implementation to be able to fetch the user's profile image.
+Polish
+Renamed [Provider]Api.java interfaces to [Provider].java
+Added Resource Owner Credentials Grant support in OAuth2Template (SOCIAL-305) and polish on OAuth2Operations interface.
+Documentation updates
+Added back applicationUrl to enable override of callback URL creation.
+Added DuplicateServiceProviderConnectionException
+Moved service provider implementations into provider-specific modules.
+Polish
+javadoc
+First pass at handling disconnect interception
+Upgraded to Gradle 1.3 and addressed some build warnings
+Added expireTime to AccessGrant
+back to 3.1.0.M1 dependency; protected resources client factory initial impl
+Merge branch 'master' of github.com:SpringSource/spring-social
+Moved Schema.sql to be under src/test/resources
+Replaced String-based redirect view names in ConnectController with RedirectView. This allows ConnectController to be used even when no URL-based view resolver is in use.
+First pass at resolving the OAuth access token internally so that the client doesn't have to deal with it.
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Update changelog.txt
+javadoc
+upgrade to spring framework 3.1 and new ClientHttpRequestInterceptor; removed temp intercept package
+Update dependency version to match Spring 5
+Fix incompatibility with Spring Security 4.0.0; Only include scope parameter in authorization URL if it is non-null. SOCIALFB-460 and SOCIALFB-461
+Pass additional parameters (populated from preSignIn) when building OAuth URL in ProviderSignInController
+Reset version back to 1.0.0.BUILD-SNAPSHOT
+Fixed #210: Incorrect JavaDoc of "ConnectionRepository::findAllConnections" method
+Polish and discover dependencies from shared ApplicationContext object. SOCIAL-388
+Added reference document files to make build happy.
+Merge branch 'master' of github.com:SpringSource/spring-social
+polish
+Merged connect branch into master
+Merge branch 'client_password_flow' of git://github.com/arikg/spring-social into arikg-client_password_flow
+polish
+Fix broken spring release tests; cleanup some warnings
+Unified DuplicateTweetException and DuplicateStatusException into a common DuplicateStatusException
+Added docs for LinkedInTemplate
+Polish
+Merge branch 'master' of github.com:SpringSource/spring-social
+Merge Spring Social 2.0.0 work
+changed findAllConnections to findConnectionsToProviders and enhanced behavior to return MultiValueMap with empty values if no connection exists for given registered provider
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+Updated some JavaDoc to correctly refer to class names that have changed.
+multi user repo impl and tests
+Allow for multiple social configuration classes.
+SOCIAL-324: Added a convenient no-arg authenticateClient() method so null doesn't have to be passed.
+resolved merge
+polishing
+SOCIAL-416 Reimplement Implicit Grant support
+Handle more Twitter errors through the error handler
+SOCIAL-293: Extracted basic configuration of social beans into a common set of support classes and use them in both XML-config and new Java-config implementations. Some cleanup/polish likely still needed, but it works.
+Added very basic Twitter sample app.
+Merge pull request #163 from harborx/fix-doc-jdbc-schema
+More repackaging work
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Upgrade to Gradle 3.0 wrapper
+Polish
+Update changelog
+polish
+Fixed issue with scope setup for OAuth2 services
+resolved tangles; made internal api impl types package private; separated out api and impl packages
+[artifactory-release] Release version 1.1.2.RELEASE
+ignore unknown providerIds allowing to handle them down the chain
+SOCIAL-255: Added ProviderSignInInterceptor and calls to interceptors during ProviderSignInController's sign-in flow. Does not address cases where PSIC must redirect to application-defined signup process.
+removed fork of 3.1 rest tempalte capability; added protected resource client factories; added http request impl support; 3.0.x compat still a wip in this new framework
+Merge branch 'master' into security
+Updated changelog to reflect changes made for SOCIAL-258
+Merge branch 'master' into connect-m3
+Upgraded to DocBook Reference plugin 0.2.2 and updated index page
+Correction of last commit: Moved Schema.sql to src/test/resources.
+Changed Twitter OAuth URLs to use api subdomain, as recommended by Twitter
+introduced ApiBinding super interface and updated base Api classes to implement it
+Edits and additions to JavaDoc.
+removed crazy whitespace
+handle client errors while exchanging for access
+Merge pull request #188 from ptahchiev/SOCIAL-373
+Merge pull request #193 from jaffadog/SOCIAL-447
+ConnectionFactoryRegistry implements Serializable
+OAuth2 authorization parameters cleanup
+Tidied up formatting
+Update connection after provider sign in. SOCIAL-222
+Ability to set ConnectController's base view path as a property. SOCIAL-371
+Remove note about adding ApplicationContext as shared object in SpringSocialConfigurer
+SOCIALTW-37: Set character set on String converter to UTF-8 so that Korean and other characters can be posted.
+Polish
+Made ConnectionRepository implementations public
+Use LinkedMultiValueMap for parameter values when building URIs
+Polish
+Merge pull request #209 from molindo/issue203
+Added tests for ConnectController's connection status pages.
+Change UserProfile constructor access to public
+Updated reference documentation to mention error=provider. SOCIAL-280
+Merged Spring Social security configurers into a single configurer. SOCIAL-388
+Reference doc work
+final sections of impl chapter
+javadoc
+Re-grouped the project to reflect that it isn't part of the core framework.
+Switched to a real DB table for account data. Also fixed a few quirks in the Twitter example.
+Renamed SocialOperations to SocialProviderOperations
+Filled in the low-level OAuth operations section of the reference documentation.
+First pass at getting the configuration namespace back in working order.
+Release version 1.0.0.RC2
+Merge branch 'master' into controller-test
+More changes in prep for nightly build.
+added findLocalUserIdsConnectedTo and NoSuchConnectionException
+ProviderSignInControllerTest
+Merge branch 'master' of github.com:SpringSource/spring-social
+step 2 in progress
+check connection expire time
+Renamed OAuth1SigningUtils to SigningUtils and made it package private.
+Update changelog.txt
+Doc update and changelog update
+polish
+Added some tests around ConnectionKey's equals(), hashCode(), and toString() methods as well as fixed symmetric bug in equals()
+Fixed JavaDoc warning
+Add message converter for form-encoded data to flat Map. SOCIAL-397
+removed unnecessary namespace parsers; removed ServiceProviderFactory and AccountIdResolver
+Add tests for connection serialization. SOCIAL-355
+Merge branch 'connect' of git.springsource.org:spring-social/spring-social into connect
+Added STS-generated META-INFs to .gitignore for the samples
+support SocialAuthenticationFailureHandler in setPostFailureUrl(..)
+Merge branch 'master' of git.springsource.org:spring-social/spring-social
+sign in bridge
+Update version to 1.0.0.BUILD-SNAPSHOT
+Exposed Connection after all for more power; renamed to ProviderUser instead of just Provider for clarity
+Updated changelog
+Add id field to UserProfile class
+Merge branch 'master' into security
+Adapted LinkedInTemplate and TripItTemplate to use OAuth1ClientRequestInterceptor to do its signing. As before, this temporarily relies on a custom RestTemplate extension that will go away once SPR-7494 is complete.
+Handle exceptions while fetching request token by redirecting to the connection status page

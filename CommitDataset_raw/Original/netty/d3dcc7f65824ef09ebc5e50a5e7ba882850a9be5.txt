@@ -1,0 +1,10 @@
+LocalChannelWrite event sequencing issue
+
+Motivation:
+https://github.com/netty/netty/pull/4143 addressed a few ordering issues but an ordering issue still remained if the Promise for a write completes, and a listener of that promise does a write on a peer channel. The ordering was subject to how potentially 2 different executors would run a task, but it should be coordinated such that the first write is read first.
+
+Modifications:
+- Keep track of the finishPeerRead task run on the executor if necessary and ensure it completes before current channel read occurs
+
+Result:
+Ordering of events for echo type situations is preserved.

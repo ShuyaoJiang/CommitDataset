@@ -1,0 +1,17 @@
+search as you type fieldmapper (#35600)
+
+Adds the search_as_you_type field type that acts like a text field optimized
+for as-you-type search completion. It creates a couple subfields that analyze
+the indexed terms as shingles, against which full terms are queried, and a
+prefix subfield that analyze terms as the largest shingle size used and
+edge-ngrams, against which partial terms are queried
+
+Adds a match_bool_prefix query type that creates a boolean clause of a term
+query for each term except the last, for which a boolean clause with a prefix
+query is created.
+
+The match_bool_prefix query is the recommended way of querying a search as you
+type field, which will boil down to term queries for each shingle of the input
+text on the appropriate shingle field, and the final (possibly partial) term
+as a term query on the prefix field. This field type also supports phrase and
+phrase prefix queries however

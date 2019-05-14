@@ -1,0 +1,10 @@
+Fix invalid PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE
+
+Prior to this commit, `AntPathMatcher.extractPathWithinPattern` would
+not process correctly `**` patterns and would only match *one* path
+segment in the given path.
+
+This commit changes `extractPathWithinPattern` to allow multiple path
+segments to be matched against a single `**` pattern segment.
+
+Issue: SPR-10515

@@ -1,0 +1,11 @@
+Fail queries with scroll that explicitely set request_cache (#27342)
+
+Queries that create a scroll context cannot use the cache.
+They modify the search context during their execution so using the cache
+can lead to duplicate result for the next scroll query.
+
+This change fails the entire request if the request_cache option is explictely set
+on a query that creates a scroll context (`scroll=1m`) and make sure internally that we never
+use the cache for these queries when the option is not explicitely used.
+For 6.x a deprecation log will be printed instead of failing the entire request and the request_cache hint
+will be ignored (forced to false).

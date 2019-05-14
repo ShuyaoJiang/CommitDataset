@@ -1,0 +1,38 @@
+Watcher: Never return credentials after watch creation... (elastic/x-pack-elasticsearch#3581)
+
+... yet support updates. This commit introduces a few changes of how
+watches are put.
+
+The GET Watch API will never return credentials like basic auth
+passwords, but a placeholder instead now. If the watcher is enabled to
+encrypt sensitive settings, then the original encrypted value is
+returned otherwise a "::es_redacted::" place holder.
+
+There have been several Put Watch API changes.
+
+The API now internally uses the Update API and versioning. This has
+several implications. First if no version is supplied, we assume an
+initial creation. This will work as before, however if a credential is
+marked as redacted we will reject storing the watch, so users do not
+accidentally store the wrong watch.
+
+The watch xcontent parser now has an additional methods to tell the
+caller if redacted passwords have been found. Based on this information
+an error can be thrown.
+
+If the user now wants to store a watch that contains a password marked
+as redacted, this password will not be part of the toXContent
+representation of the watch and in combinatination with update request
+the existing password will be merged in. If the encrypted password is
+supplied this one will be stored.
+
+The serialization for GetWatchResponse/PutWatchRequest has changed.
+The version checks for this will be put into the 6.x branch.
+
+The Watcher UI now needs specify the version, when it wants to store a
+watch. This also prevents last-write-wins scenarios and is the reason
+why the put/get watch response now contains the internal version.
+
+relates elastic/x-pack-elasticsearch#3089
+
+Original commit: elastic/x-pack-elasticsearch@bb63be9f7986585ecb04e901bc3d3b3cd8c69749

@@ -1,0 +1,9 @@
+Remove version read/write logic in Verify Response (#30879)
+
+Since master will always communicate with a >=6.4 node, the logic for
+checking if the node is 6.4 and conditionally reading and writing based
+on that can be removed from master. This logic will stay in 6.x as it is
+the bridge to the cleaner response in master. This also unmutes the
+failing test due to this bwc change.
+
+Closes #30807

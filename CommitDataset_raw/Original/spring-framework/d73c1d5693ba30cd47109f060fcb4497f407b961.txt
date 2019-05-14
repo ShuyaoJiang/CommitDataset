@@ -1,0 +1,13 @@
+Update WebSocket client SmartLifecycle support
+
+Before this change WebSocketConnectionManager delegated SmartLifecycle
+methods to the client instance it contained. After this change
+WebSocketClient implementations are expected to implement Lifecycle
+(rather than SmartLifecycle).
+
+The need for this is even more evident with SockJsClient, which is a
+WebSocketClient implementation and contains a WebSocketTransport that
+in turn contains the actual WebSocketClient. In this case
+WebSocketConnectionManager as the top level container is the obvious
+place to configure autostartup while Lifecycle events can be
+propagated all the way down to the root WebSocketClient.

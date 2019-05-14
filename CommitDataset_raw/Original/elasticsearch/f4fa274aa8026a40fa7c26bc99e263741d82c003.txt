@@ -1,0 +1,10 @@
+Tests: Do not set number of replicas for watcher index (elastic/x-pack-elasticsearch#3882)
+
+The watcher index uses auto expanding of replicas nowadays, so there is
+no need to set the number of replicas.
+
+Also ensuring that all watcher indices are green on startup has been moved
+to one call, in order to prevent indices being moved around after adding
+the triggered watches or watch history index.
+
+Original commit: elastic/x-pack-elasticsearch@dbe04adf647a0a634c4e0118d80b056a7164e107

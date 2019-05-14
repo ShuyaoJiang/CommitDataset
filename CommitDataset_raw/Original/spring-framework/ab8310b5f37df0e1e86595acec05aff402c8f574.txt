@@ -1,0 +1,12 @@
+Fix HeadersAdapters implementations
+
+This commit harmonizes the `HeadersAdapter` implementations across all
+supported servers with regards to the `get(Object key)` contract; some
+server implementations are not sticking to a `Map`-like contract and
+return empty `List` instead of `null` when a header is not present.
+
+This also fixes the `size()` implementations to reflect the number of
+header keys, as some implementations consider multiple values for the
+same header as different entries.
+
+Issue: SPR-17396

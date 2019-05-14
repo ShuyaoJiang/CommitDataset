@@ -1,0 +1,14 @@
+Include a hostname verifier rather than using the system default.
+
+On desktop Java the system default hostname verifier doesn't do
+anything. Instead HttpURLConnection does its own hostname verification
+and the pluggable verifier simply supplements that.
+
+Android's hostname verifier does everything directly.
+
+This change copies Android's hostname verifier into OkHttp. This way
+we can do hostname verification on the desktop, which wasn't possible
+previously. It also brings along Android's hostname verifier tests.
+Two of these tests fail on desktop Java due to differences in support
+for non-ASCII subject alt names. Without our own certificate parsing
+we simply live with the difference.

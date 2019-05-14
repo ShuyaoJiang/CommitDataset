@@ -1,0 +1,12 @@
+Map empty virtual host to "/" when parsed from an address
+
+Previously, an address that ended in a "/" would result in the virtual
+host being an empty string. This was inconsistent with setVirtualHost
+which would map an empty string to "/".
+
+This commit updates the address parsing logic to call setVirtualHost
+rather than assigning the value directly to this.virtualHost. This
+ensures that the special handling for an empty string is applied
+consistently.
+
+Closes gh-3304

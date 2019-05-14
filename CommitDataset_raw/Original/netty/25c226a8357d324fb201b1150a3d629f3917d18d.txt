@@ -1,0 +1,5 @@
+Make sure only direct ByteBuffer are passed to the underlying jdk Channel.
+
+This is needed because of otherwise the JDK itself will do an extra ByteBuffer copy with it's own pool implementation. Even worth it will be done
+multiple times if the ByteBuffer is always only partial written. With this change the copy is done inside of netty using it's own allocator and
+only be done one time in all cases.

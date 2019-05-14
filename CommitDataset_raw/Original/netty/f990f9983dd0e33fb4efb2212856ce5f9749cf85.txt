@@ -1,0 +1,10 @@
+HTTP/2 Don't Flow Control Iniital Headers
+
+Motivation:
+Currently the initial headers for every stream is queued in the flow controller. Since the initial header frame may create streams the peer must receive these frames in the order in which they were created, or else this will be a protocol error and the connection will be closed. Tolerating the initial headers being queued would increase the complexity of the WeightedFairQueueByteDistributor and there is benefit of doing so is not clear.
+
+Modifications:
+- The initial headers will no longer be queued in the flow controllers
+
+Result:
+Fixes https://github.com/netty/netty/issues/4758

@@ -1,0 +1,7 @@
+Do not alloc full buffer for small change requests (#35158)
+
+Today we always allocate a full buffer (1024 elements) in a
+LuceneChangesSnapshot even though the requesting size is smaller.
+With this change, we will use the requesting size as the buffer size if
+it's smaller than the default batch size; otherwise uses the default
+batch size.

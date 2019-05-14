@@ -1,0 +1,7 @@
+fix: Sort Processor does not have proper behavior with targetField (#25237)
+
+to specify a `targetField`. This results in some interesting behavior that was missed in the review.
+This processor sorts in-place, so there is a side-effect in both the original field and the target field.
+Another bug was that the targetField was not being set if the list being sorted was fewer than two elements.
+
+The new behavior works like this: If targetField and fieldName are not the same, we copy the list.

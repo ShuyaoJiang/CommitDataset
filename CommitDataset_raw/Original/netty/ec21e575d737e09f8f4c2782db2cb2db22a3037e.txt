@@ -1,0 +1,14 @@
+Correctly discard messages after oversized message is detected. (#9015)
+
+Motivation:
+
+32563bfcc129ef9332f175c277e4f6b59fd37d8c introduced a regression in which we did now not longer discard the messages after we handled an oversized message.
+
+Modifications:
+
+- Do not set aggregating to false after handleOversizedMessage is called
+- Adjust unit tests to verify the behaviour is correct again.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/9007.

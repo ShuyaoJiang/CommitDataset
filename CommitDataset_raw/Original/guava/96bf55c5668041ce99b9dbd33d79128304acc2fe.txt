@@ -1,0 +1,6 @@
+Allow synchronous calls to EventBus.post().
+
+As we're only reading the set of registered event handlers when an event is posted, it is more efficient to split the lock on handlersByType into read and write locks and only acquire the write lock in register() and unregister().
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=33685413

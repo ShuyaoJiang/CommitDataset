@@ -1,0 +1,17 @@
+Fix "**" precedence in AntPathMatcher comparator
+
+Prior to this commit, "**" and "*" pattern elements had
+the same priority when comparing two patterns.
+So when comparing several patterns, the computed order was:
+1- /hotels/{hotel}/bookings/{booking}
+2- /hotels/**
+3- /hotels/{hotel}/bookings/{booking}/customer/{customer}
+
+This commit updates the comparator so that patterns ending
+with "**" (a.k.a "catch-all" patterns) are less specific than
+the others; in the previous example, the 2nd pattern would
+then end up last.
+
+This commit also optimizes the comparator implementation.
+
+Issue: SPR-6741

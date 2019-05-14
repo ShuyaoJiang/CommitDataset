@@ -1,0 +1,15 @@
+Fix race condition in queue size test
+
+The queue size test has a race condition. Namely the offering thread can
+run so quickly completing all of its offering iterations before the
+queue size thread ever has a chance to run a single size poll
+iteration. This means that the size will never actually be polled and
+the test can spuriously fail. What we really want to do here, since this
+test is checking for a race condition between polling the size of the
+queue and offers to the queue, we want to execute each iteration in
+lockstep giving the threads multiple changes for the race between
+polling the size and offers to occur. This commit addresses this by
+running the two threads in lockstep for multiple iterations so that they
+have multiple chances to race.
+
+Relates #28584

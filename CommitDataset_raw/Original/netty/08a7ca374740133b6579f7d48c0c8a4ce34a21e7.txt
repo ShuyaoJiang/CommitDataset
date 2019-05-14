@@ -1,0 +1,15 @@
+Correctly pass ChannelPromise on to the next ChannelOutboundHandler when use CombinedChannelDuplexHandler.
+
+Motivation:
+
+Due a regression introduced by e969b6917c848c83f02617386f0f73d8f0e130a2 we missed to pass the original ChannelPromise to the next ChannelOutboundHandler and so
+may never notify the origin ChannelPromise. This is related to #4805.
+
+Modifications:
+
+- Correctly pass the ChannelPromise
+- Add unit test.
+
+Result:
+
+Correctly pass the ChannelPromise on deregister(...)

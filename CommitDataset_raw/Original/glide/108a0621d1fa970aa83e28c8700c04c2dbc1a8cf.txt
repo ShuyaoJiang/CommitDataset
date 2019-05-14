@@ -1,0 +1,18 @@
+Keep onlyRetrieveFromCache and normal requests running independently.
+
+This prevents cases where using onlyRetrieveFromCache might block a
+request on an RPC if a request was already pending without
+onlyRetrieveFromCache being set.
+
+However, this change does now mean that it's possible a resource will be
+loaded from the disk cache twice simultaneously because
+onlyRetrieveFromCache requests are no longer deduped with normal
+requests. We expect this case to be rare, and the consequences are an
+efficiency issue rather than a correctness problem, so we're still
+probably better off with this change.
+
+Future work might include attempting to cancel and notify any normal
+requests if an onlyRetrieveFromCache requests completes with the same
+key will the normal request is running.
+
+Fixes #2428.

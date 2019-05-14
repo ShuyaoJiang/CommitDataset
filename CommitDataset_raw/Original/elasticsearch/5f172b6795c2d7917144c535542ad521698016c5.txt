@@ -1,0 +1,34 @@
+[Feature] Adding a char_group tokenizer (#24186)
+
+=== Char Group Tokenizer
+
+The `char_group` tokenizer breaks text into terms whenever it encounters
+a
+character which is in a defined set. It is mostly useful for cases where
+a simple
+custom tokenization is desired, and the overhead of use of the
+<<analysis-pattern-tokenizer, `pattern` tokenizer>>
+is not acceptable.
+
+=== Configuration
+
+The `char_group` tokenizer accepts one parameter:
+
+`tokenize_on_chars`::
+    A string containing a list of characters to tokenize the string on.
+Whenever a character
+    from this list is encountered, a new token is started. Also supports
+escaped values like `\\n` and `\\f`,
+    and in addition `\\s` to represent whitespace, `\\d` to represent
+digits and `\\w` to represent letters.
+    Defaults to an empty list.
+
+=== Example output
+
+```The 2 QUICK Brown-Foxes jumped over the lazy dog's bone for $2```
+
+When the configuration `\\s-:<>` is used for `tokenize_on_chars`, the
+above sentence would produce the following terms:
+
+```[ The, 2, QUICK, Brown, Foxes, jumped, over, the, lazy, dog's, bone,
+for, $2 ]```

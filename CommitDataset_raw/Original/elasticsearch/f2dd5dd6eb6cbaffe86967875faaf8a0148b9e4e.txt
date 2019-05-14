@@ -1,0 +1,10 @@
+Remove DiscoveryPlugin#getDiscoveryTypes (#38414)
+
+With this change we no longer support pluggable discovery implementations. No
+known implementations of `DiscoveryPlugin` actually override this method, so in
+practice this should have no effect on the wider world. However, we were using
+this rather extensively in tests to provide the `test-zen` discovery type. We
+no longer need a separate discovery type for tests as we no longer need to
+customise its behaviour.
+
+Relates #38410

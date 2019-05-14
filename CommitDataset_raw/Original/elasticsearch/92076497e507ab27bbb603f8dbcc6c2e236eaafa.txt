@@ -1,0 +1,14 @@
+Use a dedicated ConnectionManger for RemoteClusterConnection (#32988)
+
+
+This change introduces a dedicated ConnectionManager for every RemoteClusterConnection
+such that there is not state shared with the TransportService internal ConnectionManager.
+All connections to a remote cluster are isolated from the TransportService but still uses
+the TransportService and it's internal properties like the Transport, tracing and internal
+listener actions on disconnects etc.
+This allows a remote cluster connection to have a different lifecycle than a local cluster connection,
+also local discovery code doesn't get notified if there is a disconnect on from a remote cluster and
+each connection can use it's own dedicated connection profile which allows to have a reduced set of
+connections per cluster without conflicting with the local cluster.
+
+Closes #31835

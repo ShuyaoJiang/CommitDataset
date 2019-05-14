@@ -1,0 +1,10 @@
+Major refactoring of EventBus, in preparation for further changes.
+
+- Make an Executor a property of all EventBuses, not just AsyncEventBus. A normal EventBus uses a direct Executor by default. Executors are stored per-subscriber.
+- Pull out the event dispatch strategy into a Dispatcher class. This handles how events are queued (or not) as they're posted. EventBus and AsyncEventBus each use strategies that should match their old behavior exactly.
+- Pull out the subscriber registration code into a SubscriberRegistry class. At the same time, switch back to using a ConcurrentMap<Class<?>, CopyOnWriteArraySet<Subscriber>> to store subscribers in order to allow lightweight, copy-free immutable snapshots of all subscribers to an event.
+- Rename EventSubscriber to Subscriber and make some changes to it. Move most code related to actually invoking a subscriber method to it.
+- Expose the EventBus's identifier.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=72652483

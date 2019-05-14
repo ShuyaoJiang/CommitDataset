@@ -1,0 +1,13 @@
+Set result for decoded request and add test for #8721 (#8721)
+
+
+Motivation:
+I want to fix bug in vert.x project (eclipse-vertx/vert.x#2562) caused by ComposedLastHttpContent result being null. I don't know if it is intentional that this last decoded chuck in the issue returns null, but if not - I am providing fix for that.
+
+Modification:
+* Added new constructor in ComposedLastHttpContent allowing to pass DecoderResult
+* set DecoderResult.SUCCESS for created ComposedLastHttpContent in HttpContentEncoder
+* set DecoderResult.SUCCESS for created ComposedLastHttpContent in HttpContentDecoder
+
+Result:
+Fixes eclipse-vertx/vert.x#2562

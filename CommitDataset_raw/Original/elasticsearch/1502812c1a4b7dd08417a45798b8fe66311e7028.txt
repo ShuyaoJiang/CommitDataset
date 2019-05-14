@@ -1,0 +1,9 @@
+Percentile/Ranks should return null instead of NaN when empty (#30460)
+
+The other metric aggregations (min/max/etc) return `null` as their XContent value and string when nothing was computed (due to empty/missing fields).  Percentiles and Percentile Ranks, however, return `NaN `which is inconsistent and confusing for the user.  This fixes the inconsistency by making the aggs return `null`.  This applies to both the numeric value and the "as string" value.  
+
+Note: like the metric aggs, this does not change the value if fetched directly from the percentiles object, which will return as `NaN`/`"NaN"`. This only changes the XContent output.
+
+While this is a bugfix, it still breaks bwc in a minor way as the response changes from prior version.
+
+Closes #29066

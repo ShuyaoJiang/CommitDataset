@@ -1,0 +1,14 @@
+Allow negative memoryAddress when calling PlatformDependent0.newDirectBuffer(...)
+
+Motivation:
+
+When UNSAFE.allocateMemory is returning an address whose high bit is set we currently throw an IllegalArgumentException. This is not correct as it may return a negative number on at least sparc.
+
+Modifications:
+
+- Allow to pass in negative memoryAddress
+- Add unit tests
+
+Result:
+
+Correctly validate the memoryAddress and so also work on sparc as expected. Fixes [#6574].

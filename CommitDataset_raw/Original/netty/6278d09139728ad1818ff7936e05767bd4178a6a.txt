@@ -1,0 +1,13 @@
+netty_epoll_linuxsocket_setTcpMd5Sig should throw ChannelException when not able to init sockaddr (#9029)
+
+Motivation:
+
+When netty_epoll_linuxsocket_setTcpMd5Sig fails to init the sockaddr we should throw an exception and not silently return.
+
+Modifications:
+
+Throw exception if init of sockaddr fails.
+
+Result:
+
+Correctly report back error to user.

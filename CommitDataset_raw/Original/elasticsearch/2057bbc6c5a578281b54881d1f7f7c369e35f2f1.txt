@@ -1,0 +1,7 @@
+Scripting: Remove unnecessary intermediate script compilation methods on QueryShardContext (#25093)
+
+This commit removes wrapper methods on QueryShardContext used to compile
+scripts. Instead, the script service is made accessible in the context,
+and calls to compile can be made directly. This will ease transition to
+each of those location becoming their own context, since they would no
+longer be able to expect the same script class type.

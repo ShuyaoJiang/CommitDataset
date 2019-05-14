@@ -1,0 +1,10 @@
+[Zen2] Only elect master-eligible nodes (#35996)
+
+Today any node can win an election. However, the whole point of
+master-eligibility is that master-ineligible nodes should not be elected as the
+leader; furthermore master-ineligible nodes do not have any outgoing STATE
+channels so cannot publish cluster states, so their leadership is ineffective
+and disruptive.
+
+This change ensures that the elected leader is master-eligible by preventing
+master-ineligible nodes from scheduling an election.

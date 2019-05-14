@@ -1,0 +1,14 @@
+Added DuplicatedAbstractByteBuf that can provide fast-path for _get* and _set* methods
+
+Motivation:
+
+DuplicatedByteBuf can be used for any ByteBuf implementations and so can not do any optimizations that could be done
+when AbstractByteBuf is duplicated.
+
+Modifications:
+
+- Add DuplicatedAbstractByteBuf that can eliminate range and reference count checks for _get* and _set* methods.
+
+Result:
+
+Faster DuplicatedByteBuf implementations for AbstractByteBuf sub-classes.

@@ -1,0 +1,14 @@
+Correctly resume wrap / unwrap when SslTask execution completes (#8899)
+
+Motivation:
+
+fa6a8cb09c9679468a6c2d912ddfbbe885ee0c08 introduced correct dispatching of delegated tasks for SSLEngine but did not correctly handle some cases for resuming wrap / unwrap after the task was executed. This could lead to stales, which showed up during tests when running with Java11 and BoringSSL.
+
+Modifications:
+
+- Correctly resume wrap / unwrap in all cases.
+- Fix timeout value which was changed in previous commit by mistake.
+
+Result:
+
+No more stales after task execution.

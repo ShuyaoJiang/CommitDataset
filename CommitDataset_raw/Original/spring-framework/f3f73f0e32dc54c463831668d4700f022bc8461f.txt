@@ -1,0 +1,17 @@
+Check original beanClass in #isFactoryBean calls
+
+This issue originates from a need in Spring Data JPA, wherein a custom
+InstantiationAwareBeanPostProcessor may alter the predicted type of
+FactoryBean objects, effectively preventing retrieval of those beans via
+calls to #getBeansOfType(FactoryBean.class).
+
+The reason for this "masking effect" is that prior to this change, the
+implementation of AbstractBeanFactory#isFactoryBean considered only the
+"predicted type" returned from #predictBeanType when evaluating
+assignability to FactoryBean.class
+
+The implementation of #isFactoryBean now ensures that not only the
+predicted bean type is considered, but also the original bean
+definition's beanClass (if one is available).
+
+Issue: SPR-8954

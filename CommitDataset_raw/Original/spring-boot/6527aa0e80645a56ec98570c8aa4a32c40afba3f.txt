@@ -1,0 +1,12 @@
+Downgrade to maven-failsafe-plugin 2.18.1
+
+This commit downgrades the maven failsafe plugin version. As of 2.19, the
+generated jar is used for integration tests rather than the
+`target/classes` directory. The fat jar in 1.4 has changed to move
+classes to `BOOT-INF/classes` and therefore these are not found anymore.
+
+There isn't a way to configure the jar file to use in the plugin. Users
+willing to use the latest version should configure a `classifier` for the
+repackaged jar so that the original jar is used by failsafe.
+
+Closes gh-6254

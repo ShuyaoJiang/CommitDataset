@@ -1,0 +1,19 @@
+QA: Switch rolling upgrade to 3 nodes (#30728)
+
+Switches the rolling upgrade tests from upgrading two nodes to upgrading
+three nodes which is much more realistic and much better able to find
+unexpected bugs. It upgrades the nodes one at a time and runs tests
+between each upgrade. As such this now has four test runs:
+
+1. Old
+2. One third upgraded
+3. Two thirds upgraded
+4. Upgraded
+
+It sets system properties so the tests can figure out which stage they
+are in. It reuses the same yml tests for the "one third" and "two
+thirds" cases because they are *almost* the same case.
+
+This rewrites the yml-based indexing tests to be Java based because the
+yml-based tests can't handle different expected values for the counts.
+And the indexing tests need that when they are run twice.

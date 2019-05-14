@@ -1,0 +1,34 @@
+Overhaul actuator endpoint code
+
+Refactor several areas of the actuator endpoint code in order to make
+future extensions easier. The primary goal is to introduce the concept
+of an `ExposableEndpoint` that has technology specific subclasses and
+can carry additional data for filters to use. Many other changes have
+been made along the way including:
+
+* A new EndpointSupplier interface that allows cleaner separation of
+  supplying vs discovering endpoints. This allows cleaner class names
+  and allows for better auto-configuration since a user can choose to
+  provide their own supplier entirely.
+
+* A `DiscoveredEndpoint` interface that allows the `EndpointFilter`
+  to be greatly simplified. A filter now doesn't need to know about
+  discovery concerns unless absolutely necessary.
+
+* Improved naming and package structure. Many technology specific
+  concerns are now grouped in a better way. Related concerns are
+  co-located and concepts from one area no longer leakage into another.
+
+* Simplified `HandlerMapping` implementations. Many common concerns have
+  been pulled up helping to create simpler subclasses.
+
+* Simplified JMX adapters. Many of the intermediary `Info` classes have
+  been removed. The `DiscoveredJmxOperation` is now responsible for
+  mapping methods to operations.
+
+* A specific @`HealthEndpointCloudFoundryExtension` for Cloud Foundry.
+  The extension logic used to create a "full" health endpoint extension
+  has been made explicit.
+
+Fixes gh-11428
+Fixes gh-11581

@@ -1,0 +1,21 @@
+Explicit thread group on DefaultThreadFactory.
+
+Motivation:
+
+Fixes #5084. We (gRPC) encountered a bug that was triggered by
+grpc/grpc-java@d927180. After that commit, event loop threads are
+created per task by NioEventLoopGroup, and inherits the thread group of
+the caller, which in our case is an application-provided request-scope
+thread. Things go south when the application tries to manipulate (e.g.,
+interrupt and join) all threads of the request-scope thread group, which
+unexpectedly include the event loop threads.
+
+Modifications:
+
+DefaultThreadFactory will save the current thread group in constructor,
+and apply it to all new threads.
+
+Result:
+
+Threads created by DefaultThreadFactory will be in the same thread group
+as the thread where the factory is created.

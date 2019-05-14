@@ -1,0 +1,11 @@
+Ensure that JarResourceManager correctly handles path without leading /
+
+Previously, JarResourceManager assumed that the path would begin with
+a / but this isn't always the case. For example, it may be an empty
+string. This could lead to a malformed jar:file: URL that used ! as
+the separator rather than the required !/.
+
+This commit updates JarResourceManager to prepend / to any path that
+does not being with one before using it to construct the URL.
+
+Closes gh-7717

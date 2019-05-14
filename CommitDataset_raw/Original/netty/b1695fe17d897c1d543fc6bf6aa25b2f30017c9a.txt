@@ -1,0 +1,13 @@
+Ensure async failures are correctly propagated to Http2LifecycleManager.onError(...) in all cases.
+
+Motivation:
+
+If DefaultHttp2ConnectionEncoder process outbound operation it sometimes missed to call Http2LifecycleManager.onError(...) when the operation was executed asynchronously.
+
+Modifications:
+
+Make best effort to update flags but still ensure failures are propageted to Http2LifecycleManager.onError(...) in all cases.
+
+Result:
+
+More consistent handling of errors.

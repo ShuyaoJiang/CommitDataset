@@ -1,0 +1,13 @@
+[#5718] Result of ByteBufUtil.compare(ByteBuf a, ByteBuf b) is dependent on ByteOrder of supplied ByteBufs
+
+Motivation:
+
+Result of ByteBufUtil.compare(ByteBuf a, ByteBuf b) is dependent on ByteOrder of supplied ByteBufs which should not be the case (as stated in the javadocs).
+
+Modifications:
+
+Ensure we get a consistent behavior when calling ByteBufUtil.compare(ByteBuf a, ByteBuf b) and not depend on ByteOrder.
+
+Result:
+
+ByteBufUtil.compare(ByteBuf a, ByteBuf b) and so AbstractByteBuf.compare(...) works correctly as stated in the javadocs.

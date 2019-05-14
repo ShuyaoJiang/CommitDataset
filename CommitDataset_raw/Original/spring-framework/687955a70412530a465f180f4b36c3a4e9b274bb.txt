@@ -1,0 +1,12 @@
+Add ImmutableMessageChannelInterceptor
+
+This change adds a ChannelInterceptor that flips the immutable flag on
+messages being sent. This allows components sending messages to leave
+the message mutable for interceptors to further apply modifications
+before the message is sent (and exposed to concurrency).
+
+The interceptor is automatically added with the STOMP/WebSocket Java
+and XML config and the StompSubProtocolHandler leaves parsed incoming
+messages mutable so they can be further modified before being sent.
+
+Issue: SPR-12321

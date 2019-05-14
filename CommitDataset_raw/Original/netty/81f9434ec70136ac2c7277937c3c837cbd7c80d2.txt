@@ -1,0 +1,12 @@
+Added test for multi header, HttpObjectDecoder performance improvement for multi header, removed empty else block.
+
+Motivation:
+
+For multi-line headers HttpObjectDecoder uses StringBuilder.append(a).append(b) pattern that could be easily replaced with regular a + b. Also oparations with a and b moved out from concat operation to make it friendly for StringOptimizeConcat optimization and thus - faster.
+
+Modification:
+
+StringBuilder.append(a).append(b) reaplced with a + b. Operations with a and b moved out from concat oparation.
+
+Result:
+Code simpler to read and faster.

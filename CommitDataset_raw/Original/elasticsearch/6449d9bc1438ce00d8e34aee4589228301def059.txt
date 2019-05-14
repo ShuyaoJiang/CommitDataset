@@ -1,0 +1,5 @@
+Include translog path in error message when translog is corrupted (#32251)
+
+Currently, when TranslogCorruptedException is thrown most of the times it does not contain information about the translog location on the file system. There is the translog recovery tool that accepts the translog path as an argument and users are constantly puzzled where to get the path.
+This pull request adds "source" information to every TranslogCorruptedException thrown. The source could be local file, remote translog source (used for recovery), assertion (translog entry is constructed to perform some assertion) or translog constructed inside the test.
+Closes #24929

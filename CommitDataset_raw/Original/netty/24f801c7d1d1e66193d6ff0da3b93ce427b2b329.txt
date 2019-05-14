@@ -1,0 +1,11 @@
+OpenSslEngine return NEED_WRAP if the destination buffered filled
+
+Motivation:
+If the destination buffer is completely filled during a call to OpenSslEngine#wrap(..) we may return NEED_UNWRAP because there is no data pending in the SSL buffers. However during a handshake if the SSL buffers were just drained, and filled up the destination buffer it is possible OpenSSL may produce more data on the next call to SSL_write. This means we should keep trying to call SSL_write as long as the destination buffer is filled and only return NEED_UNWRAP when the destination buffer is not full and there is no data pending in OpenSSL's buffers.
+
+Modifications:
+- If the handshake produces data in OpenSslEngine#wrap(..) we should return NEED_WRAP if the destination buffer is completely filled
+
+Result:
+OpenSslEngine returns the correct handshake status from wrap().
+Fixes https://github.com/netty/netty/issues/6796.

@@ -1,0 +1,7 @@
+Make `TcpTransport#openConnection` fully async (#36095)
+
+This is a follow-up to #35144. That commit made the underlying
+connection opening process in TcpTransport asynchronous. However the
+method still blocked on the process being complete before returning.
+This commit moves the blocking to the ConnectionManager level. This is
+another step towards the top-level TransportService api being async.

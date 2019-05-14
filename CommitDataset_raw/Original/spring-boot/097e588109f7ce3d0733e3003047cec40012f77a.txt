@@ -1,0 +1,15 @@
+Use more sensible defaults for OpenTsdbGaugeWriter's timeouts
+
+Previously, the default RestTemplate that is used OpenTsdbGaugeWriter
+was not used with its default configuration. Notably this meant that
+it would have infinite connect and read timeouts. This is problematic
+as it can cause metric writing to hang and block the scheduler for
+performing any other tasks.
+
+This commit updates OpenTsdbGaugeWriter to use a default connect
+timeout of 10 seconds and a default read timeout of 30 seconds. A
+constructor has been added to ease the configuration of these
+timeouts. The existing option of providing your own RestTemplate
+(via setRestTemplate) remains.
+
+Closes gh-4698

@@ -1,0 +1,22 @@
+Support `.` and `_` binder prefix joins
+
+Update RelaxedDataBinder so that both `.` and `_` are considered in
+getPropertyValuesForNamePrefix(...).
+
+With Spring Boot 1.2.5 binding environment variables of the form
+`FOO_BAR_BAZ` to `@ConfigurationProperties(prefix="foo-bar")` objects
+worked thanks to a happy accident. When `PropertySourcesPropertyValues`
+processed a non enumerable `PropertySource` it called the resolver
+with a property name `FOO_BAR.BAZ`. A `SystemEnvironmentPropertySource`
+will replace `.` with `_` and hence find a value.
+
+Commit 1abd0879 updated non enumerable processing such that the resolver
+was never called.
+
+Replicating the problem is quite involved as you need to ensure that you
+have both a SystemEnvironmentPropertySource and a non-enumerable
+property source (e.g. RandomPropertySource). A test has been added to
+PropertiesConfigurationFactoryTests which passes on 1.2.5, fails on
+1.2.6 and passes again following this commit.
+
+Fixes gh-4045

@@ -1,0 +1,14 @@
+[#3652] Improve performance of StringUtil.simpleClassName()
+
+Motivation:
+
+static Package getPackage(Class<?> c) uses synchronized block internally.
+Thanks to @jingene for the hint and initial report of the issue.
+
+Modifications:
+
+-Use simple lastIndexOf(...) and substring for a faster implementation
+
+Result:
+
+No more lock condition.

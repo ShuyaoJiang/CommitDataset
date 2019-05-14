@@ -1,0 +1,9 @@
+Tweak AggregatorBase.addRequestCircuitBreakerBytes
+
+This modifies a method Mark added to the AggregatorBase that allows aggregations
+to add additional memory tracking for datastructures used during execution. If
+an aggregation would like to reclaim circuit breaker reserved bytes by adding a
+negative number, `addWithoutBreaking` should be used instead of
+`addEstimateBytesAndMaybeBreak`.
+
+Resolves #24511

@@ -1,0 +1,19 @@
+HEAD mapping has higher priority over other conditions
+
+When comparing multiple matching @RequestMapping's, the HTTP method
+condition has the lowest precedence. It's mainly about ensuring an
+explicit mapping wins over an implicit (i.e. no method) one.
+
+As of 4.3 HTTP HEAD is handled automatically for controller methods
+that match to GET. However an explicit mapping HTTP HEAD allows an
+application to take control.
+
+This commit ensures that for HTTP HEAD requests the HTTP method
+condition is checked first which means that an explicit HEAD mapping
+now trumps all other conditions.
+
+Normally we look for the most specific matching @RequestMapping.
+For HTTP HEAD we now look for the most specific match among
+@RequestMapping methods with a HEAD mapping first.
+
+Issue: SPR-14383

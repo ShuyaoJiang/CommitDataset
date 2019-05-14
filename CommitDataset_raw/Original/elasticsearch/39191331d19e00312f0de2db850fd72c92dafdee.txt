@@ -1,0 +1,16 @@
+Only notify ready global checkpoint listeners (#33690)
+
+When we add a global checkpoint listener, it is also carries along with
+it a value that it thinks is the current global checkpoint. This value
+can be above the actual global checkpoint on a shard if the listener
+knows the global checkpoint from another shard copy (e.g., the primary),
+and the current shard copy is lagging behind. Today we notify the
+listener whenever the global checkpoint advances, regardless if it goes
+above the current global checkpoint known to the listener. This commit
+reworks this implementation. Rather than thinking of the value
+associated with the listener as the current global checkpoint known to
+the listener, we think of it as the value that the listener is waiting
+for the global checkpoint to advance to (inclusive). Now instead of
+notifying all waiting listeners when the global checkpoint advances, we
+only notify those that are waiting for a value not larger than the
+actual global checkpoint that we advanced to.

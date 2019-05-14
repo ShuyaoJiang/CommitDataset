@@ -1,0 +1,10 @@
+Disable JNDI on Jetty by default
+
+Our Investigations show that JNDI lookup is quite costly on Jetty and it
+was enabled by default while embedded tomcat does not. This commit
+excludes `jetty-jndi` to align the behavior with Tomcat.
+
+If you are relying on JNDI, the `jetty-jndi` should simply be added in
+your project.
+
+Closes gh-4710

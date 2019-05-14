@@ -1,0 +1,10 @@
+HpackUtil.equals performance improvement
+
+Motivation:
+PR #5355 modified interfaces to reduce GC related to the HPACK code. However this came with an anticipated performance regression related to HpackUtil.equals due to AsciiString's increase cost of charAt(..). We should mitigate this performance regression.
+
+Modifications:
+- Introduce an equals method in PlatformDependent which doesn't leak timing information and use this in HpcakUtil.equals
+
+Result:
+Fixes https://github.com/netty/netty/issues/5436

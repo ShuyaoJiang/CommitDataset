@@ -1,0 +1,13 @@
+Avoid loss of body content in AbstractRequestLoggingFilter
+
+Prior to this commit, the `ContentCachingRequestWrapper` class would
+cache the response content only if the reponse would be consumed using
+its InputStream. In case of a Form request, Spring MVC consumes the
+response using the `getParameter*` Servlet API methods. This causes the
+cached content to never be written.
+
+This commit makes the `ContentCachingResponseWrapper` write the request
+body to the cache buffer by using the `getParameter*` API, thus avoiding
+those issues.
+
+Issue: SPR-7913

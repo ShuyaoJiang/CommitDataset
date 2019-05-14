@@ -1,0 +1,12 @@
+Improve error message used in TestDatabaseAutoConfiguration
+
+By default, `@DataJpaTest` (and `@AutoConfigureTestDatabase`) attempt to
+replace any existing `DataSource` by an embedded one. Previously, if
+there is was no embedded database on the classpath, the exception message
+did not provide that context in the error message.
+
+This commit clarifies the error message to conduct
+`TestDatabaseAutoConfiguration` (that is replacing the existing
+`DataSource`).
+
+Closes gh-7797

@@ -1,0 +1,10 @@
+Use 'travis_wait' to prevent Travis CI from aborting builds
+
+Builds use the '-q' flag to suppress most output due to a limit of 4MB
+of logs on Travis CI. However, Travis will also abort builds that
+don't generate any output for 10 minutes. Thus we also use the
+'travis_wait' function to make sure builds aren't aborted for up to
+30 minutes.
+
+Fixes gh-6621
+Closes gh-6623

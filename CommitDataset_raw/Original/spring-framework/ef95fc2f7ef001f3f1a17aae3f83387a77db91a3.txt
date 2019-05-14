@@ -1,0 +1,8 @@
+Synchronize clear on TransactionAwareCacheDecorator
+
+Previously, a cache decorated with TransactionAwareCacheDecorator would
+clear the cache immediately, even when a transaction is running. This
+commit updates the decorator to synchronize to the afterCommit phase for
+the clear operation as well.
+
+Issue: SPR-12653

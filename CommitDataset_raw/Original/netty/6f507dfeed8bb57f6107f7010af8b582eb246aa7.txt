@@ -1,0 +1,48 @@
+Only remove ReferenceCountedOpenSslEngine from OpenSslEngineMap when engine is destroyed (#8905)
+
+Motivation:
+
+We must only remove ReferenceCountedOpenSslEngine from OpenSslEngineMap when engine is destroyed as the verifier / certificate callback may be called multiple times when the remote peer did initiate a renegotiation.
+If we fail to do so we will cause an NPE like this:
+
+```
+13:16:36.750 [testsuite-oio-worker-5-18] DEBUG i.n.h.s.ReferenceCountedOpenSslServerContext - Failed to set the server-side key material
+java.lang.NullPointerException: null
+	at io.netty.handler.ssl.OpenSslKeyMaterialManager.setKeyMaterialServerSide(OpenSslKeyMaterialManager.java:69)
+	at io.netty.handler.ssl.ReferenceCountedOpenSslServerContext$OpenSslServerCertificateCallback.handle(ReferenceCountedOpenSslServerContext.java:212)
+	at io.netty.internal.tcnative.SSL.readFromSSL(Native Method)
+	at io.netty.handler.ssl.ReferenceCountedOpenSslEngine.readPlaintextData(ReferenceCountedOpenSslEngine.java:575)
+	at io.netty.handler.ssl.ReferenceCountedOpenSslEngine.unwrap(ReferenceCountedOpenSslEngine.java:1124)
+	at io.netty.handler.ssl.ReferenceCountedOpenSslEngine.unwrap(ReferenceCountedOpenSslEngine.java:1236)
+	at io.netty.handler.ssl.ReferenceCountedOpenSslEngine.unwrap(ReferenceCountedOpenSslEngine.java:1279)
+	at io.netty.handler.ssl.SslHandler$SslEngineType$1.unwrap(SslHandler.java:217)
+	at io.netty.handler.ssl.SslHandler.unwrap(SslHandler.java:1330)
+	at io.netty.handler.ssl.SslHandler.decodeNonJdkCompatible(SslHandler.java:1237)
+	at io.netty.handler.ssl.SslHandler.decode(SslHandler.java:1274)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:502)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:441)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:278)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:337)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1408)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:359)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:345)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:930)
+	at io.netty.channel.oio.AbstractOioByteChannel.doRead(AbstractOioByteChannel.java:170)
+	at io.netty.channel.oio.AbstractOioChannel$1.run(AbstractOioChannel.java:40)
+	at io.netty.channel.ThreadPerChannelEventLoop.run(ThreadPerChannelEventLoop.java:69)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:905)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+```
+
+While the exception is kind of harmless (as we will reject the renegotiation at the end anyway) it produces some noise in the logs.
+
+Modifications:
+
+Don't remove engine from map after handshake is complete but wait for it to be removed until the engine is destroyed.
+
+Result:
+
+No more NPE and less noise in the logs.

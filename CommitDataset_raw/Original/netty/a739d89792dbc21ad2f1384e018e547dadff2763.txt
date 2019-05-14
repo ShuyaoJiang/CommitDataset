@@ -1,0 +1,13 @@
+Not log notify failure for DelegatingChannelPromiseNotifier when promise is VoidChannelPromise
+
+Motivation:
+
+We should not log by default if the promise is a VoidChannelPromise as its try* methods will always return false.
+
+Modifications:
+
+Do an instanceof check to determine if we should log or not by default
+
+Result:
+
+No more noise in the logs when using a VoidChannelPromise.

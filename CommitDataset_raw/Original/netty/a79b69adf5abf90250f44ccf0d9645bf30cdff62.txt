@@ -1,0 +1,10 @@
+ChannelFlushPromiseNotifier should allow long value for pendingDataSize
+
+Motivation:
+At the moment ChannelFlushPromiseNotifier.add(....) takes an int value for pendingDataSize, which may be too small as a user may need to use a long. This can for example be useful when a user writes a FileRegion etc. Beside this the notify* method names are kind of missleading as these should not contain *Future* because it is about ChannelPromises.
+
+Modification:
+Add a new add(...) method that takes a long for pendingDataSize and @deprecated the old method. Beside this also @deprecated all *Future* methods and add methods that have *Promise* in the method name to better reflect usage.
+
+Result:
+ChannelFlushPromiseNotifier can be used with bigger data.

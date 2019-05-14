@@ -1,0 +1,11 @@
+Downgrade Liquibase to 3.0.8
+
+There are some issues with 3.1.1. Performance is one
+(according to JIRA https://liquibase.jira.com/browse/CORE-1706),
+but the biggest is that there is a package change for the main
+ChangeLogHistoryService provider and it's package
+(liquibase.channgelog) is not included in the service locator
+scan by default. For some reason this only manifests itself
+when using the SpringPackageScanClassResolver.
+
+Fixes gh-687

@@ -1,0 +1,5 @@
+Fix a crash on conditional cache hits for new API.
+
+Previously we were returning null when a 304 didn't validate. The problem
+was caused by a bad test that specified Content-Length: 0 for a 304, which
+isn't appropriate.

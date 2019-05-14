@@ -1,0 +1,9 @@
+- Stop manually stripping @MediumTest. MOE has stripped it automatically for a while. Remove end-of-line comments that were interfering with stripping in this particular case.
+- Strip @Flaky with strip_line instead of begin_strip/end_strip.
+
+Both of these are minor simplifications, and that's nice. But also...
+
+I ran into a bad interaction between (I think) MOE's "strip elements with this annotation" stripper's heuristics and its comment stripper. I started stripping @MediumTest-annotated attributes from a special internal "Guava for Android." MOE's annotation heuristics appear to strip the end_strip comment but not the begin_strip comment. I guess that it's stripping everything from the first method annotation -- surely the right thing to do but a pain in this case. This causes MOE to strip everything from there to the end of the file. As it turns out, there's not much left to strip. But it strips the closing }, so that fouls everything up.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=99569931

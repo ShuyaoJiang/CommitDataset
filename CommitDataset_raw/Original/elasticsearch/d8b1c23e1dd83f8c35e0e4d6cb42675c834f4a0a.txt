@@ -1,0 +1,7 @@
+Remove Comparable interface from ScoreAccessor (#35519)
+
+The way ScoreAccessor implements `compareTo()` is problematic because it doesn't
+completely follow the Comparable contract, specificaly symmetry (if x is a
+ScoreAccessor and y any Number then x.comparTo(y) works, but y.compareTo(x)
+generally does not even compile). Fortunately we don't seem to use the fact that
+ScoreAccessor is a Comparable anywhere, so we can simply remove it.

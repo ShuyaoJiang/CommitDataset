@@ -1,0 +1,50 @@
+Vector field (#33022)
+
+1. Dense vector
+
+PUT dindex
+{
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "my_vector": {
+          "type": "dense_vector"
+        },
+        "my_text" : {
+          "type" : "keyword"
+        }
+      }
+    }
+  }
+}
+
+PUT dinex/_doc/1
+{
+  "my_text" : "text1",
+  "my_vector" : [ 0.5, 10, 6 ]
+}
+
+2. Sparse vector
+
+PUT sindex
+{
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "my_vector": {
+          "type": "sparse_vector"
+        },
+        "my_text" : {
+          "type" : "keyword"
+        }
+      }
+    }
+  }
+}
+
+PUT sindex/_doc/1
+{
+  "my_text" : "text1",
+  "my_vector" : {"1": 0.5, "99": -0.5,  "5": 1}
+}
+

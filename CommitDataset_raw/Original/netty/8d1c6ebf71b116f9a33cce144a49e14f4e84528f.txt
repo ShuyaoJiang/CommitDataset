@@ -1,0 +1,14 @@
+Only do priming read if there is no space in dsts buffers.
+
+Motivation:
+
+A SSL_read is needed to ensure the bio buffer is flushed, for this we did a priming read. This can be removed in many cases. Also ensure we always fill as much as possible in the destination buffers.
+
+Modifications:
+
+- Only do priming read if capacity of all dsts buffers is zero
+- Always produce as must data as possible in the dsts buffers.
+
+Result:
+
+Faster code.

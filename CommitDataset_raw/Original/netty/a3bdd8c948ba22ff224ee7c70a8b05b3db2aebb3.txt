@@ -1,0 +1,17 @@
+Don't cycle DNS servers while cycling DNS record types.
+
+Motivation:
+
+Each server should be checked for every record type. Currently, if there
+are only two configured servers and the first is down, it is impossible
+to query for IPv4 addresses because the second server is only ever
+queried for type AAAA.
+
+Modifications:
+
+Do not cycle DNS servers while cycling DNS record types (A and AAAA)
+
+Result:
+
+Name resolution is less fragile when the number of available DNS servers
+is 2.

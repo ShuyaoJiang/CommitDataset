@@ -1,0 +1,12 @@
+Add calls to flush() after writing to streams in ByteSink and CharSink.
+
+It turns out that, under JDK6, FilterOutputStream.close() calls flush() and ignores any IOException it throws. This seems like pretty bad behavior, but we can work around it by manually flushing first. Doesn't seem like this should add much overhead for streams that don't require flushing before close either.
+
+On the other hand, this only applies to:
+- subclasses of FilterOutputStream
+- for which flush() does something
+- which do not override close() themselves
+- not running under JDK7+
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=43795021

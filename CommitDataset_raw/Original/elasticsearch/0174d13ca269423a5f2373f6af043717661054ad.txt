@@ -1,0 +1,9 @@
+Fix BWC for discovery stats
+
+The new discovery stats were pushed to the 6.x branch (currently
+versioned at 6.1.0) but master was not updated to reflect this. This
+impacts the mixed-cluster BWC tests because a 6.1.0 node will be trying
+to send a 7.0.0 node the new discovery stats but the 7.0.0 did not yet
+understand that it should be reading these when talking to a 6.1.0
+node. This commit addresses this, and changes the skip version on the
+discovery stats REST tests.

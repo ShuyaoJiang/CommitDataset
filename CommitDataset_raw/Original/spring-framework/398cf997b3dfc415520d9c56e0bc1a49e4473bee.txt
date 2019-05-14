@@ -1,0 +1,44 @@
+Merge branch '3.1.x'
+
+This is the first merge from 3.1.x => master after the Gradle build
+system migration. Notice how files changed under the 3.1.x directory
+structure (org.springframework.*) merge seamlessly into the new
+directory structure (spring-*).
+
+Certain files had changed under 3.1.x that have since been deleted with
+the Gradle build migration, e.g. all pom.xml files had <license>
+sections added. These files showed up as a conflict during the merge,
+but the resolution is to simply re-remove them and commit as they are
+no longer relevant under 3.2.x / master.
+
+Also noteworthy is the .gitignore file. It has been updated under 3.1.x
+to ignore files and directories specific to the new Gradle-based
+structure. However, this causes conflicts when trying to merge against
+master, given that master should *not* ignore this directories. The
+resolution in this situation is to simply force the 'master' version of
+the file, i.e. when prompted for merge resolution:
+
+    anakata:~/Work/spring-framework/spring-framework[master|MERGING]
+    $ git status -sb
+    ## master...springsource/master [ahead 24]
+    UU .gitignore
+
+    anakata:~/Work/spring-framework/spring-framework[master|MERGING]
+    $ git checkout master .gitignore
+
+    anakata:~/Work/spring-framework/spring-framework[master|MERGING]
+    $ git commit
+
+It is helpful in situations like this one to enable git's "rerere"
+feature beforehand, which records and remembers resolution strategies,
+avoiding the need to repeat them in future merges:
+
+    $ git config --global rerere.enabled 1
+
+See:
+    http://progit.org/2010/03/08/rerere.html
+    http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time
+
+Conflicts:
+    .gitignore
+    .springframework.*/pom.xml

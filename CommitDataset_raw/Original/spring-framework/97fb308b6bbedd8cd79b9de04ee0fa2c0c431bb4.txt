@@ -1,0 +1,21 @@
+Allow use of @SendToUser even w/o authenticated user
+
+Before this change, subscribing to a user destination and use of
+@SendToUser annotation required an authenticated user.
+
+This change makes it possible to subscribe to a user destination from
+WebSocket sessions without an authenticated user. In such cases the
+destination is associated with one session only rather than with a
+user (and all their sessions).
+
+It is then also possible to send a message to a user destination
+via "/user/{sessionId}/.." rather than "/user/{user}/...".
+
+That means @SendToUser works relying on the session id of the input
+message, effectively sending a reply to destination private to the
+session.
+
+A key use case for this is handling an exception with an
+@MessageExceptionHandler method and sending a reply with @SendToUser.
+
+Issue: SPR-11309

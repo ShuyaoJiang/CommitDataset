@@ -1,0 +1,14 @@
+NetUtil valid IP methods to accept CharSequence (#7827)
+
+* NetUtil valid IP methods to accept CharSequence
+
+Motivation:
+NetUtil has methods to determine if a String is a valid IP address. These methods don't rely upon String specific methods and can use CharSequence instead.
+
+Modifications:
+- Use CharSequence instead of String for the IP validator methods.
+- Avoid object allocation in AsciiString#indexOf(char,int) and reduce
+byte code
+
+Result:
+No more copy operation required if a CharSequence exists.

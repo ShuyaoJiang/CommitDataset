@@ -1,0 +1,21 @@
+Refactor reactive mock request and response support
+
+MockServerHttpRequest and MockServerHttpResponse now extend the same
+abstract base classes that server-specific implementations do and
+therefore approximate their behavior more closely.
+
+As an immediate consequence MockServerHttpRequest is read-only after
+it is created. Instead it now exposes static builder methods similar
+to those found in RequestEntity. This enforces more strictness as well
+as recycling of requests in tests and provides nicer builder methods.
+
+To simplify tests DefaultServerWebExchange now offers a constructor
+with just a request and response, and automatically creating a
+DefaultWebSessionManager.
+
+The spring-test module now also contains client-side reactive mock
+request and response implementations. The mock client request extends
+the same AbstractClientHttpRequest as client-specific implementations
+do. There is no abstract base class for client responses.
+
+Issue: SPR-14590

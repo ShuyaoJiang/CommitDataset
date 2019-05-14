@@ -1,0 +1,14 @@
+Add WebServerApplicationContext abstraction
+
+Add a new `WebServerApplicationContext` interface that provides a common
+abstraction for all application contexts that create and manage the
+lifecycle of an embedded `WebServer`.
+
+Allows server namespaces to become a first-class concept (rather
+subverting `ConfigurableWebApplicationContext.getNamespace()`) and
+allow us to drop `getServerId()` from `WebServerInitializedEvent`.
+
+Also helps to improve `ManagementContextAutoConfiguration` and
+`ManagementContextFactory`.
+
+Fixes gh-11881

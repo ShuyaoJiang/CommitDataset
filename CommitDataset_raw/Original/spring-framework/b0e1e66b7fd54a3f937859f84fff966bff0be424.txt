@@ -1,0 +1,51 @@
+Add CORS support
+
+This commit introduces support for CORS in Spring Framework.
+
+Cross-origin resource sharing (CORS) is a mechanism that allows
+many resources (e.g. fonts, JavaScript, etc.) on a web page to
+be requested from another domain outside the domain from which
+the resource originated. It is defined by the CORS W3C
+recommandation (http://www.w3.org/TR/cors/).
+
+A new annotation @CrossOrigin allows to enable CORS support
+on Controller type or method level. By default all origins
+("*") are allowed.
+
+@RestController
+public class SampleController {
+
+	@CrossOrigin
+	@RequestMapping("/foo")
+	public String foo() {
+		// ...
+	}
+}
+
+Various @CrossOrigin attributes allow to customize the CORS configuration.
+
+@RestController
+public class SampleController {
+
+	@CrossOrigin(origin = { "http://site1.com", "http://site2.com" },
+				 allowedHeaders = { "header1", "header2" },
+				 exposedHeaders = { "header1", "header2" },
+				 method = RequestMethod.DELETE,
+				 maxAge = 123, allowCredentials = "true")
+	@RequestMapping(value = "/foo", method = { RequestMethod.GET, RequestMethod.POST} )
+	public String foo() {
+		// ...
+	}
+}
+
+A CorsConfigurationSource interface can be implemented by HTTP request
+handlers that want to support CORS by providing a CorsConfiguration
+that will be detected at AbstractHandlerMapping level. See for
+example ResourceHttpRequestHandler that implements this interface.
+
+Global CORS configuration should be supported through ControllerAdvice
+(with type level @CrossOrigin annotated class or class implementing
+CorsConfigurationSource), or with XML namespace and JavaConfig
+configuration, but this is not implemented yet.
+
+Issue: SPR-9278

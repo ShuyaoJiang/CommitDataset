@@ -1,0 +1,8 @@
+[Monitoring] Thread _xpack/monitoring/_bulk (elastic/x-pack-elasticsearch#4393)
+
+Instead of allowing the `_xpack/monitoring/_bulk` to remain on the same
+thread, it should execute on a separate thread to avoid blocking the
+http worker thread whenever the exporters get stuck waiting on the
+monitoring cluster.
+
+Original commit: elastic/x-pack-elasticsearch@25ce9a4df04d5d7f91d8b5b273dce4f65044f2f4

@@ -1,0 +1,7 @@
+Add more robust cancellation support to MultiModelLoader.
+
+There's a race described in https://github.com/bumptech/glide/issues/3343 where a child DataFetcher can call the MultiModelLoader after it has been cancelled, which can result in us unnecessarily starting a new load. Although we should probably also change the fetcher to avoid calling its callback after it's cancelled, we can make this behavior less of a problem in general by changing MultiModelLoader instead of relying on every individual DataFetcher implementation.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=216546841

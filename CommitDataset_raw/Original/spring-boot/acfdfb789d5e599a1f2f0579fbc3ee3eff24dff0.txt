@@ -1,0 +1,11 @@
+Update main class to reflect use of JarLauncher
+
+b19f6bb238 updated the CLI so that it should be launched using Spring
+Boot Loader's JarLauncher, however the spring and spring.bat shell
+scripts were not updated so they still launched the CLI by using
+SpringCli as the main class. This led to a NoClassDefFoundError
+as none of the dependencies in the jar's /lib directory could be
+found.
+
+This commit updates the two shells scripts to use JarLauncher as the
+main class.

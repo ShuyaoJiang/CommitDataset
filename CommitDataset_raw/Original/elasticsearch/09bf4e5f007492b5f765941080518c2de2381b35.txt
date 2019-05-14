@@ -1,0 +1,18 @@
+Introduce private settings (#33327)
+
+This commit introduces the formal notion of a private setting. This
+enables us to register some settings that we had previously not
+registered as fully-fledged settings to avoid them being exposed via
+APIs such as the create index API. For example, we had hacks in the
+codebase to allow index.version.created to be passed around inside of
+settings objects, but was not registered as a setting so that if a user
+tried to use the setting on any API then they would get an
+exception. This prevented users from setting index.version.created on
+index creation, or updating it via the index settings API. By
+introducing private settings, we can continue to reject these attempts,
+yet now we can represent these settings as actual settings. In this
+change, we register index.version.created as an actual setting. We do
+not cutover all settings that we had been treating as private in this
+pull request, it is already quite large due to moving some tests around
+to account for the fact that some tests need to be able to set the
+index.version.created. This can be done in a follow-up change.

@@ -1,0 +1,8 @@
+[Monitoring] Remove 202 responses in favor of 200 responses (elastic/x-pack-elasticsearch#4213)
+
+This changes `_xpack/monitoring/_bulk` to fundamentally behave in the same
+way as `_bulk` and never return 202 when data is ignored (something
+`_bulk` cannot do). Instead, anyone interested will have to inspect the
+returned response for the ignored flag.
+
+Original commit: elastic/x-pack-elasticsearch@07254a006d8ca9f2f11f434bac461f769cca9611

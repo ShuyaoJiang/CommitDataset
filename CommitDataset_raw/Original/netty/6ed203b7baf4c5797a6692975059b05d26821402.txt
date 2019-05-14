@@ -1,0 +1,13 @@
+NioServerSocketChannel.isActive() must return false after close() completes. (#9030)
+
+Motivation:
+
+When a Channel was closed its isActive() method must return false.
+
+Modifications:
+
+First check for isOpen() before isBound() as isBound() will continue to return true even after the underyling fd was closed.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/9026.

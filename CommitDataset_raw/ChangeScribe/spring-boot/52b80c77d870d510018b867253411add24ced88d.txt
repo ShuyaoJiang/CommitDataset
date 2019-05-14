@@ -1,0 +1,366 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml, invoker.properties, site.xml, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.springframework.boot:  
+
+1. Changes to package org.springframework.boot.actuate.autoconfigure.cache:  
+
+1.1. Add an object creator class for caches endpoint auto configuration. It allows to:
+
+	Get caches endpoint;
+	Get caches endpoint web extension
+
+1.2. Add a class for caches endpoint auto configuration tests. It allows to:
+
+	Run should have endpoint bean;
+	Run caches endpoint auto configuration tests without cache manager should have endpoint bean;
+	Run when  not exposed should not have endpoint bean;
+	Run when enabled property is false should  not have endpoint bean
+
+2. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint.condition:  
+
+2. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint.web.jersey:  
+
+2.1. Add a class for jersey web endpoint management context configuration tests. It allows to:
+
+	Handle resource config customizer for endpoints is auto configured;
+	Handle auto configuration is conditional on servlet web application;
+	Handle auto configuration is conditional on class resource config
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.health:  
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.integration:  
+
+3.1. Add an object creator class for integration graph endpoint auto configuration. It allows to:
+
+	Get integration graph endpoint;
+	Get integration graph server
+
+3.2. Add a class for integration graph endpoint auto configuration tests. It allows to:
+
+	Run should have endpoint bean;
+	Run when enabled property is false should  not have endpoint bean;
+	Run when  not exposed should not have endpoint bean;
+	Run when spring integration is  not enabled should not have endpoint bean
+
+4. Changes to package org.springframework.boot.actuate.autoconfigure.integrationtest:  
+
+4. Changes to package org.springframework.boot.actuate.autoconfigure.ldap:  
+
+4. Changes to package org.springframework.boot.actuate.autoconfigure.metrics:  
+
+4. Changes to package org.springframework.boot.actuate.autoconfigure.metrics.export.statsd:  
+
+4. Changes to package org.springframework.boot.actuate.autoconfigure.metrics.orm.jpa:  
+
+4.1. Add a class for hibernate metrics auto configuration. It allows to:
+
+	Convert bind entity manager factories;
+	Convert bind entity manager factory;
+	Get entity manager factory name
+
+5. Changes to package org.springframework.boot.actuate.autoconfigure.metrics.test:  
+
+5. Changes to package org.springframework.boot.actuate.autoconfigure.metrics.web.reactive:  
+
+5. Changes to package org.springframework.boot.actuate.cache:  
+
+5.1. Add a class for caches endpoint tests. It allows to:
+
+	All caches  with single cache manager;
+	All caches  with several cache managers;
+	Get named cache with single cache manager;
+	Get named cache with several cache managers;
+	Get named cache with unknown cache;
+	Get named cache with wrong cache manager;
+	Get named cache with several cache managers with cache manager filter;
+	Handle clear all caches;
+	Handle clear cache;
+	Handle clear cache with several cache managers;
+	Handle clear cache with several cache managers with cache manager filter;
+	Handle clear cache with unknown cache;
+	Handle clear cache with unknown cache manager;
+	Get cache manager;
+	Handle mock cache
+
+5.2. Add an object creator class for caches endpoint web extension. It allows to:
+
+	Instantiate caches endpoint web extension  with delegate caches endpoint;
+	Get cache;
+	Handle clear cache
+
+5.3. Add a class for non unique cache exception. It allows to:
+
+	Instantiate non unique cache exception  with cache manager names collection;
+	Get cache name;
+	Get cache manager names
+
+6. Changes to package org.springframework.boot.actuate.endpoint.web:  
+
+6. Changes to package org.springframework.boot.actuate.health:  
+
+6.1. Add a class for default health indicator registry. It allows to:
+
+	Instantiate default health indicator registry;
+	Instantiate default health indicator registry  with health indicators map;
+	Register health indicator;
+	Get unregister;
+	Get default health indicator registry;
+
+6.2. Add a class for default health indicator registry tests. It allows to:
+
+	Set default health indicator registry tests;
+	Register default health indicator registry tests;
+	Register default health indicator registry tests already used name;
+	Handle unregister;
+	Handle unregister unknown;
+	Get all is A snapshot;
+	Get all is immutable
+
+6.3. Add a class for default reactive health indicator registry. It allows to:
+
+	Instantiate default reactive health indicator registry;
+	Instantiate default reactive health indicator registry  with health indicators map;
+	Register reactive health indicator;
+	Get unregister;
+	Get default reactive health indicator registry;
+
+6.4. Add a class for default reactive health indicator registry tests. It allows to:
+
+	Set default reactive health indicator registry tests;
+	Register default reactive health indicator registry tests;
+	Register default reactive health indicator registry tests already used name;
+	Handle unregister;
+	Handle unregister unknown;
+	Get all is A snapshot;
+	Get all is immutable
+
+6.5. Add an interface declaration  for health indicator registry. It allows to:
+
+	Register health indicator;
+	Get unregister;
+	Get health indicator registry;
+
+6.6. Add a class for health indicator registry factory. It allows to:
+
+	Instantiate health indicator registry factory  with health indicator name factory function;
+	Instantiate health indicator registry factory;
+	Create health indicator registry;
+	Initialize registry
+
+6.7. Add a class for health web endpoint response mapper tests. It allows to:
+
+	Map details  with disable details does not invoke supplier;
+	Map details  with unauthorized user does not invoke supplier;
+	Map details  with authorized user invoke supplier;
+	Map details  with unavailable health;
+	Handle mock supplier;
+	Handle mock security context;
+	Create mapper
+
+6.8. Add an interface declaration  for reactive health indicator registry. It allows to:
+
+	Register reactive health indicator;
+	Get unregister;
+	Get reactive health indicator registry;
+
+6.9. Add a class for reactive health indicator registry factory. It allows to:
+
+	Instantiate reactive health indicator registry factory  with health indicator name factory function;
+	Instantiate reactive health indicator registry factory;
+	Create reactive health indicator registry;
+	Initialize registry;
+	Merge reactive health indicators map
+
+6.10. Add a class for reactive health indicator registry factory tests. It allows to:
+
+	Handle default health indicator name factory;
+	Handle health indicator is adapted
+
+7. Changes to package org.springframework.boot.actuate.integration:  
+
+7.1. Add a class for integration graph endpoint. It allows to:
+
+	Instantiate integration graph endpoint  with integration graph server;
+	Get graph;
+	Rebuild integration graph endpoint
+
+7.2. Add a class for integration graph endpoint tests. It allows to:
+
+	Set integration graph endpoint tests;
+	Read operation should return graph;
+	Write operation should rebuild graph
+
+8. Changes to package org.springframework.boot.actuate.metrics.web.reactive.client:  
+
+8.1. Add a class for default web client exchange tags provider. It allows to:
+
+	Get tags
+
+8.2. Add a class for default web client exchange tags provider tests. It allows to:
+
+	Handle setup;
+	Handle tags should be populated;
+	Handle tags when no uri template should provide uri path;
+	Handle tags when io exception should return io error status;
+	Handle tags when exception should return client error status
+
+8.3. Add a class for metrics web client customizer. It allows to:
+
+	Instantiate metrics web client customizer  with meter registry, tags provider and tags provider;
+	Customize web client builder
+
+8.4. Add a class for metrics web client customizer tests. It allows to:
+
+	Handle setup;
+	Customize should add filter function;
+	Customize should  not add duplicate filter function
+
+8.5. Add a class for metrics web client filter function. It allows to:
+
+	Instantiate metrics web client filter function  with meter registry, tags provider and tags provider;
+	Get filter
+
+8.6. Add a class for metrics web client filter function tests. It allows to:
+
+	Handle setup;
+	Handle filter should record timer;
+	Handle filter when uri template present should record timer;
+	Handle filter when io exception thrown should record timer;
+	Handle filter when exception thrown should record timer;
+	Handle filter when exception and retry should not cumulate record time
+
+8.7. Add a class for web client exchange tags. It allows to:
+
+	Instantiate web client exchange tags;
+	Get method;
+	Get uri;
+	Extract path;
+	Get status;
+	Get client name;
+	Get outcome
+
+8.8. Add an interface declaration  for web client exchange tags provider. It allows to:
+
+	Get tags
+
+8.9. Add a class for web client exchange tags tests. It allows to:
+
+	Handle setup;
+	Handle method;
+	Handle uri when absolute template is available should return template;
+	Handle uri when relative template is available should return template;
+	Handle uri when template is missing should return path;
+	Handle client name;
+	Handle status;
+	Handle status when IO exception;
+	Handle status when client exception;
+	Handle outcome tag is unknown when response is null;
+	Handle outcome tag is informational when response is 1 xx;
+	Convert outcome tag is success when response is;
+	Handle outcome tag is redirection when response is 3 xx;
+	Handle outcome tag is client error when response is 4 xx;
+	Handle outcome tag is server error when response is 5 xx;
+	Handle outcome tag is unknown when response status is unknown
+
+9. Changes to package org.springframework.boot.actuate.metrics.web.reactive.server:  
+
+9. Changes to package org.springframework.boot.autoconfigure.couchbase:  
+
+9.1. Add a class for couchbase configuration. It allows to:
+
+	Instantiate couchbase configuration  with couchbase properties;
+	Handle couchbase environment;
+	Handle couchbase cluster;
+	Determine bootstrap hosts;
+	Handle couchbase cluster info;
+	Handle couchbase client;
+	Initialize environment builder;
+	Get query service config;
+	Get view service config
+
+10. Changes to package org.springframework.boot.autoconfigure.data.couchbase:  
+
+10. Changes to package org.springframework.boot.autoconfigure.elasticsearch.rest:  
+
+10.1. Add an interface declaration  for rest client builder customizer. It allows to:
+
+	Customize rest client builder
+
+10.2. Add a class for rest client properties. It allows to:
+
+	Get uris;
+	Set uris;
+	Get username;
+	Set username;
+	Get password;
+	Set password
+
+11. Changes to package org.springframework.boot.autoconfigure.kafka:  
+
+11. Changes to package org.springframework.boot.autoconfigure.ldap:  
+
+11. Changes to package org.springframework.boot.autoconfigure.liquibase:  
+
+11. Changes to package org.springframework.boot.autoconfigure.orm.jpa:  
+
+11. Changes to package org.springframework.boot.autoconfigure.security.oauth2.client:  
+
+11. Changes to package org.springframework.boot.autoconfigure.web:  
+
+11. Changes to package org.springframework.boot.autoconfigure.web.servlet:  
+
+11.1. Add a class for web mvc properties tests. It allows to:
+
+	Handle servlet path when ends with slash has valid mapping and prefix;
+	Handle servlet path when does not end with slash has valid mapping and prefix;
+	Handle servlet path when has wildcard throws exception;
+	Handle bind;
+
+12. Changes to package org.springframework.boot.builder:  
+
+12. Changes to package org.springframework.boot.context.properties.bind:  
+
+12. Changes to package org.springframework.boot.loader.tools:  
+
+12. Changes to package org.springframework.boot.maven:  
+
+12.1. Add a class for env variables. It allows to:
+
+	Instantiate env variables  with variables map;
+	Parse env variables;
+	Get value;
+	Process env variables env variables as map;
+	Process env variables env variables as array
+
+12.2. Add a class for env variables tests. It allows to:
+
+	Process env variables tests env variables tests as null;
+	Process env variables tests env variables tests as array;
+	Process env variables tests env variables tests as map;
+	Get test args
+
+12.3. Add a class for system property formatter tests. It allows to:
+
+	Parse empty;
+	Parse system property formatter tests only key;
+	Parse key  with value;
+	Parse key  with empty value;
+	Parse key  with only spaces
+
+13. Changes to package org.springframework.boot.test.autoconfigure.web.servlet.mockmvc:  
+
+13.1. Add a class for web mvc test pageable integration tests. It allows to:
+
+	Should support pageable
+
+14. Changes to package org.test:  
+
+14.1. Add a class for sample application. It allows to:
+
+	Handle main
+
+15. Changes to package sample.actuator:  
+

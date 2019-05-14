@@ -1,0 +1,14 @@
+Order ManagementContextConfiguration classes without loading them
+
+Previously, ManagementContextConfiguration classes were loaded to
+allow them to be ordered based on either @Order or implementing
+Ordered. This had the unwanted side-effect of possibly logging
+unwanted INFO messages if the reflection-based annotation
+introspection failed. One cause of this was @ConditionalOnClass when
+the referenced class was not on the classpath.
+
+This commit uses the ASM-based annotation metadata reading to
+determine the order of a management context configuration class based
+on the @Order annotation. The classes are then sorted using a standard
+OrderComparator. Note that Ordering via implemented Ordered is not
+supported as it cannot be determine without loading the class.

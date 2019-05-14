@@ -1,0 +1,9 @@
+Make spring.profiles.include behave consistently
+
+Previously, if profiles were included via a property source with higher
+precedence than config files, profiles activated via config files would
+not be taken into account. This commit makes spring.profiles.include
+behave consistently where it adds to active profiles rather than replacing
+them, regardless of property source.
+
+Fixes gh-15344

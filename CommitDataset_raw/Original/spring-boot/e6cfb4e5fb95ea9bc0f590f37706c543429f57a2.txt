@@ -1,0 +1,10 @@
+Improve diagnostics when reading a nested jar throws a runtime exception
+
+Previously, only IOExceptions were caught and wrapped in a new
+IOException that included the name of the nested entry that was
+being read.
+
+Following this commit, any Exception is caught and wrapped so that the
+problematic entry can be identified in more failure scenarios.
+
+Closes gh-8711

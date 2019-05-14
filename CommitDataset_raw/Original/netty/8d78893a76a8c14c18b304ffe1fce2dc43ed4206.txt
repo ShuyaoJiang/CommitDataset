@@ -1,0 +1,13 @@
+Avoid writing two times the same message in case channelWritabilityChanged event is called during a write.
+
+Motivation:
+
+ChunkedWriteHandler.doFlush is called twice from the same write if the channelWritabilityChanged event is invoked during the write. The buffer is already written so no extra data is sent on the socket but it causes the "promise already done" exception to be thrown.
+This error happens only when the message is not ChunkedInput.
+
+Modification:
+Clear out the currentWrite reference before the ctx.write call, such that next time when the method is invoked the same object is not used twice.
+
+Result:
+
+Fixes #7819

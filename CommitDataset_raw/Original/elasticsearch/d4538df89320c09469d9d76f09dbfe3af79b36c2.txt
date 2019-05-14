@@ -1,0 +1,6 @@
+Improve exception handling on TransportMasterNodeAction (#29314)
+
+We have seen exceptions bubble up to the uncaught exception handler. Checking the blocks can
+lead for example to IndexNotFoundException when the indices are resolved. In order to make
+TransportMasterNodeAction more resilient against such expected exceptions, this code change
+wraps the execution of doStart() into a try catch and informs the listener in case of failures.

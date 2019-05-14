@@ -1,0 +1,13 @@
+Protect against partial visibility of Bean Validation API
+
+On WebSphere Liberty, the javax.validation package may be visible but
+other javax.validation packages upon which it depends may not be
+visible. This can lead to an incorrect assumption that the Bean
+Validation API is available when, in fact, it is only partially
+available.
+
+Add an additional check for the availability of a class in the
+javax.validation.bootstrap package to ensure that it's not just the
+javax.validation package that's available.
+
+Closes gh-10877

@@ -1,0 +1,10 @@
+Avoid calling setDataSource twice for videos
+
+It's pretty expensive to do, so we're wasting time for videos. If
+setDataSource is called with a non-video, it will throw an exception
+which in turn will cause us to move on to the next decoder, so the
+behavior shouldn't change.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=168390557

@@ -1,0 +1,14 @@
+[TEST] Use better REST endpoints for testing watch actions
+
+This is the x-pack side of https://github.com/elastic/elasticsearch/pull/24437
+
+It changes two things, for the disable tests, it uses a valid endpoint instead
+of a previously invalid endpoint that happened to return a 400 because the
+endpoint was bad, regardless of if watcher was disabled.
+
+The other change is to create the watches index by putting a watch using the
+correct API, rather than manually creating the index. This is because
+`RestHijackOperationAction` hijacks operations like this and stops accessing the
+endpoint in a regular manner.
+
+Original commit: elastic/x-pack-elasticsearch@3be78d9aea02080f5cd00d9b0bace78eec05616e

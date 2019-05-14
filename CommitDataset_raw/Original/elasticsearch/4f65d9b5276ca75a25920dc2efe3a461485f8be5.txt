@@ -1,0 +1,19 @@
+Retry startup for IndexAuditTrail and version templates (elastic/x-pack-elasticsearch#2755)
+
+This commit removes the FAILED state for the IndexAuditTrail so that we always try to keep starting
+the service. Previously, on any exception during startup we moved to a failed state and never tried
+to start again. The users only option was to restart the node. This was problematic in the case of
+large clusters as there could be common timeouts of cluster state listeners that would cause the
+startup of this service to fail.
+
+Additionally, the logic in the IndexAuditTrail to update the template on the current cluster has
+been removed and replaced with the use of the TemplateUpgradeService. However, we still need to
+maintain the ability to determine if a template on a remote cluster should be PUT. To avoid always
+PUTing the template, the version field has been added so it only needs to be PUT once on upgrade.
+
+Finally, the default queue size has been increased as this is another common issue that users hit
+with high traffic clusters.
+
+relates elastic/x-pack-elasticsearch#2658
+
+Original commit: elastic/x-pack-elasticsearch@27e2ce72238ec58385c38b05d0c326f370a2d96e

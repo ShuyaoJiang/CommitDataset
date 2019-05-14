@@ -1,0 +1,11 @@
+Provide M2E lifecycle mapping metadata for Maven plugin’s build-info goal
+
+Previously, configuring the build-info goal in a pom would result in 
+Eclipse reporting an error for the pom as it didn’t know if/when to
+execute the build-info goal.
+
+This commit adds lifecycle mapping metadata so that the goal is executed
+on incremental builds. This ensures that the contents of the generated
+file are kept up-to-date, reflecting the latest build time, etc.
+
+Closes gh-6723

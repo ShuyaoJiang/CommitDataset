@@ -1,0 +1,27 @@
+Support @Grab when app has multiple groovy scripts
+
+The AST transformation that processes @Grab annotations is driven once
+per source file. Previously, this meant that if an app consisted of
+multiple source files then multiple, discrete dependency resolutions
+would be performed.
+
+This commit updates AetherGrapeEngine to cache a previous resolution's
+outcome and use its dependency to influence the outcome of subsequent
+resolutions. For example if a one resolution results in spring-core
+4.0.0.RELEASE being added to the classpath, subsequent resolutions
+that depend upon spring-core will always get the 4.0.0.RELEASE
+version. This is achieved by using the dependencies found by earlier
+resolutions as dependency management configuration of the current
+resolution. This removes the possibility of multiple versions of the
+same dependency ending up on the classpath.
+
+In addition to using the results of earlier resolutions to provide
+dependency management configuration, default dependency management
+configuration is also provided. This configuration is specified by
+the springcli.properties file and ensures that, where Boot prescribes
+certain versions of a dependency, that is the version that will be
+resolved. For example, this ensures that spring-data-redis, which
+depends upon Spring 3.1.4, pulls in the version of Spring that Boot
+requires instead.
+
+Fixes #224

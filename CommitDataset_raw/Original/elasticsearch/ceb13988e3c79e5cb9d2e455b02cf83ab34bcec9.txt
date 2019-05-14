@@ -1,0 +1,18 @@
+Watcher: Do not update watch status state during execution (elastic/x-pack-elasticsearch#2204)
+
+When a watch is executed, it sends an update request to the watch to
+udpate its status.
+
+This update request also updates the status.state field, which contains
+information, if the watch is active. If the watch gets executed, and
+during execution a watch gets disabled, then the current execution will
+set the watch back to active.
+
+This commit fixes the current behaviour and never changes the state of
+a watch when updating the status after executing, allowing
+activate/deactivate calls to work as expected, regardless if a watch
+is being executed.
+
+This will fix not only the current behaviour but also some flaky tests.
+
+Original commit: elastic/x-pack-elasticsearch@ca69109ecb30f746c296789b8b0c58cf223addaa

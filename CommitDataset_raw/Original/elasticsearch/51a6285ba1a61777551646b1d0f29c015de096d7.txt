@@ -1,0 +1,40 @@
+SQL: Allow CSV tests to look more like the CLI (elastic/x-pack-elasticsearch#3640)
+
+This allows CSV tests to include a line between the header and the
+values that is ignored by the test framework. This optional line can be
+added to the tests to make them a little easier to read which is useful
+when they are included in the documentation. As a side effect they also
+closely mimick the output of the CLI. To the point where you can copy
+directly from the CLI and paste into the CSV tests.
+
+Example:
+```
+constantYear
+// tag::year
+SELECT YEAR(CAST('2018-01-19T10:23:27Z' AS TIMESTAMP)) as year;
+     year
+---------------
+2018
+// end::year
+;
+```
+
+This can be extracted with a construct like this in the docs:
+```
+["source","sql",subs="attributes,callouts,macros"]
+--------------------------------------------------
+include-tagged::{sql-specs}/datetime.csv-spec[year]
+--------------------------------------------------
+```
+
+Which makes documentation that looks like this:
+```
+SELECT YEAR(CAST('2018-01-19T10:23:27Z' AS TIMESTAMP)) as year;
+     year
+---------------
+2018
+```
+
+Which is fairly nice.
+
+Original commit: elastic/x-pack-elasticsearch@8c10b5cb1063e258a873a9c7e5936a250ca386f6

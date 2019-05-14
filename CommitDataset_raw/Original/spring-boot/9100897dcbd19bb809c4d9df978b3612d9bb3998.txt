@@ -1,0 +1,12 @@
+Automatically exclude auto-configurations from component scan
+
+Previously, if an auto-configuration class was (wrongly) located in a
+candidate package for component scanning, the class was silently loaded
+as an app configuration (i.e. with the wrong lifecycle).
+
+This commit adds an `AutoConfigurationExcludeFilter` to
+`@SpringBootApplication` so that such classes are automatically
+filtered. Since they are registered in `spring.factories`, we can
+silently ignore them since we know they'll be loaded later on.
+
+Closes gh-7168

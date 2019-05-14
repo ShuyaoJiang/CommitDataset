@@ -1,0 +1,10 @@
+Pre-increment leakCheckCnt to prevent false leak-detectation for very first time
+
+Motivation:
+ResourceLeakDetector reports leak for first call to open(obj) as its leakCheckCnt starts with value 0 and increment subsequently. with value of leakCheckCnt =0, it always returns ResourceLeak. Our application calls ResourceLeakDetector.open(obj) to validate Leak and it fails at very first call even though there is no leak in application.
+
+Modifications:
+ResourceLeakDetector.leakCheckCnt value will not be 0 while deriving leak and it will not return incorrect value of ResourceLeak.
+
+Result:
+Fix false leak report on first call on ResourceLeakDetector.

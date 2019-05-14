@@ -1,0 +1,14 @@
+Add ability to handle a timeout to DeferredResult
+
+When a controller returns a DeferredResult, the underlying async
+request will eventually time out. Until now the default behavior was
+to send a 503 (SERVICE_UNAVAILABLE). However, this is not desirable
+in all cases. For example if waiting on an event, a timeout simply
+means there is no new information to send.
+
+To handle those cases a DeferredResult now accespts a timeout result
+Object in its constructor. If the timeout occurs before the
+DeferredResult is set, the timeout result provided to the constructor
+is used instead.
+
+Issue: SPR-8617

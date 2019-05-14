@@ -1,0 +1,7 @@
+Refactor ExchangeResult
+
+Clearly separate how the result of an exchange is represented before
+the response body has been read (e.g. assertions on status and headers
+only) vs later after the body is extracted to a representation
+(assertions on the extracted body) or is decoded to Flux<T> (e.g. for
+use with a StepVerifier).

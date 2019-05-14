@@ -1,0 +1,19 @@
+Introduce database-name in <jdbc:embedded-database>
+
+Prior to this commit, the EmbeddedDatabaseBeanDefinitionParser set the
+name of the embedded database that it configured to the value of its
+'id'. This made it impossible to assign unique names to embedded
+databases if the same bean 'id' (e.g, 'dataSource') was used across
+multiple application contexts loaded within the same JVM, which is
+often the case within an integration test suite. In contrast, the
+EmbeddedDatabaseBuilder already provides support for setting the name
+in Java Config. Thus there is a disconnect between XML and Java
+configuration.
+
+This commit addresses this issue by introducing a 'database-name'
+attribute in <jdbc:embedded-database />. This allows developers to set
+unique names for embedded databases -- for example, via a SpEL
+expression or a property placeholder that is influenced by the current
+active bean definition profiles.
+
+Issue: SPR-12835

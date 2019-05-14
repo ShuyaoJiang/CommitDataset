@@ -1,0 +1,4 @@
+Fix a bug in internalNioBuffer() implementations of derived buffers
+
+- A user can create multiple duplicates of a buffer and access their internal NIO buffers. (e.g. write multiple duplicates to multiple channels assigned to different event loop.)  Because the derived buffers' internalNioBuffer() simply delegates the call to the original buffer, all derived buffers and the original buffer's internalNioBuffer() will return the same buffer, which will lead to a race condition.
+- Fixes #1739

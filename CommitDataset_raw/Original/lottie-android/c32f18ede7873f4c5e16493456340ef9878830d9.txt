@@ -1,0 +1,13 @@
+Refactored LottieCompositionFactory APIs (#830)
+
+Replaced existing `LottieComposition.Factory` methods with a new `LottieCompositionFactory`
+The main purpose of this is to provide a clean way to handle exceptions. Today, parsing exceptions are thrown on a background thread and impossible to handle. This replaces that with a new `LottieResult` which mimics a typical `Result` class in functional programming. It either has a result or an exception.
+
+The composition methods now return a `LottieTask<LottieResult<LottieComposition>>>`.
+You can add/remove listeners on the LottieTask. The listener will be called with the result that contains either the exception or error.
+
+This also deprecates all `LottieComposition.Factory` methods because they all have an analogous `LottieCompositionFactory` API.
+
+This PR also extracts LottieAnimationView's cache into a separate class and added tests which found an off by one error.
+
+#710 

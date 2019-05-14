@@ -1,0 +1,14 @@
+Recycler will produce npe error when multiple recycled at different thread
+
+Motivation:
+
+Recycler may produce a NPE when the same object is recycled multiple times from different threads.
+
+Modifications:
+
+- Check if the id has changed or if the Stack became null and if so throw an IllegalStateException
+- Add unit test
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8220.

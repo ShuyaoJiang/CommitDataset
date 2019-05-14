@@ -1,0 +1,11 @@
+Force stable file modes for built packages (#30823)
+
+If you have an unusual umask (e.g., 0002) and clone the GitHub
+repository then files that we stick into our packages like the
+README.textile and the license will have a file mode of 0664 on disk yet
+we expect them to be 0644. Additionally, the same thing happens with
+compiled artifacts like JARs. We try to set a default file mode yet it
+does not seem to take everywhere. This commit adds explicit file modes
+in some places that we were relying on the defaults to ensure that the
+built artifacts have a consistent file mode regardless of the underlying
+build host.

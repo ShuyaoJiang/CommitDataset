@@ -1,0 +1,12 @@
+Improve CORS handling in AbstractSockJsService
+
+After this change, AbstractSockJsService does not add CORS headers if
+the response already contains an "Access-Control-Allow-Origin" header.
+Essentially it backs off assuming CORS headers are handled centrally
+e.g. through a Filter.
+
+In order to support this, the ServletServerHttpResponse now returns an
+instance of HttpHeaders that also provides access to headers already
+present in the HttpServletResponse.
+
+Issue: SPR-11443

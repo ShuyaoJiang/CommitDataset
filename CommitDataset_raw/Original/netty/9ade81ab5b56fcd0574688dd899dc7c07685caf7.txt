@@ -1,0 +1,14 @@
+Use system property to detect if root is running the program
+
+Motivation:
+
+We forked a new process to detect if the program is run by root. We should better just use user.name system property
+
+Modifications:
+
+- Change PlatformDependent.isRoot0() to read the user.name system property to detect if root runs the program and rename it to maybeSuperUser0().
+- Rename PlatformDependent.isRoot() to maybeSuperUser() and let it init directly in the static block
+
+Result:
+
+Less heavy way to detect if the program is run by root.

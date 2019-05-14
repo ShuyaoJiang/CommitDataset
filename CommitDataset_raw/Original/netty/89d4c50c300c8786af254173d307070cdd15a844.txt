@@ -1,0 +1,13 @@
+[#2926] Fix 1 byte memory leak in native transport
+
+Motivation:
+
+We use malloc(1) in the on JNI_OnLoad method but never free the allocated memory. This means we have a tiny memory leak of 1 byte.
+
+Modifications:
+
+Call free(...) on previous allocated memory.
+
+Result:
+
+Fix memory leak

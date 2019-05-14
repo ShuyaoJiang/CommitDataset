@@ -1,0 +1,17 @@
+Optimize HPACK usage to align more with Netty types and remove heavy object creations. Related to [#3597]
+
+Motivations:
+
+The HPACK code was not really optimized and written with Netty types in mind. Because of this a lot of garbage was created due heavy object creation.
+
+This was first reported in [#3597] and https://github.com/grpc/grpc-java/issues/1872 .
+
+Modifications:
+
+- Directly use ByteBuf as input and output
+- Make use of ByteProcessor where possible
+- Use AsciiString as this is the only thing we need for our http2 usage
+
+Result:
+
+Less garbage and better usage of Netty apis.

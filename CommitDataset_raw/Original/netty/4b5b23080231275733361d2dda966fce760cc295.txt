@@ -1,0 +1,10 @@
+HTTP/2 DefaultHttp2HeadersDecoder weighted average error
+
+Motiviation:
+cfcee5798d6680d87aec3ae68cdded74a1402f84 introduced code to resize the headers based upon a weighted average. The weight used for new entries was initialized using integer arithmetic when it should have been floating point arithmetic and so new values contribute 0 weight.
+
+Modifications:
+- Cast to float when initializing
+
+Result:
+Weighted average does not give 0 weight to new headers in DefaultHttp2HeadersDecoder.

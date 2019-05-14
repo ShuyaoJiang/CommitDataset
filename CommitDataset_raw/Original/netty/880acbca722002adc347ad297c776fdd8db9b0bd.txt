@@ -1,0 +1,10 @@
+Use ByteBuf.readSlice(...).retain() to minimize memory copies.
+
+Motivation:
+At the moment we call ByteBuf.readBytes(...) in these handlers but with optimizations done as part of 25e0d9d we can just use readSlice(...).retain() and eliminate the memory copy.
+
+Modifications:
+Replace ByteBuf.readBytes(...) usage with readSlice(...).retain().
+
+Result:
+Less memory copies.

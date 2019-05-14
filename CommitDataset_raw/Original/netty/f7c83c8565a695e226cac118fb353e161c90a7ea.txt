@@ -1,0 +1,16 @@
+Don't enforce JZlibDecoder on JDK7+, close #4707
+
+Motivation:
+
+`JdkZlibDecoder` is available since Netty 4.0.8 and works with JDK7+.
+However, `io.netty.noJdkZlibDecoder` System prop evaluation always defaults to
+true, causing Netty to always use JZLib when decompressing on the
+client side when the property insn't explictly set to `false`.
+
+Modifications:
+
+Default to `false` instead of `true` when JDK7+.
+
+Result:
+
+JZLib optional as expected on JDK7+.

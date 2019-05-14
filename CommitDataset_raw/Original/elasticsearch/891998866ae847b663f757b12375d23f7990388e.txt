@@ -1,0 +1,26 @@
+Support mustache templates in role mappings (#39984)
+
+This adds a new `role_templates` field to role mappings that is an
+alternative to the existing roles field.
+
+These templates are evaluated at runtime to determine which roles should be
+granted to a user.
+For example, it is possible to specify:
+
+    "role_templates": [
+      { "template":{ "source": "_user_{{username}}" } }
+    ]
+
+which would mean that every user is assigned to their own role based on
+their username.
+
+You may not specify both roles and role_templates in the same role
+mapping.
+
+This commit adds support for templates to the role mapping API, the role
+mapping engine, the Java high level rest client, and Elasticsearch
+documentation.
+
+Due to the lack of caching in our role mapping store, it is currently
+inefficient to use a large number of templated role mappings. This will be
+addressed in a future change.

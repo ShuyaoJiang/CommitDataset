@@ -1,0 +1,11 @@
+Consider only current context in WebFlux setup
+
+This commit introduces a subclass of `DispatcherHandler` that only
+considers the current context when looking for WebFlux infrastructure
+beans.
+
+This avoids issues where a child context (e.g. with Actuator) picks up
+infrastructure beans from the parent context and exposes all endpoints
+instead of getting only the ones from the current context.
+
+Closes gh-14012

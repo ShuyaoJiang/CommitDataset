@@ -1,0 +1,45 @@
+Add @IntegrationTest annotation for test classes
+
+Allowing use of embededded container in @SpringApplicationConfiguration
+tests, e.g.
+
+```
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Config.class)
+@WebAppConfiguration
+@IntegrationTest
+public class SpringApplicationIntegrationTestTests {
+
+	@Test
+	public void nestedConfigClasses() {
+		String body = new RestTemplate().getForObject("http://localhost:8080/",
+				String.class);
+		assertEquals("Hello World", body);
+	}
+
+	@Configuration
+	@EnableWebMvc
+	@RestController
+	protected static class Config {
+
+		@Bean
+		public DispatcherServlet dispatcherServlet() {
+			return new DispatcherServlet();
+		}
+
+		@Bean
+		public EmbeddedServletContainerFactory embeddedServletContainer() {
+			return new TomcatEmbeddedServletContainerFactory();
+		}
+
+		@RequestMapping("/")
+		public String home() {
+			return "Hello World";
+		}
+
+	}
+
+}
+```
+
+Fixes gh-473

@@ -1,0 +1,11 @@
+EPOLLRDHUP prematurely marking input as shutdown
+
+Motivation:
+When the EPOLLRDHUP event is received we assume that the read side of the FD is no longer functional and force the input state to be shutdown. However if the channel is still active we should rely upon EPOLLIN and read to indicate there is no more data before we update the shutdown state. If we do not do this we may not read all pending data in the FD if the RecvByteBufAllocator doesn't want to consume it all in a single read operation.
+
+Modifications:
+- AbstractEpollChannel#epollRdHupReady() shouldn't force shutdown the input if the channel is active
+
+Result:
+All data can be read even if the RecvByteBufAllocator doesn't read it all in the current read loop.
+Fixes https://github.com/netty/netty/issues/6303

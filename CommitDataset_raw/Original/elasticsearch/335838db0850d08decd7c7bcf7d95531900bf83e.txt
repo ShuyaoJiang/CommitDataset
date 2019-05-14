@@ -1,0 +1,7 @@
+Audit logging for SQL (elastic/x-pack-elasticsearch#2210)
+
+Adapts audit logging to actions that delay getting index access control until the action is started. The audit log will contain an entry for the action itself starting without any associated indices because the indices are not yet known. The audit log will also contain an entry for every time the action resolved security for a set of indices. Since sql resolves indices one at a time it will contain an entry per index.
+
+All of this customization is entirely in the security code. The only SQL change in this PR is to add audit logging support to the integration test.
+
+Original commit: elastic/x-pack-elasticsearch@539bb3c2a844c48caf337a152438854ac6882057

@@ -1,0 +1,31 @@
+codec-http2: Improve h1 to h2 header conversion
+
+Motivation:
+
+Netty could handle "connection" or "te" headers more gently when
+converting from http/1.1 to http/2 headers.  Http/2 headers don't
+support single-hop headers, so when we convert from http/1.1 to http/2,
+we should drop all single-hop headers.  This includes headers like
+"transfer-encoding" and "connection", but also the headers that
+"connection" points to, since "connection" can be used to designate
+other headers as single-hop headers.  For the "te" header, we can more
+permissively convert it by just dropping non-conforming headers (ie
+non-"trailers" headers) which is what we do for all other headers when
+we convert.
+
+Modifications:
+
+Add a new blacklist to the http/1.1 to http/2 conversion, which is
+constructed from the values of the "connection" header, and stop
+throwing an exception when a "te" header is passed with a non-"trailers"
+value.  Instead, drop all values except for "trailers".  Add unit tests
+for "connection" and "te" headers when converting from http/1.1 to http/2.
+
+Result:
+
+This will improve the h2c upgrade request, and also conversions from
+http/1.1 to http/2.  This will simplify implementing spec-compliant
+http/2 servers that want to share code between their http/1.1 and http/2
+implementations.
+
+[Fixes #7355]

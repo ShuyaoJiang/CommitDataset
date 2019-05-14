@@ -1,0 +1,7 @@
+AbstractRequestBodyPublisher.onDataAvailable improvement
+
+When in state DATA_AVAILABLE if there are simultaneous invocations of
+AbstractRequestBodyPublisher.RequestBodySubscription.request and
+ReadListener.onDataAvailable, the first one will process the available
+data, the second one should not throw an exception because thus it will
+signal to web container that there are problems while there are not.

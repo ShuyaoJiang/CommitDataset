@@ -1,0 +1,27 @@
+Don't disable HttpObjectDecoder on upgrade from HTTP/1.x to HTTP/1.x over TLS
+
+This change allows to upgrade a plain HTTP 1.x connection to TLS
+according to RFC 2817. Switching the transport layer to TLS should be
+possible without removing HttpClientCodec from the pipeline,
+because HTTP/1.x layer of the protocol remains untouched by the switch
+and the HttpClientCodec state must be retained for proper
+handling the remainder of the response message,
+per RFC 2817 requirement in point 3.3:
+
+  Once the TLS handshake completes successfully, the server MUST
+  continue with the response to the original request.
+
+After this commit, the upgrade can be established by simply
+inserting an SslHandler at the front of the pipeline after receiving
+101 SWITCHING PROTOCOLS response, exactly as described in SslHander
+documentation.
+
+Modifications:
+- Don't set HttpObjectDecoder into UPGRADED state if
+  101 SWITCHING_PROTOCOLS response contains HTTP/1.0 or HTTP/1.1 in
+  the protocol stack described by the Upgrade header.
+- Skip pairing comparison for 101 SWITCHING_PROTOCOLS, similar
+  to 100 CONTINUE, since 101 is not the final response to the original
+  request and the final response is expected after TLS handshake.
+
+Fixes #7293.

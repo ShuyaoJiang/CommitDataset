@@ -1,0 +1,7 @@
+Fix date and ip sources in the composite aggregation (#29370)
+
+This commit fixes the formatting of the values in the composite
+aggregation response. `date` fields should return timestamp as longs
+when used in a `terms` source and `ip` fields should always be formatted as strings.
+This commit also fixes the parsing of the `after` key for these field types.
+Finally, this commit disables the index optimization for the `ip` field and any source that provides a `missing` value.

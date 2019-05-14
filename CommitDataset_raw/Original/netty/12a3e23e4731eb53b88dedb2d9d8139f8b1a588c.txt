@@ -1,0 +1,14 @@
+MessageToByteEncoder always starts with ByteBuf that use initalCapacity == 0
+
+Motivation:
+
+MessageToByteEncoder always starts with ByteBuf that use initalCapacity == 0 when preferDirect is used. This is really wasteful in terms of performance as every first write into the buffer will cause an expand of the buffer itself.
+
+Modifications:
+
+ - Change ByteBufAllocator.ioBuffer() use the same default initialCapacity as heapBuffer() and directBuffer()
+ - Add new allocateBuffer method to MessageToByteEncoder that allow the user to do some smarter allocation based on the message that will be encoded.
+
+Result:
+
+Less expanding of buffer and more flexibilty when allocate the buffer for encoding.

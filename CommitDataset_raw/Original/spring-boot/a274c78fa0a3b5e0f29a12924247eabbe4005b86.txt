@@ -1,0 +1,13 @@
+Add support for reactive health indicator
+
+This commit introduces a "ReactiveHealthIndicator" contract that can be
+implemented for health checks against a reactive API.
+
+When running in a WebFlux-based web app, the health and status endpoints
+transparently use this in a WebFlux-based application and regular
+HealthIndicator are executed on the elastic scheduler.
+
+When running in a Servlet-based web app, the endpoints includes and
+adapts available ReactiveHealthIndicators automatically
+
+Closes gh-7972

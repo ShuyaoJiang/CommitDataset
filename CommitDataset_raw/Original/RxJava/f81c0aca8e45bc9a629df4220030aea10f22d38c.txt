@@ -1,0 +1,8 @@
+Reimplementation of Concat, improved handling of Observable<Observable<T>>.
+
+The old version required all of the Observable<T>s to be generated and buffered
+before the concat could begin.  If the outer Observable was asynchronous, items
+could be dropped (test added).  The new version passes the test, and does the
+best job I could (after examining several possible strategies) of achieving
+clear and consistent semantics in accordance with the principle of least
+surprise.

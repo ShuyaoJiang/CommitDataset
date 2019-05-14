@@ -1,0 +1,35 @@
+Allow HandlerFunction to return Mono<ServerResponse>
+
+This commit makes it possible for handler functions to return
+asynchronous status codes and headers, by making HandlerFunction.handle
+return a Mono<ServerResponse> instead of a ServerResponse. As a
+consequence, all other types that deal with HandlerFunctions
+(RouterFunction, HandlerFilterFunction, etc.) had to change as well.
+
+However, when combining the above change with method references (a very
+typical use case), resulting signatures would have been something like:
+
+```
+public Mono<ServerResponse<Mono<Person>>> getPerson(ServerRequest request)
+```
+
+which was too ugly to consider, especially the two uses of Mono. It was
+considered to merge ServerResponse with the last Mono, essentialy making
+ServerResponse always contain a Publisher, but this had unfortunate
+consequences in view rendering.
+
+It was therefore decided to drop the parameterization of ServerResponse,
+as the only usage of the extra type information was to manipulate the
+response objects in a filter. Even before the above change this was
+suggested; it just made the change even more necessary.
+
+As a consequence, `BodyInserter` could be turned into a real
+`FunctionalInterface`, which resulted in changes in ClientRequest.
+
+We did, however, make HandlerFunction.handle return a `Mono<? extends
+ServerResponse>`, adding little complexity, but allowing for
+future `ServerResponse` subtypes that do expose type information, if
+it's needed. For instance, a RenderingResponse could expose the view
+name and model.
+
+Issue: SPR-14870

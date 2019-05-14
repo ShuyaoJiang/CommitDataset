@@ -1,0 +1,14 @@
+Always return SliceByteBuf on slice(...) to eliminate possible leak
+
+Motivation:
+
+When calling slice(...) on a ByteBuf the returned ByteBuf should be the slice of a ByteBuf and shares it's reference count. This is important as it is perfect legal to use buf.slice(...).release() and have both, the slice and the original ByteBuf released. At the moment this is only the case if the requested slice size is > 0. This makes the behavior inconsistent and so may lead to a memory leak.
+
+Modifications:
+
+- Never return Unpooled.EMPTY_BUFFER when calling slice(...).
+- Adding test case for buffer.slice(...).release() and buffer.duplicate(...).release()
+
+Result:
+
+Consistent behaviour and so no more leaks possible.

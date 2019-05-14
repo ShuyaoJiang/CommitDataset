@@ -1,0 +1,15 @@
+Cleanup HTTP/2 tests for Http2FrameCodec and Http2MultiplexCodec (#8646)
+
+Motiviation:
+
+Http2FrameCodecTest and Http2MultiplexCodecTest were quite fragile and often not went through the whole pipeline which made testing sometimes hard and error-prone.
+
+Modification:
+
+- Refactor tests to have data flow through the whole pipeline and so made the test more robust (by testing the while implementation).
+
+Result:
+
+Easier to write tests for the codecs in the future and more robust testing in general.
+
+Beside this it also fixes https://github.com/netty/netty/issues/6036.

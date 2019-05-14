@@ -1,0 +1,19 @@
+Avoid using @Order on @Configuration classes as Spring now honours it
+
+In Spring Framework 4.1, @Order on a @Configuration class had no effect.
+This allowed us to use it on auto-configuration classes to control
+the ordering of auto-configuration classes without it having any
+broader implications for configuration class ordering.
+
+Spring Framework 4.2 now honours @Order on @Configuration classes. This
+breaks a number of tests where we were relying on the order that the
+classes were passed to register when evaluating various bean conditions.
+
+This commit replaces the use of @Order on auto-configuration classes
+with a new annotation, @AutoConfigureOrder. The new annotation is
+handled by AutoConfigurationSorter where it’s used to order
+auto-configuration classes. This allows us to order auto-configuration
+classes without the unwanted side-effect of this also affecting the
+general ordering of configuration classes.
+
+See gh-2575

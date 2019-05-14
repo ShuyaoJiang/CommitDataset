@@ -1,0 +1,12 @@
+Await all pending activity in testConnectAndDisconnect (#40037)
+
+We call `ensureConnections()` to undo the effects of a disruption. However, it
+is possible that one or more targets are currently CONNECTING and have been
+since the disruption was active, and that the connection attempt was thwarted
+by a concurrent disruption to the connection.  If so, we cannot simply add our
+listener to the queue because it will be notified when this CONNECTING activity
+completes even though it was disrupted. We must therefore wait for all the
+current activity to finish and then go through and reconnect to any missing
+nodes.
+
+Closes #40030.

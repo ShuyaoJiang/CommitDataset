@@ -1,0 +1,7 @@
+Change MediaType's failure mode to not crash on charset problems.
+
+As-is it throws unchecked exceptions on unexpected charsets. This is a problem
+because it can cause a misbehaving webserver to crash the client.
+
+I don't expect this to break existing clients; returning 'null' has always
+been a possibility; it's just returned in more cases.

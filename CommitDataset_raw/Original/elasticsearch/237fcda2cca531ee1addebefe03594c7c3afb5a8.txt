@@ -1,0 +1,9 @@
+Disable dynamic mapping update in testTransportBulkTasks (#38073)
+
+If a replica does not have a right mapping yet, we will retry the index
+request on that replica; then the actual tasks is higher than the
+expected tasks. Since #31140 this happens more frequently for we no
+longer require acking on the dynamic mapping of index requests.
+
+Relates #31140
+Closes #37893

@@ -1,0 +1,17 @@
+Fix interruption leak in submitAsync and whenAllComplete().callAsync().
+
+There are two bugs in the handling of TrustedListenableFutureTask:
+
+1. Returning an future that was cancelled with interruption calls setFuture(), which then calls interruptTask() on the output future - this then calls InterruptibleTask.interruptTask(), which happily interrupts the thread that directExecutor.execute() was called on.
+
+2. The thread that InterruptibleTask runs on is referenced forever, and CombinedFuture nulls out its reference to InterruptibleTask in afterDone() - which is called after interruptTask. This means that if the setFuture() path is taken, then cancel(true) is called, the thread that called the callable will be interrupted, even after InterruptTask.run() has returned.
+
+If we've ever seen spurious InterruptedExceptions in production, this could be a cause - whenAllComplete().callAsync(callable, executor).cancel(true) can interrupt whatever thread callable was called on, even long after call() returns. If that thread is part of a pool (which it probably always would be), then this would interrupt whatever unlucky task happened to be running on that pool thread later.
+
+This CL adds earlier nulling out of the InterruptibleTask in TrustedListenableFutureTask, as well as makes InterruptibleTask robust to having interruptTask called after runInterruptibly has returned. To avoid tasks interrupting themselves when they call setFuture of an interrupted and cancelled future, a new method allows subclasses to end the interruption window early - this should also somewhat reduce the race of directExecutor() listeners being interrupted.
+
+Additionally, by splitting CombinedFuture.setValue() into 2 methods, this CL fixes the equivalent of https://github.com/google/guava/issues/2254 for Futures.whenAllSucceed/whenAllComplete.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=162649353

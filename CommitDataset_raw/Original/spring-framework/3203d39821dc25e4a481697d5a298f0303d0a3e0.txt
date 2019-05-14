@@ -1,0 +1,23 @@
+Remove Content-Length response header from errors
+
+Prior to this commit, when errors happened before the response was
+committed, the `Content-Length` response header would be left as is.
+This can be problematic since the error can be handled later in the
+chain and the response body changed accordingly. For example, Spring
+Boot renders error pages in those cases. If the `Content-Length` is set,
+HTTP clients can get confused and only consider part of the error
+response body.
+
+This commit ensures that any `Content-Length` response header is removed
+in case of errors, if the response is not already committed.
+
+This is done at the `AbstractServerHttpResponse` level, since errors can
+be handled in multiple places and the response itself is the safest
+place to handle this case.
+
+As a consequence, this commit also removes `Content-Length` checks in
+`EncoderHttpMessageWriter` since we now consider that we should rely on
+the response body we're about to write rather than any previously set
+value.
+
+Issue: SPR-17502

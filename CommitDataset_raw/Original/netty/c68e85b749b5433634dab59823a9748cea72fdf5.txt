@@ -1,0 +1,13 @@
+Fix h2c upgrade failure when multiple connection headers are present in upgrade request (#8848)
+
+Motivation:
+
+When more than one connection header is present in h2c upgrade request, upgrade fails. This is to fix that.
+
+Modification:
+In HttpServerUpgradeHandler's upgrade() method, check whether any of the connection header value is upgrade, not just the first header value which might return a different value other than upgrade.
+
+Result:
+Fixes #8846.
+
+With this PR, now when multiple connection headers are sent with the upgrade request, upgrade will not fail.

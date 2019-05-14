@@ -1,0 +1,7 @@
+[Zen2] Reconfigure cluster as its membership changes (#34592)
+
+As master-eligible nodes join or leave the cluster we should give them votes or
+take them away, in order to maintain the optimal level of fault-tolerance in
+the system. #33924 introduced the `Reconfigurator` to calculate the optimal
+configuration of the cluster, and in this change we add the plumbing needed to
+actually perform the reconfigurations needed as the cluster grows or shrinks.

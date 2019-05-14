@@ -1,0 +1,15 @@
+Explicitly apply mirror and auth settings to remote repos in the CLI
+
+Previously, the CLI relied on Aether using the session's mirror
+selector and authentication selector to customize the configured
+repositories. These selectors are only used to configure what Aether
+calls recessive repositories (repositories discovered when resolving
+an artifact), rather than the explicitly configured repositories that
+are typically used.
+
+This commit updates AetherGrapeEngine to apply mirror and
+authentication configuration to every added repository, bringing its
+behaviour for these two settings into line with what it already does
+for proxy configuration.
+
+Fixes #1354

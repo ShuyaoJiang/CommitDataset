@@ -1,0 +1,17 @@
+[ML] Add force delete datafeed action (elastic/x-pack-elasticsearch#1623)
+
+When a user or client intend to delete a datafeed
+and its job, there is benefit into ensuring the
+datafeed has gracefully stopped (ie no data loss).
+In constrast, the desired behaviour is to stop and
+delete the datafeed as quickly as possible.
+
+This change adds a force option to the delete
+datafeed action. When the delete is forced,
+the datafeed is isolated, its task removed and,
+finally, the datafeed itself is removed from the
+metadata.
+
+relates elastic/x-pack-elasticsearch#1533
+
+Original commit: elastic/x-pack-elasticsearch@5ae0168bf2024900dc58617c676025b428192758

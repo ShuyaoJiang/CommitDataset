@@ -1,0 +1,15 @@
+Remove the comment which is a bit misleading
+
+This fixes #6652.
+
+Rationale
+
+The invocation of initChannel of ChannelInitializer has been moved to as
+early as during handlerAdded is invoked in 26aa34853, whereas it was
+only invoked during channelRegistered is invoked before that. So the
+comment does not describe how handlers are added in normal circumstances
+anymore.
+
+However, the code is kept as-is since there might be unusual cases, and
+adding ServerBootstrapAcceptor via the event loop is always safe to
+enforce the correct order.

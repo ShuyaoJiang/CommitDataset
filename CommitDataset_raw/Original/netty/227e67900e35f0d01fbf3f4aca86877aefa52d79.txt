@@ -1,0 +1,13 @@
+Fixing spammy logging for CoalescingBufferQueueTest
+
+Motivation:
+
+The CoalescingBufferQueueTest is somewhat relaxed with its releasing of test buffers, using safeRelease to generically deal with tests that may or may not release the buffers. SafeRelease generates logs, however, when the release fails.
+
+Modifications:
+
+Tightened up the individual test methods to verify that the buffers are released properly.
+
+Result:
+
+Fixes #4497

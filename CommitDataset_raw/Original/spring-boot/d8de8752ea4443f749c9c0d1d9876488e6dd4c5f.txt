@@ -1,0 +1,11 @@
+Change metrics exporters to auto-configurations
+
+Refactor `*ExportConfiguration` classes to be regular auto-configuration
+classes.
+
+Also removed the `@ConditionalOnProperty` guards for `.enabled` properties
+since auto-configuration can now be excluded in the usual way. Enabled
+properties remain where applicable and are adapted for Micrometer to use
+as it sees fit.
+
+Fixes gh-11838

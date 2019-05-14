@@ -1,0 +1,9 @@
+Aggressively null out references when invoking the transformation/fallback.
+
+This probably won't matter for the Function overloads. (But in theory the GC could recognize that the remaining references in local variables are unused. And we could null those out if we want, too.)
+It is more likely to help with the AsyncFunction overloads. There we are more likely to let inputFuture (and possibly a chain of its own dependencies) be GCed long before the derived future completes, since the whole doTransform/doFallback stack frame is often destroyed before the setFuture call bears fruit.
+
+One other advantage: If we screw up and try to access the fields instead of the local variables, we get an error always instead of only in rare cases.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=95137240

@@ -1,0 +1,5 @@
+Operator Scan Backpressure Fix
+
+Problem 1) The initial value was being emitted before subscription which caused issues with request/producer state, particularly if filter() was used to skip that initial value and then called request(1) before the real request had been sent.
+Problem 2) The initial value was not accounted for by the request so it was sending 1 more value than requested. It now modifies the request to account for it.
+Problem 3) Redo relied upon these nuances to work. I've fixed this by using a simpler implementation that just maintains state within a map function.

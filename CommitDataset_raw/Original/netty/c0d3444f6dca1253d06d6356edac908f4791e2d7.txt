@@ -1,0 +1,14 @@
+DnsNameResolver should log in trace level if notification of the promise fails (#9022)
+
+Motivation:
+
+During investigating some other bug I noticed that we log with warn level if we fail to notify the promise due the fact that it is already full-filled. This is not correct and missleading as there is nothing wrong with it in general. A promise may already been fullfilled because we did multiple queries and one of these was successful.
+
+Modifications:
+
+- Change log level to trace
+- Add unit test which before did log with warn level but now does with trace level.
+
+Result:
+
+Less missleading noise in the log.

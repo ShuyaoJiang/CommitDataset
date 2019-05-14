@@ -1,0 +1,11 @@
+Plugins: Add plugin extension capabilities (#27881)
+
+This commit adds the infrastructure to plugin building and loading to
+allow one plugin to extend another. That is, one plugin may extend
+another by the "parent" plugin allowing itself to be extended through
+java SPI. When all plugins extending a plugin are finished loading, the
+"parent" plugin has a callback (through the ExtensiblePlugin interface)
+allowing it to reload SPI.
+
+This commit also adds an example plugin which uses as-yet implemented
+extensibility (adding to the painless whitelist).

@@ -1,0 +1,10 @@
+Prevent early initialization of factory beans in text context customizers
+
+Until Spring Framework 5.1.15, a FactoryBean with a non-default constructor
+defined via component scanning would cause an error. This behavior has changed
+as of https://github.com/spring-projects/spring-framework/issues/22409.
+Regardless of this change we want to ensure that we avoid triggering eager
+initialisation. `SimpleFactoryBean` has been written this way so that the tests
+fail if early initialization is triggered regardless of the Spring Framework version.
+
+Fixes gh-15898

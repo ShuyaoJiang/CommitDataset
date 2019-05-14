@@ -1,0 +1,9 @@
+ Transition transport apis to use void listeners (#27440)
+
+Currently we use ActionListener<TcpChannel> for connect, close, and send
+message listeners in TcpTransport. However, all of the listeners have to
+capture a reference to a channel in the case of the exception api being
+called. This commit changes these listeners to be type <Void> as passing
+the channel to onResponse is not necessary. Additionally, this change
+makes it easier to integrate with low level transports (which use
+different implementations of TcpChannel).

@@ -1,0 +1,19 @@
+Ensure spring-test test tasks are UP-TO-DATE
+
+Prior to this commit, the three `test` tasks in the spring-test module
+shared the same output directory for test reports. This had the
+negative side effect of causing Gradle to believe that the tasks were
+not UP-TO-DATE. Consequently, all three `test` tasks in the spring-test
+module were executed for every build even if there were zero changes in
+the spring-test module.
+
+This commit fixes this issue by allowing Gradle to use the default test
+results output directory for each `test` task. Thanks to @marcphilipp
+for providing the tip.
+
+In addition, the Artifactory Gradle task in the Default Job of the
+Bamboo build plan for the Spring Framework (SPR-PUB) has been updated
+to use the following custom test results directory pattern:
+`**/build/test-results/**/*.xml`.
+
+See: https://guides.gradle.org/using-build-cache/#concepts_overlapping_outputs

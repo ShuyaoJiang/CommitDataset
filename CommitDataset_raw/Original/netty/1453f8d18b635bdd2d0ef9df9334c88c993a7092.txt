@@ -1,0 +1,28 @@
+Ensure we not try to call `select` when the `AbstractSniHandler` was already removed from the pipeline.
+
+Motivation:
+
+We tried to call `select` after we closed the channel (and so removed all the handlers from the pipeline) when we detected a non SSL record. This would cause an exception like this:
+
+```
+Caused by: java.util.NoSuchElementException: io.netty.handler.ssl.SniHandler
+	at io.netty.channel.DefaultChannelPipeline.getContextOrDie(DefaultChannelPipeline.java:1098)
+	at io.netty.channel.DefaultChannelPipeline.replace(DefaultChannelPipeline.java:506)
+	at io.netty.handler.ssl.SniHandler.replaceHandler(SniHandler.java:133)
+	at io.netty.handler.ssl.SniHandler.onLookupComplete(SniHandler.java:113)
+	at io.netty.handler.ssl.AbstractSniHandler.select(AbstractSniHandler.java:225)
+	at io.netty.handler.ssl.AbstractSniHandler.decode(AbstractSniHandler.java:218)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:489)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:428)
+	... 40 more
+```
+
+Modifications:
+
+- Ensure we rethrow the NotSslRecordException when detecting it (and closing the channel). This will also ensure we not call `select(...)`
+- Not catch `Throwable` but only `Exception`
+- Add test case.
+
+Result:
+
+Correctly handle the case of an non SSL record.

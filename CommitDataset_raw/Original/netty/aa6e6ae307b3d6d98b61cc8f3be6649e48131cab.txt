@@ -1,0 +1,13 @@
+[#4241] Ensure NioEventLoopGroup.shutdownGracefully(...) with no quiet period shutdown as fast as expected.
+
+Motivation:
+
+If the user uses 0 as quiet period we should shutdown without any delay if possible.
+
+Modifications:
+
+Ensure we not introduce extra delay when a shutdown quit period of 0 is used.
+
+Result:
+
+EventLoop shutdown as fast as expected.

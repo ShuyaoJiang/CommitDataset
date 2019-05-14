@@ -1,0 +1,3 @@
+Set minimum_master_nodes to all nodes for REST tests (#27344)
+
+PR #26911 set minimum_master_nodes from number_of_nodes to (number_of_nodes / 2) + 1 in our REST tests. This has led to test failures (see #27233) as the REST tests only configure the first node in its unicast.hosts pinging list (see explanation here: #27233 (comment)). Until we have a proper fix for this, I'm reverting the change in #26911.

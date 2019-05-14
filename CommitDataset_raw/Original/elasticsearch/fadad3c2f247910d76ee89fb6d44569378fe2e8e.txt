@@ -1,0 +1,38 @@
+Relax testStressMaybeFlushOrRollTranslogGeneration (#38918)
+
+The predicate shouldPeriodicallyFlush is determined by the uncommitted
+translog size and the local checkpoint. The uncommitted translog size
+depends on the local checkpoint. The condition shouldPeriodicallyFlush
+can be true twice in in the test in the following scenario:
+
+1. Index doc-0 and advances the local checkpoint to 0, the condition
+shouldPeriodicallyFlush remains false.
+
+2. Index doc-1 and add it to translog, but the local checkpoint is not
+advanced yet (still 0). The condition shouldPeriodicallyFlush becomes
+true because the uncommitted translog size is 216bytes (2ops + gen-1 +
+gen-2) > 180bytes and the translog generation of the new index commit
+would advance from 1 to 2.
+
+> [2019-02-13T23:33:58,257][TRACE][o.e.i.e.Engine           ] [node_s_0]
+> [test][0] committing writer with commit data [{local_checkpoint=0,
+> max_unsafe_auto_id_timestamp=-1, translog_uuid=fFp1Yqd4QiqKDD4ZrC8F-g,
+> min_retained_seq_no=0, history_uuid=cn31yrwVQk-Vs7qcg4bi_Q,
+> retention_leases=primary_term:1;version:0;, translog_generation=2,
+> max_seq_no=1}]
+
+1. The shouldPeriodicallyFlush becomes true again after the local
+checkpoint is advanced to 1 because the uncommitted translog size is
+216bytes (2ops + gen-2 + gen-3) > 180bytes and the translog generation
+of the new index commit would advance from 2 to 4.
+
+> [2019-02-13T23:33:58,264][TRACE][o.e.i.e.Engine           ] [node_s_0]
+> [test][0] committing writer with commit data [{local_checkpoint=1,
+> max_unsafe_auto_id_timestamp=-1, translog_uuid=fFp1Yqd4QiqKDD4ZrC8F-g,
+> min_retained_seq_no=0, history_uuid=cn31yrwVQk-Vs7qcg4bi_Q,
+> retention_leases=primary_term:1;version:0;, translog_generation=4,
+> max_seq_no=1}]
+
+We need to relax the assertion in this test to cover this situation.
+
+Closes #31629

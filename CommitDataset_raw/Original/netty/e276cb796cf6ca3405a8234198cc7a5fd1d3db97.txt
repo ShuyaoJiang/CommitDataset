@@ -1,0 +1,14 @@
+Correct semantic of LocalChannel.doWrite(...) and remove memory copy
+
+Motivation:
+
+The semantic of LocalChannel.doWrite(...) were a bit off as it notified the ChannelFuture before the data was actual moved to the peer buffer.
+
+Modifications:
+
+- Use our MPSC queue as inbound buffer
+- Directly copy to data to the inbound buffer of the peer and either success or fail the promise after each copy.
+
+Result:
+
+Correct semantic and less memory copies.

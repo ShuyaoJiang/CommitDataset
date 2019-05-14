@@ -1,0 +1,14 @@
+[#4313] ByteBufUtil.writeUtf8 should use fast-path for WrappedByteBuf
+
+Motivation:
+
+ByteBufUtil.writeUtf8(...) / writeUsAscii(...) can use a fast-path when writing into AbstractByteBuf. We should try to unwrap WrappedByteBuf implementations so
+we are able to do the same on wrapped AbstractByteBuf instances.
+
+Modifications:
+
+- Try to unwrap WrappedByteBuf to use the fast-path
+
+Result:
+
+Faster writing of utf8 and usascii for WrappedByteBuf instances.

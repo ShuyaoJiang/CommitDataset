@@ -1,0 +1,19 @@
+Add support for global @ExceptionHandler methods
+
+Before this change @ExceptionHandler methods could be located in and
+apply locally within a controller. The change makes it possible to have
+such methods applicable globally regardless of the controller that
+raised the exception.
+
+The easiest way to do that is to add them to a class annotated with
+`@ExceptionResolver`, a new annotation that is also an `@Component`
+annotation (and therefore works with component scanning). It is also
+possible to register classes containing `@ExceptionHandler` methods
+directly with the ExceptionHandlerExceptionResolver.
+
+When multiple `@ExceptionResolver` classes are detected, or registered
+directly, the order in which they're used depends on the the `@Order`
+annotation (if present) or on the value of the order field (if the
+Ordered interface is implemented).
+
+Issue: SPR-9112

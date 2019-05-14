@@ -1,0 +1,13 @@
+SSLSession.putValue / getValue / removeValue / getValueNames must be thread-safe. (#8648)
+
+Motivation:
+
+SSLSession.putValue / getValue / removeValue / getValueNames must be thread-safe as it may be called from multiple threads. This is also the case in the OpenJDK implementation.
+
+Modifications:
+
+Guard with synchronized (this) blocks to keep the memory overhead low as we do not expect to have these called frequently.
+
+Result:
+
+SSLSession implementation is thread-safe.

@@ -1,0 +1,8 @@
+Catch NPEs and RuntimeExceptions thrown in getActiveNetworkInfo.
+
+The framework seems to throw these on various devices and versions of
+Android, though mostly on Samsung between APIs 22 and 24. 
+
+The deleted test was passing because of an exception in isConnected, not
+in registerReceiver so it was incorrect. There doesn’t seem to be a way
+to force Robolectric to throw when registering receivers.

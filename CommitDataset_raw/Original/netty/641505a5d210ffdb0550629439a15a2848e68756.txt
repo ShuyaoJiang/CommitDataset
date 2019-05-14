@@ -1,0 +1,11 @@
+DefaultChannelConfig maxMessagesPerRead default not always set
+
+Motivation:
+ChannelMetadata has a field minMaxMessagesPerRead which can be confusing. There are also some cases where static instances are used and the default value for channel type is not being applied.
+
+Modifications:
+- use a default value which is set unconditionally to simplify
+- make sure static instances of MaxMessagesRecvByteBufAllocator are not used if the intention is that the default maxMessagesPerRead should be derived from the channel type.
+
+Result:
+Less confusing interfaces in ChannelMetadata and ChannelConfig. Default maxMessagesPerRead is correctly applied.

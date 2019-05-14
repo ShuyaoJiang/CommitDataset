@@ -1,0 +1,11 @@
+Reuse `ConfigurationProperties` bean defined in parent
+
+This commit makes sure that if a `ConfigurationProperties` annotated bean
+already exists in the parent context, a new one is not created in the
+child anymore.
+
+This makes sure that a single bean exists in a parent/child hierarchy if
+`@EnableConfigurationProperties` is processed in both context on the same
+class.
+
+Closes gh-8187

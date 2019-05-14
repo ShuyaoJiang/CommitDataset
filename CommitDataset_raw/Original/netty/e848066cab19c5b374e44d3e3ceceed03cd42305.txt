@@ -1,0 +1,31 @@
+Name resolver API and DNS-based name resolver
+
+Motivation:
+
+So far, we relied on the domain name resolution mechanism provided by
+JDK.  It served its purpose very well, but had the following
+shortcomings:
+
+- Domain name resolution is performed in a blocking manner.
+  This becomes a problem when a user has to connect to thousands of
+  different hosts. e.g. web crawlers
+- It is impossible to employ an alternative cache/retry policy.
+  e.g. lower/upper bound in TTL, round-robin
+- It is impossible to employ an alternative name resolution mechanism.
+  e.g. Zookeeper-based name resolver
+
+Modification:
+
+- Add the resolver API in the new module: netty-resolver
+- Implement the DNS-based resolver: netty-resolver-dns
+  .. which uses netty-codec-dns
+- Make ChannelFactory reusable because it's now used by
+  io.netty.bootstrap, io.netty.resolver.dns, and potentially by other
+  modules in the future
+  - Move ChannelFactory from io.netty.bootstrap to io.netty.channel
+  - Deprecate the old ChannelFactory
+  - Add ReflectiveChannelFactory
+
+Result:
+
+It is trivial to resolve a large number of domain names asynchronously.

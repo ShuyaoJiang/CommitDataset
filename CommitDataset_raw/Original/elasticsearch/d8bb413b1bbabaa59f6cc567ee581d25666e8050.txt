@@ -1,0 +1,14 @@
+Configure heap dump path out of the box
+
+The JVM defaults to dumping the heap to the working directory of
+Elasticsearch. For the RPM and Debian packages, this location is
+/usr/share/elasticsearch. This directory is not writable by the
+elasticsearch user, so by default heap dumps in this situation are
+lost. This commit modifies the packaging for the RPM and Debian packages
+to set the heap dump path to /var/lib/elasticsearch as the default
+location for dumping the heap. This location is writable by the
+elasticsearch user by default. We add documentation of this important
+setting if /var/lib/elasticsearch is not suitable for receiving heap
+dumps.
+
+Relates #26755

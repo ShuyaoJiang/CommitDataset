@@ -1,0 +1,16 @@
+setgid on /etc/elasticearch on package install
+
+When creating the keystore explicitly (from executing
+elasticsearch-keystore create) or implicitly (for plugins that require
+the keystore to be created on install) on an Elasticsearch package
+installation, we are running as the root user. This leaves
+/etc/elasticsearch/elasticsearch.keystore having the wrong ownership
+(root:root) so that the elasticsearch user can not read the keystore on
+startup. This commit adds setgid to /etc/elasticsearch on package
+installation so that when executing this directory (as we would when
+creating the keystore), we will end up with the correct ownership
+(root:elasticsearch). Additionally, we set the permissions on the
+keystore to be 660 so that the elasticsearch user via its group can read
+this file on startup.
+
+Relates #26412

@@ -1,0 +1,6 @@
+Disallow multiple parent-join fields per mapping (#25002)
+
+This change ensures that there is a single parent-join field defined per mapping.
+The verification is done through the addition of a special field mapper (MetaJoinFieldMapper) with a unique name (_parent_join) that is registered to the mapping service
+when the first parent-join field is defined. If a new parent-join is added, this field mapper will clash with the new one and the update will fail.
+This change also simplifies the parent join fetch sub phase by retrieving the parent-join field without iterating on all fields in the mapping.

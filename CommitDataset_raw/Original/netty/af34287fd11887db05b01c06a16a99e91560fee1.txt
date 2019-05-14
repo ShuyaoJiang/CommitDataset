@@ -1,0 +1,13 @@
+HeadContext is inbound and outbound (#8592)
+
+Motivation:
+
+Our HeadContext in DefaultChannelPipeline does handle inbound and outbound but we only marked it as outbound. While this does not have any effect in the current code-base it can lead to problems when we change our internals (this is also how I found the bug).
+
+Modifications:
+
+Construct HeadContext so it is also marked as handling inbound.
+
+Result:
+
+More correct code.

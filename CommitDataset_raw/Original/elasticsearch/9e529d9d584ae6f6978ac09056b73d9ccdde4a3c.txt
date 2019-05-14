@@ -1,0 +1,24 @@
+Enable testing in FIPS140 JVM (#31666)
+
+Ensure our tests can run in a FIPS JVM
+
+JKS keystores cannot be used in a FIPS JVM as attempting to use one
+in order to init a KeyManagerFactory or a TrustManagerFactory is not
+allowed.( JKS keystore algorithms for private key encryption are not
+FIPS 140 approved)
+This commit replaces JKS keystores in our tests with the
+corresponding PEM encoded key and certificates both for key and trust
+configurations.
+Whenever it's not possible to refactor the test, i.e. when we are
+testing that we can load a JKS keystore, etc. we attempt to
+mute the test when we are running in FIPS 140 JVM. Testing for the
+JVM is naive and is based on the name of the security provider as
+we would control the testing infrastrtucture and so this would be
+reliable enough.
+Other cases of tests being muted are the ones that involve custom
+TrustStoreManagers or KeyStoreManagers, null TLS Ciphers and the
+SAMLAuthneticator class as we cannot sign XML documents in the
+way we were doing. SAMLAuthenticator tests in a FIPS JVM can be
+reenabled with precomputed and signed SAML messages at a later stage.
+
+IT will be covered in a subsequent PR

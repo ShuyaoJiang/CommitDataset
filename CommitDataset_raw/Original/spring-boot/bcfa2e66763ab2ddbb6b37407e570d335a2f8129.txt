@@ -1,0 +1,11 @@
+Make TestRestTemplate not extend RestTemplate
+
+Update TestRestTemplate so that it no longer directly extends
+RestTemplate. Prior to this commit it was possible that TestRestTemplate
+could interfere with user defined RestTemplate beans.
+
+TestRestTemplate offers the same methods as RestTemplate so should be
+a drop-in replacement. If access is needed to the actual underlying
+template the `getRestTemplate()` method should be used.
+
+Fixes gh-5915

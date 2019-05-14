@@ -1,0 +1,13 @@
+Allow to inject RejectedExecutionHandler for different EventLoops and EventExecutors
+
+Motiviation:
+
+Sometimes it is useful to allow to specify a custom strategy to handle rejected tasks. For example if someone tries to add tasks from outside the eventloop it may make sense to try to backoff and retries and so give the executor time to recover.
+
+Modification:
+
+Add RejectedEventExecutor interface and implementations and allow to inject it.
+
+Result:
+
+More flexible handling of executor overload.

@@ -1,0 +1,13 @@
+Refactor children aggregator into a generic ParentJoinAggregator (#34845)
+
+This commit adds a new ParentJoinAggregator that implements a join using global ordinals
+in a way that can be reused by the `children` and the upcoming `parent` aggregation.
+This new aggregator is a refactor of the existing ParentToChildrenAggregator with two main changes:
+* It uses a dense bit array instead of a long array when the aggregation does not have any parent.
+* It uses a single aggregator per bucket if it is nested under another aggregation.
+For the latter case we use a `MultiBucketAggregatorWrapper` in the factory in order to ensure that each
+instance of the aggregator handles a single bucket. This is more inlined with the strategy we use for other
+aggregations like `terms` aggregation for instance since the number of buckets to handle should be low (thanks to the breadth_first strategy).
+This change is also required for #34210 which adds the `parent` aggregation in the parent-join module.
+
+Relates #34508

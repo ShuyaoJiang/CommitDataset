@@ -1,0 +1,19 @@
+Update Jersey indicator class to one that requires the Servlet API
+
+Previously, if WebFlux and Jersey were on the classpath, but there was
+no Servlet API (and no embedded container) on the classpath, the web
+application type would be prevented from being reactive. The absence
+of the Servlet API would then prevent the web application type from
+being servlet so it would be none.
+
+By contrast, if Spring MVC was on the classpath in place of Jersey
+the absence of the Servlet API would allow the web application type to
+be reactive. This happened because the Spring MVC indicator class is
+DispatcherServlet which requires the Servlet API.
+
+This commit updates the Jersey indicator class to be ServletContainer.
+This class is both an HttpServlet and a Filter so it too requires the
+Servlet API and, therefore, further aligns the deduction behaviour for
+Jersey and Spring MVC.
+
+Closes gh-14701

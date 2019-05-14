@@ -1,0 +1,11 @@
+Deploy spring-boot-test-support so it's available downstream
+
+Concourse builds spring-boot-tests separately from spring-boot-project
+and relies on modules from the latter being available in the
+distribution repository when building the former. This commit enables the
+deployment of spring-boot-test-support from spring-boot-project so that it
+is added to the distribution repository and is therefore available when
+building spring-boot-tests. It is then excluded when putting to the
+Artifactory resource as we do not want it to be published.
+
+See gh-15471

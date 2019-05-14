@@ -1,0 +1,12 @@
+Avoid stack overflow on search phases
+
+When a search is executing locally over many shards, we can stack
+overflow during query phase execution. This happens due to callbacks
+that occur after a phase completes for a shard and we move to the same
+phase on another shard. If all the shards for the query are local to the
+local node then we will never go async and these callbacks will end up
+as recursive calls. With sufficiently many shards, this will end up as a
+stack overflow. This commit addresses this by truncating the stack by
+forking to another thread on the executor for the phase.
+
+Relates #27069

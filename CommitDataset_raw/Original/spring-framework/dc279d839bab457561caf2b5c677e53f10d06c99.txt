@@ -1,0 +1,12 @@
+Use refactored CodecConfigurer
+
+This commit changes the `HandlerStrategies` and `ExchangeStrategies`
+builders to use the `CodecConfigurer` for configuring Decoder|Encoder
+and HttpMessage[Reader|Writer]. Other classes that use `CodecConfigurer`
+have also been changed to reflect the refactoring to interfaces.
+
+This commit also removes the ExchangeStrategies methods that take an
+application context, as it was too naive approach to simply look up
+every message reader and writer in the context.
+
+Issue: SPR-15415, SPR-15435

@@ -1,0 +1,13 @@
+Do not depend on the implementation detail of Unpooled.buffer(int) when accessing backing array. (#8865)
+
+Motivation:
+
+We should not depend on the implementation detail of Unpooled.buffer(int) to allocate the exact size of backing byte[] as depending on the implementation it may return a buffer with a bigger backing array.
+
+Modifications:
+
+Explicit allocate the byte[] and wrap it in the ByteBuf. This way we are sure that ByteBuf.array() returns an byte[] which has the exact length and content we expect.
+
+Result:
+
+More correct and safe usage of ByteBuf.array()

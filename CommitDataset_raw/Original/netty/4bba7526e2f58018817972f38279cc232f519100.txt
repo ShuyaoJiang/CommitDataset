@@ -1,0 +1,11 @@
+retained[Slice|Duplicate] buffer reference count bug
+
+Motivation:
+Currently the ByteBuf created as a result of retained[Slice|Duplicate] maintains its own reference count, and when this reference count is depleated it will release the ByteBuf returned from unwrap(). The unwrap() buffer is designed to be the 'root parent' and will skip all intermediate layers of buffers. If the intermediate layers of buffers contain a retained[Slice|Duplicate] then these reference counts will be ignored during deallocation. This may lead to deallocating the 'root parent' before all derived pooled buffers are actually released. This same issue holds if a retained[Slice|Duplicate] is in the heirachy and a 'regular' slice() or duplicate() buffer is created.
+
+Modifications:
+- AbstractPooledDerivedByteBuf must maintain a reference to the direct parent (the buffer which retained[Slice|Duplicate] was called on) and release on this buffer instead of the 'root parent' returned by unwrap()
+- slice() and duplicate() buffers created from AbstractPooledDerivedByteBuf must also delegate reference count operations to their immediate parent (or first ancestor which maintains an independent reference count).
+
+Result:
+Fixes https://github.com/netty/netty/issues/5999

@@ -1,0 +1,15 @@
+[ML] Switch state to use _type "doc" (elastic/x-pack-elasticsearch#1552)
+
+This commit means that newly created ML state indices will have a single
+type named "doc", and newly persisted state documents will have type
+"doc" too.
+
+Retrieving state is only supported for type "doc".
+
+When deleting state, documents with the old types are deleted in addition
+to those with type "doc".  This means jobs created by the beta can be fully
+deleted.
+
+Relates elastic/x-pack-elasticsearch#668
+
+Original commit: elastic/x-pack-elasticsearch@29c07d40f15baee93958bfd8a17f93b5a5c827ef

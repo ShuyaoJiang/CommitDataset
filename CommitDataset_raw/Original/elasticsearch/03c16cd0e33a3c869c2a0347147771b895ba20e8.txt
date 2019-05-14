@@ -1,0 +1,11 @@
+Painless: Add PainlessClassBuilder (#32141)
+
+Several pieces of data in PainlessClass cannot be passed in at the time the 
+PainlessClass is created so it must be "frozen" after all the data is collected. This means 
+PainlessClass is currently serving two functions as both a builder and a set of data. This 
+separates the two pieces into clearly distinct values.
+
+This change also removes the PainlessMethodKey in favor of a simple String. The goal is 
+to have the painless method key be completely internal to the PainlessLookup eventually 
+and this simplifies the way there. Note that this was added since PainlessClass and 
+PainlessClassBuilder were already being changed instead of a follow up PR.

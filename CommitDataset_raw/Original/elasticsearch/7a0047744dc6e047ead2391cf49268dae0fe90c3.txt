@@ -1,0 +1,7 @@
+`query_string` should use indexed prefixes (#36895)
+
+The QueryStringQueryBuilder does not currently delegate to the field mapper's prefixQuery
+method, so does not use indexed prefixes. This commit corrects this.
+
+It also fixes a bug where a query a* would not match the word a if indexed prefixes were used with
+a minchar setting of 2.

@@ -1,0 +1,8 @@
+[Tests] Fix alias names in PutIndexTemplateRequestTests (#30960)
+
+The randomized alias names could contain unicode controll charactes that don't
+survive an xContent rendering and parsing roundtrip when using the YAML xContent
+type. This fix filters the randomized unicode string for control characters to
+avoid this particular problem.
+
+Closes #30911

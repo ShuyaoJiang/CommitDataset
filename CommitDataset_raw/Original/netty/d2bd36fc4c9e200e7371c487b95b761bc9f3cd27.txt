@@ -1,0 +1,14 @@
+ByteBufUtil.isText method should be safe to be called concurrently
+
+Motivation:
+
+ByteBufUtil.isText(...) may produce unexpected results if called concurrently on the same ByteBuffer.
+
+Modifications:
+
+- Don't use internalNioBuffer where it is not safe.
+- Add unit test.
+
+Result:
+
+ByteBufUtil.isText is thread-safe.

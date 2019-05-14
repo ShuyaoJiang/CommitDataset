@@ -1,0 +1,14 @@
+Ensure we not sent duplicate certificates when using OpenSslEngine
+
+Motivation:
+
+We need to ensure we not set duplicated certificates when using OpenSslEngine.
+
+Modifications:
+
+- Skip first cert in chain when set the chain itself and so not send duplicated certificates
+- Add interopt unit tests to ensure no duplicates are send.
+
+Result:
+
+No more duplicates.

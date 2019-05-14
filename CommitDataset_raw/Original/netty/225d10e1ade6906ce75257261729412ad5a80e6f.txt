@@ -1,0 +1,11 @@
+HTTP/2 Make DefaultHttp2HeadersDecoder's Http2Headers object creation extensible
+
+Motivation:
+It is generally useful to override DefaultHttp2HeadersDecoder's creation of a new Http2Headers object so more optimized versions can be substituted if the use case allows for it.
+
+Modifications:
+- DefaultHttp2HeadersDecoder should support an overridable method to generate the new Http2Headers object for each decode operation
+
+Result:
+DefaultHttp2HeadersDecoder is more extensible.
+Fixes https://github.com/netty/netty/issues/6591.

@@ -1,0 +1,7 @@
+[Test] Fix InstallPluginCommandTests failure on Windows (#28447)
+
+The `testMetaPluginPolicyConfirmation` needs to close the file streams it is
+iterating over, otherwise some OSes (like Windows) might not be able to delete
+all temporary folders, which in turn leads to test failures.
+
+Closes #28415

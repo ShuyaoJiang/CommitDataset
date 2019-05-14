@@ -1,0 +1,10 @@
+specify subdirs of lib, bin, modules in package (#32253)
+
+Explicitly include all subdirectories of these folders in
+/usr/share/elasticsearch in package distributions so that they are
+managed by the package manager. This change does really have an
+effect in the 7.x series, where there are no subdirectories in bin, and
+we were already doing this in lib and modules. It does have an effect in
+the 6.x series where the bin/x-pack subdirectory was not previously
+tracked by the package manager and could be left behind on removal in
+rpm distributions.

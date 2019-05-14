@@ -1,0 +1,11 @@
+Remove response content-type before error handling
+
+Prior to this commit, the negotiated content-type during the request
+mapping phase would be kept as the response content-type header; this
+information is used when rendering the error response and prevents a new
+round of content negotiation to choose the media type that fits best.
+
+This commit removes the response content type information at the
+beginning of the error handling phase.
+
+Fixes gh-22452

@@ -1,0 +1,18 @@
+Throw exception for illegal PathMatch configurations
+
+With the new `ParsingPathMatcher` implementation, new patterns are now
+allowed, such as `"/foo/{*bar}". The `"{*bar}"` segment will capture
+everything until the end of the given path. Adding other elements after
+that segment is illegal and will throw exceptions.
+
+One can configure on a `PathMatchConfigurer` various options like
+`useTrailingSlashMatch` and `useSuffixPatternMatch`; those options, when
+enabled, will try to append suffixes like `".*"` and `"/"` to existing
+path patterns. In case of a "capture the rest" pattern segment, those
+options won't be honored.
+
+This is why this commit ensures that an exception is thrown at the start
+of the application if an illegal configuration is applied to the
+`PathMatchConfigurer`.
+
+Issue: SPR-15303, SPR-15558

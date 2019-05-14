@@ -1,0 +1,16 @@
+Reuse ApplicationEventMulticaster
+
+Spring Framework allows a custom `ApplicationEventMulticaster` bean to be
+defined with a well-defined bean. If such bean is present, it is used
+instead of the default implementation.
+
+This commit fixes `EventPublishingRunListener` to properly honour such
+arrangement. Rather than registering a `ApplicationEventMulticaster` to
+transmit the application listeners from the `SpringBootApplication` it
+now only uses an internal multicaster for early events (i.e. events that
+are fired before the context is actually refreshed).
+
+This has the positive effect of making sure that `ApplicationReadyEvent`
+is fired to the proper multicaster.
+
+Closes gh-6048

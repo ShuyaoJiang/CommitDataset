@@ -1,0 +1,14 @@
+Fixed a FreshValueGenerator bug that causes failure in generating fresh values recursively when there are finite number of distinct values provided by user.
+
+The fix is to make sure the "freshness" AtomicInteger is only incremented at the end of generating a fresh value for user code. Recursive generation of values for nested types (such as generating the K and V for a Map<K, V>) doesn't increment the freshness.
+
+This ensures that for finite set of distinct values, we don't ever skip distinct value.
+
+Along the way, the special casing for Optional had to be changed. So I just spent extra effort supporting an @Empty annotation that can be used to generate "empty" value for any arbitrary type.
+
+Originally, I tried to return empty collections. But some existing tests failed because the classes don't always like being injected with empty collections or maps (they may have a precondition check to reject empty collection).
+
+So @Empty is only applied to Optional, Range and ConcurrentMap.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=75542159

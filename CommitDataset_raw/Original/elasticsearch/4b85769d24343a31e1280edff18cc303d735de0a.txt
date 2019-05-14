@@ -1,0 +1,7 @@
+Increase InternalHistogramTests coverage (#36004)
+
+In `InternalHistogramTests` we were randomizing different values but `minDocCount` was hardcoded to `1`. It's important to test other values, especially `0` as it's the default. To make this possible, the test needed some adapting in the way buckets are randomly generated: all aggs need to share the same `interval`, `minDocCount` and `emptyBucketInfo`. Also assertions need to take into account that more (or less) buckets are expected depending on `minDocCount`.
+
+This was originated by #35921 and its need to test adding empty buckets as part of the reduce phase.
+
+Also relates to #26856 as one more key comparison needed to use `Double.compare` to properly handle `NaN` values, which was triggered by the increased test coverage.

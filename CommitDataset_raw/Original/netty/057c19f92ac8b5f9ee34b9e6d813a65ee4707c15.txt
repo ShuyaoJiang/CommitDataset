@@ -1,0 +1,13 @@
+Move less common code-path to extra method to allow inlining of writeUtf8. (#8600)
+
+Motivation:
+
+ByteBuf is used everywhere so we should try hard to be able to make things inlinable. During benchmarks it showed that writeCharSequence(...) fails to inline writeUtf8 because it is too big even if its hots.
+
+Modifications:
+
+Move less common code-path to extra method to allow inlining.
+
+Result:
+
+Be able to inline writeUtf8 in most cases.

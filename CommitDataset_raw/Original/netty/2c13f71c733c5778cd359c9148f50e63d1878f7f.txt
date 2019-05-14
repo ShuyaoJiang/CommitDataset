@@ -1,0 +1,13 @@
+Ensure NIO transport can be used on Java6 again. (#8168)
+
+Motivation:
+
+952eeb8e1e3706b09d4d3f32f16d7f0e5c540cb5 introduced the possibility to use any JDK SocketOption when using the NIO transport but broke the possibility to use netty with java6.
+
+Modifications:
+
+Do not use java7 types in method signatures of the static methods in NioChannelOption to prevent class-loader issues on java6.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8166.

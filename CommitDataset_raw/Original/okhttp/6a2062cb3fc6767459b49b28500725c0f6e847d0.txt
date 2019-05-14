@@ -1,0 +1,5 @@
+Change SpdyStream to be safe for any initialization order.
+
+Previously we were assuming a field initializer wouldn't be
+run until after the constructor. It wasn't and we were getting
+NullPointerExceptions looking up the bufferPool.

@@ -1,0 +1,9 @@
+ILM: use node _id attribute when allocating to one node (#35061)
+
+ILM's Shrink Action was using a nodes "_name" attribute to
+allocate to prepare for the shrink step. Since the name is
+configurable by a user and may use the same name for
+multiple nodes on one machine, _id is safer since it is guaranteed
+to be unique.
+
+closes #35043.

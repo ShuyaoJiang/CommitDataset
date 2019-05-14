@@ -1,0 +1,12 @@
+Inline TransportReplAction#registerRequestHandlers (#40762)
+
+It is important that resync actions are not rejected on the primary even if its
+`write` threadpool is overloaded. Today we do this by exposing
+`registerRequestHandlers` to subclasses and overriding it in
+`TransportResyncReplicationAction`. This isn't ideal because it obscures the
+difference between this action and other replication actions, and also might
+allow subclasses to try and use some state before they are properly
+initialised. This change replaces this override with a constructor parameter to
+solve these issues.
+
+Relates #40706

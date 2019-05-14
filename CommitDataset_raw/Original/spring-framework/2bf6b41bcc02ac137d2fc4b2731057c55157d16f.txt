@@ -1,0 +1,11 @@
+Initialize ResourceUrlProvider only once
+
+Prior to this change, the ResourceUrlProvider would listen to
+ContextRefreshedEvents and autodetect resource handlers each time. This
+can cause issues when multiple contexts are involved and the last one
+has no resource handler, thus clearing the previously detected ones.
+
+This commit disables resource handlers auto-detection once some have
+been detected with a refreshed context.
+
+Issue: SPR-12592

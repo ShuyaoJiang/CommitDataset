@@ -1,0 +1,6 @@
+Fix a class loading ordering bug on android.
+
+Apparently in some android versions (and/or testing environments, maybe?) Unsafe.getFieldOffset(Field) will trigger initialization (not just loading) of the class that declares the field.  This causes an ordering bug where when the Waiter class is initialized ATOMIC_HELPER is null.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=81812260

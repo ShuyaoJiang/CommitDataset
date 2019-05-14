@@ -1,0 +1,15 @@
+Fix handling of percent-encoded spaces in Windows batch files (#31034)
+
+If you invoke elasticsearch-plugin (or any other CLI script on Windows)
+with a path that has a percent-encoded space (or any other
+percent-encoded character) because the CLI scripts now shell into a
+common shell script (elasticsearch-cli) the percent-encoded space ends
+up being interpreted as a parameter. For example passing install --batch
+file:/c:/encoded%20%space/analysis-icu-7.0.0.zip to elasticsearch-plugin
+leads to the %20 being interpreted as %2 followed by a zero. Here, the
+%2 is interpreted as the second parameter (--batch) and the
+InstallPluginCommand class ends up seeing
+file:/c/encoded--batch0space/analysis-icu-7.0.0.zip as the path which
+will not exist. This commit addresses this by escaping the %* that is
+used to pass the parameters to the common CLI script so that the common
+script sees the correct parameters without the %2 being substituted.

@@ -1,0 +1,13 @@
+Reflect each source's values in env endpoint's response
+
+Previously, the env endpoint would use the entire environment to
+get the value of each property in a source. This meant that when
+there were multiple sources with the same property, the value from
+the source with the highest precedence would be used for every
+source that contains the property.
+
+This commit update the endpoint to retrieve the value from the
+property source that is being described, rather than resolving it
+against all the environment's property sources.
+
+Closes gh-10883

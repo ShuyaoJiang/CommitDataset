@@ -1,0 +1,10 @@
+LocalChannel write when peer closed leak
+
+Motivation:
+If LocalChannel doWrite executes while the peer's state changes from CONNECTED to CLOSED it is possible that some promise's won't be completed and buffers will be leaked.
+
+Modifications:
+- Check the peer's state in doWrite to avoid a race condition
+
+Result:
+All write operations should release, and the associated promise should be completed.

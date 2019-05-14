@@ -1,0 +1,12 @@
+String encoding for any MIME type
+
+CharSequenceEncoder now supports all MIME types, however since encoding
+Flux<String> can overlap with other encoders (e.g. SSE) there are now
+two ways to create a CharSequenceEncoder -- with support for text/plain
+only or with support for any MIME type.
+
+In WebFlux configuration we insert one CharSequenceEncoder for
+text/plain (as we have so far) and a second instance with support for
+any MIME type at the very end.
+
+Issue: SPR-15374

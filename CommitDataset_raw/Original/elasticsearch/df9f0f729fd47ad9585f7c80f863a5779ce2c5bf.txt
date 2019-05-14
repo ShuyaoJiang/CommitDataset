@@ -1,0 +1,7 @@
+Cascading primary failure lead to MSU too low (#40249)
+
+If a replica were first reset due to one primary failover and then
+promoted (before resync completes), its MSU would not include changes
+since global checkpoint, leading to errors during translog replay.
+
+Fixed by re-initializing MSU before restoring local history.

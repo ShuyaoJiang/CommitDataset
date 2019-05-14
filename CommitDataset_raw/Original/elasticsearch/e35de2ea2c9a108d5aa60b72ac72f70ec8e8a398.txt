@@ -1,0 +1,6 @@
+Synchronize WriteReplicaResult callbacks (#36770)
+
+TransportWriteAction.WriteReplicaResult is not properly synchronized, which can lead to a data race
+between the thread that calls respond and the AsyncAfterWriteAction that calls either onSuccess or
+onFailure. This data race results in the response listener not being called, which ultimately results in
+a stuck replication task on the replica.

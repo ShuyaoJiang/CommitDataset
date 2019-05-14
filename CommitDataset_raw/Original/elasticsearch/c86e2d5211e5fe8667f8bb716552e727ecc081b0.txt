@@ -1,0 +1,18 @@
+Structured audit logging (#31931)
+
+Changes the format of log events in the audit logfile.
+It also changes the filename suffix from `_access` to `_audit`.
+The new entry format is consistent with Elastic Common Schema.
+Entries are formatted as JSON with no nested objects and field
+names have a dotted syntax. Moreover, log entries themselves
+are not spaced by commas and there is exactly one entry per line.
+In addition, entry fields are ordered, unlike a typical JSON doc,
+such that a human would not strain his eyes over jumbled 
+fields from one line to the other; the order is defined in the log4j2
+properties file.
+The implementation utilizes the log4j2's `StringMapMessage`.
+This means that the application builds the log event as a map
+and the log4j logic (the appender's layout) handle the format
+internally. The layout, such as the set of printed fields and their
+order, can be changed at runtime without restarting the node.
+

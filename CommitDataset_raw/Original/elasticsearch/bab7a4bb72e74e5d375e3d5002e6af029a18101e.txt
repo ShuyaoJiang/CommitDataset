@@ -1,0 +1,30 @@
+Fix failures in SessionFactoryLoadBalancingTests (#39154)
+
+This change aims to fix failures in the session factory load balancing
+tests that mock failure scenarios. For these tests, we randomly shut
+down ldap servers and bind a client socket to the port they were
+listening on. Unfortunately, we would occasionally encounter failures
+in these tests where a socket was already in use and/or the port
+we expected to connect to was wrong and in fact was to one of the ldap
+instances that should have been shut down.
+
+The failures are caused by the behavior of certain operating systems
+when it comes to binding ports and wildcard addresses. It is possible
+for a separate application to be bound to a wildcard address and still
+allow our code to bind to that port on a specific address. So when we
+close the server socket and open the client socket, we are still able
+to establish a connection since the other application is already
+listening on that port on a wildcard address. Another variant is that
+the os will allow a wildcard bind of a server socket when there is
+already an application listening on that port for a specific address.
+
+In order to do our best to prevent failures in these scenarios, this
+change does the following:
+
+1. Binds a client socket to all addresses in an awaitBusy
+2. Adds assumption that we could bind all valid addresses
+3. In the case that we still establish a connection to an address that
+   we should not be able to, try to bind and expect a failure of not
+   being connected
+
+Closes #32190

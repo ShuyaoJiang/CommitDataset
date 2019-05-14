@@ -1,0 +1,25 @@
+Improves doc values format deprecation message (#33576)
+
+* Improves doc values format deprecation message
+
+This changes the deprecation message when doc values fields do not
+supply a format form logging a deprecation warning for each offending
+field individually to logging a single message which lists all
+offending fields
+
+Closes #33572
+
+* Updates YAML test with new deprecation message
+
+Also adds a test to ensure multiple deprecation warnings are collated
+into one message
+
+* Condenses collection of fields without format check
+
+Moves the collection of fields that don't have a format to a separate
+loop and moves the logging of the deprecation warning to be next to it
+at the expesnse of looping through the field list twice
+
+* fixes typo
+
+* Fixes test

@@ -1,0 +1,15 @@
+Add support for Mock test with WebFlux
+
+This commit add mock support for WebFlux with an infrastructure similar
+to what `WebMvcTest` provides. `@WebFluxTest` can be used to test
+controllers with a narrowed classpath that is relevant to WebFlux. Also,
+`@SpringBootTest` now starts WebFlux in "mock" mode by default and
+`@AutoConfigureWebTestClient` can be used to inject a `WebTestClient`
+connected to the `ApplicationContext`.
+
+To make that happen, a `ReactiveWebApplicationContext` interface has been
+introduced to mirror what `WebApplicationContext` currently does. Things
+are still a bit volatile at this point and that infra may move to Spring
+Framework at some point.
+
+Closes gh-8401

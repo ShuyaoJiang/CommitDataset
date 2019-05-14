@@ -1,0 +1,16 @@
+[ML] Only clear scroll whan a scroll id exists (elastic/x-pack-elasticsearch#3148)
+
+The issue here is that if the first search request fails
+(initScroll), then we do not have a scroll_id. However,
+in order to retry the search, we reset the scroll. That
+involves clearing the current search, but since we do
+not have a scroll_id, the clear scroll request fails.
+We end up reporting the failure for the scroll clearing,
+rather than the actual problem.
+
+This commit fixes that by avoiding clearing the scroll
+when the scroll_id is null.
+
+relates elastic/x-pack-elasticsearch#3146
+
+Original commit: elastic/x-pack-elasticsearch@b5086028f673673697087f1494498b2c0e98f25d

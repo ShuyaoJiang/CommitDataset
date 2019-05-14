@@ -1,0 +1,9 @@
+Fix bug in CompositeException.getRootCause (#6380)
+
+* Fix bug in CompositeException.getRootCause 
+
+The original code use to be `if (root == null || root == e)`, but apparently after some refactoring it ended up as `if (root == null || cause == root)`, which I believe is a bug.
+
+This method should probably be `static` (that would have prevented the bug).
+
+* Update unit tests for CompositeException.getRootCause

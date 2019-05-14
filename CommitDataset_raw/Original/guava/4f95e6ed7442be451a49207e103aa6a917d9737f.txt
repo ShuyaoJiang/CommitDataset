@@ -1,0 +1,9 @@
+Remove a redundant RegularImmutableSortedSet workaround for comparators that are inconsistent with equals().
+The workaround, added in CL 13880333, existed to support ImmutableSortedAsList.
+However, it turned out that the workaround was needed for other types, too, and it was added to ImmutableSortedAsList itself (but not removed from RegularImmutableSortedSet) in CL 29041788.
+This CL removes the redundant RegularImmutableSortedSet copy, moving its comments into the ImmutableSortedAsList copy.
+Additionally, it adds a test to demonstrate that the redundant copy, which is no longer used only by asList(), was causing problems.
+Our existing tests caught a similar problem when I applied Louis's pending http://codereview.appspot.com/6218056/
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=30530740

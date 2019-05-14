@@ -1,0 +1,12 @@
+Support bootstrap password when in container (elastic/x-pack-elasticsearch#1832)
+
+This is related to elastic/x-pack-elasticsearch#1217. This commit reads two environment variables on
+startup: BOOTSTRAP_PWD and ELASTIC_CONTAINER. If BOOTSTRAP_PWD is
+present, ELASTIC_CONTAINER must be set to true. Otherwise a new
+bootstrap check will fail.
+
+If ELASTIC_CONTAINER is set to true, the elastic user can be
+authenticated with the BOOTSTRAP_PWD variable when its password
+has not been explicitly set.
+
+Original commit: elastic/x-pack-elasticsearch@78f53fd2322d88151465e1ee9168ba70a9ca6076

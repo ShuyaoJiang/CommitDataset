@@ -1,0 +1,14 @@
+Make custom index metadata completely immutable (#33735)
+
+Currently `IndexMetadata#getCustomData(...)` wraps the custom metadata
+in an unmodifiable map, but in case there is no entry for the specified
+key then a NPE is thrown by Collections.unmodifiableMap(...). This is not
+ideal in case callers like to throw an exception with a specific message.
+(like in the case for ccr to indicate that the follow index was not created
+by the create_and_follow api and therefor incompatible as follow index)
+
+I think making `DiffableStringMap` itself immutable is better then just wrapping
+custom metadata with `Collections.unmodifiableMap(...)` in all methods that access it.
+
+Also removed the `equals()`, `hashcode()` and to `toString()` methods of
+`DiffableStringMap`, because `AbstractMap` already implements these methods.

@@ -1,0 +1,18 @@
+Ensure we not log missleading errors if the promise was already failed due errors
+
+Motivation:
+
+In DefaultHttp2ConnectionEncoder we fail the promise in in the FlowControlledData.error(...) method but also add it the CoalescingBufferQueue. Which can lead to have the promise failed by error(...) before it can be failed in CoalescingBufferQueue.
+
+This can lead to confusing and missleading errors in the log like:
+    2016-08-12 09:47:43,716       nettyIoExecutorGroup-1-9 [WARN ] PromiseNotifier                - Failed to mark a promise as failure because it's done already: DefaultChannelPromise@374225e0(failure: javax.net.ssl.SSLException: SSLEngine closed already)
+    javax.net.ssl.SSLException: SSLEngine closed already
+        at io.netty.handler.ssl.SslHandler.wrap(...)(Unknown Source) ~[netty-all-4.1.5.Final-SNAPSHOT.jar:?]
+
+Modifications:
+
+Ensure we only fail the queue (which will also fail the promise).
+
+Result:
+
+No more missleading logs.

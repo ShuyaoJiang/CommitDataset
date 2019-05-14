@@ -1,0 +1,7 @@
+Use more precise does S3 bucket exist method (#34123)
+
+We are using a deprecated method for checking if an S3 bucket
+exists. This deprecated method has a limitation that it can not
+distinguish between invalid credentials and a lack of permissions. This
+commit switches to using a method that correctly surfaces if invalid
+credentials are supplied when checking for the existence of a bucket.

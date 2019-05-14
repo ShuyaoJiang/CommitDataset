@@ -1,0 +1,17 @@
+Generate heap and thread dump when some tests fail
+
+Motivation:
+
+We have a few sporadic test failures which are only easily reproduceable
+in our CI machine.  To get more information about the failure, we need
+heap and full thread dump at the moment of failure.
+
+Modifications:
+
+- Add TestUtils.dump() method to dump heap and threads
+- Modify SocketGatheringWriteTest and SocketSslEchoTest to call
+  TestUtils.dump() on failure
+
+Result:
+
+We get more information about the test failure.

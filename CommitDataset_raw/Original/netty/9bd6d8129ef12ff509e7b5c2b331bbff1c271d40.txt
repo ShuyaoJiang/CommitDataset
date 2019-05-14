@@ -1,0 +1,10 @@
+HttpObjectEncoder buffer size estimation
+
+Motivation:
+HttpObjectEncoder allocates a new buffer when encoding the initial line and headers, and also allocates a buffer when encoding the trailers. The allocation always uses the default size of 256. This may lead to consistent under allocation and require a few resize/copy operations which can cause GC/memory pressure.
+
+Modifications:
+- Introduce a weighted average which tracks the historical size of encoded data and uses this as an estimate for future buffer allocations
+
+Result:
+Better approximation of buffer sizes.

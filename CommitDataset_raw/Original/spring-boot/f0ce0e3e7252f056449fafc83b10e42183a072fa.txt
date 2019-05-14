@@ -1,0 +1,18 @@
+Defer Tomcat’s session ID generator initialization until it’s needed
+
+By default, Tomcat forces the generation of a session id during startup
+to ensure that a SecureRandom instance has been initialized. When there
+is a lack of entropy (as is often the case on a newly booted VPS, for
+example) this can block for a long time (several minutes in some cases)
+causing users to incorrectly believe that their application has hung
+during startup. This is particularly problematic for applications that
+don't use HTTP sessions as they are paying the startup cost for no
+benefit.
+
+This commit address the problem by configuring a custom
+SessionIdGenerator that does not initialize itself during startup.
+Instead, the initialization is now deferred until a request for a
+session id is made.
+
+Closes gh-6174
+

@@ -1,0 +1,11 @@
+Determine Spring Boot version for bom import correctly when using Java 9
+
+In Java 9, a package may return null for its implementation version
+even when the manifest attribute specifying the version is present
+in the jar from which the package was loaded.
+
+This commit updates DependencyManagementPluginAction to fall back to
+accessing the jar and its manifest attributes directly when the
+implementation version of its package is null.
+
+Closes gh-10049

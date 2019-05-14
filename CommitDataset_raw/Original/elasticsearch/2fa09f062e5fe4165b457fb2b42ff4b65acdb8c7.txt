@@ -1,0 +1,12 @@
+New plugin - Annotated_text field type (#30364)
+
+New plugin for annotated_text field type.
+Largely a copy of `text` field type but adds ability to include markdown-like syntax in the text.
+The “AnnotatedText” class parses text+markup and converts into plain text and AnnotationTokens.
+The annotation token values are injected unchanged alongside the regular text tokens to provide a
+form of additional indexed overlay useful in positional searches and highlighting.
+Annotated_text fields do not support fielddata as we want to phase this out.
+Also includes a new "annotated" highlighter type that retains annotations and merges in search
+hits as additional annotation markup.
+
+Closes #29467

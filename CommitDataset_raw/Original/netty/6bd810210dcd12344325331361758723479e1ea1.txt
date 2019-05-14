@@ -1,0 +1,10 @@
+Servers should not send duplicate intermediate certificates.
+
+Motivation:
+Servers sometimes send duplicate intermediate certificates.
+
+Modifications:
+OpenSslKeyMaterialManager.setKeyMaterial() dedups aliases before calling SSL.setCertificateChainBio().
+
+Result:
+Servers no longer send duplicate itermediate certificates.

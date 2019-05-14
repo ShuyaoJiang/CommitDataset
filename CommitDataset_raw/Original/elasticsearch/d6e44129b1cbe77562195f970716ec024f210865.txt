@@ -1,0 +1,8 @@
+TEST: Only check max_seq_no_of_updates when rollback (#35170)
+
+Currently, we assume that rollback always happens in the test
+testRestoreLocalHistoryFromTranslogOnPromotion. However, if the global
+checkpoint equals max_seq_no, we won't rollback. This causes the
+max_seq_no_of_updates assertion failed because max_seq_no_of_updates
+won't be advanced to the global checkpoint. With this commit, we assert
+max_seq_no_of_updates in two different paths.

@@ -1,0 +1,19 @@
+Allow to specify AbstractHttpMessageConverter default charset
+
+Before this commit, specifying the charset to use with produces or
+consumes @RequestMapping attributes resulted in default charset
+loss. That was really annoying for JSON for example, where using
+UTF-8 charset is mandatory in a lot of use cases.
+
+This commit adds a defaultCharset property to
+AbstractHttpMessageConverter in order to avoid losing the
+default charset when specifying the charset with these
+@RequestMapping attributes.
+
+It changes slightly the default behavior (that's why we have waited
+4.3), but it is much more error prone, and will match with most
+user's expectations since the charset loss was accidental in most
+use cases (users usually just want to limit the media type supported
+by a specific handler method).
+
+Issue: SPR-13631

@@ -1,0 +1,11 @@
+HttpObjectEncoder and MessageAggregator EMPTY_BUFFER usage
+
+Motivation:
+HttpObjectEncoder and MessageAggregator treat buffers that are not readable special. If a buffer is not readable, then an EMPTY_BUFFER is written and the actual buffer is ignored. If the buffer has already been released then this will not be correct as the promise will be completed, but in reality the original content shouldn't have resulted in any write because it was invalid.
+
+Modifications:
+- HttpObjectEncoder should retain/write the original buffer instead of using EMPTY_BUFFER
+- MessageAggregator should retain/write the original ByteBufHolder instead of using EMPTY_BUFFER
+
+Result:
+Invalid write operations which happen to not be readable correctly reflect failed status in the promise, and do not result in any writes to the channel.

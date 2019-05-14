@@ -1,0 +1,13 @@
+Correctly count acquired channels when timeout occurs in FixedChannelPool
+
+Motivation:
+
+We don't decrease acquired channel count in FixedChannelPool when timeout occurs by AcquireTimeoutAction.NEW and eventually fails.
+
+Modifications:
+
+Set AcquireTask.acquired=true to call decrementAndRunTaskQueue when timeout action fails.
+
+Result:
+
+Acquired channel count decreases correctly.

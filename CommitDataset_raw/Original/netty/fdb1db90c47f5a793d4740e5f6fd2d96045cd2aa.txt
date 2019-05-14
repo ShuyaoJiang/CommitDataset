@@ -1,0 +1,10 @@
+[#2362] AbstractChannel.AbstractUnsafe.write(...) is slow
+
+Motivation:
+At the moment we do a Channel.isActive() check in every AbstractChannel.AbstractUnsafe.write(...) call which gives quite some overhead as shown in the profiler when you write fast enough. We can eliminate the check and do something more smart here.
+
+Modifications:
+Remove the isActive() check and just check if the ChannelOutboundBuffer was set to null before, which means the Channel was closed. The rest will be handled in flush0() anyway.
+
+Result:
+Less overhead when doing many write calls

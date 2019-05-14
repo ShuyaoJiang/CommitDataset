@@ -1,0 +1,14 @@
+Makes LengthFieldBasedFrameDecoder::decode inlineable
+
+Motivation:
+
+The decode method is too large to be inlined with default compiler settings, hence the uncommon paths need to be packed and moved away form the common one.
+
+Modifications:
+
+The uncommon paths of the decode call (eg failures with thrown exceptions) are packed and moved in private methods in order to reduce the size of the common one
+and let it being inlined.
+
+Result:
+
+The decode method is being inlined if the stack depth allows it.

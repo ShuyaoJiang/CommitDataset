@@ -1,0 +1,13 @@
+Add heartbeat lock to SockJS server sessions
+
+Even before this change SockJS sessions always cancelled the heartbeat
+task first prior to sending messages. However when the heartbeat task
+is already in progress, cancellation of it is not enough and we must
+wait until the heartbeat is sent.
+
+This commit adds a heartbeat write lock which is obtained and held
+during the sending of a heartbeat. Now when sessions send a message
+they still cancel the heartbeat task but if that fails they also wait
+for the heartbeat write lock.
+
+Issue: SPR-14356

@@ -1,0 +1,13 @@
+Improve the performance of copying header sets when hashing and name validation are equivalent.
+
+Motivation:
+Headers and groups of headers are frequently copied and the current mechanism is slower than it needs to be.
+
+Modifications:
+Skip name validation and hash computation when they are not necessary.
+Fix emergent bug in CombinedHttpHeaders identified with better testing
+Fix memory leak in DefaultHttp2Headers when clearing
+Added benchmarks
+
+Result:
+Faster header copying and some collateral bug fixes

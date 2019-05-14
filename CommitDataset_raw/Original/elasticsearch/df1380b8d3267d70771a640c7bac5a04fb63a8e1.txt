@@ -1,0 +1,7 @@
+Remove versionType from translog (#31945)
+
+With the introduction of sequence number, we no longer use versionType to
+resolve out of order collision in replication and recovery requests.
+
+This PR removes removes the versionType from translog. We can only remove
+it in 7.0 because it is still required in a mixed cluster between 6.x and 5.x.

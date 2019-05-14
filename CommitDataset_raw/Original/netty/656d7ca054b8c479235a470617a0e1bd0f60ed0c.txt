@@ -1,0 +1,5 @@
+Improve localhost / local interface detection mechanism in NetUtil
+
+- Do not attempt to validate localhost by binding a socket because it can fail when SecurityManager is in use
+- Find loopback interface first and get address from there instead of getting loopback address from InetAddress.getLocalHost() (because it's more reliable)
+- Instead of throwing an Error, just log and fall back to 127.0.0.1 while determining localhost address

@@ -1,0 +1,20 @@
+Add support for reloading resources in Gradle plugin
+
+Usage:
+
+$ gradle bootRun
+...
+
+Edit files in src/main/resources and see the changes live in a web app
+(e.g. static resources in /static).
+
+The old functionality of bootRun has been replaced (since it didn't add
+a lot of value and also didn't expose any JMV argument setters of anything).
+This new feature set is backed by any existing "run" task configuration.
+
+In addition autodetects a main class if there is one in the project
+sources, so no need for mainClassName = '...' in build.gradle.
+
+Applies the 'application' plugin (so no need to declare that either).
+
+Fixes gh-225

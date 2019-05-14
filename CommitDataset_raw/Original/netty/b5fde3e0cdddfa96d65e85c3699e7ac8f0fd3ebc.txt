@@ -1,0 +1,13 @@
+Add #ifdef statements so the compilation of the native code not fails on MacOS (#7895)
+
+Motivation:
+
+b818852cdb0ee56ce3cf939e2faa538d519baabd added support for IP_RECVORIGDSTADDR but did not include any #ifdef statements to ensure its usable at all (which is not the case on MacOS).
+
+Modifications:
+
+Add #ifdef statements to check for IP_RECVORIGDSTADDR.
+
+Result:
+
+Compilation works again on MacOS.

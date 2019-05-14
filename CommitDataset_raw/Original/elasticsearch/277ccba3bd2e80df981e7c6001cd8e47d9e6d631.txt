@@ -1,0 +1,7 @@
+[Zen2] fix NodeJoinTests#testConcurrentJoining() (#36033)
+
+Today we sometimes create a setup in which the node is a quorum on its own,
+which allows it to win a pre-voting round and schedule an election essentially
+at will, causing it to discard all the joins it just received and fail the
+test. This change excludes this case, preventing stray elections from ruining
+things.

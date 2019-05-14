@@ -1,0 +1,10 @@
+HTTP/2 SimplePromiseAggregator tryFailure not consistent with setFailure
+
+Motivation:
+The SimplePromiseAggregator.setFailure allows a failure to occur before newPromise is called, but tryFailure doesn't. These methods should be consistent.
+
+Modifications:
+- tryFailure should use the same logic as setFailure
+
+Result:
+Consistent failure routines.

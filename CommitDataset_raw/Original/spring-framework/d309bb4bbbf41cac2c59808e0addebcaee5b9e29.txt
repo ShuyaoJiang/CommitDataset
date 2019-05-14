@@ -1,0 +1,15 @@
+Add web-fragment.xml to spring-web
+
+The servlet spec treats any jar in WEB-INF/lib as a web fragment:
+"A plain old jar file in the WEB-INF/lib directory with no web-
+fragment.xml is also considered a fragment" (section 8.2.1)
+
+This change adds a web-fragment.xml giving the web fragment an
+explicit name, "spring_web", and indicating there is no need
+to scan for Servlet annotations in the spring-web.jar itself
+through metadata-complete=true.
+
+This allows applications that choose to include only specific
+web fragments, through the <absolute-ordering> element in web.xml
+to also include the "spring_web" fragment, in order to enable scanning
+for WebApplicationInitializer types.

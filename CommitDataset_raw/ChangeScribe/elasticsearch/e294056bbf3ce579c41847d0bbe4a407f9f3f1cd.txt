@@ -1,0 +1,250 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. 
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.client.ml.job.config:  
+
+1. Changes to package org.elasticsearch.license:  
+
+1. Changes to package org.elasticsearch.upgrades:  
+
+1. Changes to package org.elasticsearch.xpack.core:  
+
+1. Changes to package org.elasticsearch.xpack.core.ml:  
+
+1.1. Add a class for ml tasks tests. It allows to:
+
+	Handle test get job state;
+	Handle test get job state given null;
+	Handle test get datefeed state;
+	Handle test get job task;
+	Handle test get datafeed task;
+	Handle test open job ids;
+	Handle test open job ids given null;
+	Handle test started datafeed ids;
+	Handle test started datafeed ids given null;
+	Handle test unallocated job ids;
+	Handle test unallocated datafeed ids
+
+2. Changes to package org.elasticsearch.xpack.core.ml.action:  
+
+2. Changes to package org.elasticsearch.xpack.core.ml.datafeed:  
+
+2. Changes to package org.elasticsearch.xpack.core.ml.job.config:  
+
+2. Changes to package org.elasticsearch.xpack.core.ml.job.messages:  
+
+2. Changes to package org.elasticsearch.xpack.core.ml.job.persistence:  
+
+2. Changes to package org.elasticsearch.xpack.core.ml.job.results:  
+
+2. Changes to package org.elasticsearch.xpack.core.ml.utils:  
+
+2. Changes to package org.elasticsearch.xpack.ml:  
+
+2.1. Add a class for ml config migration eligibility check. It allows to:
+
+	Instantiate ml config migration eligibility check  with settings, cluster service and cluster service;
+	Set config migration enabled;
+	Can start migration;
+	Ml config index is allocated;
+	Handle job is eligible for migration;
+	Handle datafeed is eligible for migration
+
+2.2. Add a class for ml config migration eligibility check tests. It allows to:
+
+	Set up tests;
+	X content registry;
+	Handle test can start migration given migration is disabled;
+	Convert test can start migration given nodes not up;
+	Handle test can start migration given nodes not up to version and migration is enabled;
+	Handle test can start migration given missing index;
+	Handle test can start migration given inactive shards;
+	Add ml config index;
+	Convert test job is eligible for migration given nodes not up;
+	Handle test job is eligible for migration given job not in cluster state;
+	Handle test job is eligible for migration given deleting job;
+	Handle test job is eligible for migration given open job;
+	Handle test job is eligible for migration given open job and and migration is disabled;
+	Handle test job is eligible for migration given closed job;
+	Handle test job is eligible for migration given open and unallocated job;
+	Convert test datafeed is eligible for migration given nodes not up;
+	Handle test datafeed is eligible for migration given datafeed not in cluster state;
+	Handle test datafeed is eligible for migration given started datafeed;
+	Handle test datafeed is eligible for migration given started datafeed and migration is disabled;
+	Handle test datafeed is eligible for migration given stopped datafeed;
+	Handle test datafeed is eligible for migration given unallocated datafeed;
+	Get given cluster settings;
+	Handle new settings;
+	Create compatible datafeed
+
+2.3. Add a class for ml config migrator tests. It allows to:
+
+	X content registry;
+	Handle test non deleting jobs;
+	Handle test closed or unallocated jobs;
+	Handle test stopped datafeed configs;
+	Handle test update job for migration;
+	Handle test update job for migration given V 54 job;
+	Handle test serialisation of updated job;
+	Handle test filter failed job config writes;
+	Handle test filter failed datafeed config writes;
+	Handle test documents not written;
+	Handle test remove jobs and datafeeds remove all;
+	Handle test remove jobs and datafeeds remove some;
+	Handle test limit writes given below limit;
+	Handle test limit writes given above limit;
+	Handle test limit writes given more jobs than datafeeds;
+	Handle test limit writes given null job;
+	Handle test rewrite persistent task params;
+	Handle test rewrite persistent task params given no unallocated tasks;
+	Create compatible datafeed
+
+3. Changes to package org.elasticsearch.xpack.ml.action:  
+
+3.1. Add a class for transport finalize job execution action tests. It allows to:
+
+	Handle setup mocks;
+	Handle test operation;
+	Create action
+
+4. Changes to package org.elasticsearch.xpack.ml.datafeed:  
+
+4. Changes to package org.elasticsearch.xpack.ml.datafeed.persistence:  
+
+4.1. Add a class for datafeed config provider. It allows to:
+
+	Instantiate datafeed config provider  with client, named X content registry and named X content registry;
+	Put datafeed config;
+	Get datafeed config;
+	Process  on response;
+	Process  on failure;
+	Find datafeeds  for job ids;
+	Delete datafeed config;
+	Update datefeed config;
+	Handle index updated config;
+	Expand datafeed ids;
+	Expand datafeed configs;
+	Build datafeed id query;
+	Build datafeed job ids query;
+	Parse source bytes reference leniently from source;
+
+5. Changes to package org.elasticsearch.xpack.ml.integration:  
+
+5.1. Add a class for datafeed config provider IT. It allows to:
+
+	Create components;
+	Handle test crud;
+	Handle test get datafeed config missing;
+	Handle test multiple create and deletes;
+	Handle test update when applying the update throws;
+	Handle test update with validator function that errors;
+	Handle test allow no datafeeds;
+	Handle test expand datafeeds;
+	Handle test find datafeeds for job ids;
+	Handle test headers are overwritten;
+	Create datafeed config;
+	Create security header;
+	Put datafeed config
+
+5.2. Add a class for job config provider IT. It allows to:
+
+	Create components;
+	Handle test get missing job;
+	Handle test check job exists;
+	Handle test overwrite not allowed;
+	Handle test crud;
+	Handle test update with A validation error;
+	Handle test update with validator;
+	Handle test allow no jobs;
+	Handle test expand jobs groups and job ids;
+	Handle test expand jobs wild card expansion;
+	Handle test expand job ids exclude deleting;
+	Handle test expand groups;
+	Handle test find jobs with custom rules given no jobs;
+	Handle test find jobs with custom rules;
+	Handle test validate datafeed job;
+	Handle test mark as deleting;
+	Create job;
+	Add custom rule;
+	Put job
+
+5.3. Add a class for ml config migrator IT. It allows to:
+
+	Set up tests;
+	Convert test write config;
+	Handle test migrate configs;
+	Test existing snapshot does  not block migration;
+	Handle test migrate configs given large number of jobs and datafeeds;
+	Handle test migrate configs given no jobs or datafeeds;
+	Handle test migrate configs without tasks given migration is disabled;
+	Assert snapshot;
+	Add ml config index;
+	Handle test config index is created;
+	Handle config index exists
+
+6. Changes to package org.elasticsearch.xpack.ml.job:  
+
+6. Changes to package org.elasticsearch.xpack.ml.job.persistence:  
+
+6.1. Add a class for batched jobs iterator. It allows to:
+
+	Instantiate batched jobs iterator  with client;
+	Get query;
+	Map search hit
+
+7. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect:  
+
+7. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.output:  
+
+7. Changes to package org.elasticsearch.xpack.ml.job.retention:  
+
+7. Changes to package org.elasticsearch.xpack.ml.process:  
+
+7.1. Add a class for ml memory tracker. It allows to:
+
+	Instantiate ml memory tracker  with settings, cluster service, thread pool, job manager, job results provider and job results provider;
+	Set reassignment recheck interval;
+	Process ml memory tracker ml memory tracker on master;
+	Off master;
+	Stop ml memory tracker;
+	Executor name;
+	Check if ml memory tracker is recently refreshed;
+	Get job memory requirement;
+	Remove job;
+	Handle async refresh;
+	Refresh job memory and all others;
+	Refresh persistent tasks custom meta data;
+	Iterate ml job tasks;
+	Refresh job memory;
+	Set job memory  to limit
+
+7.2. Add a class for ml memory tracker tests. It allows to:
+
+	Handle setup;
+	Handle test refresh all;
+	Handle test refresh one;
+	Handle test stop;
+	Make test task
+
+8. Changes to package org.elasticsearch.xpack.restart:  
+
+8.1. Add a class for ml migration full cluster restart IT. It allows to:
+
+	Rest client settings;
+	Wait ml migration full cluster restart IT for ml templates;
+	Create test index;
+	Handle test migration;
+	Handle old cluster tests;
+	Get upgraded cluster tests;
+	Wait ml migration full cluster restart IT for job to be assigned;
+	Wait ml migration full cluster restart IT for datafeed to be assigned;
+	Wait expected migrated jobs list for migration;
+	Check task params are updated;
+	Assert datafeed  not present;
+	Assert job  not present;
+	Add aggregations
+
+9. Changes to package org.elasticsearch.xpack.test.rest:  
+

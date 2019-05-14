@@ -1,0 +1,16 @@
+Ignore non-JavaExec run task when finding application's main class
+
+Previously, FindMainClassTask would look for a property named main
+on any class named run. This was based on the assumption that the
+run task would be a JavaExec task (typically provided by the
+application plugin). If the run task was not a JavaExec task (more
+accurately, if it did not have a main property) this would result in
+a build failure due to trying to read a non-existent property.
+
+This commit updates FindMainClassTask to only use the main property
+of the run task if the task is a JavaExec task. This guarantees that
+the property will exist on the task, and unlike using any property
+named main on a task named run, also guarantee that its value will
+refer to a Java class with a main method.
+
+Closes gh-5501

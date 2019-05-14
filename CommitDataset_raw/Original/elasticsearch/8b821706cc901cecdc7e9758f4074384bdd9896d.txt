@@ -1,0 +1,20 @@
+Switch more tests to zen2 (#36367)
+
+1. CCR tests work without any changes
+2. `testDanglingIndices` require changes the source code (added TODO).
+3. `testIndexDeletionWhenNodeRejoins` because it's using just two
+nodes, adding the node to exclusions is needed on restart.
+4. `testCorruptTranslogTruncationOfReplica` starts dedicated master
+one, because otherwise, the cluster does not form, if nodes are stopped
+and one node is started back.
+5. `testResolvePath` needs TEST cluster, because all nodes are stopped
+at the end of the test and it's not possible to perform checks needed
+by SUITE cluster.
+6. `SnapshotDisruptionIT`. Without changes, the test fails because Zen2
+retries snapshot creation as soon as network partition heals. This
+results into the race between creating snapshot and test cleanup logic
+(deleting index). Zen1 on the
+other hand, also schedules retry, but it takes some time after network
+partition heals, so cleanup logic executes latter and test passes. The
+check that snapshot is eventually created is added to
+the end of the test.

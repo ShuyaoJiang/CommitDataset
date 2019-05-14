@@ -1,0 +1,13 @@
+Remove call to SSL.setHostNameValidation(...) as it is done in the TrustManager (#8981)
+
+Motivation:
+
+We do not need to call SSL.setHostNameValidation(...) as it should be done as part of the TrustManager implementation. This is consistent with the JDK implementation of SSLEngine.
+
+Modifications:
+
+Remove call to SSL.setHostNameValidation(...)
+
+Result:
+
+More consistent behaviour between our SSLEngine implementation and the one that comes with the JDK.

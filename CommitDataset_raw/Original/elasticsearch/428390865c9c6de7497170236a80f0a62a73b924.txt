@@ -1,0 +1,10 @@
+Tests: Give stats tests long to wait for listener
+
+This test waited 10 seconds for a refresh listener to appear in
+the stats. It turns out that in our NFS testing infrastructure this can
+take a lot longer than 10 seconds. The error reported here:
+https://elasticsearch-ci.elastic.co/job/elastic+elasticsearch+master+nfs/257/consoleFull
+has it taking something like 15 seconds. This bumps the timeout
+to a solid minute.
+
+Closes #24417

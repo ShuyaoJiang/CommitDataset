@@ -1,0 +1,10 @@
+Disable date parsing test in non english locale (#39052)
+
+This ensures we do not attempt to parse non english locale dates
+in FIPS mode. The error, originally assumed to affect only Joda,
+affects Java time in the same manner and manifests only with the
+version of BouncyCastle FIPS certified provider we use in tests.
+The upstream issue https://github.com/bcgit/bc-java/issues/405
+indicates that the behavior is resolved in later versions of the
+BouncyCastle library and should be tested again when the new
+versions become FIPS 140 certified

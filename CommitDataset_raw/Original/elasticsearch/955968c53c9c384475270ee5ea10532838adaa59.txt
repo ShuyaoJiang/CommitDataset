@@ -1,0 +1,10 @@
+[ML] Delete one type at a time when deleting model snapshots (elastic/x-pack-elasticsearch#1637)
+
+This avoids log spam about being unable to create new mappings in indices
+that are set to only allow one type.  (It doesn't actually have any effect
+on the deletion, which was working before despite the failure to create new
+mappings for the legacy types referenced by the delete request.)
+
+relates elastic/x-pack-elasticsearch#1634
+
+Original commit: elastic/x-pack-elasticsearch@061ce7acf1037eee312c2baff8eb03b26f5e1e41

@@ -1,0 +1,5 @@
+Expose sequence number and primary terms in search responses (#37639)
+
+Users may require the sequence number and primary terms to perform optimistic concurrency control operations. Currently, you can get the sequence number via the `docvalues_fields` API but the primary term is not accessible because it is maintained by the `SeqNoFieldMapper` and the infrastructure can't find it. 
+
+This commit adds a dedicated sub fetch phase to return both numbers that is connected to a new `seq_no_primary_term` parameter.

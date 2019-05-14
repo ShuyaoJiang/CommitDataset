@@ -1,0 +1,27 @@
+Provide specializations of MapMakerInternalMap's internal data structures, notably InternalEntry, for the case where the value type is a singleton. This is Interners's exact use case.
+
+This CL is a pure refactor that results in a strict memory win. No public apis are changed.
+
+I am very happy that my design made this refactor very easy :)
+
+There are the following Interners use cases:
+- Interners#newStrongInterner
+- Interners#newWeakInterner
+and the following relevant jvm flags:
+- -XX:+UseCompressedOops
+- -XX:-UseCompressedOops
+
+Of the four combinations of interner type and pointer size, the most important use case is probably Interners#newWeakInterner, since users tend to put lots of stuff in weak interners. On a 64-bit jvm with +UseCompressedOops, there's actually no win because of the way the current object alignment for WeakKeyStrongValueEntry works out. However, the current object alignment works out unfavorably on a jvm with -UseCompressedOops, and so this CL gives a sizeable win there.
+
+The CL also gives very large savings for Interners#newStrongInterner, but I reckon that use case isn't too important.
+
+Summary of results:
+-------------------
+StrongInternerImpl w/ +UseCompressedOops --> 19.8% savings
+WeakInternerImpl w/ +UseCompressedOops --> 0.00016% savings
+StrongInternerImpl w/ -UseCompressedOops --> 12.3% savings
+WeakInternerImpl w/ -UseCompressedOops --> 9.0%% savings
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=154450505

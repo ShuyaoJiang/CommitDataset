@@ -1,0 +1,14 @@
+Refactor the spring-beans build
+
+This commit merges back the "spring-beans-groovy" module into the main
+"spring-beans" one. The build is configured so:
+
+* Java and Groovy sources are jointly compiled
+* Kotlin sources are compiled after
+
+With this change, the `MergePlugin` is not used anymore in the project
+build and therefore is removed.
+The `DetectSplitPackagesPlugin` wasn't applied so it's been removed as
+well.
+
+Issue: SPR-15885

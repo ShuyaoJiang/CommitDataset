@@ -1,0 +1,12 @@
+Resolve concurrency with watcher trigger service (#39092)
+
+The watcher trigger service could attempt to modify the perWatchStats
+map simultaneously from multiple threads. This would cause the
+internal state to become inconsistent, in particular the count()
+method may return an incorrect value for the number of watches.
+
+This changes replaces the implementation of the map with a
+ConcurrentHashMap so that its internal state remains consistent even
+when accessed from mutiple threads.
+
+Resolves: #39087

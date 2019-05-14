@@ -1,0 +1,13 @@
+Not try to write more then Integer.MAX_VALUE / SSIZE_MAX via writev
+
+Motivation:
+
+When trying to write more then Integer.MAX_VALUE / SSIZE_MAX via writev(...) the OS may return EINVAL depending on the kernel or the actual OS (bsd / osx always return EINVAL). This will trigger an IOException.
+
+Modifications:
+
+Never try to write more then Integer.MAX_VALUE / SSIZE_MAX when using writev.
+
+Result:
+
+No more IOException when write more data then Integer.MAX_VALUE / SSIZE_MAX via writev.

@@ -1,0 +1,9 @@
+Modify cluster state callback in recovery land
+
+We use a callback in recovery land during primary relocation to ensure
+the relocation target is on at least the same version as the relocation
+source. This callback is typed as a Callback<Long> which is an
+unnecessary custom type (we can use Consumer<T> or the appropriate
+primitive callbacks). Here, we can use LongConsumer.
+
+Relates #25081

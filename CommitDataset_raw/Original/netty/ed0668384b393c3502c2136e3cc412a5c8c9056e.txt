@@ -1,0 +1,19 @@
+NIO read spin event loop spin when half closed (#7801)
+
+
+Motivation:
+AbstractNioByteChannel will detect that the remote end of the socket has
+been closed and propagate a user event through the pipeline. However if
+the user has auto read on, or calls read again, we may propagate the
+same user events again. If the underlying transport continuously
+notifies us that there is read activity this will happen in a spin loop
+which consumes unnecessary CPU.
+
+Modifications:
+- AbstractNioByteChannel's unsafe read() should check if the input side
+of the socket has been shutdown before processing the event. This is
+consistent with EPOLL and KQUEUE transports.
+- add unit test with @normanmaurer's help, and make transports consistent with respect to user events
+
+Result:
+No more read spin loop in NIO when the channel is half closed.

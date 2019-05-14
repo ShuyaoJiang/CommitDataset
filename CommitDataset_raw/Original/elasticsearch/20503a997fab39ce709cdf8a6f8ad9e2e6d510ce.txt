@@ -1,0 +1,17 @@
+X-Pack-Security: Improve error messaging during setup password (elastic/x-pack-elasticsearch#3809)
+
+* X-Pack-Security: Improve error messaging during setup password
+
+Changes are done to improve logging and exception messages when
+setup passwords. Now it checks whether
+- X-Pack plugin is available
+- X-Pack Security is available 
+- X-Pack Security is enabled
+by invoking /_xpack query and throws a specific error message.
+1. Modifications to simple http client to return http response.
+2. Changes in SetupPasswordTool for throwing appropriate exceptions.
+2. Unit tests
+
+relates elastic/x-pack-elasticsearch#3476
+
+Original commit: elastic/x-pack-elasticsearch@eb0c5a19c5c5bc349d4016d154faba011788ed67

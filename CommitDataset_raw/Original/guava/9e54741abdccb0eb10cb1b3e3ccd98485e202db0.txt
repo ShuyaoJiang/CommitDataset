@@ -1,0 +1,10 @@
+Delete the ImmutableSet.copyOf() inside edgesConnecting() for immutable networks. Three main points here:
+
+1) The comment is no longer true. edgesConnecting() used to be evaluated as the intersection of two sets, but is now done differently (we did add a unit test to make sure they're equal though!).
+
+2) With the introduction of "SimpleEdgesConnecting", in the no parallel edges allowed case, this is already super efficient (i.e. everything is O(1)). There's no need to wrap it in an immutable set.
+
+3) With the introduction of "MultiEdgesConnecting", even in the parallel edges allowed case, methods such as .contains(), .size(), and .isEmpty() are all O(1) if successors() has been invoked. We lose the O(1) runtime of those methods if we always make an immutable copy of the set first.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=127470554

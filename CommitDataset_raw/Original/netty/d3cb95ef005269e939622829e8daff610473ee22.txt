@@ -1,0 +1,15 @@
+Make NIO and EPOLL transport connect errors more consistent with the JDK
+
+Motivation:
+
+The NIO transport used an IllegalStateException if a user tried to issue another connect(...) while the connect was still in process. For this case the JDK specified a ConnectPendingException which we should use. The same issues exists in the EPOLL transport. Beside this the EPOLL transport also does not throw the right exceptions for ENETUNREACH and EISCONN errno codes.
+
+Modifications:
+
+- Replace IllegalStateException with ConnectPendingException in NIO and EPOLL transport
+- throw correct exceptions for ENETUNREACH and EISCONN in EPOLL transport
+- Add test case
+
+Result:
+
+More correct error handling for connect attempts when using NIO and EPOLL transport

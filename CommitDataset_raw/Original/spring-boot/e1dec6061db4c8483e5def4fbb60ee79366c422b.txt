@@ -1,0 +1,7 @@
+Make MongoRepositoriesAutoConfiguration order more explicit
+
+It has to come after MongoDataAutoConfiguration (not
+MongoAutoConfiguration) because it looks for beans that are defined
+there (e.g. MongoMappingContext which is the one that scans for entities).
+
+Fixes gh-3577

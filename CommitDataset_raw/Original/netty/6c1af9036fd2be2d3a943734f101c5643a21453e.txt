@@ -1,0 +1,26 @@
+Simplify native library resolution using os-maven-plugin
+
+Motivation:
+
+So far, we used a very simple platform string such as linux64 and
+linux32.  However, this is far from perfection because it does not
+include anything about the CPU architecture.
+
+Also, the current build tries to put multiple versions of .so files into
+a single JAR.  This doesn't work very well when we have to ship for many
+different platforms.  Think about shipping .so/.dynlib files for both
+Linux and Mac OS X.
+
+Modification:
+
+- Use os-maven-plugin as an extension to determine the current OS and
+  CPU architecture reliable at build time
+- Use Maven classifier instead of trying to put all shared libraries
+  into a single JAR
+- NativeLibraryLoader does not guess the OS and bit mode anymore and it
+  always looks for the same location regardless of platform, because the
+  Maven classifier does the job instead.
+
+Result:
+
+Better scalable native library deployment and retrieval

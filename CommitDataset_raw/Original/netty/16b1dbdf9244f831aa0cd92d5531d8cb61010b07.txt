@@ -1,0 +1,41 @@
+Motivation: Resource Leak Detector (RLD) tries to helpfully indicate where an object was last accessed and report the accesses in the case the object was not cleaned up. It handles lightly used objects well, but drops all but the last few accesses.
+
+Configuring this is tough because there is split between highly shared (and accessed) objects and lightly accessed objects.
+
+Modification:
+There are a number of changes here.  In relative order of importance:
+
+API / Functionality changes:
+* Max records and max sample records are gone.  Only "target" records, the number of records tries to retain is exposed.
+* Records are sampled based on the number of already stored records.  The likelihood of recording a new sample is `2^(-n)`, where `n` is the number of currently stored elements.
+* Records are stored in a concurrent stack structure rather than a list.  This avoids a head and tail.  Since the stack is only read once, there is no need to maintain head and tail pointers
+* The properties of this imply that the very first and very last access are always recorded.  When deciding to sample, the top element is replaced rather than pushed.
+* Samples that happen between the first and last accesses now have a chance of being recorded.  Previously only the final few were kept.
+* Sampling is no longer deterministic.  Previously, a deterministic access pattern meant that you could conceivably always miss some access points.
+* Sampling has a linear ramp for low values and and exponentially backs off roughly equal to 2^n.  This means that for 1,000,000 accesses, about 20 will actually be kept.  I have an elegant proof for this which is too large to fit in this commit message.
+
+Code changes:
+* All locks are gone.  Because sampling rarely needs to do a write, there is almost 0 contention.  The dropped records counter is slightly contentious, but this could be removed or changed to a LongAdder.  This was not done because of memory concerns.
+* Stack trace exclusion is done outside of RLD.  Classes can opt to remove some of their methods.
+* Stack trace exclusion is faster, since it uses String.equals, often getting a pointer compare due to interning.  Previously it used contains()
+* Leak printing is outputted fairly differently.  I tried to preserve as much of the original formatting as possible, but some things didn't make sense to keep.
+
+Result:
+More useful leak reporting.
+
+Faster:
+```
+Before:
+Benchmark                                           (recordTimes)   Mode  Cnt       Score      Error  Units
+ResourceLeakDetectorRecordBenchmark.record                      8  thrpt   20  136293.404 ± 7669.454  ops/s
+ResourceLeakDetectorRecordBenchmark.record                     16  thrpt   20   72805.720 ± 3710.864  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint              8  thrpt   20  139131.215 ± 4882.751  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint             16  thrpt   20   74146.313 ± 4999.246  ops/s
+
+After:
+Benchmark                                           (recordTimes)   Mode  Cnt       Score      Error  Units
+ResourceLeakDetectorRecordBenchmark.record                      8  thrpt   20  155281.969 ± 5301.399  ops/s
+ResourceLeakDetectorRecordBenchmark.record                     16  thrpt   20   77866.239 ± 3821.054  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint              8  thrpt   20  153360.036 ± 8611.353  ops/s
+ResourceLeakDetectorRecordBenchmark.recordWithHint             16  thrpt   20   78670.804 ± 2399.149  ops/s
+```

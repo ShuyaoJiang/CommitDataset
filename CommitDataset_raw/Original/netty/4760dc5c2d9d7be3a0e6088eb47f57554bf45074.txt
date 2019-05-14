@@ -1,0 +1,15 @@
+Don't double release ByteBuf when parsing of the X509Certificate fails (#8457)
+
+Motivation:
+
+Due a bug in our implementation we tried to release the same ByteBuf two times when we failed to parse the X509Certificate as closing the ByteBufInputStream already closed it.
+
+Modifications:
+
+- Don't close the ByteBuf when closing the ByteBufInputStream
+- Explicit release all ByteBufs after we are done parsing in a finally block.
+- Add testcase.
+
+Result:
+
+Do not produce an IllegalReferenceCountException and throw the correct CertificateException.

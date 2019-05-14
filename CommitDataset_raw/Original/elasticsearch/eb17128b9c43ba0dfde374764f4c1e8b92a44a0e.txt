@@ -1,0 +1,20 @@
+[ML] Add Detector config classes to protocol library (#32495)
+
+This commit adds the Detector class and its dependencies to the
+X-Pack protocol library used by the high level REST client.
+
+(Future commits will add the remaining config classes, plus results
+and stats classes.)
+
+These classes:
+
+- Are immutable, with builders, but the builders do no validation
+  beyond null checks
+- Are convertible to and from X-Content, but NOT wire transportable
+- Have lenient parsers to maximize compatibility across versions
+- Have the same class names, member names and getter/setter names
+  as the corresponding classes in X-Pack core to ease migration
+  for transport client users
+- Don't reproduce all the methods that do calculations or
+  transformations that the the corresponding classes in X-Pack core
+  have

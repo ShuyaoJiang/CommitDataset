@@ -1,0 +1,12 @@
+Fill LocalCheckpointTracker with Lucene commit (#34474)
+
+Today we rely on the LocalCheckpointTracker to ensure no duplicate when
+enabling optimization using max_seq_no_of_updates. The problem is that
+the LocalCheckpointTracker is not fully reloaded when opening an engine
+with an out-of-order index commit. Suppose the starting commit has seq#0
+and seq#2, then the current LocalCheckpointTracker would return "false"
+when asking if seq#2 was processed before although seq#2 in the commit.
+
+This change scans the existing sequence numbers in the starting commit,
+then marks these as completed in the LocalCheckpointTracker to ensure
+the consistent state between LocalCheckpointTracker and Lucene commit.

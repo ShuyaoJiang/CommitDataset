@@ -1,0 +1,15 @@
+Do not execute ResourceUrlEncodingFilter only once per request
+
+In case the filter is also registered to the ERROR dispatcher, the
+following happens:
+* the filter is executed once for the regular execution
+* the filter should be executed a second time when dispatched to error
+
+Since the filter is a `OncePerRequestFilter`, the filter is only
+executed once and won't be executed when handling the error.
+
+This can lead to situations like spring-projects/spring-boot#7348
+
+This commit makes this filter a simple `GenericFilterBean`.
+
+Issue: SPR-14891

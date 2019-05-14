@@ -1,0 +1,15 @@
+Support path segment URI var expansion in UrlTag
+
+Before this change UrlTag expanded URI vars and encoded them using
+UriUtils.encodePath.
+
+This change makes it possible to expand using
+UriUtils.encodePathSegment, which means a "/" is encoded as "%2F".
+
+To expand with path segment semantics, prefix the URI var name "/":
+
+<spring:url value="/url/path/{/var}">
+    <spring:param name="var" value="my/Id" />
+</spring:url>
+
+Issue: SPR-11401

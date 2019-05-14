@@ -1,0 +1,15 @@
+Do not use a pseudo random for tree traversal
+
+Motivation:
+
+If we make allocateRun/SubpageSimple() always try the left node first and make allocateRun/Subpage() always tries the right node first,  it is more likely that allocateRun/Subpage() will find a node with ST_UNUSED sooner.
+
+Modifications:
+
+- Make allocateRunSimple() and allocateSubpageSimple() always try the left node first.
+- Make allocateRun() and allocateSubpage() always try the right node first.
+- Remove randome
+
+Result:
+
+We get the same performance without using random numbers.

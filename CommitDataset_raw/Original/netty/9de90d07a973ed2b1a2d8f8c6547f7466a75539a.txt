@@ -1,0 +1,10 @@
+DefaultHttp2RemoteFlowController reentry infinite loop
+
+Motivation:
+DefaultHttp2RemoteFlowController.writePendingBytes does not support reentry but does not enforce this constraint. Reentry is possible if the channel transitions from Writable -> Not Writable -> Writable during the distribution phase. This can happen if the user flushes when notified of the channel transitioning to the not writable state, and may be done if the user wants to fill the channel outbound buffer before flushing.
+
+Modifications:
+- DefaultHttp2RemoteFlowController.writePendingBytes should protect against reentry
+
+Result:
+DefaultHttp2RemoteFlowController will not allocate unexpected amounts or enter an infinite loop.

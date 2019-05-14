@@ -1,0 +1,9 @@
+Allow treating empty @RequestParam as missing value
+
+If type conversion turns an empty request parameter value (i.e. "") to
+null, we should treat it as a missing value. By default the
+ConversionService doesn't change empty strings and therefore one must
+explicitly convert them to null for example by registering a
+StringTrimmerEditor with emptyAsNull=true.
+
+Issue: SPR-10402

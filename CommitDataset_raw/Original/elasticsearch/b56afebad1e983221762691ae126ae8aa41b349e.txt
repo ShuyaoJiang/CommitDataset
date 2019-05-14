@@ -1,0 +1,12 @@
+Fix creating keystore when upgrading (#29121)
+
+When upgrading via the RPM package, we can run into a problem where
+the keystore fails to be created. This arises because the %post script
+on RPM runs after the new package files are installed but before the
+removal of the old package files. This means that the contents of the
+lib folder can contain files from the old package and the new package
+and thus running the create keystore tool can encounter JAR hell
+issues and fail. To solve this, we move creating the keystore to the
+%posttrans script which runs after the old package files are
+removed. We only need to do this on the RPM package, so we add a
+switch in the shared post-install script.

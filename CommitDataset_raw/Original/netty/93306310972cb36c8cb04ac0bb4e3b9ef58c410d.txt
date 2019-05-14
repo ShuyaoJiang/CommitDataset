@@ -1,0 +1,13 @@
+Ensure all pending SSL data is written before closing channel during handshake error.
+
+Motivation:
+
+We need to ensure we call ctx.flush() before closing the actual channel when an handshake failure took place. If we miss to do so we may not send all pending data to the remote peer which also include SSL alerts.
+
+Modifications:
+
+Ensure we call ctx.flush() before ctx.close() on a handshake error.
+
+Result:
+
+All pending data (including SSL alerts) are written to the remote peer on a handshake error.

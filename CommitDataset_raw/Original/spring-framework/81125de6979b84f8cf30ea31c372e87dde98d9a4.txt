@@ -1,0 +1,8 @@
+Fix error responses handling in WebClient
+
+This commit fixes a typo in the `DefaultWebClient` implementation.
+Instead of forwarding resolved `WebClientException` instances as error
+signals, the `bodyToMono(ParameterizedTypeReference)` variant would just
+forward those exceptions as `onNext` signals.
+
+Issue: SPR-15946

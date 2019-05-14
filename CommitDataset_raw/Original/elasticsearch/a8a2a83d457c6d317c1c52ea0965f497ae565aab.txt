@@ -1,0 +1,14 @@
+SQL: Fix grammar for `*` in arithm expressions (#34176)
+
+Previously, parsing an arithmetic expression with `*` and no spaces,
+e.g.: `2*i` threw a parsing exception as the grammar rule for
+tableIdentifier was clashing with the rule for arithmetic operator `*`.
+
+This issue comes already in the lexer and the left part of the
+expression (in our example `2*`) was recognised as a
+TABLE_IDENTIFIER token.
+
+The solution adopted is to allow the `*` wildcard in the table name
+only if it's surrounded with double quotes, e.g.: `"my*index"`
+
+Closes: #33957

@@ -1,0 +1,10 @@
+Use Set (again) for enumerating MvcEndpoints
+
+This reverts a change that I assume was orphaned from work in
+progress to address #1353, but is no longer needed. Anyway
+there is no reason to restrict MvcEndpoints to be unique by
+path since they can declare their own @RequestMappings
+(and if there are duplicates they will be detected when those
+are scanned).
+
+Fixes gh-1911

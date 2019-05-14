@@ -1,0 +1,38 @@
+Don't close the connection whenever Expect: 100-continue is missing.
+
+Motivation:
+
+The 4.1.0-Beta3 implementation of HttpObjectAggregator.handleOversizedMessage closes the
+connection if the client sent oversized chunked data with no Expect:
+100-continue header. This causes a broken pipe or "connection reset by
+peer" error in some clients (tested on Firefox 31 OS X 10.9.5,
+async-http-client 1.8.14).
+
+This part of the HTTP 1.1 spec (below) seems to say that in this scenario the connection
+should not be closed (unless the intention is to be very strict about
+how data should be sent).
+
+http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html
+
+"If an origin server receives a request that does not include an
+Expect request-header field with the "100-continue" expectation,
+the request includes a request body, and the server responds
+with a final status code before reading the entire request body
+from the transport connection, then the server SHOULD NOT close
+the transport connection until it has read the entire request,
+or until the client closes the connection. Otherwise, the client
+might not reliably receive the response message. However, this
+requirement is not be construed as preventing a server from
+defending itself against denial-of-service attacks, or from
+badly broken client implementations."
+
+Modifications:
+
+Change HttpObjectAggregator.handleOversizedMessage to close the
+connection only if keep-alive is off and Expect: 100-continue is
+missing. Update test to reflect the change.
+
+Result:
+
+Broken pipe and connection reset errors on the client are avoided when
+oversized data is sent.

@@ -1,0 +1,9 @@
+Do not add noop from local translog to translog again (#29637)
+
+Today we always add no-ops to translog regardless of its origin, thus a
+noop may appear in the translog multiple times. This is not a big deal
+as noops are small and rare to appear.
+
+This commit ensures to add a noop to translog only if its origin is not
+from local translog. This restriction has been applied for index and
+delete.

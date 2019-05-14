@@ -1,0 +1,21 @@
+Create SimpleUserEventChannelHandler convenience class (#7991)
+
+Motivation:
+
+Currently, the vast majority of userEventTriggered() implementations
+require the user to supply the boilerplate behavior of performing an
+instanceof check, handling if appropriate, and calling
+fireUserEventTriggered() otherwise.
+
+We can simplify this very common use case by creating a class that only
+matches user events of a given type, similar to the existing
+SimpleChannelInboundHandler class.
+
+Modifications:
+
+Create a new SimpleUserEventChannelHandler class
+Create accompanying SimpleUserEventChannelHandlerTest class
+
+Result:
+
+Users will be able to handle most events in a less verbose manner.

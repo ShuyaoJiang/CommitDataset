@@ -1,0 +1,8 @@
+Attempt an alternate route when a connect times out.
+
+This changes the new allocations model to keep the same route unless it
+has been specifically found to have connectivity problems. Previously we
+attempted to null out the route selector when a route succeeded; with
+this we do the opposite by nulling out a route when it fails.
+
+Closes: https://github.com/square/okhttp/issues/1736

@@ -1,0 +1,13 @@
+Detach Transport from TransportService (#31727)
+
+Today TransportService is tightly coupled with Transport since it
+requires an instance of TransportService in order to receive responses
+and send requests. This is mainly due to the Request and Response handlers
+being maintained in TransportService but also because of the lack of a proper 
+callback interface.
+
+This change moves request handler registry and response handler registration into
+Transport and adds all necessary methods to `TransportConnectionListener` in order
+to remove the `TransportService` dependency from `Transport`
+Transport now accepts one or more `TransportConnectionListener` instances that are
+executed sequentially in a blocking fashion.

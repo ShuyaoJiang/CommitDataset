@@ -1,0 +1,35 @@
+Fix unknown licenses (#31223)
+
+The goal of this commit is to address unknown licenses when producing
+the dependencies info report. We have two different checks that we run
+on licenses. The first check is whether or not we have stashed a copy of
+the license text for a dependency in the repository. The second is to
+map every dependency to a license type (e.g., BSD 3-clause). The problem
+here is that the way we were handling licenses in the second check
+differs from how we handle licenses in the first check. The first check
+works by finding a license file with the name of the artifact followed
+by the text -LICENSE.txt. Yet in some cases we allow mapping an artifact
+name to another name used to check for the license (e.g., we map
+lucene-.* to lucene, and opensaml-.* to shibboleth. The second check
+understood the first way of looking for a license file but not the
+second way. So in this commit we teach the second check about the
+mappings from artifact names to license names. We do this by copying the
+configuration from the dependencyLicenses task to the dependenciesInfo
+task and then reusing the code from the first check in the second
+check. There were some other challenges here though. For example,
+dependenciesInfo was checking too many dependencies. For now, we should
+only be checking direct dependencies and leaving transitive dependencies
+from another org.elasticsearch artifact to that artifact (we want to do
+this differently in a follow-up). We also want to disable
+dependenciesInfo for projects that we do not publish, users only care
+about licenses they might be exposed to if they use our assembled
+products. With all of the changes in this commit we have eliminated all
+unknown licenses. A follow-up will enforce that when we add a new
+dependency it does not get mapped to unknown, these will be forbidden in
+the future. Therefore, with this change and earlier changes are left
+having no unknown licenses and two custom licenses; custom here means it
+does not map to an SPDX license type. Those two licenses are xz and
+ldapsdk. A future change will not allow additional custom licenses
+unless they are explicitly whitelisted. This ensures that if a new
+dependency is added it is mapped to an SPDX license or mapped to custom
+because it does not have an SPDX license.

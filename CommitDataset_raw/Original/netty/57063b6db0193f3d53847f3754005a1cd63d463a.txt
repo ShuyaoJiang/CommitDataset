@@ -1,0 +1,22 @@
+Implement the ByteBuf methods that should have been overridden
+
+Motivation:
+
+Some ByteBuf implementations do not override all necessary methods,
+which can lead to potentially sub-optimal behavior.
+
+Also, SlicedByteBuf does not perform the range check correctly due to
+missing overrides.
+
+Modifications:
+
+- Add missing overrides
+- Use unwrap() instead of direct member access in derived buffers for
+  consistency
+- Merge unwrap0() into unwrap() using covariant return type
+- Deprecate AbstractDerivedByteBuf and its subtypes, because they were
+  not meant to be public
+
+Result:
+
+Correctness

@@ -1,0 +1,8 @@
+Catch errors when adding SourceHttpMessageConverter
+
+This commit ignores errors like TransformerFactoryConfigurationError
+that can be thrown when instantiating SourceHttpMessageConverter on
+platforms where no TransformerFactory implementation is available,
+like when compiling/running as GraalVM native images.
+
+Issue: SPR-17007

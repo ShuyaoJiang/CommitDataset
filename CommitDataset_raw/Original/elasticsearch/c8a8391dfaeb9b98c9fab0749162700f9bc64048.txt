@@ -1,0 +1,13 @@
+Only compress responses if request was compressed (#36867)
+
+This is a follow-up to some discussions around #36399. Currently we have
+relatively confusing compression behavior where compression can be
+configured for requests based on transport.compress or a specific
+setting for a remote cluster. However, we can only compress responses
+based on transport.compress as we do not know where a request is
+coming from (currently).
+
+This commit modifies the behavior to NEVER compress responses based on
+settings. Instead, a response will only be compressed if the request was
+compressed. This commit also updates the documentation to more clearly
+described transport level compression.

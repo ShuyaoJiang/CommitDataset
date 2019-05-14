@@ -1,0 +1,14 @@
+Allow custom CacheResolver
+
+Previously, if a bean of type `CacheResolver` was present in the context
+the whole cache auto-configuration would back off. If said
+`CacheResolver` hasn't been defined via the `CachingConfigurer`
+infrastructure, the application context would fail with a rather
+unpleasant error message.
+
+It can be quite common to define custom `CacheResolver` beans as the cache
+annotations allow to defines custom cache resolvers per operation. This
+commit makes sure that the cache auto-configuration will back-off only if
+the `CacheResolver` is named `cacheResolver`.
+
+Closes gh-5201

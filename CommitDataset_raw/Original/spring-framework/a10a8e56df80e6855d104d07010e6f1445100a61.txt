@@ -1,0 +1,30 @@
+Support concurrent execution in TestContextManager & DefaultTestContext
+
+Prior to this commit, executing tests concurrently in the TestContext
+Framework (TCF) was unsupported and typically lead to unpredictable
+results.
+
+This commit addresses this core issue by supporting concurrent
+execution in the TestContextManager and the DefaultTestContext.
+
+Specifically, the TestContextManager now uses ThreadLocal storage for
+the current TestContext, thereby ensuring that any registered
+TestExecutionListeners and the TestContextManager itself operate on a
+TestContext specific to the current thread.
+
+In order to avoid repeatedly incurring the costs of the overhead of the
+TCF bootstrapping process, the original TestContext built by the
+TestContextBootstrapper is used as a template which is then passed to
+the copy constructor of the concrete implementation of the TestContext
+to create the context for the current thread. DefaultTestContext now
+implements such a copy constructor, and all concrete implementations of
+TestContext are encouraged to do the same.
+
+If the TestContext built by the TestContextBootstrapper does not
+provide a copy constructor, thread-safety and support for concurrency
+are left completely to the implementation of the concrete TestContext.
+
+Note, however, that this commit does not address any thread-safety or
+concurrency issues in the ContextLoader SPI or its implementations.
+
+Issue: SPR-5863

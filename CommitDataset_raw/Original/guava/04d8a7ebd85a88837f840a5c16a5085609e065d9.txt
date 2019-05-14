@@ -1,0 +1,9 @@
+Fix an interruption bug from CL 162649353, but do so in a way that doesn't reintroduce yet another bug that that CL fixed.
+
+Specifically, go back to setting the runner thread before checking isDone() (so that we can't end up with a task that was cancel(true)ed but runs without being interrupted).
+
+But also, if aborting because isDone(), spin until we've received the interrupt, just as we do during normal completion (so that we don't end up interrupting the thread after the task is done).
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=162941603

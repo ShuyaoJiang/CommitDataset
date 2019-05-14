@@ -1,0 +1,12 @@
+Added AbstractPackageSanityTests to apply automated sanity tests for an entire package.
+
+Yaks I needed to shave:
+- move a piece of reusable code from NullPointerTester into a new DummyProxy class.
+- Added a few new default values to ArbitraryInstances. (I'm thinking to change the default value of numbers to 1, in a separate CL)
+
+Added PackageSanityTests to common.reflect and common.testing, as dogfooding. Had to add some @Nullable and missing checkNotNull() as a result.
+
+Since APST is classpath sensitive, there are a lot of top-level class fixture files in the packagesanity package and each test case corresponds to a single java_test rule. That makes the CL more daunting than it actually is.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=33660554

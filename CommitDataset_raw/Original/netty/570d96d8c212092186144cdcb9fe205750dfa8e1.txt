@@ -1,0 +1,11 @@
+SslHandler leak
+
+Motivation:
+SslHandler only supports ByteBuf objects, but will not release objects of other types. SslHandler will also not release objects if its internal state is not correctly setup.
+
+Modifications:
+- Release non-ByteBuf objects in write
+- Release all objects if the SslHandler queue is not setup
+
+Result:
+Less leaks in SslHandler.

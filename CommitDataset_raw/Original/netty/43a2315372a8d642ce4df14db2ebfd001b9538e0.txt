@@ -1,0 +1,13 @@
+Skip SSLEngineTests that depend on KeyManagerFactory when this is not supported by the openssl version.
+
+Motivation:
+
+Some version of openssl dont support the needed APIs to use a KeyManagerFactory. In this case we should skip the tests.
+
+Modifications:
+
+- Use assumeTrue(...) to skip tests that need a KeyManagerFactory and its not supported.
+
+Result:
+
+Tests pass on all openssl versions we support.

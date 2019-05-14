@@ -1,0 +1,15 @@
+Another approach to handling strange interceptor bodies.
+
+The previous approach Just Works if users have fancy or interesting interceptors
+that genuinely need to swap the response body in an interceptor and keep the
+original body.
+
+One problem with that solution is that although it gives expert users a powerful
+way to separate response bodies, it also allows normal users to accidentally leak
+response bodies in their interceptors.
+
+This is an alternate solution that forbids the expert use case and requires that
+closing the response body stream also closes the underlying socket stream. It
+throws an exception if that implicit contract is not honored.
+
+I'm fine with either solution but think we should consider both.

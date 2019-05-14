@@ -1,0 +1,7 @@
+Adjust BWC version on settings upgrade test (#33650)
+
+The skip_unavailable setting did not exist until 6.1.0. This means that
+we need to skip this test on versions prior to 6.1.0. We need to use
+this setting because otherwise we will fail startup without it (since we
+are not setting up a real remote cluster connection). This commit adds a
+skip for all versions prior to 6.1.0.

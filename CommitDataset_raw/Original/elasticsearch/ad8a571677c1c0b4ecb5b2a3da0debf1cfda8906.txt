@@ -1,0 +1,6 @@
+Add read timeouts to http module (#27713)
+
+We currently do not have any server-side read timeouts implemented in
+elasticsearch. This commit adds a read timeout setting that defaults to
+30 seconds. If after 30 seconds a read has not occurred, the channel
+will be closed. A timeout of value of 0 will disable the timeout.

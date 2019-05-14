@@ -1,0 +1,11 @@
+Avoid property name collisions when serializing AuditEvent to JSON
+
+Previously, in case the data for the audit event contained an entry
+with the key "type", the member `type` from the AuditEvent would be
+overwritten when rendering to JSON due to the use of @JsonAnyGetter on
+the data property.
+
+This commit removes @JsonAnyGetter so that the data map is rendered as
+a separate property in the JSON.
+
+Closes gh-7990

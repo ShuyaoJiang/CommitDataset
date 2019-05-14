@@ -1,0 +1,9 @@
+TEST: Avoid deletion in FlushIT
+
+Due to the recent change in LUCENE-8263, a merge can be triggered if the
+deletion ration is higher than 33%. An in-progress merge can prevent a
+synced-flush from issuing.
+
+This commit avoids deletes by using different docIds.
+
+Closes #32436

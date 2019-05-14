@@ -1,0 +1,11 @@
+Revert "Improve suffix pattern check"
+
+This reverts commit 3474afb165b6efa1a15db87c088e0fe79353000f.
+
+Unfortunately this change is likely to cause issues for applications
+that use regular expressions in a URI variable. I think we will have
+to leave at: if there are any dots in the last segment of the
+request path, regardless of whether they're in a URI var or not,
+the suffix pattern match is off.
+
+Issue: SPR-11532

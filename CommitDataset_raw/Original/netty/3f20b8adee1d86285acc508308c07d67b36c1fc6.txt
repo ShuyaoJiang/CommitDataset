@@ -1,0 +1,10 @@
+Added optional pending timeouts counter parameter to HashedWheelTimer constructor and ensured that pending timeouts don't exceed provided max pending timeouts.
+
+Motivation:
+If the rate at which new timeouts are created is very high and the created timeouts are not cancelled, then the JVM can crash because of out of heap space. There should be a guard in the implementation to prevent this.
+
+Modifications:
+The constructor of HashedWheelTimer now takes an optional max pending timeouts parameter beyond which it will reject new timeouts by throwing RejectedExecutionException.
+
+Result:
+After this change, if the max pending timeouts parameter is passed as constructor argument to HashedWheelTimer, then it keeps a track of pending timeouts that aren't yet expired or cancelled. When a new timeout is being created, it checks for current pending timeouts and if it's equal to or greater than provided max pending timeouts, then it throws RejectedExecutionException.

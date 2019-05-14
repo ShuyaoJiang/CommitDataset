@@ -1,0 +1,14 @@
+Combine flushes in DnsNameResolver to allow usage of sendmmsg to reduce syscall costs (#8470)
+
+Motivation:
+
+Some of transports support gathering writes when using datagrams. For example this is the case for EpollDatagramChannel. We should minimize the calls to flush() to allow making efficient usage of sendmmsg in this case.
+
+Modifications:
+
+- minimize flush() operations when we query for multiple address types.
+- reduce GC by always directly schedule doResolveAll0(...) on the EventLoop.
+
+Result:
+
+Be able to use sendmmsg internally in the DnsNameResolver.

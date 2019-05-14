@@ -1,0 +1,13 @@
+Make Watcher validation message copy/pasteable
+
+Watcher validates `action.auto_create_index` upon startup. If a user
+specifies a pattern that does not contain watcher indices, it raises an
+error message to include a list of three indices. However, the indices
+are separated by a comma and a space which is not considered in parsing.
+
+With this commit we change the error message string so it does not
+contain the additional space thus making it more straightforward to copy
+it to the configuration file.
+
+Closes #33369
+Relates #33497

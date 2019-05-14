@@ -1,0 +1,13 @@
+ChannelConfig operations should wrap ClosedChannelException if Channel was closed before.
+
+Motivation:
+
+To be consistent with the JDK we should ensure our native methods throw a ClosedChannelException if the Channel was previously closed. This will then be wrapped in a ChannelException as usual. For all other errors we continue to just throw a ChannelException directly.
+
+Modifications:
+
+Ensure getsockopt and setsockopt will throw a ClosedChannelException if the channel was closed before, on other errors we throw a ChannelException as before diretly.
+
+Result:
+
+Consistent with the NIO Channel implementations.

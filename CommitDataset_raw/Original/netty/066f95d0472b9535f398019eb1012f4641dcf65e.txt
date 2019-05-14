@@ -1,0 +1,16 @@
+[#2573] UnpooledUnsafeDirectByteBuf.setBytes(int,ByteBuf,int,int) fails to use fast-path when src has array
+
+Motivation:
+
+UnpooledUnsafeDirectByteBuf.setBytes(int,ByteBuf,int,int) fails to use fast-path when src uses an array as backing storage. This is because the if else uses the wrong ByteBuf for its check.
+
+Modifications:
+
+- Use correct ByteBuf when check for array as backing storage
+- Also eliminate unecessary check in UnpooledDirectByteBuf which always fails anyway
+
+Result:
+
+Faster setBytes(...) when src ByteBuf is backed by an array.
+
+No more IndexOutOfBoundsException or data-corruption.

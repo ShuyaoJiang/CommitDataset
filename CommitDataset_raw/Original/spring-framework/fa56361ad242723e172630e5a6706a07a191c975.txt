@@ -1,0 +1,12 @@
+Add getAcceptLanguageAsLocales
+
+The use of Locale.LanguageRange for the Accept-Language header makes
+sense as it gives the most flexibility for a client to set a weighted
+list and for a server to do filtering via Locale#filter.
+
+This commit adds an additional convenience method that turns
+the LangugeRange list to a list of Locale's also filtering out a
+wildcard (i.e. "*"). A List<Locale> is the most basic way to access
+prefered languages and needed when filtering is not required.
+
+Issue: SPR-15024

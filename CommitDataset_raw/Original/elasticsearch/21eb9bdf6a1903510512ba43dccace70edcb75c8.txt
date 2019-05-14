@@ -1,0 +1,20 @@
+Use separate searchers for "search visibility" vs "move indexing buffer to disk (#26972)
+
+Today, when ES detects it's using too much heap vs the configured indexing
+buffer (default 10% of JVM heap) it opens a new searcher to force Lucene to move
+the bytes to disk, clear version map, etc.
+
+But this has the unexpected side effect of making newly indexed/deleted
+documents visible to future searches, which is not nice for users who are trying
+to prevent that, e.g. #3593.
+
+This is also an indirect spinoff from #26802 where we potentially pay a big
+price on rebuilding caches etc. when updates / realtime-get is used. We are
+refreshing the internal reader for realtime gets which causes for instance
+global ords to be rebuild. I think we can gain quite a bit if we'd use a reader
+that is only used for GETs and not for searches etc. that way we can also solve
+problems of searchers being refreshed unexpectedly aside of replica recovery /
+relocation.
+
+Closes #15768
+Closes #26912

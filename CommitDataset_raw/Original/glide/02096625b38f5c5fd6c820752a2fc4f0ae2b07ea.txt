@@ -1,0 +1,10 @@
+Add resources that are dereferenced but not released to the cache.
+
+Previously resources that were dereferenced but not released vanished
+into the ether. As a result you could load a Bitmap and then immediately
+after load the same Bitmap again and get a memory cache miss on the
+second load. This pattern is particularly common with the submit() APIs
+that load images on background threads where the Target is neither
+referenced by a view nor referenced directly.
+
+Fixes #2560

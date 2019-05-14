@@ -1,0 +1,11 @@
+Consistent ordering for @PropertySource locations
+
+Ensure that property source locations are processed in the same order
+regardless if the 'name' attribute is set or not.
+
+Prior to this commit multiple locations from a `@PropertySource` with
+a name were added to a `CompositePropertySource` in such a way that
+the first location would take precedence. This has now been reversed
+for consistence with unnamed `@PropertySource`s
+
+Issue: SPR-10820

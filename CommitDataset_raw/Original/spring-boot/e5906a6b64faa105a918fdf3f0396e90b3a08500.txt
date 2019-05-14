@@ -1,0 +1,33 @@
+Allow HttpMsgConverter to depend on ConvService without creating a cycle
+
+In an MVC web application, DelegatingWebMvcConfiguration provides the
+ConversionService while also consuming WebMvcConfigurerAdapters that,
+among other things, can configure HTTP message converters. Boot's
+WebMvcConfigurerAdapter, WebMvcAutoConfigurationAdapter, consumes
+the HttpMessageConverters bean and uses it to configure Spring MVC's
+HTTP message converters. This can create a bean dependency cycle if
+an HTTP message converter bean depends, directly or indirectly on
+the ConversionService. An example of the cycle is:
+
+┌─────┐
+|  jsonComponentConversionServiceCycle.ThingDeserializer defined in …
+↑     ↓
+|  org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration$EnableWebMvcConfiguration
+↑     ↓
+|  org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration$WebMvcAutoConfigurationAdapter
+↑     ↓
+|  org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfiguration
+↑     ↓
+|  mappingJackson2HttpMessageConverter defined in class path resource [org/springframework/boot/autoconfigure/web/JacksonHttpMessageConvertersConfiguration$MappingJackson2HttpMessageConverterConfiguration.class]
+↑     ↓
+|  jacksonObjectMapper defined in class path resource [org/springframework/boot/autoconfigure/jackson/JacksonAutoConfiguration$JacksonObjectMapperConfiguration.class]
+└─────┘
+
+This commit breaks the cycle by making WebMvcAutoConfigurationAdapter
+consume HttpMessageConverters lazily. This allows the adapter to be
+created without triggered instantiation of every HTTP message
+converter bean and all their dependencies. This allows it to be
+injected into DelegatingWebMvcConfiguration without triggering an
+attempt to retrieve the ConversionService.
+
+Closes gh-9409

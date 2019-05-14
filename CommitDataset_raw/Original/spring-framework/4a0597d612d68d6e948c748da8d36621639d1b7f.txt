@@ -1,0 +1,21 @@
+Replace WebClient.filter with Builder.filter
+
+This commit replaces the WebClient.filter method with
+WebClient.Builder.filter. The reason for this change is that filters
+added via WebClient.filter would be applied in the opposite order of
+their declaration, due to the compositional nature of the method,
+combined with the immutable nature of the WebClient.
+WebClient.Builder.filter does keep the order of the filters, as
+registered.
+
+Furthermore, this commit introduces a WebClient.mutate() method,
+returning a WebClient.Builder. This method allow to add/remove filters
+and other defaults from a given WebClient.
+
+Issue: SPR-15657
+
+Add WebClient.Builder.addFilter
+
+Add Consumer-based headers and cookies methods to builders.
+
+Add WebClient.mutate

@@ -1,0 +1,11 @@
+HTTP/2 UniformStreamByteDistributor negative window shouldn't write
+
+Motivation:
+If the stream window is negative UniformStreamByteDistributor may write data. This is prohibited by the RFC https://tools.ietf.org/html/rfc7540#section-6.9.2.
+
+Modifications:
+- UniformStreamByteDistributor should use StreamState.isWriteAllowed()
+
+Result:
+UniformStreamByteDistributor is more complaint with HTTP/2 RFC.
+Fixes https://github.com/netty/netty/issues/4545

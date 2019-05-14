@@ -1,0 +1,7 @@
+Core: Remove RequestBuilder from Action (#30966)
+
+This commit removes the RequestBuilder generic type from Action. It was
+needed to be used by the newRequest method, which in turn was used by
+client.prepareExecute. Both of these methods are now removed, along with
+the existing users of prepareExecute constructing the appropriate
+builder directly.

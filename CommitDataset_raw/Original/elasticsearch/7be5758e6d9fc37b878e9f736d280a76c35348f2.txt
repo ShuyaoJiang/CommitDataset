@@ -1,0 +1,5 @@
+SearchScrollRequest to implement ToXContentObject (#24906)
+
+SearchScrollRequest can be created from a request body, but it doesn't support the opposite, meaning printing out its content to an XContentBuilder. This is useful to the high level REST client and allows for better testing of what we parse.
+
+Moved parsing method from RestSearchScrollAction to SearchScrollRequest so that fromXContent and toXContent sit close to each other. Added unit tests to verify that body parameters override query_string parameters when both present (there is already a yaml test for this but unit test is even better)

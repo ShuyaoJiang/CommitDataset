@@ -1,0 +1,22 @@
+Introduce Maintenance Mode to ILM (#31164)
+
+This PR introduces a concept of a maintenance mode for the
+lifecycle service. During maintenance mode, no policies are
+executed.
+
+To be placed into maintenance mode, users must first issue a
+request to be placed in maintenance mode. Once the service
+is assured that no policies are in actions that are not to be
+interrupted (like ShrinkAction), the service will place itself
+in maintenance mode.
+
+APIs to-be introduced:
+
+- POST _xpack/index_lifecycle/maintenance/_request
+   - issues a request to be placed into maintenenance mode.
+     This is not immediate, since we must first verify that
+     it is safe to go from REQUESTED -> IN maintenance mode.
+- POST _xpack/index_lifecycle/maintenance/_stop
+   - issues a request to be taken out (this is immediate)
+- GET _xpack/index_lifecycle/maintenance
+   - get back the current mode our lifecycle management is in

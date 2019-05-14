@@ -1,0 +1,12 @@
+ Stabilise testStaleMasterNotHijackingMajority (#40253)
+
+This test inadvertently asserts that the election occurs after a master failure
+is clean. However, messy elections are a fact of life so we should not fail on
+a messy election.
+
+This change moves this test away from an `AbstractDisruptionTestCase` since it
+does not need the fault detector to be so enthusiastic, and weakens the
+assertions to merely say that we ignore states published by the old master
+without saying anything about the cleanliness of the election.
+
+Closes #36556

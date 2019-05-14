@@ -1,0 +1,21 @@
+Fix the possible reference leak in Recycler
+
+Motivation:
+
+Under very unlikely (however possible) circumstances, Recycler may leak
+references. This happens _only_ when the object was already recycled
+at least once (which means it's got written to the stack) and then
+taken out again, and never returned.
+
+The "never returned" part may be the fault of the user (forgotten
+`finally` clause) or the situation when Recycler drops the possibly
+youngest item itself.
+
+Modifications:
+
+Nullify the item taken from the stack.
+
+Result:
+
+Reference is cleaned up. If the object is lost, it will be a subject for
+GC. The rest of Stack / Recycler functionality remains unaffected.

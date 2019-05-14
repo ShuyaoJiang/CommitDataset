@@ -1,0 +1,8 @@
+Register ResyncTask.Status as a NamedWriteable (#36610)
+
+Today, ResyncTask.Status is not registered, but appears as a task status
+sometimes, leading to `Failed to deserialize response from handler` exceptions:
+
+    java.lang.IllegalArgumentException: Unknown NamedWriteable [org.elasticsearch.tasks.Task$Status][resync]
+
+This commit adds the missing registration.

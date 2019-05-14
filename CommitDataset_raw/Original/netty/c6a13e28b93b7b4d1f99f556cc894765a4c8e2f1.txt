@@ -1,0 +1,12 @@
+Improvement : constant pool now less concurrent
+
+Current constant pool holds all data within HashMap and all access to this HashMap is done via synchronized blocks. Thus CuncurrentHashMap will be here more efficient as it designed for higher throughput and will use less locks. Also valueOf method was not very efficient as it performed get operation 2 times.
+
+Modifications :
+
+HashMap -> PlatformDependent.newConcurrentHashMap().
+ValueOf is more efficient now, threadsafe and uses less locks. Downside is that final T tempConstant = newConstant(nextId(), name); could be called more than 1 time during high contention.
+
+Result :
+
+Less contention, cleaner code.

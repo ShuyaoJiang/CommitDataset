@@ -1,0 +1,16 @@
+ShallowEtagHeaderFilter use specified contentlength
+
+Prior to this commit, the ShallowEtagHeaderFilter did not use the
+content length given by the content generator to set the
+ByteArrayOutputStream's buffer size.
+This can lead to performance issues for large content since the buffer
+grows as the content is being written.
+
+This commit adds a new ByteArrayOutputStream variant called
+ResizableByteArrayOutputStream. This implementation has public methods
+for modifying the internal buffer size and does not synchronize on
+buffer access.
+This commit also make use of this new variant in
+ShallowEtagHeaderFilter.
+
+Issue: SPR-8271

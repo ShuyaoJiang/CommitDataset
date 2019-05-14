@@ -1,0 +1,15 @@
+Add an integration test to verify filter ordering
+
+We have some requirements for filter ordering:
+
+1. The character encoding filter must go first
+2. Spring Session’s filter should go early
+3. RequestContextFilter should go late so that it any request wrapping
+   performed by other filters is reflected in the request that’s set
+   in the RequestContextHolder
+4. Spring Security’s Filter must go after RequestContextFilter so that
+   any code called by Filters in Spring Security’s Filter chain can
+   retrieve the request from RequestContextHolder, for example
+   OAuth2ClientContextFilter.
+
+See gh-4331

@@ -1,0 +1,8 @@
+Add NoOps to Lucene for failed delete ops (#33217)
+
+Today we add a NoOp to Lucene and translog if we fail to process an
+indexing operation. However, we are only adding NoOps to translog for
+delete operations. In order to have a complete history in Lucene, we
+should add NoOps of failed delete operations to both Lucene and translog.
+
+Relates #29530

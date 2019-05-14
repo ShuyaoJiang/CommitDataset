@@ -1,0 +1,10 @@
+Move trimming unsafe commits from engine ctor to store (#29260)
+
+As follow up to #28245 , this PR removes the logic for selecting the 
+right start commit from the Engine constructor in favor of explicitly
+trimming them in the Store, before the engine is opened. This makes the
+constructor in engine follow standard Lucene semantics and use the last
+commit.
+
+Relates #28245
+Relates #29156

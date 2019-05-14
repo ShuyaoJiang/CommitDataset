@@ -1,0 +1,22 @@
+Generate -sources and -javadoc jars
+
+Each spring-* subproject now has sourcesJar and javadocJar tasks
+
+ - Ignore subproject overview.html files for now (not all have one)
+ - Ensure @author attribution occurs
+ - Javadoc 'header' is project description
+
+spring-asm is a special case
+
+ - source jar is created, but empty (to comply with entry rules for
+   Maven Central)
+
+ - add package-info.java explaining the nature of spring-asm
+   this is nice, because it shows up in the public API docs now.
+
+ - add SpringAsmInfo in the org.springframework.asm package as a
+   placeholder allowing the generation of javadocs (see link to bug)
+
+ - add explicit 'repackageAsm' Gradle task allowing for easy testing
+   and merging of jar containing bundlor manifest as well as jar
+   containing repackaged ASM classes.

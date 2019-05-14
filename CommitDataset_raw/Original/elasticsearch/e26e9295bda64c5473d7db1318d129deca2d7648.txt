@@ -1,0 +1,26 @@
+Rollup jobs should be cleaned up before indices are deleted (#38930)
+
+Rollup jobs should be stopped + deleted before the indices are removed.
+It's possible for an active rollup job to issue a bulk request, the test
+ends and the cleanup code deletes all indices.  The in-flight bulk
+request will then stall + error because the index no-longer exists...
+but this process might take longer than the StopRollup timeout.
+
+Which means the test fails, and often fails several other tests since
+the job is still active (e.g. other tests cannot create the same-named
+job, or fail to stop the job in their cleanup because it's still stalled).
+
+This tends to knock over several tests before the bulk finally times
+out and the job shuts down.
+
+Instead, we need to simply stop jobs first.  Inflight bulks will resolve
+quickly, and we can carry on with deleting indices after the jobs are
+confirmed inactive.
+
+stop-job.asciidoc tended to trigger this issue because it executed
+an async stop API and then exited, which setup the above situation. In
+can and did happen with other tests though.  As an extra precaution,
+the doc test was modified to substitute in wait_for_completion
+to help head off these issues too.
+
+

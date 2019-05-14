@@ -1,0 +1,21 @@
+Provide default ParameterNameDiscoverer for AACBF
+
+Prior to this change, AbstractAutowireCapableBeanFactory did not support
+a default ParameterNameDiscoverer.  This meant that attempting to use
+<constructor-arg name=".."> syntax would fail (with a fairly obscure
+exception) as that feature depends on a ParameterNameDiscoverer to
+introspect the constructor arguments.
+
+This lack of a default was originally intended to avoid a dependency on
+ASM, but now that (a) .asm is a built-in module and (b) .beans has a
+non-optional compile-time dependency on .asm, there is no reason not to
+provide this default.
+
+The net effect is that in a number of locations throughout the
+framework, namely in GenericApplicationContext and
+AbstractRefreshableApplicationContext, it is no longer necessary to
+explicitly call AACBF#setParameterNameDiscoverer. This also means that
+using a naked BeanFactory (likely for testing scenarios) is that much
+easier.
+
+Issue: SPR-8184

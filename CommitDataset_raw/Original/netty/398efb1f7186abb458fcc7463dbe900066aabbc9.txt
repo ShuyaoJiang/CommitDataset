@@ -1,0 +1,13 @@
+Ensure valid message sequence if channel is closed before receive headers.
+
+Motivation:
+
+When the channel is closed while we still decode the headers we currently not preserve correct message sequence. In this case we should generate an invalid message with a current cause.
+
+Modifications:
+
+Create an invalid message with a PrematureChannelClosureException as cause when the channel is closed while we decode the headers.
+
+Result:
+
+Correct message sequence preserved and correct DecoderResult if the channel is closed while decode headers.

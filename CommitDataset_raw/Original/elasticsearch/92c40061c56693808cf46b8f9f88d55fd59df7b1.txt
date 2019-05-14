@@ -1,0 +1,12 @@
+[ML] Skip index health checks for remote indices on datafeed node sel (elastic/x-pack-elasticsearch#3301)
+
+Upon selecting a node to run a datafeed we normally check that the
+data indices exists and their primaries are active. However, these
+checks cannot be applied for CCS to a remote cluster. This commit
+skips these checks for remote indices.
+
+This removes the last obstacle for running CCS datafeeds.
+
+Relates elastic/x-pack-elasticsearch#1071
+
+Original commit: elastic/x-pack-elasticsearch@092f44feeebffae3a54ebbf4581beb56f7e541a1

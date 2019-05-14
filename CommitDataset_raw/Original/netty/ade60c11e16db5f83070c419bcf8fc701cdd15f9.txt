@@ -1,0 +1,14 @@
+PlatformDependent0 should be able to better detect if unaligned access is supported on java9 and later. (#8255)
+
+Motivation:
+
+In Java8 and earlier we used reflection to detect if unaligned access is supported. This fails in Java9 and later as we would need to change the accessible level of the method.
+Lucky enough we can use Unsafe directly to read the content of the static field here.
+
+Modifications:
+
+Add special handling for detecting if unaligned access is supported on Java9 and later which does not fail due jigsaw.
+
+Result:
+
+Better and more correct detection on Java9 and later.

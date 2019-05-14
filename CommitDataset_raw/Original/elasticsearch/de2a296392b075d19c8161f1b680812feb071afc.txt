@@ -1,0 +1,9 @@
+Allow snapshotting replicated closed indices (#39644)
+
+This adds the capability to snapshot replicated closed indices.
+
+It also changes snapshot requests in v8.0.0 to automatically expand wildcards to closed indices and hence start snapshotting closed indices by default. For v7.1.0 and above, wildcards are by default only expanded to open indices, which can be changed by explicitly setting the expand_wildcards option either to all or closed.
+
+Note that indices are always restored as open indices, even if they have been snapshotted as closed replicated indices.
+
+Relates to #33888

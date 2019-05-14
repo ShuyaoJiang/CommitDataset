@@ -1,0 +1,8 @@
+Fix a major bug in our HPACK encoder.
+
+Running the HPACK regression suite shows that in some cases we may
+use the wrong dynamic index after the dynamic table has been resized.
+
+This fixes the problem and simplifies the implementation to avoid
+maps with Integer values, which were difficult to reason about and
+easy to get out-of-sync with the main table.

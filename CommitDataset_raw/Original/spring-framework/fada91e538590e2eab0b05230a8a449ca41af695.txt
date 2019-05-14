@@ -1,0 +1,13 @@
+Treat Kotlin nullable as non-required
+
+Where `isOptional` is used, also check for `isNullable` i.e.
+values are not considered required if they are Kotlin nullables:
+- spring-messaging: named value method arguments
+- spring-web: named value method arguments
+- spring-webmvc: request parts
+
+This means that Kotlin client code no longer has to explicity specify
+"required=false" for Kotlin nullables -- this information is inferred
+automatically by the framework.
+
+Issue: SPR-14165

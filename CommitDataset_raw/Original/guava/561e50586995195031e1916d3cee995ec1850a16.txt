@@ -1,0 +1,16 @@
+Make MapTestSuiteBuilder (also BiMapTestSuiteBuilder) work under GWT, and then use it there (as well as the non-GWT ImmutableSortedMapTest, where it should have been used already).
+
+This primarily involves making more derived suites (e.g., keySet(), values(), entrySet()) work under GWT.
+The GWT test suites are produced with code generation, so, in order to work under GWT, a derived suite must be recognized by GwtTestSuiteGenerator so that we know how to generate code for it.
+I've generalized the existing DerivedTestIteratorGenerator support to support any DerivedGenerator (each of which should have a one-arg constructor accepting its inner generator as an argument).
+
+Now that we run MapTestSuiteBuilder tests, we can remove the individual, manually generated "derived" test suites.
+
+The MapTestSuiteBuilder tests did encounter a couple problems:
+- I had to move NullsBeforeB from MultisetCollectionTest to Helpers so that it could be used more widely (for reasons that its Javadoc hopefully makes clear).  (This was a problem in the test, not the production code.)
+- I had to support null queries in the GWT ImmutableSortedMap.  (While I was there, I also prevented us from double-wrapping any submaps with unmodifiableSortedSet, since we know that the original map was already unmodifiable.  This is a tiny optimization.)  The null-query behavior was a "bug," albeit a very small one.
+
+TODO(cpovirk): get the SortedMap tests running under GWT
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=28784540

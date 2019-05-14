@@ -1,0 +1,10 @@
+2.x: operator tests unsubscribeOn, withLatestFrom, zip (partial)
+
++ fixed cancellation behavior of observeOn, subscribeOn and
+unsubscribeOn (when and what to call cancel on)
++ fixed infinite loop in ScheduledRunnable
++ fixed zip not quitting eagerly if one of the sources was shorter
++ added specific ZipIterable because zip-iterable tests expect it to be
+not prefetching any of the sources (the plain zip does prefetch)
++ made the fromIterable more resilient to Iterable/Iterator crashes and
+added null-value checks

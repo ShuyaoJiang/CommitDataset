@@ -1,0 +1,18 @@
+Watcher: Restore old WatcherStatsAction for BWC (elastic/x-pack-elasticsearch#2022)
+
+To achieve backwards compatibility the easiest way is
+to restore the old watcher stats, which are supposed to run
+on the master node only.
+
+The distributed watcher stats have been moved under the statsdist
+package and the action name has been changed as well.
+
+This way there is no need to have a serialization BWC layer,
+we can just call different actions.
+
+Note: With the current approach developers still need to change
+their java applications if they try to receive watcher stats,
+as by default we are now using the distributed stats in the
+watcher client.
+
+Original commit: elastic/x-pack-elasticsearch@49b3a4545222e57e7d6f237dd97dabeeee3894d0

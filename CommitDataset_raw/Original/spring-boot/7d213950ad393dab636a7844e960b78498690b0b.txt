@@ -1,0 +1,13 @@
+Never run data.sql scripts if spring.datasource.initialize is false
+
+Previously, the data scripts were always run in response to the
+publication of a DataSourceInitializedEvent, irrespective of
+spring.datasource.initialize. While the event won't be published by
+DataSourceInitializer if spring.datasource.initialize is false, it
+will be published if spring.jpa.hibernate.hbm2ddl.auto has been set.
+
+This commit updates DataSourceInitializer's handling of
+DataSourceInitializedEvent to only run the data scripts if
+spring.datasource.initialize is true.
+
+Fixes #1336

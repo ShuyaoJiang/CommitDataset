@@ -1,0 +1,30 @@
+Added an option to use websockets without masking
+
+Motivation:
+
+The requirement for the masking of frames and for checks of correct
+masking in the websocket specifiation have a large impact on performance.
+While it is mandatory for browsers to use masking there are other
+applications (like IPC protocols) that want to user websocket framing and proxy-traversing
+characteristics without the overhead of masking. The websocket standard
+also mentions that the requirement for mask verification on server side
+might be dropped in future.
+
+Modifications:
+
+Added an optional parameter allowMaskMismatch for the websocket decoder
+that allows a server to also accept unmasked frames (and clients to accept
+masked frames).
+Allowed to set this option through the websocket handshaker
+constructors as well as the websocket client and server handlers.
+The public API for existing components doesn't change, it will be
+forwarded to functions which implicetly set masking as required in the
+specification.
+For websocket clients an additional parameter is added that allows to
+disable the masking of frames that are sent by the client.
+
+Result:
+
+This update gives netty users the ability to create and use completely
+unmasked websocket connections in addition to the normal masked channels
+that the standard describes.

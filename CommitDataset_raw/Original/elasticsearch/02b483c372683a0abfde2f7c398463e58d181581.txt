@@ -1,0 +1,13 @@
+Logging improvements in CoordinatorTests (#33991)
+
+Today, we know that CoordinatorTests sometimes fail to stabilise due to an
+election collision. This change improves the logging that occurs when an
+election collision occurs so it will be easier to see if this is happening when
+analysing a test failure. We also wrap the call to
+masterService.submitStateUpdateTask() in a context that logs the node on which
+it runs.
+
+We also introduce the InitialJoinAccumulator instead of using a placeholder
+CandidateJoinAccumulator at startup, which reduces the cases to consider in
+CandidateJoinAccumulator.close() and tightens up the assertions we can make
+here.

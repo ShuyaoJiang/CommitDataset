@@ -1,0 +1,11 @@
+Add support for MIME-based message conversion
+
+The MessageConverter interface in spring-messaging is now explicitly
+designed to support conversion of the payload of a Message<?> to and
+from serialized form based on MIME type message header.
+By default, the MessageHeaders.CONTENT_HEADER header is used but a
+custom ContentTypeResolver can be configured to customize that.
+
+Currently available are Jackson 2, String, and byte array converters.
+A CompositeMessageConverter can be used to configure several
+message converters in various places such as a messaging template.

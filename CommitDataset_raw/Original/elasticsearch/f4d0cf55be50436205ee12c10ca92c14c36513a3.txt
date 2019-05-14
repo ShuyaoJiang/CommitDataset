@@ -1,0 +1,8 @@
+Update packaging tests to work with meta plugins (#28336)
+
+The current install_plugin() does not play well with meta plugins because 
+it always checks for the plugin's descriptor file.
+
+This commit changes the install_plugin() so that it only runs the install plugin 
+command and lets the caller verify that the required files are correctly installed. 
+It also adds a install_meta_plugin() function to install meta plugins.

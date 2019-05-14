@@ -1,0 +1,26 @@
+Fixes, standardizations, and noise reduction in Futures tests.
+
+- Run more tests under GWT (and fix some @GwtIncompatible reason documentation). This required no actual changes to the tests except...
+- Make testSuccessfulAsList_resultCancelledRacingInputDone look at the correct logger now that we've moved most listener execution to AbstractFuture.
+- Retrieve that logger with getLogger() rather than from the class under test's `log` field.
+- Use TestLogHandler instead of our custom throwing handler.
+- Move RuntimeExceptionThrowingFuture out of FutureCallbackTest, and use it in FuturesTest instead of our hacked up solutions that happen to work today.
+- Test both overloads of get() for some immediate*Future() implementations.
+- Go crazy with static imports, even by my standards.
+- Rename expected exceptions to "expected," and remove comments about their expectedness.
+- Remove descriptions from fail() calls.
+- Remove a redundant immediateFuture() test.
+- Use Truth in a few places.
+- Use getDone() for various reasons:
+  - It will let tests work under GWT if I remove get() there.
+  - It sometimes saves us an isDone() assertion.
+  - It prevents some tests from hanging in the case of a bug.
+  - It doesn't declare `throws InterruptedException`, so in theory, we might be able to remove some `throws` clauses. (But I haven't done so.)
+- Add a getDoneFromTimeoutOverload() with a custom GWT implementation to prepare for losing timed get() there.
+
+Left for later CLs:
+- reformatting everything
+- splitting FuturesTest into separate classes
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=116759522

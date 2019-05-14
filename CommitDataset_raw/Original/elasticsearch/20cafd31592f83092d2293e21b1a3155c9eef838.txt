@@ -1,0 +1,11 @@
+Build: Switch integ-test-zip to OSS-only (#31866)
+
+We mistakenly enabled bundling of the default distribution's bin scripts
+into the `integ-test-zip` artifact used by plugin authors to test plugins.
+These didn't change the version of Elasticsearch used for testing but as
+a side effect changed the LICENSE.txt from the Apache 2 license to the
+Elastic license. We really didn't mean for that to happen. The bin script
+and the elasticsearch-sql-cli jar file bundled into the distribution are
+indeed governed by the Elastic license but we didn't intend for them to be
+in the testing artifact in the first place. This removes them and fixes
+the license of the `integ-test-zip` artifact.

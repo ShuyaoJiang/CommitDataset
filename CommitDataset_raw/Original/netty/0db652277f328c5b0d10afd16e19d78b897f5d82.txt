@@ -1,0 +1,18 @@
+DefaultHttp2Headers#contains(CharSequence, CharSequence) does not work with String
+
+Motivation:
+
+If you test a header value providing a String, contains() returns false.
+This is due to the implementation inherited from DefaultHeaders using
+the JAVA_HASHER.
+
+JAVA_HASHER.equals returns false because a is a String and b an
+AsciiString.
+
+Modifications:
+
+DefaultHttp2Headers overrides contains and uses CASE_SENSITIVE_HASHER.
+
+Result:
+
+You can test a header value with any CharSequence implementation.

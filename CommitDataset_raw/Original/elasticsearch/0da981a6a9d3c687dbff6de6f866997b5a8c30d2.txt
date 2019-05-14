@@ -1,0 +1,15 @@
+[TEST] Add some ACL yaml tests for Rollup (#33035)
+
+These two tests compliment the existing unit tests which check Rollup's
+ACL/security integration.
+
+The first test creates to indices, puts a document in each one, and then
+assigns a role to the test user that can only access one of the indices.
+A rollup job is created with a pattern that would match both indices,
+and we verify that only the allowed document was rolled up (e.g. verifying
+that the unpermissioned index stays hidden).
+
+The second test creates a single index with two documents tagged by
+the keyword "public"/"private".  An attribute-based role is created
+that only allows viewing "public" documents.  We then verify the rollup
+job only rolled the "public" doc, and not the "private" one.

@@ -1,0 +1,12 @@
+SQL: Improve CircuitBreaker logic for SqlParser (#35300)
+
+Grammar's identifiers can be completely skipped from counting depths
+as they just add another level to the tree and they are always children
+of some other expression which gets counted.
+
+Increased maximum depth from 100 to 200. After testing on production
+configuration with -Xss1m, depths of at least 250 can be used, so being
+conservative we put the limit lower.
+
+Fixes: #35299
+

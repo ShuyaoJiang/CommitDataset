@@ -1,0 +1,9 @@
+testHlrcFromXContent() should respect assertToXContentEquivalence() (#38232)
+
+Tests can override assertToXContentEquivalence() in case their xcontent
+cannot be directly compared (e.g. due to insertion order in maps
+affecting the xcontent ordering).  But the `testHlrcFromXContent` test
+hardcoded the equivalence test to `true` instead of consulting
+`assertToXContentEquivalence()`
+
+Fixes #36034

@@ -1,0 +1,12 @@
+Make NativeLibraryLoader check java.library.path first
+Motivation:
+
+On restricted systems (e.g. grsecurity), it might not be possible to write a .so on disk and load it afterwards. On those system Netty should check java.library.path for libraries to load.
+
+Modifications:
+
+Changed NativeLibraryLoader.java to first try to load libs from java.library.path before exporting the .so to disk.
+
+Result:
+
+Libraries load fine on restricted systems.

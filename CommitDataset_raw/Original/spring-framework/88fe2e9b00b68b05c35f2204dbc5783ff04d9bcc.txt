@@ -1,0 +1,18 @@
+Convert TestContext to interface & default impl
+
+Since the Spring TestContext Framework was introduced in Spring
+Framework 2.5, the TestContext class has always been a public class
+with package private constructors. The visibility of TestContext's
+constructor and methods was intentionally limited in order to hide the
+implementation details of the context cache, etc. However, this fact
+has made it difficult (if not impossible) to unit test custom
+TestExecutionListener implementations.
+
+This commit addresses this issue by converting TestContext into a
+public interface with a package private DefaultTestContext
+implementation. This enables unit testing of any components that depend
+on a TestContext (e.g., TestExecutionListeners) while at the same time
+preserving the encapsulation of the inner workings of the TestContext
+implementation with regard to context loading and caching.
+
+Issue: SPR-7692

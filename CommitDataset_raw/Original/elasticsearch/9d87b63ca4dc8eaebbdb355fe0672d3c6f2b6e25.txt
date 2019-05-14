@@ -1,0 +1,14 @@
+Build: Fix third party audit task for xpack core (elastic/x-pack-elasticsearch#3656)
+
+This commit re-enables thirdPartyAudit for x-pack core. Previously, when
+xpack was a single plugin, it transitively picked up httpcore-nio
+through the elasticsearch rest client. Now that xpack core does not
+depend on the rest client, httpcore-nio must be added as a dependency.
+Additionally, commons-logging was previously handled through the rest
+client, but now xpack depends directly on this, thus excludes must be
+added for the pesky missing classes there.
+
+This commit also cleans up unnecessary parts of plugin/build.gradle no
+longer necessary.
+
+Original commit: elastic/x-pack-elasticsearch@70e936bdc3b14026729c725ac1b9478a0b81017e

@@ -1,0 +1,13 @@
+Do not fail on runtime when an older version of Log4J2 is on the classpath. (#8240)
+
+Motivation:
+
+At the moment we will just assume the correct version of log4j2 is used when we find it on the classpath. This may lead to an AbstractMethodError at runtime. We should not use log4j2 if the version is not correct.
+
+Modifications:
+
+Check on class loading if we can use Log4J2 or not.
+
+Result:
+
+Fixes #8217.

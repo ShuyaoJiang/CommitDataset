@@ -1,0 +1,13 @@
+Correct throw ClosedChannelException when attempt to call shutdown*(...) on closed EpollSocketChannel.
+
+Motivition:
+
+NIO throws ClosedChannelException when a user tries to call shutdown*() on a closed Channel. We should do the same for the EPOLL transport
+
+Modification:
+
+Throw ClosedChannelException when a user tries to call shutdown*() on a closed channel.
+
+Result:
+
+Consistent behavior.

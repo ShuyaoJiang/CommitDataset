@@ -1,0 +1,11 @@
+HTTP/2 GOAWAY Reference Count Issue
+
+Motiviation:
+The Http2ConnectionHandler is incrementing the reference count in the goAway method for the debugData buffer after it has already been sent and maybe consumed. This may result in an IllegalRefCountException to be thrown. The unit tests also encounter buffer leaks because they have not been updated to invoke the listener which releases the buffer in the goAway method.
+
+Modifications:
+- The retain() call should be before the frameWriter().writeGoAway(...) call
+- The unit tests which call goAway must also invoke the operationComplete(..) method for the listener.
+
+Result:
+No IllegalRefCountException. Less buffer leaks in tests.

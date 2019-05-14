@@ -1,0 +1,13 @@
+Introduce index store plugins (#32375)
+
+Today we allow plugins to add index store implementations yet we are not
+doing this in our new way of managing plugins as pull versus push. That
+is, today we still allow plugins to push index store providers via an on
+index module call where they can turn around and add an index
+store. Aside from being inconsistent with how we manage plugins today
+where we would look to pull such implementations from plugins at node
+creation time, it also means that we do not know at a top-level (for
+example, in the indices service) which index stores are available. This
+commit addresses this by adding a dedicated plugin type for index store
+plugins, removing the index module hook for adding index stores, and by
+aggregating these into the top-level of the indices service.

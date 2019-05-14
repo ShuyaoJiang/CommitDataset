@@ -1,0 +1,19 @@
+Add BufferingStompDecoder
+
+Before this change the StompDecoder decoded and returned only the first
+Message in the ByteBuffer passed to it. So to obtain all messages from
+the buffer, one had to loop passing the same buffer in until no more
+complete STOMP frames could be decoded.
+
+This chage modifies StompDecoder to return List<Message> after
+exhaustively decoding all available STOMP frames from the input buffer.
+Also an overloaded decode method allows passing in Map that will be
+populated with any headers successfully parsed, which is useful for
+"peeking" at the "content-length" header.
+
+This change also adds a BufferingStompDecoder sub-class which buffers
+any content left in the input buffer after parsing one or more STOMP
+frames. This sub-class can also deal with fragmented messages,
+re-assembling them and parsing as a whole message.
+
+Issue: SPR-11527

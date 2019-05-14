@@ -1,0 +1,9 @@
+Disable dynamic mapping in testSimpleGetFieldMappingsWithDefaults (#38045)
+
+Since #31140 we no longer require acking on the dynamic mapping of index
+requests. Thus, a returned mapping from a get mapping request does not
+necessarily contain the dynamic updates from the index request. This
+commit replaces the dynamic mapping update with a manual put mapping.
+
+Relates #31140
+Closes #37928

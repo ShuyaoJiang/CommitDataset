@@ -1,0 +1,15 @@
+Flatten the Graph->Network hierarchy. In other words, it's no longer true that a Network IS A Graph. Instead, provide an asGraph() method that allows for viewing a Network as a Graph. Also, update a lot of code that should have been using Graph (instead of Network) to use Graph.
+
+The motivating reasons for this are:
+
+1) Graphs, by definition, do not support parallel edges. So to have Network be a Graph and break that is a little odd. Instead, we can delegate this to asGraph(), stating that the graph will have an edge between node A and B if the Network has an edge between A and B.
+
+2) Equality/hashcode semantics. It was rather unfortunate to require Graph to have explicit knowledge of its subinterfaces, so that they could have their own definition of equality that's incompatible with Graph. With this change, Graph has only one definition of equals/hashcode (like basically every other Java data structure) and subinterfaces (e.g. the upcoming ValueGraph) are expected to follow that.
+
+3) We're going to add an edges() method to Graph, but Graphs will have a slightly different concept of edges than Networks. In a Graph the edges ARE the endpoints, while in a Network the edges HAVE endpoints (and ARE the user-provided objects).
+
+Note that there are a LOT of places where we refer to networks as "graph" in the code. This CL does not make an attempt to change those. It's uncertain whether we want to change those to "network" or continue to use "graph" as a generic term, but that can be handled in a separate CL if necessary.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=129020913

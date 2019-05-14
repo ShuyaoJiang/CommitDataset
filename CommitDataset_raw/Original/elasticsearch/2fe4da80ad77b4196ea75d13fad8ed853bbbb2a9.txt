@@ -1,0 +1,12 @@
+SQL: add filter support in REST action (elastic/x-pack-elasticsearch#3045)
+
+Adds the option to specify an elasticsearch filter in addition to the SQL query by introducing a filter parameter in the REST query which would create a boolean filter if the SQL query generates an elasticsearch query or a constant score query if SQL if the SQL query doesn't generates an elasticsearch query. Usage:
+
+{
+   "query": "SELECT * FROM index",
+   "filter" : {  "term" : { "tag" : "tech" } }
+}
+
+relates elastic/x-pack-elasticsearch#2895
+
+Original commit: elastic/x-pack-elasticsearch@9a73813c7f49041aab16ed0e0ded7246ae15ad5f

@@ -1,0 +1,7 @@
+Add settings assertion in internal index reindexer
+
+When performing an internal reindex, we add a setting marking the source
+as read-only. We also check that this index is not already
+read-only. This means that when we add the read-only setting, we expect
+that it is already not there. This commit adds an assertion before we
+increment the settings version validating that this is indeed the case.

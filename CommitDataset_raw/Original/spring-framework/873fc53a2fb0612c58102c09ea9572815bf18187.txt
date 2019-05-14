@@ -1,0 +1,23 @@
+Introduce support for JUnit 5 in the TestContext framework
+
+This commit introduces initial support for JUnit Jupiter (i.e., the new
+programming and extension models in JUnit 5) in the Spring TestContext
+Framework.
+
+Specifically, this commit introduces the following.
+
+- SpringExtension: an implementation of multiple extension APIs from
+  JUnit Jupiter that provides full support for the existing feature set
+  of the Spring TestContext Framework. This support is enabled via
+  @ExtendWith(SpringExtension.class).
+
+- @SpringJUnitConfig: a composed annotation that combines
+  @ExtendWith(SpringExtension.class) from JUnit Jupiter with
+  @ContextConfiguration from the Spring TestContext Framework.
+
+- @SpringJUnitWebConfig: a composed annotation that combines
+  @ExtendWith(SpringExtension.class) from JUnit Jupiter with
+  @ContextConfiguration and @WebAppConfiguration from the Spring
+  TestContext Framework.
+
+Issue: SPR-13575

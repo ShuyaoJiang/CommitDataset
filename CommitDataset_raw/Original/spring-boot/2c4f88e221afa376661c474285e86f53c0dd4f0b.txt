@@ -1,0 +1,12 @@
+Fix Hazelcast auto-configuration ordering
+
+Make sure that the general Hazelcast auto-configuration is processed
+before the cache auto-configuration. This was supposed to be fixed and
+tested in 721b5a2 but unfortunately the `@AutoConfigureAfter` annotation
+was placed on a regular `@Configuration` class (which has no effect).
+
+The tests were passing because the ordering is actually hardcoded in the
+test. The relevant tests now use `ImportAutoConfiguration` that simulates
+the same order as the one use by the actual application.
+
+Closes gh-4389

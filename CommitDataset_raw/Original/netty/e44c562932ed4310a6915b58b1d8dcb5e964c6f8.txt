@@ -1,0 +1,25 @@
+Mark initialization of unsafe as privileged
+
+Motiviation:
+
+Preparing platform dependent code for using unsafe requires executing
+privileged code. The privileged code for initializing unsafe is executed
+in a manner that would require all code leading up to the initialization
+to have the requisite permissions. Yet, in a restrictive environment
+(e.g., under a security policy that only grants the requisite
+permissions the Netty common jar but not to application code triggering
+the Netty initialization), then initializing unsafe will not succeed
+even if the security policy would otherwise permit it.
+
+Modifications:
+
+This commit marks the necessary blocks as privileged. This enables
+access to the necessary resources for initialization unsafe. The idea is
+that we are saying the Netty code is trusted, and as long as the Netty
+code has been granted the necessary permissions, then we will allow the
+caller access to these resources even though the caller itself might not
+have the requisite permissions.
+
+Result:
+
+Unsafe can be initialized in a restrictive security environment.

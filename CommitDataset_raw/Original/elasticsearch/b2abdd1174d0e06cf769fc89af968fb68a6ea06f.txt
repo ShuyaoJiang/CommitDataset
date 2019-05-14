@@ -1,0 +1,12 @@
+Add a second refresh to concurrent relocation test
+
+This commit adds a second refresh to the concurrent relocation
+test. This is necessary as the first refresh might have brought back a
+local checkpoint for a shard that a newly relocated primary became aware
+of but did not yet receive a local checkpoint for that shard. When that
+local checkpoint arrives on the new primary, the global checkpoint could
+advance again and so we need a second replication action to push that
+global checkpoint back out to the replica. This is indeed a hack, and it
+will eventually be removed.
+
+Closes #24599

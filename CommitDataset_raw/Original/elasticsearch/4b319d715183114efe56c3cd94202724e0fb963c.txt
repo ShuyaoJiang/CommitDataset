@@ -1,0 +1,7 @@
+SAML: Process only signed data (#30420)
+
+As conformance to best practices, this changes ensures that if a
+SAML Response is signed, we verify the signature before processing
+it any further. We were only checking the InResponseTo and
+Destination attributes before potential signature validation but
+there was no reason to do that up front either.

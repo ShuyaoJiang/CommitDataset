@@ -1,0 +1,6 @@
+Don't mark shard as refreshPending on stats fetching (#40458)
+
+Completion and DocStats are pulled from internal readers
+instead of external since #33835 and #33847 which doesn't require
+us to refresh after a stats call since refreshes will happen internally
+anyhow and that will cause updated stats on ongoing indexing.

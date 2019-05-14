@@ -1,0 +1,11 @@
+Cleanup HazelcastInstance in test
+
+If a JCache provider is started with hazelcast and the default settings,
+the underlying `HazelcastInstance` is disposed at the end of the
+process, not when the `CacheManager` is closed.
+
+This commit fixes the only test that use such setup.
+
+See also https://github.com/hazelcast/hazelcast/issues/7606
+
+Closes gh-5209

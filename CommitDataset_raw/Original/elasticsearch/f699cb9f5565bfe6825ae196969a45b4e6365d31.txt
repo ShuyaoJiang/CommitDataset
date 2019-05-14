@@ -1,0 +1,7 @@
+Bypass highlight query terms extraction on empty fields (#32090)
+
+Dealing with empty fields in the highlight phase can
+slow down the query because the query terms extraction is done independently
+on each field. This change shortcuts the highlighting performed by the unified highlighter
+for fields that are not present in the document. In such cases there is nothing to higlight so
+we don't need to visit the query to build the highligh builder.

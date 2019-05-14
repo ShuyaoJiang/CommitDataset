@@ -1,0 +1,82 @@
+Fix JSR305 links yet again.
+
+I broke them when I added links to the Checker Framework, which began to claim javax.annotations, just as the JDK had previously done.
+
+I had hoped that the fix was as simple as moving the Checker Framework to the -linkoffline section so that it could come after JSR305, but that didn't work: Maven tries to prevalidate the package-list file, and somehow it fails to connect to checkerframework.org.
+
+We saw problems with pre-validation before with JSR305 in []But I diagnosed it wrong there: I thought that Maven was trying to fetch the Javadoc root URL -- e.g., https://checkerframework.org/api/. But I was wrong: I was confusing the `link` and `linkUri` variables in the maven-javadoc-plugin source. In fact, Maven tries to fetch the package-list file, as you'd expect. But for some reason, this fails for javadoc.io and for checkerframework.org, even though it succeeds for docs.oracle.com. But it doesn't appear to be a User-Agent problem: I'm able to wget from checkerframework.org with the default Java User-Agent (which fails in the javadoc.io case), an absent User-Agent, and the User-Agent that I think maven-javadoc-plugin is using (judging from its source code). Plus, as far as I can tell, the connection attempt doesn't even get far enough to send a User-Agent.
+
+Here are the logs provided by `mvn javadoc:javadoc -Dorg.slf4j.simpleLogger.log.org.apache.http=debug`. (Note: Even *that* logging may go away with the upgrade to maven-javadoc-plugin 3.) Both javadoc.io and checkerframework.org follow the same pattern:
+
+[DEBUG] Connection request: [route: {s}->https://checkerframework.org][total kept alive: 0; route allocated: 0 of 2; total allocated: 0 of 20]
+[DEBUG] Connection leased: [id: 1][route: {s}->https://checkerframework.org][total kept alive: 0; route allocated: 1 of 2; total allocated: 1 of 20]
+[DEBUG] Connecting to checkerframework.org:443
+[DEBUG] Connection org.apache.http.impl.conn.DefaultClientConnection@45545e7a closed
+[DEBUG] Connection org.apache.http.impl.conn.DefaultClientConnection@45545e7a shut down
+[DEBUG] Connection org.apache.http.impl.conn.DefaultClientConnection@45545e7a closed
+[DEBUG] Connection released: [id: 1][route: {s}->https://checkerframework.org][total kept alive: 0; route allocated: 0 of 2; total allocated: 0 of 20]
+[DEBUG] Connection manager is shutting down
+[DEBUG] Connection manager shut down
+[ERROR] Error fetching link: https://checkerframework.org/api//package-list. Ignored it.
+
+Compare to the successful logs for docs.oracle.com:
+
+[DEBUG] Connection request: [route: {s}->https://docs.oracle.com][total kept alive: 0; route allocated: 0 of 2; total allocated: 0 of 20]
+[DEBUG] Connection leased: [id: 0][route: {s}->https://docs.oracle.com][total kept alive: 0; route allocated: 1 of 2; total allocated: 1 of 20]
+[DEBUG] Connecting to docs.oracle.com:443
+[DEBUG] CookieSpec selected: best-match
+[DEBUG] Auth cache not set in the context
+[DEBUG] Target auth state: UNCHALLENGED
+[DEBUG] Proxy auth state: UNCHALLENGED
+[DEBUG] Attempt 1 to execute request
+[DEBUG] Sending request: GET /javase/9/docs/api//package-list HTTP/1.1
+...
+
+So what is wrong? Probably SSL. Based on that suspicion, I learned that I could set -Djavax.net.debug=ssl, which produced more information before the close message:
+
+main, WRITE: TLSv1.2 Handshake, length = 239
+main, READ: TLSv1 Alert, length = 2
+main, RECV TLSv1.2 ALERT:  fatal, handshake_failure
+main, called closeSocket()
+main, handling exception: javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+main, IOException in getSession():  javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+main, called close()
+main, called closeInternal(true)
+[DEBUG] Connection org.apache.http.impl.conn.DefaultClientConnection@3667faa8 closed
+
+And now that I've written that, I can't reproduce it :\ With -Djavax.net.debug=*all*, I can see what else is going on:
+
+%% Cached client session: [Session-1, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384]
+main, called close()
+main, called closeInternal(true)
+main, SEND TLSv1.2 ALERT:  warning, description = close_notify
+main, WRITE: TLSv1.2 Alert, length = 26
+main, called closeSocket(true)
+[DEBUG] Connection org.apache.http.impl.conn.DefaultClientConnection@58af5076 closed
+
+Maybe the server has an aggressive timeout? I think I saw someone suggest that as a possibility.
+
+I don't know more detail than that. I see people who suggest that the problem could involve:
+- connection managers (which maven-javadoc-plugin uses): https://stackoverflow.com/a/24084141/28465
+- a need for a specific key store: https://stackoverflow.com/a/5206837/28465
+- a need for extra crypto implementations/settings: https://stackoverflow.com/a/38264878/28465
+- or other settings (I at least tried passing -Dhttps.protocols= and adding the suggested (possibly wrong in this case) -Dhttps.cipherSuites to that): https://stackoverflow.com/a/32226688/28465
+- a new JDK: https://stackoverflow.com/a/39405982/28465
+- a new HTTPClient (though whatever comes with the newest maven-javadoc-plugin (assuming that that's built in to the plugin and not to Maven??) apparently wasn't good enough): https://stackoverflow.com/a/43220038/28465
+- aggressive timeout, I think, as noted above
+- maybe weird things happen when maven-javadoc-plugin closes the stream without reading from it?
+- I think other things that I've forgotten, and surely other things I haven't understood.
+
+Anyway, I made a local copy of the package-list, just as I'd done for the javadoc.io projects, even though this time there's only one problem instead of two :)
+
+I'm pretty sure that the Checker Framework links will work now, too, but I haven't tested because we don't have any yet in Guava itself.
+
+Possibly I should just switch us to back using -link instead of -linkoffline, adding the User-Agent override that I figured out last time....
+
+Also, I moved some configuration to the parent pom so that it also affects guava-testlib. But I didn't move the most interesting parts, which require a little more work (though hopefully not much...).
+
+Re-fixes https://github.com/google/guava/issues/2965
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=178252119

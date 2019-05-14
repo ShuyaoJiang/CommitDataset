@@ -1,0 +1,17 @@
+Ignore HEAD requests in ShallowEtagHeaderFilter
+
+Prior to this commit, the `ShallowEtagHeaderFilter` could participate in
+the response and set its ETag/Content-Length headers, even for HEAD
+requests. Since the response body is empty, the filter implementation
+would set a `"Content-Length: 0"`.
+
+The RFC states that responses to HEAD requests should exhibit identical
+response headers to GET (with the possible exception of payload related
+headers such as Content-Length.
+
+With this commit, `ShallowEtagHeaderFilter` now ignores HEAD requests
+since the proper values may be set already for payload related headers
+by the handler. The filter has no way to generate a proper ETag value
+nor calculate the content length without the actual body.
+
+Issue: SPR-15261

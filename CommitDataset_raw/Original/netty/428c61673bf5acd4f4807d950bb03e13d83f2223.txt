@@ -1,0 +1,14 @@
+Logs in invokeExceptionCaught have been made consistent and full
+
+Motivation:
+
+In case of exception in invokeExceptionCaught() only original exception passed to invokeExceptionCaught() will be logged on any log level.
++ AbstractChannelHandlerContext and CombinedChannelDuplexHandler log different exceptions.
+
+Modifications:
+
+Fix inconsistent logging code and add ability to see both stacktraces on DEBUG level.
+
+Result:
+
+Both handlers log now both original exception and thrown from invokeExceptionCaught. To see full stacktrace of exception thrown from invokeExceptionCaught DEBUG log level must be enabled.

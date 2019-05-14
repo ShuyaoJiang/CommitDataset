@@ -1,0 +1,37 @@
+Replace atomic move writer
+
+I noticed this while working on a previous issue with atomic move writer
+(silent swallowing of exceptions). Namely, atomic move writer has
+dangerous semantics. The problem is as follows: atomic move writer works
+by writing lines to a temporary file, and then in its close method it
+replaces the target path with the temporary file. However, the close
+method is invoked whether or not all writes to the temporary file
+succeeded (because writers obtained from atomic move writer are used in
+try-with-resources blocks, as they should be). There is no way to
+distinguish that the writer is being closed in a successful scenario
+versus a failure scenario. In the close method for atomic move writer,
+the target file is replaced by the temporary file. This means that the
+target file is replaced whether or not writing to the temporary file
+actually succeeded. Since these atomic move writers are used for user
+configuration files (users and user_roles), a failure here can lead to
+data loss for the user, a tragedy!
+
+There is another (less serious) problem with the atomic move
+writer. Since the close method tries to move the temporary file in place
+of the existing file, the temporary file can be left behind if there is
+another failure in the close method (e.g., closing the underlying file
+after writing, or setting the permissions on the temporary file). This
+means that in some situations, atomic move writer will leave temporary
+files behind (which is not definitively not atomic).
+
+This commit replaces the atomic move writer with a safer mechanism. We
+still perform the write atomically in the following sense: we write to a
+temporary file. Either writing to that file succeeds or it fails. If
+writing succeeds, we replace the existing file with the temporary
+file. If writing fails, we clean up the temporary file and the existing
+file remains in place.
+
+Relates elastic/x-pack-elasticsearch#2299
+
+
+Original commit: elastic/x-pack-elasticsearch@3199decb0a97744babd59494b88c4c10ca324ac6

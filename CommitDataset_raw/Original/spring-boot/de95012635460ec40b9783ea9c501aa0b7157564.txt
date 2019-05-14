@@ -1,0 +1,11 @@
+Workaround problems with order of endpoint handler mapping
+
+When Spring Data REST is owning the home page it has its own
+HandlerMapping with a fix (relatively) low priority. The /links
+endpoint wants to own the home page as well, and our handler mapping
+has a high priority for good reasons. This change addresses the
+issue by checking if Spring Data REST is configured and if
+the management context path (or  more specifically, the links
+endpoint) is the same as the home page.
+
+Fixes gh-3486

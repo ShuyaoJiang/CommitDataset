@@ -1,0 +1,15 @@
+[ML] Allow jobs in the "closing" state to be killed (elastic/x-pack-elasticsearch#2026)
+
+This is important for two reasons:
+
+1. If a job hangs in the closing state for any reason there is now a
+   way to get rid of it
+2. The force delete endpoint (as used by the UI) killed open jobs before
+   deleting them, but could not kill closing jobs, which created the
+   possibility that if a job was deleted from the UI while in the closing
+   state then the last few results could be indexed after the deletion
+   completed
+
+relates elastic/x-pack-elasticsearch#1796
+
+Original commit: elastic/x-pack-elasticsearch@1471106e0688171880704e93d4b7502f0fbcd0ea

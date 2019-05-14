@@ -1,0 +1,13 @@
+Avoid creating multiple BeanNameViewResolver beans
+
+ErrorMvcAutoConfiguration creates a BeanNameViewResolver bean in case
+the user has used @EnabledWebMvc and disabled WebMvcAutoConfiguration.
+If the user hasn’t used @EnabledWebMvc, WebMvcAutoConfiguration will
+creates its BeanNameViewResolver and override the one that’s already
+been defined by ErrorMvcAutoConfiguration.
+
+This commit makes WebMvcAutoConfiguration’s BeanNameViewResolver
+definition conditional on there being no existing BeanNameViewResolver
+bean definition.
+
+Closes gh-5354

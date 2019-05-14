@@ -1,0 +1,13 @@
+[#3368] Ensure ByteBuf is not release two times
+
+Motivation:
+
+As the ByteBuf is not set to null after release it we may try to release it again in handleReadException()
+
+Modifications:
+
+-  set ByteBuf to null to avoid another byteBuf.release() to be called in handleReadException()
+
+Result:
+
+No IllegalReferenceCountException anymore

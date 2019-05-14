@@ -1,0 +1,14 @@
+Unify transport settings naming (#36623)
+
+This commit updates our transport settings for 7.0. It generally takes a
+few approaches. First, for normal transport settings, it usestransport.
+instead of transport.tcp. Second, it uses transport.tcp, http.tcp,
+or network.tcp for all settings that are proxies for OS level socket
+settings. Third, it marks the network.tcp.connect_timeout setting for
+removal. Network service level settings are only settings that apply to
+both the http and transport modules. There is no connect timeout in
+http. Fourth, it moves all the transport settings to a single class
+TransportSettings similar to the HttpTransportSettings class.
+
+This commit does not actually remove any settings. It just adds the new
+renamed settings and adds todos for settings that will be deprecated.

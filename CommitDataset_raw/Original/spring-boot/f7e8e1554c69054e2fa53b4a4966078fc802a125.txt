@@ -1,0 +1,14 @@
+Shut down logging system as part of clean up processing
+
+Previously, when a LoggingSystem was cleaned up the underlying logging
+system (LogBack, Log4J, Log4J2, JUL) was not being properly shut down.
+LogBack explicitly recommends stopping it cleanly [1]. While the other
+logging systems are less explicity about it, they would all appear to
+benefit from being stopped.
+
+This commit updates all four LoggingSystems to stop/reset/clean up to
+underlying logging system when cleanUp is called.
+
+Closes gh-4026
+
+[1] http://logback.qos.ch/manual/configuration.html#stopContext

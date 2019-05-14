@@ -1,0 +1,10 @@
+Support {/...} patterns in UriComponents(Builder)
+
+This commit introduces support for "Path Segment URI Variable
+expansion", see https://tools.ietf.org/html/rfc6570#section-3.2.6.
+In practice, this means that URI template variables prefixed with a '/'
+are treated like path segments and - as such - will encode any '/'
+found. For example: {/foo} expanded with "bar/baz" with result in
+"bar%2F".
+
+Issue: SPR-12750

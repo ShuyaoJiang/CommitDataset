@@ -1,0 +1,17 @@
+Support SSL_ prefixed cipher suites in addition to TLS_ prefixed ones.
+
+Motivation:
+Http2SecurityUtil currently lists HTTP/2 ciphers as documented by
+JSSE docs [1] and the IANA [2] using the TLS_ prefix.
+In some IBM J9 implementations the SSL_ prefix is used, which is also
+covered by the JSSE.
+
+[1] http://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html
+[2] http://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml
+
+Modifications:
+Add both variants of the cipher names (prefixed with SSL_ in additon to TLS_)
+
+Result:
+HTTP/2 connections can now be created using the SslProvider.JDK on IBM J9
+and potentially other JVMs which use the SSL_ prefix.

@@ -1,0 +1,20 @@
+Detect jOOQ SQLDialect through jOOQ's JDBCUtils
+
+This change updates SqlDialectLookup to delegate to jOOQ's JDBCUtils
+rather than creating an additional mapping between
+org.springframework.boot.jdbc.DatabaseDriver and org.jooq.SQLDialect.
+
+This has the following advantages:
+
+1. jOOQ's `SQLDialect` to URL mappings are already maintained by jOOQ,
+   so no additional changes will be necessary to Spring Boot in the
+   future.
+2. Delegating to jOOQ means that the mapping also works for the
+   commercial jOOQ distributions, e.g. when working with DB2, Oracle,
+   SQL Server, etc., as the JDBCUtils of the commercial distribution
+   also contains the relevant logic to map to e.g. `SQLDialect.DB2`,
+   `SQLDialect.ORACLE`, `SQLDialect.SQLSERVER` (which are not
+   available from the open source distribution linked by Spring Boot
+   by default).
+
+Closes gh-11466

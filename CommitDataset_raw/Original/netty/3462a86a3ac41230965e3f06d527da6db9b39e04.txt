@@ -1,0 +1,13 @@
+Ensure we release the previous retained AddressedEnvelope when we fail to notify the promise.
+
+Motivation:
+
+We need to ensure we release the AddressedEnvelope if we fail to notify the future (as it may be notified before because of an timeout). Otherwise we may leak.
+
+Modifications:
+
+Call release() if we fail to notify the future.
+
+Result:
+
+No more memory leak on notify failure.

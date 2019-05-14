@@ -1,0 +1,125 @@
+Introduce primary context (#25122)
+
+* Introduce primary context
+
+The target of a primary relocation is not aware of the state of the
+replication group. In particular, it is not tracking in-sync and
+initializing shards and their checkpoints. This means that after the
+target shard is started, its knowledge of the replication group could
+differ from that of the relocation source. In particular, this differing
+view can lead to it computing a global checkpoint that moves backwards
+after it becomes aware of the state of the entire replication
+group. This commit addresses this issue by transferring a primary
+context during relocation handoff.
+
+* Fix test
+
+* Add assertion messages
+
+* Javadocs
+
+* Barrier between marking a shard in sync and relocating
+
+* Fix misplaced call
+
+* Paranoia
+
+* Better latch countdown
+
+* Catch any exception
+
+* Fix comment
+
+* Fix wait for cluster state relocation test
+
+* Update knowledge via upate local checkpoint API
+
+* toString
+
+* Visibility
+
+* Refactor permit
+
+* Push down
+
+* Imports
+
+* Docs
+
+* Fix compilation
+
+* Remove assertion
+
+* Fix compilation
+
+* Remove context wrapper
+
+* Move PrimaryContext to new package
+
+* Piping for cluster state version
+
+This commit adds piping for the cluster state version to the global
+checkpoint tracker. We do not use it yet.
+
+* Remove unused import
+
+* Implement versioning in tracker
+
+* Fix test
+
+* Unneeded public
+
+* Imports
+
+* Promote on our own
+
+* Add tests
+
+* Import
+
+* Newline
+
+* Update comment
+
+* Serialization
+
+* Assertion message
+
+* Update stale comment
+
+* Remove newline
+
+* Less verbose
+
+* Remove redundant assertion
+
+* Tracking -> in-sync
+
+* Assertions
+
+* Just say no
+
+Friends do not let friends block the cluster state update thread on
+network operations.
+
+* Extra newline
+
+* Add allocation ID to assertion
+
+* Rename method
+
+* Another rename
+
+* Introduce sealing
+
+* Sealing tests
+
+* One more assertion
+
+* Fix imports
+
+* Safer sealing
+
+* Remove check
+
+* Remove another sealed check

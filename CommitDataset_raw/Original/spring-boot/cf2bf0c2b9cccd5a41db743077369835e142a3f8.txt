@@ -1,0 +1,11 @@
+Work around javadoc bug when linking to annotation attributes
+
+If an annotation attribute is linked to in javadoc before the
+javadoc processor encounters a usage of the annotation, the javadoc
+tool fails with a class cast exception. This is a known issue [1]
+but it has been closed as won't fix so we need to work around it.
+Sadly, the only reasonable way to do so appears to be to remove
+the links to the annotation attributes and only link to the annotation
+itself.
+
+[1] https://bugs.openjdk.java.net/browse/JDK-8170447

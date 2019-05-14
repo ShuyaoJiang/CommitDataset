@@ -1,0 +1,25 @@
+Fix write watermarks comparison to use less than and greater than.
+
+Motivation:
+
+The API documentation in ChannelConfig states that a a channel is writable,
+if the number of pending bytes is below the low watermark and a
+channel is not writable, if the number of pending bytes exceeds the high
+watermark.
+
+Therefore, we should use < operators instead of <= as well as > instead of >=.
+
+Using <= and >= is also problematic, if the low watermark is equal to the high watermark,
+as then a channel could be both writable and unwritable with the same number of pending
+bytes (depending on whether remove() or addMessage() is called first).
+
+The use of <= and >= was introduced in PR https://github.com/netty/netty/pull/3036, but
+I don't understand why, as there doesn't seem to have been any discussion around that.
+
+Modifications:
+
+Use < and > operators instead of <= and >=.
+
+Result:
+
+High and low watermarks are treated as stated in the API docs.

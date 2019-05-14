@@ -1,0 +1,13 @@
+Fix possible deadlock in DefaultChannelPipeline.destroyDown(...)
+
+Motivation:
+
+We need to ensure we not hold a lock while executor callHandlerRemoved(...) as this may lead to a deadlock if handlerRemoved(...) will call another method in DEfaultChannelPipeline from another thread that will need to obtain the lock as well and wait for the result.
+
+Modifications:
+
+Release the lock before call handlerRemoved0(...).
+
+Result:
+
+No more deadlock possible

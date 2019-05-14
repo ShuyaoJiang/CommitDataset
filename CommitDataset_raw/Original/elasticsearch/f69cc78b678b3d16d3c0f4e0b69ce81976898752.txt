@@ -1,0 +1,5 @@
+Release pipelined http responses on close (#26226)
+
+Right now it is possible for the `HttpPipeliningHandler` to queue
+pipelined responses. On channel close, we do not clear and release these
+responses. This commit releases the responses and completes the promise.

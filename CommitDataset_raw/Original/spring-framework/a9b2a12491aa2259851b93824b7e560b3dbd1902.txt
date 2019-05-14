@@ -1,0 +1,9 @@
+Allow ResponseBodyAdvice to modify null return values
+
+This change defers determination of whether to invoke a message
+converter in case of a null @ResponseBody value (or ResponseEntity with
+a null body) until after the invocation of the ResponseBodyAdvice
+chain. This allows a ResponseBodyAdvice to handle null values
+potentially turning them into non-null value.s
+
+Issue: SPR-12152

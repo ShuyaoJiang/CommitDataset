@@ -1,0 +1,16 @@
+Implement EventExecutor.parent() in AbstractEventExecutor
+
+Motivation:
+
+EventExecutor.parent() and EventLoop.parent() almost always return a constant parent executor.  There's not much reason to let it implemented in subclasses.
+
+Modifications:
+
+- Implement AbstractEventExecutor.parent() with an additional contructor
+- Add AbstractEventLoop so that subclasses extend AbstractEventLoop, which implements parent() appropriately
+- Remove redundant parent() implementations in the subclasses
+- Fix inspector warnings
+
+Result:
+
+Less duplication.

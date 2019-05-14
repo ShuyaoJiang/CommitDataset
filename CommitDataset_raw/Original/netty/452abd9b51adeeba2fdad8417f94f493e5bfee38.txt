@@ -1,0 +1,14 @@
+Correctly monkey-patch id also in whe os / arch is used within library name. (#8913)
+
+Motivation:
+
+2bb9f64e16dbb5cbbf691e284a97d745378a7b8a introduced a change which made it possible to use different shaded versions of netty-tcnative on the classpath. This only partly worked as we did not correctly handled the case when os / arch is part of the library name (which is the case when netty-tcnative-boringssl-static is used with the uber jar).
+
+Modifications:
+
+- If patching the ID failed we retry again with the os / arch stripped
+- Add unit tests to verify that patching ID now works with and without os / arch as suffix.
+
+Result:
+
+Using multiple shaded version of netty-tcnative-boringssl-static on MacOS works.

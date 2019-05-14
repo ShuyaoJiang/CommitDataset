@@ -1,0 +1,13 @@
+Dereference when calling PooledByteBuf.deallocate()
+
+Motivation:
+
+We missed to dereference the chunk and tmpNioBuf when calling deallocate(). This means the GC can not collect these as we still hold a reference while have the PooledByteBuf in the recycler stack.
+
+Modifications:
+
+Dereference chunk and tmpNioBuf.
+
+Result:
+
+GC can collect things.

@@ -1,0 +1,15 @@
+Allow to use EmbeddedChannel.schedule*(...)
+
+Motivation:
+
+At the moment when EmbeddedChannel is used and a ChannelHandler tries to schedule and task it will throw an UnsupportedOperationException. This makes it impossible to test these handlers or even reuse them with EmbeddedChannel.
+
+Modifications:
+
+- Factor out reusable scheduling code into AbstractSchedulingEventExecutor
+- Let EmbeddedEventLoop and SingleThreadEventExecutor extend AbstractSchedulingEventExecutor
+- add EmbbededChannel.runScheduledPendingTasks() which allows to run all scheduled tasks that are ready
+
+Result:
+
+Embeddedchannel is now usable even with ChannelHandler that try to schedule tasks.

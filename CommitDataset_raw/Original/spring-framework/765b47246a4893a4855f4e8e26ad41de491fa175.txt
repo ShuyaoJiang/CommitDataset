@@ -1,0 +1,11 @@
+Improve async request timeout handling
+
+Rather than setting the status to 503 directly from the timeout
+interceptor which no longer seems to work reliably with Servlet
+containers like Jetty even performing an additional ERROR dispatch back
+to the original URL, we know rather set the DeferredResult to an
+AsyncTimeoutException, which results in a dispatch and standard
+handling within Spring MVC. This should be a more reliable way of
+dealing with timeouts.
+
+Issue: SPR-14669

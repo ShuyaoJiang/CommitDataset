@@ -1,0 +1,22 @@
+Reinstate support for spring.groovy.template.configuration.*
+
+Previously, spring.groovy.template.configuration.* was mapped onto both
+GroovyTemplateProperties.configuration and GroovyMarkupConfigurer. The
+former being a Map and the latter being specific type with getters and
+setters. This clash caused problems with the IDE support.
+
+GroovyTemplateProperties.configuration appeared to be dead code so it
+was removed in 326bdf2. Unfortunately this broke the use of
+spring.groovy.template.configuration.* properties as
+GroovyTemplateProperties uses a prefix of spring.groovy.template and it
+no longer had a configuration property.
+
+This commit addresses the problem by updating GroovyTemplateProperties
+to ignore unknown fields. This allows
+spring.groovy.template.configuration.* properties to be used and bound
+to GroovyMarkupConfigurer without reintroducing the clash which prompted
+the initial change.
+
+Closes gh-3198
+
+

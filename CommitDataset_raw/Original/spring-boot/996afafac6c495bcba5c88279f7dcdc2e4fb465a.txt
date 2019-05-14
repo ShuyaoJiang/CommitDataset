@@ -1,0 +1,8 @@
+Optimize OnClassCondition isPresent check
+
+Update `OnClassCondition` to use its own `isPresent` rather than using
+`ClassUtils.isPresent`. Using our own implementation saves a few cycles
+since we never need to check for native types, and we don't support
+nested class references specified in the non `$` notation.
+
+See gh-7573

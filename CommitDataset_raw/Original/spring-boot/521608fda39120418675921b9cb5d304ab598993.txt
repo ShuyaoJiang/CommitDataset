@@ -1,0 +1,14 @@
+Extract CLI parsing from config file initializer
+
+Extract command line property parsing logic from the
+ConfigFileApplicationContextInitializer and instead perform it as part
+of the SpringApplication initialization. This allows SpringApplications
+that do not use the ConfigFileApplicationContextInitializer to still
+expose command line arguments as property sources.
+
+SpringApplicationInitializers may now implement EnvironmentAware if
+they need access to the environment during early initialization.
+
+This commit also removes the custom command line parsing logic that
+was temporarily added to work around SPR-10579 which has since been
+fixed upstream.

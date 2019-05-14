@@ -1,0 +1,23 @@
+Revert "Upgrade Gradle plugin’s ID so it’s suitable for the Plugin Portal"
+
+This reverts commit b1c0a7cda486e4f745b4233715efb8c0dc2814df.
+
+The plugin publishing process has moved to a new plugin-based approach
+that brings with it some significant limitations:
+
+ - There's no staging to allow the promotion of good release builds
+ - There's no easy way to upload an existing artifact
+ - There's no control over the published pom.
+
+The risk brought by these limitations, particularly the first, are
+too great so we will no be publishing the Boot plugin to the Portal
+until they're resolved.
+
+Changing the plugin's ID was a breaking change that would require
+users to do some work when they upgrade to Boot 1.3. The ID of the
+plugin was changed purely so that it met the Portal's requirements.
+Given that the plugin will not be published to the Portal for the
+foreseaable future there's no need for us to inflict a breaking change
+on people when there will be no benefit.
+
+See gh-1567

@@ -1,0 +1,25 @@
+TransportResyncReplicationAction should not honour blocks (#35795)
+
+After #35332 has been merged, we noticed some test failures like #35597 
+in which one or more replica shards failed to be promoted as primaries 
+because the primary replica re-synchronization never succeed.
+
+After some digging it appeared that the execution of the resync action was 
+blocked because of the presence of a global cluster block in the cluster state 
+(in this case, the "no master" block), making the resync action to fail when 
+executed on the primary.
+
+Until #35332 such failures never happened because the 
+TransportResyncReplicationAction is skipping the reroute phase, the only 
+place where blocks were checked. Now with #35332 blocks are checked 
+during reroute and also during the execution of the transport replication 
+action on the primary. After some internal discussion, we decided that the TransportResyncReplicationAction should never be blocked. This action is 
+part of the replica to primary promotion and makes sure that replicas are in 
+sync and should not be blocked when the cluster state has no master or 
+when the index is read only.
+
+This commit changes the TransportResyncReplicationAction to make obvious 
+that it does not honor blocks. It also adds a simple test that fails if the resync 
+action is blocked during the primary action execution.
+
+Closes #35597

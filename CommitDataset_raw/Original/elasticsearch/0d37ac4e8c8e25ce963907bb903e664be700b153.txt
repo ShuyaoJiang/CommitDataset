@@ -1,0 +1,6 @@
+[TEST] remove endless wait in RestClientTests (#30776)
+
+This commit adds a max wait timeout of one second to all the latch.await
+calls made in RestClientTests. It also makes clearer that the `onSuccess`
+listener method will never be called given that the underlying http
+client is mocked and makes sure that `latch.countDown` is always called

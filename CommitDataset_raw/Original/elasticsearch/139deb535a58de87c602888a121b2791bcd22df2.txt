@@ -1,0 +1,8 @@
+Test: Use --illegal-access=warn for tests (#28437)
+
+This commit conditionally adds the --illegal-access=warn flag when tests
+are run with java 9. Currently, testing on java 9 triggers a warning
+about illegal access from mockito. While that should be fixed (by
+updating to a newer mockito base for securemock), the stderr warning we
+get is only the first one. Thankfully that is the only one, but this
+change will enable finding all such illegal accesses in the future.

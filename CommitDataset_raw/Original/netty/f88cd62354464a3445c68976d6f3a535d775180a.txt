@@ -1,0 +1,13 @@
+[#2692] Allows notify ChannelFutureProgressListener on complete writes
+
+Motivation:
+
+We have some inconsistency when handling writes. Sometimes we call ChannelOutboundBuffer.progress(...) also for complete writes and sometimes not. We should call it always.
+
+Modifications:
+
+Correctly call ChannelOuboundBuffer.progress(...) for complete and incomplete writes.
+
+Result:
+
+Consistent behavior

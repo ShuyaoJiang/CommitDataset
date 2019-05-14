@@ -1,0 +1,16 @@
+Squashed commit of the following:
+
+make the DiskLruCache's initialize() public through the Cache interface
+
+The DiskLruCache’s cache does lazy initialization. The time spent in
+initialization varies depending on the actual cache size and journal
+file size.
+
+On very low end device, the initialization time could be as long as
+1000 ms once the cache reaches 100M for example on a 4.0 device. This
+has significant performance impact on the very 1st cache hit.
+
+So the proposed solution is to give the developer an opportunity to
+explicitly do the initialization early on and in a back ground thread.
+Without this change, the developer would have to call any method from
+the Cache class to warm up the cache implicitly.

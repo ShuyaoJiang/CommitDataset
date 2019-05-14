@@ -1,0 +1,11 @@
+Fix AntPathMatcher rule for combining with extensions
+
+Before this fix AntPathMatcher had a special rule for combining
+patterns with wildcards and extensions as follows:
+
+"/*.*"  + "/*.html" => "/*.html"
+
+This change ensures this rule never applies if the first pattern
+contains URI variables.
+
+Issue: SPR-10062

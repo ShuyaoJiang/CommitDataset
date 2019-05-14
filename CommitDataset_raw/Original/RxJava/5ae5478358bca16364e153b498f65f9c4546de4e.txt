@@ -1,0 +1,9 @@
+Rename create to unsafeCreate, add "safe" create methods. (#4317)
+
+This change is built around one goal: make the `create` methods actually usable by developers!
+
+Currently the advice given to most developers using 1.x is avoid `create` unless you are absolutely 100% sure you understand backpressure and cancellation, and even then avoid it if possible. This is a trap that most new developers fall into. _The method is named "create", after all, so it must be how I create these things!_ I want to make that not only correct, but advisable (at least when the still-convenient "from" methods are not suitable, such as when wrapping callback-based APIs).
+
+Because `Observable`, `Single`, and `Completable` are backpressure-free, this amounts to just suppressing downstream notifications when disposed. This doesn't seem too controversial.
+
+The most controversial part is that I have renamed `Flowable.fromAsync` to `Flowable.create` thus making it the canonical way for users to create `Flowable`s directly. I'm much less opinionated on this change, but it felt wrong to have an `Flowable.unsafeCreate` with no associated `create` and `fromAsync` is the "safest" version we have.

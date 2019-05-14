@@ -1,0 +1,22 @@
+Initial working version of the echo server example
+
+- Optimized AbstractChannelBuffer.discardReadBytes()
+- Split ChannelHandlerInvoker into ChannelInboundInvoker and
+  ChannelOutboundInvoker
+  - Channel implements ChannelOutboundInvoker
+  - ChannelOutboundInvoker.nextOut() is now out()
+  - ChannelOutboundHandlerContext.out() is now prevOut()
+  - Added the outbound operations without future
+    parameter to ChannelOutboundInvoker for user convenience
+- All async operations which requires a ChannelFuture as a parameter
+  now returns ChannelFuture for user convenience
+- Added ChannelFutureFactory.newVoidFuture() to allow a user specify
+  a dummy future that is of no use
+  - I'm unsure if it is actually a good idea to introduce it. It might
+    go away later.
+- Made the contract of AbstractChannel.doXXX() much simpler and moved
+  all common code up to AbstractChannel.DefaultUnsafe
+- Added Channel.isOpen()
+- Fixed a bug where MultithreadEventLoop always shut down its child
+  event loops on construction
+- Maybe more changes I don't remember :-)

@@ -1,0 +1,78 @@
+Improve HTTP caching flexiblity
+
+This commit improves HTTP caching defaults and flexibility in
+Spring MVC.
+
+1) Better default caching headers
+
+The `WebContentGenerator` abstract class has been updated with
+better HTTP defaults for HTTP caching, in line with current
+browsers and proxies implementation (wide support of HTTP1.1, etc);
+depending on the `setCacheSeconds` value:
+
+* sends "Cache-Control: max-age=xxx" for caching responses and
+do not send a "must-revalidate" value by default.
+* sends "Cache-Control: no-store" or "Cache-Control: no-cache"
+in order to prevent caching
+
+Other methods used to set specific header such as
+`setUseExpiresHeader` or `setAlwaysMustRevalidate` are now deprecated
+in favor of `setCacheControl` for better flexibility.
+Using one of the deprecated methods re-enables previous HTTP caching
+behavior.
+
+This change is applied in many Handlers, since
+`WebContentGenerator` is extended by `AbstractController`,
+`WebContentInterceptor`, `ResourceHttpRequestHandler` and others.
+
+2) New CacheControl builder class
+
+This new class brings more flexibility and allows developers
+to set custom HTTP caching headers.
+
+Several strategies are provided:
+
+* `CacheControl.maxAge(int)` for caching responses with a
+"Cache-Control: max-age=xxx" header
+* `CacheControl.noStore()` prevents responses from being cached
+with a "Cache-Control: no-store" header
+* `CacheControl.noCache()` forces caches to revalidate the cached
+response before reusing it, with a "Cache-Control: no-store" header.
+
+From that point, it is possible to chain method calls to craft a
+custom CacheControl instance:
+
+```
+CacheControl cc = CacheControl.maxAge(1, TimeUnit.HOURS)
+    .cachePublic().noTransform();
+```
+
+3) Configuring HTTP caching in Resource Handlers
+
+On top of the existing ways of configuring caching mechanisms,
+it is now possible to use a custom `CacheControl` to serve
+resources:
+
+```
+@Configuration
+public class MyWebConfig extends WebMvcConfigurerAdapter {
+
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    CacheControl cc = CacheControl.maxAge(1, TimeUnit.HOURS);
+    registry.addResourceHandler("/resources/**)
+            .addResourceLocations("classpath:/resources/")
+            .setCacheControl(cc);
+  }
+}
+```
+
+or
+
+```
+<mvc:resources mapping="/resources/**" location="classpath:/resources/">
+  <mvc:cachecontrol max-age="3600" cache-public="true"/>
+</mvc:resources>
+```
+
+Issue: SPR-2779, SPR-6834, SPR-7129, SPR-9543, SPR-10464

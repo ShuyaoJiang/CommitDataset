@@ -1,0 +1,10 @@
+Groovy loader should delegate to XML loader in the TCF
+
+If a resource location in the MergedContextConfiguration has a ".xml"
+extension, the GenericGroovyXmlContextLoader now delegates to a
+dedicated XmlBeanDefinitionReader for loading bean definitions from that
+resource, thus preserving XML validation for all XML resource locations.
+For all other extensions (presumably only ".groovy"), the
+GenericGroovyXmlContextLoader delegates to a GroovyBeanDefinitionReader.
+
+Issue: SPR-11233

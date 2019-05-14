@@ -1,0 +1,13 @@
+Fix REE handling in SerializingExecutor.
+
+The old implementation had two bugs:
+1. Tasks that threw RejectedExecutionException on submission would still execute later
+2. Two threads submitting to an idle SequentialExecutor might see one submission succeed, even if the delegate threw REE. The submitted task wouldn't run until someone else successfully submitted another task.
+
+This costs a possible extra lock acquisition  (to solve #2) and an allocation (to solve #1) when submitting to a SequentialExecutor that doesn't already have worker scheduled or running.
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=181810127

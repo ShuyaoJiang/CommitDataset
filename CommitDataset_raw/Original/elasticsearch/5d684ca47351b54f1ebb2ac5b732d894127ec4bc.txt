@@ -1,0 +1,11 @@
+Combine the execution of an exclusive replica operation with primary term update (#36116)
+
+This commit changes how an operation which requires all index shard 
+operations permits is executed when a primary term update is required: 
+the operation and the update are combined so that the operation is 
+executed after the primary term update under the same blocking 
+operation.
+
+Closes #35850
+
+Co-authored-by: Yannick Welsch <yannick@welsch.lu>

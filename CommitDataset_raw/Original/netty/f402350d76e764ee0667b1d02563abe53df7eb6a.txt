@@ -1,0 +1,20 @@
+[#2544] Correctly parse Multipart-mixed POST HTTP request in case of entity ends with odd number of 0x0D
+
+Motivation:
+When an attribute is ending with an odd number of CR (0x0D), the decoder
+add an extra CR in the decoded attribute and should not.
+
+Modifications:
+Each time a CR is detected, the next byte was tested to be LF or not. If
+not, in a number of places, the CR byte was lost while it should not be.
+When a CR is detected, if the next byte is not LF, the CR byte should be
+saved as the position point to the next byte (not LF). When a CR is
+detected, if there is not yet other available bytes, the position is
+reset to the position of CR (since a LF could follow).
+
+A new Junit test case is added, using DECODER and variable number of CR
+in the final attribute (testMultipartCodecWithCRasEndOfAttribute).
+
+Result:
+The attribute is now correctly decoded with the right number of CR
+ending bytes.

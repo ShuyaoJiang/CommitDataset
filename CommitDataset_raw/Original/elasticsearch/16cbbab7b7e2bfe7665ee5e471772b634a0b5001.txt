@@ -1,0 +1,17 @@
+[ILM] fix retry so it picks up latest policy and executes async action (#35406)
+
+Before, moving to a failed step would only change the step info
+to be that of the failed step. This means two things.
+
+1. Async Steps would never be triggered to execute
+2. If there are inherent problems with the action definition that can
+be fixed with a policy update, these changes were not being reflected
+by the new execution info.
+
+Changes now
+
+1. Async steps are executed after the move to the failed step in cluster state
+2. the lifecycle execution info's phase definition is updated from the current
+latest policy definition, even though the index isn't moving to a new phase.
+
+Closes #35397.

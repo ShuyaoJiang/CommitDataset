@@ -1,0 +1,11 @@
+Fix JPA bootstrap executor detection with multiple candidates
+
+Spring Boot provides two separate auto-configurations that can
+potentially expose an `AsyncTaskExecutor` implementation so relying on
+the presence of a single instance is too weak.
+
+This commit fixes the detection of the AsyncTaskExecutor that can be
+used to bootstrap JPA so that a single instance is used and, in the case
+more than one exists, the one named `applicationTaskExecutor`.
+
+Closes gh-15447

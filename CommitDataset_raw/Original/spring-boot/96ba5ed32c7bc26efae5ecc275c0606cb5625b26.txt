@@ -1,0 +1,11 @@
+Ensure OAuth2 context state is not reset if access tokens match
+
+We can expect that occasionally a user clicks on a login link when
+the token is expired. If the UserInfoTokenServices tries to
+authenticate the user at that point, it can retain the option to
+refresh the expired token if we preserve the state. Since the
+state is in session scope all we need to do is to check that the
+token that is being checked has the same value as the one in the
+OAuth2ClientContext and re-use the context if it is.
+
+Fixes gh-4251

@@ -1,0 +1,9 @@
+Deleting a document from a non-existing index creates the should not auto create it, unless using EXTERNAL* versioning (#24518)
+
+Currently a `delete document` request against a non-existing index actually **creates** this index.
+
+With this change the `delete document` no longer creates the previously non-existing index and throws an `index_not_found` exception instead.
+
+However as discussed in https://github.com/elastic/elasticsearch/pull/15451#issuecomment-165772026, if an external version is explicitly used, the current behavior is preserved and the index is still created and the document is marked for deletion.
+
+Fixes #15425 

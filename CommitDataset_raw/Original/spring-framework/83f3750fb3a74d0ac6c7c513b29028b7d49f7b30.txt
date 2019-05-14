@@ -1,0 +1,12 @@
+Support byte[] in JaxbMarshaller under JDK 7
+
+JDK7 changed its reflections API in order to resolve
+http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5041784
+
+In short, JDK 5 and 6 (wrongly) return GenericArrayTypes in certain
+reflection scenarios, whereas JDK 7 changed this to return a normal
+array type. For Jaxb2Marshaller, this meant that marshaling byte arrays
+was not supported under JDK 7.
+
+This change fixes that, so that Jaxb2Marhsaller supports marshalling
+byte arrays again (under JDK 5, 6 or 7).

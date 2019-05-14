@@ -1,0 +1,13 @@
+Remove DisposableBeanMethodInterceptor
+
+Previously, any @Configuration class was enhanced to namely implement
+DisposableBean in order to remove static callbacks that were registered
+for that class. This leads to problem if an ApplicationContext is created
+and destroyed within the lifecycle on another ApplicationContext in the
+same class loader.
+
+It turns out that the destruction callback is no longer necessary as the
+interceptors are now stateless: the VM is free to reclaim any of those if
+necessary.
+
+Issue: SPR-12445

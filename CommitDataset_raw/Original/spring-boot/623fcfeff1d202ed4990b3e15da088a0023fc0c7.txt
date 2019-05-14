@@ -1,0 +1,11 @@
+Properly guard cache statistics providers
+
+Previously, a `NoClassDefFoundError` could be thrown if EhCache or Guava
+is on the classpath without `spring-context-support` as the respective
+cache statistics provider both needs the implementation and the spring
+abstraction implementation.
+
+The `@ConditionalOnClass` definition has been updated to properly guard
+those beans.
+
+Closes gh-3960

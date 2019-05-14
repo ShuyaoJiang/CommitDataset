@@ -1,0 +1,13 @@
+Allow any ExitCodeGenerator bean to switch of auto-configured bean
+
+In bedf2edf, the return type of the auto-configuration method that
+creates batch's ExitCodeGenerator was changed from ExitCodeGenerator
+to JobExecutionExitCodeGenerator but the on missing bean condition
+was left unchanged. This means that the auto-configured bean can
+only be switched off by a JobExecutionExitCodeGenerator bean, rather
+than any bean that implements ExitCodeGenerator.
+
+This commit corrects the use of @ConditionalOnMissingBean to allow any
+ExitCodeGenerator bean to switch off the auto-configured one.
+
+Closes gh-4752

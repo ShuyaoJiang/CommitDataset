@@ -1,0 +1,12 @@
+Optimise rejection of out-of-range `long` values (#40325)
+
+Today if you try and insert a very large number like `1e9999999` into a long
+field we first construct this number as a `BigDecimal`, convert this to a
+`BigInteger` and then reject it because it is out of range. Unfortunately
+making such a large `BigInteger` is rather expensive.
+
+We can avoid this expense by performing a (weaker) range check on the
+`BigDecimal` representation of incoming `long`s too.
+
+Relates #26137
+Closes #40323

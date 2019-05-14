@@ -1,0 +1,14 @@
+Change parsing of numeric `to` and `from` parameters in `date_range` aggregation (#25376)
+
+Currently the `to` and `from` parameter in the `date_range` aggregation is not
+parsed with the correct date field format from the mappings or the aggregation
+if the argument is numeric, but always treated as a long value specifying
+`epoch_millis`. This leads to problems e.g. when the format is `epoch_second`,
+but the `to` and `from` are currently treated as millis.
+
+With this change, we interpret these parameters according to the `format` of the target field.
+If the `format` in the mappings is not compatible with numeric input values,
+a compatible `format` (e.g. `epoch_millis`, `epoch_second`) must be specified in
+the `date_range` aggregation itself, otherwise an error is thrown.
+
+#Closes #17920 

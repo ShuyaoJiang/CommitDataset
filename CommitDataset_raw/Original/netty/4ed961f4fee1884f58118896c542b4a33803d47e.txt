@@ -1,0 +1,18 @@
+To detect Android, check the VM property rather than the classpath
+
+Motivation:
+Some java binaries include android classes on their classpath, even
+if they aren't actually android.  When this is true, `Unsafe` no
+longer works, disabling the Epoll functionality.  A sample case is
+for binaries that use the j2objc library.
+
+Modifications:
+Check the `java.vm.name` instead of the classpath.   Numerous
+Google-internal Android libraries / binaries check this property
+rather than the class path.
+
+It is believed this is safe and works with bother ART and Dalvik
+VMs, safe for Robolectric, and j2objc.
+
+Results:
+Unusually built java server binaries can still use Netty Epoll.

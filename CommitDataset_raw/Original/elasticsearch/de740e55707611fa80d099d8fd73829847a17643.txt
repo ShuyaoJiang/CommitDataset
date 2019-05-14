@@ -1,0 +1,6 @@
+Tidy up GroupedActionListener (#39633)
+
+Today the `GroupedActionListener` accepts a `defaults` parameter but all
+callers pass an empty list. Also it is permitted to pass an empty group but
+this is trappy because the delegated listener is never be called in that case.
+This commit removes the `defaults` parameter and forbids an empty group.

@@ -1,0 +1,48 @@
+Non-sticky thread groups in DefaultThreadFactory
+
+Motivation:
+
+A recent change to DefaultThreadFactory modified it so that it is sticky
+with respect to thread groups. In particular, this change made it so
+that DefaultThreadFactory would hold on to the thread group that created
+it, and then use that thread group to create threads.
+
+This can have problematic semantics since it can lead to violations of a
+tenet of thread groups that a thread can only modify threads in its own
+thread group and descendant thread groups. With a sticky thread group, a
+thread triggering the creation of a new thread via
+DefaultThreadFactory#newThread will be modifying a thread from the
+sticky thread group which will not necessarily be its own nor a
+descendant thread group. When a security manager is in place that
+enforces this requirement, these modifications are now impossible. This
+is especially problematic in the context of Netty because certain global
+singletons like GlobalEventExecutor will create a
+DefaultThreadFactory. If all DefaultThreadFactory instances are sticky
+about their thread groups, it means that submitting tasks to the
+GlobalEventExecutor singleton can cause a thread to be created from the
+DefaultThreadFactory sticky thread group, exactly the problem with
+DefaultThreadFactory being sticky about thread groups. A similar problem
+arises from the ThreadDeathWatcher.
+
+Modifications:
+
+This commit modifies DefaultThreadFactory so that a null thread group
+can be set with the behavior that all threads created by such an
+instance will inherit the default thread group (the thread group
+provided by the security manager if there is one, otherwise the thread
+group of the creating thread). The construction of the instances of
+DefaultThreadFactory used by the GlobalEventExecutor singleton and
+ThreadDeathWatcher are modified to use this behavior. Additionally, we
+also modify the chained constructor invocations of the
+DefaultThreadFactory that do not have a parameter to specify a thread
+group to use the thread group from the security manager is available,
+otherwise the creating thread's thread group. We also add unit tests
+ensuring that all of this behavior is maintained.
+
+Result:
+
+It will be possible to have DefaultThreadFactory instances that are not
+sticky about the thread group that led to their creation. Instead,
+threads created by such a DefaultThreadFactory will inherit the default
+thread group which will either be the thread group from the security
+manager or the current thread's thread group.

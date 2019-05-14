@@ -1,0 +1,16 @@
+Close channels that are released to a closed FixedChannelPool.
+
+Motivation:
+
+Channels returned to a FixedChannelPool after closing it remain active.
+
+Since channels that where acquired from the pool are not closed during the close operation, they remain open even after releasing the channel back to the pool where they are then in accessible and become in-effect a connection leak.
+
+Modification:
+
+Close the released channel on releasing back to a closed pool.
+
+Result:
+
+Much harder to create a connection leak by closing an active
+FixedChannelPool instance.

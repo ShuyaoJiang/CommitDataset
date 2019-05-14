@@ -1,0 +1,18 @@
+Correctly not try to call handshake() when engine is already closed.
+
+Motivation:
+
+We need to ensure we not call handshake() when the engine is already closed. Beside this our implementation of isOutboundDone() was not correct as it not took the pending data in the outbound buffer into acount (which may be also generated as part of an ssl alert). Beside this we also called SSL_shutdown(...) while we were still in init state which will produce an error and so noise in the log with openssl later versions.
+
+This is also in some extend related to #5931 .
+
+Modifications:
+
+- Ensure we not call handshake() when already closed
+- Correctly implement isOutboundDone()
+- Not call SSL_shutdown(...) when still in init state
+- Added test-cases
+
+Result:
+
+More correct behaviour of our openssl SSLEngine implementation.

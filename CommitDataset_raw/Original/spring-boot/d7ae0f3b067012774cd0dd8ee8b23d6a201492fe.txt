@@ -1,0 +1,8 @@
+Ensure that management endpoints with nested paths are secured
+
+Previously each endpoint was secured for path, path/, and path.*.
+This meant that a request to path/foo was not secured. This commit
+secures path/** to ensure that requests to a nested endpoint path are
+also secured.
+
+Fixes gh-2476

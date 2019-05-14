@@ -1,0 +1,18 @@
+Support @Rollback on classes & deprecate @TxConfig
+
+Since Spring Framework 2.5, @Rollback has been supported on test
+methods, with class-level rollback settings configured via
+@TransactionConfiguration; however, allowing @Rollback to be declared
+on test classes with method-level declarations overriding class-level
+declarations would prove more intuitive than having to declare both
+@TransactionConfiguration and @Rollback. Furthermore, the
+transactionManager flag in @TransactionConfiguration was made
+superfluous many years ago with the introduction of support for a
+qualifier in @Transactional.
+
+This commit enables @Rollback to be declared at the class level for
+default rollback semantics within test class hierarchies and deprecates
+@TransactionConfiguration in favor of @Rollback and @Transactional
+qualifiers.
+
+Issue: SPR-13276, SPR-13277

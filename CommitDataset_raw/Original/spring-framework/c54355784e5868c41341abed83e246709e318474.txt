@@ -1,0 +1,10 @@
+Buffer leak fixes
+
+Address issues where buffers are allocated (and cached somehow) at or
+before subscription, and before explicit demand.
+
+The commit adds tests proving the leaks and fixes. The common thread
+for all tests is a "zero demand" subscriber that subscribes  but does
+not request, and then cancels without consuming anything.
+
+Closes gh-22107

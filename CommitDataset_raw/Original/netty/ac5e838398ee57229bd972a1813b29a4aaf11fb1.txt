@@ -1,0 +1,16 @@
+Allow specifying `SelectorProvider` when constructing an NIO channel #2311
+
+Motivation:
+
+At the moment we use the system-wide default selector provider for this invocation of the Java virtual machine when constructing a new NIO channel, which makes using an alternative SelectorProvider practically useless.
+This change allows user specify his/her preferred SelectorProvider.
+
+Modifications:
+
+Add SelectorProvider as a param for current `private static *Channel newSocket` method of NioSocketChannel, NioServerSocketChannel and NioDatagramChannel.
+Change default constructors of NioSocketChannel, NioServerSocketChannel and NioDatagramChannel to use DEFAULT_SELECTOR_PROVIDER when calling newSocket(SelectorProvider).
+Add new constructors for NioSocketChannel, NioServerSocketChannel and NioDatagramChannel which allow user specify his/her preferred SelectorProvider.
+
+Result:
+
+Now users can specify his/her preferred SelectorProvider when constructing an NIO channel.

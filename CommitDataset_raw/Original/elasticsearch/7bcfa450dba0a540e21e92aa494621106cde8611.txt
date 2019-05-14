@@ -1,0 +1,7 @@
+[Monitoring] Remove `include_type_name` parameter from GET _template request (#38818)
+
+The HTTP exporter code in the Monitoring plugin makes `GET _template` requests to check for existence of templates. These requests don't need to pass the `include_type_name` query parameter so this PR removes it from the request. This should remove the following deprecation log entries on the Monitoring cluster in 7.0.0 onwards:
+
+```
+[types removal] Specifying include_type_name in get index template requests is deprecated.
+```

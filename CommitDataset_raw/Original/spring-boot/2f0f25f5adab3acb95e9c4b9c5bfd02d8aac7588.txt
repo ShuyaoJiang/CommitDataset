@@ -1,0 +1,16 @@
+Add Configurations class
+
+Add a general purpose `Configurations` class that encapsulates the
+sorting and merging rules that are usually apply. The class is
+particularly useful in tests where configuration classes often need
+to be specified, but an `@Import` or `ImportSelector` cannot be easily
+used.
+
+Two `Configurations` subclasses have been initially added. The
+`UserConfigurations` class can be used to represent user defined
+configuration and the `AutoConfigurations` class can be used to
+represent a subset of auto-configurations. Auto configurations are
+sorted using the same `@AutoConfiguraionBefore`/`@AutoConfiguraionAfter`
+logic as the `@EnableAutoConfiguration` annotation.
+
+Fixes gh-9795

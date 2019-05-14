@@ -1,0 +1,5 @@
+High-level client: fix clusterAlias parsing in SearchHit (#32465)
+
+When using cross-cluster search through the high-level REST client, the cluster alias from each search hit was not parsed correctly. It would be part of the index field initially, but overridden just a few lines later once setting the shard target (in case we have enough info to build it from the response). In any case, getClusterAlias returns `null` which is a bug.
+
+With this change we rather parse back clusterAliases from the index name, set its corresponding field and properly handle the two possible cases depending on whether we can or cannot build the shard target object.

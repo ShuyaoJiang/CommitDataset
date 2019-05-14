@@ -1,0 +1,15 @@
+Support @Cache* as merged composed annotations
+
+Prior to this commit, @Cacheable, @CacheEvict, @CachePut, and @Caching
+could be used to create custom stereotype annotations with hardcoded
+values for their attributes; however, it was not possible to create
+composed annotations with attribute overrides.
+
+This commit addresses this issue by refactoring
+SpringCacheAnnotationParser to use the newly introduced
+findAllMergedAnnotations() method in AnnotatedElementUtils. As a
+result, @Cacheable, @CacheEvict, @CachePut, and @Caching can now be
+used to create custom composed annotations with attribute overrides
+configured via @AliasFor.
+
+Issue: SPR-13475

@@ -1,0 +1,92 @@
+Fix Race in ReferenceCountedOpenSslEngine
+
+Motivation:
+ReferenceCountedOpenSslEngine is careful to lock access to `ssl`
+almost everywhere (manually verified) *except* in the constructor.
+Since `ssl` is non-final, it does not enjoy automatic thread safety
+of the code that uses it.  Specifically, that means netty tcnative
+code is not thread safe.
+
+Modifications:
+
+Ensure that all ssl engine intialization and variables related to
+it are properly synchronized  by adding in the constructor.
+
+Result:
+Less noisy race detector.
+
+Notes:
+The specific racing threads are:
+```
+  Read of size 8 at 0x7b5400019ff8 by thread T52 (mutexes: write M215300):
+    #0 ssl_do_info_callback .../src/ssl/ssl_lib.c:2602:24 (f077793ecd812aeebb37296c987f655c+0x23c6834)
+    #1 ssl_process_alert .../src/ssl/tls_record.c:473:3 (f077793ecd812aeebb37296c987f655c+0x23a5346)
+    #2 tls_open_record .../src/ssl/tls_record.c:338:12 (f077793ecd812aeebb37296c987f655c+0x23a5289)
+    #3 ssl3_get_record .../src/ssl/s3_pkt.c:146:7 (f077793ecd812aeebb37296c987f655c+0x23a3da0)
+    #4 ssl3_read_app_data .../src/ssl/s3_pkt.c:388:17 (f077793ecd812aeebb37296c987f655c+0x23a368f)
+    #5 ssl_read_impl .../src/ssl/ssl_lib.c:722:15 (f077793ecd812aeebb37296c987f655c+0x23c0895)
+    #6 SSL_read .../src/ssl/ssl_lib.c:743:10 (f077793ecd812aeebb37296c987f655c+0x23c075b)
+    #7 netty_internal_tcnative_SSL_readFromSSL .../netty_tcnative/openssl-dynamic/src/main/c/ssl.c:946:12 (f077793ecd812aeebb37296c987f655c+0x23827f7)
+    #8 <null> <null> (0x7fc0760193be)
+    #9 io.netty.handler.ssl.ReferenceCountedOpenSslEngine.readPlaintextData(Ljava/nio/ByteBuffer;)I (ReferenceCountedOpenSslEngine.java:449)
+    #10 io.netty.handler.ssl.ReferenceCountedOpenSslEngine.unwrap([Ljava/nio/ByteBuffer;II[Ljava/nio/ByteBuffer;II)Ljavax/net/ssl/SSLEngineResult; (ReferenceCountedOpenSslEngine.java:882)
+    #11 io.netty.handler.ssl.ReferenceCountedOpenSslEngine.unwrap([Ljava/nio/ByteBuffer;[Ljava/nio/ByteBuffer;)Ljavax/net/ssl/SSLEngineResult; (ReferenceCountedOpenSslEngine.java:985)
+    #12 io.netty.handler.ssl.ReferenceCountedOpenSslEngine.unwrap(Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;)Ljavax/net/ssl/SSLEngineResult; (ReferenceCountedOpenSslEngine.java:1028)
+    #13 io.netty.handler.ssl.SslHandler$SslEngineType$1.unwrap(Lio/netty/handler/ssl/SslHandler;Lio/netty/buffer/ByteBuf;IILio/netty/buffer/ByteBuf;)Ljavax/net/ssl/SSLEngineResult; (SslHandler.java:206)
+    #14 io.netty.handler.ssl.SslHandler.unwrap(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;II)Z (SslHandler.java:1162)
+    #15 io.netty.handler.ssl.SslHandler.decode(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;Ljava/util/List;)V (SslHandler.java:1084)
+    #16 io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;Ljava/util/List;)V (ByteToMessageDecoder.java:489)
+    #17 io.netty.handler.codec.ByteToMessageDecoder.callDecode(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;Ljava/util/List;)V (ByteToMessageDecoder.java:428)
+    #18 io.netty.handler.codec.ByteToMessageDecoder.channelRead(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Object;)V (ByteToMessageDecoder.java:265)
+    #19 io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Ljava/lang/Object;)V (AbstractChannelHandlerContext.java:362)
+    #20 io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Lio/netty/channel/AbstractChannelHandlerContext;Ljava/lang/Object;)V (AbstractChannelHandlerContext.java:348)
+    #21 io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(Ljava/lang/Object;)Lio/netty/channel/ChannelHandlerContext; (AbstractChannelHandlerContext.java:340)
+    #22 io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Object;)V (DefaultChannelPipeline.java:1334)
+    #23 io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Ljava/lang/Object;)V (AbstractChannelHandlerContext.java:362)
+    #24 io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(Lio/netty/channel/AbstractChannelHandlerContext;Ljava/lang/Object;)V (AbstractChannelHandlerContext.java:348)
+    #25 io.netty.channel.DefaultChannelPipeline.fireChannelRead(Ljava/lang/Object;)Lio/netty/channel/ChannelPipeline; (DefaultChannelPipeline.java:926)
+    #26 io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read()V (AbstractNioByteChannel.java:134)
+    #27 io.netty.channel.nio.NioEventLoop.processSelectedKey(Ljava/nio/channels/SelectionKey;Lio/netty/channel/nio/AbstractNioChannel;)V (NioEventLoop.java:644)
+    #28 io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized()V (NioEventLoop.java:579)
+    #29 io.netty.channel.nio.NioEventLoop.processSelectedKeys()V (NioEventLoop.java:496)
+    #30 io.netty.channel.nio.NioEventLoop.run()V (NioEventLoop.java:458)
+    #31 io.netty.util.concurrent.SingleThreadEventExecutor$5.run()V (SingleThreadEventExecutor.java:858)
+    #32 io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run()V (DefaultThreadFactory.java:138)
+    #33 java.lang.Thread.run()V (Thread.java:745)
+    #34 (Generated Stub)
+
+  Previous write of size 8 at 0x7b5400019ff8 by thread T97:
+    #0 SSL_CTX_set_info_callback .../ssl/ssl_session.c:1136:22 (f077793ecd812aeebb37296c987f655c+0x23bd621)
+    #1 netty_internal_tcnative_SSL_newSSL .../netty_tcnative/openssl-dynamic/src/main/c/ssl.c:830:5 (f077793ecd812aeebb37296c987f655c+0x2382306)
+    #2 <null> <null> (0x7fc0760193be)
+    #3 io.netty.handler.ssl.ReferenceCountedOpenSslEngine.<init>(Lio/netty/handler/ssl/ReferenceCountedOpenSslContext;Lio/netty/buffer/ByteBufAllocator;Ljava/lang/String;IZ)V (ReferenceCountedOpenSslEngine.java:237)
+    #4 io.netty.handler.ssl.OpenSslEngine.<init>(Lio/netty/handler/ssl/OpenSslContext;Lio/netty/buffer/ByteBufAllocator;Ljava/lang/String;I)V (OpenSslEngine.java:31)
+    #5 io.netty.handler.ssl.OpenSslContext.newEngine0(Lio/netty/buffer/ByteBufAllocator;Ljava/lang/String;I)Ljavax/net/ssl/SSLEngine; (OpenSslContext.java:49)
+    #6 io.netty.handler.ssl.ReferenceCountedOpenSslContext.newEngine(Lio/netty/buffer/ByteBufAllocator;Ljava/lang/String;I)Ljavax/net/ssl/SSLEngine; (ReferenceCountedOpenSslContext.java:409)
+    #7 io.netty.handler.ssl.ReferenceCountedOpenSslContext.newEngine(Lio/netty/buffer/ByteBufAllocator;)Ljavax/net/ssl/SSLEngine; (ReferenceCountedOpenSslContext.java:423)
+    #8 io.grpc.netty.ProtocolNegotiators$ServerTlsHandler.handlerAdded(Lio/netty/channel/ChannelHandlerContext;)V (ProtocolNegotiators.java:133)
+    #9 io.netty.channel.DefaultChannelPipeline.callHandlerAdded0(Lio/netty/channel/AbstractChannelHandlerContext;)V (DefaultChannelPipeline.java:597)
+    #10 io.netty.channel.DefaultChannelPipeline.addLast(Lio/netty/util/concurrent/EventExecutorGroup;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline; (DefaultChannelPipeline.java:226)
+    #11 io.netty.channel.DefaultChannelPipeline.addLast(Lio/netty/util/concurrent/EventExecutorGroup;[Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline; (DefaultChannelPipeline.java:392)
+    #12 io.netty.channel.DefaultChannelPipeline.addLast([Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline; (DefaultChannelPipeline.java:379)
+    #13 io.grpc.netty.NettyServerTransport.start(Lio/grpc/internal/ServerTransportListener;)V (NettyServerTransport.java:99)
+    #14 io.grpc.netty.NettyServer$1.initChannel(Lio/netty/channel/Channel;)V (NettyServer.java:164)
+    #15 io.netty.channel.ChannelInitializer.initChannel(Lio/netty/channel/ChannelHandlerContext;)Z (ChannelInitializer.java:113)
+    #16 io.netty.channel.ChannelInitializer.handlerAdded(Lio/netty/channel/ChannelHandlerContext;)V (ChannelInitializer.java:105)
+    #17 io.netty.channel.DefaultChannelPipeline.callHandlerAdded0(Lio/netty/channel/AbstractChannelHandlerContext;)V (DefaultChannelPipeline.java:597)
+    #18 io.netty.channel.DefaultChannelPipeline.access$000(Lio/netty/channel/DefaultChannelPipeline;Lio/netty/channel/AbstractChannelHandlerContext;)V (DefaultChannelPipeline.java:44)
+    #19 io.netty.channel.DefaultChannelPipeline$PendingHandlerAddedTask.execute()V (DefaultChannelPipeline.java:1387)
+    #20 io.netty.channel.DefaultChannelPipeline.callHandlerAddedForAllHandlers()V (DefaultChannelPipeline.java:1122)
+    #21 io.netty.channel.DefaultChannelPipeline.invokeHandlerAddedIfNeeded()V (DefaultChannelPipeline.java:647)
+    #22 io.netty.channel.AbstractChannel$AbstractUnsafe.register0(Lio/netty/channel/ChannelPromise;)V (AbstractChannel.java:506)
+    #23 io.netty.channel.AbstractChannel$AbstractUnsafe.access$200(Lio/netty/channel/AbstractChannel$AbstractUnsafe;Lio/netty/channel/ChannelPromise;)V (AbstractChannel.java:419)
+    #24 io.netty.channel.AbstractChannel$AbstractUnsafe$1.run()V (AbstractChannel.java:478)
+    #25 io.netty.util.concurrent.AbstractEventExecutor.safeExecute(Ljava/lang/Runnable;)V (AbstractEventExecutor.java:163)
+    #26 io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(J)Z (SingleThreadEventExecutor.java:403)
+    #27 io.netty.channel.nio.NioEventLoop.run()V (NioEventLoop.java:462)
+    #28 io.netty.util.concurrent.SingleThreadEventExecutor$5.run()V (SingleThreadEventExecutor.java:858)
+    #29 io.netty.util.concurrent.DefaultThreadFactory$DefaultRunnableDecorator.run()V (DefaultThreadFactory.java:138)
+    #30 java.lang.Thread.run()V (Thread.java:745)
+    #31 (Generated Stub)
+
+```

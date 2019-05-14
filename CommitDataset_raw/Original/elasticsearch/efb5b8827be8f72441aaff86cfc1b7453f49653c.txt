@@ -1,0 +1,12 @@
+[Monitoring] Add Rolling Upgrade Tests (elastic/x-pack-elasticsearch#2832)
+
+This adds a rolling upgrade test for X-Pack monitoring. It works by using the `_xpack/monitoring/_bulk` endpoint to send arbitrary data, then verify that it exists.
+
+This forces a few things to happen, thereby testing the behavior: 
+
+1. The templates must exist.
+2. The elected master node must be "ready" to work (hence the first
+point).
+3. The same "system_api_version" is accepted by every version of ES.
+
+Original commit: elastic/x-pack-elasticsearch@012e5738bba1741eb8f6270a0d6d43b884d38756

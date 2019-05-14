@@ -1,0 +1,22 @@
+Mark sun.nio.ch as optional
+
+Motivation:
+
+If sun.nio.ch is not optional this will cause troubles in the
+OSGi world. The package is not exposed by default in OSGi, so
+actually the whole netty framework cannot be used directly.
+
+There are workarounds, but workarounds are ugly. Especially since
+the use of sun.nio.ch is optional. So the requirement on the
+package should be optional as well.
+
+Modifications:
+
+Make the import of sun.nio.ch optional.
+
+Result:
+
+If the package cannot be imported it will behave as if the package
+sun.nio.ch is not present (like with other JVMs). If the package is
+exposed in OSGi (e.g. bootclassloader delegation, extension fragment)
+it will be used.

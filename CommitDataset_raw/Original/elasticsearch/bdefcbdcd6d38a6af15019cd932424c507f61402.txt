@@ -1,0 +1,13 @@
+reroute API: log messages from commands (#25955)
+
+Gives allocation commands from the cluster reroute API
+the ability to provide messages to be logged once the 
+cluster state change has been committed. 
+
+The purpose of this change is to create a record in the 
+logs when allocation commands which could potentially
+be destructive are applied. The allocate_empty_primary
+and allocate_stale_primary commands are the only ones
+that currently provide log messages.
+
+Closes #22821

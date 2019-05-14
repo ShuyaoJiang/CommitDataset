@@ -1,0 +1,7 @@
+Ensure ILM policies run safely on leader indices  (#38140)
+
+Adds a Step to the Shrink and Delete actions which prevents those
+actions from running on a leader index - all follower indices must first
+unfollow the leader index before these actions can run. This prevents
+the loss of history before follower indices are ready, which might
+otherwise result in the loss of data.

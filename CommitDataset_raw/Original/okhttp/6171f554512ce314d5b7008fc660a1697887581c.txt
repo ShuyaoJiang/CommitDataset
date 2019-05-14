@@ -1,0 +1,13 @@
+Fix two problems with the window size.
+
+Each peer has a window size. The peer's window size controls how much
+data we can send the peer, and our window size controls how much data
+the peer can send us. We had these reversed in SpdyStream, so if the
+peer specified a non-default window size we wouldn't send the required
+WINDOW_UPDATE events when we needed to.
+
+The connection has its own window size. But unlike the stream window
+sizes, this needs to be manually adjusted with a windowUpdate frame
+when the connection is opened.
+
+Closes https://github.com/square/okhttp/issues/933

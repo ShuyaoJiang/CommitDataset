@@ -1,0 +1,12 @@
+Change order of config file locations to be more natural
+
+The most natural order is "more specific locations win". That way
+if a use has application.properties in the root of a JAR (as is
+normal), overrides can always be made on
+classpath:/config/application.properties (as well as
+file:./application.properties which has always been the case).
+
+Before this change properties in classpath:/config/* were over
+written by those in the root location, not the other way round.
+
+Fixes gh-527

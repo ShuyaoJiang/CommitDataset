@@ -1,0 +1,33 @@
+add move-to-step endpoint for lifecycles (#30636)
+
+
+This change introduces a new rest endpoint for lifecycles that
+allows users to explicitely jump to earlier or later steps in the
+policy's execution. This is useful for re-running tasks that may
+be stuck, or were incorrectly configured.
+
+Endpoint can be found in this format:
+
+POST _xpack/index_lifecycle/_move/<index_name>
+{
+  current_step: ...
+  next_step: ...
+}
+
+This operates on a per-index basis and does not resolve the param to
+multiple indices.
+
+The action is validated so that the index's state is only modified if
+all of the following are true:
+
+- <index_name> has an existing policy associated with it
+- current_step is the actual step the index is currently on (for sanity)
+- next_step is a valid step within the policy-step-registry
+
+* respond to reviewer
+
+refactor to stop using MoveToNextStepUpdateTask directly
+
+* remove getPolicyRegistry
+
+* rename validateMoveToNextStep

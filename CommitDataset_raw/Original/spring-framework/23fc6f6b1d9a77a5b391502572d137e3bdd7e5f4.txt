@@ -1,0 +1,12 @@
+Drain JDK HTTP client response body in all cases
+
+Prior to this commit, when using the `SimpleClientHttpRequestFactory`
+as a driver for `RestTemplate`, the HTTP response body would only be
+drained if there was an attempt to read it in the first place.
+
+This commit ensures that, even if there's no attempt at reading the
+response body, it is properly drained when the response is closed to
+make sure that the connection is released in a proper state and can be
+put back in the connection pool for reuse.
+
+Issue: SPR-17181

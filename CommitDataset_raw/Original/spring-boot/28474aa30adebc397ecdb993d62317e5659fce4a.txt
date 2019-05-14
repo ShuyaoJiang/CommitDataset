@@ -1,0 +1,19 @@
+Fix compatibility with Apache Kafka 0.10.1
+
+Update KafkaProperties since  Apache Kafka `0.10.1` changed the type
+for the `ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG` from the
+`Long` to `Integer`.
+
+Kafka includes the following conversion logic:
+
+    case LONG:
+        if (value instanceof Integer)
+            return ((Integer) value).longValue();
+        if (value instanceof Long)
+            return (Long) value;
+        else if (value instanceof String)
+            return Long.parseLong(trimmed);
+
+So we remain compatible with both `0.10.0` and `0.10.1`
+
+Closes gh-7723

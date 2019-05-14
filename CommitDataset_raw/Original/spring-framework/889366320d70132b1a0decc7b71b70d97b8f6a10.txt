@@ -1,0 +1,13 @@
+Do not process undefined conditional HTTP requests
+
+Prior to this change, the HttpEntityMethodProcessor would try to process
+conditional requests that are undefined by the spec, such as:
+
+* an HTTP GET request with "If-None-Match:*"
+* a request with both "If-None-Match" and "If-Match"
+* a request with both "If-None-Match" and "If-Unmodified-Since"
+
+This commit skips the processing of those requests as conditional
+requests and continues with normal request handling.
+
+Issue: SPR-13626

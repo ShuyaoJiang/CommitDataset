@@ -1,0 +1,11 @@
+Add dedicated step for checking shrink allocation status (#35161)
+
+This adds a new step for checking whether an index is allocated correctly based
+on the rules added prior to running the shrink step. It also fixes a bug where
+for shrink we are not allowed to have the shards relocating for the shrink step.
+
+This also allows us to simplify AllocationRoutedStep and provide better
+feedback in the step info for why either the allocation or the shrink checks
+have failed.
+
+Resolves #34938

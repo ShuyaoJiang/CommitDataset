@@ -1,0 +1,11 @@
+Fix interoperability with < 6.3 transport clients (#30971)
+
+With the default distribution changing in 6.3, clusters might now contain custom metadata that a
+pure OSS transport client cannot deserialize. As this can break transport clients when accessing
+the cluster state or reroute APIs, we've decided to exclude any custom metadata that the transport
+client might not be able to deserialize. This will ensure compatibility between a < 6.3 transport
+client and a 6.3 default distribution cluster. Note that this PR only covers interoperability with older
+clients, another follow-up PR will cover full interoperability for >= 6.3 transport clients where we will
+make it possible again to get the custom metadata from the cluster state.
+
+Relates to #30731

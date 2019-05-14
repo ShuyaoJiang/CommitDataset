@@ -1,0 +1,17 @@
+Arithmetic
+
+* big refactor of Processor by introducing ProcessorDefinition an
+immutable tree structure used for resolving multiple inputs across
+folding (in particular for aggregations) which at runtime gets
+translated into 'compiled' or small Processors
+
+Add expression arithmetic, expression folding and type coercion
+
+Folding
+* for literals, scalars and inside the optimizer
+
+Type validation happens per type hierarchy (numeric vs decimal) not type
+Ceil/Floor/Round functions return long/int instead of double
+ScalarFunction preserves ProcessorDefinition instead of functionId
+
+Original commit: elastic/x-pack-elasticsearch@a703f8b455604f1471d1861c13afe2feb84e216c

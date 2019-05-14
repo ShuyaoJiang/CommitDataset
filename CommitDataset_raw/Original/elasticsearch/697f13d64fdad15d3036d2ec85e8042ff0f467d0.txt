@@ -1,0 +1,7 @@
+Check that delete index request succeeded in test teardown (#38903)
+
+When tearing down from `ESSingleNodeTestCase` we perform a delete on "*"
+indices, it some cases, however, those indices are not fully deleted. Rather
+than have a failure occur later down the change (see:
+https://github.com/elastic/elasticsearch/issues/30290#issuecomment-463589008 )
+the failure should occurr immediately so it can be diagnosed more easily.

@@ -1,0 +1,19 @@
+[ML] Modify thresholds for normalization triggers (#33663)
+
+[ML] Modify thresholds for normalization triggers
+
+The (arbitrary) threshold factors used to judge if scores have
+changed significantly enough to trigger a look-back renormalization have
+been changed to values that reduce the frequency of such
+renormalizations.
+
+Added a clause to treat changes in scores as a 'big change' if it would
+result in a change of severity reported in the UI.
+
+Also altered the clause affecting small scores so that a change should
+be considered big if scores have changed by at least 1.5. 
+
+Relates https://github.com/elastic/machine-learning-qa/issues/263
+
+
+

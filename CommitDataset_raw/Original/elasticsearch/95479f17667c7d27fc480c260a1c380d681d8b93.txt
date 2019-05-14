@@ -1,0 +1,9 @@
+Ensure that a non static top docs is created during the search phase
+
+This change fixes an unreleased bug that trips an assertion because a static instance
+shared among threads is modified during the search. This commit copies the static
+instance in order to ensure that each thread can modify the value without modifying
+the other instances.
+
+Closes #37179
+Closes #37266

@@ -1,0 +1,7 @@
+Primary replica resync should not send ops without seqno (#40433)
+
+Primary-replica resync in a mixed-cluster between 6.x and 5.6 can send
+operations without sequence number to a replica which already processed
+operations with sequence number. This leads to the failure of that
+replica for we trip the sequence number assertion when writing resync
+operations without sequence number to translog.

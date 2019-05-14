@@ -1,0 +1,6 @@
+Avoid deadlocks in cache (#30461)
+
+This commit avoids deadlocks in the cache by removing dangerous places
+where we try to take the LRU lock while completing a future. Instead, we
+block for the future to complete, and then execute the handling code
+under the LRU lock (for example, eviction).

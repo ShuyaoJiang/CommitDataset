@@ -1,0 +1,19 @@
+Watcher: Increase HttpClient parallel sent requests (#30130)
+
+The HTTPClient used in watcher is based on the apache http client. The
+current client is using a lot of defaults - which are not always
+optimal. Two of those defaults are the maximum number of total
+connections and the maximum number of connections to a single route.
+
+If one of those limits is reached, the HTTPClient waits for a connection
+to be finished thus acting in a blocking fashion. In order to prevent
+this when many requests are being executed, we increase the limit of
+total connections as well as the connections per route (a route is
+basically an endpoint, which also contains proxy information, not
+containing an URL, just hosts).
+
+On top of that an additional option has been set to evict
+long running connections, which can potentially be reused after some
+time. As this requires an additional background thread, this required
+some changes to ensure that the httpclient is closed properly. Also the
+timeout for this can be configured.

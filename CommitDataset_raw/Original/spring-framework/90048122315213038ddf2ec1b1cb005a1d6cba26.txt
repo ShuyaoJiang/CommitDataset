@@ -1,0 +1,32 @@
+Add Server-Sent Events support
+
+Flux<SseEvent> is Spring Web Reactive equivalent to Spring MVC
+SseEmitter type. It allows to send Server-Sent Events in a reactive way.
+Sending Flux<String> or Flux<Pojo> is equivalent to sending
+Flux<SseEvent> with the data property set to the String or
+Pojo value. For example:
+
+@RestController
+public class SseController {
+
+	@RequestMapping("/sse/string")
+	Flux<String> string() {
+		return Flux.interval(Duration.ofSeconds(1)).map(l -> "foo " + l);
+	}
+
+	@RequestMapping("/sse/person")
+	Flux<Person> person() {
+		return Flux.interval(Duration.ofSeconds(1)).map(l -> new Person(Long.toString(l), "foo", "bar"));
+	}
+
+	@RequestMapping("/sse-raw")
+	Flux<SseEvent> sse() {
+		return Flux.interval(Duration.ofSeconds(1)).map(l -> {
+			SseEvent event = new SseEvent();
+			event.setId(Long.toString(l));
+			event.setData("foo\nbar");
+			event.setComment("bar\nbaz");
+			return event;
+		});
+	}
+}

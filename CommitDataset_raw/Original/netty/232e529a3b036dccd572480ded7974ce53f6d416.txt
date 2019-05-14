@@ -1,0 +1,19 @@
+Fix missing version properties of transport-epoll in all-in-one JAR
+
+Related: #2952
+
+Motivation:
+
+META-INF/io.netty.versions.properties in netty-all-*.jar does not
+contain the version information about the netty-transport-epoll module.
+
+Modifications:
+
+Fix a bug in the regular expression in pom.xml, so that the artifacts
+with a classifier is also included in the version properties file.
+
+Result:
+
+The version information of all modules are included in the version
+properties file, and Version.identify() does not miss
+netty-transport-epoll.

@@ -1,0 +1,26 @@
+Allow endpoint paths to be configured via endpoint.<name>.path
+
+Support for configuring an endpoint’s path separately from its id was
+introduced in 97255785, but it didn’t work for a variety of reasons:
+
+ 1. Some custom MVC endpoints did not have configuration properties
+    bound to them
+ 2. Some generic endpoints rejected the path property as they were
+    configured not to ignore unknown fields
+ 3. The property used to configure the path was dependent on the id
+    of the endpoint. This meant that the path property’s name would
+    change if the endpoint’s id was changed
+
+This commit addresses these problems:
+
+ 1. @ConfigurationProperties has been added to custom MvcEndpoints where
+    it was missing
+ 2. Generic endpoints have been updated to ignore unknown fields,
+    allowing the path of their MVC adapter to be configured
+ 3. Rather than using the id of a generic endpoint to determine the name
+    of its path property, the prefix or value of the endpoint’s
+    @ConfigurationProperties annotation is used instead. Any generic
+    endpoint that is not annotated with @ConfigurationProperties is
+    ignored, making its path unconfigurable.
+
+Closes gh-5105

@@ -1,0 +1,8 @@
+Fixed NPEs caused by requests without content. (#23497)
+
+REST handlers that require a body will throw an an ElasticsearchParseException "request body required".
+REST handlers that require a body OR source param will throw an ElasticsearchParseException "request body or source param required".
+Replaced asserts in BulkRequest parsing code with a more descriptive IllegalArgumentException if the line contains an empty object.
+Updated bulk REST test to verify an empty action line is rejected properly.
+Updated BulkRequestTests with randomized testing for an empty action line.
+Used try-with-resouces for XContentParser in AbstractBulkByQueryRestHandler.

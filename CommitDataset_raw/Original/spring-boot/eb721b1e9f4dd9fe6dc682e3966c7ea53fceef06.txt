@@ -1,0 +1,12 @@
+Find 'messages*.properties' in all jar URLs
+
+Update the the PathMatchingResourcePatternResolver used in the
+MessageSourceAutoConfiguration condition to deal with the fact
+that `classpath*:` patterns do not work with URLClassLoaders when
+the pattern doesn't include a folder.
+
+The ExtendedPathMatchingResourcePatternResolver works by searching
+all classpath URLs when the `findAllClassPathResources` method is
+called with an empty location.
+
+Fixes gh-1378

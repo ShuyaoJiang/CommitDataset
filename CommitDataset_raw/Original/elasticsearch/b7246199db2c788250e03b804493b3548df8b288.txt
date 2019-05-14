@@ -1,0 +1,10 @@
+Preserve thread context when connecting to remote cluster (#31574)
+
+Establishing remote cluster connections uses a queue to coordinate multiple concurrent connect
+attempts. Connect attempts can be initiated by user triggered searches as well as by system events 
+(e.g. when nodes disconnect). Multiple such concurrent events can lead to the connectListener of
+one event to be called under the thread context of another connect attempt. This can lead to the
+situation as seen in #31462 where the connect listener is executed under the system context, which 
+breaks when fetching the search shards from the remote cluster.
+
+Closes #31462

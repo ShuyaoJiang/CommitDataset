@@ -1,0 +1,9 @@
+Fix tests that assume Class.getClassLoader() returns a URLClassLoader so that they can call getURLs() to instead parse the "java.class.path" system property.
+
+This doesn't fully fix FinalizableReferenceQueueClassLoaderUnloadingTest: I still see a failure for testUnloadableInStaticFieldIfClosed. But at least the other 2 tests in the file pass, and the failure is now a "real" failure ("Predicate did not become true within 10 second timeout") rather than a ClassCastException.
+
+(I've confirmed that the failing test computes exactly the same classpath under Java 9 as under Java 8, so I'm not sure exactly what's up. I may ask emcmanus.)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=182227182

@@ -1,0 +1,17 @@
+OpenSslEngine support unwrap plaintext greater than 2^14 and avoid
+infinite loop
+
+Motivation:
+If SslHandler sets jdkCompatibilityMode to false and ReferenceCountedOpenSslEngine sets jdkCompatibilityMode to true there is a chance we will get stuck in an infinite loop if the peer sends a TLS packet with length greater than 2^14 (the maximum length allowed in the TLS 1.2 RFC [1]). However there are legacy implementations which actually send larger TLS payloads than 2^14 (e.g. OpenJDK's SSLSessionImpl [2]) and in this case ReferenceCountedOpenSslEngine will return BUFFER_OVERFLOW in an attempt to notify that a larger buffer is to be used, but if the buffer is already at max size this process will repeat indefinitely.
+
+[1] https://tools.ietf.org/html/rfc5246#section-6.2.1
+[2] http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/d5a00b1e8f78/src/share/classes/sun/security/ssl/SSLSessionImpl.java#l793
+
+Modifications:
+- Support TLS payload sizes greater than 2^14 in ReferenceCountedOpenSslEngine
+- ReferenceCountedOpenSslEngine should throw an exception if a
+BUFFER_OVERFLOW is impossible to rectify
+
+Result:
+No more infinite loop in ReferenceCountedOpenSslEngine due to
+BUFFER_OVERFLOW and large TLS payload lengths.

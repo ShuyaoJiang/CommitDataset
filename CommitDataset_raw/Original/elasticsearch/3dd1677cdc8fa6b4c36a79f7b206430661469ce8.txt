@@ -1,0 +1,8 @@
+[Test] Fix DuelScrollIT#testDuelIndexOrderQueryThenFetch
+
+This commit disables the automatic `refresh_interval` in order to ensure
+that index readers cannot differ between the normal and scroll search.
+This issue is related to the 7.5 Lucene upgrade which contains a change that
+makes single segment merge more likely to occur (max deletes percentage).
+
+Closes #32682

@@ -1,0 +1,11 @@
+HTTP/2 Example Needs FullHttpRequest
+
+Motivation:
+The HTTP/2 hello world example server should be expecting a FullHttpRequest when falling back to HTTP/1.x mode.
+
+Modifications:
+- HelloWorldHttp1Handler should process FullHttpRequestObjects
+- Http2ServerInitializer should insert an HttpObjectAggregator into the pipeline if no upgrade was attempted
+
+Result:
+Responses from the HelloWorldHttp1Handler should only come after full HTTP requests are received.

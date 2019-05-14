@@ -1,0 +1,8 @@
+Move testToUtc test to DateFormattersTests (#38610)
+
+The test was relying on toString in ZonedDateTime which is different to
+what is formatted by strict_date_time when milliseconds are 0
+The method is just delegating to dateFormatter, so that scenario should
+be covered there.
+
+closes #38359

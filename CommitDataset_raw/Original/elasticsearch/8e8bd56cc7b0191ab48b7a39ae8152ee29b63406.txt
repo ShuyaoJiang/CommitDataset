@@ -1,0 +1,10 @@
+In MatchQuery, remove a check for fragile search analyzers. (#33927)
+
+As far as I can tell this guard against fragile analyzers is no longer relevant, since
+we stopped setting special analyzers on numeric fields (3bf6f4). Instead of removing
+the guard completely, I opted to keep a check for untokenized + unnormalized fields
+to avoid going through the analysis process unnecessarily.
+
+My motivation for simplifying this check is that I'd like to add support for
+`split_queries_on_whitespace` to the new 'queryable object' fields. As it stands, I would
+have to add a dedicated instanceof check for the new mapper, which is not optimal.

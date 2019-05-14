@@ -1,0 +1,11 @@
+Restore quiet logging on startup
+
+Reinstate initializeWithSensibleDefaults() on AbstractLoggingSystem
+beforeInitialize(). This is required to ensure no superfluous logging
+output occurs when starting up a spring boot application from the
+command line.
+
+It appears that commit e9c649dfb2b1653f5e4f2fed421aa053e6fd42ce
+modified the logic in an attempt to prevent double initialization.
+
+fixes gh-174

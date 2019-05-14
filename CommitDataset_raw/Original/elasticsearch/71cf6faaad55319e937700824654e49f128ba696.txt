@@ -1,0 +1,13 @@
+Only turn to follower when term bumping on follower check (#36449)
+
+Deals with a situation where a follower becomes disconnected from the leader, but only for such a
+short time where it becomes candidate and puts up a NO_MASTER_BLOCK, but then receives a
+follower check from the leader. If the leader does not notice the node disconnecting, it is important
+for the node not to be turned back into a follower but try and join the leader again.
+
+We still should prefer the node into a follower on a follower check when this follower check triggers
+a term bump as this can help during a leader election to quickly have a leader turn all other nodes
+into followers, even before the leader has had the chance to transfer a possibly very large cluster
+state.
+
+Closes #36428

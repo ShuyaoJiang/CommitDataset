@@ -1,0 +1,9 @@
+Minor DocWriteResponse changes (#29675)
+
+Remove double if depending on the Result value. It makes little sense to
+pass in a boolean flag based on a Result value that we already have,
+if that internally is represented again as a `Result` value.
+
+Also changed the `Result` `lowercase` instance member to be computed
+based on `name()` instead of `toString()` which is safer and to use
+`Locale.ROOT` instead of `Locale.ENGLISH`

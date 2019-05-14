@@ -1,0 +1,11 @@
+Remove Servlet API dependency from SecurityProperties
+
+A dependency on the Servlet API (the filter's dispatcher types) causes
+a failure when Spring Security is used in a non-web application.
+
+This commit removes the dependency on javax.servlet.DispatcherType
+in favour of using a Set of Strings. SecurityFilterAutoConfiguration,
+which is only enabled for web applications, is the responsible for
+converting each String to a DispatcherType.
+
+Closes gh-4505

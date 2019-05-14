@@ -1,0 +1,11 @@
+Introduce RequestExpectationManager
+
+This commit factors out the logic to declare and manage expectations
+including matching them to requests and verifying at the end behind
+a commong abstraction.
+
+MockRestServiceServer delegates to the new abstraction and is no longer
+aware of how that's done. There are two implementations, one for
+ordered and another for unordered expectation.
+
+Issue: SPR-11365

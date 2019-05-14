@@ -1,0 +1,17 @@
+Reinstate removal of semicolon content
+
+Commit 5b1165 was an attempt to leave semicolon content in the URL path
+while ignoring it for request mapping purposes. However, it becomes
+quite difficult to manage and semicolon content should not always be
+ignored (sometimes a semicolon is used as a separator of multiple items
+in a path segment, rather than for matrix variables).
+
+This change effectively reverts back to the original approach in 3.2
+where a flag on AbstractHandlerMapping can be used to have semicolon
+content removed or kept. If kept, path segments with matrix variables
+must be represented with a path segment.
+
+The main difference is that by default it is removed everywhere
+including the MVC namespace and Java config.
+
+Issue: SPR-10427, SPR-10234

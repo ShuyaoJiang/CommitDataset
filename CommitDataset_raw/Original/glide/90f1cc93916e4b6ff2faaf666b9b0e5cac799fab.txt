@@ -1,0 +1,8 @@
+Add a DrawableTransformation that runs wrapped BitmapTransformations.
+
+The transformation uses the same logic used by the ResourceBitmapDecoder
+to try to convert non-Bitmap Drawables to BitmapDrawables. Exceptions 
+are thrown that will cause the load to fail if the conversion can’t happen. The primary benefit of this approach is that transformations
+work similarly for the non-Bitmap Drawables that we’re now decoding. 
+Unfortunately this isn’t a super efficient process, so hopefully it’s
+rare. 

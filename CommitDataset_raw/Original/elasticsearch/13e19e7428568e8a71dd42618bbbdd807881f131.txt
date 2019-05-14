@@ -1,0 +1,13 @@
+Allow _update and upsert to read from the transaction log (#29264)
+
+We historically removed reading from the transaction log to get consistent
+results from _GET calls. There was also the motivation that the read-modify-update
+principle we apply should not be hidden from the user. We still agree on the fact
+that we should not hide these aspects but the impact on updates is quite significant
+especially if the same documents is updated before it's written to disk and made serachable.
+
+This change adds back the ability to read from the transaction log but only for update calls.
+Calls to the _GET API will always do a refresh if necessary to return consistent results ie.
+if stored fields or DocValues Fields are requested.
+
+Closes #26802

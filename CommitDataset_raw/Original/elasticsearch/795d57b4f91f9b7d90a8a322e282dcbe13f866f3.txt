@@ -1,0 +1,13 @@
+Auto configure all test tasks (#34666)
+
+With this change, we apply the common test config automatically to all
+newly created tasks instead of opting in specifically.
+
+For plugin authors using the plugin externally this means that the
+configuration will be applied to their RandomizedTestingTasks as well.
+
+The purpose of the task is to simplify setup and make it easier to
+change projects that use the `test` task but actually run integration
+tests to use a task called `integTest` for clarity, but also because
+we may want to configure and run them differently.
+E.x. using different levels of concurrency.

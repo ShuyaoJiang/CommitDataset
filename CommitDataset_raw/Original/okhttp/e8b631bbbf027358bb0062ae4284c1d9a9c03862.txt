@@ -1,0 +1,7 @@
+Fix canonicalization of IPv6 addresses in HttpUrl
+
+Per RFC 5952, section 4.2.2, a single 16-bit field must not be shortened.
+Improper canonicalization can break TLS hostname verification because
+the canonicalized name will not match the server certificate.
+
+This change adds the examples from the RFC to the tests.

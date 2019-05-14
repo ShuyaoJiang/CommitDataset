@@ -1,0 +1,12 @@
+Make Transport Shard Bulk Action Async (#39793)
+
+This is a dependency of #39504 
+
+Motivation: 
+By refactoring `TransportShardBulkAction#shardOperationOnPrimary` to async, we enable using `DeterministicTaskQueue` based tests to run indexing operations. This was previously impossible since we were blocking on the `write` thread until the `update` thread finished the mapping update.
+With this change, the mapping update will trigger a new task in the `write` queue instead. 
+This change significantly enhances the amount of coverage we get from `SnapshotResiliencyTests` (and other potential future tests) when it comes to tracking down concurrency issues with distributed state machines.
+
+The logical change is effectively all in `TransportShardBulkAction`, the rest of the changes is then simply mechanically moving the caller code and tests to being async and passing the `ActionListener` down.
+
+Since the move to async would've added more parameters to the `private static` steps in this logic, I decided to inline and dry up (between delete and update) the logic as much as I could instead of passing the listener + wait-consumer down through all of them.

@@ -1,0 +1,13 @@
+Fix property replacement bug in Log4jWebConfigurer
+
+Previously, if the resolution of a ${...} placeholder resulted in a
+valid URL for the location of a log4j properties/XML file, the URL
+would ultimately be malformed by an unnecessary call to to
+WebUtils#getRealPath.
+
+The implementation of Log4jWebConfigurer#initLogging now eagerly
+attempts SystemPropertyUtils#resolvePlaceholders before checking to see
+if the location is a valid URL, and bypassing the call to
+WebUtils#getRealPath if so.
+
+Issue: SPR-9417

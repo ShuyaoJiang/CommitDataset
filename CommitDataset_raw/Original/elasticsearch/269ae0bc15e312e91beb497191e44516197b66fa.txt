@@ -1,0 +1,11 @@
+Handle MatchNoDocsQuery in span query wrappers (#34106)
+
+* Handle MatchNoDocsQuery in span query wrappers
+
+This change adds a new SpanMatchNoDocsQuery query that replaces
+MatchNoDocsQuery in the span query wrappers.
+The `wildcard` query now returns MatchNoDocsQuery if the target field is not
+in the mapping (#34093) so we need the equivalent span query in order to
+be able to pass it to other span wrappers.
+
+Closes #34105

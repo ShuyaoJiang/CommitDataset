@@ -1,0 +1,13 @@
+Ensure @AliasFor overrides attribute in correct meta-annotation
+
+Prior to this commit, an explicit override for an attribute in a
+meta-annotation configured via @AliasFor could potentially result in an
+incorrect override of an attribute of the same name but in the wrong
+meta-annotation.
+
+This commit fixes the algorithm in getAliasedAttributeName(Method,
+Class) in AnnotationUtils by ensuring that an explicit attribute
+override is only applied to the configured target meta-annotation
+(i.e., configured via the 'annotation' attribute in @AliasFor).
+
+Issue: SPR-13325

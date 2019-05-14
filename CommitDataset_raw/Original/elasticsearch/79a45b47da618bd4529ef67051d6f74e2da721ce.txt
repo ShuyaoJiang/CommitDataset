@@ -1,0 +1,14 @@
+Recover retention leases during peer recovery (#38435)
+
+This commit integrates retention leases with recovery. With this change,
+we copy the current retention leases on primary to the replica during
+phase two of recovery. At this point, the replica will have been added
+to the replication group and so is already receiving retention lease
+sync requests from the primary. This means that if any retention lease
+syncs are triggered on the primary after we sample the retention leases
+here during phase two, that sync request will also arrive on the replica
+ensuring that the replica is from this point on up to date with the
+retention leases on the primary. We have to copy these during phase two
+since we will be applying indexing operations, potentially triggering
+merges, and therefore must ensure the correct retention leases are in
+place beforehand.

@@ -1,0 +1,10 @@
+ByteString introduced as AsciiString super class
+
+Motivation:
+The usage and code within AsciiString has exceeded the original design scope for this class. Its usage as a binary string is confusing and on the verge of violating interface assumptions in some spots.
+
+Modifications:
+- ByteString will be created as a base class to AsciiString. All of the generic byte handling processing will live in ByteString and all the special character encoding will live in AsciiString.
+
+Results:
+The AsciiString interface will be clarified. Users of AsciiString can now be clear of the limitations the class imposes while users of the ByteString class don't have to live with those limitations.

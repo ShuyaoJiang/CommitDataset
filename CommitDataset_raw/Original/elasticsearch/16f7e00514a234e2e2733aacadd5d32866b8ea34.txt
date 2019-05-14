@@ -1,0 +1,10 @@
+Improve testTransportStatsWithException test (#28554)
+
+This commit modifies the transport stats with exception test to remove
+the requirement that we calculate the published address size when
+comparing bytes received. This is tricky and is currently broken as we
+also place the address string in the transport exception, however we do
+not adjust the bytes for that.
+
+The solution in this commit is to just serialize the transport exception
+in the test and use that for the calculation.

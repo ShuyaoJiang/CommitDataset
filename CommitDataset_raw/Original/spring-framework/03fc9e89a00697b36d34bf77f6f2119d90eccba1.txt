@@ -1,0 +1,12 @@
+Fixed isWritable for badly formed SpEL expressions
+
+Before this change isWritable() could return true
+for a badly formed expression. That is because the
+decision about whether something is writable was made
+based on the node type rather than whether the node
+represented something that could actually be resolved
+to be a real thing. This change ensures a resolution
+check is done and isWritable() should only return
+true if a subsequent setValue() will succeed.
+
+Issue: SPR-10610

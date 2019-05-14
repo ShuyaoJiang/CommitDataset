@@ -1,0 +1,8 @@
+SNAPSHOT: Make Atomic Blob Writes Mandatory (#37168)
+
+* With #37066 introducing atomic writes to HDFS repository we can enforce atomic write capabilities on this interface
+* The overrides on the other three cloud implementations are ok because:
+   * https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html states that "Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the entire object to the bucket."
+   * https://cloud.google.com/storage/docs/consistency states that GCS has strong read-after-write consistency
+   * https://docs.microsoft.com/en-us/rest/api/storageservices/put-block#remarks Azure has the concept of committing blobs, so there's no partial content here either
+* Relates #37011

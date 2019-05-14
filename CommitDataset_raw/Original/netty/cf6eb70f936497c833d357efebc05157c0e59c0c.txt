@@ -1,0 +1,17 @@
+Fix NoClassDefFoundError when netty-tcnative is unavailable
+
+Motivation:
+
+ProxyHandlerTest fails with NoClassDefFoundError raised by
+SslContext.newClientContext().
+
+Modifications:
+
+Fix a missing 'return' statement that makes the switch-case block fall
+through unncecessarily
+
+Result:
+
+- ProxyHandlerTest does not fail anymore.
+- SslContext.newClientContext() does not raise NoClassDefFoundError
+  anymore.

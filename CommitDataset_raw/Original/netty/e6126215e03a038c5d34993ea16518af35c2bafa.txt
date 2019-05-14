@@ -1,0 +1,11 @@
+DefaultHttp2FrameWriter reduce object allocation
+
+Motivation:
+DefaultHttp2FrameWriter#writeData allocates a DataFrameHeader for each write operation. DataFrameHeader maintains internal state and allocates multiple slices of a buffer which is a maximum of 30 bytes. This 30 byte buffer may not always be necessary and the additional slice operations can utilize retainedSlice to take advantage of pooled objects. We can also save computation and object allocations if there is no padding which is a common case in practice.
+
+Modifications:
+- Remove DataFrameHeader
+- Add a fast path for padding == 0
+
+Result:
+Less object allocation in DefaultHttp2FrameWriter

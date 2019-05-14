@@ -1,0 +1,11 @@
+DNS Resolve ambiguity in which DNS servers are used during resolution
+
+Motivation:
+Recently DnsServerAddressStreamProvider was introduced to allow control for each query as to which DNS server should be used for resolution to respect the local host's default DNS server configuration. However resolver-dns also accepts a stream of DNS servers to use by default, but this stream is not host name aware. This creates an ambiguity as to which method is used to determine the DNS server to user during resolution, and in which order. We can remove this ambiguity and provide a more general API by just supporting DnsServerAddressStreamProvider.
+
+Modifications:
+- Remove the fixed DnsServerAddresses and instead only accept a DnsServerAddressStreamProvider.
+- Add utility methods to help use DnsServerAddressStreamProvider for a single entry, a list of entries, and get the default for the current machine.
+
+Result:
+Fixes https://github.com/netty/netty/issues/6573.

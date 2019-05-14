@@ -1,0 +1,28 @@
+Don’t start child context for actuator endpoints when not embedded
+
+Prior to this commit, EndpointWebMvcAutoConfiguration would start a
+child context if the management port was different to the server port
+and the application context was a web application context. This caused
+two problems:
+
+If a user built an executable war and configured the management port so
+that it was different to the server port, their application would run
+successfully when launched with java -jar, but it would fail when
+deployed to Tomcat as an attempt would be made to start embedded Tomcat.
+
+Secondly, if a user ran a test annotated with @WebAppConfiguration the
+main embedded Tomcat instance would not be started, but the child
+context would trigger the creation of a Tomcat instance listening on the
+configured management port. This is unexpected as @WebIntegrationTest
+or @IntegrationTest and @WebAppConfiguration should be required to have
+the test trigger full startup of the application and listen on the
+configured ports.
+
+This commit updates EndpointWebMvcAutoConfiguration so that it will only
+start a child context when the management port is different to the
+server port and the EmbeddedWebApplicationContext has an embedded
+servlet container. This resolves the two problems described above as
+there will be no embedded servlet container when deployed to a
+standalone container or when a test is run without @IntegrationTest.
+
+Fixes gh-2798

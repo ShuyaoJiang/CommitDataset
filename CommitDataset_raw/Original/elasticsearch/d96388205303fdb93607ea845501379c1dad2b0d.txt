@@ -1,0 +1,9 @@
+Enable a long translog retention policy by default (#25294)
+
+#25147  added the translog deletion policy but didn't enable it by default. This PR enables a default retention of 512MB (same maximum size of the current translog) and an age of 12 hours (i.e., after 12 hours all translog files will be deleted). This increases to chance to have an ops based recovery, even if the primary flushed or the replica was offline for a few hours.
+
+In order to see which parts of the translog are committed into lucene the translog stats are extended to include information about uncommitted operations.
+
+Views now include all translog ops and guarantee, as before, that those will not go away. Snapshotting a view allows to filter out generations that are not relevant based on a specific sequence number.
+
+Relates to #10708 

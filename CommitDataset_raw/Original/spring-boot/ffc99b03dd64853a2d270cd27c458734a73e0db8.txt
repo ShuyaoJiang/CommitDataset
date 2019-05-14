@@ -1,0 +1,14 @@
+Remove use of deprecated Gradle API from plugin's public API
+
+This commit removes the use of the incubating PropertyState and
+Provider API that was introduced in Gradle 4.0 and deprecated in
+Gradle 4.3. A not-deprecated-but-still-incubating replacement was
+introduced in Gradle 4.3. The short life of PropertyState and Provider
+has made me wary of using an incubating Gradle API in our public API
+as it may not be stable for long. Therefore, this commit does not move
+to the replacement as it is incubating. Instead, it falls back to
+using Gradle's convention mapping. This is internal API, but its use
+is not part of our public API and I perceive the risk of using it to
+be lower than using the deprecated and/or incubating API alternatives.
+
+Closes gh-11640

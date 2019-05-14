@@ -1,0 +1,14 @@
+Improve upgrade path for Spring Session
+
+Commit b7e7bcf made `spring.session.store-type` explicit which means that
+users of Spring Session in 1.3 have to set that property to restore the
+auto-configuration support in 1.4.
+
+This commit implicitly set the store type to redis if redis is present
+and log a warning inviting the user to actually specify that in
+configuration.
+
+The entry in the auto-configuration report also mentions that such
+arrangement is deprecated.
+
+Closes gh-5838

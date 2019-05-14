@@ -1,0 +1,15 @@
+Add ability to automatically adjust search threadpool queue_size
+
+This PR adds a new thread pool type: `fixed_auto_queue_size`. This thread pool
+behaves like a regular `fixed` threadpool, except that every
+`auto_queue_frame_size` operations (default: 10,000) in the thread pool,
+[Little's Law](https://en.wikipedia.org/wiki/Little's_law) is calculated and
+used to adjust the pool's `queue_size` either up or down by 50. A minimum and
+maximum is taken into account also. When the min and max are the same value, a
+regular fixed executor is used instead.
+
+The `SEARCH` threadpool is changed to use this new type of thread pool. However,
+the min and max are both set to 1000, meaning auto adjustment is opt-in rather
+than opt-out.
+
+Resolves #3890

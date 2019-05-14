@@ -1,0 +1,15 @@
+MemoryRegionCache$Entry objects are not recycled
+
+Motivation:
+
+Even though MemoryRegionCache$Entry instances are allocated through a recycler they are not properly recycled,
+leaving a lot of instances to be GCed along with Recycler$DefaultHandle objects.
+Fixes #4071
+
+Modification:
+
+Recycle Entry when done using it.
+
+Result:
+
+Less GCed objects.

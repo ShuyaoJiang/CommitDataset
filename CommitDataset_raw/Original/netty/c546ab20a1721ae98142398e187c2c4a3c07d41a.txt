@@ -1,0 +1,14 @@
+Ensure ByteToMessageDecoder.Cumulator implementations always release in buffer. (#8325)
+
+Motivation:
+
+We need to ensure the Cumulator always releases the input buffer if it can not take over the ownership of it as otherwise it may leak.
+
+Modifications:
+
+- Correctly ensure the buffer is always released.
+- Add unit tests.
+
+Result:
+
+Ensure buffer is always released.

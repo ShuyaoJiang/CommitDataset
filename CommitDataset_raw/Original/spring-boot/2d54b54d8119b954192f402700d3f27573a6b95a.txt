@@ -1,0 +1,8 @@
+Listen for parent close events and close child context
+
+If the context hierarchy is from a SpringApplication we can control
+the shutdown semantics a bit. Specifically we need a listener in the child context
+that will shut it down when the parent closes (since assummably the child relies
+on beans in the arent that may now be disposed).
+
+Fixes gh-275

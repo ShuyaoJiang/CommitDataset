@@ -1,0 +1,10 @@
+[#2358] SslHandler.safeClose(...) may not notify the ChannelPromise
+
+Motivation:
+In SslHandler.safeClose(...) we attach a ChannelFutureListener to the flushFuture and will notify the ChannelPromise which was used for close(...) in it. The problem here is that we only call ChannelHandlerContext.close(ChannelPromise) if Channel.isActive() is true and otherwise not notify it at all. We should just call ChannelHandlerContext.close(ChannelPromise) in all cases.
+
+Modifications:
+Always call ChannelHandlerContext.close(ChannelPromise) in the ChannelFutureListeiner
+
+Result:
+ChannelPromise used for close the Channel is notified in all cases

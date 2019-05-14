@@ -1,0 +1,10 @@
+Fix Guava issue 1751
+
+http://code.google.com/p/guava-libraries/issues/detail?id=1751
+
+The bug is that this test depends on listener ordering. I believe that this race was technically introduced by [], since our strategy for invoking listener callbacks was sufficiently serialized prior to that cl, such that this was safe even though it violated the spec.
+
+As it is, it takes some seriously bad luck to observe the race (thanks cpovirk!)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=66902563

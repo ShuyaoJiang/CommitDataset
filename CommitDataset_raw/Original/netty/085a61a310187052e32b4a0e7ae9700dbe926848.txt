@@ -1,0 +1,41 @@
+Refactor FastThreadLocal to simplify TLV management
+
+Motivation:
+
+When Netty runs in a managed environment such as web application server,
+Netty needs to provide an explicit way to remove the thread-local
+variables it created to prevent class loader leaks.
+
+FastThreadLocal uses different execution paths for storing a
+thread-local variable depending on the type of the current thread.
+It increases the complexity of thread-local removal.
+
+Modifications:
+
+- Moved FastThreadLocal and FastThreadLocalThread out of the internal
+  package so that a user can use it.
+- FastThreadLocal now keeps track of all thread local variables it has
+  initialized, and calling FastThreadLocal.removeAll() will remove all
+  thread-local variables of the caller thread.
+- Added FastThreadLocal.size() for diagnostics and tests
+- Introduce InternalThreadLocalMap which is a mixture of hard-wired
+  thread local variable fields and extensible indexed variables
+- FastThreadLocal now uses InternalThreadLocalMap to implement a
+  thread-local variable.
+- Added ThreadDeathWatcher.unwatch() so that PooledByteBufAllocator
+  tells it to stop watching when its thread-local cache has been freed
+  by FastThreadLocal.removeAll().
+- Added FastThreadLocalTest to ensure that removeAll() works
+- Added microbenchmark for FastThreadLocal and JDK ThreadLocal
+- Upgraded to JMH 0.9
+
+Result:
+
+- A user can remove all thread-local variables Netty created, as long as
+  he or she did not exit from the current thread. (Note that there's no
+  way to remove a thread-local variable from outside of the thread.)
+- FastThreadLocal exposes more useful operations such as isSet() because
+  we always implement a thread local variable via InternalThreadLocalMap
+  instead of falling back to JDK ThreadLocal.
+- FastThreadLocalBenchmark shows that this change improves the
+  performance of FastThreadLocal even more.

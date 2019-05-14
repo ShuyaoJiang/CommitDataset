@@ -1,0 +1,11 @@
+Fix PreConfiguredTokenFilters getSynonymFilter() implementations (#38839)
+
+When we added support for TokenFilterFactories to specialise how they were used when parsing
+synonym files, PreConfiguredTokenFilters were set up to either apply themselves, or be ignored.
+This behaviour is a leftover from an earlier iteration, and also has an incorrect default.
+
+This commit makes preconfigured token filters usable in synonym file parsing by default, and brings
+those filters that should not be used into line with index-specific filter factories; in indexes created
+before version 7 we emit a deprecation warning, and we throw an error in indexes created after.
+
+Fixes #38793

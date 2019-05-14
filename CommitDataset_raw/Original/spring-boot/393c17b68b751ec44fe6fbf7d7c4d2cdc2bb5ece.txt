@@ -1,0 +1,11 @@
+Support @SpringBootTest with @ContextHierarchy
+
+Update SpringBootTestContextBootstrapper to detect `@ContextHierarchy`
+annotations so that only the last child creates a
+`WebApplicationContext`.
+
+Prior to this commit a context hierarchy would start two embedded web
+servers which is inconsistent with the `SpringApplicationBuilder`
+behavior.
+
+Fixes gh-8311

@@ -1,0 +1,13 @@
+Reduce overhead of cancel flowcontrolled writes.
+
+Motivation:
+
+When we cancel the flowcontrolled writes we did create a new StreamException for each write that was enqueued. Creating Exceptions is very expensive due of filling the stacktrace.
+
+Modifications:
+
+Only create the StreamException once and reuse the same for all the flowcontrolled writes (per stream).
+
+Result:
+
+Less expensive to cancel flowcontrolled writes.

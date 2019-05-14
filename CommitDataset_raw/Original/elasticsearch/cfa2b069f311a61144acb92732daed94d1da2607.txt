@@ -1,0 +1,9 @@
+Use correct cluster state version for node fault detection (#30810)
+
+Since its introduction in ES 1.4, node fault detection has been using the wrong cluster state version to send
+as part of the ping request, by using always the constant -1 (ClusterState.UNKNOWN_VERSION). This can, in an
+unfortunate series of events, lead to a situation where a previous stale master can regain its authority and
+revert the cluster to an older state.
+
+This commit makes NodesFaultDetection use the correct current cluster state for sending ping requests, avoiding
+the situation where a stale master possibly forces a newer master to step down and rejoin the stale one.

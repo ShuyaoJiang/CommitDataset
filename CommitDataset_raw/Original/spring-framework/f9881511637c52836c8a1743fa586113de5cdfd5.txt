@@ -1,0 +1,22 @@
+Improve charset management in XpathResultMatchers
+
+Prior to this change, `XpathResultMatchers` and more generally the
+`MockHttpServletResponse` would default to ISO-8859-1 encoding even when
+it's not supposed to. The Servlet/HTTP specs mention this encoding
+for all `text/*` mime types when decoding bodies to Strings, but this
+issue is about XML Parsers.
+
+XML Parsers should use the encoding:
+
+* defined in the `Content-Type` response header (if available)
+* written in the XML declaration of the document
+* "guessed" by a built-in auto-detection mechanism
+
+This commit changes the following:
+
+* XPathMatchers now feed the XML parser with byte arrays instead of
+decoded Strings
+* the response should be written to `MockHttpServletResponse` using
+its OutputStream, and not a PrintWriter which defaults to ISO-8859-1
+
+Issue: SPR-12676

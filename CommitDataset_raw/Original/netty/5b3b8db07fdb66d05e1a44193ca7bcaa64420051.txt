@@ -1,0 +1,14 @@
+epoll_wait produces an EINVAL error since 4.1.30 (#8350)
+
+Motivation:
+
+epoll_wait should work in 4.1.30 like it did in 4.1.29.
+
+Modifications:
+
+Revert Integer.MAX_VALUE back to MAX_SCHEDULED_TIMERFD_NS (999,999,999).
+Add unit test.
+
+Result:
+
+epoll_wait will no longer throw EINVAL.

@@ -1,0 +1,7 @@
+Add latch countdown on failure in CCR license tests (#33548)
+
+We have some listeners in the CCR license tests that invoke Assert#fail
+if the onSuccess method for the listener is unexpectedly invoked. This
+can leave the main test thread hanging until the test suite times out
+rather than failing quickly. This commit adds some latch countdowns so
+that we fail quickly if these cases are hit.

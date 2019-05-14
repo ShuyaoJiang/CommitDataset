@@ -1,0 +1,10 @@
+Add support for decoding AssetFileDescriptors as videos.
+
+AssetFileDescriptors require an offset and a length, simply unwrapping
+them as FileDescriptors or ParcelFileDescriptors won’t work. Most of the
+time videos are loaded through providers that don’t store multiple 
+videos in a single file or from individual files so this is relatively
+rare. However, prior to this change Glide would fail to load any video
+placed in resources like raw resources. Glide might also fail to load
+videos provided via ContentProviders as AssetFileDescriptors prior to
+this change.

@@ -1,0 +1,43 @@
+Add Spring MVC Test framework
+
+This commit adds the spring-test-mvc project [1] to the Spring
+Framework as part of the spring-test module.
+
+The sources are added as a root-level project called "spring-test-mvc"
+instead of under "spring-test" because the new sources need to be
+compiled with Servlet 3 while the current "spring-test" sources require
+Servlet 2.5 and the Eclipse IDE does not support having different
+classpaths for the same project.
+
+The Gradle build produces a single spring-test jar that contains
+sources from both "spring-test" and "spring-test-mvc". This merge is
+made possible through merge-dist.gradle as follows:
+
+- jar tasks of the "from" project execute tasks of the "to" project
+- "to" project is added to the classpath of the "from" project
+- "to" project pom is updated with entries from the "from" project
+
+For further details see documentation in merge-dist.gradle.
+
+Special thanks to everyone who contributed to the initial development
+of the Spring MVC Test framework:
+
+ Arjen Poutsma <poutsma@mac.com>
+ Craig Walls <cwalls@vmware.com>
+ Frans Flippo <fransflippo@utopia.orange11.nl>
+ Harry Lascelles <harry@firstbanco.com>
+ Irfan <mail.urfi@gmail.com>
+ Jörg Rathlev <joerg.rathlev@s24.com>
+ Keesun Baik <whiteship2000@gmail.com>
+ Keesun Baik <whiteship@epril.com>
+ Matthew Reid <matthew.reid@nakedwines.com>
+ Nils-Helge Garli Hegvik <Nils-Helge.Hegvik@telenor.com>
+ Rob Winch <rwinch@vmware.com>
+ Scott Frederick <sfrederick@vmware.com>
+ Sven Filatov <sven.filatov@gmail.com>
+ Thomas Bruyelle <thomas.bruyelle@gmail.com>
+ youngm <youngm@gmail.com>
+
+[1]: https://github.com/SpringSource/spring-test-mvc
+
+Issue: SPR-9859, SPR-7951

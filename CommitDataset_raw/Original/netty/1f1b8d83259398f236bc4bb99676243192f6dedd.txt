@@ -1,0 +1,9 @@
+Add a new faster, memory efficient URL decoder.
+
+Query string parameters need to be decoded as per RFC 3986, Section 2.
+The implementation of the URLDecoder in the JDK is slow because it takes
+long and inefficient code paths, and it generates a lot more garbage
+than necessary.  This decoder is about 2x faster and doesn't allocate
+any memory in the easy case where the decoded string is unchanged.
+When the string needs to be changed, only one buffer is allocated for
+the decoded string.

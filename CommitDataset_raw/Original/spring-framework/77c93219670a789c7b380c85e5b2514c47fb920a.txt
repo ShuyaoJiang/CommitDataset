@@ -1,0 +1,18 @@
+Sort candidate @AspectJ methods deterministically
+
+Update the ReflectiveAspectJAdvisorFactory class to sort candidate
+AOP methods based on their annotation first and method name second.
+
+Prior to this the order of aspects created from annotated methods
+could differ depending on the underling JVM, as first noticed under
+JDK7 in SPR-9729.
+
+ - ConvertingComparator and InstanceComparator have been introduced in
+   support of this change, per SPR-9730.
+
+ - A shared static INSTANCE field has been added to ComparableComparator
+   to avoid unnecessary instantiation costs within ConvertingComparator
+   as well as to prevent generics warnings during certain caller
+   scenarios.
+
+Issue: SPR-9729, SPR-9730

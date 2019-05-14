@@ -1,0 +1,30 @@
+Remove MessageList from public API and change ChannelInbound/OutboundHandler accordingly
+
+I must admit MesageList was pain in the ass.  Instead of forcing a
+handler always loop over the list of messages, this commit splits
+messageReceived(ctx, list) into two event handlers:
+
+- messageReceived(ctx, msg)
+- mmessageReceivedLast(ctx)
+
+When Netty reads one or more messages, messageReceived(ctx, msg) event
+is triggered for each message.  Once the current read operation is
+finished, messageReceivedLast() is triggered to tell the handler that
+the last messageReceived() was the last message in the current batch.
+
+Similarly, for outbound, write(ctx, list) has been split into two:
+
+- write(ctx, msg)
+- flush(ctx, promise)
+
+Instead of writing a list of message with a promise, a user is now
+supposed to call write(msg) multiple times and then call flush() to
+actually flush the buffered messages.
+
+Please note that write() doesn't have a promise with it.  You must call
+flush() to get notified on completion. (or you can use writeAndFlush())
+
+Other changes:
+
+- Because MessageList is completely hidden, codec framework uses
+  List<Object> instead of MessageList as an output parameter.

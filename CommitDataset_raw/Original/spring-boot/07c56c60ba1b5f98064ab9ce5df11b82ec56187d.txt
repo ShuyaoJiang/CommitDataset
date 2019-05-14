@@ -1,0 +1,15 @@
+Make sure Hazelcast bootstraps before any JCache setup
+
+This commit makes sure that if a `javax.cache.CacheManager` is required,
+an auto-configured `HazelcastInstance` is fully resolved first. This
+prevents the case where the JCache bootstrap actually starts an instance
+early, followed by a second (potentially unwanted) instance created by the
+regular auto-configuration.
+
+Since the JCache implementation works with an `HazelcastInstance` behind
+the scenes, if there is one `HazelcastInstance` configured and it has a
+name, then we configure the `CacheProvider` to use that. Future Hazelcast
+version will allow to pass the instance directly (i.e. not requiring an
+actual name).
+
+Closes gh-8484

@@ -1,0 +1,10 @@
+Change the operator order of TrafficCounter to calculate the throughput to get the correct result
+
+Motivation:
+Currently the last read/write throughput is calculated by first division,this will be 0 if the last read/write bytes < interval,change the order will get the correct result
+
+Modifications:
+Change the operator order from first do division to multiplication
+
+Result:
+Get the correct result instead of 0 when bytes are smaller than interval

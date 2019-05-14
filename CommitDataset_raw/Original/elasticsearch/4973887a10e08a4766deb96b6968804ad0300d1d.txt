@@ -1,0 +1,24 @@
+Make primary-replica resync failures less lenient (#28534)
+
+Today, failures from the primary-replica resync are ignored as the best 
+effort to not mark shards as stale during the cluster restart. However
+this can be problematic if replicas failed to execute resync operations
+but just fine in the subsequent write operations. When this happens,
+replica will miss some operations from the new primary. There are some
+implications if the local checkpoint on replica can't advance because of
+the missing operations.
+
+1. The global checkpoint won't advance - this causes both primary and 
+replicas keep many index commits
+
+2. Engine on replica won't flush periodically because uncommitted stats
+is calculated based on the local checkpoint
+
+3. Replica can use a large number of bitsets to keep track operations seqno
+
+However we can prevent this issue but still reserve the best-effort by 
+failing replicas which fail to execute resync operations but not mark
+them as stale. We have prepared to the required infrastructure in #28049
+and #28054 for this change.
+
+Relates #24841

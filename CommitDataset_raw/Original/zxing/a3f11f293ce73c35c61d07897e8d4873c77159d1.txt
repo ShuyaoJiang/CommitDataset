@@ -1,0 +1,13 @@
+Decent speed improvement for HybridBinarizer::calculateBlackPoints().  The
+approach is to stop testing for min/max values once the dynamic range
+condition is satisfied.
+
+On "typical" images, the function is about 20% faster.  Worst-case images
+(low contrast images) can be slower but they are less likely to be read
+successfully.
+
+This change makes no change to test results, only performance.
+
+
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@2174 59b500cc-1b3d-0410-9834-0bbf25fbcc57

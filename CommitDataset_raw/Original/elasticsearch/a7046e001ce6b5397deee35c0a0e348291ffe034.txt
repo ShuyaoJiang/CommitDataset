@@ -1,0 +1,19 @@
+Remove support for maxRetryTimeout from low-level REST client (#38085)
+
+We have had various reports of problems caused by the maxRetryTimeout
+setting in the low-level REST client. Such setting was initially added
+in the attempts to not have requests go through retries if the request
+already took longer than the provided timeout.
+
+The implementation was problematic though as such timeout would also
+expire in the first request attempt (see #31834), would leave the
+request executing after expiration causing memory leaks (see #33342),
+and would not take into account the http client internal queuing (see #25951).
+
+Given all these issues, it seems that this custom timeout mechanism 
+gives little benefits while causing a lot of harm. We should rather rely 
+on connect and socket timeout exposed by the underlying http client 
+and accept that a request can overall take longer than the configured 
+timeout, which is the case even with a single retry anyways.
+
+This commit removes the `maxRetryTimeout` setting and all of its usages.

@@ -1,0 +1,13 @@
+[#5541] Ensure failing a Promise in SimpleChannelPool will not result in stack overflow.
+
+Motivation:
+
+We used Promise.setFailure(...) when fail a Promise in SimpleChannelPool. As this happens in multiple levels this can result in stackoverflow as setFailure(...) may throw an IllegalStateException which then again is propergated.
+
+Modifications:
+
+Use tryFailure(...)
+
+Result:
+
+No more possibility to cause a stack overflow when failing the promise.

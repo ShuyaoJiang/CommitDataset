@@ -1,0 +1,10 @@
+Fail startup if management server can't start
+
+Update EndpointWebMvcAutoConfiguration to no longer catch and ignore
+EmbeddedServletContainerExceptions. Since commit 764e34b9, starting a
+management on a different port is not even attempted when running in a
+classic servlet container. This means that the catch/log logic (which
+was originally added in 45315a97) is no longer necessary, and only
+serves to hide genuine problems.
+
+Fixes gh-4064

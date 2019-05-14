@@ -1,0 +1,11 @@
+Reduce global checkpoint sync interval in disruption tests (#38931)
+
+We verify seq_no_stats is aligned between copies at the end of some
+disruption tests. Sometimes, the assertion `assertSeqNos` is tripped due
+to a lagged global checkpoint on replicas. The global checkpoint on
+replicas is lagged because we sync the global checkpoint 30 seconds (by
+default) after the last replication operation. This change reduces the
+global checkpoint sync-internal to 1s in the disruption tests.
+
+Closes #38318
+Closes #36789

@@ -1,0 +1,20 @@
+Eagerly check for an appropriate exceptionClass constructor during calls to Futures.getChecked.
+This way, callers that pass a bad exceptionClass find out unconditionally instead of only when their Future fails.
+
+(Retry of CL 97776570, rolled back in CL 97787294 because of a breakage that has since been addressed. I've made two tweaks: I've improved the error message (to minimize confusion, and I've migrated to the standard J2ObCIncompatible annotation (as done elsewhere already),
+
+We hope for bad exceptionClass parameters to soon be caught at compile time.
+
+To keep performance acceptable, cache a set of classes with appropriate constructors.
+Use ClassValue, which was introduced in JDK7.
+Do the compatibility dance, including making Animal Sniffer happy by annotating the class that uses ClassValue.
+That requires updating Animal Sniffer to a version that respects the annotation in more places, perhaps related to http://jira.codehaus.org/browse/MANIMALSNIFFER-29
+I've also updated the Animal Sniffer signatures on the theory that newer is probably better, although there is no apparent no impact on Guava.
+
+The cost of the eager check is performance in the success case: What used to take ~1.6ns will now take ~3.2ns. This is likely to be swamped by the actual work being done and by other overhead (like threads). (This was discussed and approved in API Review.)
+The ClassValue implementation is faster than the fallback version, particularly in the unlikely case in which users call getChecked() with many different kinds of exception types.
+
+Finally, take the opportunity to start on splitting up Futures.java and FuturesTest.java: https://github.com/google/guava/issues/2091
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=97961145

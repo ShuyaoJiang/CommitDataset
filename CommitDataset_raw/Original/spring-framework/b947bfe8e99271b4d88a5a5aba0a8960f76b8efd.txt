@@ -1,0 +1,18 @@
+Support of HTTP persistent connections for JDK client
+
+Prior to this commit, HTTP clients relying on the JDK HTTP client would
+not properly reuse existing TCP connections (i.e. HTTP 1.1 persisten
+connection). The SimpleClientHttpResponse would close the actual connection once the
+response is handled.
+
+As explained in the JDK documentation
+(http://docs.oracle.com/javase/8/docs/technotes/guides/net/http-keepalive.html)
+HTTP clients should do the following to allow resource reuse:
+
+* consume the whole HTTP response content
+* close the response inputstream once done
+
+This commit makes sure that the response content is
+totally drained and then the stream closed (and not the connection).
+
+Issue: SPR-14040

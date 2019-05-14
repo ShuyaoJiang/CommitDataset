@@ -1,0 +1,16 @@
+Reduce http2 buffer slicing (#8598)
+
+Motivation
+
+DefaultHttp2FrameReader currently does a fair amount of "intermediate"
+slicing which can be avoided.
+
+Modifications
+
+Avoid slicing the input buffer in DefaultHttp2FrameReader until
+necessary. In one instance this also means retainedSlice can be used
+instead (which may also avoid allocating).
+
+Results
+
+Less allocations when using http2. 

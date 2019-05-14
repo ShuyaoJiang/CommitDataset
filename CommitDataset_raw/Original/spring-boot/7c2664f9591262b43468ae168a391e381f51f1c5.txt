@@ -1,0 +1,12 @@
+Ensure that jar entry names use forward slashes, even on Windows
+
+Previously, in the DevTools integration tests, portions of a File's
+path were used to create the name of a jar entry. On Windows this
+resulted in the entry containing \ characters. As a result the
+directory structure was incorrect and the classes could not be loaded
+from the jar.
+
+This commit ensures that any \ characters are replaced with /
+characters.
+
+See gh-7782

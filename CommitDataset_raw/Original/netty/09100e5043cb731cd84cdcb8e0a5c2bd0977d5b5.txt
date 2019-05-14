@@ -1,0 +1,14 @@
+Avoid redundant reads of head in peakNode
+
+Motivation:
+
+There is not need todo redunant reads of head in peakNode as we can just spin on next() until it becomes visible.
+
+Modifications:
+
+Remove redundant reads of head in peakNode. This is based on @nitsanw's patch for akka.
+See https://github.com/akka/akka/pull/15596
+
+Result:
+
+Less volatile access.

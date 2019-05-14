@@ -1,0 +1,13 @@
+Ensure ChannelHandler.handlerAdded(...) callback is executed directly when added from ChannelFutureListener added to the registration future.
+
+Motivation:
+
+Commit 4c048d069d99891d6a83859b469c39b4ff0f4ae1 moved the logic of calling handlerAdded(...) to the channelRegistered(...) callback of the head of the DefaultChannelPipeline. Unfortunatlly this may execute the callbacks to late as a user may add handlers to the pipeline in the ChannelFutureListener attached to the registration future. This can lead to incorrect ordering.
+
+Modifications:
+
+Ensure we always invoke ChannelHandler.handlerAdded(...) for all handlers before the registration promise is notified.
+
+Result:
+
+Not possible of incorrect ordering or missed events.

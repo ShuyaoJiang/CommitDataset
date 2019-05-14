@@ -1,0 +1,14 @@
+Avoid unnecessary string conversion where possible
+
+Motivation:
+
+HttpResponseStaus, HttpMethod and HttpVersion have methods that return
+AsciiString.  There's no need for object-to-string conversion.
+
+Modifications:
+
+Use codeAsText(), name(), text() instead of setInt() and setObject()
+
+Result:
+
+Efficiency

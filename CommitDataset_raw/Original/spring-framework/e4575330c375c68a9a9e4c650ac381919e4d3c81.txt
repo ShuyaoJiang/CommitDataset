@@ -1,0 +1,12 @@
+Support empty body in Jackson2JsonDecoder.decodeToMono
+
+Prior to this commit, extracting an HTTP response with an empty body
+and no Content-Type header using the WebClient would:
+
+* trigger the use of the Jackson2JsonDecoder
+* throw a NoSuchElementException because of the use of `Flux.single()`
+
+This commit changes this behavior to `Flux.singleOrEmpty()` to avoid
+throwing exceptions for empty Flux instances.
+
+Issue: SPR-14582

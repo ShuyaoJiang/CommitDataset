@@ -1,0 +1,19 @@
+Don't let standalone Tomcat render its error page after redirect
+
+Previously, if the configured error controller responded with a
+redirect to an error caused by an exception, standalone Tomcat would
+render its default error page for the original exception. This
+occurred because ErrorPageFilter sets the
+javax.servlet.error.exception request attribute prior to dispatching
+to the error controller and then does not clear it. As the request
+unwinds, Tomcat's ErrorReportValve notices that the attribute is set
+and renders an error page for the exception that is the attribute's
+value.
+
+This commit updates ErrorPageFilter to remove the
+javax.servlet.error.exception and javax.servlet.error.exception_type
+attributes upon successful completion of a forward to the error
+controller. This prevents Tomcat from rendering an error page for
+an exception that has already been handled by the error controller.
+
+Closes gh-7920

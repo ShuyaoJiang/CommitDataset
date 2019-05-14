@@ -1,0 +1,9 @@
+Remove the single argument Environment constructor (#27235)
+
+Only tests should use the single argument Environment constructor.  To
+enforce this the single arg Environment constructor has been replaced with
+a test framework factory method.
+
+Production code (beyond initial Bootstrap) should always use the same
+Environment object that Node.getEnvironment() returns.  This Environment
+is also available via dependency injection.

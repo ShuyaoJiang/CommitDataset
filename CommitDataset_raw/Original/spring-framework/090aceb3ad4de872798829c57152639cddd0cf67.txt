@@ -1,0 +1,10 @@
+Fix repeated calls to DataBuffer.write(CharSequence, Charset)
+
+Prior to this commit, repeated calls to `DataBuffer.write(CharSequence,
+Charset)` would not write the given chars to the expected position in
+the original buffer.
+
+This commit fixes that by writing to the `outBuffer.position()`, offset
+by the current `DataBuffer.writePosition()`.
+
+Fixes gh-22484

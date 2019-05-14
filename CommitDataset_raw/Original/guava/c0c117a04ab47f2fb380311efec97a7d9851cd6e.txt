@@ -1,0 +1,11 @@
+Fix some simple cases of stack overflow in AbstractFuture.toString()
+
+This is a partial fix for people doing weird things and can easily be circumvented by people adding some indirection, but this is also what AbstractCollection.toString does so it seems like there is a decent precedent for a partial solution to this problem.
+
+It doesn't appear to be possible to implement a full fix without resorting to things like threadlocals or examining the callstack, and this problem doesn't seem important enough to justify a solution like that.
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=181325137

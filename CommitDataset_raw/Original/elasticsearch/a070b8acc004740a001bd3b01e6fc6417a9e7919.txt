@@ -1,0 +1,6 @@
+Extract TransportRequestDeduplication from ShardStateAction (#37870)
+
+* Extracted the logic for master request duplication so it can be reused by the snapshotting logic
+* Removed custom listener used by `ShardStateAction` to not leak these into future users of this class
+* Changed semantics slightly to get rid of redundant instantiations of the composite listener
+* Relates #37686

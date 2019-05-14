@@ -1,0 +1,11 @@
+Disable console logging in the Windows service
+
+When Elasticsearch is run as a service we should not use the console
+logger otherwise we end up duplicating logging (to the Elasticsearch
+logs and whereever standard output is captured). Previously we disabled
+the console logger when started as a service using systemd (otherwise
+the console logs are duplicated to the journal). This commit does the
+same for the Windows service, starting Elasticsearch with the --quiet
+flag to avoid standard output being written to the service stdout logs.
+
+Relates #28618

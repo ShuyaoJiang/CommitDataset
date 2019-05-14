@@ -1,0 +1,9 @@
+[ML] Avoid stack traces in the log when deleting jobs (elastic/x-pack-elasticsearch#1615)
+
+Now we've set the option for one type per index it causes a stack trace
+in to be logged if we issue a request to delete two documents with
+different types.  We only do this to cover the case of documents left
+over from v5.4.  We can avoid it by deleting by query using just the
+document IDs.
+
+Original commit: elastic/x-pack-elasticsearch@2abffc7d9540e946605d35d7547cb4c572bc44b1

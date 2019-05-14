@@ -1,0 +1,8 @@
+Bubble up exception when processing NoOp (#39338)
+
+Today we do not bubble up exceptions when processing NoOps but always
+treat them as document-level failures. This incorrect treatment causes
+the assert_no_failure being tripped in peer-recovery if IndexWriter was
+closed exceptionally before.
+
+Closes #38898

@@ -1,0 +1,25 @@
+Refactor to lazy Environment creation where possible
+
+This commit avoids eager creation of Environment instances, favoring
+delegation of already existing Environment objects where possible. For
+example, FrameworkServlet creates an ApplicationContext; both require
+a StandardServletEnvironment instance, and prior to this change, two
+instances were created where one would suffice - indeed these two
+instances may reasonably be expected to be the same. Now, the
+FrameworkServlet defers creation of its Environment, allowing users to
+supply a custom instance via its #setEnvironment method (e.g. within a
+WebApplicationInitializer); the FrameworkServlet then takes care to
+delegate that instance to the ApplicationContext created
+in #createWebApplicationContext.
+
+This behavior produces more consistent behavior with regard to
+delegation of the environment, saves unnecessary cycles by avoiding
+needless instantiation and calls to methods like
+StandardServletEnvironment#initPropertySources and leads to better
+logging output, as the user sees only one Environment created and
+initialized when working with the FrameworkServlet/DispatcherServlet.
+
+This commit also mirrors these changes across the corresponding
+Portlet* classes.
+
+Issue: SPR-9763

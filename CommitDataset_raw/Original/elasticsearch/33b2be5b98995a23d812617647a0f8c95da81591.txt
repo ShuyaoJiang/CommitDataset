@@ -1,0 +1,9 @@
+Copy retention leases when trim unsafe commits (#37995)
+
+When a primary shard is recovered from its store, we trim the last
+commit (when it's unsafe). If that primary crashes before the recovery
+completes, we will lose the committed retention leases because they are
+baked in the last commit. With this change, we copy the retention leases
+from the last commit to the safe commit when trimming unsafe commits.
+
+Relates #37165

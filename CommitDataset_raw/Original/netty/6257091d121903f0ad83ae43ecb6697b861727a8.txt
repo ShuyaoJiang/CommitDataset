@@ -1,0 +1,11 @@
+HttpConversionUtil does not account for COOKIE compression
+
+Motivation:
+The HTTP/2 RFC allows for COOKIE values to be split into individual header elements to get more benefit from compression (https://tools.ietf.org/html/rfc7540#section-8.1.2.5). HttpConversionUtil was not accounting for this behavior.
+
+Modifications:
+- Modify HttpConversionUtil to support compressing and decompressing the COOKIE values
+
+Result:
+HttpConversionUtil is compatible with https://tools.ietf.org/html/rfc7540#section-8.1.2.5)
+Fixes https://github.com/netty/netty/issues/4457

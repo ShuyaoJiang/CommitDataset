@@ -1,0 +1,14 @@
+DnsNameResolver.resolveAll(...) should not include duplicates (#9021)
+
+Motivation:
+
+DnsNameResolver#resolveAll(String) may return duplicate results in the event that the original hostname DNS response includes an IP address X and a CNAME that ends up resolving the same IP address X. This behavior is inconsistent with the JDK’s resolver and is unexpected to retrun a List with duplicate entries from a resolveAll(..) call.
+
+Modifications:
+
+- Filter out duplicates
+- Add unit test
+
+Result:
+
+More consistent and less suprising behavior

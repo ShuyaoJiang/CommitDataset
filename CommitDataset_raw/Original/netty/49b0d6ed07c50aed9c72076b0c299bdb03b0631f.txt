@@ -1,0 +1,10 @@
+HTTP/2 ConnectionHandler close cleanup
+
+Motiviation:
+The connection handler stream close operation is unconditionally adding a listener object to a future. We may not have to add a listener at all because the future has already been completed.
+
+Modifications:
+- If the future is done, directly invoke the logic without creating/adding a new listener.
+
+Result:
+No need to create/add listener if the future is already done in close logic.

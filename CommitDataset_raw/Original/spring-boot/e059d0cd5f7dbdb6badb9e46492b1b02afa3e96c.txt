@@ -1,0 +1,9 @@
+Re-order security auto configuration so the fallback can be applied
+
+The management security autoconfiguration wanted to come last in the chain
+but that won't suit the fallback that was already in place for gh-568. This
+change re-orders the autoconfig so that @EnableWebSecurity is still added
+if the user sets security.basic.enabled=false and includes the actuator
+endpoints.
+
+Fixes gh-568

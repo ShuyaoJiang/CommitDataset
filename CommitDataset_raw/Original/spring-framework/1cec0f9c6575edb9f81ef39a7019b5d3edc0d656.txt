@@ -1,0 +1,45 @@
+Investigate claims made in SPR-9051 regarding transactional tests
+
+The claim: given an integration test class that is annotated with 
+@ContextConfiguration and declares a configuration class that is missing
+
+an @Configuration annotation, if a transactional test method (i.e., one 
+annotated with @Transactional) changes the state of the database then
+the 
+changes will not be rolled back as would be expected with the default 
+rollback semantics of the Spring TestContext Framework (TCF).
+
+TransactionalAnnotatedConfigClassWithAtConfigurationTests is a concrete 
+implementation of AbstractTransactionalAnnotatedConfigClassTests that
+uses 
+a true @Configuration class and thereby demonstrates the expected
+behavior 
+of such transactional tests with automatic rollback.
+
+TransactionalAnnotatedConfigClassesWithoutAtConfigurationTests is a 
+concrete implementation of
+AbstractTransactionalAnnotatedConfigClassTests 
+that does NOT use a true @Configuration class but rather a 'lite mode'
+configuration class (see the Javadoc for @Bean for details).
+
+Using such a 'lite mode' configuration class results in the following:
+
+ - Its @Bean methods act as factory methods instead of singleton beans.
+ - The dataSource() method is invoked multiple times instead of once.
+ - The test instance and the TCF operate on different data sources.
+ - The transaction managed (and rolled back) by the TCF is not the 
+   transaction that the application code or test instance uses.
+
+Ultimately, the use of a 'lite mode' configuration class gives the false
+appearance that there is a bug in the TCF (in that the transaction is
+not 
+rolled back); however, the transaction managed by the TCF is in fact 
+rolled back.
+
+In conclusion, these tests demonstrate both the intended behavior of the
+
+TCF and the fact that using 'lite mode' configuration classes can lead
+to 
+confusing results (both in tests and production code).
+
+Issue: SPR-9051

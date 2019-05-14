@@ -1,0 +1,11 @@
+Ensure no scheduled refresh in testPendingRefreshWithIntervalChange
+
+If a refresh, which is scheduled by the setting change, executes after
+the index-2 operation and win the refresh race (i.e., maybeRefresh) with
+the scheduledRefresh that we are going to check, then the latter will
+return false.
+
+Closes #39565
+Relates #39462
+
+PR #40387

@@ -1,0 +1,5 @@
+Revised RootBeanDefinition's externallyManaged* Sets to rely on postProcessingLock
+
+This allows us to avoid early initialization of footprint-heavy ConcurrentHashMaps, and reuses the existing postProcessingLock which will typically be active already when registerExternallyManaged* calls come in from the bean factory's post-processing phase.
+
+Issue: SPR-11343

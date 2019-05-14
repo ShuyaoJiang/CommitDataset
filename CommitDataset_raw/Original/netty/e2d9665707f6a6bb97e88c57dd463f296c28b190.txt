@@ -1,0 +1,18 @@
+Added comments to LineBasedFrameDecoder, JsonObjectDecoder and XmlFrameDecoder that they are only compatible with UTF-8 encoded streams. (#8651)
+
+
+Motivation:
+
+LineBasedFrameDecoder, JsonObjectDecoder and XmlFrameDecoder upon investigation of the
+sourcecode appeared to only support ASCII or UTF-8 input. It is an important characteristic
+and ont reflected in any documentation. This could lead to improper usage and bugs.
+
+Modifications:
+
+Javadoc comment is addedd to all three classes to state that implementation is only
+compatible with UTF-8 or ASCII input streams and brifly touches on implementaion details.
+
+Result:
+
+The end user of the netty library would not have to study sorcecode to deterime character
+encoding limitations for given classes.

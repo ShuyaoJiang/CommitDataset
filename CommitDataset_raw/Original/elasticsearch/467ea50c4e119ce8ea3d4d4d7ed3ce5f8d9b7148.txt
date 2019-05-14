@@ -1,0 +1,7 @@
+Use stronger write-once semantics for Azure repository (#30437)
+
+There's no need for an extra blobExists() call when writing a blob to the Azure service. Azure
+provides an option (with stronger consistency guarantees) on the upload method that guarantees
+that the blob that's uploaded does not already exist. This saves one network roundtrip.
+
+Relates to #19749

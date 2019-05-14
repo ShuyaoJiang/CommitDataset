@@ -1,0 +1,13 @@
+ByteString arrayOffset method
+
+Motivation:
+The ByteString class currently assumes the underlying array will be a complete representation of data. This is limiting as it does not allow a subsection of another array to be used. The forces copy operations to take place to compensate for the lack of API support.
+
+Modifications:
+- add arrayOffset method to ByteString
+- modify all ByteString and AsciiString methods that loop over or index into the underlying array to use this offset
+- update all code that uses ByteString.array to ensure it accounts for the offset
+- add unit tests to test the implementation respects the offset
+
+Result:
+ByteString and AsciiString can represent a sub region of a byte[].

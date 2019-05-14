@@ -1,0 +1,9 @@
+Ensure transport impls read SSLConfiguration early (elastic/x-pack-elasticsearch#1797)
+
+Today we parse / construct SSLConfiguration late when client / server
+channels are created. This is problematic if we try to read from secure settings
+in the future since we need to read all secure settings as soon as the node is
+constructed. If we keep on reading late, we will access a closed keystore
+since channel creation happens during node startup.
+
+Original commit: elastic/x-pack-elasticsearch@78d6061990f50fad98f24d62707a01011fcd3aae

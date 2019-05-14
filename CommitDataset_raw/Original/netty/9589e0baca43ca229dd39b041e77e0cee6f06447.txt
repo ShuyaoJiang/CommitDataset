@@ -1,0 +1,16 @@
+Change client id validation range in codec-mqtt
+
+Motivation:
+
+In MQTT 3.1 specification, "The Client Identifier (Client ID) is between
+1 and 23 characters long, and uniquely identifies the client to the
+server". But, current client id validation length is 0~23. It must be
+1~23. The empty string is invalid client id in MQTT 3.1
+
+Modifications:
+
+Change isValidClientId method. Add MIN_CLIENT_ID_LENGTH.
+
+Result:
+
+The validation check for client id length is between 1 and 23.

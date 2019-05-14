@@ -1,0 +1,10 @@
+New API to break platform-specific dependencies.
+
+In particular:
+ - Don't require OkHttp to depend on Jetty's non-boot package for
+   Android. This was causing ugly, confidence-smashing dalvik
+   errors in Android apps.
+ - Don't prevent HTTP on Java6 just because SPDY isn't available.
+
+This uses gross reflection and dynamic proxies! That's sad, but
+it's encapsulated so users won't have to know it exists.

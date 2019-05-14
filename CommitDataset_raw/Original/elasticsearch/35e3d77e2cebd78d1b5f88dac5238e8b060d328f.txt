@@ -1,0 +1,22 @@
+[Zen2] Implement state recovery (#36013)
+
+This commit implements proper metadata recovery for Zen2.
+
+GatewayService is responsible for the recovery. In Zen1 GatewayService
+creates an instance of Gateway, that is used to reach out to other cluster
+nodes, get their state and calculate the most up-to-date state based on
+versions. After that Gateway performs upgrade and archival of
+ ClusterSettings and closes bad indices. Then recovered state is passed to GatewayService.GatewayRecoveryListener that mixes up current state
+and restored state, removes state not recovered block, creates the
+routing table and performs re-routing.
+
+In Zen2 we should perform this kind of logic on cluster startup, except
+mixing state (because there is nothing to mix) and opening routing table.
+
+This commit refactors out all `ClusterUpdate` functions in a separate class
+`ClusterStateUpdaters`, which is used by `Gateway` and `GatewayService`
+in case of Zen1, and by `GatewayMetaState` and `GatewayService` in case of
+Zen2.
+
+This commit also switches all integration tests that are already using Zen2 from
+InMemoryPersistedState to GatewayMetaState.

@@ -1,0 +1,11 @@
+Auto-configure WebSocket JSON converter to use context’s ObjectMapper
+
+This commit adds auto-configuration support for WebSocket-based
+messaging. When the user enables WebSocket messaging (typically via
+@EnableWebSocket and @EnableWebSocketMessageBroker) and an ObjectMapper
+bean exists, a MappingJackson2MessageConverter that uses the
+ObjectMapper will be configured. This causes any spring.jackson.*
+configuration to affect WebSocket message conversion in the same way
+as it affects HTTP message conversion.
+
+Closes gh-2445

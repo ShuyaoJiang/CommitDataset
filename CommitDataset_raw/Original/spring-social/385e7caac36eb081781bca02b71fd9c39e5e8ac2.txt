@@ -1,0 +1,11 @@
+SOCIAL-447: Fix OAuth2 redirect url when server is behind a proxy
+
+When we are behind a proxy which is terminating SSL and forwarding
+our server http rather than the original https or the original user
+request, OAuth2AuthenticationService will incorrectly generate a
+redirect_uri using the http scheme rather than https.  A similar issue
+can occur if the proxy is doing port translation.  To correct this, we
+are replacing the original approach, which is to use
+HttpServletRequest.getRequestURL() with an approach that looks for and
+uses X-Forwarded-Proto and X-Forwarded-Port request headers, which
+should be inserted by the proxy.

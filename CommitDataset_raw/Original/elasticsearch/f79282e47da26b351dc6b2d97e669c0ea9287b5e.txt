@@ -1,0 +1,19 @@
+[TESTS] Set SO_LINGER and SO_REUSEADDR on the mock socket (#34211)
+
+In SessionFactoryLoadBalancingTests#testRoundRobinWithFailures()
+we kill ldap servers randomly and immediately bind to that port
+connecting to mock server socket. This is done to avoid someone else
+listening to this port. As the creation of mock socket and binding to the
+port is immediate, sometimes the earlier socket would be in TIME_WAIT state
+thereby having problems with either bind or connect.
+This commit sets the SO_REUSEADDR explicitly to true and also sets
+the linger on time to 0(as we are not writing any data) so as to
+allow re-use of the port and close immediately.
+
+Note: I could not find other places where this might be problematic
+but looking at test runs and netstat output I do see lot of sockets
+in TIME_WAIT. If we find that this needs to be addressed we can
+wrap ServerSocketFactory to set these options and use that with in
+memory ldap server configuration during tests.
+
+Closes #32190

@@ -1,0 +1,9 @@
+Fix a bug in SPDY plus HTTP caching.
+
+With spdy/3 the built-in headers were renamed from 'status'
+to ':status' and 'version' to ':version'. This caused the
+response cache to break, since it was parsing lines like
+':status: 200 OK' by splitting on the first colon.
+
+The fix drops these synthetic headers as soon as they're
+received; converting them to the HTTP form immediately.

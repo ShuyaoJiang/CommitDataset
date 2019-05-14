@@ -1,0 +1,10 @@
+Build: Ensure build metadata is written (#26427)
+
+This commit adds writing build metadata to the `check` command for each
+bwc project. This ensures the files will be written if doing a general
+`gradle check`, which is what CI intake jobs do. In later jobs like
+bwcTest, the extra bwc-release-snapshot info is needed.
+
+Note this commit also has a little cleanup of the output for the bwc
+checkout, as it was plastering a git warning, instead of the real info
+we care about (the refspec and commit that were used).

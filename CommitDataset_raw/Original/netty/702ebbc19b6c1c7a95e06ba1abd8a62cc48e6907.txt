@@ -1,0 +1,16 @@
+Don't spin from malformed dns packets containing loops
+
+Motivation:
+
+DNS packets that contain pointers in a loop will cause
+DnsResponseDecoder.readName() to infinite loop.
+
+Modifications:
+
+Fixed DnsResponseDecoder.readName() to detect when packets have loops
+and return null instead.
+
+Result:
+
+It is no longer possible to cause Netty to infinite loop by sending it malformed
+DNS packets with a loop.

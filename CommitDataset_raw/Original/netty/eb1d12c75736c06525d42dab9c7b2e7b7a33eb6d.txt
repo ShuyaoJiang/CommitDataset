@@ -1,0 +1,13 @@
+Expose the global direct memory counter. (#8945)
+
+
+Motivation:
+This counter is very useful in order to monitor Netty without having every ByteBufAllocator in the JVM
+
+Modification:
+Expose the value of DIRECT_MEMORY_COUNTER as we are already doing for DIRECT_MEMORY_LIMIT.
+We are returning -1 in case that DIRECT_MEMORY_COUNTER is not available.
+
+Result:
+
+Be able to get the amount of direct memory used.

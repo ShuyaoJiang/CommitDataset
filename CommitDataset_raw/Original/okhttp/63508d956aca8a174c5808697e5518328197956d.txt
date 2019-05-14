@@ -1,0 +1,6 @@
+Stopped sending empty frame on stream initiated in sender half-closed state.
+
+The SPDY protocol states the sender of FLAG_FIN must not send further frames
+on that stream.  This change skips the sending of a final (empty) frame with
+FLAG_FIN set when the stream is already half-closed because SYN_STREAM was
+sent with FLAG_FIN set.

@@ -1,0 +1,5 @@
+Snapshot/Restore: Ensure that shard failure reasons are correctly stored in CS (#25941)
+
+The failure reason for snapshot shard failures might not be propagated properly if the master node changes after the errors were reported by other data nodes. This commits ensures that the snapshot shard failure reason is preserved properly and adds workaround for reading old snapshot files where this information might not have been preserved.
+
+Closes #25878

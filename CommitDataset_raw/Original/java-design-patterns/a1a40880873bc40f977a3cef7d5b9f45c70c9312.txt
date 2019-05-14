@@ -1,0 +1,8 @@
+As getAll method returns a Stream, we cannot close the involved
+resources (Connection, Statement and resultSet) until the stream is
+closed by the consumer. So try-with-resources is not an option as per
+sonarqube’s recommendation. But it is still recommended to close
+statement and result set. When connection pool used, connection is not
+closed when close() called. It is just returned to the pool.
+
+Using //NOSONAR to avoid false blocker issue.

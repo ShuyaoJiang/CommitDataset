@@ -1,0 +1,14 @@
+Improve error reporting when driver class version is unsupported
+
+ClassUtils.isPresent(String, ClassLoader) swallows all Throwables when
+trying to load a class by name. For this reason
+UnsupportedClassVersionError will also be swallowed when user code is
+trying to use a driver library which has been compiled with a later
+JDK than the one the application is running with. All the user would
+
+see was "Cannot load driver class". This change simply propagates the
+UnsupportedClassVersionNumberError so that it is easier for users to
+find the root cause of the problem.
+
+Closes gh-4082
+Closes gh-4091

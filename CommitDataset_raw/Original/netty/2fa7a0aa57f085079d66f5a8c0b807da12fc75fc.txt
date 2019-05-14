@@ -1,0 +1,14 @@
+Keep the amount of scheduled tasks for DefaultDnsCache at a minimum (#8187)
+
+Motivation:
+
+We are currently always remove all entries from the cache for a hostname if the lowest TTL was reached but schedule one for each of the cached entries. This is wasteful.
+
+Modifications:
+
+- Reimplement logic to schedule TTL to only schedule a new removal task if the requested TTL was actual lower then the one for the already scheduled task.
+- Ensure we only remove from the internal map if we did not replace the Entries in the meantime.
+
+Result:
+
+Less overhead in terms of scheduled tasks for the DefaultDnsCache

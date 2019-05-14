@@ -1,0 +1,14 @@
+ingest: compile mustache template only if field includes '{{'' (#37207)
+
+* ingest: compile mustache template only if field includes '{{''
+
+Prior to this change, any field in an ingest node processor that supports
+script templates would be compiled as mustache template regardless if they
+contain a template or not. Compiling normal text as mustache templates is
+harmless. However, each compilation counts against the script compilation
+circuit breaker. A large number of processors without any templates or scripts
+could un-intuitively trip the too many script compilations circuit breaker.
+
+This change simple checks for '{{' in the text before it attempts to compile.
+
+fixes #37120

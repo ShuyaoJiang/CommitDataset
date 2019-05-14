@@ -1,0 +1,11 @@
+Add Support for ForwardedHeaderFilter sendRedirect
+
+Previously ForwrdedHeaderFilter did not ensure that
+HttpServletResponse.sendRedirect worked properly based on
+X-Forwarded-* headers.
+
+This commit updates ForwardedHeaderFilter to overrided the
+HttpServletResponse.sendRedirect method to ensure
+X-Forwarded-* headers are honored.
+
+Issue SPR-15020

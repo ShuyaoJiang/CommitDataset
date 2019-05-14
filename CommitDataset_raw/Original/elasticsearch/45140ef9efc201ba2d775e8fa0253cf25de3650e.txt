@@ -1,0 +1,21 @@
+Use consistent view of realms for authentication (#38815)
+
+This change updates the authentication service to use a consistent view
+of the realms based on the license state at the start of
+authentication. Without this, the license can change during
+authentication of a request and it will result in a failure if the
+realm that extracted the token is no longer in the realm list. This
+manifests in some tests as an authentication failure that should never
+really happen; one example would be the test framework's transport
+client user should always have a succesful authentication but in the
+LicensingTests this can fail and will show up as a
+NoNodeAvailableException.
+
+Additionally, the licensing tests have been updated to ensure that
+there is consistency when changing the license. The license is changed
+by modifying the internal xpack license state on each node, which has
+no protection against be changed by some pending cluster action. The
+methods to disable and enable now ensure we have a green cluster and
+that the cluster is consistent before returning.
+
+Closes #30301

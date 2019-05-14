@@ -1,0 +1,18 @@
+Add Expected Reciprocal Rank metric (#31891)
+
+This change adds Expected Reciprocal Rank (ERR) as a ranking evaluation metric
+as descriped in:
+
+Chapelle, O., Metlzer, D., Zhang, Y., & Grinspan, P. (2009).
+Expected reciprocal rank for graded relevance.
+Proceeding of the 18th ACM Conference on Information and Knowledge Management.
+https://doi.org/10.1145/1645953.1646033
+
+ERR is an extension of the classical reciprocal rank to the graded relevance
+case and assumes a cascade browsing model. It quantifies the usefulness of a
+document at rank `i` conditioned on the degree of relevance of the items at ranks
+less than `i`. ERR seems to be gain traction as an alternative to (n)DCG, so it
+seems like a good metric to support. Also ERR seems to be the default optimization
+metric used for training in RankLib, a widely used learning to rank library.
+
+Relates to #29653

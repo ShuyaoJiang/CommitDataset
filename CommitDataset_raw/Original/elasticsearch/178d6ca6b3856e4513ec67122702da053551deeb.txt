@@ -1,0 +1,14 @@
+SQL: Move shared REST client methods to shared-client (elastic/x-pack-elasticsearch#3428)
+
+* SQL: Move shared REST client methods to shared-client
+
+This commit is a preliminary step for moving JDBC to the REST client. It extracts the common REST clients from CLI and moves it to shared-client. This will allow us to move to the 5 project setup: rest-proto, shared-client, server, jdbc, cli with the following dependencies:
+
+server <-- rest-proto
+shared-client <-- rest-proto
+jdbc <-- shared-client
+cli <-- shared-client
+
+Relates to elastic/x-pack-elasticsearch#3419
+
+Original commit: elastic/x-pack-elasticsearch@2e6a134de04ad9540cbfe40ec82338a95783af18

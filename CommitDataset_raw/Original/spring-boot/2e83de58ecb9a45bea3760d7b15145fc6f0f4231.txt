@@ -1,0 +1,15 @@
+Test placeholder expansion supports relaxed names
+
+A test to ensure that the updated configuration properties support
+correctly expands placeholders using mapped properties.
+
+Prior to the updated support an `application.properties` file of the
+form:
+
+	my.prefix.some-url=http://github.com
+	my.prefix.login-url=${my.prefix.some-url}/login
+
+Would not correctly expand the placeholder against the environment
+variable `MY_PREFIX_SOME_URL`
+
+Closes gh-2496

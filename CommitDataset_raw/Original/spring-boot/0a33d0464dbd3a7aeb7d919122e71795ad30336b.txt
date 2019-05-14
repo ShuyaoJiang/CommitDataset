@@ -1,0 +1,12 @@
+Respect Boot locations in MockServletContext
+
+Update SpringApplicationContextLoader to use a MockServletContext
+subclass which also respects common Spring Boot resource locations. This
+allows resources in `/META-INF/resources`, `/resources`, `/public` and
+`/static` to be loaded in the same way as those in `/src/main/webapp`.
+
+SpringBootMockServletContext also returns an empty temporary folder for
+'/' when no resource locations can be found. This is primarily to
+prevent superfluous warnings from Liquibase.
+
+Fixes gh-2654

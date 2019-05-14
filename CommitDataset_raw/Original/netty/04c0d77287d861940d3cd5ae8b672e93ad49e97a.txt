@@ -1,0 +1,10 @@
+HTTP/2 Server Example No Response for HTTP/1.x Only Clients
+
+Motiviation:
+The HTTP/2 server example just hangs when a client is using only HTTP with no ALPN or upgrade attempts. We should still send some kind of response.
+
+Modifications:
+The HTTP/2 server example has a special handler to detect no upgrade HTTP clients and generate a response.
+
+Result:
+Clients that just use HTTP with no upgrade will no appear hung when interacting with the HTTP/2 server example.

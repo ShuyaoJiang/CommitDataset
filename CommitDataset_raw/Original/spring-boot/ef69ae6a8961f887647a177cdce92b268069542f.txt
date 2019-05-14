@@ -1,0 +1,15 @@
+Ensure logging filters are removed on cleanup
+
+Update `Log4J2LoggingSystem` and `LogbackLoggingSystem` to ensure
+that filters are removed when the `cleanUp` method is called. Prior
+to this commit application failures would not remove the filter and
+no log messages would appear.
+
+The `LoggingApplicationListener` has also been updated since it
+previously failed to handle `ApplicationFailureEvents`.
+
+Finally `EventPublishingRunListener` and `DelegatingApplicationListener`
+have been updated to deal with `null` parameters and to cope with
+listener errors.
+
+Fixes gh-7758

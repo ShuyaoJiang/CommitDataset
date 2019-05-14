@@ -1,0 +1,33 @@
+Map HTTP/2 Streams to Channels
+
+Motivation:
+
+This allows using handlers for Streams in normal Netty-style. Frames are
+read/written to the channel as messages, not directly as a
+callback/method call. Handlers allow mixing and can ease HTTP/1 and
+HTTP/2 interoperability by eventually supporting HTTP/1 handlers in
+HTTP/2 and vise versa.
+
+Modifications:
+
+New handler Http2MultiplexCodec that converts from the current HTTP/2
+API to a message-based API and child channels for streams.
+
+Result:
+
+The basics are done for server-side: new streams trigger creation of new
+channels in much the same appearance to how new connections trigger new
+channel creation. The basic frames HEADERS and DATA are handled, but
+also GOAWAY and RST_STREAM.
+
+Inbound flow control is implemented, but outbound is not. That will be
+done later, along with not completing write promises on the child
+channel until the write actually completes on the parent.
+
+There is not yet support for outbound priority/weight, push promises,
+and many other features.
+
+There is a generic Object that may be set on stream frames. This also
+paves the way for client-side support which needs a way to refer to
+yet-to-be-created streams (due to how HEADERS allocates a stream id, and
+the allocation order must be the same as transmission order).

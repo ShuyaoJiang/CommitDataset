@@ -1,0 +1,8 @@
+Delete the TODO to "try creating an abstract superclass that NetworkBuilder and GraphBuilder could derive from."
+
+I investigated this, and although it's possible, you get almost no benefit from it. There's only 3 rather trivial methods that end up the in the abstract class (4 if we eventually allow parallel edges on Graphs), and the subclasses still have to override them to scope the return type (you don't want to actually return the abstract base class to the user!).
+
+If the method names were buildGraph() and buildNetwork() instead of just build(), it would be much more reasonable.  Then we wouldn't need an abstract class at all and NetworkBuilder could extend GraphBuilder. But I don't think the extra verboseness for callers is worth being able to simplify some code on our end. Also, I don't think being able to use a NetworkBuilder to build Graphs (not Networks) is an ability anybody particularly wants.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=125365378

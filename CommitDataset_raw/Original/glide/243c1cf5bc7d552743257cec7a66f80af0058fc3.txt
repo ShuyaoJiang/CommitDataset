@@ -1,0 +1,6 @@
+Avoid releasing resources to memory cache after they’re removed.
+
+Previously when the Target was dereferenced, even if it was cleared 
+first, the resource would be put into the memory cache. That could end
+up affecting eviction order and prevent Glide from re-using resources
+it would have otherwise been able to. 

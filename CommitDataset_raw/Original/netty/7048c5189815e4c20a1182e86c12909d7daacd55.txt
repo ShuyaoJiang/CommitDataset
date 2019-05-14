@@ -1,0 +1,2 @@
+Fixed Javadoc of LifeCycleAwareChannelHandler
+* Some handlers (e.g. SslHandler, ZlibEncoder) need to store its context somewhere, and they needed to implement both beforeAdd() and channelOpen() because beforeAdd() is not called if pipeline is not attached.  This led to code duplication.  To address this issue, ChannelPipeline now always calls the life cycle listeners whether it is attached or not

@@ -1,0 +1,21 @@
+Add test helper to manipulate the ApplicationContext
+
+This commit adds ContextLoader, a test helper that configures an
+ApplicationContext that is meant to simulate a particular
+auto-configuration scenario.
+
+The auto-configuration, user configuration and environment can be
+customized. The loader invokes a ContextConsumer to assert the context
+and automatically close the context once it is done.
+
+Concretely, tests can create a shared field instance of that helper with
+the shared configuration to increase its visibility and tune the context
+further in each test.
+
+If the context is expected to fail, `loadAndFail` allows to optionally
+assert the root exception and consume it for further assertions.
+
+This commit also migrates some tests to illustrate the practical use of
+the helper
+
+Closes gh-9634

@@ -1,0 +1,9 @@
+Test: fix AuthenticationService tests timeouts due to incorrect stream sizes
+
+The AuthenticationService#testInvalidToken would cause a suite timeout in the case of an exception
+due to a incorrect stream size as the latch was never counted down. This fixes the missing latch
+countdown.
+
+relates elastic/x-pack-elasticsearch#2615
+
+Original commit: elastic/x-pack-elasticsearch@e838e6e912560d04cabd4a6f3755c20b7c22ca58

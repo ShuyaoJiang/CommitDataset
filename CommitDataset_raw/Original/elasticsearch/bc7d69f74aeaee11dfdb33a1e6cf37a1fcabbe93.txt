@@ -1,0 +1,8 @@
+Core: Don't rely on java time for epoch seconds formatting (#34086)
+
+In order to be compatible with joda time, this adds an epoch seconds
+formatter, that is able to parse floating point values.
+
+However joda time discards the floating point values, but still parses
+the data, where as this one is able to parse the whole value including
+milliseconds.

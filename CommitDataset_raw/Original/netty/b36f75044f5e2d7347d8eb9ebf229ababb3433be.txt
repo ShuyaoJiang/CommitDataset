@@ -1,0 +1,13 @@
+Fix possible ByteBuf leak when CompositeByteBuf is resized (#8946)
+
+Motivation:
+
+The special case fixed in #8497 also requires that we keep a derived slice when trimming components in place, as done by the capacity(int) and discardReadBytes() methods.
+
+Modifications:
+
+Ensure that we keep a ref to trimmed components' original retained slice in capacity(int) and discardReadBytes() methods, so that it is released properly when the they are later freed. Add unit test which fails prior to the fix.
+
+Result:
+
+Edge case leak is eliminated.

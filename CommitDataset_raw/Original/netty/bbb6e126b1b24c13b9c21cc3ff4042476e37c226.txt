@@ -1,0 +1,18 @@
+Correctly handle DNS redirects for NS servers that have no ADDITIONAL record (#8177)
+
+Motiviation:
+
+We incorrectly did ignore NS servers during redirect which had no ADDITIONAL record. This could at worse have the affect that we failed the query completely as none of the NS servers had a ADDITIONAL record. Beside this using a DnsCache to cache authoritative nameservers does not work in practise as we we need different features and semantics when cache these servers (for example we also want to cache unresolved nameservers and resolve these on the fly when needed).
+
+Modifications:
+
+- Correctly take NS records into account that have no matching ADDITIONAL record
+- Correctly handle multiple ADDITIONAL records for the same NS record
+- Introduce AuthoritativeDnsServerCache as a replacement of the DnsCache when caching authoritative nameservers + adding default implementation
+- Add an adapter layer to reduce API breakage as much as possible
+- Replace DnsNameResolver.uncachedRedirectDnsServerStream(...) with newRedirectDnsServerStream(...)
+- Add unit tests
+
+Result:
+
+Our DnsResolver now correctly handle redirects in all cases.

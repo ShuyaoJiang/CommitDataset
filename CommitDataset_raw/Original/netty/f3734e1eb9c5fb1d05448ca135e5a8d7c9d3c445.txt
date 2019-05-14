@@ -1,0 +1,8 @@
+Simplified DefaultChannelPipeline by making its list head final
+
+- Previously, head was a volatile field which is null at the beginning.
+  While iterating over the pipeline, if the loop hits null, it called
+  Channel.Unsafe explicitly.
+- Instead, I created an outbound handler that redirects all requests
+  to the unsafe and made it a final field of the pipeline.
+- As a result, DefaultChannelPipeline code became much simpler.

@@ -1,0 +1,9 @@
+Remove the method Graphs.roots(). “roots” as we’re defining them isn’t really a standard term of art (I can only find references to ROOTED graphs, which have exactly one root). Additional reasons to remove:
+
+1) It's super easy to implement yourself, either inlined as you're processing nodes or as a static method.
+2) The definition is even weirder for undirected graphs.
+3) If we have this method, we should have also have the parallel method "Set<N> leafs(Graph<N> graph)". However, "leafs" is not well-defined in graph theory. It can either mean "nodes with an out degree of zero" OR "nodes with a degree of one".
+4) There's only 1 real caller. Technically there's 2, but one of them seems to have a bunch of methods that are dead.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=127139526

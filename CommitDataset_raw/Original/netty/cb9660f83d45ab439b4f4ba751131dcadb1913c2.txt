@@ -1,0 +1,10 @@
+Allow the user to call slice().retain() or duplicate.retain() in his/her ByteToMessageDecoder.decode(...) method.
+
+Motivation:
+At the moment a user can not safetly call slice().retain() or duplicate.retain()in the ByteToMessageDecoder.decode(...) implementation without the risk to see coruption because we may call discardSomeReadBytes() to make room on the buffer once the handling is done.
+
+Modifications:
+Check for the refCnt() before call discardSomeReadBytes() and also check before call decode(...) to create a copy if needed.
+
+Result:
+The user can safetly call slice().retain() or duplicate.retain() in his/her ByteToMessageDecoder.decode(...) method.

@@ -1,0 +1,26 @@
+Avoid exposing several javax.validaton.Validator beans
+
+This commit makes sure that the Spring `Validator` used by the MVC
+layer doesn't expose a JSR-303 contract, if any.
+
+The default implementation of the `mvcValidator` is
+`LocalValidatorFactoryBean`. While this object is exposed as a Spring
+`Validator` only, its runtime capabilities expose that contract as well
+as the standard `Validator` and `ValidatorFactory` ones.
+
+Concretely, if an auto-configuration is checking if a
+`javax.validation.Validator` bean is missing, the condition will match
+since we only know about "advertized types": beans haven't been created
+yet so we can't inspect their runtime capabilities. Since the condition
+match, we will auto-configure a bean. At runtime though, we're no longer
+ale to inject a `javax.validation.Validator` by type since two candidates
+are available.
+
+This commit introduces `SpringValidatorAdapterWrapper`, a wrapper class
+on any `SpringValidatorAdapter` (`LocalValidatorFactoryBean` being one of
+the available implementations) that only exposes the Spring contract.
+
+Also, if a `javax.validation.Validator` bean is available, we will use it
+for the MVC layer, rather than creating a new one.
+
+Closes gh-8223

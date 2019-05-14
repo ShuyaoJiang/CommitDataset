@@ -1,0 +1,13 @@
+Allow writing with void promise if IdleStateHandler is configured in pipeline.
+
+Motivation:
+
+Allow writing with void promise if IdleStateHandler is configured in the pipeline for read timeout events.
+
+Modifications:
+
+Better performance.
+
+Result:
+
+No more ChannelFutureListeners are created if IdleStateHandler is only configured for read timeouts allowing for writing to the channel with void promise.

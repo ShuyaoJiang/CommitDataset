@@ -1,0 +1,9 @@
+Exit Windows scripts promptly on failure
+
+When invoking the elasticsearch-env.bat batch script on Windows, if the
+script exits due to an error (e.g., Java can not be found, or the wrong
+version of Java is found), then the script exits. Sadly, on Windows,
+this does not also terminate the caller, instead returning control. This
+means we have to explicitly exit so that is what we do in this commit.
+
+Relates #25959

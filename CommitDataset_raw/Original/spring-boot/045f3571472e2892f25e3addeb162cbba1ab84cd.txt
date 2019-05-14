@@ -1,0 +1,20 @@
+Upgrade Elasticsearch to 2.4 and restore use of Jackson 2.8
+
+In 1.4.0 we used Elasticsearch 2.3.5 and Jackson 2.8. This
+combination was incompatible in some circumstances due to a change
+in Jackson (gh-6508). With Elasticsearch 2.4 yet to be released at the
+time, the only way to restore compatibility was to downgrade Jackson.
+
+With the release of Elasticsearch 2.4 we have another option: revert
+the Jackson downgrade and upgrade Elasticsearch instead. While we
+normally wouldn't consider upgrading to a new minor version of a
+dependency in a maintenance release we have to do something to restore
+compatibility. The alternative is to downgrade Jackson but that will
+affect more people (Jackson is more widely used than Elasticsearch)
+and will lose some functionality that was new in Jackson 2.8 that
+people may already be relying upon.
+
+This commit restores the use of Jackson 2.8 – including the
+2.8-specific dependency management – and upgrades to Elasticsearch 2.4
+
+Closes gh-6868

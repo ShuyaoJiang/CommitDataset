@@ -1,0 +1,8 @@
+Fix `_field_caps` serialization in order to support cross cluster search (#24722)
+
+Today the `_field_caps` API doesn't implement its request serialization
+correctly since indices and indices options are not serialized at all.
+This will likely break with all transport clients etc. and if this request
+must be send across the network. This commit fixes this and adds correct
+handling if we have only remote indices to prevent the inclusion of
+all local indices.

@@ -1,0 +1,14 @@
+Ensure Netty is usable on Java7
+
+Motivation:
+
+When adding SNIMatcher support we missed to use static delegating methods and so may try to load classes that not exists in Java7. Which will lead to errors.
+
+Modifications:
+
+- Correctly only try to load classes when running on java8+
+- Ensure Java8+ related tests only run when using java8+
+
+Result:
+
+Fixes [#6700]

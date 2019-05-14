@@ -1,0 +1,41 @@
+Expose adaptive replica selection stats in /_nodes/stats API
+
+This exposes the collected metrics we store for ARS in the nodes stats, as well
+as the computed rank of nodes. Each node exposes its perspective about the
+cluster.
+
+Here's an example output (with `?human`):
+
+```json
+...
+"adaptive_selection" : {
+  "_k6v1-wERxyUd5ke6s-D0g" : {
+    "outgoing_searches" : 0,
+    "avg_queue_size" : 0,
+    "avg_service_time" : "7.8ms",
+    "avg_service_time_ns" : 7896963,
+    "avg_response_time" : "9ms",
+    "avg_response_time_ns" : 9095598,
+    "rank" : "9.1"
+  },
+  "VJiCUFoiTpySGmO00eWmtQ" : {
+    "outgoing_searches" : 0,
+    "avg_queue_size" : 0,
+    "avg_service_time" : "1.3ms",
+    "avg_service_time_ns" : 1330240,
+    "avg_response_time" : "4.5ms",
+    "avg_response_time_ns" : 4524154,
+    "rank" : "4.5"
+  },
+  "DHNGTdzyT9iiaCpEUsIAKA" : {
+    "outgoing_searches" : 0,
+    "avg_queue_size" : 0,
+    "avg_service_time" : "2.1ms",
+    "avg_service_time_ns" : 2113164,
+    "avg_response_time" : "6.3ms",
+    "avg_response_time_ns" : 6375810,
+    "rank" : "6.4"
+  }
+}
+...
+```

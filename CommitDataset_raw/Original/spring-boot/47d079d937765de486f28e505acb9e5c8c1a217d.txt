@@ -1,0 +1,19 @@
+Add default proxy settings from System proerties
+
+Aether apparently doesn't use the java.net.* APIs for
+TCP connections so it doesn't notice when a user sets
+-Dhttp.Proxy*. To fix it is painful, and leads me to
+suspect that actually we might want to parse a
+settings.xml at some point (however unpalatable that
+is).
+
+For now I have added a Proxy to all RemoteRepository
+instances that we create in the CLI if the user
+has set -Dhttp.proxyHost (and/or -Dhttps.proxyHost for
+a secure repository).
+
+TODO: authentication. Is there a standard way to specify
+that globally via system properties.
+
+TODO: maybe use per-repository settings if provided
+(e.g. in settings.xml).

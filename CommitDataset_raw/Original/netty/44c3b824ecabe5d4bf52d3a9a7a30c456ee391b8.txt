@@ -1,0 +1,16 @@
+Remove uninterpolated `{}` in DefaultHttp2ConnectionDecoder log message (#8441)
+
+Motivation:
+
+There are log messages emitted from Http2ConnectionDecoder of the form
+```
+INF i.n.h.c.h.DefaultHttp2ConnectionDecoder ignoring HEADERS frame for stream RST_STREAM sent. {}
+```
+
+Modifications:
+
+Remove the trailing `{}` in the log message that doesn't have a value.
+
+Result:
+
+Log messages no longer have a trailing `{}`.

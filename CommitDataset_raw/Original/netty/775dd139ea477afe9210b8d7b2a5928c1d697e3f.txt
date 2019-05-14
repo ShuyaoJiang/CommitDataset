@@ -1,0 +1,13 @@
+Ensure Bootstrap.connect(...) not throw IllegalStateException when registration is delayed.
+
+Motivation:
+
+Bootstrap.connect(...) tries to obtain the EventLoop of a Channel before it may be registered. This will cause an IllegalStateException. We need to ensure we handle the cause of late registration and not throw in this case.
+
+Modifications:
+
+Ensure we only try to access the EventLoop after the Channel is registered and handle the case of late registration.
+
+Result:
+
+Bootstrap.connect(...) not fails on late registration.

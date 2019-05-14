@@ -1,0 +1,13 @@
+Ensure SslUtils and so SslHandler works when using with Little-Endian buffers.
+
+Motivation:
+
+We not correctly handle LE buffers when try to read the packet length out of the buffer and just assume it always is a BE buffer.
+
+Modifications:
+
+Correctly account for the endianess of the buffer when reading the packet lenght.
+
+Result:
+
+Fixes [#6709].

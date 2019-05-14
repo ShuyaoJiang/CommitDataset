@@ -1,0 +1,13 @@
+[#5866] HttpToHttp2ConnectionHandler / InboundHttp2ToHttpAdapter ignores STREAM_DEPENDENCY_ID and STREAM_WEIGHT.
+
+Motivation:
+
+HttpToHttp2ConnectionHandler.write(ctx, msg, promise) ignores HttpConversionUtil.ExtensionHeaderNames.STREAM_DEPENDENCY_ID header in outbound message. Beside this InboundHttp2ToHttpAdapter also not add the STREAM_DEPENDENCY_ID and STREAM_WEIGHT headers.
+
+Modifications:
+
+Respect STREAM_DEPENDENCY_ID and STREAM_WEIGHT
+
+Result:
+
+Correctly respect STREAM_DEPENDENCY_ID and STREAM_WEIGHT.

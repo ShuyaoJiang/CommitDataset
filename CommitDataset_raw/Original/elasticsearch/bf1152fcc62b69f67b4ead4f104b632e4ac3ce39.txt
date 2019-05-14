@@ -1,0 +1,12 @@
+Use follower primary term when applying operations (#31113)
+
+The primary shard copy on the following has authority of the replication
+operations that occur on the following side in cross-cluster
+replication. Yet today we are using the primary term directly from the
+operations on the leader side. Instead we should be replacing the
+primary term on the following side with the primary term of the primary
+on the following side. This commit does this by copying the translog
+operations with the corrected primary term. This ensures that we use
+this primary term while applying the operations on the primary, and when
+replicating them across to the replica (where the replica request was
+carrying the primary term of the primary shard copy on the follower).

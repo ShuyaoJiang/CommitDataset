@@ -1,0 +1,17 @@
+Allow spring.main.sources to override only if uninitialized
+
+The problem this change fixes is that spring.main.sources would always
+be bound to SpringApplication.sources when provided in a properties file
+even if SpringApplication.run() is called directly with sources. This
+led to confusion with users saying that their sources were not working
+where in fact they weren't even being used.
+
+There would be more than one way to approach this problem, but we
+have chosen for now to ignore spring.main.sources completely
+if the SpringApplication constructor was already called with
+explicit non-empty sources. It might be preferable, if possible,
+to only ignore its value in an external properties file (allowing
+command line or System properties to override). If we want to change
+the behaviour again, I suggest a new story should be created.
+
+[Fixes #54185750] [bs-255]

@@ -1,0 +1,17 @@
+Add PathPatternRegistry for handler mapping matching
+
+Previously `HandlerMapping` implementation were heavily relying on
+`String` path patterns, `PathMatcher` implementations and dedicated maps
+for matching incoming request URL to an actual request handler.
+
+This commit adds the `PathPatternRegistry` that holds `PathPattern`
+instances and the associated request handler — matching results are then
+shared as `PathMatchResult` instances. `AbstractUrlHandlerMapping` will
+use this registry directly, but other components dealing with request
+matching (like `PatternsRequestCondition`) will directly use ordered
+`PathPattern` collections since ordering is important there.
+
+This opens the door for faster request matching and simplifies the
+design of this part.
+
+Issue: SPR-15608

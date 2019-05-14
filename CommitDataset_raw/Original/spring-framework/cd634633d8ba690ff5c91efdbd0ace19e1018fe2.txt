@@ -1,0 +1,11 @@
+MockMvc re-uses response instance on async dispatch
+
+MockMvc now properly detects the presence of an AsyncContext and
+re-uses the response instance used to start it.
+
+This commit also includes a minor fix in
+ResponseBodyEmitterReturnValueHandler to ensure it does not disable
+ETag related content buffering for reactive return values that do not
+result in streaming (e.g. single value or collections).
+
+Issue: SPR-16067

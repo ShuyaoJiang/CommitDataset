@@ -1,0 +1,24 @@
+Clean up the execution mechanism of examples
+
+Motivation:
+
+- There's no way to pass an argument to an example.
+- Assigning a Maven profile for each example is an overkill.
+  It makes the pom.xml crowded.
+
+Modifications:
+
+- Remove example profiles from example/pom.xml
+- Keep the list of examples in run-example.sh
+- run-example.sh passes all options to exec-maven-plugin.
+  For example, we can now do this:
+
+    ./run-example.sh -Dssl -Dport=443 http-server
+
+Result:
+
+- It's much easier to add a new example and provide an easy way to
+  launch it.
+- We can still pass an arbitrary argument to the example being launched.
+  (I'll update all examples to make them get their options from system
+  properties rather than from args[].

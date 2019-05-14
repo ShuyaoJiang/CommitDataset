@@ -1,0 +1,10 @@
+Not cause busy loop when interrupt Thread of NioEventLoop
+
+Motivation:
+Because Thread.currentThread().interrupt() will unblock Selector.select() we need to take special care when check if we need to rebuild the Selector. If the unblock was caused by the interrupt() we will clear it and move on as this is most likely a bug in a custom ChannelHandler or a library the user makes use of.
+
+Modification:
+Clear the interrupt state of the Thread if the Selector was unblock because of an interrupt and the returned keys was 0.
+
+Result:
+No more busy loop caused by Thread.currentThread().interrupt()

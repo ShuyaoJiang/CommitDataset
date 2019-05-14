@@ -1,0 +1,20 @@
+Wrap operations requiring SocketPermission with doPrivileged blocks
+
+Motivation:
+
+Currently Netty does not wrap socket connect, bind, or accept
+operations in doPrivileged blocks. Nor does it wrap cases where a dns
+lookup might happen.
+
+This prevents an application utilizing the SecurityManager from
+isolating SocketPermissions to Netty.
+
+Modifications:
+
+I have introduced a class (SocketUtils) that wraps operations
+requiring SocketPermissions in doPrivileged blocks.
+
+Result:
+
+A user of Netty can grant SocketPermissions explicitly to the Netty
+jar, without granting it to the rest of their application.

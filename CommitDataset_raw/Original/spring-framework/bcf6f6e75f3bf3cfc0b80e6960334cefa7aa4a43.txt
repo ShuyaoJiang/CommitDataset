@@ -1,0 +1,12 @@
+Refactoring in reactive WebSocketSession and adapters
+
+The WebSocketHander adapters are now neutral for client vs server-side
+use with the adapters for RxNetty and Reactor Netty (server-side only)
+completely removed.
+
+A new HandshakeInfo carries information about the handshake including
+URI, headers, and principal from the upgrade strategy, to the adapter,
+and then to the session.
+
+WebSocketSession exposes the HandshakeInfo as well reducing its overall
+number of methods.

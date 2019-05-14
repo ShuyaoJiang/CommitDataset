@@ -1,0 +1,15 @@
+Set custom handshakeHandler for XML sockjs config
+
+Prior to this commit, configuring a custom handshakeHandler when setting
+up a stomp-endpoint with SockJS would not be taken into account:
+
+  <websocket:stomp-endpoint path="/foo">
+    <websocket:handshake-handler ref="customHandler"/>
+    <websocket:sockjs/>
+  </websocket:stomp-endpoint>
+
+This commit fixes this by creating and registering a
+WebsocketTransportHandler (with this handshakeHandler) as a
+transportHandler override for the SockJSService.
+
+Issue: SPR-11568

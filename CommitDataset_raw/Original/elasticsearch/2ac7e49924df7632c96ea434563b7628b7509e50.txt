@@ -1,0 +1,7 @@
+Fix broken NaN check in MovingFunctions#stdDev() (#31888)
+
+The initial check will never be true, because of the special semantics of NaN,
+where no value is equal to Nan, including NaN. Thus, x == Double.NaN always
+evaluates to false. The method still works correct because later computations
+will also return NaN if the avg argument is NaN, but the intended shortcut
+doesn't work.

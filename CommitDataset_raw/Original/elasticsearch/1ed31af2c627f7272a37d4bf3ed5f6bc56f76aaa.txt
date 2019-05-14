@@ -1,0 +1,19 @@
+[ML] Allow model_memory_limit to be reduced (elastic/x-pack-elasticsearch#3998)
+
+Up to now a job update that reduces the model memory limit
+was not allowed. However, there could definitely be cases
+where reducing the limit is necessary and reasonable.
+
+This commit makes it possible to decrease the limit as long
+as it does not go below the current memory usage. We obtain
+the latter from the model size stats.
+
+The conditions under which updating the model_memory_limit
+is not allowed are now:
+
+ - when the job is open
+ - latest model_size_stats.model_bytes < new value
+
+relates elastic/x-pack-elasticsearch#2461
+
+Original commit: elastic/x-pack-elasticsearch@5b359235906d89883097db10ba7b6fedf314b80e

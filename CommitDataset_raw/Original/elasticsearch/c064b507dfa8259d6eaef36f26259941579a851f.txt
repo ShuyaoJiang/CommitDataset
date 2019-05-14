@@ -1,0 +1,6 @@
+Encapsulate Translog in Engine (#31220)
+
+This removes the abstract `getTranslog` method in `Engine`, instead leaving it
+to the abstract implementations of the other methods that use the translog. This
+allows future Engines not to have a Translog, as instead they must implement the
+methods that use the translog pieces to return necessary values.

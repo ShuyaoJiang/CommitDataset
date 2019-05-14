@@ -1,0 +1,10 @@
+IovArray#add return value resulted in more ByteBufs being added during iteration
+
+Motivation:
+IovArray implements MessageProcessor, and the processMessage method will continue to be called during iteration until it returns true. A recent commit b215794de31f28355e4469fcc04782f55076c80c changed the return value to only return true if any component of a CompositeByteBuf was added as a result of the method call. However this results in the iteration continuing, and potentially subsequent smaller buffers maybe added, which will result in out of order writes and generally corrupts data.
+
+Modifications:
+- IovArray#add should return false so that the MessageProcessor#processMessage will stop iterating.
+
+Result:
+Native transports which use IovArray will not corrupt data during gathering writes of CompositeByteBuf objects.

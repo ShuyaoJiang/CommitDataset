@@ -1,0 +1,13 @@
+Correctly release message in MemcacheClientHandler that is used in the memcache example. (#8119)
+
+Motivation:
+
+MemcacheClientHandler.channelRead(...) need to release the frame after it prints out its content to not introduce a memory leak.
+
+Modifications:
+
+Call release() on the frame.
+
+Result:
+
+Example has no leak any more.

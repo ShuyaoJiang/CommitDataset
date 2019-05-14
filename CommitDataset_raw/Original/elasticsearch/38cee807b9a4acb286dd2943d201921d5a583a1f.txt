@@ -1,0 +1,128 @@
+SQL: Parse all multi_match options from request (elastic/x-pack-elasticsearch#3361)
+
+* Parse all multi_match options from request
+
+Rather than hardcoding predicates that require more methods for each newly added
+options, this encapsulates the state into a collection of appliers that can
+accumulate what's needed in the QueryBuilder itself.
+
+For example, the following:
+
+```json
+GET /_xpack/sql/translate
+{
+  "query": "SELECT foo,baz from i WHERE MATCH('baz', 'should clause', 'operator=AND;type=cross_fields')"
+}
+```
+
+Then generates the following:
+
+```json
+{
+  "size" : 1000,
+  "query" : {
+    "multi_match" : {
+      "query" : "should clause",
+      "fields" : [
+        "baz^1.0"
+      ],
+      "type" : "cross_fields",
+      "operator" : "AND",
+      "slop" : 0,
+      "prefix_length" : 0,
+      "max_expansions" : 50,
+      "zero_terms_query" : "NONE",
+      "auto_generate_synonyms_phrase_query" : true,
+      "fuzzy_transpositions" : true,
+      "boost" : 1.0
+    }
+  },
+  "_source" : {
+    "includes" : [
+      "baz"
+    ],
+    "excludes" : [ ]
+  },
+  "docvalue_fields" : [
+    "foo"
+  ]
+}
+```
+
+And when an invalid field value is used:
+
+```json
+GET /_xpack/sql
+{
+  "query": "SELECT foo,baz from i WHERE MATCH('baz', 'should clause', 'operator=AND;minimum_should_match=potato')"
+}
+```
+
+We get what ES would usually send back:
+
+```json
+{
+  "error" : {
+    "root_cause" : [
+      {
+        "type" : "query_shard_exception",
+        "reason" : "failed to create query: {\n  \"multi_match\" : {\n    \"query\" : \"should clause\",\n    \"fields\" : [\n      \"baz^1.0\"\n    ],\n    \"type\" : \"best_fields\",\n    \"operator\" : \"AND\",\n    \"slop\" : 0,\n    \"prefix_length\" : 0,\n    \"max_expansions\" : 50,\n    \"minimum_should_match\" : \"potato\",\n    \"zero_terms_query\" : \"NONE\",\n    \"auto_generate_synonyms_phrase_query\" : true,\n    \"fuzzy_transpositions\" : true,\n    \"boost\" : 1.0\n  }\n}",
+        "index_uuid" : "ef3MWf8FTUe2Qjz2FLbhoQ",
+        "index" : "i"
+      }
+    ],
+    "type" : "search_phase_execution_exception",
+    "reason" : "all shards failed",
+    "phase" : "query",
+    "grouped" : true,
+    "failed_shards" : [
+      {
+        "shard" : 0,
+        "index" : "i",
+        "node" : "VfG9zfk9TDWdWvEZu0a4Rw",
+        "reason" : {
+          "type" : "query_shard_exception",
+          "reason" : "failed to create query: {\n  \"multi_match\" : {\n    \"query\" : \"should clause\",\n    \"fields\" : [\n      \"baz^1.0\"\n    ],\n    \"type\" : \"best_fields\",\n    \"operator\" : \"AND\",\n    \"slop\" : 0,\n    \"prefix_length\" : 0,\n    \"max_expansions\" : 50,\n    \"minimum_should_match\" : \"potato\",\n    \"zero_terms_query\" : \"NONE\",\n    \"auto_generate_synonyms_phrase_query\" : true,\n    \"fuzzy_transpositions\" : true,\n    \"boost\" : 1.0\n  }\n}",
+          "index_uuid" : "ef3MWf8FTUe2Qjz2FLbhoQ",
+          "index" : "i",
+          "caused_by" : {
+            "type" : "number_format_exception",
+            "reason" : "For input string: \"potato\""
+          }
+        }
+      }
+    ]
+  },
+  "status" : 400
+}
+```
+
+It even includes the validation that ES already does for things like `type`:
+
+```json
+GET /_xpack/sql
+{
+  "query": "SELECT foo,baz from i WHERE MATCH('baz', 'should clause', 'operator=AND;type=eggplant')"
+}
+```
+
+```json
+{
+  "error" : {
+    "root_cause" : [
+      {
+        "type" : "parse_exception",
+        "reason" : "failed to parse [multi_match] query type [eggplant]. unknown type."
+      }
+    ],
+    "type" : "parse_exception",
+    "reason" : "failed to parse [multi_match] query type [eggplant]. unknown type."
+  },
+  "status" : 400
+}
+```
+
+Resolves elastic/x-pack-elasticsearch#3257
+
+
+Original commit: elastic/x-pack-elasticsearch@59f518af4a40eb2261bbefe577087f1d52b5d221

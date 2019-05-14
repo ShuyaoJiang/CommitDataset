@@ -1,0 +1,10 @@
+[Tests] Remove QueryStringQueryBuilderTests#toQuery class assertions (#32236)
+
+Currently we check that the queries that QueryStringQueryBuilder#toQuery returns
+is one out of a list of many Lucene query classes. This list has extended a lot over time,
+since QueryStringQueryBuilder can build all sort of queries. This makes the test hard to 
+maintain. The recent addition of alias fields which build a BlendedTermQuery show how
+easy this test breaks. Also the current assertions doesn't add a lot in terms of catching
+errors. This is why we decided to remove this check.
+
+Closes #32234

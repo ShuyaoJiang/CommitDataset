@@ -1,0 +1,11 @@
+Stop assuming datasource creation failure originates from auto-config
+
+There are documented way to reuse bits of the infrastructure in user
+config to offer similar datasource configuration. If that fails, the
+regular failure there will kick in.
+
+This commit improves `DataSourceBeanCreationFailureAnalyzer` to not
+misguide users that the auto-configuration has failed. Rather, it
+describes what has failed in a more generic way.
+
+Closes gh-12947

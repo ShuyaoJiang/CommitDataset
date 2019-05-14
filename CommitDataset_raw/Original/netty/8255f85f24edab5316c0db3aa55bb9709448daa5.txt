@@ -1,0 +1,18 @@
+Rename SslHandler.close(...) to closeOutbound(...) as it is still useful and delegate to the methods. (#8193)
+
+* Rename SslHandler.close(...) to closeOutbound(...) as it is still useful and delegate to the methods.
+
+Motivation:
+
+Sometimes the user may want to send a close_notify without closing the underlying Channel. For this we offered the SslHandler.close(...) methods which were marked as deeprecated. We should offer an way to still do this without the user calling deprecated methods.
+
+See https://stackoverflow.com/questions/51710231/using-nettys-sslhandlerclosechannelhandlercontext-channelpromise/51753742#comment90555949_51753742 .
+
+Modifications:
+
+- Remove deprecation of the SslHandler.close(...) method that exactly allows this and rename these to closeOutbound(...) as this is more clear.
+- Add close(...) methods that delegate to these and mark these as deprecated.
+
+Result:
+
+Be able to send close_notify without closing the Channel.

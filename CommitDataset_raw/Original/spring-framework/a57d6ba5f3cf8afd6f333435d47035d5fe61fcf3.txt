@@ -1,0 +1,8 @@
+Optimize StringUtils.cleanPath
+
+Add an early exit to `StringUtils.cleanPath` to save array creating and
+string concatenation. With a typical Spring application, the `cleanPath`
+method can be called over 600 times, often with a path constructed by
+a `ClassPathResource` that is likely to already be clean.
+
+Closes gh-22568

@@ -1,0 +1,13 @@
+Ensure correct ordering if a ChannelInitializer adds another ChannelInitializer
+
+Motivation:
+
+At the moment we call initChannel(...) in the channelRegistered(...) method which has the effect that if another ChannelInitializer is added within the initChannel(...) method the ordering of the added handlers is not correct and surprising. This is as the whole initChannel(...) method block is executed before the initChannel(...) block of the added ChannelInitializer is handled.
+
+Modifications:
+
+Call initChannel(...) from within handlerAdded(...) if the Channel is registered already. This is true in all cases for our DefaultChannelPipeline implementation. This way the ordering is always as expected. We still keep the old behaviour as well to not break code for other ChannelPipeline implementations (if someone ever wrote one).
+
+Result:
+
+Correct and expected ordering of ChannelHandlers.

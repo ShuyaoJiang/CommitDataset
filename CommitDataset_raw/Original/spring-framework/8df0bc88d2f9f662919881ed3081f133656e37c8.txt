@@ -1,0 +1,14 @@
+Improve access to raw content in WebTestClient
+
+If the content has not been consumed, cause it to be produced, and
+wait for a certain amount of time before giving up, so the raw content
+can be made available. This can occur when:
+
+1) In a mock server scenario the Flux representing the client request
+content is passed directly to the mock server request, but is never
+consumed because of an error before the body is read.
+
+2) Test obtains FluxExchangeResult (e.g. for streaming) but instead of
+consuming the Flux, it calls getResponseBodyContent() instead.
+
+Issue: SPR-17363

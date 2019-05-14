@@ -1,0 +1,14 @@
+retainSlice() unwrap ByteBuf
+
+Motivation:
+retainSlice() currently does not unwrap the ByteBuf when creating the ByteBuf wrapper. This effectivley forms a linked list of ByteBuf when it is only necessary to maintain a reference to the unwrapped ByteBuf.
+
+Modifications:
+- retainSlice() and retainDuplicate() variants should only maintain a reference to the unwrapped ByteBuf
+- create new unit tests which generally verify the retainSlice() behavior
+- Remove unecessary generic arguments from AbstractPooledDerivedByteBuf
+- Remove unecessary int length member variable from the unpooled sliced ByteBuf implementation
+- Rename the unpooled sliced/derived ByteBuf to include Unpooled in their name to be more consistent with the Pooled variants
+
+Result:
+Fixes https://github.com/netty/netty/issues/5582

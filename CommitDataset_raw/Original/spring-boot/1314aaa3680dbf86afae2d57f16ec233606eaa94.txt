@@ -1,0 +1,10 @@
+Avoid early init of CacheManager
+
+This commit restructures the Cache auto-configuration to avoid an early
+init on CacheManager (and potentially all its infrastructure). Rather
+than adding a dependency on the validator bean, this commit relies on
+the fact CacheAspectSupport checks if a CacheManager is available in the
+afterSingletonsInstantiated callback. In this case, a simple bean with
+a postconstruct callback is enough.
+
+Closes gh-13038

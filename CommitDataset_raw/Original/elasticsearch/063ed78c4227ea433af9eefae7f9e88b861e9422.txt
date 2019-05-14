@@ -1,0 +1,11 @@
+Provide clearer errors if SAML is not licensed (elastic/x-pack-elasticsearch#4096)
+
+SAML is only available on a Platinum license. If you try and use SAML
+on a Gold license, then the error message is misleading - it gives the
+equivalent of "cannot find saml realm".
+
+This change adds a standard license error of
+    "current license is non-compliant for [saml]"
+if SAML rest actions are used when SAML is not licensed.
+
+Original commit: elastic/x-pack-elasticsearch@7c0e26d58eed46a4441abfec7293326c9d1da469

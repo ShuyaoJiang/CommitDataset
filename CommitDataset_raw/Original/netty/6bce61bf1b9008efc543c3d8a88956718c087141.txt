@@ -1,0 +1,10 @@
+[#2234] Use QueryStringDecoder.decodeComponent to decode url-encoded data instead of Java's URLDecoder.
+
+Motivation:
+Previously, we used URLDecoder.decode(...) to decode url-encoded data. This generates a lot of garbage and takes a considerable amount of time.
+
+Modifications:
+Replace URLDecoder.decode(...) with QueryStringDecoder.decodeComponent(...)
+
+Result:
+Less garbage to GC and faster decode processing.

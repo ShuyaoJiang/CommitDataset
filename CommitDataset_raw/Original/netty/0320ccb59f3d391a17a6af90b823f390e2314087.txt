@@ -1,0 +1,14 @@
+Let getSoError() throw IOException as well
+
+Motivation:
+
+In commit acbca192bd93b2691c86c5cec06e4fc1f15d6a05 we changed to have our native operations which either gall getsockopt or setsockopt throw IOExceptions (to be more specific we throw a ClosedChannelException in some cases). Unfortunally I missed to also do the same for getSoError() and missed to add throws IOException to the native methods.
+
+Modifications:
+
+- Correctly throw IOException from getSoError()
+- Add throws IOException to native methods where it was missed.
+
+Result:
+
+Correct declaration of getSoError() and other native methods.

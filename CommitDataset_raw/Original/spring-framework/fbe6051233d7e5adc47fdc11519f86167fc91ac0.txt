@@ -1,0 +1,17 @@
+Upgrade HttpComponentsHIRE to HttpComponents 4.3
+
+Previously, HttpComponentsHttpInvokerRequestExecutor was not compatible
+with the new API of HttpComponents 4.3. Specifically, it is not possible
+to update the socket and read timeouts on the HttpClient itself anymore.
+
+We actually already updated HttpComponentsClientHttpRequestFactory for a
+similar problem in SPR-11442: if we detect an older HttpClient
+implementation, we update the timeout directly on the client. If that's
+not the case, we keep the value in the factory itself and use it when a
+new HttpRequest needs to be created.
+
+This commit also uses the new API to create a default HttpClient and
+therefore requires HttpComponents 4.3. As mentioned above, it is still
+possible to use deprecated HttpClient instances against this executor.
+
+Issue: SPR-11113

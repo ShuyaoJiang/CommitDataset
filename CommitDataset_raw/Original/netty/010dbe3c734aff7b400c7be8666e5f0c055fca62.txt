@@ -1,0 +1,10 @@
+Optimize space usage of FastThreadLocal (#7861)
+
+Motivation:
+A FastThreadLocal instance currently occupies 2 slots of InternalThreadLocalMap of every thread. Actually for a FastThreadLocalThread, it does not need to store cleaner flags of FastThreadLocal instances. Besides, using BitSet to store cleaner flags is also better for space usage.
+
+Modification:
+Use BitSet to optimize space usage of FastThreadLocal.
+
+Result:
+Avoid unnecessary slot occupancy. Cleaner flags are now stored into a BitSet.

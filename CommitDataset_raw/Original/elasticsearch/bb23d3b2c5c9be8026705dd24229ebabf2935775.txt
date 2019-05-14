@@ -1,0 +1,3 @@
+Remove allocation id from replica replication response (#25488)
+
+The replica replication response object has an extra allocationId field that contains the allocation id of the replica on which the request was executed. As we are sending the allocation id with the actual replica replication request, and check when executing the replica replication action that the allocation id of the replica shard is what we expect, there is no need to communicate back the allocation id as part of the response object.

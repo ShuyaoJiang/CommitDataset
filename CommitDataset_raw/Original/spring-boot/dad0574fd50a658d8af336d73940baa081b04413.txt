@@ -1,0 +1,13 @@
+In absence of HAL browser, serve browsers JSON from actuator entry point
+
+Following the changes made to combines the /links and /hal endpoints
+into a single /actuator endpoint, a web browser accessing /actuator
+would receive a 406 response if HAL browser was not on the classpath.
+
+This commit updates the /actuator main entry point so that it will
+serve JSON to a web browser when HAL browser is not on the classpath.
+
+The actuator's embedded documentation has also been updated to reflect
+the recent changes.
+
+Closes gh-3696

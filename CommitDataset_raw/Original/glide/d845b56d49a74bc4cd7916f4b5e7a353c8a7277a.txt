@@ -1,0 +1,10 @@
+Only look at image loading to determine animations
+
+Currently we only treat an image as having been 
+loaded from cache (and therefore eligible to skip
+an animation) if we can both determine the size of
+the target the image is being loaded into and load
+the image synchronously. This can lead to bugs
+in collections where views may use match_parent or
+layout weights resulting in near synchronous loads
+being treated as asynchronous.

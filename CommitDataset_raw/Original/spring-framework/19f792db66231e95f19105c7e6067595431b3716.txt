@@ -1,0 +1,22 @@
+Add Coroutines support for WebClient and WebFlux.fn
+
+This commit is the first part of a more complete Coroutines
+support coming in Spring Framework 5.2. It introduces suspendable
+Kotlin extensions for Mono based methods in WebFlux classes like
+WebClient, ServerRequest, ServerResponse as well as a Coroutines
+router usable via `coRouter { }`.
+
+Coroutines extensions use `await` prefix or `AndAwait` suffix,
+and most are using names close to their Reactive counterparts,
+except `exchange` in `WebClient.RequestHeadersSpec`
+which translates to `awaitResponse`.
+
+Upcoming expected changes are:
+ - Leverage `Dispatchers.Unconfined` (Kotlin/kotlinx.coroutines#972)
+ - Expose extensions for `Flux` based API (Kotlin/kotlinx.coroutines#254)
+ - Introduce interop with `CoroutineContext` (Kotlin/kotlinx.coroutines#284)
+ - Support Coroutines in `ReactiveAdapterRegistry`
+ - Support Coroutines for WebFlux annotated controllers
+ - Fix return type of Kotlin suspending functions (gh-21058)
+
+See gh-19975

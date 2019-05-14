@@ -1,0 +1,19 @@
+Add configuration key for GzipResourceResolver
+
+This commit adds a new key that configures a GzipResourceResolver
+in the resource handling chain.
+
+Configuring an application with the following will add that resolver,
+which checks for gzipped resources in the configured locations:
+
+```
+spring.resources.chain.gzipped=true
+```
+
+This means that if a resource "style.css" is requested, the
+GzipResourceResolver will look for resources named "style.css.gz", which
+should be a gzipped variant of the "style.css" file. Note that this
+resolver only checks for variants if the client supports the "gzip"
+encoding, as defined in the "Accept-Encoding" HTTP request headers.
+
+Fixes #4683

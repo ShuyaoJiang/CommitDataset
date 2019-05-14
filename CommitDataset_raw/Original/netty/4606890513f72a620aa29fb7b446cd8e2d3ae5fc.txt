@@ -1,0 +1,13 @@
+Retain AbstractBinaryMemcacheDecoder.currentMessage when sending it out and release it when it's not used.
+
+Motivation:
+
+AbstractBinaryMemcacheDecoder.currentMessage is not retained after sending it out. Hence, if a message contains `extras`, `io.netty.util.IllegalReferenceCountException` will be thrown in `channelInactive`.
+
+Modifications:
+
+Retain AbstractBinaryMemcacheDecoder.currentMessage After putting it to `out` and release it when it's not used.
+
+Result:
+
+No IllegalReferenceCountException or leak.

@@ -1,0 +1,16 @@
+Use response encoding when escaping HTML
+
+With SPR-9293, it is now possible to HTML escape text while taking into
+account the current response encoding. When using UTF-* encodings, only
+XML markup significant characters are escaped, since UTF-* natively
+support those characters.
+
+This commit adds a new servlet context parameter to enable this fix by
+default in a Spring MVC application:
+
+    <context-param>
+      <param-name>responseEncodedHtmlEscape</param-name>
+      <param-value>true</param-value>
+    </context-param>
+
+Issue: SPR-12350, SPR-12132

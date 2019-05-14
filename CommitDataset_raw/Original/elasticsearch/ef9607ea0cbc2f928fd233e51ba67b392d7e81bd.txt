@@ -1,0 +1,7 @@
+Track fetch exceptions for shard follow tasks (#33047)
+
+This commit adds tracking and reporting for fetch exceptions. We track
+fetch exceptions per fetch, keeping track of up to the maximum number of
+concurrent fetches. With each failing fetch, we associate the from
+sequence number with the exception that caused the fetch. We report
+these in the CCR stats endpoint, and add some testing for this tracking.

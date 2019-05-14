@@ -1,0 +1,6 @@
+Only recommend disabling allocation of replicas in a rolling upgrade (#40299)
+
+The current documentation recommends disabling allocations of all shards. This prevents shards of
+new indices from being allocated as well. That means that during a rolling upgrade, operations like
+roll over and index shrinking will operate correctly. This, in turn, can cause issues for data ingestion
+and ILM.

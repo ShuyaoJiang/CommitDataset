@@ -1,0 +1,19 @@
+Improve DateFormatter parsing performance (#8821)
+
+Motivation:
+
+Just was looking through code and found 1 interesting place DateFormatter.tryParseMonth that was not very effective, so I decided to optimize it a bit.
+
+Modification:
+
+Changed DateFormatter.tryParseMonth method. Instead of invocation regionMatch() for every month - compare chars one by one.
+
+Result:
+
+DateFormatter.parseHttpDate method performance improved from ~3% to ~15%.
+
+Benchmark                                                                (DATE_STRING)   Mode  Cnt        Score       Error  Units
+DateFormatter2Benchmark.parseHttpHeaderDateFormatter     Sun, 27 Jan 2016 19:18:46 GMT  thrpt    6  4142781.221 ± 82155.002  ops/s
+DateFormatter2Benchmark.parseHttpHeaderDateFormatter     Sun, 27 Dec 2016 19:18:46 GMT  thrpt    6  3781810.558 ± 38679.061  ops/s
+DateFormatter2Benchmark.parseHttpHeaderDateFormatterNew  Sun, 27 Jan 2016 19:18:46 GMT  thrpt    6  4372569.705 ± 30257.537  ops/s
+DateFormatter2Benchmark.parseHttpHeaderDateFormatterNew  Sun, 27 Dec 2016 19:18:46 GMT  thrpt    6  4339785.100 ± 57542.660  ops/s

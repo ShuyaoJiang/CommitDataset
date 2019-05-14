@@ -1,0 +1,24 @@
+Register environment in all bean factories in a hierarchy
+
+Prior to this change, AbstractApplicationContext#prepareBeanFactory
+registered a bean named 'environment' once and only once within a given
+ApplicationContext hierarchy. This worked fine with the expectation
+that the Environment object is always delegated downward to children of
+that hierarchy. However, with SPR-9444 and the introduction of
+ConfigurableEnvironment#merge, this expectation was violated; each
+member of an application context hierarchy now maintains its own
+distinct Environment instance, which means that by extension that each
+application context's underlying BeanFactory should have its own
+'environment' bean pointing to that context's environment instance.
+
+This problem could manifest in getting the wrong environment instance
+when calling #getBean(Environment) or when @Autowiring an Environment
+instance, for example into a @Configuration class. As reported in
+SPR-9756, this could result in false negative property lookups or
+incorrect results when checking whether a profile is active.
+
+This commit ensures that every bean factory in an application
+hierarchy has an 'environment' bean referring to the object returned
+from the enclosing ApplicationContext#getEnvironment method.
+
+Issue: SPR-9756, SPR-9444

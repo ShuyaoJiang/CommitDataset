@@ -1,0 +1,10 @@
+HTTP/2 Unit Test LocalChannel Leaks
+
+Motivation:
+Some unit HTTP/2 unit tests use LocalChannel. LocalChannel's doClose method will ensure any pending items in the queue will be released, but it may execute a Runnable on the peer's EventLoop to ensure the peer's queue is also cleaned up. The HTTP/2 unit tests close the event loop groups with no wait time so that unit tests will execute quickly, but if the doClose Runnable is in the EventLoop's queue it will not run and thus the items in the queue will not be released.
+
+Modifications:
+- Ensure all HTTP/2 unit tests which use LocalChannel wait for both client and server channels to be closed before closing the EventLoop.
+
+Result:
+Related to https://github.com/netty/netty/issues/5850.

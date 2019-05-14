@@ -1,0 +1,10 @@
+Fix rounding of time values near to overlapping days (#28151)
+
+Sometimes, in some places, the clocks are set back across midnight, leading to
+overlapping days. This was not handled as expected, and this change fixes this.
+
+Additionally, in this situation it is not true that rounding a time down to the
+nearest day is a monotonic operation, as asserted in these tests. This change 
+suppresses those assertions in those rare cases.
+
+Fixes #27966.

@@ -1,0 +1,7 @@
+Support realm validation when Keystore is closed (elastic/x-pack-elasticsearch#3096)
+
+If the KeyStoreWrapper is closed, then we cannot validate secure settings (because we no longer have access to them)
+The Realm group setting uses the "validate" method to ensure that child settings are correct, but it must ignore secure settings as it might get called
+after startup (e.g. during a settings diff)
+
+Original commit: elastic/x-pack-elasticsearch@b30db6bc626d924850b6efbe88810905b6fba07f

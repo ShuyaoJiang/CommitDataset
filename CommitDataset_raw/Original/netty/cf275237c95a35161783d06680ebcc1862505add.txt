@@ -1,0 +1,24 @@
+Overall clean-up of ipfilter package
+
+Motivation:
+
+Recently merged ipfilter package has the following problems:
+* AbstractIpFilterHandler could be improved to support any SocketAddress types rather than only InetSocketAddress.
+* AbstractIpFilterHandler can be removed immediately after decision is made rather than keeping the outcome of the decision as an attribute.
+* AbstractIpFilterHandler doesn't have a hook for the accepted addresses.
+* The hook method (reject()) needs to be named in line with other handler methods (i.e. channelRejected())
+* IpFilterRuleHandler should allow accepting zero rules - it's particularly useful for machine-configured setup (i.e. specifying zero rules disables ipfilter).
+* IpFilterRuleType.ALLOW/DENY should be ACCEPT/REJECT for consistency.
+
+Modifications:
+
+* AbstractIpFilterHandler has been renamed to AbstractRemoteAddressFilter and now uses type parameter.
+* Added channelAccepted() and renamed reject() to channelRejected()
+* Added ChannelHandlerContext as a parameter of accept() so that accept() can add a listener to the closeFuture() of the channel. This way, UniqueIpFilter continue working even if we remove the filtering handler early.
+* Various renames
+  * IpFilterRuleHandler -> RuleBasedIpFilter
+  * UniqueIpFilterHandler -> UniqueIpFilter
+
+Result:
+
+* Much cleaner API with more extensibility

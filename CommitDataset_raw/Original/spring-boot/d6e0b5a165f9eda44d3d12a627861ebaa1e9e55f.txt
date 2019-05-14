@@ -1,0 +1,13 @@
+Use @DirtiesContext to avoid unwanted context caching in the tests
+
+We rarely use the same configuration in multiple test classes, but
+Spring’s Test framework caches each context by default. For projects
+with large numbers of integration tests, this can lead to tens of
+contexts being cached. This increases memory usage, live thread count,
+etc for no benefit.
+
+This commit adds @DirtiesContext to the integration tests in
+spring-boot, spring-boot-autoconfigure, and spring-boot-actuator so
+that the context is closed once the test class has completed.
+
+See gh-5141

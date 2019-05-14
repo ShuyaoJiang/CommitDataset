@@ -1,0 +1,17 @@
+Added testEquals() to AbstractPackageSanityTests.
+
+Extracted some of the code into a new ClassSanityTester class.
+
+Also added utility to test factory classes such as Predicates, for example:
+
+new ClassSanityTester().forAllPublicStaticMethods(Predicates.class)
+.testEqualsAndSerialiable();
+
+This cannot be performed by package sanity tests because there is no reliable pattern to tell that a class is a factory class (using plural is tricky in i18n if not anything else). But I think adding a simple test to PredicatesTest for Predicates is already a lot easier.
+
+Added javadoc to explain which case are covered by these automated sanity tests and which aren't.
+
+Added ItemReporter to RelationshipTester and EqualsTester so that the error message can be customized. The default "group i, item j" message is useless for automated test, since user didn't explicitly create the equality groups and the group numbers and item numbers are meaningless to users.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=34054176

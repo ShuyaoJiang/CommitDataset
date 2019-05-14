@@ -1,0 +1,13 @@
+[#5598] Ensure SslHandler not log false-positives when try to close the channel due timeout.
+
+Motivation:
+
+When we try to close the Channel due a timeout we need to ensure we not log if the notification of the promise fails as it may be completed in the meantime.
+
+Modifications:
+
+Add another constructor to ChannelPromiseNotifier and PromiseNotifier which allows to log on notification failure.
+
+Result:
+
+No more miss-leading logs.

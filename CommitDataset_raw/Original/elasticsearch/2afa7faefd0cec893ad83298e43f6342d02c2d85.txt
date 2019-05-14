@@ -1,0 +1,21 @@
+Override the JVM DNS cache policy (#36570)
+
+When a security manager is present, the JVM will cache positive hostname
+lookups indefinitely. This can be problematic, especially in the modern
+world with cloud services where DNS addresses can change, or
+environments using Docker containers where IP addresses could be
+considered ephemeral. This behavior impacts cluster discovery,
+cross-cluster replication and cross-cluster search, reindex from remote,
+snapshot repositories, webhooks in Watcher, external authentication
+mechanisms, and the Elastic Stack Monitoring Service. The experience of
+watching a DNS lookup change yet not be reflected within Elasticsearch
+is a poor experience for users. The reason the JVM has this is guard
+against DNS cache posioning attacks. Yet, there is already a defense in
+the modern world against such attacks: TLS. With proper certificate
+validation, even if a resolver falls prey to a DNS cache poisoning
+attack, using TLS would neuter the attack. Therefore we have a policy
+with dubious security value that significantly impacts usability. As
+such we make the usability/security tradeoff towards usability, since
+the security risks are very low. This commit introduces new system
+properties that Elasticsearch observes to override the JVM DNS cache
+policy.

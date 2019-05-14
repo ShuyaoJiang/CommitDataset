@@ -1,0 +1,16 @@
+Add smart logging for disconnected SockJS clients
+
+The Servlet API does not provide notifications when a client
+disconnects, see see https://java.net/jira/browse/SERVLET_SPEC-44.
+Therefore network IO failures may occur simply because a client has
+gone away. Before this change that could fill logs with unnecessary
+stack traces.
+
+After this change we make a best effort to identify such network
+failures, on a per-server basis (tested with Jetty, Tomcat, Glassfish,
+and WildFly), and log them under a separate log category.
+
+A simple one-line message is logged at DEBUG level (i.e. no stack trace)
+while a full stack trace is shown at TRACE level.
+
+Issue: SPR-11438

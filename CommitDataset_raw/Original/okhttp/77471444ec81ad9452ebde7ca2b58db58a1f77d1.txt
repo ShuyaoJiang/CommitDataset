@@ -1,0 +1,6 @@
+Don't report connectionAcquired until actually connected. (#3566)
+
+Currently our implementation acquires the connection early so that we have
+something to close if the call is canceled. Event listeners are simpler if
+they only get a connectionAcquired event once the connection has been
+actually established.

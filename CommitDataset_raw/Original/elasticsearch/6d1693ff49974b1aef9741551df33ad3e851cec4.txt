@@ -1,0 +1,13 @@
+[ML] Prevent submit after autodetect worker is stopped (#37700)
+
+Runnables can be submitted to
+AutodetectProcessManager.AutodetectWorkerExecutorService
+without error after it has been shutdown which can lead
+to requests timing out as their handlers are never called
+by the terminated executor.
+
+This change throws an EsRejectedExecutionException if a
+runnable is submitted after after the shutdown and calls
+AbstractRunnable.onRejection on any tasks not run.
+
+Closes #37108

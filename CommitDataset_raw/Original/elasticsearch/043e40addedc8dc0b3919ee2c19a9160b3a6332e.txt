@@ -1,0 +1,6 @@
+Fix unreachable error condition in AmazonS3Fixture (#32005)
+
+The `else` branch where currently the error response should be thrown is not
+reachable because `handler` is always non-null inside the previous outer check.
+Moving error creation into an else branch on the other condition check, removing
+the other superflous check for non-null handler inside the first branch.

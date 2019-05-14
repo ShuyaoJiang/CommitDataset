@@ -1,0 +1,13 @@
+[#4805] Respect isAutoRead() once re-register Channel
+
+Motivation:
+
+When a channel was registered before and is re-registered we need to respect ChannelConfig.isAutoRead() and so start reading one the registration task completes. This was done "by luck" before 15162202fb82e2293624a86bfc27a9c5c35960be.
+
+Modifications:
+
+Explicit start reading once a Channel was re-registered if isAutoRead() is true.
+
+Result:
+
+Correctly receive data after re-registration completes.

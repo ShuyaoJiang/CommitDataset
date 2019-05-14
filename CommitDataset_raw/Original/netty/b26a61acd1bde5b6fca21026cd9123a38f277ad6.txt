@@ -1,0 +1,21 @@
+Centralize internal reference counting logic (#8614)
+
+
+Motivation
+
+AbstractReferenceCounted and AbstractReferenceCountedByteBuf contain
+duplicate logic for managing the volatile refcount in an optimized and
+consistent manner, which increased in complexity in #8583. It's possible
+to extract this into a common helper class now that all access is via an
+AtomicIntegerFieldUpdater.
+
+Modifications
+
+- Move duplicate logic into a shared ReferenceCountUpdater class
+- Incorporate some additional simplification for the most common single
+increment/decrement cases (fewer checks/operations)
+
+Result
+
+Less code duplication, better encapsulation of the "non-trivial"
+internal volatile refcount manipulation

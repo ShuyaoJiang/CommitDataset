@@ -1,0 +1,12 @@
+Validate `transport.profiles.*` settings (#25508)
+
+Transport profiles unfortunately have never been validated. Yet, it's very
+easy to make a mistake when configuring profiles which will most likely stay
+undetected since we don't validate the settings but allow almost everything
+based on the wildcard in `transport.profiles.*`. This change removes the
+settings subset based parsing of profiles but rather uses concrete affix settings
+for the profiles which makes it easier to fall back to higher level settings since
+the fallback settings are present when the profile setting is parsed. Previously, it was
+unclear in the code which setting is used ie. if the profiles settings (with removed
+prefixes) or the global node setting. There is no distinction anymore since we don't pull
+prefix based settings.

@@ -1,0 +1,12 @@
+SQL: Fix deserialisation issue of TimeProcessor (#40776)
+
+TimeProcessor didn't implement `getWriteableName()` so the one from
+the parent was used which returned the `NAME` of the parent. This
+caused `TimeProcessor` objects to be deserialised into
+DateTimeProcessor.
+
+Moreover, added a restriction to run the TIME related integration tests
+only in UTC timezone.
+
+Fixes: #40717
+

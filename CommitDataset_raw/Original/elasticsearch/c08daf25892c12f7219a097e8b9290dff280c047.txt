@@ -1,0 +1,40 @@
+Build global ordinals terms bucket from matching ordinals (#30166)
+
+The global ordinals terms aggregator has an option to remap global ordinals to
+dense ordinal that match the request. This mode is automatically picked when the terms
+aggregator is a child of another bucket aggregator or when it needs to defer buckets to an
+aggregation that is used in the ordering of the terms.
+Though when building the final buckets, this aggregator loops over all possible global ordinals
+rather than using the hash map that was built to remap the ordinals.
+For fields with high cardinality this is highly inefficient and can lead to slow responses even
+when the number of terms that match the query is low.
+This change fixes this performance issue by using the hash table of matching ordinals to perform
+the pruning of the final buckets for the terms and significant_terms aggregation.
+I ran a simple benchmark with 1M documents containing 0 to 10 keywords randomly selected among 1M unique terms.
+This field is used to perform a multi-level terms aggregation using rally to collect the response times.
+The aggregation below is an example of a two-level terms aggregation that was used to perform the benchmark:
+
+```
+"aggregations":{
+   "1":{
+      "terms":{
+         "field":"keyword"
+      },
+      "aggregations":{
+         "2":{
+            "terms":{
+               "field":"keyword"
+            }
+         }
+      }
+   }
+}
+```
+
+| Levels of aggregation | 50th percentile ms (master) | 50th percentile ms (patch) |
+| --- | --- | --- |
+| 2 | 640.41ms | 577.499ms |
+| 3 | 2239.66ms | 600.154ms |
+| 4 | 14141.2ms | 703.512ms |
+
+Closes #30117

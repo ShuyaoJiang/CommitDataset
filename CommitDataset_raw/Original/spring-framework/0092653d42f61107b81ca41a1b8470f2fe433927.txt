@@ -1,0 +1,19 @@
+Fix JDK9 build after Groovy 2.5 upgrade
+
+After the Groovy 2.5 upgrade, the Spring Framework build on JDK9 hit
+GROOVY-8631. Adding the relevant `jax-api` dependency to the module
+didn't fix this issue. The Groovy release notes mention the use of the
+`--add-modules` JVM flag, but this is not an option for this build which
+should run on JDK8 -> JDK11.
+
+This commit changes the dependency from `groovy-all` to more focused
+dependencies on Groovy in the `spring-beans` and `spring-context`
+modules. This change seems to avoid the automatic loading of Groovy
+enhancements to JAXB (shipped with `groovy-xml`).
+
+See:
+
+* http://groovy-lang.org/releasenotes/groovy-2.5.html#Groovy2.5releasenotes-Knownissues
+* https://issues.apache.org/jira/browse/GROOVY-8631
+
+Issue: SPR-15407

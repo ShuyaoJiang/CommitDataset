@@ -1,0 +1,10 @@
+Allow AVX-512 on JDK 11+ (#40828)
+
+We previously found a bug in the JVM where AVX-512 instructions could
+crash the JVM to crash with a segmentation fault. This bug impacted JDK
+9 and JDK 10, but was most prominent on JDK 10 because AVX-512 was
+enabled there by default. In JDK 11, this bug is reported fixed so this
+commit restricts the disabling of AVX-512 to JDK 10 only. Since we no
+longer support JDK 10 for any versions that this commit will be
+integrated into (7.1, 8.0), we simply remove the disabling of this flag
+from the JVM options.

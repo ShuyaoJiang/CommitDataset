@@ -1,0 +1,10 @@
+Emit settings deprecation logging at most once
+
+When a setting is deprecated, if that setting is used repeatedly we
+currently emit a deprecation warning every time the setting is used. In
+cases like hitting settings endpoints over and over against a node with
+a lot of deprecated settings, this can lead to excessive deprecation
+warnings which can crush a node. This commit ensures that a given
+setting only sees deprecation logging at most once.
+
+Relates #25457

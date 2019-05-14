@@ -1,0 +1,12 @@
+Ensure InterruptibleTask.interruptTask works even when Thread.interrupt() throws or takes a long time
+
+Java nio APIs enable arbitrary code to register callbacks that get run on calls to interrupt() as a result interrupt() can throw arbitrary exceptions, or even deadlock.  This adds some defense against this in InterruptibleTask.
+
+* we move the call to set(DONE) to a finally block to ensure it always runs
+* we have the completing task park itself if it spins for a long time waiting for set(DONE) to be called.  This adds some complexity to the interruptTask protocol
+
+RELNOTES=Ensure that interrupting an InterruptibleTask works even if Thread.interrupt() throws or takes a long time.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=218884075

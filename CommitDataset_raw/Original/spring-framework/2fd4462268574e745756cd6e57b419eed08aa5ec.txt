@@ -1,0 +1,21 @@
+Upgrade build to Gradle 2.14
+
+In the process of upgrading the build to use Gradle 2.14, the
+setFieldOnLegacyEntityWithSideEffectsInToString() test method in
+ReflectionTestUtilsTests began to fail. The reason is that the log
+level for ReflectionTestUtils is now DEBUG by default with Gradle 2.14.
+The apparent cause is that log4j was present on the test runtime
+classpath for the spring-test module with all previous versions of
+Gradle (via a transitive optional dependency from another project that
+spring-test depends on). Thus the configuration in log4j.properties in
+spring-test was previously honored, but with Gradle 2.14 a different
+commons logging implementation is picked up.
+
+Thus, in addition to upgrading the build to Gradle 2.14, this commit
+introduces an explicit test runtime dependency on log4j in the
+spring-test module.
+
+The discovered bug in ReflectionTestUtils regarding DEBUG log level
+will be addressed separately.
+
+Issue: SPR-14362

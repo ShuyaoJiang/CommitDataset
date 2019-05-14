@@ -1,0 +1,9 @@
+Always set soft-deletes field of IndexWriterConfig (#36196)
+
+Today we configure the soft-deletes field iff soft-deletes enabled.
+Although this choice was correct, it prevents an engine with
+soft-deletes disabled from opening a Lucene index with soft-deletes.
+Moreover, this change should not have any side-effect if a Lucene index
+does not have any soft-deletes.
+
+Relates #36141

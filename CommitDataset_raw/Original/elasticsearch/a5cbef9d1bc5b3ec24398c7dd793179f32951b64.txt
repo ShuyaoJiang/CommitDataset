@@ -1,0 +1,9 @@
+Rebuild remote connections on profile changes (#37678)
+
+Currently remote compression and ping schedule settings are dynamic.
+However, we do not listen for changes. This commit adds listeners for
+changes to those two settings. Additionally, when those settings change
+we now close existing connections and open new ones with the settings
+applied.
+
+Fixes #37201.

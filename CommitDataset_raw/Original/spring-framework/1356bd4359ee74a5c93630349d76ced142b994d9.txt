@@ -1,0 +1,16 @@
+Share HandlerInterceptors in ResourceHandlerMapping
+
+Prior to this commit, the Resource `HandlerMapping` configured by
+`@EnableSpringMvc` would be set up with only one custom
+`HandlerInterceptor` (the one exposing the `ResourceUrlProvider` for
+resolving URLs of static resources).
+
+This behavior is not consistent with the rest of the default
+configuration which leverages the interceptors configured against the
+interceptor registry (with possible user-provided ones).
+
+This change allows to register interceptors against resource handling;
+this can be useful for metrics purposes, as in
+spring-projects/spring-boot#10335.
+
+Issue: SPR-16034

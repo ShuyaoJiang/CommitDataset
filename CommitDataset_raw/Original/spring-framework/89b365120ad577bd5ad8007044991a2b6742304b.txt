@@ -1,0 +1,5 @@
+TransactionInterceptor avoids reflective method search for method identification
+
+As of Spring 3.0.4, we were trying to expose the target method signature as transaction name. Unfortunately, the algorithm called the ClassUtils.getMostSpecificMethod helper method which performs a quite expensive reflective search. As of this commit, we're simply concatenating the target class name with the method name, accepting the use of the concrete target class (which is arguably more meaningful for monitoring anyway) even when the method implementation actually sits on a base class.
+
+Issue: SPR-9802

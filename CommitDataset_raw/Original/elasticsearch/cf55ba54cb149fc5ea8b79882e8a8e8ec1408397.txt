@@ -1,0 +1,13 @@
+Make -try xlint warning disabled by default. (#40833)
+
+Many gradle projects specifically use the -try exclude flag, because
+there are many cases where auto-closeable resource ignore is never
+referenced in body of corresponding try statement. Suppressing this
+warning specifically in each case that it happens using
+`@SuppressWarnings("try")` would be very verbose.
+
+This change removes `-try` from any gradle project and adds it to the
+build plugin. Also this change removes exclude flags from gradle projects
+that is already specified in build plugin (for example -deprecation).
+
+Relates to #40366

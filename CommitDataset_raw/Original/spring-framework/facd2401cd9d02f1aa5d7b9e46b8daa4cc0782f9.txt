@@ -1,0 +1,13 @@
+Document lifecycle issue  with JNDI-based beans
+
+When a bean is retrieved via JNDI using Java config, we apply the same
+inferred more for destruction callbacks as for any other bean. If an
+object from the JNDI tree has a `close` or `shutdown` method, the
+context calls it when it shutdowns.
+
+Unfortunately, we have no way to know that the bean was retrieved via
+JNDI and that its lifecycle is managed outside the application.
+
+The documentation has been updated to reflect that problem explicitly.
+
+Issue: SPR-12551

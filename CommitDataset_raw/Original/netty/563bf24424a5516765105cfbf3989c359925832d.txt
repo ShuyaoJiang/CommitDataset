@@ -1,0 +1,16 @@
+Do not use SLF4J/Logback API directly
+
+Motivation:
+
+TrafficShapingHandlerTest uses Logback API directly, which is
+discouraged.  Also, it overrides the global default log level, which
+silences the DEBUG messages from other tests.
+
+Modifications:
+
+Remove the direct use of Logback API
+
+Result:
+
+The tests executed after TrafficShapingHandlerTest logs their DEBUG
+messages correctly.

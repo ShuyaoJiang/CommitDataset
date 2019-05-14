@@ -1,0 +1,11 @@
+TCP_NOTSENT_LOWAT socket option support
+
+Motiviation:
+Linux provides the TCP_NOTSENT_LOWAT socket option. This can be used to control how much unsent data is queued in the tcp kernel buffers. This can be important when application level protocols (SPDY, HTTP/2) have their own priority mechanism and don't want data queued in the kernel.
+
+Modifications:
+- The epoll module will have an additional socket option TCP_NOTSENT_LOWAT
+- There will be JNI methods to control the underlying linux socket option mechanism
+
+Result:
+Linux EPOLL module exposes the TCP_NOTSENT_LOWAT socket option.

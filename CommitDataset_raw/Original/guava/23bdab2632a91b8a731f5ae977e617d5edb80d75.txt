@@ -1,0 +1,8 @@
+Change PathByteSource in MoreFiles to not use Files.readAllBytes() for its read() method, as Files.readAllBytes() creates 2 unnecessary copies of the byte array the file is read into in the normal case where the file doesn't change size.
+
+In the process of doing that, a few other changes:
+- Change both PathByteSource and FileByteSource to delegate to a new package-private method ByteStreams.toByteArray(InputStream, int) which handles reading to a byte array when you have an expected size.
+- Also change both implementations to get the expected size for the file from the size() method on FileChannel/SeekableByteChannel instead of reading the size attribute before opening the stream.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=52120076

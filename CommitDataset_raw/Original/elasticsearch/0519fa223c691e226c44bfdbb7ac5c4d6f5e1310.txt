@@ -1,0 +1,22 @@
+Ensure logging is configured for CLI commands
+
+Any CLI commands that depend on core Elasticsearch might touch classes
+(directly or indirectly) that depends on logging. If they do this and
+logging is not configured, Log4j will dump status error messages to the
+console. As such, we need to ensure that any such CLI command configures
+logging (with a trivial configuration that dumps log messages to the
+console). Previously we did this in the base CLI command but with the
+refactoring of this class out of core Elasticsearch, we no longer
+configure logging there (since we did not want this class to depend on
+settings and logging). However, this meant for some CLI commands (like
+the plugin CLI) we were no longer configuring logging. This commit adds
+base classes between the low-level command and multi-command classes
+that ensure that logging is configured. Any CLI command that depends on
+core Elasticsearch should use this infrastructure to ensure logging is
+configured. There is one exception to this: Elasticsearch itself because
+it takes reponsibility into its own hands for configuring logging from
+Elasticsearch settings and log4j2.properties. We preserve this special
+status.
+
+Relates #27523
+

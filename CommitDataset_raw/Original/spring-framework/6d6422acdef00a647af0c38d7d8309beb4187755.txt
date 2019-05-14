@@ -1,0 +1,26 @@
+Support for generics-based events
+
+Update the event publishing infrastructure to support generics-based
+events, that is support ApplicationListener implementations that define
+a generic event, something like:
+
+public class MyListener
+        implements ApplicationListener<GenericEvent<String>> { ... }
+
+This listener should only receive events that are matching the generic
+signature, for instance:
+
+public class StringEvent extends GenericEvent<String> { ... }
+
+Note that because of type erasure, publishing an event that defines the
+generic type at the instance level will not work. In other words,
+publishing "new GenericEvent<String>" will not work as expected as type
+erasure will define it as GenericEvent<?>.
+
+To support this feature, use the new GenericApplicationListener that
+supersedes SmartApplicationListener to handle generics-based even types via
+`supportsEventType` that takes a ResolvableType instance instead of the
+simple Class of the event. ApplicationEventMulticaster has an additional
+method to multicast an event based on the event and its ResolvableType.
+
+Issue: SPR-8201

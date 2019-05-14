@@ -1,0 +1,15 @@
+Fix error message when package install fails due to missing Java (#36077)
+
+Currently is `java` is not in $PATH the preinst script fails
+prematurely and prevents an appropriate message from getting displayed
+to the user.
+
+Make package installation more user friendly when java is not in
+$PATH and add a test for it.
+
+Also use a she-bang in the preinst script, as, at least in Debian,
+maintainer scripts must start with the #! convention [1].
+
+Relates #31845
+
+[1] https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html

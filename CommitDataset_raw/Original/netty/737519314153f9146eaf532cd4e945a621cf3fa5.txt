@@ -1,0 +1,18 @@
+Don't update state of PromiseCombiner when finish(null) is called (#8843)
+
+Motivation:
+
+When we fail a call to PromiseCombiner.finish(...) because of a null argument we must not update the internal state before throwing.
+
+Modifications:
+
+- First do the null check and only after we validated that the argument is not null update the internal state
+- Add test case.
+
+Modifications:
+
+Do not mess up internal state of PromiseCombiner when finish(...) is called with a null argument.
+
+Result:
+
+After your change, what will change.

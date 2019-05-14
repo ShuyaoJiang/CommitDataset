@@ -1,0 +1,7 @@
+[Monitoring] Remove Dedicated IndicesStatsCollector (elastic/x-pack-elasticsearch#2192)
+
+This removes the `IndicesStatsCollector` and, instead, it reuses the superset version of the call from the `IndexStatsCollector`.
+
+On clusters with a large number of indices, this should actually help a good amount in reducing wasted calls and memory allocation without any difference in the output.
+
+Original commit: elastic/x-pack-elasticsearch@93b09878e4cc9ba0423822a75a3dc316a728e0b8

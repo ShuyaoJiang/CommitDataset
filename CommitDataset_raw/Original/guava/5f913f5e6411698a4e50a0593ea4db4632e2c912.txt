@@ -1,0 +1,16 @@
+Change TypeResolver to not construct new TypeResolver when all the bounds remain the same. This is to work round the change in JDK TypeVariableImpl.equals().
+
+In summary:
+
+1) When <A> resolves to itself <A> (i.e. all bounds resolve equal to themselves), uses the original TypeVariable instead of the Guava artificial TypeVariableImpl, which doesn't compare equal with JDK TypeVariableImpl.
+
+2) In order to do 1), we need TypeVariableImpl.equals() to compare bounds too.
+
+3) Uses TypeVariableKey as key in the map from TypeVariable to Type, during resolution. This ensures that during type resolution, despite the change of equals() in 2), the same type variable with or without partially resolved bounds is always mapped to the same resolved type.
+
+4) Since JDK's TypeVariableImpl no longer compares equal with our custom TypeVariableImpl. We need to change equals() to do the same to ensure symmetry.
+
+5) All of the above are done conditionally only under the new JDK.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=60778041

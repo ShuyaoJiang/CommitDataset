@@ -1,0 +1,9 @@
+Fix issue with async return value type determination
+
+Before this change, the type of asynchronously produced return values
+(e.g. Callable, DeferredResult, ListenableFuture) could not be
+properly determined with an actual resulting value of null. Or even
+with an actual value returned, the generic type could not be properly
+determined. This change fixes both of those issues.
+
+Issue: SPR-12287

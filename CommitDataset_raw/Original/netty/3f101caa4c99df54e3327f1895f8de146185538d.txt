@@ -1,0 +1,13 @@
+Not call java methods from within JNI init code to prevent class loading deadlocks.
+
+Motivation:
+
+We used NetUtil.isIpV4StackPreferred() when loading JNI code which tries to load NetworkInterface in its static initializer. Unfortunally a lock on the NetworkInterface class init may be already hold somewhere else which may cause a loader deadlock.
+
+Modifications:
+
+Add a new Socket.initialize() method that will be called when init the library and pass everything needed to the JNI level so we not need to call back to java.
+
+Result:
+
+Fixes [#7458].

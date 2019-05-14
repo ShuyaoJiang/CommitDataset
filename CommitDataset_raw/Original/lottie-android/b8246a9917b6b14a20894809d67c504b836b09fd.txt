@@ -1,0 +1,14 @@
+Reverse the iteration direction for keyframe finding
+
+Bodymovin only specifies start time for a frame. The end time of
+the previous frame cam be implied to be immediately before that.
+During keyframe creation, we set the end frame of a keyframe to
+the start frame of the next one. However, that means that if we
+iterate forward to find a keyframe, if you are exactly at the
+beginning of a keyframe, it will be detected at the end of a keyframe
+rather than the beginning of the next one.
+
+This also fixes an end frame calculate which was one too short
+for layers with in out animations.
+
+#506

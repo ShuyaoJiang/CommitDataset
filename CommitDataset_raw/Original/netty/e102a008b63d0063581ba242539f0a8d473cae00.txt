@@ -1,0 +1,13 @@
+[#5893] Ensure we not close NioDatagramChannel when SocketException is received.
+
+Motivation:
+
+When using java.nio.DatagramChannel we should not close the channel when a SocketException was thrown as we can still use the channel.
+
+Modifications:
+
+Not close the Channel when SocketException is thrown
+
+Result:
+
+More robust and correct handling of exceptions when using NioDatagramChannel.

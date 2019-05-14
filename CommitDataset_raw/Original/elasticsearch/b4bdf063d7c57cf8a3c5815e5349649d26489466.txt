@@ -1,0 +1,15 @@
+Tie-break completion suggestions with same score and surface form (#39564)
+
+In case multiple completion suggestion entries have the same score and
+surface form, the order in which such options will be returned is
+currently not deterministic.
+
+With this commmit we introduce tie-breaking for such situations, based
+on shard id, index name, index uuid and doc id like we already do for
+ ordinary search hits. With this change we also make shardIndex
+mandatory when sorting and comparing completion suggestion options,
+which was previously only needed later when fetching hits).
+
+Also, we need to make sure shardIndex is properly set when merging
+completion suggestions coming from multiple clusters in
+`SearchResponseMerger`

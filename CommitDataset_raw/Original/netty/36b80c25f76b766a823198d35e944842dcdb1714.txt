@@ -1,0 +1,14 @@
+Correctly return from selector loop one a scheduled task is ready for processing
+
+Motivation:
+
+We use the nanoTime of the scheduledTasks to calculate the milli-seconds to wait for a select operation to select something. Once these elapsed we check if there was something selected or some task is ready for processing. Unfortunally we not take into account scheduled tasks here so the selection loop will continue if only scheduled tasks are ready for processing. This will delay the execution of these tasks.
+
+Modification:
+
+- Check if a scheduled task is ready after selecting
+- also make a tiny change in NioEventLoop to not trigger a rebuild if nothing was selected because the timeout was reached a few times in a row.
+
+Result:
+
+Execute scheduled tasks on time.

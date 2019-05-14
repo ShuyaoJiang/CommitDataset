@@ -1,0 +1,22 @@
+Add abstractions for content negotiation
+
+Introduced ContentNeogtiationStrategy for resolving the requested
+media types from an incoming request. The available implementations
+are based on path extension, request parameter, 'Accept' header,
+and a fixed default content type. The logic for these implementations
+is based on equivalent options, previously available only in the
+ContentNegotiatingViewResolver.
+
+Also in this commit is ContentNegotiationManager, the central class to
+use when configuring content negotiation options. It accepts one or
+more ContentNeogtiationStrategy instances and delegates to them.
+
+The ContentNeogiationManager can now be used to configure the
+following classes:
+
+- RequestMappingHandlerMappingm
+- RequestMappingHandlerAdapter
+- ExceptionHandlerExceptionResolver
+- ContentNegotiatingViewResolver
+
+Issue: SPR-8410, SPR-8417, SPR-8418,SPR-8416, SPR-8419,SPR-7722

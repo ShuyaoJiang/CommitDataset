@@ -1,0 +1,4 @@
+Remove deprecated ByteBufUtil.release(..) and ByteBufUtil.retain(..) methods and its usage. Also fix a problem where an object would have been released two times.
+
+* The problem with the release(..) calls here was that it would have called release on an unsupported message and then throw an exception. This exception will trigger ChannelOutboundBuffer.fail(..), which will also try to release the message again.
+* Also use the same exception type for unsupported messages as in other channel impls.

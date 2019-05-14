@@ -1,0 +1,26 @@
+Move file-based discovery to core (#33241)
+
+Today we support a static list of seed hosts in core Elasticsearch, and allow a
+dynamic list of seed hosts to be provided via a file using the `discovery-file`
+plugin. In fact the ability to provide a dynamic list of seed hosts is
+increasingly useful, so this change moves this functionality to core
+Elasticsearch to avoid the need for a plugin.
+
+Furthermore, in order to start up nodes in integration tests we currently
+assign a known port to each node before startup, which unfortunately sometimes
+fails if another process grabs the selected port in the meantime. By moving the
+`discovery-file` functionality into the core product we can use it to avoid
+this race.
+
+This change also moves the expected path to the file from
+`$ES_PATH_CONF/discovery-file/unicast_hosts.txt` to
+`$ES_PATH_CONF/unicast_hosts.txt`. An example of this file is not included in
+distributions.
+
+For BWC purposes the plugin still exists, but does nothing more than create the
+example file in the old location, and issue a warning when it is used. We also
+continue to support the old location for the file, but warn about its
+deprecation.
+
+Relates #29244
+Closes #33030

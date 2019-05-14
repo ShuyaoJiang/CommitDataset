@@ -1,0 +1,13 @@
+Adjust testsuite-osgi to resolve bundles from local build (#8944)
+
+Motivation:
+
+testsuite-osgi currently resolve its bundles from the local / remote maven repository, which means you will need to do `mvn install` before it can pick up the bundles. Beside this this also means that you may pick up old versions if you forgot to call `install` before running it.
+
+Modifications:
+
+Use alta-maven-plugin to be able to resolve bundles from the local build directory during the build.
+
+Result:
+
+No need to install jars before running the OSGI testsuite and ensure we always test with the latest jars.

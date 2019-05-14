@@ -1,0 +1,87 @@
+Introduce FeatureSpecification support
+
+Introduce FeatureSpecification interface and implementations
+
+    FeatureSpecification objects decouple the configuration of
+    spring container features from the concern of parsing XML
+    namespaces, allowing for reuse in code-based configuration
+    (see @Feature* annotations below).
+
+    * ComponentScanSpec
+    * TxAnnotationDriven
+    * MvcAnnotationDriven
+    * MvcDefaultServletHandler
+    * MvcResources
+    * MvcViewControllers
+
+Refactor associated BeanDefinitionParsers to delegate to new impls above
+
+    The following BeanDefinitionParser implementations now deal only
+    with the concern of XML parsing.  Validation is handled by their
+    corresponding FeatureSpecification object.  Bean definition creation
+    and registration is handled by their corresponding
+    FeatureSpecificationExecutor type.
+
+    * ComponentScanBeanDefinitionParser
+    * AnnotationDrivenBeanDefinitionParser (tx)
+    * AnnotationDrivenBeanDefinitionParser (mvc)
+    * DefaultServletHandlerBeanDefinitionParser
+    * ResourcesBeanDefinitionParser
+    * ViewControllerBeanDefinitionParser
+
+Update AopNamespaceUtils to decouple from XML (DOM API)
+
+    Methods necessary for executing TxAnnotationDriven specification
+    (and eventually, the AspectJAutoProxy specification) have been
+    added that accept boolean arguments for whether to proxy
+    target classes and whether to expose the proxy via threadlocal.
+
+    Methods that accepted and introspected DOM Element objects still
+    exist but have been deprecated.
+
+Introduce @FeatureConfiguration classes and @Feature methods
+
+    Allow for creation and configuration of FeatureSpecification objects
+    at the user level.  A companion for @Configuration classes allowing
+    for completely code-driven configuration of the Spring container.
+
+    See changes in ConfigurationClassPostProcessor for implementation
+    details.
+
+    See Feature*Tests for usage examples.
+
+    FeatureTestSuite in .integration-tests is a JUnit test suite designed
+    to aggregate all BDP and Feature* related tests for a convenient way
+    to confirm that Feature-related changes don't break anything.
+    Uncomment this test and execute from Eclipse / IDEA. Due to classpath
+    issues, this cannot be compiled by Ant/Ivy at the command line.
+
+Introduce @FeatureAnnotation meta-annotation and @ComponentScan impl
+
+    @FeatureAnnotation provides an alternate mechanism for creating
+    and executing FeatureSpecification objects.  See @ComponentScan
+    and its corresponding ComponentScanAnnotationParser implementation
+    for details.  See ComponentScanAnnotationIntegrationTests for usage
+    examples
+
+Introduce Default[Formatting]ConversionService implementations
+
+    Allows for convenient instantiation of ConversionService objects
+    containing defaults appropriate for most environments.  Replaces
+    similar support originally in ConversionServiceFactory (which is now
+    deprecated). This change was justified by the need to avoid use
+    of FactoryBeans in @Configuration classes (such as
+    FormattingConversionServiceFactoryBean). It is strongly preferred
+    that users simply instantiate and configure the objects that underlie
+    our FactoryBeans. In the case of the ConversionService types, the
+    easiest way to do this is to create Default* subtypes. This also
+    follows convention with the rest of the framework.
+
+Minor updates to util classes
+
+    All in service of changes above. See diffs for self-explanatory
+    details.
+
+    * BeanUtils
+    * ObjectUtils
+    * ReflectionUtils

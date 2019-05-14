@@ -1,0 +1,14 @@
+Check for closed connection while opening
+
+While opening a connection to a node, a channel can subsequently
+close. If this happens, a future callback whose purpose is to close all
+other channels and disconnect from the node will fire. However, this
+future will not be ready to close all the channels because the
+connection will not be exposed to the future callback yet. Since this
+callback is run once, we will never try to disconnect from this node
+again and we will be left with a closed channel. This commit adds a
+check that all channels are open before exposing the channel and throws
+a general connection exception. In this case, the usual connection retry
+logic will take over.
+
+Relates #26932

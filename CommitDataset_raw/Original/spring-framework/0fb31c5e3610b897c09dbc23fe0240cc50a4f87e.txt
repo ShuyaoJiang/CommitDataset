@@ -1,0 +1,15 @@
+Refine "." separator support for STOMP messaging
+
+After this commit DefaultUserDestinationResolves no longer looks at
+whether AntPathMatcher is configured with "." as separator and rather
+expects to be explicitly told whether to keep the leading slash in
+translated destinations which actually depends on what the message
+broker supports (e.g. RabbitMQ "/", Artemis ".") or how it is
+configured (simple broker could be either way).
+
+There is also a minor improvement in SimpMessagingTemplate to ensure
+user destinations are correctly formed based on what the
+DefaultUserDestinationResolver expects. When using "." as separtor it
+allows sending messages to "queue.q1" rather than "/queue.q1".
+
+Issue: SPR-16275

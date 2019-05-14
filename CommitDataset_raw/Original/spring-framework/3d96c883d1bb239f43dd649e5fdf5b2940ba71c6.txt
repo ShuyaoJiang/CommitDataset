@@ -1,0 +1,11 @@
+Cache lookup path in ResourceUrlEncodingFilter
+
+Commit https://github.com/spring-projects/spring-framework/commit/2b97d6
+introduced a change where the path within the DispatcherServlet is
+determined with each call to ResourceUrlProvider.getForRequestUrl.
+
+To avoid repeating that every time a URL is encoded through the
+response, we now cache the result of the lookupPath determination in
+ResourceUrlEncodingFilter.
+
+Issue: SPR-12332

@@ -1,0 +1,10 @@
+Handle min_doc_freq in phrase suggester (#40840)
+
+The phrase suggesters have an option to remove terms that have
+a frequency lower than a provided min_doc_freq. However this value is
+overwritten by the frequency of the original term in the popular mode.
+This change ensures that we keep the maximum value between the provided
+min_doc_value and the original term frequency as a threshold to select
+candidates.
+
+Fixes #16764

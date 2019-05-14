@@ -1,0 +1,14 @@
+Fix pre-6.0 response to unknown replication actions
+
+When sending replica requests for replication operations, we skip
+sending the request to pre-6.0 nodes for operations that such nodes
+would not be aware of (e.g., the background global checkpoint sync, or
+the primary/replica resync) since they would not know what to do with
+these requests. Yet, we simulate that we received responses from these
+nodes. Today, this is done by simulating that they sent us that their
+local checkpoint is unassigned sequence number. However, for pre-6.0
+nodes we have introduced a special local checkpoint used in the global
+checkpoint tracker for such nodes and that is what we should use here
+too. This commit fixes this issue.
+
+Relates #25744

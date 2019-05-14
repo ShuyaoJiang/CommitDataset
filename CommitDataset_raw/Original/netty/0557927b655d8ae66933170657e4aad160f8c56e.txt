@@ -1,0 +1,19 @@
+Updating allowNullOrigin to return 'null' instead of '*'.
+
+Motivation:
+Currently the way a 'null' origin, a request that most often indicated
+that the request is coming from a file on the local file system, is
+handled is incorrect. We are currently returning a wildcard origin '*'
+but should be returning 'null' for the 'Access-Control-Allow-Origin'
+which is valid according to the specification [1].
+
+Modifications:
+Updated CorsHandler to add a 'null' origin instead of the '*' origin in
+the case the request origin is 'null.
+
+Result:
+All test pass and the CORS example as does the cors.html example if you
+try to serve it by opening the file directly in a web browser.
+
+[1]
+https://www.w3.org/TR/cors/#access-control-allow-origin-response-header

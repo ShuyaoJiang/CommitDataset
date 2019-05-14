@@ -1,0 +1,767 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.channel.epoll:  
+
+1.1. Add a class for epoll socket test. It allows to:
+
+	Load JNI;
+	Handle test tcp cork;
+	Handle test peer creds;
+	Handle new socket
+
+1.2. Add a class for linux socket. It allows to:
+
+	Instantiate linux socket;
+	Set tcp defer accept;
+	Set tcp quick ack;
+	Set tcp cork;
+	Get set so busy poll;
+	Set tcp  not sent low at;
+	Set tcp  fast open;
+	Set tcp  fast open connect;
+	Check if linux socket is tcp fast open connect;
+	Set tcp keep idle;
+	Set tcp keep intvl;
+	Set tcp keep cnt;
+	Set tcp user timeout;
+	Set ip free bind;
+	Set ip transparent;
+	Set linux socket;
+	Get tcp info;
+	Set tcp md 5 sig;
+	Check if linux socket is tcp cork;
+	Get linux socket so busy poll;
+	Get tcp defer accept;
+	Check if linux socket is tcp quick ack;
+	Get tcp  not sent low at;
+	Get tcp keep idle;
+	Get tcp keep intvl;
+	Get tcp keep cnt;
+	Get tcp user timeout;
+	Check if linux socket is ip free bind;
+	Check if linux socket is ip transparent;
+	Check if linux socket is ip recv orig dest addr;
+	Get peer credentials;
+	Send file;
+	Handle new socket stream;
+	Handle new socket dgram;
+	Handle new socket domain;
+
+2. Changes to package io.netty.channel.kqueue:  
+
+2.1. Add a class for accept filter. It allows to:
+
+	Instantiate accept filter;
+	Get filter name;
+	Get filter args;
+	Check if accept filter equals;
+	Hash code;
+	Convert accept filter to string
+
+2.2. Add a class for bsd socket. It allows to:
+
+	Instantiate bsd socket;
+	Set accept filter;
+	Set bsd socket tcp no push;
+	Set bsd socket snd low at;
+	Check if bsd socket is tcp no push;
+	Get bsd socket snd low at;
+	Get accept filter;
+	Get peer credentials;
+	Send file;
+	Handle new socket stream;
+	Handle new socket dgram;
+	Handle new socket domain;
+	Get tcp no push;
+
+2.3. Add a class for k queue. It allows to:
+
+	Check if k queue is available;
+	Ensure availability;
+	Get unavailability cause;
+	Instantiate k queue
+
+2.4. Add an object creator class for k queue abstract domain socket echo test. It allows to:
+
+	Handle new socket address
+
+2.5. Add a class for k queue channel config. It allows to:
+
+	Instantiate k queue channel config  with abstract K queue channel;
+	Get options;
+	Get option;
+	Set option;
+	Set rcv alloc transport provides guess;
+	Get rcv alloc transport provides guess;
+	Set connect timeout millis;
+	Set max messages  per read;
+	Set write spin count;
+	Set  allocator byte buf allocator;
+	Set recv byte buf  allocator recv byte buf allocator;
+	Set auto read;
+	Set write buffer high water mark;
+	Set write buffer low water mark;
+	Set write buffer water mark;
+	Set message size estimator;
+	Handle auto read cleared;
+	Set max bytes per gathering write;
+	Get max bytes per gathering write
+
+2.6. Add a class for k queue channel config test. It allows to:
+
+	Before k queue channel config test;
+	Handle test option get throws channel exception;
+	Handle test option set throws channel exception;
+	Handle test so linger no assert error
+
+2.7. Add a class for k queue channel option. It allows to:
+
+	Instantiate k queue channel option
+
+2.8. Add a class for k queue datagram channel config. It allows to:
+
+	Instantiate k queue datagram channel config  with K queue datagram channel;
+	Get options;
+	Get option;
+	Set option;
+	Set active  on open;
+	Get active  on open;
+	Check if k queue datagram channel config is reuse port;
+	Set reuse port;
+	Set rcv alloc transport provides guess;
+	Set message size estimator;
+	Set write buffer low water mark;
+	Set write buffer high water mark;
+	Set write buffer water mark;
+	Set auto close;
+	Set auto read;
+	Set recv byte buf  allocator recv byte buf allocator;
+	Set write spin count;
+	Set  allocator byte buf allocator;
+	Set connect timeout millis;
+	Set max messages  per read;
+	Get send buffer size;
+	Set send buffer size;
+	Get receive buffer size;
+	Set receive buffer size;
+	Get traffic class;
+	Set traffic class;
+	Check if k queue datagram channel config is reuse address;
+	Set reuse address;
+	Check if k queue datagram channel config is broadcast;
+	Set broadcast;
+	Check if k queue datagram channel config is loopback mode disabled;
+	Set loopback mode disabled;
+	Get time  to live;
+	Set time  to live;
+	Get interface;
+	Set interface;
+	Get network interface;
+	Set network interface
+
+2.9. Add a class for k queue datagram unicast test. It allows to:
+
+	Handle new factories
+
+2.10. Add a class for k queue domain socket channel config. It allows to:
+
+	Instantiate k queue domain socket channel config  with abstract K queue channel;
+	Get options;
+	Get option;
+	Set option;
+	Set rcv alloc transport provides guess;
+	Set max messages  per read;
+	Set connect timeout millis;
+	Set write spin count;
+	Set recv byte buf  allocator recv byte buf allocator;
+	Set  allocator byte buf allocator;
+	Set auto close;
+	Set message size estimator;
+	Set write buffer low water mark;
+	Set write buffer high water mark;
+	Set write buffer water mark;
+	Set auto read;
+	Set read mode;
+	Get read mode;
+	Check if k queue domain socket channel config is allow half closure;
+	Set allow half closure
+
+2.11. Add a class for k queue domain socket echo test. It allows to:
+
+	Handle new socket address;
+	Handle new factories
+
+2.12. Add a class for k queue domain socket fd test. It allows to:
+
+	Handle new socket address;
+	Handle new factories;
+	Handle test send recv fd;
+	Channel active;
+	Handle operation complete;
+	Channel read;
+	Handle exception caught
+
+2.13. Add a class for k queue domain socket file region test. It allows to:
+
+	Handle new socket address;
+	Handle new factories
+
+2.14. Add a class for k queue domain socket fixed length echo test. It allows to:
+
+	Handle new socket address;
+	Handle new factories
+
+2.15. Add a class for k queue domain socket gathering write test. It allows to:
+
+	Handle new socket address;
+	Handle new factories
+
+2.16. Add a class for k queue domain socket object echo test. It allows to:
+
+	Handle new socket address;
+	Handle new factories
+
+2.17. Add a class for k queue domain socket ssl echo test. It allows to:
+
+	Instantiate k queue domain socket ssl echo test  with server ctx ssl context, client ctx ssl context, renegotiation and renegotiation;
+	Handle new socket address;
+	Handle new factories
+
+2.18. Add a class for k queue domain socket ssl greeting test. It allows to:
+
+	Instantiate k queue domain socket ssl greeting test  with server ctx ssl context, client ctx ssl context and client ctx ssl context;
+	Handle new socket address;
+	Handle new factories
+
+2.19. Add a class for k queue domain socket start tls test. It allows to:
+
+	Instantiate k queue domain socket start tls test  with server ctx ssl context, client ctx ssl context and client ctx ssl context;
+	Handle new socket address;
+	Handle new factories
+
+2.20. Add a class for k queue domain socket string echo test. It allows to:
+
+	Handle new socket address;
+	Handle new factories
+
+2.21. Add a class for k queue ET socket auto read test. It allows to:
+
+	Handle new factories
+
+2.22. Add a class for k queue ET socket exception handling test. It allows to:
+
+	Handle new factories
+
+2.23. Add a class for k queue ET socket half closed test. It allows to:
+
+	Handle new factories
+
+2.24. Add a class for k queue ET socket read pending test. It allows to:
+
+	Handle new factories
+
+2.25. Add a class for k queue event array. It allows to:
+
+	Instantiate k queue event array;
+	Get memory address;
+	Get capacity;
+	Get size;
+	Handle clear;
+	Handle ev set;
+	Realloc k queue event array if needed;
+	Handle realloc;
+	Handle free;
+	Get K event offset;
+	Get K event offset address;
+	Get short;
+	Get flags;
+	Get filter;
+	Get fflags;
+	F k queue event array;
+	Get data;
+	Calculate buffer capacity;
+
+2.26. Add a class for k queue event loop. It allows to:
+
+	Get;
+	Instantiate k queue event loop  with parent event loop group, executor, select strategy, rejected execution handler and rejected execution handler;
+	Add abstract K queue channel;
+	Handle ev set;
+	Remove abstract K queue channel;
+	Handle clean array;
+	Handle wakeup;
+	Handle kqueue wait;
+	Handle kqueue wait now;
+	Handle process ready;
+	Run k queue event loop;
+	Handle new task queue;
+	Get io ratio;
+	Set io ratio;
+	Get registered channels;
+	Handle cleanup;
+	Close k queue event loop;
+	Handle loop exception
+
+2.27. Add a class for k queue event loop group. It allows to:
+
+	Instantiate k queue event loop group;
+	Instantiate k queue event loop group  with select strategy factory;
+	Instantiate k queue event loop group  with thread factory;
+	Instantiate k queue event loop group  with executor;
+	Instantiate k queue event loop group  with thread factory, select strategy factory and select strategy factory;
+	Instantiate k queue event loop group  with executor, select strategy factory and select strategy factory;
+	Instantiate k queue event loop group  with executor, event executor chooser factory, select strategy factory and select strategy factory;
+	Instantiate k queue event loop group  with executor, event executor chooser factory, select strategy factory, rejected execution handler and rejected execution handler;
+	Set io ratio;
+	Handle new child
+
+2.28. Add a class for k queue rcv allocator override socket ssl echo test. It allows to:
+
+	Instantiate k queue rcv allocator override socket ssl echo test  with server ctx ssl context, client ctx ssl context, renegotiation and renegotiation;
+	Configure server bootstrap
+
+2.29. Add a class for k queue recv byte allocator handle. It allows to:
+
+	Get;
+	Instantiate k queue recv byte allocator handle  with recv byte buf allocator extended handle;
+	Guess k queue recv byte allocator handle;
+	Reset channel config;
+	Handle inc messages read;
+	Allocate byte buf allocator;
+	Handle last bytes read;
+	Get attempted bytes read;
+	Read complete;
+	Reading maybe more data supplier;
+	Reading k queue recv byte allocator handle;
+	Read EOF;
+	Check if k queue recv byte allocator handle is read EOF;
+	Handle number bytes pending;
+	Convert maybe more data;
+
+2.30. Add a class for k queue server channel config. It allows to:
+
+	Instantiate k queue server channel config  with abstract K queue channel;
+	Get options;
+	Get option;
+	Set option;
+	Check if k queue server channel config is reuse address;
+	Set reuse address;
+	Get receive buffer size;
+	Set receive buffer size;
+	Get backlog;
+	Set backlog;
+	Set rcv alloc transport provides guess;
+	Set performance preferences;
+	Set connect timeout millis;
+	Set max messages  per read;
+	Set write spin count;
+	Set  allocator byte buf allocator;
+	Set recv byte buf  allocator recv byte buf allocator;
+	Set auto read;
+	Set write buffer high water mark;
+	Set write buffer low water mark;
+	Set write buffer water mark;
+	Set message size estimator
+
+2.31. Add a class for k queue server domain socket channel. It allows to:
+
+	Instantiate k queue server domain socket channel;
+	Instantiate k queue server domain socket channel  with bsd socket;
+	Handle new child channel;
+	Handle local address 0;
+	Do bind;
+	Do k queue server domain socket channel close;
+	Get config;
+	Handle remote address;
+	Handle local address
+
+2.32. Add a class for k queue server socket channel. It allows to:
+
+	Instantiate k queue server socket channel;
+	Instantiate k queue server socket channel  with fd bsd socket;
+	Check if k queue server socket channel is compatible;
+	Do bind;
+	Handle remote address;
+	Handle local address;
+	Get config;
+	Handle new child channel
+
+2.33. Add a class for k queue server socket channel config. It allows to:
+
+	Instantiate k queue server socket channel config  with K queue server socket channel;
+	Get options;
+	Get option;
+	Set option;
+	Set reuse port;
+	Check if k queue server socket channel config is reuse port;
+	Set accept filter;
+	Get accept filter;
+	Set rcv alloc transport provides guess;
+	Set reuse address;
+	Set receive buffer size;
+	Set performance preferences;
+	Set backlog;
+	Set connect timeout millis;
+	Set max messages  per read;
+	Set write spin count;
+	Set  allocator byte buf allocator;
+	Set recv byte buf  allocator recv byte buf allocator;
+	Set auto read;
+	Set write buffer high water mark;
+	Set write buffer low water mark;
+	Set write buffer water mark;
+	Set message size estimator
+
+2.34. Add a class for k queue server socket channel config test. It allows to:
+
+	Before k queue server socket channel config test;
+	Process k queue server socket channel config test k queue server socket channel config test after;
+	Handle test reuse port;
+	Handle test accept filter;
+	Handle test options does not throw
+
+2.35. Add a class for k queue socket channel config. It allows to:
+
+	Instantiate k queue socket channel config  with K queue socket channel;
+	Get options;
+	Get option;
+	Set option;
+	Get receive buffer size;
+	Get send buffer size;
+	Get k queue socket channel config so linger;
+	Get traffic class;
+	Check if k queue socket channel config is keep alive;
+	Check if k queue socket channel config is reuse address;
+	Check if k queue socket channel config is tcp no delay;
+	Get k queue socket channel config snd low at;
+	Set k queue socket channel config snd low at;
+	Check if k queue socket channel config is tcp no push;
+	Set k queue socket channel config tcp no push;
+	Set keep alive;
+	Set receive buffer size;
+	Set reuse address;
+	Set send buffer size;
+	Get set so linger;
+	Set k queue socket channel config tcp no delay;
+	Set traffic class;
+	Check if k queue socket channel config is allow half closure;
+	Set rcv alloc transport provides guess;
+	Set performance preferences;
+	Set allow half closure;
+	Set connect timeout millis;
+	Set max messages  per read;
+	Set write spin count;
+	Set  allocator byte buf allocator;
+	Set recv byte buf  allocator recv byte buf allocator;
+	Set auto read;
+	Set auto close;
+	Set write buffer high water mark;
+	Set write buffer low water mark;
+	Set write buffer water mark;
+	Set message size estimator;
+	Calculate max bytes  per gathering write
+
+2.36. Add a class for k queue socket channel config test. It allows to:
+
+	Process k queue socket channel config test k queue socket channel config test before class;
+	Process k queue socket channel config test k queue socket channel config test after class;
+	Handle setup;
+	Handle teardown;
+	Handle test random snd low at;
+	Handle test invalid high snd low at;
+	Handle test tcp no push;
+	Handle test set option when closed;
+	Handle test get option when closed
+
+2.37. Add a class for k queue socket channel not yet connected test. It allows to:
+
+	Handle new factories
+
+2.38. Add a class for k queue socket connect test. It allows to:
+
+	Handle new factories
+
+2.39. Add a class for k queue socket connection attempt test. It allows to:
+
+	Handle new factories
+
+2.40. Add a class for k queue socket echo test. It allows to:
+
+	Handle new factories
+
+2.41. Add a class for k queue socket file region test. It allows to:
+
+	Handle new factories
+
+2.42. Add a class for k queue socket fixed length echo test. It allows to:
+
+	Handle new factories
+
+2.43. Add a class for k queue socket gathering write test. It allows to:
+
+	Handle new factories
+
+2.44. Add a class for k queue socket multiple connect test. It allows to:
+
+	Handle new factories
+
+2.45. Add a class for k queue socket object echo test. It allows to:
+
+	Handle new factories
+
+2.46. Add a class for k queue socket rst test. It allows to:
+
+	Handle new factories;
+	Assert rst  on close exception
+
+2.47. Add a class for k queue socket shutdown output by peer test. It allows to:
+
+	Handle new factories
+
+2.48. Add a class for k queue socket shutdown output by self test. It allows to:
+
+	Handle new factories
+
+2.49. Add a class for k queue socket ssl echo test. It allows to:
+
+	Instantiate k queue socket ssl echo test  with server ctx ssl context, client ctx ssl context, renegotiation and renegotiation;
+	Handle new factories
+
+2.50. Add a class for k queue socket ssl greeting test. It allows to:
+
+	Instantiate k queue socket ssl greeting test  with server ctx ssl context, client ctx ssl context and client ctx ssl context;
+	Handle new factories
+
+2.51. Add a class for k queue socket start tls test. It allows to:
+
+	Instantiate k queue socket start tls test  with server ctx ssl context, client ctx ssl context and client ctx ssl context;
+	Handle new factories
+
+2.52. Add a class for k queue socket string echo test. It allows to:
+
+	Handle new factories
+
+2.53. Add a class for k queue socket test. It allows to:
+
+	Load JNI;
+	Handle test peer creds;
+	Handle new socket
+
+2.54. Add a class for k queue socket test permutation. It allows to:
+
+	Get socket;
+	Handle server socket;
+	Handle new instance;
+	Get client socket;
+	Get datagram;
+	Handle new channel;
+	Convert to string;
+	Get domain socket;
+	Handle server domain socket;
+	Get client domain socket;
+	Get datagram socket;
+	Handle new socket address
+
+2.55. Add a class for k queue statically referenced jni methods. It allows to:
+
+	Instantiate k queue statically referenced jni methods;
+	Add k queue statically referenced jni methods;
+	Enable k queue statically referenced jni methods;
+	Ev disable;
+	Delete k queue statically referenced jni methods;
+	Ev clear;
+	Ev EOF;
+	Ev error;
+	Note read closed;
+	Note conn reset;
+	Disconnected k queue statically referenced jni methods;
+	Evfilt read;
+	Get evfilt write;
+	Handle evfilt user;
+	Evfilt sock
+
+2.56. Add a class for native. It allows to:
+
+	Handle new K queue;
+	Handle kevent wait;
+	Create native;
+	Handle kevent trigger user event;
+	Handle kevent add user event;
+	Handle sizeof K event;
+	Handle offsetof K event ident;
+	Handle offsetof K event flags;
+	Handle offsetof K event F flags;
+	Handle offsetof K event filter;
+	Handle offsetof kevent data;
+	Load native library;
+	Instantiate native
+
+2.57. Add a class for native long array. It allows to:
+
+	Instantiate native long array;
+	Get idx;
+	Calculate buffer capacity;
+	Add native long array;
+	Handle clear;
+	Check if native long array is empty;
+	Get size;
+	Handle free;
+	Get memory address;
+	Get memory address end;
+	Handle memory offset;
+	Realloc native long array if needed;
+	Convert native long array to string
+
+3. Changes to package io.netty.channel.unix:  
+
+3.1. Rename type DatagramSocketAddress with DatagramSocketAddress
+
+3.2. Rename type DomainSocketAddress with DomainSocketAddress
+
+3.3. Rename type DomainSocketChannel with DomainSocketChannel
+
+3.4. Rename type DomainSocketChannelConfig with DomainSocketChannelConfig
+
+3.5. Rename type ErrorsStaticallyReferencedJniMethods with ErrorsStaticallyReferencedJniMethods
+
+3.6. Rename type FileDescriptor with FileDescriptor
+
+3.7. Add a class for iov array. It allows to:
+
+	Instantiate iov array;
+	Handle clear;
+	Add byte buf;
+	Add iov array;
+	Get count;
+	Get size;
+	Max bytes;
+	Get memory address;
+	Handle release;
+	Handle process message;
+	Get idx
+
+3.8. Add a class for limits. It allows to:
+
+	Instantiate limits
+
+3.9. Add a class for limits statically referenced jni methods. It allows to:
+
+	Instantiate limits statically referenced jni methods;
+	Ssize max;
+	Iov limits statically referenced jni methods;
+	Get uio max iov;
+	Get size ofjlong;
+	Get uds sun path size
+
+3.10. Rename type NativeInetAddress with NativeInetAddress
+
+3.11. Add a class for peer credentials. It allows to:
+
+	Instantiate peer credentials;
+	Get pid;
+	Get uid;
+	Get gids;
+	Convert peer credentials to string
+
+3.12. Rename type ServerDomainSocketChannel with ServerDomainSocketChannel
+
+3.13. Add a class for socket. It allows to:
+
+	Instantiate socket;
+	Handle shutdown;
+	Check if socket is shutdown;
+	Check if socket is input shutdown;
+	Check if socket is output shutdown;
+	Send  to byte buffer;
+	Send inet address to address;
+	Send inet address to addresses;
+	Get recv from;
+	Get recv from address;
+	Handle recv fd;
+	Send fd;
+	Connect socket address;
+	Connect socket;
+	Disconnect socket;
+	Handle bind;
+	Listen socket;
+	Accept socket;
+	Handle remote address;
+	Handle local address;
+	Get receive buffer size;
+	Get send buffer size;
+	Check if socket is keep alive;
+	Check if socket is tcp no delay;
+	Check if socket is reuse address;
+	Check if socket is reuse port;
+	Check if socket is broadcast;
+	Get socket so linger;
+	Get socket so error;
+	Get traffic class;
+	Set keep alive;
+	Set receive buffer size;
+	Set send buffer size;
+	Set socket tcp no delay;
+	Get set so linger;
+	Set reuse address;
+	Set reuse port;
+	Set broadcast;
+	Set traffic class;
+	Convert socket to string;
+	Handle new socket stream;
+	Handle new socket dgram;
+	Handle new socket domain;
+	Initialize socket;
+	Handle new socket stream 0;
+	Handle new socket dgram 0;
+	Handle new socket domain 0;
+	Get shutdown;
+	Connect domain socket;
+	Get bind;
+	Get bind domain socket;
+	Send socket to address;
+	Send socket to addresses;
+	Handle new socket stream fd;
+	Handle new socket dgram fd;
+	Handle new socket domain fd;
+
+3.14. Add a class for socket writable byte channel. It allows to:
+
+	Instantiate socket writable byte channel  with fd file descriptor;
+	Write src java nio byte buffer;
+	Check if socket writable byte channel is open;
+	Close socket writable byte channel;
+	Process socket writable byte channel socket writable byte channel alloc
+
+3.15. Rename type UnixChannel with UnixChannel
+
+3.16. Add a class for unix channel option. It allows to:
+
+	Instantiate unix channel option
+
+4. Changes to package io.netty.channel.unix.tests:  
+
+4.1. Add a class for socket test. It allows to:
+
+	Handle new socket;
+	Handle setup;
+	Tear socket test;
+	Handle test keep alive;
+	Handle test tcp no delay;
+	Handle test received buffer size;
+	Handle test send buffer size;
+	Handle test so linger;
+	Handle test double close does not throw;
+	Handle test traffic class
+
+4.2. Add an object creator class for unix test utils. It allows to:
+
+	Handle new socket address;
+	Instantiate unix test utils
+
+5. Changes to package io.netty.util:  
+
+5. Changes to package io.netty.util.internal:  
+

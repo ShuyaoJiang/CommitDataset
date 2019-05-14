@@ -1,0 +1,14 @@
+Require aopalliance dependency for spring-aop
+
+A recent commit made aopalliance optional for spring-aop, while
+continuing to require it for spring-tx. On review, this is probably
+overly aggressive, and for convenience aopalliance should remain
+required for spring-aop. There are use cases for which aopalliance is
+indeed optional, but core functionality such as <aop:scoped-proxy>
+should never result in a ClassNotFoundException.
+
+This commit returns the aopalliance dependency for spring-aop to
+required status, and also explicitly notes the same dependency in other
+modules that compile directly against aopalliance types.
+
+Issue: SPR-9501

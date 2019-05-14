@@ -1,0 +1,32 @@
+Support scrolling in SQL's CLI (elastic/x-pack-elasticsearch#2494)
+
+* Move CLI to TransportSqlAction
+    * Moves REST endpoint from `/_cli` to `/_sql/cli`
+    * Removes the special purpose CLI transport action instead
+    implements the CLI entirely on the REST layer, delegating
+    all SQL stuff to the same action that backs the `/_sql` REST
+    API.
+    * Reworks "embedded testing mode" to use a `FilterClient` to
+    bounce capture the sql transport action and execute in embedded.
+    * Switches CLI formatting from consuming the entire response
+    to consuming just the first page of the response and returning
+    a `cursor` that can be used to read the next page. That read is
+    not yet implemented.
+    * Switch CLI formatting from the consuming the `RowSetCursor` to
+    consuming the `SqlResponse` object.
+    * Adds tests for CLI formatting.
+* Support next page in the cli
+    * Rename cli's CommandRequest/CommandResponse to
+    QueryInitRequest/QueryInitResponse to line up with jdbc
+    * Implement QueryPageRequest/QueryPageResponse in cli
+    * Use `byte[]` to represent the cursor in the cli. Those bytes
+    mean something, but only to the server. The only reasonint that
+    the client does about them is "if length == 0 then there isn't a
+    next page."
+    * Pull common code from jdbc's QueryInitRequest, QueryPageRequest,
+    QueryInitResponse, and QueryPageResponse into the shared-proto
+    project
+        * By implication this switches jdbc's QueryPageRequest to using
+     the same cursor implementation as the cli
+
+Original commit: elastic/x-pack-elasticsearch@193586f1eeae0dfa8d835e225b7257161dde30db

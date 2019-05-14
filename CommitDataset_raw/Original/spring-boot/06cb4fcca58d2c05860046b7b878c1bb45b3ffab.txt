@@ -1,0 +1,19 @@
+Add `/loggers` actuator endpoint
+
+Add `LoggersEndpoint` that can enables listing and configuration of log
+levels. This actuator builds on top of the `LoggingSystem` abstraction
+and implements support for Logback, Log4J2, and JUL.  The LoggingSystem
+interface is modified to require each implementation to list the
+configuration of all loggers as well as an individual logger by name.
+
+The MVC endpoint exposes these behaviors at `GET /loggers` and
+`GET /loggers/{name}` (much like the metrics actuator).
+
+In addition `POST /loggers/{name}` allows users to modify the level for a given
+logger. This modification is passed to the logging implementation, which
+then decides, as an internal implementation detail, what the final outcome
+of the modification is (e.g. changing all unconfigured children). Users
+are then expected to request the listing of all loggers to see what has
+changed internally to the logging system.
+
+Closes gh-7086

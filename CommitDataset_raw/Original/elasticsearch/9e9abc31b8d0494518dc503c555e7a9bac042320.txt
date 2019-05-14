@@ -1,0 +1,13 @@
+Fix IndexTemplateMetaData parsing from xContent (#30917)
+
+We failed to register "aliases" and "version" into the list of keywords
+in the IndexTemplateMetaData; then fail to parse the following index
+template.
+
+```
+{
+    "aliases": {"log": {}},
+    "index_patterns": ["pattern-1"]
+}
+```
+This commit registers that missing keywords.

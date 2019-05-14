@@ -1,0 +1,28 @@
+Make sure to notify handshake success even if SSLEngine is closed
+
+Related:
+
+e9685ea45aebcb4f9dad0f3a1fc328a06b4932dd
+
+Motivation:
+
+SslHandler.unwrap() does not evaluate the handshake status of
+SSLEngine.unwrap() when the status of SSLEngine.unwrap() is CLOSED.
+
+It is not correct because the status does not reflect the state of the
+handshake currently in progress, accoding to the API documentation of
+SSLEngineResult.Status.
+
+Also, sslCloseFuture can be notified earlier than handshake notification
+because we call sslCloseFuture.trySuccess() before evaluating handshake
+status.
+
+Modifications:
+
+- Notify sslCloseFuture after the unwrap loop is finished
+- Add more assertions to SocketSslEchoTest
+
+Result:
+
+Potentially fix the regression caused by:
+- e9685ea45aebcb4f9dad0f3a1fc328a06b4932dd

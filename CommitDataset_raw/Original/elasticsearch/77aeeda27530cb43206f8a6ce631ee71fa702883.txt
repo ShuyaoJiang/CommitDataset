@@ -1,0 +1,25 @@
+Correctly handle PKCS#11 tokens for system keystore (#33460)
+
+* Correctly handle NONE keyword for system keystore
+
+As defined in the PKCS#11 reference guide
+https://docs.oracle.com/javase/8/docs/technotes/guides/security/p11guide.html
+PKCS#11 tokens can be used as the JSSE keystore and truststore and
+the way to indicate this is to set `javax.net.ssl.keyStore` and
+`javax.net.ssl.trustStore` to `NONE` (case sensitive).
+
+This commits ensures that we honor this convention and do not
+attempt to load the keystore or truststore if the system property is
+set to NONE.
+
+* Handle password protected system truststore
+
+When a PKCS#11 token is used as the system truststore, we need to
+pass a password when loading it, even if only for reading
+certificate entries. This commit ensures that if
+`javax.net.ssl.trustStoreType` is set to `PKCS#11` (as it would
+when a PKCS#11 token is in use) the password specified in
+`javax.net.ssl.trustStorePassword` is passed when attempting to
+load the truststore.
+
+Relates #33459

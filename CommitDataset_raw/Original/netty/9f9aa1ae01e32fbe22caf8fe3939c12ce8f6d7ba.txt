@@ -1,0 +1,14 @@
+Respect ctx.read() calls while processing reads for the child channels when using the Http2MultiplexCodec. (#8617)
+
+Motivation:
+
+We did not correct respect ctx.read() calls while processing a read for a child Channel. This could lead to read stales when auto read is disabled and no other read was requested.
+
+Modifications:
+
+- Keep track of extra read() calls while processing reads
+- Add unit tests that verify that read() is respected when triggered either in channelRead(...) or channelReadComplete(...)
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8209.

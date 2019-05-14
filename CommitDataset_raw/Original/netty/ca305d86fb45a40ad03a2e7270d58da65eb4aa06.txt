@@ -1,0 +1,10 @@
+PlatformDependent String char[] optimization
+
+Motivation:
+PlatformDependent0 has an optimization which grabs the char[] from a String. Since this code was introduced http://openjdk.java.net/jeps/254 has been gaining momentum in JDK 9. This JEP changes the internal storage from char[] to byte[], and thus the existing char[] only based optimizations will not work.
+
+Modifications:
+- The ASCII encoding char[] String optimizations should also work for byte[].
+
+Result:
+ASCII encoding char[] String optimizations don't break if the underlying storage in String is byte[].

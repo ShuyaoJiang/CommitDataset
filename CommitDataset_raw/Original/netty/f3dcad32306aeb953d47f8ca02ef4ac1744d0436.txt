@@ -1,0 +1,23 @@
+Do not call System.nanoTime() in ReadTimeoutHandler.channelRead()
+
+Motivation:
+
+We mitigate callouts to System.nanoTime() in SingleThreadEventExecutor
+as it is 'relatively expensive'. On a modern system, tak translates to
+about 20ns per call. With channelReadComplete() we can side-step this in
+channelRead().
+
+Modifications:
+
+Introduce a boolean flag, which indicates that a read batch is currently
+on-going, which acts as a flush guard for lastReadTime. Update
+lastReadTime in channelReadComplete() just before setting the flag to
+false. We set the flag to true in channelRead().
+
+The periodic task examines the flag, and if it observes it to be true,
+it will reschedule the task for the full duration. If it observes as
+false, it will read lastReadTime and adjust the delay accordingly.
+
+Result:
+
+ReadTimeoutHandler calls System.nanoTime() only once per read batch.

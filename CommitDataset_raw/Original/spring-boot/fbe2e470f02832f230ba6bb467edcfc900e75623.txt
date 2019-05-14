@@ -1,0 +1,19 @@
+Ignore case when filtering out properties based on target name
+
+Previously, PropertiesConfigurationFactory would only create a
+DefaultPropertyNamePatternsMatcher that ignored case if it was
+ignoring unknown fields. If the binding had a target name and
+unknown fields were not being ignored the matcher would consider the
+case when finding matches. This meant that SERVER_PORT would not being
+to ServerProperties.port as SERVER did not match the target name,
+server.
+
+This commit updates PropertiesConfigurationFactory to use a
+case-ignoring DefaultPropertyNamePatternsMatcher when binding with
+a target name. The tests have also been updated to test binding both
+with and without ignoring case and using either Properties or
+PropertySources. The above-described matching is only performed
+against PropertySources and the bug only occurred when using a target
+name, making it important to test all combinations.
+
+Closes gh-3745

@@ -1,0 +1,9 @@
+Update Repackager to use Java 8 APIs safely
+
+Previously, Repackager used Java 8 APIs without protecting against the
+possibility of a NoSuchMethodError on earlier versions of Java.
+This commit wraps the Java 8 APIs in try-catch blocks to ensure
+that they do not cause a failure on Java versions before 8, while
+still making full use of Java 8's capabilities when available.
+
+Closes gh-5280

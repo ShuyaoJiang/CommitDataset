@@ -1,0 +1,9 @@
+[Tests] Harden InternalExtendedStatsTests (#24934)
+
+The order in which double values are added in Java can give different results,
+so in testing the sum and sumOfSquares we need to allow some delta for testing
+equality. The difference can be larger for large sum values, so we should
+account for this by making the delta in the assertion depend on the values
+magnitude.
+
+Closes #24931

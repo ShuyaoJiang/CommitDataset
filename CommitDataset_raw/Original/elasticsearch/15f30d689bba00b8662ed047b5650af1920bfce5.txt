@@ -1,0 +1,25 @@
+[CCR] Do not unnecessarily wrap fetch exception in a ElasticSearch exception and (#33777)
+
+* [CCR] Do not unnecessarily wrap fetch exception in a ElasticSearch exception and
+properly map fetch_exception.exception field as object.
+
+The extra caused by level is not necessary here:
+
+```
+"fetch_exceptions": [
+              {
+                "from_seq_no": 1,
+                "retries": 106,
+                "exception": {
+                  "type": "exception",
+                  "reason": "[index1] IndexNotFoundException[no such index]",
+                  "caused_by": {
+                    "type": "index_not_found_exception",
+                    "reason": "no such index",
+                    "index_uuid": "_na_",
+                    "index": "index1"
+                  }
+                }
+              }
+            ],
+```

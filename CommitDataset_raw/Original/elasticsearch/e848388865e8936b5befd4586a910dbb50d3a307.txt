@@ -1,0 +1,34 @@
+Fix SourceOnlySnapshotIT (#37461)
+
+The SourceOnlySnapshotIT class tests a source only repository
+using the following scenario:
+    starts a master node
+    starts a data node
+    creates a source only repository
+    creates an index with documents
+    snapshots the index to the source only repository
+    deletes the index
+    stops the data node
+    starts a new data node
+    restores the index
+
+Thanks to ESIntegTestCase the index is sometimes created using a custom 
+data path. With such a setting, when a shard is assigned to one of the data 
+node of the cluster the shard path is resolved using the index custom data 
+path and the node's lock id by the NodeEnvironment#resolveCustomLocation().
+
+It should work nicely but in SourceOnlySnapshotIT.snashotAndRestore(), b
+efore the change in this PR, the last data node was restarted using a different 
+path.home. At startup time this node was assigned a node lock based on other 
+locks in the data directory of this temporary path.home which is empty. So it 
+always got the 0 lock id. And when this new data node is assigned a shard for
+ the index and resolves it against the index custom data path, it also uses the 
+node lock id 0 which conflicts with another node of the cluster, resulting in 
+various errors with the most obvious one being LockObtainFailedException.
+
+This commit removes the temporary home path for the last data node so that it 
+uses the same path home as other nodes of the cluster and then got assigned 
+a correct node lock id at startup.
+
+Closes #36330
+Closes #36276

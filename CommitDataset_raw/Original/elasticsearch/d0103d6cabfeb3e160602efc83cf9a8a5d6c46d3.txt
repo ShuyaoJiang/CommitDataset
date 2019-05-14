@@ -1,0 +1,7 @@
+[TEST] Fixes PageParamsTests to no underflow from and size
+
+In `mutateInstance()` the from or size could become negative if the other one was pushed over the limit for `from + size`. This change fixes this case to make sure after the mutate method is called the from and size obey the limit but are also both `>= 0`
+
+relates elastic/x-pack-elasticsearch#2344
+
+Original commit: elastic/x-pack-elasticsearch@a8a7072fcc2943902ed44b1fbcacc24b4bd0d9fc

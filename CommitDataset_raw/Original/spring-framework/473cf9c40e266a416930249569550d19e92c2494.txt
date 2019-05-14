@@ -1,0 +1,16 @@
+Preserve ETag HTTP header for versioned resources
+
+Prior to this change, a resource handler chain configured with a
+`VersionResourceResolver` would add the resource version to the request
+attributes when serving that resource. This approach would not work when
+a `CachingResourceResolver` is configured and the resource is already
+cached. Indeed, that code path is not executed when the resource is
+resolved from the cache.
+
+This commit adds a new `VersionedResource` interface that's used by the
+`VersionResourceResolver`, adding a `getVersion()` method that returns
+the version string for that resource. This way, the version information
+is cached with the resource itself and the request attributes are no
+longer used for this.
+
+Issue: SPR-13817

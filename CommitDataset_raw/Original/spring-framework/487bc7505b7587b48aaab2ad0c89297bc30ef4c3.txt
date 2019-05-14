@@ -1,0 +1,15 @@
+Print request body in PrintingResultHandler in Spring MVC Test
+
+Prior to this commit, the PrintingResultHandler used by the various
+print() and log() methods in Spring MVC Test printed the response body
+but not the request body.
+
+Since request bodies are sometimes generated programmatically, however,
+it can be beneficial to have the dynamically generated request body
+logged as well.
+
+This commit therefore prints the request body in PrintingResultHandler
+by delegating to the recently introduced getContentAsString() method in
+MockHttpServletRequest.
+
+Issue: SPR-14717

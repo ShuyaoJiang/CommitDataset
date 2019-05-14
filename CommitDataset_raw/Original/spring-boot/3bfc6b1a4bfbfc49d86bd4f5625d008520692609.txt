@@ -1,0 +1,24 @@
+Avoid packaging two versions of same dependency in Gradle repackaging
+
+Previously, the Gradle plugin would include all of the dependencies
+from both the compile and runtime configurations in the repackaged
+jar. In the unlikely event that the compile and runtime configurations
+contained different versions of the same dependency, this would lead
+to both versions of the dependency being packaged in the jar file.
+
+The runtime configuration extends the compile configuration so, in
+normal circumstances, it will contain a superset of the compile
+configuration's dependencies. In the situation described above where
+the two configurations contain different versions of the same
+dependency the runtime configuration will only contain whichever
+version of the two dependencies has "won". By default, this will
+be the dependency with the higher version.
+
+This commit updates the Gradle plugin to only include the runtime
+configuration's resolved dependencies during repackaging. As explained
+above, the runtime configuration extends the compile configuration so
+any compile dependencies will still be included, with the added
+benefit that duplicate versions of the same dependency will have been
+resolved to a single, preferred version.
+
+Closes gh-5749

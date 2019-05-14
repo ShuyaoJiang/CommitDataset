@@ -1,0 +1,9 @@
+Make recoverFromCancelReusesConnection() more deterministic
+
+This addresses the following observed failure modes and reduces the flakinesss of the test:
+
+1. On most runs, the first request is canceled before the client starts to read the response body. In some runs, it's canceled after the client starts to read the response body and the first call doesn't fail as expected.
+
+2. The first request is sometimes canceled before the server dequeues the first mocked response. That response, which is set to send a body after a 10 second delay, is then used to respond to the second request, which triggers the 5 second test timeout.
+
+https://github.com/square/okhttp/issues/4633

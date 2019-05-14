@@ -1,0 +1,13 @@
+Remove reflection usage in orm.hibernate4.*
+
+Previously reflection was required when interacting with Hibernate 4 in
+order to support both Hibernate 3 and Hibernate 4 since there were
+non-passive changes in the APIs. Now that the Spring build uses Gradle
+it is trivial to support multiple Hibernate versions.
+
+This commit removes the reflection usage in orm.hibernate4.* by
+creating a spring-orm-hibernate4 module that uses
+gradle/merge-artifacts.gradle to build a single artifact but keep
+distinct classpaths.
+
+Issue: SPR-10039

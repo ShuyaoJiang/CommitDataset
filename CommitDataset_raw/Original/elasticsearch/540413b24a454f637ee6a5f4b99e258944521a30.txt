@@ -1,0 +1,17 @@
+Also skip JAVA_TOOL_OPTIONS on Windows
+
+On non-Windows platforms, we ignore the environment variable
+JAVA_TOOL_OPTIONS (this is an environment variable that the JVM respects
+by default for picking up extra JVM options). The primary reason that we
+ignore this because of the Jayatana agent on Ubuntu; a secondary reason
+is that it produces an annoying "Picked up JAVA_TOOL_OPTIONS: ..."
+output message. When the elasticsearch-env batch script was introduced
+for Windows, ignoring this environment variable was deliberately not
+carried over as the primary reason does not apply on Windows. However,
+after additional thinking, it seems that we should simply be consistent
+to the extent possible here (and also avoid that annoying "Picked up
+JAVA_TOOL_OPTIONS: ..." on Windows too). This commit causes the Windows
+version of elasticsearch-env to also ignore JAVA_TOOL_OPTIONS.
+
+Relates #25968
+

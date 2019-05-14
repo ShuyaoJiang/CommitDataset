@@ -1,0 +1,13 @@
+Allow to offload certificate validation when using BoringSSL (#8974)
+
+Motivation:
+
+BoringSSL supports offloading certificate validation to a different thread. This is useful as it may need to do blocking operations and so may block the EventLoop.
+
+Modification:
+
+- Adjust ReferenceCountedOpenSslEngine to correctly handle offloaded certificate validation (just as we already have code for certificate selection).
+
+Result:
+
+Be able to offload certificate validation when using BoringSSL.

@@ -1,0 +1,13 @@
+[Rollup] Disallow index patterns that match the rollup index (#30491)
+
+We should not allow the user to configure index patterns that also match
+the index which stores the rollup index.
+
+For example, it is quite natural for a user to specify `metricbeat-*`
+as the index pattern, and then store the rollups in `metricbeat-rolled`.
+This will start throwing errors as soon as the rollup index is created
+because the indexer will try to search it.
+
+Note: this does not prevent the user from matching against existing
+rollup indices.  That should be prevented by the field-level validation
+during job creation.

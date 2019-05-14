@@ -1,0 +1,5 @@
+MethodHandles.Lookup.defineClass for CGLIB class definition purposes
+
+Spring's CGLIB fork is patched with local copies of affected files here, introducing the notion of a "contextClass" (e.g. the proxy superclass) which gets passed through to ReflectUtils.defineClass for delegating to MethodHandles.Lookup.defineClass eventually, against a privateLookupIn(contextClass) lookup context on JDK 9/10/11.
+
+Issue: SPR-15859

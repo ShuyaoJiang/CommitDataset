@@ -1,0 +1,14 @@
+[#2618] Introduce ChannelPromise.unvoid() and ChannelFuture.isVoid()
+
+Motivation:
+
+There is no way for a ChannelHandler to check if the passed in ChannelPromise for a write(...) call is a VoidChannelPromise. This is a problem as some handlers need to add listeners to the ChannelPromise which is not possible in the case of a VoidChannelPromise.
+
+Modification:
+
+- Introduce ChannelFuture.isVoid() which will return true if it is not possible to add listeners or wait on the result.
+- Add ChannelPromise.unvoid() which allows to create a ChannelFuture out of a void ChannelFuture which supports all the operations.
+
+Result:
+
+It's now easy to write ChannelHandler implementations which also works when a void ChannelPromise is used.

@@ -1,0 +1,12 @@
+Add IPv6 support in RestTemplate
+
+Prior to this commit, RestTemplate would not would
+not accept IPv6 raw addresses in URLs because UriComponentsBuilder
+would not parse/encode the Host part correctly.
+
+The UriComponentsBuilder now parses and encode raw IPv6 addresses
+in the "[1abc:2abc:3abc::5ABC:6abc]" format and also supports the
+use of IPv6 scope_ids (see JDK8 java.net.Inet6Address),
+like "[1abc:2abc:3abc::5ABC:6abc%eth0]".
+
+Issue: SPR-10539

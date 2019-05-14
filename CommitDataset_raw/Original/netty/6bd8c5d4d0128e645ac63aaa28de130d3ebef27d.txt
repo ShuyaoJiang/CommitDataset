@@ -1,0 +1,33 @@
+Improve the allocation algorithm in PoolChunk
+
+Motivation:
+
+Depth-first search is not always efficient for buddy allocation.
+
+Modification:
+
+Employ a new faster search algorithm with different memoryMap layout.
+
+Result:
+
+With thread-local cache disabled, we see a lot of performance
+improvment, especially when the size of the allocation is as small as
+the page size, which had the largest search space previously:
+
+-- master head --
+Benchmark                (size) Mode    Score  Error Units
+pooledDirectAllocAndFree  8192 thrpt  215.392  1.565 ops/ms
+pooledDirectAllocAndFree 16384 thrpt  594.625  2.154 ops/ms
+pooledDirectAllocAndFree 65536 thrpt 1221.520 18.965 ops/ms
+pooledHeapAllocAndFree    8192 thrpt  217.175  1.653 ops/ms
+pooledHeapAllocAndFree   16384 thrpt  587.250 14.827 ops/ms
+pooledHeapAllocAndFree   65536 thrpt 1217.023 44.963 ops/ms
+
+-- changes --
+Benchmark                (size) Mode    Score  Error Units
+pooledDirectAllocAndFree  8192 thrpt 3656.744 94.093 ops/ms
+pooledDirectAllocAndFree 16384 thrpt 4087.152 22.921 ops/ms
+pooledDirectAllocAndFree 65536 thrpt 4058.814 29.276 ops/ms
+pooledHeapAllocAndFree    8192 thrpt 3640.355 44.418 ops/ms
+pooledHeapAllocAndFree   16384 thrpt 4030.206 24.365 ops/ms
+pooledHeapAllocAndFree   65536 thrpt 4103.991 70.991 ops/ms

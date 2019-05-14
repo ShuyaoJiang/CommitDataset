@@ -1,0 +1,15 @@
+CCR/TEST: Limit indexing docs in FollowerFailOverIT (#35228)
+
+The suite FollowerFailOverIT is failing because some documents are not
+replicated to the follower. Maybe the FollowTask is not working as
+expected or the background indexers eat all resources while the follower
+cluster is trying to reform after a failover; then CI is not fast enough
+to replicate all the indexed docs within 60 seconds (sometimes I see 80k
+docs on the leader).
+
+This commit limits the number of documents to be indexed into the leader
+index by the background threads so that we can eliminate the latter
+case. This change also replaces a docCount assertion with a docIds
+assertion so we can have more information if these tests fail again.
+
+Relates #33337

@@ -1,0 +1,15 @@
+Improve the allocation algorithm in PoolChunk
+
+Motivation:
+
+Depth-first search is not always efficient for buddy allocation.
+
+Modification:
+
+Employ a new faster search algorithm with different memoryMap layout.
+
+Result:
+
+With thread-local cache disabled, we see a lot of performance
+improvment, especially when the size of the allocation is as small as
+the page size, which had the largest search space previously.

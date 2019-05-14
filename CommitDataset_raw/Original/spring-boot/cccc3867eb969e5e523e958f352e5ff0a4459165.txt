@@ -1,0 +1,13 @@
+Allow users to customize authentication entry point in OAuth2 SSO
+
+The SsoSecurityConfigurer that gets added when a user has a custom
+WebSecurityConfigurer with @EnableOAuth2Sso is quite opinionated, and
+this is preventing users from custimizing the exception handling in the
+customized UI security. This change makes it less opinionated, using
+request matchers to configure the default instead of ovewriting the
+single authentication entry point.
+
+Also adds an entry point responding with a 401 for XHR clients (just like
+the vanilla HTTP Basic auth).
+
+Fixes gh-4629

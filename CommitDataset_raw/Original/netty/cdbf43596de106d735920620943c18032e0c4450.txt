@@ -1,0 +1,11 @@
+Add generic utility for enqueuing buffers with promises and dequeueing them in arbitrary byte ranges.
+
+Motivation:
+Simplifies writing code that needs to merge or slice a sequence of buffer & promise pairs into chunks of arbitrary sizes.
+For example in HTTP2 we merge or split buffers across fixed-size DATA frame boundaries.
+
+Modifications:
+Add new utility class CoalescingBufferQueue
+
+Result:
+Following this change HTTP2 code will switch to use it instead of CompositeByteBuffer for DATA frame coalescing.

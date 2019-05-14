@@ -1,0 +1,15 @@
+[ML] Prevent time_field and control field name in analysis_config (elastic/x-pack-elasticsearch#1729)
+
+In does not make sense for the time_field in the data_description to
+be used as a by/over/partition field name, nor the summary_count_field,
+categorization_field or as an influencer.  Therefore, configurations
+where the time_field in the data_description is used in the
+analysis_config are now rejected.
+
+Additionally, it causes a problem communicating with the C++ code if
+the control field name (which is '.') is used in the analysis_config,
+so this is also rejected at the validation stage.
+
+Relates elastic/x-pack-elasticsearch#1684
+
+Original commit: elastic/x-pack-elasticsearch@e6750a2cda9d862ad7ecf24cae256d2e011dd8b9

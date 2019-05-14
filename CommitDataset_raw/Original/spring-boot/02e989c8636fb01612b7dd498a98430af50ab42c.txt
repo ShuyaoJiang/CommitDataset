@@ -1,0 +1,12 @@
+Check that URL is actually a file URL before getting a File from it
+
+Previously, Log4J2LoggingSystem used ResourceUtils.isFileURL(URL) to
+check that the URL of the configuration was suitable for accessing as a
+File. Unfortunately, this fails when the URL’s protocol is vfs or
+vfsfile as both return true and then fail when the URL is subsequently
+passed into ResourceUtils.getFile(URL).
+
+This commit switches to checking that the URL’s protocol is file,
+the only protocol that will allow getFile(URL) to succeed.
+
+Closes gh-6246

@@ -1,0 +1,54 @@
+Add support for replicating closed indices (#39499)
+
+Before this change, closed indexes were simply not replicated. It was therefore 
+possible to close an index and then decommission a data node without knowing 
+that this data node contained shards of the closed index, potentially leading to 
+data loss. Shards of closed indices were not completely taken into account when 
+balancing the shards within the cluster, or automatically replicated through shard 
+copies, and they were not easily movable from node A to node B using APIs like 
+Cluster Reroute without being fully reopened and closed again.
+
+This commit changes the logic executed when closing an index, so that its shards 
+are not just removed and forgotten but are instead reinitialized and reallocated on 
+data nodes using an engine implementation which does not allow searching or
+ indexing, which has a low memory overhead (compared with searchable/indexable 
+opened shards) and which allows shards to be recovered from peer or promoted 
+as primaries when needed.
+
+This new closing logic is built on top of the new Close Index API introduced in 
+6.7.0 (#37359). Some pre-closing sanity checks are executed on the shards before 
+closing them, and closing an index on a 8.0 cluster will reinitialize the index shards 
+and therefore impact the cluster health.
+
+Some APIs have been adapted to make them work with closed indices:
+- Cluster Health API
+- Cluster Reroute API
+- Cluster Allocation Explain API
+- Recovery API
+- Cat Indices
+- Cat Shards
+- Cat Health
+- Cat Recovery
+
+This commit contains all the following changes (most recent first):
+* c6c42a1 Adapt NoOpEngineTests after #39006
+* 3f9993d Wait for shards to be active after closing indices (#38854)
+* 5e7a428 Adapt the Cluster Health API to closed indices (#39364)
+* 3e61939 Adapt CloseFollowerIndexIT for replicated closed indices (#38767)
+* 71f5c34 Recover closed indices after a full cluster restart (#39249)
+* 4db7fd9 Adapt the Recovery API for closed indices (#38421)
+* 4fd1bb2 Adapt more tests suites to closed indices (#39186)
+* 0519016 Add replica to primary promotion test for closed indices (#39110)
+* b756f6c Test the Cluster Shard Allocation Explain API with closed indices (#38631)
+* c484c66 Remove index routing table of closed indices in mixed versions clusters (#38955)
+* 00f1828 Mute CloseFollowerIndexIT.testCloseAndReopenFollowerIndex()
+* e845b0a Do not schedule Refresh/Translog/GlobalCheckpoint tasks for closed indices (#38329)
+* cf9a015 Adapt testIndexCanChangeCustomDataPath for replicated closed indices (#38327)
+* b9becdd Adapt testPendingTasks() for replicated closed indices (#38326)
+* 02cc730 Allow shards of closed indices to be replicated as regular shards (#38024)
+* e53a9be Fix compilation error in IndexShardIT after merge with master
+* cae4155 Relax NoOpEngine constraints (#37413)
+* 54d110b [RCI] Adapt NoOpEngine to latest FrozenEngine changes
+* c63fd69 [RCI] Add NoOpEngine for closed indices (#33903)
+
+Relates to #33888

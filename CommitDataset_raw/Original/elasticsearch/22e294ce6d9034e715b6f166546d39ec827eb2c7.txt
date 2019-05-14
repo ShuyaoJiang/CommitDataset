@@ -1,0 +1,11 @@
+Fix performance of RoutingNodes#assertShardStats
+
+The performance of this method is abysmal, it leads to the
+balanced/unbalanced cluster tests taking twenty seconds! The reason for
+the performance issue is a quadruple-nested for loop. The inner
+double-nested loop is partitioning shards by shard ID in disguise, so we
+simply extract this into computing a partition of shards by shard ID
+once. Now balanced/unbalanced cluster test does not take twenty seconds
+to run.
+
+Relates #27747

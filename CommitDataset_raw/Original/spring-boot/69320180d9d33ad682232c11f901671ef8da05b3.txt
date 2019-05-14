@@ -1,0 +1,25 @@
+Make FileSystemWatcherTests.waitsForPollingInterval more robust
+
+The intent of the test is to:
+
+1. Make a change
+2. Sleep for long enough for that change to be picked up
+3. Make another change
+4. Stop that watcher after 1 further scan has been performed
+5. Assert that a further scan was performed by checking that two
+   separate sets of changes (step 1 and step 3) have been picked up
+
+Previously, step 2 relied on simply sleeping for a period of time
+longer than the polling interval. In reality, the polling interval
+is only a minimum time between scans and the actual time between them
+depends on thread scheduling, GC pauses, etc. This lead to the
+test failing intermittently if the scan didn't happen in a timely
+manner.
+
+This commit removes the sleep and replaces it with a while loop that
+waits for first change to be picked up. This ensures that the second
+change will be detected separately from the first and that two
+separate change sets should always be available once the watcher has
+stopped.
+
+See gh-7782

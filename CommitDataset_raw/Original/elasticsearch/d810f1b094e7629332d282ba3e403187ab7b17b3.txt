@@ -1,0 +1,10 @@
+[Kerberos] Add realm name & UPN to user metadata (#33338)
+
+We have a Kerberos setting to remove realm part from the user
+principal name (remove_realm_name). If this is true then
+the realm name is removed to form username but in the process,
+the realm name is lost. For scenarios like Kerberos cross-realm
+authentication, one could make use of the realm name to determine
+role mapping for users coming from different realms.
+This commit adds user metadata for kerberos_realm and
+kerberos_user_principal_name.

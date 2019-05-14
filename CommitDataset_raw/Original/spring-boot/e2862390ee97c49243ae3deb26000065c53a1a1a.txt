@@ -1,0 +1,12 @@
+Allow anonymous access to devtools remote server
+
+Previously, if an app had Spring Security on the classpath the remote
+devtools server would be secured using basic authentication. This
+prevented RemoteSpringApplication from uploading changes to the server
+as they would be rejected with a 401.
+
+This commit updates RemoteDevToolsAutoConfiguration to allow anonymous
+access to the remote server. CSRF protection is also disabled so that
+POST requests without a CSRF token will be accepted.
+
+Closes gh-3889

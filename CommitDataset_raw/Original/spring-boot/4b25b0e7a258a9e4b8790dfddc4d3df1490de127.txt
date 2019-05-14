@@ -1,0 +1,21 @@
+Allow Jackson features to be configured via the environment
+
+Enhance JacksonAutoConfiguration to configure features on the
+ObjectMapper it creates based on the following configuration
+properties:
+
+spring.jackson.deserialization.* = true|false
+spring.jackson.generator.* = true|false
+spring.jackson.mapper.* = true|false
+spring.jackson.parser.* = true|false
+spring.jackson.serialization.* = true|false
+
+The final part of each property name maps onto an enum. The enums are:
+
+deserialization: com.fasterxml.jackson.databind.DeserializationFeature
+generator: com.fasterxml.jackson.core.JsonGenerator.Feature
+mapper: com.fasterxml.jackson.databind.MapperFeature
+parser: com.fasterxml.jackson.core.JsonParser.Feature
+serialization: com.fasterxml.jackson.databind.SerializationFeature
+
+Closes gh-1227

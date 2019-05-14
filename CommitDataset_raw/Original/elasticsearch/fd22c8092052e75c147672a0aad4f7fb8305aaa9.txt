@@ -1,0 +1,8 @@
+Fix security index auto-create and state recovery race (#39582)
+
+Previously, the security index could be wrongfully recreated. This might
+happen if the index was interpreted as missing, as in the case of a fresh
+install, but the index existed and the state did not yet recover.
+
+This fix will return HTTP SERVICE_UNAVAILABLE (503) for requests that
+try to write to the security index before the state has not been recovered yet.

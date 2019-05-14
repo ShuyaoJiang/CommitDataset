@@ -1,0 +1,13 @@
+Watcher: Ensure watcher thread pool size is reasonably bound (elastic/x-pack-elasticsearch#3056)
+
+The watcher threadpool size was always five times the CPU core
+count, resulting in a huge threadpool when with even 24 cores.
+
+This changes the behaviour to be five times the number of cores
+by default - as watcher is usually waiting on I/O you should have more
+threads than cores, but it maxes out with 50 threads, unless the number
+of available cores is higher than that.
+
+relates elastic/x-pack-elasticsearch#3052
+
+Original commit: elastic/x-pack-elasticsearch@eab5deb11317f0ae8a904a16c5097c1afbdfd904

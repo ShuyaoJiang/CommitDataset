@@ -1,0 +1,11 @@
+Filter mappings fields when field level security is configured (elastic/x-pack-elasticsearch#3173)
+
+This PR uses a new extension point that's being added to Elasticsearch (see https://github.com/elastic/elasticsearch/pull/27603) so that the security plugin can filter the mappings fields returned by get index, get mappings, get field mappings and field capabilities API.
+
+This effort aims at filtering information returned by API in the `indices/admin` category and field capabilities. It doesn't filter what the cluster state api returns as that is a cluster level operation.
+
+One question is about backwards compatibility given that we would like to have this in 6.2. Shall we treat this as a bug as mappings should have been filtered before? Not sure if it's going to break existing integrations.
+
+relates elastic/x-pack-elasticsearch#340
+
+Original commit: elastic/x-pack-elasticsearch@d7e3fd3fa125c2de2e908cbd395558cfd303a2a6

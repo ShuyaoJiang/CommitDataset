@@ -1,0 +1,12 @@
+Auto-expand replicas only after failing nodes (#30553)
+
+#30423 combined auto-expansion in the same cluster state update where nodes are removed. As
+the auto-expansion step would run before deassociating the dead nodes from the routing table, the
+auto-expansion would possibly remove replicas from live nodes instead of dead ones. This commit
+reverses the order to ensure that when nodes leave the cluster that the auto-expand-replica
+functionality only triggers after failing the shards on the removed nodes. This ensures that active
+shards on other live nodes are not failed if the primary resided on a now dead node.
+Instead, one of the replicas on the live nodes first gets promoted to primary, and the auto-
+expansion (removing replicas) only triggers in a follow-up step (but still same cluster state update).
+
+Relates to #30456 and follow-up of #30423

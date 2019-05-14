@@ -1,0 +1,10 @@
+DefaultMaxMessagesRecvByteBufAllocator support an option to ignore maybeMoreData
+
+Motivation:
+If large amounts of data is being transferred it is difficult to correlate the amount we attempt to read vs the maximum amount that the OS will actually buffer and deliver to the application. For exmaple some OSes may dynicamlly update the SO_RCVBUF size or otherwise dynamically adjust how much data is delieved to the application. In these circumstances it can reduce latency to just call read() on the socket another time to see if there is really any data remaining instead of giving up the maxMessagesPerRead quantum and going back to the selector to read later.
+
+Motifications:
+- Add DefaultMaxMessagesRecvByteBufAllocator#respectMaybeMoreData which provides a way to ignore the maybeMoreData function which may not account for the current data pending, and if it does this maybe racy.
+
+Result:
+Option to always use the full maxMessagesPerRead quantum before going back to the selector.

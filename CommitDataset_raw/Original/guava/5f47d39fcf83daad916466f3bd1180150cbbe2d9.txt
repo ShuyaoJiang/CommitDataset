@@ -1,0 +1,17 @@
+Standardise message format for "duplicate key" IllegalArgumentException thrown from ImmutableTable.Builder.build().
+
+Internally, ImmutableTable.Builder.build() delegates to two classes, {Dense,Sparse}ImmutableTable and these currently have inconsistent error messages when a duplicate key is detected.
+
+Prior to this CL, SparseImmutableTable had a message formatted like:
+  "Duplicate value for row=%rowKey%, column=%columnKey%: %newValue%, %oldValue%"
+Whereas DenseImmutableTable had:
+  "duplicate key: (%rowKey%, %columnKey%)"
+
+After this CL both classes will format the message like:
+  "Duplicate key: (row=%rowKey%, column=%columnKey%), values: [%newValue%, %oldValue%]."
+
+RELNOTES=Standardise message format for "duplicate key" IllegalArgumentException thrown from ImmutableTable.Builder.build().
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=220478817

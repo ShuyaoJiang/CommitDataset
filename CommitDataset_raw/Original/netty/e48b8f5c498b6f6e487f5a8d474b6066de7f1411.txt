@@ -1,0 +1,14 @@
+[#3539] Correctly handle EPOLLRDHUP
+
+Motivation:
+
+As we missed to correctly handle EPOLLRDHUP we produce an IOException which is unnessary. This leads
+to have exceptionCaught(...) methods called.
+
+Modifications:
+
+When EPOLLRDHUP was received just close the socket and fail all pending writes.
+
+Result:
+
+Correctly handle of EPOLLRDHUP and so not miss-leading exceptions.

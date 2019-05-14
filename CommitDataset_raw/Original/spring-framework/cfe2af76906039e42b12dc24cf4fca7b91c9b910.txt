@@ -1,0 +1,17 @@
+Use the type of the actual return value in @MVC
+
+The new @MVC support classes select a HandlerMethodArgumentResolver
+and a HandlerMethodReturnValueHandler statically, i.e. based on
+the signature of the method, which means that a controller method
+can't declare a more general return type like Object but actually
+return a more specific one, e.g.  String vs RedirectView, and
+expect the right handler to be used.
+
+The fix ensures that a HandlerMethodReturnValueHandler is selected
+based on the actual return value type, which is something that was
+supported with the old @MVC support classes. One consequence
+of the change is the selected HandlerMethodReturnValueHandler can
+no longer be cached but that matches the behavior of the old
+@MVC support classes.
+
+Issues: SPR-9218

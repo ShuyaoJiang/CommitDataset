@@ -1,0 +1,11 @@
+HTTP/2 Allow more time for EventLoopGroup to shutdown in test that use LocalChannel
+
+Motivation:
+The CI servers have reported leaks while building the HTTP/2 unit tests. The unit tests attempt to wait for the channels to be closed before exiting the test, but we should wait in case there are any tasks pending on the EventLoopGroup's task queues.
+
+Modifications:
+- Change the Future.sync() operations to Future.syncUninterruptibly()
+- HTTP/2 unit tests which use local channel should wait for 5 seconds before shutting down the EventLoopGroups
+
+Result:
+More likely that any cleanup related tasks will execute before the unit tests are shutdown.

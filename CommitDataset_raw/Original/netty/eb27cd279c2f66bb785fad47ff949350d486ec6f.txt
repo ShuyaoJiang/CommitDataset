@@ -1,0 +1,11 @@
+[#2494] Fix data curruption by ChannelTrafficShapingHandler
+
+Motivation:
+ChannelTrafficShapingHandler may corrupt inbound data stream by
+scheduling the fireChannelRead event.
+
+Modification:
+Always call fireChannelRead(...) and only suspend reads after it
+
+Result:
+No more data corruption

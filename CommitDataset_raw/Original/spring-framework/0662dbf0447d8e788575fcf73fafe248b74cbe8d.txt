@@ -1,0 +1,23 @@
+String decoding for text only vs any MIME type
+
+Follow-up to:
+https://github.com/spring-projects/spring-framework/commit/3d68c496f15c80a75711480a569cda1f7c64dc91
+
+StringDecoder can be created in text-only vs "*/*" mode which in turn
+allows a more intuitive order of client side decoders, e.g. SSE does
+not have to be ahead of StringDecoder.
+
+The commit also explicitly disables String from the supported types in
+Jackson2Decoder leaving it to the StringDecoder in "*/*" mode which
+comes after. This does not change the current arrangement since the
+the StringDecoder ahead having "*/*" picks up JSON content just the
+same.
+
+From a broader perspective this change allows any decoder to deal with
+String if it wants to after examining the content type be it the SSE
+or another, custom decoder. For Jackson there is very little value in
+decoding to String which works only if the output contains a single
+JSON string but will fail to parse anything else (JSON object/array)
+while StringDecoder in "*/*" mode will not fail.
+
+Issue: SPR-15374

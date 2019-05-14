@@ -1,0 +1,11 @@
+Use TAR instead of DOCKER build type before 6.7.0 (#40723)
+
+In 6.7.0 (#39378) we added a build type of DOCKER for the docker images, but
+unfortunately earlier versions do not understand this and will reject any
+transport messages that mention this build type.
+
+This commit fixes this by reporting TAR instead of DOCKER when talking to older
+nodes.
+
+Relates (but does not fix) #40511
+Relates #39378

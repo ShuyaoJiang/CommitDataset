@@ -1,0 +1,11 @@
+Http/2 RST_STREAM frame robustness
+
+Motivation:
+The Http2ConnectionHandler writeRstStream method allows RST_STREAM frames to be sent when we do not know about the stream and after a RST_STREAM frame has already been sent.  This may lead to sending frames when we should not according to the HTTP/2 spec. There is also the potential to notify the closeListener multiple times if the closeStream method is called multiple times.
+
+Modifications:
+- Prevent RST_STREAM from being sent if we don't know about the stream, or if we already sent the RST_STREAM.
+- Prevent the closeListener from being notified multiple times.
+
+Result:
+More robust writeRstStream logic in boundary conditions.

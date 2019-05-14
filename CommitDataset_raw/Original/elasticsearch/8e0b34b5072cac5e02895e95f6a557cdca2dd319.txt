@@ -1,0 +1,13 @@
+Override indexing plans
+
+Operations from a leader shard will be indexed into the engine with the
+origin set to primary. The problem is here is that then we have primary
+semantics in the engine such as assertions about sequence numbers being
+unassigned, and we do not have correct semantics for out-of-order
+delivery of operations (as we should on a following engine, whether or
+not it is primary since the ordering is determined from the
+leader). This commit handles this by always using the replica plan for
+indexing into a following engine, whether or not the engine is for a
+primary shard.
+
+Relates #3000

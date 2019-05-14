@@ -1,0 +1,11 @@
+Modify SpEL code gen to take account of null safe refs
+
+With this change the code generation for method and property
+references is modified to include branching logic in the
+case of null safe dereferencing (?.). This is complicated
+by the possible usage of primitives on the left hand side
+of the dereference. To cope with this case primitives are
+promoted to boxed types when this situation occurs enabling
+null to be passed as a possible result.
+
+Issue: SPR-16489

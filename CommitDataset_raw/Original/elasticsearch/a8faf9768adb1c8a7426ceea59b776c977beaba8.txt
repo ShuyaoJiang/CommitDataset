@@ -1,0 +1,13 @@
+Limit the scope of BouncyCastle dependency (#30358)
+
+Limits the scope of the runtime dependency on
+BouncyCastle so that it can be eventually removed.
+
+* Splits functionality related to reading and generating certificates
+and keys in two utility classes so that reading certificates and
+keys doesn't require BouncyCastle.
+* Implements a class for parsing PEM Encoded key material (which also
+adds support for reading PKCS8 encoded encrypted private keys).
+* Removes BouncyCastle dependency for all of our test suites(except
+for the tests that explicitly test certificate generation) by using
+pre-generated keys/certificates/keystores.

@@ -1,0 +1,12 @@
+Expose external refreshes through the stats API (#38643)
+
+Right now, the stats API only provides refresh metrics regarding
+internal refreshes. This isn't very useful and somewhat misleading for
+cluster administrators since the internal refreshes are not indicative
+of documents being available for search.
+
+In this PR I added a new metric for collecting external refreshes as
+they occur and exposing them through the stats API. Now, calling an
+endpoint for stats will yield external refresh metrics as well.
+
+Relates #36712

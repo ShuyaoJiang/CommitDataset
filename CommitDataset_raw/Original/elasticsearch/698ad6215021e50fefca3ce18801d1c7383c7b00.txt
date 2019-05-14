@@ -1,0 +1,10 @@
+Fix SAMLRealmTests#testReadIdpMetadataFromHttps failures
+
+This commit fixes failures in SAMLRealmTests#testReadIdpMetadataFromHttps. The main test failure is
+caused by the test relying too much on timing with a sleep; the sleep has been removed and replaced
+with an assert busy. The second issue that was fixed in the test, is the test makes two requests to
+the webserver but only one request is queued in the MockWebServer leading to a NPE.
+
+relates elastic/x-pack-elasticsearch#3667
+
+Original commit: elastic/x-pack-elasticsearch@6c7076c99081fb7adf2fa4193c7644f271e6db92

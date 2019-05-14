@@ -1,0 +1,12 @@
+Make Http2StreamFrameToHttpObjectCodec truly @Sharable (#8482)
+
+Motivation:
+The `Http2StreamFrameToHttpObjectCodec` is marked `@Sharable` but mutates
+an internal `HttpScheme` field every time it is added to a pipeline.
+
+Modifications:
+Instead of storing the `HttpScheme` in the handler we store it as an
+attribute on the parent channel.
+
+Result:
+Fixes #8480.

@@ -1,0 +1,8 @@
+_cluster/state should always return cluster_uuid (#30143)
+
+Currently, the only way to get the REST response for the `/_cluster/state`
+call to return the `cluster_uuid` is to request the `metadata` metrics,
+which is one of the most expensive response structures. However, external
+monitoring agents will likely want the `cluster_uuid` to correlate the
+response with other API responses whether or not they want cluster
+metadata.

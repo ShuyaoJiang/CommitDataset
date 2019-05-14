@@ -1,0 +1,20 @@
+Fix JibxMarshallerTests failing on Windows
+
+Before this change JibxMarshallerTests would fail on Windows with an
+error message explaining that JiBX compiler generated classes are not
+found on the classpath for binding with name 'binding'. Tests would
+execute well on Linux and OS X.
+
+Actual root cause of this bug is found to be in JiBX 1.1.5 release that
+is used to build Spring. The binding name can be explicitly specified in
+JiBX binding file. If omitted, when generating classes the JiBX compiler
+as fall-back mechanism tries to derive the binding name from the binding
+file name. That logic had a bug which gets manifested when configured
+binding file path has mixed Windows and *nix style file separators, as
+in case of JibxMarshallerTests being executed on a Windows platform.
+
+This commit resolves this issue by upgrading Spring's build from JiBX
+1.1.5 to 1.2.3, as the bug mentioned was fixed in JiBX 1.2. See JIBX-441
+for more details.
+
+Issue: SPR-8360

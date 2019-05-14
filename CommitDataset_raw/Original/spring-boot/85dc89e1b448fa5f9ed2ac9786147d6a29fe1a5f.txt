@@ -1,0 +1,15 @@
+Make serialization of @ConfigurationProperties beans more defensive
+
+Previously, serialization of a @ConfigurationProperties bean to JSON
+would fail if:
+
+- A property on the bean returned the bean (the bean was
+  self-referential)
+- An exception was thrown when attempting to retrieve a property's
+  value.
+
+This commit makes the serialization more defensive by skipping any
+property that is affected by either of the problems described above.
+Debug logging has been added to aid diagnosis of missing properties.
+
+Closes gh-10846

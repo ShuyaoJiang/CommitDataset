@@ -1,0 +1,11 @@
+Replace PhaseAfterStep with PhaseCompleteStep (#33398)
+
+This removes `PhaseAfterStep` in favor of a new `PhaseCompleteStep`. This step
+in only a marker that the `LifecyclePolicyRunner` needs to halt until the time
+indicated for entering the next phase.
+
+This also fixes a bug where phase times were encapsulated into the policy
+instead of dynamically adjusting to policy changes.
+
+Supersedes #33140, which it replaces
+Relates to #29823

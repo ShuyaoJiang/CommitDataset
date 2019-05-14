@@ -1,0 +1,11 @@
+Remove `flatSettings` support from request classes (#29560)
+
+As part of adding support for new API to the high-level REST client,
+we added support for the `flat_settings` parameter to some of our
+request classes. We added documentation that such flag is only ever
+read by the high-level REST client, but the truth is that it doesn't
+do anything given that settings are always parsed back into a `Settings`
+object, no matter whether they are returned in a flat format or not.
+
+It was a mistake to add support for this flag in the context of the
+high-level REST client, hence this commit removes it.

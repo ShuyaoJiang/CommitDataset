@@ -1,0 +1,7 @@
+Remove internal channel tracking in transports (#27711)
+
+This commit attempts to continue unifying the logic between different
+transport implementations. As transports call a `TcpTransport` callback
+when a new channel is accepted, there is no need to internally track
+channels accepted. Instead there is a set of accepted channels in
+`TcpTransport`. This set is used for metrics and shutting down channels.

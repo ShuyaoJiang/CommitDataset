@@ -1,0 +1,18 @@
+Fix ArrayStoreException caused by JerseyAutoConfiguration again
+
+This is a follow-on from the changes made in 2b7bf3e. In addition to the
+problematic use of @ConditionalOnClass that was addressed in 2b7bf3e,
+JerseyAutoConfiguration also used @ConditionalOnBean referencing a 
+Jersey class. This has the same problem when used on a class that
+implements WebApplicationInitializer. Implementing
+WebApplicationInitializer causes the class’s annotations to be
+introspected during servlet container initialiser processing. If a
+@ConditionalOnBean annotation references a Class that cannot be
+loaded an ArrayStoreException occurs.
+
+This commit updates JerseyAutoConfiguration to reference ResourceConfig
+as a String. This allows it annotations to be introspected without
+attempting to load a Jersey class that may not be on the classpath.
+
+Fixes gh-1733
+Fixes gh-1719

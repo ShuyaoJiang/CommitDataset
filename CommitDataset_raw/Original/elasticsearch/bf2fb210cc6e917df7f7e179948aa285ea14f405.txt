@@ -1,0 +1,6 @@
+[Tests] Relax allowed delta in extended_stats aggregation (#30569)
+
+The order in which double values are added in java can give different results
+for the sum, so we need to allow a certain delta in the test assertions. The
+current value was still a bit too low, resulting in rare test failures. This
+change increases the allowed margin of error by a factor of ten.

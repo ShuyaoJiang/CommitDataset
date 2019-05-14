@@ -1,0 +1,37 @@
+CCR: Replicate existing ops with old term on follower (#34412)
+
+Since #34288, we might hit deadlock if the FollowTask has more fetchers
+than writers. This can happen in the following scenario:
+
+Suppose the leader has two operations [seq#0, seq#1]; the FollowTask has
+two fetchers and one writer.
+
+1. The FollowTask issues two concurrent fetch requests: {from_seq_no: 0,
+num_ops:1} and {from_seq_no: 1, num_ops:1} to read seq#0 and seq#1
+respectively.
+
+2. The second request which fetches seq#1 completes before, and then it
+triggers a write request containing only seq#1.
+
+3. The primary of a follower fails after it has replicated seq#1 to
+replicas.
+
+4. Since the old primary did not respond, the FollowTask issues another
+write request containing seq#1 (resend the previous write request).
+
+5. The new primary has seq#1 already; thus it won't replicate seq#1 to
+replicas but will wait for the global checkpoint to advance at least
+seq#1.
+
+The problem is that the FollowTask has only one writer and that writer
+is waiting for seq#0 which won't be delivered until the writer completed.
+
+This PR proposes to replicate existing operations with the old primary
+term (instead of the current term) on the follower. In particular, when
+the following primary detects that it has processed an process already,
+it will look up the term of an existing operation with the same seq_no
+in the Lucene index, then rewrite that operation with the old term
+before replicating it to the following replicas. This approach is
+wait-free but requires soft-deletes on the follower.
+
+Relates #34288

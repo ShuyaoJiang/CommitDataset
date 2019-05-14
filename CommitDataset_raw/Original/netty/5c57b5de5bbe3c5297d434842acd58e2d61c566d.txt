@@ -1,0 +1,13 @@
+Check for errors without object allocation
+
+Motivation:
+
+At the moment we use SSL.getLastError() in unwrap(...) to check for error. This is very inefficient as it creates a new String for each check and we also use a String.startsWith(...) to detect if there was an error we need to handle.
+
+Modifications:
+
+Use SSL.getLastErrorNumber() to detect if we need to handle an error, as this only returns a long and so no String creation happens. Also the detection is much cheaper as we can now only compare longs. Once an error is detected the lately SSL.getErrorString(long) is used to conver the error number to a String and include it in log and exception message.
+
+Result:
+
+Performance improvements in OpenSslEngine.unwrap(...) due less object allocation and also faster comparations.

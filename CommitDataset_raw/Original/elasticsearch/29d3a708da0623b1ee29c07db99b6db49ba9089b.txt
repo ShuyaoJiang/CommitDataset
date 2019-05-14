@@ -1,0 +1,13 @@
+Fix BulkWithUpdatesIT and CloseIndexIT
+
+As of today the Close Index API does its best to close indices,
+but closing an index with ongoing recoveries might or might not
+be acknowledged depending of the values of the max seq number
+and global checkpoint at the time the
+TransportVerifyShardBeforeClose action is executed.
+
+These tests failed because they always expect that the index is
+correctly closed on the first try, which is not always the case.
+Instead we need to retry the closing until it succeed.
+
+Closes #37571

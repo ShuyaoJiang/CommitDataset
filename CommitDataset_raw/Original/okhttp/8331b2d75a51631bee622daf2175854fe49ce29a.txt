@@ -1,0 +1,12 @@
+Fix RealConnection to guard allocationLimit by connectionPool.
+
+I'm working towards making OkHttp limit itself to a single HTTP/2 connection
+to a single host. In this work I found we're not sufficiently safe on
+allocationLimit - connections are added to the pool when this is 0, and
+the value is updated without any synchronization.
+
+This change also reduces the visibility of some connection fields in
+RealConnection and organizes the fields into two sets: those that are
+immutable after connect and those that are guarded by connectionPool.
+
+https://github.com/square/okhttp/issues/373

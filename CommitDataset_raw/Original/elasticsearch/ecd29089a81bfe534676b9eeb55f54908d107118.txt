@@ -1,0 +1,12 @@
+Cache the score of the parent document in the nested agg (#36019)
+
+The nested agg can defer the collection of children if it is nested
+under another aggregation. In such case accessing the score in the children
+aggregation throws an error because the scorer has already advanced to the next
+parent. This change fixes this error by caching the score of the parent in the
+nested aggregation. Children aggregations that work on nested documents will be
+able to access the _score. Also note that the _score in this case is always the
+parent's score, there is no way to retrieve the score of a nested docs in aggregations.
+
+Closes #35985
+Closes #34555

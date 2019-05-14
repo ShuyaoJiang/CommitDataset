@@ -1,0 +1,248 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. 
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.client:  
+
+1.1. Add a class for rollup client. It allows to:
+
+	Instantiate rollup client  with rest high level client;
+	Put rollup job;
+	Put rollup job async;
+	Start rollup job;
+	Start rollup job async;
+	Stop rollup job;
+	Stop rollup job async;
+	Delete rollup job;
+	Delete rollup job async;
+	Get rollup job;
+	Get rollup job async;
+	Get search;
+	Search async;
+	Get rollup capabilities;
+	Get rollup capabilities  async get rollup caps request;
+	Get rollup index capabilities;
+	Get rollup index capabilities  async get rollup index caps request
+
+1.2. Add a class for rollup IT. It allows to:
+
+	Handle init;
+	Get index docs;
+	Handle test delete rollup job;
+	Handle test delete missing rollup job;
+	Handle test put start and get rollup job;
+	Handle test search;
+	Handle test search with type;
+	Handle test get missing rollup job;
+	Handle test get rollup caps;
+	Handle test get rollup index caps
+
+1.3. Add a class for rollup request converters. It allows to:
+
+	Instantiate rollup request converters;
+	Put job;
+	Start job;
+	Stop job;
+	Get job;
+	Delete job;
+	Get search;
+	Get rollup caps;
+	Get rollup index caps
+
+2. Changes to package org.elasticsearch.client.documentation:  
+
+2.1. Add a class for rollup documentation IT. It allows to:
+
+	Set up docs;
+	Handle test create rollup job;
+	Process  on response;
+	Process  on failure;
+	Handle test get rollup job;
+	Handle test start rollup job;
+	Handle test stop rollup job;
+	Handle test search;
+	Handle test get rollup caps;
+	Handle test get rollup index caps;
+	Handle test delete rollup job;
+
+3. Changes to package org.elasticsearch.client.rollup:  
+
+3.1. Add a class for put rollup job request. It allows to:
+
+	Instantiate put rollup job request  with rollup job config;
+	Get config;
+	Convert put rollup job request to X content;
+	Validate put rollup job request;
+	Check if put rollup job request equals;
+	Hash code
+
+3.2. Add a class for put rollup job request tests. It allows to:
+
+	Set up optional id;
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test require configuration
+
+4. Changes to package org.elasticsearch.client.rollup.job.config:  
+
+4.1. Add a class for date histogram group config. It allows to:
+
+	Instantiate date histogram group config  with date histogram interval;
+	Instantiate date histogram group config  with date histogram interval, delay date histogram interval and delay date histogram interval;
+	Validate date histogram group config;
+	Get field;
+	Get interval;
+	Get delay;
+	Get time zone;
+	Convert date histogram group config to X content;
+	Check if date histogram group config equals;
+	Hash code;
+	Process date histogram group config date histogram group config from X content
+
+4.2. Add a class for date histogram group config tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test validate null field;
+	Handle test validate empty field;
+	Handle test validate null interval;
+	Handle test validate;
+	Handle random date histogram group config
+
+4.3. Add a class for group config. It allows to:
+
+	Instantiate group config  with date histogram group config;
+	Instantiate group config  with date histogram group config, histogram group config, terms group config and terms group config;
+	Validate group config;
+	Get date histogram;
+	Get histogram;
+	Get terms;
+	Convert group config to X content;
+	Check if group config equals;
+	Hash code;
+	Process group config group config from X content
+
+4.4. Add a class for group config tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test validate null date histogram group config;
+	Handle test validate date histogram group config with errors;
+	Handle test validate histogram group config with errors;
+	Handle test validate terms group config with errors;
+	Handle test validate;
+	Handle random group config
+
+4.5. Add a class for histogram group config. It allows to:
+
+	Instantiate histogram group config;
+	Validate histogram group config;
+	Get interval;
+	Get fields;
+	Convert histogram group config to X content;
+	Check if histogram group config equals;
+	Hash code;
+	Process histogram group config histogram group config from X content
+
+4.6. Add a class for histogram group config tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test validate null fields;
+	Handle test validat empty fields;
+	Handle test validate negative interval;
+	Handle test validate zero interval;
+	Handle test validate;
+	Handle random histogram group config
+
+4.7. Add a class for metric config. It allows to:
+
+	Instantiate metric config  with metrics list;
+	Validate metric config;
+	Get field;
+	Get metrics;
+	Convert metric config to X content;
+	Check if metric config equals;
+	Hash code;
+	Process metric config metric config from X content
+
+4.8. Add a class for metric config tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test validate null field;
+	Handle test validate empty field;
+	Handle test validate null list of metrics;
+	Handle test validate empty list of metrics;
+	Handle test validate;
+	Handle random metric config
+
+4.9. Add a class for rollup job config. It allows to:
+
+	Instantiate rollup job config  with group config, metrics config list, timeout value and timeout value;
+	Validate rollup job config;
+	Get id;
+	Get group config;
+	Get metrics config;
+	Get timeout;
+	Get index pattern;
+	Get rollup index;
+	Get cron;
+	Get page size;
+	Convert rollup job config to X content;
+	Check if rollup job config equals;
+	Hash code;
+	Process rollup job config rollup job config from X content
+
+4.10. Add a class for rollup job config tests. It allows to:
+
+	Set up optional id;
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test validate null id;
+	Handle test validate empty id;
+	Handle test validate null index pattern;
+	Handle test validate empty index pattern;
+	Handle test validate match all index pattern;
+	Handle test validate index pattern matches rollup index;
+	Handle test validate same index and rollup patterns;
+	Handle test validate null rollup pattern;
+	Handle test validate empty rollup pattern;
+	Handle test validate null cron;
+	Handle test validate empty cron;
+	Handle test validate page size;
+	Handle test validate group or metrics;
+	Handle test validate group config with errors;
+	Handle test validate list of metrics with errors;
+	Handle random rollup job config;
+	Handle random cron
+
+4.11. Add a class for terms group config. It allows to:
+
+	Instantiate terms group config;
+	Validate terms group config;
+	Get fields;
+	Convert terms group config to X content;
+	Check if terms group config equals;
+	Hash code;
+	Process terms group config terms group config from X content
+
+4.12. Add a class for terms group config tests. It allows to:
+
+	Create test instance;
+	Do parse instance;
+	Handle supports unknown fields;
+	Handle test validate null fields;
+	Handle test validat empty fields;
+	Handle test validate;
+	Handle random terms group config
+
+5. Changes to package org.elasticsearch.xpack.rollup.rest:  
+

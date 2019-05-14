@@ -1,0 +1,16 @@
+Watcher: Mark test AwaitsFix
+
+Looks like sometimes it catches a throttled watch.
+
+```
+18:23:19 FAILURE 7.93s | SmokeTestWatcherWithSecurityIT.testSearchTransformHasPermissions <<< FAILURES!
+18:23:19    > Throwable elastic/x-pack-elasticsearch#1: java.lang.AssertionError:
+18:23:19    > Expected: is "executed"
+18:23:19    >      but: was "throttled"
+18:23:19    > 	at __randomizedtesting.SeedInfo.seed([C40A591DC5A7785E:ED7ABE031CA86AB3]:0)
+18:23:19    > 	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+18:23:19    > 	at org.elasticsearch.smoketest.SmokeTestWatcherWithSecurityIT.testSearchTransformHasPermissions(SmokeTestWatcherWithSecurityIT.java:189)
+18:23:19    > 	at java.lang.Thread.run(Thread.java:748)
+```
+
+Original commit: elastic/x-pack-elasticsearch@b96b6438d3fb85951a3f17fca955e9f214905b2c

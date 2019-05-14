@@ -1,0 +1,9 @@
+Retry ILM steps that fail due to SnapshotInProgressException (#37624)
+
+Some steps, such as steps that delete, close, or freeze an index, may fail due to a currently running snapshot of the index. In those cases, rather than move to the ERROR step, we should retry the step when the snapshot has completed.
+
+This change adds an abstract step (`AsyncRetryDuringSnapshotActionStep`) that certain steps (like the ones I mentioned above) can extend that will automatically handle a situation where a snapshot is taking place. When a `SnapshotInProgressException` is received by the listener wrapper, a `ClusterStateObserver` listener is registered to wait until the snapshot has completed, re-running the ILM action when no snapshot is occurring.
+
+This also adds integration tests for these scenarios (thanks to @talevy in #37552).
+
+Resolves #37541

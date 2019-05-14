@@ -1,0 +1,8 @@
+Fix `ShardSplittingQuery` to respect nested documents. (#27398)
+
+Today if nested docs are used in an index that is split the operation
+will only work correctly if the index is not routing partitioned or
+unless routing is used. This change fixes the query that selectes the docs
+to delete to also select all parents nested docs as well.
+
+Closes #27378

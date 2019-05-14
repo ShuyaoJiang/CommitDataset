@@ -1,0 +1,25 @@
+Scripted metric aggregations: add deprecation warning and system property to control legacy params (#31597)
+
+* Scripted metric aggregations: add deprecation warning and system property to control legacy params
+
+Scripted metric aggregation params._agg/_aggs are replaced by state/states context variables. By default the old params are still present, and a deprecation warning is emitted when Scripted Metric Aggregations are used. A new system property can be used to disable the legacy params. This functionality will be removed in a future revision.
+
+* Fix minor style issue and docs test failure
+
+* Disable deprecated params._agg/_aggs in tests and revise tests to use state/states instead
+
+* Add integration test covering deprecated scripted metrics aggs params._agg/_aggs access
+
+* Disable deprecated params._agg/_aggs in docs integration tests and revise stored scripts to use state/states instead
+
+* Revert unnecessary migrations doc change
+
+A relevant note should be added in the changes destined for 7.0; this PR is going to be backported to 6.x.
+
+* Replace deprecated _agg param bwc integration test with a couple of unit tests
+
+* Fix compatibility test after merge
+
+* Rename backwards compatibility system property per code review feedback
+
+* Tweak deprecation warning text per review feedback

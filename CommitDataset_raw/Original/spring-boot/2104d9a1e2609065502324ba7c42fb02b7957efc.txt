@@ -1,0 +1,11 @@
+Prevent failure of web app with parent context
+
+ServerProperties formerly had an @OnMissingBeanCondition
+that didn't restrict the hierarchy. It also asserts that
+the current context (not including parents) contains such
+a bean. This led to an inevitable failure when there was
+an existing instance in the parent context.
+
+Fixed by a) searching only the current context, b) not
+adding a ServerProperties bean if the context is not a
+web app.

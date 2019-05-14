@@ -1,0 +1,16 @@
+Refactor WebSessionStore
+
+- Add WebSessionStore.createWebSession.
+
+- Remove remove WebSessionStore.changeSessionId
+
+- Add WebSessionStore updateLastAccessTime which allows updating the
+WebSession lastAccessTime without exposing a method on WebSession in
+an implementation independent way.
+
+- Remove WebSessionStore.storeSession. This method is not necessary
+since the WebSession that is returned allows saving the WebSession.
+Additionally, it is error prone since the wrong type might be passed
+into it.
+
+Issue: SPR-15875, 15876

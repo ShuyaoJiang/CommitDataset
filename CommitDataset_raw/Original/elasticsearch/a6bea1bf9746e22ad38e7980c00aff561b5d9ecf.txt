@@ -1,0 +1,6 @@
+testMockFailToSendNoConnectRule should wait for connection close to bubble up and disconnect the node
+
+#25521 changed channel closing to be handled async on anything but transport stop. This means it may take a while before
+calling `connection.close()` and the node being removed from the `connectedNodes` list (but the connection is immediately unusuable).
+
+Fixes #25686

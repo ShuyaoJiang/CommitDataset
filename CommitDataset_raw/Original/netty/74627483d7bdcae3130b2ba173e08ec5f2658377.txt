@@ -1,0 +1,10 @@
+[#3724] HTTP/2 Headers END_STREAM results in RST_STREAM
+
+Motivation:
+If headers are sent on a stream that does not yet exist and the END_STREAM flag is set we will send a RST_STREAM frame. We should send the HEADERS frame and no RST_STREAM.
+
+Modifications:
+DefaultHttp2RemoteFlowController should allow frames to be sent if stream is created in the 'half closed (local)' state.
+
+Result:
+We can send HEADERS frame with the END_STREAM flag sent without sending a RST_STREAM frame.

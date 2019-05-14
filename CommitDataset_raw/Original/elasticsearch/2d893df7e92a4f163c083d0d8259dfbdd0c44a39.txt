@@ -1,0 +1,16 @@
+Add better authorization for scroll requests and remove signing (elastic/x-pack-elasticsearch#1416)
+
+This commit adds better security for scroll requests in that they are now tied to a single user as
+we only authorize the request that creates the scroll. This is accomplished by adding a
+SearchOperationListener that listens for new scroll contexts and stores the authentication on the
+ScrollContext. Then upon
+retrieval of the search context for a query or fetch, the current authentication is compared to the
+authentication that was present when the scroll context was created. If the current authentication
+belongs to a different user, then a SearchContextMissingException will be thrown to prevent leaking
+a valid vs invalid scroll id.
+
+Additionally, signing of a scroll id is only performed when there is a older node in the cluster
+that would expect the scroll id to be signed. Once this is backported to 5.x, we can remove this
+bwc layer for 6.0/master.
+
+Original commit: elastic/x-pack-elasticsearch@0e5dcafd3270049b0cca35b16cd51a490da60f37

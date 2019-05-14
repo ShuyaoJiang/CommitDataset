@@ -1,0 +1,8 @@
+Add dedicated retention lease exceptions (#38754)
+
+When a retention lease already exists on an add retention lease
+invocation, or a retention lease is not found on a renew retention lease
+invocation today we throw an illegal argument exception. This puts a
+burden on the caller to catch that specific exception and parse the
+message. This commit relieves the burden from the caller by adding
+dedicated exception types for these situations.

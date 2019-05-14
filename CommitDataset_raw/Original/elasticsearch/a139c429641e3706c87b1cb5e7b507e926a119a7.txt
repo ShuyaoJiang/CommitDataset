@@ -1,0 +1,7 @@
+Build: Fix test task to explicitly depend on testClasses task (#28490)
+
+Gradle 4.5 now hides immutable task dependencies. We previously copied
+the existing dependencies from the builtin test task to the
+randomizedtesting task. This commit adds testClasses as an extra
+dependency of the randomizedtesting task, to ensure the classes are
+built.

@@ -1,0 +1,15 @@
+Improve LDAP auto-configuration conditions
+
+At present, auto-configuration of `LdapContextSource` is conditional on
+presence of a `ContextSource` bean. However, there are valid use cases
+which require multiple `ContextSource` bean, for instance
+`PooledContextSource`. With the current arrangement, the
+auto-configuration of `LdapContextSource` will back off if user provides
+a `PooledContextSource` bean, while it would still be reasonable to
+reuse the auto-configured `LdapContextSource`.
+
+This commit improves `LdapContextSource` factory method return value and
+condition to back off only if users actually provide a
+`LdapContextSource` bean themselves.
+
+See gh-13143

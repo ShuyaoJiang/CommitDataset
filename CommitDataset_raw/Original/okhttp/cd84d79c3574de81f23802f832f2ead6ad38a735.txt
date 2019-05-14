@@ -1,0 +1,12 @@
+OkHostnameVerifier: Don't fall back to CN verification. (#3764)
+
+The use of Common Name was deprecated in RFC 2818 (May 2000), section 3.1:
+
+  Although the use of the Common Name is existing practice, it is
+  deprecated and Certification Authorities are encouraged to use the
+  dNSName instead.
+
+In 2017, Chrome 58, Firefox 48, and Opera 45 web browsers removed this
+fallback, with Chrome leaving it configurable for enterprise deployments
+(see https://www.chromestatus.com/feature/4981025180483584).
+Android is removing it in http://r.android.com/581382 .

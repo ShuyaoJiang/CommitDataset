@@ -1,0 +1,13 @@
+ingest: support simulate with verbose for pipeline processor (#33839)
+
+* ingest: support simulate with verbose for pipeline processor
+
+This change better supports the use of simulate?verbose with the
+pipeline processor. Prior to this change any pipeline processors
+executed with simulate?verbose would not show all intermediate 
+processors for the inner pipelines.
+
+This changes also moves the PipelineProcess and TrackingResultProcessor
+classes to enable instance checks and to avoid overly public classes.
+As well this updates the error message for when cycles are detected
+in pipelines calling other pipelines. 

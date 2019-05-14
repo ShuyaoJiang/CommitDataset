@@ -1,0 +1,1 @@
+Optimize PairedStatsAccumulator.addAll(PairedStats). If we update the xStats before we update sumOfProductsOfDeltas, instead of after, so that we use the new value of (values.xStats().mean() - xStats.mean()) instead of the old value, then we absorb two of the factors in the product, and save ourselves a multiplication and a division.

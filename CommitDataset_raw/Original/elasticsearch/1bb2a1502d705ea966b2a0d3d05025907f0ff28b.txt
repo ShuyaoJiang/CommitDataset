@@ -1,0 +1,9 @@
+Preserve thread context during authentication. (#34290)
+
+There may be values in the thread context that ought to be preseved
+for later use, even if one or more realms perform asynchronous
+authentication.
+
+This commit changes the AuthenticationService to wrap the potentially
+asynchronous calls in a ContextPreservingActionListener that retains
+the original thread context for the authentication.

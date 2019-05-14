@@ -1,0 +1,45 @@
+Merge branch '3.1.x'
+
+Reconciled all 3.1.1 dev against 3.1.x and master (3.2.x) branches.
+
+From this point forward, all 3.1.1 dev should happen directly against
+3.1.x, and we will periodically merge those changes into master.
+
+Note that when these merges take place, there will be a conflict
+among any files containing version numbers, such as build.properties
+and pom files.  Use `git rerere` to record the conflict resolution
+strategy for future merges, avoiding redundant work.
+
+    $ git config --global rerere.enabled 1
+    $ git checkout master
+    $ git merge 3.1.x      # conflicts
+    $ git checkout master  # take master version of all affected files
+    $ git commit           # conflict resolution strategy is remembered
+
+See http://progit.org/2010/03/08/rerere.html
+
+Conflicts:
+	build.properties
+	org.springframework.aop/pom.xml
+	org.springframework.asm/pom.xml
+	org.springframework.aspects/pom.xml
+	org.springframework.beans/pom.xml
+	org.springframework.context.support/pom.xml
+	org.springframework.context/pom.xml
+	org.springframework.core/pom.xml
+	org.springframework.expression/pom.xml
+	org.springframework.instrument.tomcat/pom.xml
+	org.springframework.instrument/pom.xml
+	org.springframework.integration-tests/pom.xml
+	org.springframework.jdbc/pom.xml
+	org.springframework.jms/pom.xml
+	org.springframework.orm/pom.xml
+	org.springframework.oxm/pom.xml
+	org.springframework.spring-library/pom.xml
+	org.springframework.spring-parent/pom.xml
+	org.springframework.test/pom.xml
+	org.springframework.transaction/pom.xml
+	org.springframework.web.portlet/pom.xml
+	org.springframework.web.servlet/pom.xml
+	org.springframework.web.struts/pom.xml
+	org.springframework.web/pom.xml

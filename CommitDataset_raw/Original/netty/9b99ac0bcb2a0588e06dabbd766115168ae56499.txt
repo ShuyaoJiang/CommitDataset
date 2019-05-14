@@ -1,0 +1,13 @@
+[#2771] Correctly handle constructing of EmbeddedChannel
+
+Motivation:
+
+Because of an incorrect logic in teh EmbeddedChannel constructor it is not possible to use EmbeddedChannel with a ChannelInitializer as constructor argument. This is because it adds the internal LastInboundHandler to its ChannelPipeline before it register itself to the EventLoop.
+
+Modifications:
+
+First register self to EventLoop before add LastInboundHandler to the ChannelPipeline.
+
+Result:
+
+It's now possible to use EmbeddedChannel with ChannelInitializer.

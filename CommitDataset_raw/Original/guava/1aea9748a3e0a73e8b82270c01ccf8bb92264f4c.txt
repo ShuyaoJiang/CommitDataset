@@ -1,0 +1,9 @@
+Make the tests for Quantiles use up-to-date Truth technology. My main motiviation here is to stop using hasValuesWithin, which is going away. While I'm at it, let's start using comparingValuesUsing for the Map assertions to avoid the unpleasant loop, and inline the helpers, which aren't really useful now that we've done that.
+
+I also fixed testPercentiles_index_computeInPlace() which was being slow (about 100s on my machine, and it was annotated as incompatible with android just for slowness) because it was doing a lot of stuff which wasn't really necessary.
+
+I also added a jsr305 dep which blaze complained was missing if I didn't :-/.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=148237028

@@ -1,0 +1,13 @@
+WebSocketClientHandshaker.rawPath(URI) should use the raw query
+
+Motivation:
+
+If the wsURL contains an encoded query, it will be decoded when generating the raw path.  For example if the wsURL is http://test.org/path?a=1%3A5, the returned raw path would be /path?a=1:5
+
+Modifications:
+
+Use wsURL.getRawQuery() rather than wsURL.getQuery()
+
+Result:
+
+rawPath will now return /path?a=1%3A5

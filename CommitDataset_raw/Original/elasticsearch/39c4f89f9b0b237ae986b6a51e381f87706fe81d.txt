@@ -1,0 +1,8 @@
+Move Watcher versioning setting to meta field (#30832)
+
+The .watcher-history-* template is currently using a plugin-custom index setting xpack.watcher.template.version,
+which prevents this template from being installed in a mixed OSS / X-Pack cluster, ultimately
+leading to the situation where an X-Pack node is constantly spamming an OSS master with (failed)
+template updates. Other X-Pack templates (e.g. security-index-template or security_audit_log)
+achieve the same versioning functionality by using a custom _meta field in the mapping instead.
+This commit switches the .watcher-history-* template to use the _meta field instead.

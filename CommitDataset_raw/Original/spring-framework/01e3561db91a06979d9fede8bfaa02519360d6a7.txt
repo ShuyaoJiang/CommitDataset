@@ -1,0 +1,15 @@
+Support RouterFunction in @EnableWebFlux
+
+This commit removes the RouterFunctions.toHandlerMapping method, in
+favor of native support for RouterFunctions in @EnableWebFlux
+configuration classes.
+
+In order to accomplish this, the HandlerStrategies components has been
+repurposed to only be used for the "bare-bones" HttpHandler, while the
+(newly introduced) RouterFunctionMapping uses the strategies as exposed
+through WebFluxConfigurationSupport.
+
+Furthermore, this commit also introduces support for testing
+RouterFunctions without resorting to an application context.
+
+Issue: SPR-15536

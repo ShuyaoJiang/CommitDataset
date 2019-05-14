@@ -1,0 +1,12 @@
+Make GwtPlatform available to server-side applications.
+It's not actually used there, but dev mode clients do use it, and it won't be available to them unless it's compiled by javac as part of our GWT targets.
+
+One complication: The obvious way of doing this requires the server-side code to depend on the GWT target containing @GwtScriptOnly.
+This might be OK (though we'd have to check with at least one project, whose tests flag the new dependency), but it turns out to be unnecessary:
+@GwtScriptOnly has an effect only on the supersource class (which makes sense, since it's the supersource version that's the one being used in JavaScript only -- the GwtPlatform files I'm editing here are more like @UseThisInsteadIfNotGwtScript).
+Thus, I can remove it from these versions of GwtPlatform.
+
+http://code.google.com/p/guava-libraries/issues/detail?id=1328
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=43892696

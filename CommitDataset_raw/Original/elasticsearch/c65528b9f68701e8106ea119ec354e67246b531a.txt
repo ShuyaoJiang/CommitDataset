@@ -1,0 +1,19 @@
+Watcher: Ensure state is cleaned properly in watcher life cycle service (elastic/x-pack-elasticsearch#3770)
+
+The WatcherLifeCycleService is responsible for deciding if watches need
+to be reloaded while running. In order to do this, the service stores
+the currently local shard allocation ids in a List.
+
+This data structure however was not properly updated all the time, when
+it should have been - for example when a master node is not available.
+
+This lead to unintended reloads, even though there was no change in the
+allocated shards. This in turn lead to unwanted executions and unwanted
+loading of triggered watches.
+
+This commit should also fix one of the more nasty ongoing test failures,
+where the test returns with an exception that only parts of watcher have
+been started. The AbstractWatcherIntegrationTestCase now properly waits
+until watcher is started before starting the test case itself.
+
+Original commit: elastic/x-pack-elasticsearch@097f12a900b879d3a9fab5aeaf57f5b4be10def0

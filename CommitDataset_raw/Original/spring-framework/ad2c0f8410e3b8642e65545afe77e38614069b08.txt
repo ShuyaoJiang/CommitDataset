@@ -1,0 +1,12 @@
+Improve @Nullable annotation
+
+This commit makes Spring @Nullable annotation leveraging
+JSR 305 @TypeQualifierNickname + @Nonnull(when= When.MAYBE)
+instead of directly using @javax.annotation.Nullable which
+seems not designed to be used as a meta-annotation.
+
+It also removes @TypeQualifierDefault since the purpose of
+this annotation when applied at method level is to only
+change return value nullability, not parameters one.
+
+Issue: SPR-15540

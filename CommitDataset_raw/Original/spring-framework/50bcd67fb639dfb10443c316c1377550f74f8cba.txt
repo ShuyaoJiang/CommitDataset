@@ -1,0 +1,15 @@
+Relax SPR-13867 changes for ResourceHttpRequestHandler
+
+Prior to this change, SPR-13867 made sure that any class extending
+WebContentGenerator would not overwrite existing HTTP "Cache-Control"
+response headers - set by a filter, a Controller handler, etc.
+
+This caused issues with resource handling, since specifying a cache
+configuration there would not overwrite default headers set by filters,
+for example by Spring Security.
+
+This commit restricts the previous changes to the
+RequestMappingHandlerAdapter, in order to avoid overwriting header set
+by a filter or a Controller handler in those cases.
+
+Issue: SPR-14005

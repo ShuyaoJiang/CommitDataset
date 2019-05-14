@@ -1,0 +1,13 @@
+Not use safeRelease(...) but release(...) to release non-readable holders to ensure we not mask errors.
+
+Motivation:
+
+AbstractChannel attempts to "filter" messages which are written [1]. A goal of this process is to copy from heap to direct if necessary. However implementations of this method [2][3] may translate a buffer with 0 readable bytes to EMPTY_BUFFER. This may mask a user error where an empty buffer is written but already released.
+
+Modifications:
+
+Replace safeRelease(...) with release(...) to ensure we propagate reference count issues.
+
+Result:
+
+Fixes [#7383]

@@ -1,0 +1,17 @@
+Observable.concat: refactor varargs to overloads
+
+https://github.com/Netflix/RxJava/issues/359 Varargs cause compiler warnings
+
+As part of this I also changed this:
+
+```java
+public static <T> Observable<T> concat(Observable<Observable<? extends T>> observables)
+```
+
+to
+
+```java
+public static <T> Observable<T> concat(Observable<Observable<T>> observables)
+```
+
+I documented the reasoning of this at https://github.com/Netflix/RxJava/issues/360#issuecomment-24121217

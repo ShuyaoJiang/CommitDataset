@@ -1,0 +1,35 @@
+Add or avoid proxy configurations for integration tests
+
+The Maven POM does all the dependency resolutions for the
+spring-boot-antlib project. Delegating this task to Ivy, which is
+buried deep in the Antrun/Antunit part of the build, makes any kind
+of proxy configuration much more complex.
+The ivysettings.xml already has the local M2 repository configured,
+but because the folder "repository" is missing, the artifacts, already
+downloaded by Maven cannot be resolved from this location.
+The Spring and Maven Central repositories should be removed from the
+ivysettings.xml files in order to force all resolves to be done through
+the local M2 repository. The POM of joda-time version 2.8.1 has an
+optional dependency to joda-convert 1.2, which lets the Ivy resolve
+process fail, because this version of the joda-convert library was
+not resolved by any of the Maven POMs. It seems as if Ivy does not
+respect the optional scope, defined in the joda-time POM.
+
+Pass proxy settings to the forked process to make the Gradle distribution download work
+
+Create a gradle.properties file for each Gradle integration test and writes the forking
+process' proxy settings as systemProp.http(s).Host/Port to the properties file.
+This configures the external process with the right proxy settings to let it download
+the Gradle distribution via the HTTP proxy server.
+
+Added a hint for Windows users to get the core.autocrlf setting right
+
+When the core.autocrlf setting under Windows is set to false for example
+All files are not converted regarding their EOL characters to the
+Windows format with CRLF at a line's end. There is a checkstyle
+validation that checks that all files have the system's line endings
+and in some test-cases the value from the system property "line.ending"
+is used to check test output. So without the conversion, those checks
+are going to fail, resulting in build errors.
+
+Fixes gh-4367, fixes gh-3816

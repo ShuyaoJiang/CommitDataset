@@ -1,0 +1,13 @@
+Avoid repeating the same field and hiding it (#8335)
+
+Motivation
+
+The EpollChannelConfig (same for KQueues) and its subclasses repeatetly declare their own channel field which leads to a 3x repetition for each config instance. Given the fields are protected or package-private it's exposing the code code to "field hiding" bugs.
+
+Modifications
+
+Use the the existing protected channel field from the DefaultChannelConfig class and simply cast it when needed.
+
+Result
+
+Fixes #8331

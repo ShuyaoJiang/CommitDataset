@@ -1,0 +1,10 @@
+Fix AbstractRequestBodyPublisher to comply with the spec
+
+As per specification "The Subscription MUST allow the Subscriber to
+call Subscription.request synchronously from within onNext or
+onSubscribe". With the current implementation if Subscription.request
+is called more than once when Subscriber.onSubscribe ISE will be
+thrown - java.lang.IllegalStateException: DEMAND.
+With this fix the implementation will not throw ISE and will allow
+many invocations of Subscription.request when
+Subscriber.onSubscribe.

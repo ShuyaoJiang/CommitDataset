@@ -1,0 +1,15 @@
+Server-side session support
+
+This commit adds initial support for a maintaining a server-side
+session with attributes across HTTP requests. The WebSession
+abstraction can be accessed via WebServerExchange from a WebFilter or
+the target WebHandler.
+
+The session sub-package contains additional abstractions for creating
+and managing sessions providing a basis for extensibility (e.g. Spring
+Session). Those include WebSessionManager, SessionIdStrategy, and
+SessionStore along with a cookie-based session id strategy and an
+in-memory session store in use by default.
+
+Note that the current API does not provide a way to invalidate or
+re-create the session from server side code.

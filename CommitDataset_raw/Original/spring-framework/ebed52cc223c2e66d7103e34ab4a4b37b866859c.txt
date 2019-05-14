@@ -1,0 +1,14 @@
+Favor local, composed annotations in AnnotatedElementUtils
+
+This commit updates the "get semantics" search algorithm used in
+`AnnotatedElementUtils` so that locally declared 'composed annotations'
+are favored over inherited annotations.
+
+Specifically, the internal `searchWithGetSemantics()` method now
+searches locally declared annotations before searching inherited
+annotations.
+
+All TODOs in `AnnotatedElementUtilsTests` have been completed, and all
+ignored tests have been reinstated.
+
+Issue: SPR-11598

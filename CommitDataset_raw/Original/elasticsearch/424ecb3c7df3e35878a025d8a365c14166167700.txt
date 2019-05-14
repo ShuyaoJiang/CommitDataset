@@ -1,0 +1,13 @@
+Add ability to index prefixes on text fields (#28290)
+
+This adds the ability to index term prefixes into a hidden subfield, enabling prefix queries to be run without multitermquery rewrites. The subfield reuses the analysis chain of its parent text field, appending an EdgeNGramTokenFilter. It can be configured with minimum and maximum ngram lengths. Query terms with lengths outside this min-max range fall back to using prefix queries against the parent text field.
+
+The mapping looks like this:
+
+"my_text_field" : {
+"type" : "text",
+"analyzer" : "english",
+"index_prefix" : { "min_chars" : 1, "max_chars" : 10 }
+}
+
+Relates to #27049

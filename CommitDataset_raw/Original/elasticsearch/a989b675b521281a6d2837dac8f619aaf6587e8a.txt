@@ -1,0 +1,8 @@
+Remove NPE from IndexFollowingIT (#35717)
+
+Currently there is a common NPE in the IndexFollowingIT that does not
+indicate the test failing. This is when a cluster state listener is
+called and certain index metadata is not yet available.
+
+This commit checks that the metadata is not null before performing the
+logic that depends on the metadata.

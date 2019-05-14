@@ -1,0 +1,8 @@
+Fix Token Service retry mechanism (#39639)
+
+Fixes several errors of the token retry logic:
+
+* not checking for backoff.hasNext() before calling backoff.next()
+* checking for backoff.hasNext() without calling backoff.next()
+* not preserving the context on the retry
+* calling scheduleWithFixedDelay instead of schedule

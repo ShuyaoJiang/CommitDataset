@@ -1,0 +1,21 @@
+[ML] Enable overall buckets aggregation at a custom bucket span (elastic/x-pack-elasticsearch#2782)
+
+For the purpose of getting this API consumed by our UI, returning
+overall buckets that match the job's largest `bucket_span` can
+result in too much data. The UI only ever displays a few buckets
+in the swimlane. Their span depends on the time range selected and
+the screen resolution, but it will only ever be a relatively
+low number.
+
+This PR adds the ability to aggregate overall buckets in a user
+specified `bucket_span`. That `bucket_span` may be equal or
+greater to the largest job's `bucket_span`. The `overall_score`
+of the result overall buckets is the max score of the
+corresponding overall buckets with a span equal to the job's
+largest `bucket_span`.
+
+The implementation is now chunking the bucket requests
+as otherwise the aggregation would fail when too many buckets
+are matching.
+
+Original commit: elastic/x-pack-elasticsearch@981f7a40e5d733c755992a83171891cc332d366d

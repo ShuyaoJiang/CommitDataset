@@ -1,0 +1,15 @@
+Relax -aspects dependence on -test (compile=>test)
+
+The spring-aspects Maven pom had an incorrect compile-scoped dependence
+on spring-test. In fact, spring-aspects only uses spring-test in its
+unit tests. The pom has been updated accordingly, meaning that use
+of spring-aspects in Maven-based applications will no longer require
+spring-test on the classpath at runtime.
+
+ivy.xml metadata did not need updating, as it was already correct.
+
+This change is only necessary on the 3.1.x line; in 3.2.x (master) Maven
+poms are generated automatically from Gradle dependency metadata, which
+is also already correct.
+
+Issue: SPR-9048

@@ -1,0 +1,13 @@
+Directly receive remote address when call accept(...)
+
+Motivation:
+
+There is a small race in the native transport where an accept(...) may success but a later try to obtain the remote address from the fd may fail is the fd is already closed.
+
+Modifications:
+
+Let accept(...) directly set the remote address.
+
+Result:
+
+No more race possible.

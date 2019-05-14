@@ -1,0 +1,10 @@
+NIO autoReadClear should also clear the SelectionKey
+
+Motivation:
+Prior to 5b48fc284ebe85ca4974985e3be005d37626e980 setting readPending to false when autoReadClear was called was enough because when/if the EventLoop woke up with a read event we would first check if readPending was true and if it is not, we would return early. Now that readPending will only be set in the EventLoop it is not necessary to check readPending at the start of the read methods, and we should instead remove the OP_READ from the SelectionKey when we also set readPending to false.
+
+Modifications:
+- autoReadCleared should call AbstractNioUnsafe.removeReadOp
+
+Result:
+NIO is now consistent with EPOLL and removes the READ operation on the selector when autoRead is cleared.

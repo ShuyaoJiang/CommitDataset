@@ -1,0 +1,12 @@
+SQL: Fix bug with JDBC timezone setting and DATE type (#39978)
+
+Previously, JDBC's REST call to the server was always sending UTC
+instead of the timezone passed through connection string/properties.
+
+Moreover the conversion to java.sql.Date was problematic as a
+calculation on the epoch millis was used to set the time to 00:00:00.000
+and the timezone info was lost. This caused the resulting java.sql.Date
+object which is always using the JVM's timezone (no matter what timezone
+setting is used in the connection string/properties) to be wrongly created.
+
+Fixes: #39915

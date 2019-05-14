@@ -1,0 +1,18 @@
+Fix sporadic assertion failure in SingleThreadEventLoopTest
+
+Motivation:
+
+SingleThreadEventLoopTest.testScheduleTaskAtFixedRate() fails often due to:
+
+- too little tolerance
+- incorrect assertion (it compares only with the previous timestamp)
+
+Modifications:
+
+- Increase the timestamp difference tolerance from 10ms to 20ms
+- Improve the timestamp assertion so that the comparison is performed against the first recorded timestamp
+- Misc: Fix broken Javadoc tag
+
+Result:
+
+More build stability

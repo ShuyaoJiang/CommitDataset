@@ -1,0 +1,9 @@
+fix UpdateSettingsRequestStreamableTests.mutateInstance (#39386)
+
+Mutations of the timeout values were using string-representations.
+
+This resulted in very rare cases where the original timeout value was
+represented as something like "0ms" and the new random time-value generated
+was "0s". Although their string representations differ, their underlying
+TimeValue does not. This resulted in `-Dtests.seed=7F4C034C43C22B1B` to
+fail.

@@ -1,0 +1,11 @@
+Scheduler.scheduleRecursive
+
+Make recursive scheduling a first-class citizen without needing to refer to "this" which doesn't work inside lambdas (Java8/Scala/etc).
+
+        Schedulers.newThread().scheduleRecursive(new Action1<Recurse>() {
+            @Override
+            public void call(Recurse r) {
+                System.out.println("do stuff on thread: " + Thread.currentThread() + " Time: " + System.nanoTime());
+                r.schedule(100, TimeUnit.MILLISECONDS);
+            }
+        });

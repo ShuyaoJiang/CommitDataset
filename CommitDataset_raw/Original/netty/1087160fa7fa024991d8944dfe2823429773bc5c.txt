@@ -1,0 +1,10 @@
+[#2363] SelectedSelectionKeySet may hold strong reference to SelectionKey after Channel is closed
+
+Motivation:
+Because we not null out the array entry in the SelectionKey[] which is produced by SelectedSelectionKeySet.flip() we may end up with a few SelectionKeyreferences still hanging around here even after the Channel was closed. As these entries may be present at the end of the SelectionKey[] which is never updated for a long time as not enough SelectionKeys are ready.
+
+Modifications:
+Once we access the SelectionKey out of the SelectionKey[] we directly null it out.
+
+Result:
+Reference can be GC'ed right away once the Channel was closed.

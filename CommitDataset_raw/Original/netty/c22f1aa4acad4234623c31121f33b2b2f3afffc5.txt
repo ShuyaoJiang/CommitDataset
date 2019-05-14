@@ -1,0 +1,10 @@
+Clear selectedKeys in OioSctpChannel.doReadMessages
+
+Motivation:
+The fix for https://github.com/netty/netty/issues/3884 breaks SctpEchoTest because Selector.select will always return 0 if you do not clear last selectedKeys.
+
+Modifications:
+Clear readSelector.selectedKeys() if it is not empty.
+
+Result:
+SctpEchoTest is green again.

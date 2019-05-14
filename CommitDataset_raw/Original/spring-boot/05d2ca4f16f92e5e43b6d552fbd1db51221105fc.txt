@@ -1,0 +1,10 @@
+Allow bean binding if property binding fails
+
+Update `Binder` so that if a property exists, but it cannot be converted
+to required type, bean binding is attempted.
+
+Prior to this commit, if a user happened to have an environment
+variable named `SERVER` the binder would fail when trying to directly
+convert its `String` value into a `ServerProperties`
+
+Fixes gh-10945

@@ -1,0 +1,14 @@
+Ensure EpollSocketChannel.localAddress() returns correct address after connect(...) call.
+
+Motivation:
+
+We missed to correctly retrieve the localAddress() after we called Socket.connect(..) and so the user would always see an incorrect address when calling EpollSocketChannel.localAddress().
+
+Modifications:
+
+- Ensure we always retrieve the localAddress() after we called Socket.connect(...) as only after this we will be able to receive the correct address.
+- Add unit test
+
+Result:
+
+Correct and consistent behaviour across different transports (NIO/OIO/EPOLL).

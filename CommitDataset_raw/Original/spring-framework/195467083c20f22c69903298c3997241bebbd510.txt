@@ -1,0 +1,5 @@
+Drop JpaSystemException(PersistenceException) constructor to avoid ambiguity in HibernateJpaVendorAdapter
+
+Hibernate 5.2's HibernateException extends PersistenceException, leading to a different constructor compiled into the bytecode, breaking compatibility with Hibernate 5.0 at runtime.
+
+Issue: SPR-13827

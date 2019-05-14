@@ -1,0 +1,14 @@
+Remove usage of own Atomic*FieldUpdater in favor of JDKs
+
+Motivation:
+
+In later Java8 versions our Atomic*FieldUpdater are slower then the JDK implementations so we should not use ours anymore. Even worse the JDK implementations provide for example an optimized version of addAndGet(...) using intrinsics which makes it a lot faster for this use-case.
+
+Modifications:
+
+- Remove methods that return our own Atomic*FieldUpdaters.
+- Use the JDK implementations everywhere.
+
+Result:
+
+Faster code.

@@ -1,0 +1,18 @@
+Graph.java: break out mutation- and edge-specific methods into subinterfaces:
+* Network.java: edge-specific methods (extends Graph)
+* MutableGraph.java: mutation methods for Graph (extends Graph)
+* MutableNetwork.java: mutation methods for Network (extends Network)
+Graph<N, E> becomes Graph<N>.
+
+Consequential changes:
+* adding various new Network-specific classes (NetworkBuilder, AbstractNetwork, etc.)
+* adapted Graph-specific classes to remove edge-related code
+
+Note: Graph does not currently support parallel edges.
+
+Motivations:
+* Make graphs without explicit, first-class edge objects available.
+* Remove mutation methods from the top-level interfaces so that Graph/Network objects supplied as their parameters don't (contractually) support modifications.  (And so that the slightly differing signatures for Graph and Network mutation methods don't cause user confusion.)
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=119461180

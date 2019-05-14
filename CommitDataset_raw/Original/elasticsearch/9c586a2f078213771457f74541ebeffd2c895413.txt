@@ -1,0 +1,13 @@
+Do not log warn shard not-available exception in replication (#30205)
+
+Since #28049, only fully initialized shards are received write requests.
+This enhancement allows us to handle all exceptions. In #28571, we
+started strictly handling shard-not-available exceptions and tried to
+keep the way we report replication errors to users by only reporting if
+the error is not shard-not-available exceptions. However, since then we
+unintentionally always log warn for all exception. This change restores
+to the previous behavior which logs warn only if an exception is not a
+shard-not-available exception.
+
+Relates #28049
+Relates #28571

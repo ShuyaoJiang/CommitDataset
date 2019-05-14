@@ -1,0 +1,13 @@
+This PR fixes an issue with the PROXY protocol where the reader index of a consumed byte array was not set correctly.
+
+Motivation:
+
+When using the AF_UNIX PROXY protocol, the reader index was not set correctly after consuming the message bytes of the original header ByteBuf. This caused no immediate harm because after the codepath there is no consumer of the ByteBuf in the current implementation. It’s a bug nevertheless, because consumers of the ByteBuf for extensions (like TLVs, which are allowed by the PROXY protocol spec) would consume a ByteBuf that has a wrong readerIndex when using AF_UNIX instead of e.g. IPv4 (which has correct behaviour)
+
+Modifications:
+
+Increase the reader index of the ByteBuf after it was read
+
+Result:
+
+Correct and consistent behaviour of the AF_UNIX codepath

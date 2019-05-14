@@ -1,0 +1,17 @@
+[Rollup] Fix bad await in tests
+
+The arrangement of the final latch meant the latch could countdown,
+then the test ends before the await() triggers which caused the
+thread to be interrupted and fail.  The whole arrangement was incorrect
+anyhow.
+
+We need to await the latch before sending the search response as before,
+but move the final atomicBoolean to the second time the persistent
+task status is updated which is a signal that we are done
+and can end the test
+
+If these tests continues to be flaky, we should probably just remove them.
+The headers are tested elsewhere and not required to be tested in this
+context.
+
+Original commit: elastic/x-pack-elasticsearch@0cf560397299af9b99e5b2750ac0a381926f2470

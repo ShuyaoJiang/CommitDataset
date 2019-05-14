@@ -1,0 +1,9 @@
+Refactored the MonochromeBitmapSource class hierarchy into LuminanceSource, Binarizer, and BinaryBitmap classes. The unit tests pass and I believe the change is complete, but there are some clients like J2ME and Bug that I can't build.
+
+This change will allow new thresholding algorithms to be developed and tested, as well as implemented per platform if needed (e.g. in JNI on Android). It should also perform better when multiple 2D Readers are installed, because the underlying image will only be converted to 1 bit once. It also allows some platforms to return luminance data without a copy.
+
+The current state of this checkin is to use the old black point algorithm, which now lives in GlobalHistogramBinarizer. This will be our benchmark and fallback for slower platforms. Going forward we will begin to use LocalBlockBinarizer as I shake out the edge cases and tune it for performance. Currently it is unused.
+
+IMPORTANT: I have temporarily included three methods from MonochromeBitmapSource at the end of BinaryBitmap as a way to make this change in stages. They are deprecated and will be removed soon. All of the Reader classes will need to change the way they examine 1 bit pixels to use the new getBlackRow() and getBlackMatrix() calls.
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@993 59b500cc-1b3d-0410-9834-0bbf25fbcc57

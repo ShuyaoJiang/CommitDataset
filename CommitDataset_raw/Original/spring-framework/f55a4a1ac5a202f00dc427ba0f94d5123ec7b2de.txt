@@ -1,0 +1,17 @@
+Reduce log level for message re: missing annotation
+
+Previously (since Spring 3.1.1) RecursiveAnnotationAttributesVisitor
+logs at level WARN when ASM parsing encounters an annotation or an (enum
+used within an annotation) that cannot be classloaded. This is not
+necessarily indicative of an error, e.g. JSR-305 annotations such as
+@Nonnull may be used only for static analysis purposes, but because
+these annotations have runtime retention, they remain present in the
+bytecode. Per section 9.6.1.2 of the JLS, "An annotation that is present
+in the binary may or may not be available at run-time via the reflective
+libraries of the Java platform."
+
+This commit lowers the log level of these messages from warn to debug,
+but leaves at warn level other messages dealing with the ability
+reflectively read enum values from within annotations.
+
+Issue: SPR-9233

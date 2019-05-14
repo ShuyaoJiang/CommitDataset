@@ -1,0 +1,18 @@
+Wrap DecodingException in DefaultServerRequest
+
+Prior to this commit, Spring WebFlux function would let
+`DecodingException` thrown by codecs bubble up to the web handler level.
+Since this exception is not handled by default there, the response would
+be turned into a HTTP 500 status.
+
+In the annotation model, `ArgumentResolver` implementations wrap this
+exception with a `ServerWebInputException`, which itself extends
+`ResponseStatusException`. The latter is supported by the error handling
+infrastructure as a HTTP 400 response.
+
+This commit ensures that `DecodingException` instances are properly
+wrapped in `ServerWebInputException` at the `ServerRequest` level
+directly, thus supporting all setup modes ("standalone" and through the
+`DispatcherHandler`).
+
+Fixes #22290

@@ -1,0 +1,19 @@
+Enable PooledByteBufAllocator to work, event without a cache
+
+Motivation:
+`useCacheForAllThreads` may be false which disables memory caching
+on non netty threads.  Setting this argument or the system property
+makes it impossible to use `PooledByteBufAllocator`.
+
+Modifications:
+
+Delayed the check of `freeSweepAllocationThreshold` in
+`PoolThreadCache` to after it knows there will be any caches in
+use.  Additionally, check if the caches will have any data in them
+(rather than allocating a 0-length array).
+
+A test case is also added that fails without this change.
+
+Results:
+
+Fixes #7194

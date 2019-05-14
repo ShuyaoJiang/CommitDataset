@@ -1,0 +1,5 @@
+Switch to a better, custom validating subscriber.
+
+TestSubscriber is a poor implementation for correctness testing. This new subscriber ensures all events are tested by being a JUnit rule. It also consumes events as they're validated so that assertion becomes more like a script than a ledger.
+
+This also switches tests to use unsafeSubscribe to ensure that any contract violations are not being suppressed. The latest version of RxJava is required for accessing this method on Completable.

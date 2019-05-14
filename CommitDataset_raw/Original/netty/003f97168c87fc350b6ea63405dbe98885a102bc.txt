@@ -1,0 +1,12 @@
+HTTP Content Decoder Cleanup Bug
+
+Motiviation:
+The HTTP content decoder's cleanup method is not cleaning up the decoder correctly.
+The cleanup method is currently doing a readOutbound on the EmbeddedChannel but
+for decoding the call should be readInbound.
+
+Modifications:
+-Change readOutbound to readInbound in the cleanup method
+
+Result:
+The cleanup method should be correctly releaseing unused resources

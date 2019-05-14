@@ -1,0 +1,15 @@
+DnsNameResolver.resolve*(...) never notifies the Future when empty hostname is used.
+
+Motivation:
+
+When an empty hostname is used in DnsNameResolver.resolve*(...) it will never notify the future / promise. The root cause is that we not correctly guard against errors of IDN.toASCII(...) which will throw an IllegalArgumentException when it can not parse its input. That said we should also handle an empty hostname the same way as the JDK does and just use "localhost" when this happens.
+
+Modifications:
+
+- If the try to resolve an empty hostname we use localhost
+- Correctly guard against errors raised by IDN.toASCII(...) so we will always noify the future / promise
+- Add unit test.
+
+Result:
+
+DnsNameResolver.resolve*(...) will always notify the future.

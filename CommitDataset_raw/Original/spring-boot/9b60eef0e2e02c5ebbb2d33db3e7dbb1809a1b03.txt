@@ -1,0 +1,13 @@
+Fix build after SPR-17034 in Spring Framework
+
+Since SPR-17034, the core container now behaves a bit differently when
+dealing with `null` beans.
+
+Given a `null` `HandlerMapping` bean named "resourceHandlerMapping":
+
+* `context.getBean("resourceHandlerMapping", HandlerMapping.class)`
+still returns a `NullBean`
+* `ListableBeanFactory.getBeansOfType` will return a Map of all existing
+beans, not including the `null` ones as values of the map.
+
+Closes gh-13760

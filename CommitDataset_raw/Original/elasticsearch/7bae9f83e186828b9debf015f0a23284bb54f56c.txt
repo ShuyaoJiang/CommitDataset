@@ -1,0 +1,11 @@
+Set mappings when creating indices in SuggestSearchIT (#39323)
+
+* Set mappings when creating indices in SuggestSearchIT
+
+These tests don't test dynamic mapping, so they can use preset mappings. This
+removes the possibility they may fail due to the mapping not being available
+since mapping updates are asynchronous.
+
+Resolves #39315
+
+* Wrap creates in assertAcked

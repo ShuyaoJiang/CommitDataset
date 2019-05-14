@@ -1,0 +1,15 @@
+Improve CcrRepositoryIT mappings tests (#38817)
+
+Currently we index documents concurrently to attempt to ensure that we
+update mappings during the restore process. However, this does not
+actually test that the mapping will be correct and is dangerous as it
+can lead to a misalignment between the max sequence number and the local
+checkpoint. If these are not aligned, peer recovery cannot be completed
+without initiating following which this test does not do. That causes
+teardown assertions to fail.
+
+This commit removes the concurrent indexing and flushes after the
+documents are indexed. Additionally it modifies the mapping specific
+test to ensure that there is a mapping update when the restore session
+is initiated. This mapping update is picked up at the end of the restore
+by the follower.

@@ -1,0 +1,17 @@
+Fix speed regression in property binding
+
+Update `MapBinder` to only compute values if an entry does not already
+exist. Prior to this commit, a binding to `Map<String,List<String>>`
+would be expensive since the same entries would be bound many times.
+
+For example, given:
+
+	foo.bar[0]=baz1
+	foo.bar[1]=baz1
+	foo.bar[2]=baz1
+
+The Map binder would iterate over the properties `bar[0]`, `bar[1]` and
+`bar[2]`. Each of these properties resulted in the same actual key of
+`bar` which would then be bound to list multiple times.
+
+Fixes gh-10093

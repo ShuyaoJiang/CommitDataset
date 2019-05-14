@@ -1,0 +1,14 @@
+Minimize object allocation when calling AbstractByteBuf.toString(..., Charset)
+
+Motivation:
+
+Calling AbstractByteBuf.toString(..., Charset) is used quite frequently by users but produce a lot of GC.
+
+Modification:
+
+- Use a FastThreadLocal to store the CharBuffer that are needed for decoding.
+- Use internalNioBuffer(...) when possible
+
+Result:
+
+Less object creation / Less GC

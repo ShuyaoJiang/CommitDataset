@@ -1,0 +1,33 @@
+Infer HTTP 404 from empty Optional/Publisher types
+
+This commit handles "empty" cases for `ResponseEntity` controller
+handler return types when wrapped with a `java.util.Optional` in Spring
+MVC or a single `Publisher` like `Mono`.
+
+Given the following example for Spring MVC:
+
+```
+@GetMapping("/user")
+public Optional<ResponseEntity<User>> fetchUser() {
+	Optional<User> user = //...
+	return user.map(ResponseEntity::ok);
+}
+```
+
+If the resulting `Optional` is empty, Spring MVC will infer a
+`ResponseEntity` with an empty body and a 404 HTTP response status.
+
+The same reasoning is applied to Spring WebFlux with Publisher types:
+
+```
+@GetMapping("/user")
+public Mono<ResponseEntity<User>> fetchUser() {
+	Mono<User> user = //...
+	return user.map(ResponseEntity::ok);
+}
+```
+
+This feature is only valid for `HttpEntity` return types and does not
+apply to `@ResponseBody` controller handlers.
+
+Issue: SPR-13281

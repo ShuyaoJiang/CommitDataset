@@ -1,0 +1,9 @@
+Add Channel.type() which tells if stream-oriented or message-oriented
+
+- DefaultChannelPipeline uses this information to reject invalid buffer
+  access in inbound(Message|Byte)Buffer.  Otherwise, a user can access
+  a message buffer when the channel is stream-oriented.
+- Because ChannelType cannot be both STREAM and MESSAGE, catch-all
+  buffer has been removed to avoid confusion and unexpected behavior
+  (it's already causing headache.)
+- As a result, codec embedder needs rework.

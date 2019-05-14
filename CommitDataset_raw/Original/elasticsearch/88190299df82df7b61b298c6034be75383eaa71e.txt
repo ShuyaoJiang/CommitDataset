@@ -1,0 +1,7 @@
+CCR: Fix incorrect read request completion condition (#32266)
+
+Today we consider a read request is exhausted if from_seqno is equal to
+or greater than the max_required_seqno. However, if we stop when
+from_seqno equals to the max_required_seqno, we will miss an operation
+whose seqno is max_required_seqno because we have not seen that 
+operation yet.

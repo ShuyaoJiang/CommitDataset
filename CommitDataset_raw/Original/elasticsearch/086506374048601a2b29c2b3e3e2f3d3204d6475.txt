@@ -1,0 +1,17 @@
+SQL: Fix multi-line CLI commands to join correctly (elastic/x-pack-elasticsearch#3516)
+
+Previously multi-line CLI SQL statements were joined, but the space command was
+missing, so a command like:
+
+```
+sql> SHOW
+   | functions;
+```
+
+Would incorrectly parse as "showfunctions" and throw an error.
+
+This fixes the behavior and adds a test for multi-line commands.
+
+Resolves elastic/x-pack-elasticsearch#3410
+
+Original commit: elastic/x-pack-elasticsearch@3870924ccd1b2594f1288709b42c17f498fba38c

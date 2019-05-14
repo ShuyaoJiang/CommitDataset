@@ -1,0 +1,17 @@
+Add AsyncRestTemplate
+
+Added AsyncRestTemplate, the asynchronous counterpart to the
+RestTemplate that was introduced in Spring 3. All methods on the
+AsyncRestTemplate are similar to those found on the synchronous
+RestTemplatem, except that they return Future wrappers instead of
+concrete results.
+
+To enable this, this commit introduces the AsyncClientHttpRequest and
+AsyncClientHttpRequestFactory, similar to the ClientHttpRequest and
+ClientHttpRequestFactory, except that ClientHttpRequest returns a
+Future<ClientHttpResponse> for the execute method. Two implementations
+of these interfaces are provided, one based on the HttpURLConnection
+incombination with a Spring AsyncTaskExecutor and one based on Apache
+HttpComponents HttpAsyncClient.
+
+Issue: SPR-8804

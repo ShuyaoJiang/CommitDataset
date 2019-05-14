@@ -1,0 +1,18 @@
+Support use of @Scheduled against JDK proxies
+
+Prior to this change, ScheduledAnnotationBeanPostProcessor found any
+@Scheduled methods against the ultimate targetClass for a given bean
+and then attempted to invoke that method against the bean instance. In
+cases where the bean instance was in fact a JDK proxy, this attempt
+would fail because the proxy is not an instance of the target class.
+
+Now SABPP still attempts to find @Scheduled methods against the target
+class, but subsequently checks to see if the bean is a JDK proxy, and if
+so attempts to find the corresponding method on the proxy itself. If it
+cannot be found (e.g. the @Scheduled method was declared only at the
+concrete class level), an appropriate exception is thrown, explaining to
+the users their options: (a) use proxyTargetClass=true and go with
+subclass proxies which won't have this problem, or (b) pull the
+@Scheduled method up into an interface.
+
+Issue: SPR-8651

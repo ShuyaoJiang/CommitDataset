@@ -1,0 +1,17 @@
+Write CharSequence instances to DataBuffers
+
+Prior to this commit, one could write a `CharSequence` to an existing
+`DataBuffer` instance by turning it into a byte array or `ByteBuffer`
+first. This had the following disadvantages:
+
+1. Memory allocation was not efficient (not leveraging pooled memory
+when available)
+2. Dealing with `CharsetEncoder` is not always easy
+3. `DataBuffer` implementations, like `NettyDataBuffer` can use
+optimized implementations in some cases
+
+This commit adds a new `DataBuffer#write(CharSequence, Charset)` method
+for those cases and also an `ensureCapacity` method useful for checking
+that the current buffer has enough capacity to write to it..
+
+Issue: SPR-17558

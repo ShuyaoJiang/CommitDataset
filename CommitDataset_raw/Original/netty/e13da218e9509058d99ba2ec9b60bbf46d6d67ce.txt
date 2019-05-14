@@ -1,0 +1,10 @@
+HTTP/2 revert Http2FrameWriter throws API change
+
+Motivation:
+2fd42cfc6b32dacb812c6f2ecef8522cd94718d4 fixed a bug related to encoding headers but it also introduced a throws statement onto the Http2FrameWriter methods which write headers. This throws statement makes the API more verbose and is not necessary because we can communicate the failure in the ChannelFuture that is returned by these methods.
+
+Modifications:
+- Remove throws from all Http2FrameWriter methods.
+
+Result:
+Http2FrameWriter APIs do not propagate checked exceptions.

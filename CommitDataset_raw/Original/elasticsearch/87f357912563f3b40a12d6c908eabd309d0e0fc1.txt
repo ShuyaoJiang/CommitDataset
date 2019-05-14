@@ -1,0 +1,14 @@
+Add nanosecond field mapper (#37755)
+
+This adds a dedicated field mapper that supports nanosecond resolution -
+at the price of a reduced date range.
+
+When using the date field mapper, the time is stored as milliseconds since the epoch
+in a long in lucene. This field mapper stores the time in nanoseconds
+since the epoch - which means its range is much smaller, ranging roughly from
+1970 to 2262.
+
+Note that aggregations will still be in milliseconds.
+However docvalue fields will have full nanosecond resolution
+
+Relates #27330

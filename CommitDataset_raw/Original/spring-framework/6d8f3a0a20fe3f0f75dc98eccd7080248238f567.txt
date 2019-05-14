@@ -1,0 +1,11 @@
+Fix SimpleKey equality with array argument
+
+Prior to this commit, an array argument was not handled properly in
+SimpleKey#equals and SimpleKey#hashCode. As a result, two method
+invocations with the same array argument lead to two different keys
+and therefore two different entries in the cache.
+
+This commit uses deepEquals and deepHashCode to properly handle
+methods that have arguments that are array types.
+
+Issue: SPR-11505

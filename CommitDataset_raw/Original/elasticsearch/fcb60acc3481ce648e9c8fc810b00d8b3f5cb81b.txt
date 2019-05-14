@@ -1,0 +1,11 @@
+Calculate changed roles on roles.yml reload (#33525)
+
+In order to optimize the use of the role cache, when the roles.yml file
+is reloaded we now calculate the names of removed, changed, and added
+roles so that they may be passed to any listeners. This allows a
+listener to selectively clear cache for only the roles that have been
+modified. The CompositeRolesStore has been adapted to do exactly that
+so that we limit the need to reload roles from sources such as the
+native roles stores or external role providers.
+
+See #33205

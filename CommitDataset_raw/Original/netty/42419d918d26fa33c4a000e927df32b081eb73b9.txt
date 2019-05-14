@@ -1,0 +1,18 @@
+Fix setBytes when source is read-only ByteBuffer and target is pooled buffer
+
+Motivation:
+
+The method setBytes creates temporary heap buffer when source buffer is read-only.
+But this temporary buffer is not used correctly and may lead to data corruption.
+This problem occurs when target buffer is pooled and temporary buffer
+arrayOffset() is not zero.
+
+Modifications:
+
+Use correct arrayOffset when calling PlatformDependent.copyMemory.
+Unit test was added to test this case.
+
+Result:
+
+Setting buffer content works correctly when target is pooled buffer and source
+is read-only ByteBuffer.

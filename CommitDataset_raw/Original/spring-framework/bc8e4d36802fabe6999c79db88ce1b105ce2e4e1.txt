@@ -1,0 +1,20 @@
+Fix SpEL varargs handling and usage of other getValue() methods
+
+Building on the initial work for SPR-12326, this commit
+addresses three problems:
+
+Firstly the ReflectiveMethodResolver is modified to consider
+a direct parameter match more important than a varargs match.
+Also in that same type when there are a number of close
+matches, the first one is taken rather than the last one.
+
+Secondly more testcases and better support have been added
+for the case of passing a single parameter to a varargs
+accepting method.
+
+Finally it is possible to set the root context object
+indirectly and not pass it on getValue() calls to the
+expression objects but not all variants of getValue()
+were handling that. This is now fixed.
+
+Issue: SPR-12326

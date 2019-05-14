@@ -1,0 +1,13 @@
+[#2867] Workaround performance issue with IPv4-mapped-on-IPv6 addresses
+
+Motivation:
+
+InetAddress.getByName(...) uses exceptions for control flow when try to parse IPv4-mapped-on-IPv6 addresses. This is quite expensive.
+
+Modifications:
+
+Detect IPv4-mapped-on-IPv6 addresses in the JNI level and convert to IPv4 addresses before pass to InetAddress.getByName(...) (via InetSocketAddress constructor).
+
+Result:
+
+Eliminate performance problem causes by exception creation when parsing IPv4-mapped-on-IPv6 addresses.

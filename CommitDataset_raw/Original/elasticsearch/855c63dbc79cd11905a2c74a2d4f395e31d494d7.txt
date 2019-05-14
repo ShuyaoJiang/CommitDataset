@@ -1,0 +1,13 @@
+User/role names can be longer with more characters (elastic/x-pack-elasticsearch#1745)
+
+This changes the validation criteria we use for user and role
+names in the file realm, native realm, and the
+realm-agnostic code in x-pack security. The new criteria is:
+
+A valid username's length must be at least 1 and no more than 1024
+characters. It may not contain leading or trailing whitespace. All
+characters in the name must be be alphanumeric (`a-z`, `A-Z`, `0-9`),
+printable punctuation or symbols in the https://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)[Basic Latin (ASCII) block],
+or the space character.
+
+Original commit: elastic/x-pack-elasticsearch@f77640f26903a0ec36a7e3e6e779f721ea712e77

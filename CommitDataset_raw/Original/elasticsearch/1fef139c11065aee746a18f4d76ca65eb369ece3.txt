@@ -1,0 +1,10 @@
+Ensure only parent breaker trips in unit test
+
+With this commit we raise the limit of the child circuit breaker used in
+the unit test for the circuit breaker service so it is high enough to trip
+only the parent circuit breaker. The previous limit was 300 bytes but
+theoretically (considering overhead) we could reach 346 bytes. Thus any
+value larger than 300 bytes could trip the child circuit breaker leading
+to spurious failures.
+
+Relates #31767

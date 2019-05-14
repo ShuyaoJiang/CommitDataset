@@ -1,0 +1,28 @@
+Migrate existing tests from deprecated package
+
+Update the existing tests to use the relocated `spring-boot-test`
+classes. Restructuring was achieved using the following command:
+
+find . -type f -name '*.java' -exec sed -i '' \
+-e s/org.springframework.boot.test.ConfigFileApplicationContextInitializer/\
+org.springframework.boot.test.context.ConfigFileApplicationContextInitializer/g \
+-e s/org.springframework.boot.test.EnvironmentTestUtils/\
+org.springframework.boot.test.util.EnvironmentTestUtils/g \
+-e s/org.springframework.boot.test.IntegrationTest/\
+org.springframework.boot.test.context.IntegrationTest/g \
+-e s/org.springframework.boot.test.IntegrationTestPropertiesListener/\
+org.springframework.boot.test.context.IntegrationTestPropertiesListener/g \
+-e s/org.springframework.boot.test.OutputCapture/\
+org.springframework.boot.test.rule.OutputCapture/g \
+-e s/org.springframework.boot.test.SpringApplicationConfiguration/\
+org.springframework.boot.test.context.SpringApplicationConfiguration/g \
+-e s/org.springframework.boot.test.SpringApplicationContextLoader/\
+org.springframework.boot.test.context.SpringApplicationContextLoader/g \
+-e s/org.springframework.boot.test.SpringBootMockServletContext/\
+org.springframework.boot.test.mock.web.SpringBootMockServletContext/g \
+-e s/org.springframework.boot.test.TestRestTemplate/\
+org.springframework.boot.test.web.client.TestRestTemplate/g \
+-e s/org.springframework.boot.test.WebIntegrationTest/\
+org.springframework.boot.test.context.web.WebIntegrationTest/g {} \;
+
+See gh-5293

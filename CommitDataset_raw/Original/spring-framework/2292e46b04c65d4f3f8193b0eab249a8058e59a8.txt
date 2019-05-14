@@ -1,0 +1,10 @@
+Update empty return value ResponseBody handling
+
+When a null is returned from an @ResponseBody method, rather than
+returning Mono.empty() immediately, convert it to Mono.empty() and
+apply the same processing.
+
+Currently that doesn't make a practical difference but it's more
+accurate to do it this way. Eventually it may mean the possibility
+to turn empty values into something through an extension point
+as we do with ResponseBodyAdvice in Spring MVC today.

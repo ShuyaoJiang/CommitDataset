@@ -1,0 +1,5 @@
+Move x-pack-core to core package (elastic/x-pack-elasticsearch#3678)
+
+This commit moves the source file in x-pack-core to a org.elasticsearch.xpack.core package. This is to prevent issues where we have compile-time success reaching through packages that will cross module boundaries at runtime (due to being in different classloaders). By moving these to a separate package, we have compile-time safety. Follow-ups can consider build time checking that only this package is defined in x-pack-core, or sealing x-pack-core until modules arrive for us.
+
+Original commit: elastic/x-pack-elasticsearch@232e156e0e7318c0c8f8070ac3a7c3638d2e5a5a

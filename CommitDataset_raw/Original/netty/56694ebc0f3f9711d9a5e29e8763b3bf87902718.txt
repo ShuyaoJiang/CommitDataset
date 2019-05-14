@@ -1,0 +1,10 @@
+Cleanup from fbf0e5f4ddad88a9d593cfb357c5f466c72ae977
+
+Motivation:
+ThreadLocalInsecureRandom still referenced ThreadLocalRandom directly, but shouldn't.
+
+Modifications:
+ThreadLocalInsecureRandom should reference PlatformDependent#threadLocalRandom() in comments
+
+Result:
+Less usage of internal.ThreadLocalRandom.

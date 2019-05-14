@@ -1,0 +1,12 @@
+Add dedicated section for `spring.main.banner-mode`
+
+One of the options of the new `banner-mode` property is `off`. YAML maps
+`off` to `false` and since we are exposing the method from the
+`SpringApplication` public class we can't change the signature to accept
+a `String` and do the conversion ourselves.
+
+This commit adds a dedicated section in the guide to warn users about
+that particular situation. Adding quotes around the value prevents the
+conversion.
+
+Closes gh-4600

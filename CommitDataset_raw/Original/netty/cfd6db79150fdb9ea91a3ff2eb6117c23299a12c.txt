@@ -1,0 +1,24 @@
+Avoid missed signals on a default promise
+
+Motivation:
+
+Today when awaiting uninterruptibly on a default promise, a race
+condition can lead to a missed signal. Quite simply, the check for
+whether the condition holds is not made inside a lock before
+waiting. This means that the waiting thread can enter the wait after the
+promise has completed and will thus not be notified, thus missing the
+signal. This leads to the waiting thread to enter a timed wait that will
+only trip with the timeout elapses leading to unnecessarily long waits
+(imagine a connection timeout, and the waiting thread missed the signal
+that the connection is ready).
+
+Modification:
+
+This commit fixes this missed signal by checking the condition inside a
+lock. We also add a test that reliably fails without the non-racy
+condition check.
+
+Result:
+
+Timed uninterruptible waits on default promise will not race against the
+condition and possibly wait longer than necessary.

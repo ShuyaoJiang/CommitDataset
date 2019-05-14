@@ -1,0 +1,18 @@
+Reuse previous created HttpHeaders by HttpObjectAggregator
+
+Motivation:
+
+HttpObjectAggregator currently creates a new FullHttpResponse / FullHttpRequest for each message it needs to aggregate. While doing so it also creates 2 DefaultHttpHeader instances (one for the headers and one for the trailing headers). This is bad for two reasons:
+  - More objects are created then needed and also populate the headers is not for free
+  - Headers may get validated even if the validation was disabled in the decoder
+
+Modification:
+
+- Wrap the previous created HttpResponse / HttpRequest and so reuse the original HttpHeaders
+- Reuse the previous created trailing HttpHeader.
+- Fix a bug where the trailing HttpHeader was incorrectly mixed in the headers.
+
+Result:
+
+- Less GC
+- Faster HttpObjectAggregator implementation

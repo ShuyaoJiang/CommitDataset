@@ -1,0 +1,10 @@
+Prefer Jackson unless user explicity states preference for Gson
+
+This commit rewords the changes made in d718a80 so that simply adding
+Gson to the classpath isn't sufficient to stop Jackson being used
+for HTTP JSON mapping. To use Gson, the user must now either remove
+Jackson from the classpath (not an option if they also wish to use
+the Actuator) or configure the spring.http.converters.preferred-mapper
+property with a value gson.
+
+Closes gh-2247

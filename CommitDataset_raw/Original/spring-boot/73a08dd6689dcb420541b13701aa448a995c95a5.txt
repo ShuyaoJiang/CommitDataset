@@ -1,0 +1,33 @@
+Avoid overriding beans and ensure import order is used for DataSource
+
+During processing of a configuration class, the class's complete
+hierarchy is processed and during the processing of each class its
+member classes are processed. Previously, each pool-specific
+inner-class of DataSourceConfiguration extended the abstract outer
+class. This meant that when the import from
+DataSourceAutoConfiguration.PooledDataSourceConfiguration caused the
+first pool-specific inner-class to be  processed,
+DataSourceConfiguration would be processed as it was the inner-class's
+superclass. In turn all of DataSourceConfiguration's member classes
+would then be processed. This caused the first import (of
+DataSourceConfiguration.Tomcat) to trigger processing of all of the
+other pool-specific inner-classes in whatever order they were found
+rather than them being processed in the order in which they are
+imported by DataSourceAutoConfiguration.PooledDataSourceConfiguration.
+
+Another part of the problem was that none of the pool-specific
+inner-classes were conditional on a missing DataSource bean. This
+meant that, when multiple pools were on the classpath, each class
+after the first would override the previous class's definition of the
+DataSource bean.
+
+This commit updates each of the pool-specific inner-classes so that
+they no longer extend DataSourceConfiguration. This ensures that
+the inner classes are processed in the order defined in the import
+on PooledDataSourceConfiguration. Each of the classes has also been
+annotated with @ConditionalOnMissingBean(DataSource.class). This
+prevents the DataSource bean definition from being overridden and
+ensures that the order of precedence for the pool that will be used
+is as defined in the import.
+
+Closes gh-13737

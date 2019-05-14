@@ -1,0 +1,50 @@
+New Implementation of SerializedObserver
+
+#### JMH Benchmarks
+
+0.17.3
+
+Benchmark                                                          (size)   Mode   Samples         Mean   Mean error    Units
+r.operators.OperatorSerializePerf.noSerializationSingleThreaded      1024   avgt         5       45.504        1.710    ns/op
+r.operators.OperatorSerializePerf.noSerializationSingleThreaded   1048576   avgt         5       58.600        5.647    ns/op
+r.operators.OperatorSerializePerf.serializedSingleStream             1024   avgt         5       68.610        4.596    ns/op
+r.operators.OperatorSerializePerf.serializedSingleStream          1048576   avgt         5       71.313        2.318    ns/op
+r.operators.OperatorSerializePerf.synchronizedSingleStream           1024   avgt         5       73.322        3.666    ns/op
+r.operators.OperatorSerializePerf.synchronizedSingleStream        1048576   avgt         5       76.518        1.355    ns/op
+
+0.17.2
+
+Benchmark                                                          (size)   Mode   Samples         Mean   Mean error    Units
+r.operators.OperatorSerializePerf.noSerializationSingleThreaded      1024   avgt         5       45.790        1.184    ns/op
+r.operators.OperatorSerializePerf.noSerializationSingleThreaded   1048576   avgt         5       58.518        3.788    ns/op
+r.operators.OperatorSerializePerf.serializedSingleStream             1024   avgt         5       72.665        7.851    ns/op
+r.operators.OperatorSerializePerf.serializedSingleStream          1048576   avgt         5       74.788        2.946    ns/op
+r.operators.OperatorSerializePerf.synchronizedSingleStream           1024   avgt         5       73.661        3.499    ns/op
+r.operators.OperatorSerializePerf.synchronizedSingleStream        1048576   avgt         5       78.386        5.036    ns/op
+
+#### Manual Benchmarks
+
+/**
+ * 0.17.3:
+ *
+ * Run: 10 - 9,746,505 ops/sec
+ * Run: 11 - 9,956,019 ops/sec
+ * Run: 12 - 10,053,770 ops/sec
+ * Run: 13 - 10,076,958 ops/sec
+ * Run: 14 - 9,983,319 ops/sec
+ *
+ * 0.17.2:
+ *
+ * Run: 10 - 9,851,999 ops/sec
+ * Run: 11 - 9,726,975 ops/sec
+ * Run: 12 - 9,719,762 ops/sec
+ * Run: 13 - 9,668,141 ops/sec
+ * Run: 14 - 9,799,700 ops/sec
+ *
+ * @param input
+ */
+public void serializedSingleStream(Input input) {
+    for (int i = 0; i < reps; i++) {
+        input.observable.serialize().subscribe(input.subscriber);
+    }
+}

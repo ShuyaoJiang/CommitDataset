@@ -1,0 +1,15 @@
+Clean up following #6016
+Motivation:
+
+* DefaultHeaders from netty-codec has some duplicated logic for header date parsing
+* Several classes keep on using deprecated HttpHeaderDateFormat
+
+Modifications:
+
+* Move HttpHeaderDateFormatter to netty-codec and rename it into HeaderDateFormatter
+* Make DefaultHeaders use HeaderDateFormatter
+* Replace HttpHeaderDateFormat usage with HeaderDateFormatter
+
+Result:
+
+Faster and more consistent code

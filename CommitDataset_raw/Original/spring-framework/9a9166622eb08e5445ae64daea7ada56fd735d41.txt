@@ -1,0 +1,8 @@
+Fix ForwardedHeaderFilter getRequestURL()
+
+Previously ForwardedHeaderFilter would return the same StringBuffer for every invocation. This
+meant that users that modified the StringBuffer changed the state of the HttpServletRequest.
+
+This commit ensures that a new StringBuffer is always returned for ForwardedHeaderFilter.
+
+Issue: SPR-15423

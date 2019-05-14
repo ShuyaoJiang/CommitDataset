@@ -1,0 +1,25 @@
+Fix mutually exclusive use of CachePut and Cacheable
+
+Commit eea230f introduced a regression by adding a support for the
+"result" variable in SpEL expression for @CachePut. As such expressions
+cannot be evaluated upfront anymore, any method that contains both
+@Cacheable and @CachePut annotations are always executed even when
+their conditions are mutually exclusive.
+
+This is an example of such mutual exclusion
+
+@Cacheable(condition = "#p1", key = "#p0")
+@CachePut(condition = "!#p1", key = "#p0")
+public Object getFooById(Object id, boolean flag) { ... }
+
+This commit updates CacheEvaluationContext to define a set of
+unavailable variables. When such variable is accessed for a given
+expression, an exception is thrown. This is used to restore the
+evaluation of the @CachePut condition upfront by registering "result"
+as an unavailable variable.
+
+If all @CachePut operations have been excluded by this upfront check,
+the @Cacheable operation is processed as it was before. Such upfront
+check restore the behavior prior to eea230f.
+
+Issue: SPR-11955

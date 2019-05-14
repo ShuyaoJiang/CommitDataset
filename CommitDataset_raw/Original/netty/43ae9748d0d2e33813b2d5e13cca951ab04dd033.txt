@@ -1,0 +1,11 @@
+Unify default cipher suites betweek JDK and OpenSSL
+
+Motivation:
+Currently the default cipher suites are set independently between JDK and OpenSSL. We should use a common approach to setting the default ciphers. Also the OpenSsl default ciphers are expressed in terms of the OpenSSL cipher name conventions, which is not correct and may be exposed to the end user. OpenSSL should also use the RFC cipher names like the JDK defaults.
+
+Modifications:
+- Move the default cipher definition to a common location and use it in JDK and OpenSSL initialization
+- OpenSSL should not expose OpenSSL cipher names externally
+
+Result:
+Common initialization and OpenSSL doesn't expose custom cipher names.

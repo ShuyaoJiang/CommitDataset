@@ -1,0 +1,10 @@
+Add exception handling for write listeners (#27590)
+
+This potential issue was exposed when I saw this PR #27542. Essentially
+we currently execute the write listeners all over the place without
+consistently catching and handling exceptions. Some of these exceptions
+will be logged in different ways (including as low as `debug`).
+
+This commit adds a single location where these listeners are executed.
+If the listener throws an execption, the exception is caught and logged
+at the `warn` level.

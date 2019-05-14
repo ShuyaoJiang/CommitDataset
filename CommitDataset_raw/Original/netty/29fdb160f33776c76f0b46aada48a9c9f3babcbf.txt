@@ -1,0 +1,20 @@
+[#5486] Not operate on serial execution assumption when using EventExecutor in the DefaultChannelPipeline.
+
+Motivation:
+
+In commit f984870ccca133d6056e8b0df0b2352f8f90b0fe I made a change which operated under invalide assumption that tasks executed by an EventExecutor will always be processed in a serial fashion. This is true for SingleThreadEventExecutor sub-classes but not part of the EventExecutor interface contract.
+
+Because of this change implementations of EventExecutor which not strictly execute tasks in a serial fashion may miss events before handlerAdded(...) is called. This is strictly speaking not correct as there is not guarantee in this case that handlerAdded(...) will be called as first task (as there is no ordering guarentee).
+
+Cassandra itself ships such an EventExecutor implementation which has no strict ordering to spread load across multiple threads.
+
+Modifications:
+
+- Add new OrderedEventExecutor interface and let SingleThreadEventExecutor / EventLoop implement / extend it.
+- Only expose "restriction" of skipping events until handlerAdded(...) is called for OrderedEventExecutor implementations
+- Add ThreadPoolEventExecutor implementation which executes tasks in an unordered fashion. This is used in added unit test but can also be used for protocols which not expose an strict ordering.
+- Add unit test.
+
+Result:
+
+Resurrect the possibility to implement an EventExecutor which does not enforce serial execution of events and be able to use it with the DefaultChannelPipeline.

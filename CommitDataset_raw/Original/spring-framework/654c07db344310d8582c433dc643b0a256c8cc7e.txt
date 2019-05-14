@@ -1,0 +1,41 @@
+Refactor detect-split-packages Gradle plugin
+
+ - Use conventional plugin naming, i.e. "detect-split-packages" instead
+   of applying plugin based on fully-qualified class name
+
+ - Rename "diagnose" => "detect" consistently throughout plugin, task
+   and method names and generally refactor naming throughout to follow
+   "detect split packages" phrasing
+
+ - Add Javadoc to DetectSplitPackagesPlugin
+
+ - Improve error reporting when split packages are detected
+
+   Upon detecting one or more split packages, `detectSplitPackages` now
+   fails idiomatically, throwing a GradleException to signal task failure
+   (as opposed to the previous approach of using an assert assertion), and
+   the output reads as follows:
+
+       $ gradle detectSplitPackages
+       [...]
+       :buildSrc:build UP-TO-DATE
+       :detectSplitPackages FAILED
+
+       FAILURE: Build failed with an exception.
+
+       * What went wrong:
+       Execution failed for task ':detectSplitPackages'.
+       > The following split package(s) have been detected:
+          - org.springframework.beans (split across spring-beans and spring-orm)
+          - org.springframework.core.env (split across spring-context and spring-core)
+
+ - DetectSplitPackagesTask now automatically attaches itself to `check`
+   task lifecycle if the enclosing project contains a `check` task
+
+ - DetectSplitPackagesTask adds itself to the 'Verification' task group,
+   ensuring that it shows up correctly in `gradle tasks` task listings
+
+ - packagesToScan now defaults to all subprojects; users may then
+   customize this by removing individual subprojects from the collection
+
+Issue: SPR-9990

@@ -1,0 +1,52 @@
+Simplify Jackson-related auto-configuration for HATEOAS and Data REST
+
+This commit simplifies the Jackson-related auto-configuration that’s
+applied when Spring HATEOAS and Spring Data REST are on the classpath.
+
+Previously, Boot used Jackson2HalModule to apply the HAL-related
+ObjectMapper configuration to the context’s primary ObjectMapper. This
+was to allow HAL-formatted responses to be sent for requests accepted
+application/json (see gh-2147). This had the unwanted side-effect of
+polluting the primary ObjectMapper with HAL-specific functionality.
+Furthermore, Jackson2HalModule is an internal of Spring HATEOAS that
+@olivergierke has asked us to avoid using.
+
+This commit replaces the use of Jackson2HalModule with a new approach.
+Now, the message converters of any RequestMappingHandlerAdapter beans
+are examined and any TypeConstrainedMappingJackson2HttpMessageConverter
+instances are modified to support application/json in addition to their
+default support for application/hal+json. This behaviour can be disabled
+by setting spring.hateoas.use-hal-as-default-json-media-type to false.
+This property is named after Spring Data REST’s configuration option
+which has the same effect when using Spring Data REST. The new property
+replaces the old spring.hateoas.apply-to-primary-object-mapper property.
+
+Previously, when Spring Data REST was on the classpath,
+JacksonAutoConfiguration would be switched off resulting in the context
+containing multiple ObjectMappers, none of which was primary.
+
+This commit configures RepositoryRestMvcAutoConfiguration to run after
+JacksonAutoConfiguration. This gives the latter a chance to create its
+primary ObjectMapper before the former adds its ObjectMapper beans to
+the context.
+
+Previously, the actuator’s hypermedia support assumed that the
+HttpMessageConverters bean would contain every HttpMessageConverter
+being used by Spring MVC. When Spring HATEOAS is on the classpath this
+isn’t the case as it post-processes RequestMappingHandlerAdapter beans
+and adds a TypeConstrainedMappingJackson2HttpMessageConverter to them.
+This wasn’t a problem in the past as the primary ObjectMapper, used by a
+vanilla MappingJackson2HttpMessageConverter, was configured with Spring
+HATEOAS’sJackson2HalModule. Now that this pollution has been tidied up
+the assumption described above no longer holds true. MvcEndpointAdvice,
+which adds links to the actuator’s json responses, has been updated
+to look at the HttpMessageConverters of every
+RequestMappingHandlerAdapter when it’s trying to find a converter to
+use to write a response with additional hypermedia links.
+
+Integration tests have been added to spring-boot-actuator to ensure
+that the changes described above have not regressed the ability to
+configure its json output using spring.jackson.* properties (see
+gh-1729).
+
+Closes gh-3891

@@ -1,0 +1,10 @@
+Dedup translog operations by reading in reverse (#27268)
+
+Currently, translog operations are read and processed one by one. This
+may be a problem as stale operations in translogs may suddenly reappear
+in recoveries. To make sure that stale operations won't be processed, we
+read the translog files in a reverse order (eg. from the most recent
+file to the oldest file) and only process an operation if its sequence
+number was not seen before.
+
+Relates to #10708

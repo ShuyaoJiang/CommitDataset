@@ -1,0 +1,15 @@
+Allow to detect failed query caused by an Timeout / IO error and also not cache these.
+
+Motivation:
+
+At the moment there is not way for the user to know if resolving a domain was failed because the domain was unkown or because of an IO error / timeout. If it was caused by an timeout / IO error the user may want to retry the query. Also if the query was failed because of an IO error / timeout we should not cache it.
+
+Modifications:
+
+- Add DnsNameResolverTimeoutException and include it in the UnkownHostException if the domain could not be resolved because of an timeout. This will allow the user to retry the query when inspecting the cause.
+- Do not cache IO errors / timeouts
+- Add unit test
+
+Result:
+
+Easier for users to implement retries for DNS querys and not cache IO errors / timeouts.

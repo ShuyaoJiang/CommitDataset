@@ -1,0 +1,13 @@
+[#3780] Handle ChannelInitializer exception in exceptionCaught()
+
+Motivation:
+
+At the moment we directly closed the Channel when an exception accoured durring initChannel(...) without giving the user any way to do extra or special handling.
+
+Modifications:
+
+Handle the exception in exceptionCaught(...) of the ChannelInitializer which will by default log and close the Channel. This way the user can override this.
+
+Result:
+
+More felixible handling of exceptions.

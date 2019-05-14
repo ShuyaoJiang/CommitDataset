@@ -1,0 +1,39 @@
+[ML] Set explicit defaults to AnalysisLimits (elastic/x-pack-elasticsearch#4015)
+
+Analysis limits contain settings that affect the resources
+used by ML jobs. Those limits always take place. However,
+explictly setting them is not required as they have reasonable
+defaults. For a long time those defaults lived on the c++ side.
+The job could just not have any explicit limits and that meant
+defaults would be used at the c++ side. This has the disadvantage
+that it is not obvious to the users what these settings are set to.
+Additionally, users might not be aware of the settings existence.
+
+On top of that, since 6.1, the default model_memory_limit was lowered
+from 4GB to 1GB. For BWC, this meant that jobs where model_memory_limit
+is null, the default of 4GB applies. Jobs that were created from 6.1
+onwards, contain an explicit setting for model_memory_limit, which is
+1GB unless the user sets it differently. This adds additional confusion.
+
+This commit makes analysis limits an always explicit setting on the job.
+Regardless of whether the user sets custom limits or not, the job object
+(and response) will contain the full analysis limits values.
+
+The possibilities for interpretation of missing values are:
+
+  - the entire analysis_limits is null: this may only happen for jobs
+  created prior to 6.1. Thus we set the model_memory_limit to 4GB.
+  - analysis_limits are non-null but model_memory_limit is: this also
+  may only happen for jobs prior to 6.1. Again, we set memory limit to
+  4GB.
+  - model_memory_limit is non-null: this either means the user set an
+  explicit value or the job was created from 6.1 onwards and it has
+  the explicit default of 1GB. We simply keep the given value.
+
+For categorization_examples_limit the default has always been 4, so
+we fill that in when it's missing.
+
+Finally, note that we still need to handle potential null values
+for the situation of a mixed cluster.
+
+Original commit: elastic/x-pack-elasticsearch@5b6994ef750298a829dd2995664470cd4cc95e07

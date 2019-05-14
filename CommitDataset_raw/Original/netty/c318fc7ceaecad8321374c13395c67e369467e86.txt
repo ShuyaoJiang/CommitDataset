@@ -1,0 +1,13 @@
+Remove not needed intermediate collection while reading DatagramPackets in native transports
+
+Motivation:
+
+We used an intermediate collection to store the read DatagramPackets and only fired these through the pipeline once wewere done with the reading loop. This is not needed and can also increase memory usage.
+
+Modifications:
+
+Remove intermediate collection
+
+Result:
+
+Less overhead and possible less memory usage during read loop.

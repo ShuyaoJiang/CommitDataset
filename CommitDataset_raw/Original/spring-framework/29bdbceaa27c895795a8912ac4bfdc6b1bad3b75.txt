@@ -1,0 +1,14 @@
+Customize concurrency at listener level
+
+Prior to this commit, customizing the concurrency to use fo a given JMS
+listener involved to define it in a specific listener-container. As
+this is quite restrictive, users may stop using the XML namespace
+support altogether to fallback on regular abstract bean definition for
+the container.
+
+This commit adds a concurrency attribute to the jms and jca listener
+element as well as on the @JmsListener annotation. If the value is set,
+it takes precedence; otherwise the value provided by the factory is
+used.
+
+Issue: SPR-11988

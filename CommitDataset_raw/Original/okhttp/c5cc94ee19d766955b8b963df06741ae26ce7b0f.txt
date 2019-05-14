@@ -1,0 +1,9 @@
+Always build full chains with CertificateChainCleaner.
+
+We had a bug on Android where the trust root index would return trusted
+intermediate certificates when we called findTrustAnchorByIssuerAndSignature().
+This would lead to a partial chain, which would fail the pin check
+unnecessarily.
+
+Also permit that method to return null, as it does when the certificate
+is not trusted.

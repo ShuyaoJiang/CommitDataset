@@ -1,0 +1,13 @@
+Removing unnecessary use of Math.ceil in HTTP/2 priority algorithm.
+
+Motivation:
+
+We're currently using Math.ceil which isn't necessary. We should exchange for a lighter weight operation.
+
+Modifications:
+
+Changing the logic to just ensure that we allocate at least one byte to the child rather than always performing a ceil.
+
+Result:
+
+Slight performance improvement in the priority algorithm.

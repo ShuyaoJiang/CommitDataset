@@ -1,0 +1,16 @@
+Introduce plugin-specific env scripts
+
+With plugins of a meta-plugin now loaded in separate classloaders, we
+should not be loading all classes in all plugins of a meta-plugin when
+executing scripts. This is particularly problematic in the case of
+security extensions where the install plugin extension command would be
+running with the classpath of all plugins. However, if there is JAR hell
+in this classpath, installation would fail. This is not realistic though
+since the plugins are run in separate classloaders. To fix this, for the
+scripts of a plugin, we only set the classpath to include the JARs for
+that plugin and the JARs of core. This leads us to the introduction of
+plugin-specific env scripts.
+
+Relates elastic/x-pack-elasticsearch#3649
+
+Original commit: elastic/x-pack-elasticsearch@543df37eedf369969d78ac5facae43d2f4638ad3

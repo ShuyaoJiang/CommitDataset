@@ -1,0 +1,79 @@
+Merged revisions 321,327,330,332,334,342-343,352-353,355-358,361-363,365,372 via svnmerge from 
+https://zxing.googlecode.com/svn/trunk/android-m3
+
+........
+  r321 | srowen | 2008-03-28 09:57:55 -0700 (Fri, 28 Mar 2008) | 1 line
+  
+  Updates for 0.6; set aside a different android-m3-home variable for android-m3 build
+........
+  r327 | srowen | 2008-03-31 12:04:38 -0700 (Mon, 31 Mar 2008) | 1 line
+  
+  Made the RGB to luminance approximation/optimization a little faster -- one less shift
+........
+  r330 | dswitkin | 2008-03-31 13:55:38 -0700 (Mon, 31 Mar 2008) | 1 line
+  
+  Changed the project names for the two Android clients to disambiguate them.
+........
+  r332 | dswitkin | 2008-04-01 09:11:36 -0700 (Tue, 01 Apr 2008) | 1 line
+  
+  Added some debugging features to the M3 Android client. You can now press 'C' to capture a photo, 'U' to decode only UPC/1D barcodes, and 'Q' to decode only QR Codes.
+........
+  r334 | dswitkin | 2008-04-01 12:23:05 -0700 (Tue, 01 Apr 2008) | 1 line
+  
+  Added latency measurement in milliseconds to the Android client.
+........
+  r342 | dswitkin | 2008-04-03 14:13:50 -0700 (Thu, 03 Apr 2008) | 1 line
+  
+  Improved the Android M3 viewfinder display, by making the framing box larger and zooming in. Also fixed a bug when restarting the activity where the camera params were stale. Fixed handling of geo and tel URIs.
+........
+  r343 | srowen | 2008-04-03 15:18:16 -0700 (Thu, 03 Apr 2008) | 1 line
+  
+  Moved the "geo:" fix to the 'right' place
+........
+  r352 | dswitkin | 2008-04-08 08:25:13 -0700 (Tue, 08 Apr 2008) | 1 line
+  
+  Rewrote the Android M3 client to do continuous decoding, which means you no longer have to push the shutter button. Now you can just place the barcode in the viewfinder and it will display the contents as soon as it decodes them. That also means you no longer get "barcode not found" error dialogs which is a big improvement. Also made sure that capturing debug JPEGs uses unique filenames.
+........
+  r353 | dswitkin | 2008-04-08 09:06:13 -0700 (Tue, 08 Apr 2008) | 1 line
+  
+  Improved the CameraThread state machine, and fixed a bug where preview would not continue after capture.
+........
+  r355 | dswitkin | 2008-04-10 13:57:37 -0700 (Thu, 10 Apr 2008) | 1 line
+  
+  Made sure the BitmapSource subclasses do not reuse a BitArray which is too small.
+........
+  r356 | dswitkin | 2008-04-11 12:30:54 -0700 (Fri, 11 Apr 2008) | 1 line
+  
+  Changed ProGuard settings so it will inline methods which use private members. This eliminates tens of thousands of function calls to BitArray.get() on a typical decode, and lots of other work as well. Overall we're roughly 20% faster by using ProGuard than turning it off.
+........
+  r357 | dswitkin | 2008-04-11 13:25:09 -0700 (Fri, 11 Apr 2008) | 1 line
+  
+  Made the worker threads shut down synchronously to fix a race condition where the CameraManager could close the camera driver too soon.
+........
+  r358 | dswitkin | 2008-04-11 14:16:08 -0700 (Fri, 11 Apr 2008) | 1 line
+  
+  Added 'T' as a shortcut to toggle debug method tracing using android.os.Debug and traceview for analysis. The traces are written to /sdcard, which means the SD Card must not be mounted as a volume by USB at the time. Tracing can slow down decoding by a factor of 5 or more but gives very useful insights into where the time is going.
+........
+  r361 | dswitkin | 2008-04-15 15:34:49 -0700 (Tue, 15 Apr 2008) | 1 line
+  
+  A couple small improvements to the CameraManager.
+........
+  r362 | srowen | 2008-04-15 17:27:36 -0700 (Tue, 15 Apr 2008) | 1 line
+  
+  Small simplification of build file condition properties using else attribute
+........
+  r363 | srowen | 2008-04-15 17:34:13 -0700 (Tue, 15 Apr 2008) | 1 line
+  
+  Fix Issue 50, not building on Windows, by adding some small workarounds for Windows paths in build files for Android
+........
+  r365 | dswitkin | 2008-04-17 13:09:17 -0700 (Thu, 17 Apr 2008) | 1 line
+  
+  Converted the Android client to use a status bar on the bottom of the screen instead of dialogs for a much better, less interrupting user experience.
+........
+  r372 | dswitkin | 2008-04-21 11:11:02 -0700 (Mon, 21 Apr 2008) | 1 line
+  
+  Added some simple sharpening for 1D decoding which allowed a couple more blackbox images to pass. There were a few cases where the format or content is now misdetected, but since the net gain was positive I decided to make those non-fatal errors. In real world use the sharpening seems to help, and I think we can do even better with a better algorithm.
+........
+
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@374 59b500cc-1b3d-0410-9834-0bbf25fbcc57

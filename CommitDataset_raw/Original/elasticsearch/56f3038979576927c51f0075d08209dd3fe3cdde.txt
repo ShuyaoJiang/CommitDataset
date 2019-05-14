@@ -1,0 +1,14 @@
+[Data Frame] Refactor PUT transform to not create a task (#39934)
+
+* [Data Frame] Refactor PUT transform such that:
+
+ * POST _start creates the task and starts it
+ * GET transforms queries docs instead of tasks
+ * POST _stop verifies the stored config exists before trying to stop
+the task
+
+* Addressing PR comments
+
+* Refactoring DataFrameFeatureSet#usage, decreasing size returned getTransformConfigurations
+
+* fixing failing usage test

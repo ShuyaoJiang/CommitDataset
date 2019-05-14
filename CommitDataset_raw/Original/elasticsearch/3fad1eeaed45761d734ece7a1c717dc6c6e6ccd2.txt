@@ -1,0 +1,8 @@
+Un-assign persistent tasks as nodes exit the cluster (#37656)
+
+PersistentTasksClusterService decides if a task should be reassigned by 
+checking there is a node in the cluster with the same Id. If a node is 
+restarted PersistentTasksClusterService may not observe the change and 
+decide the task still has a valid assignment because the node's 
+ephemeral Id is not used in that decision. This change un-assigns tasks
+as the nodes in the cluster change. 

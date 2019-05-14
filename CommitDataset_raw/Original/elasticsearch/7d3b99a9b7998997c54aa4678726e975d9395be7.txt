@@ -1,0 +1,22 @@
+SQL: Fix result column names for CAST (#33604)
+
+Previously, when an non-pruned cast (casting as a different
+data type) got applied on a table column in the `SELECT` clause,
+the name of the result column didn't contain the target data type
+of the cast, e.g.:
+
+  SELECT CAST(MAX(salary) AS DOUBLE) FROM "test_emp"
+
+returned as column name:
+
+  CAST(MAX(salary))
+
+instead of:
+
+  CAST(MAX(salary) AS DOUBLE)
+
+Closes #33571
+
+* Added more tests for trivial casts that are pruned
+
+

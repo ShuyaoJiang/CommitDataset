@@ -1,0 +1,19 @@
+Watcher: Ignore system locale/timezone in croneval CLI tool (#33215)
+
+The elasticsearch-croneval CLI tool uses local dates to display when
+something gets triggered the next time. This is very confusing.
+
+This commit ensures, that UTC and local timezone times will be written
+out.
+
+The output looks like this and contains localized dates for each trigger
+date as well as for `now`.
+
+Now is [Tue, 28 Aug 2018 17:23:51 +0000] in UTC, local time is [ᏔᎵᏁ, 28 ᎦᎶ 2018 12:23:51 -0500]
+Here are the next 10 times this cron expression will trigger:
+1.	Mon, 2 Jan 2040 11:00:00 +0000
+	ᏉᏅᎯ, 2 ᎤᏃ 2040 06:00:00 -0500
+2.      ...
+
+This also removes an old outstanding TODO to use the jopt parsing to
+cast the count to an integer instead of doing it ourselves.

@@ -1,0 +1,13 @@
+Protect against '//' in UriComponentsBuilder
+
+Refactor UriComponentsBuilder to ensure that paths do not contain empty
+segments.
+
+For example, prior to this commit:
+
+    fromUriString("http://example.com/abc/").path("/x/y/z")
+
+would build the URL "http://example.com/abc//x/y/z" where as it will
+now build "http://example.com/abc/x/y/z".
+
+Issue: SPR-10270

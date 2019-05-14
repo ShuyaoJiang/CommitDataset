@@ -1,0 +1,28 @@
+Return index name and empty map for /{index}/_alias with no aliases
+
+Previously in #24723 we changed the `_alias` API to not go through the
+`RestGetIndicesAction` endpoint, instead creating a `RestGetAliasesAction` that
+did the same thing.
+
+This changes the formatting so that it matches the old formatting of the
+endpoint, before:
+
+```
+GET /test-1/_alias
+
+{ }
+```
+
+And after this change:
+
+```
+GET /test-1/_alias
+
+{
+  "test-1": {
+    "aliases": {}
+  }
+}
+```
+
+This is related to #25090

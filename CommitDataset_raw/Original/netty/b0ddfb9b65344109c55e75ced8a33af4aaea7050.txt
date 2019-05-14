@@ -1,0 +1,10 @@
+[#2525] Use VoidChannelPromise in MessageToMessageEncoder when possible
+
+Motivation:
+At the moment MessageToMessageEncoder uses ctx.write(msg) when have more then one message was produced. This may produce more GC pressure then necessary as when the original ChannelPromise is a VoidChannelPromise we can safely also use one when write messages.
+
+Modifications:
+Use VoidChannelPromise when the original ChannelPromise was of this type
+
+Result:
+Less object creation and GC pressure

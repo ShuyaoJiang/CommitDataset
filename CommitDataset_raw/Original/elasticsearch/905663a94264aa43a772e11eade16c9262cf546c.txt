@@ -1,0 +1,9 @@
+Use armored input stream for reading public key (#31229)
+
+This was silly; Bouncy Castle has an armored input stream for reading
+keys in ASCII armor format. This means that we do not need to strip the
+header ourselves and base64 decode the key. This had problems anyway
+because of discrepancies in the padding that Bouncy Castle would produce
+and the JDK base64 decoder was expecting. Now that we armor input/output
+the whole way during tests, we fix all random failures in test cases
+too.

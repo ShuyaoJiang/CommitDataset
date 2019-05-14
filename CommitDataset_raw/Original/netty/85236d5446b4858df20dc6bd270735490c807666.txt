@@ -1,0 +1,13 @@
+[#4355] OpenSslServerContext reinitializes the provided TrustManagerFactory with the key cert chain.
+
+Motivation:
+
+OpenSslServerContext should not reinitialize the provided TrustManagerFactory with the key cert chain as the user should be able to pass a fully initialized TrustManagerFactory. This is also in line with how JdkSslServerContext works.
+
+Modifications:
+
+Not reinitialize the provided TrustManagerFactory with the key cert chain.
+
+Result:
+
+Correct and consistent behavior.

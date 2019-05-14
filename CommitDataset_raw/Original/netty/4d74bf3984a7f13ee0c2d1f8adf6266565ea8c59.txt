@@ -1,0 +1,10 @@
+HTTP/2 MaxStreams cleanup
+
+Motivation:
+765e944d4d105863ccb8e3e745285aaea0b8105b imposed a limit on the maximum number of stream in all states. However the default limit did not allow room for streams in addition to SETTINGS_MAX_CONCURRENT_STREAMS. This can mean streams in states outside the states which SETTINGS_MAX_CONCURRENT_STREAMS applies to may not be reliably created.
+
+Modifications:
+- The default limit should be larger than SETTINGS_MAX_CONCURRENT_STREAMS
+
+Result:
+More lenient limit is applied to maxStreams by default.

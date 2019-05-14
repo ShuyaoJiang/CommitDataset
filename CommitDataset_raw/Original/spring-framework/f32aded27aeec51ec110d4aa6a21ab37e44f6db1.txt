@@ -1,0 +1,12 @@
+Consolidate CORS/OPTIONS request mapping
+
+The CORS pre-flight request matching logic for all request conditions
+was added (in 4.2) to RequestMappingInfo. However the logic for
+default handling of all HTTP OPTIONS requests for 4.3 unintentionally
+overrode some of the pre-flight request handling thus causing issues.
+
+This commit moves CORS pre-flight matching logic into each respective
+RequestMethodCondition implementations so each has to consider in one
+place what happens for pre-flight and for all other requests.
+
+Issue: SPR-13130

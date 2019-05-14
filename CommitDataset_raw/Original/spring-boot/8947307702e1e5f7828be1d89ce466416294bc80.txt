@@ -1,0 +1,16 @@
+Add retry and parameter increment logic to job runner
+
+The existing behaviour of JobLauncherCommandLineRunner was really too
+basic. It has now been enhanced (at the expense of duplicating a lot
+of code in Spring Batch it seems) to automatically increment job
+parameters if it can, and to retry a failed or stopped execution
+if it can (without incrementing, but with additional job parameters
+added from command line if they are non-identifying).
+
+The JobLauncherCommandLineRunner is more extendable and exposes
+its DI wiring points now as well, so hopefully users can make
+use of it independently of autoconfig (by providing a @Bean of
+that type).
+
+Not everything from the wishlist in gh-325 is implememented yet,
+but it should be a good platform to work with and to extend.

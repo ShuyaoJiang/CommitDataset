@@ -1,0 +1,10 @@
+DefaultChannelHandlerInvoker write leak
+
+Motivation:
+DefaultChannelHandlerInvoker.invokeWrite calls a utility method validatePromise which may throw if the arguments are not valid. If this method throws then the message will not be released.
+
+Modifications:
+- If an exception is thrown the message should be released
+
+Result:
+No more leak in DefaultChannelHandlerInvoker.invokeWrite

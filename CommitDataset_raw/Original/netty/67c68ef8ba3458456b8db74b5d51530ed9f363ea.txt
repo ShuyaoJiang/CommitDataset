@@ -1,0 +1,13 @@
+CorsHandler should release HttpRequest after processing preflight/error.
+
+Motivation:
+Currently, when the CorsHandler processes a preflight request, or
+respondes with an 403 Forbidden using the short-curcuit option, the
+HttpRequest is not released which leads to a buffer leak.
+
+Modifications:
+Releasing the HttpRequest when done processing a preflight request or
+responding with an 403.
+
+Result:
+Using the CorsHandler will not cause buffer leaks.

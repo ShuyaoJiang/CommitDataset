@@ -1,0 +1,27 @@
+Introduce client feature tracking (#31020)
+
+This commit introduces the ability for a client to communicate to the
+server features that it can support and for these features to be used in
+influencing the decisions that the server makes when communicating with
+the client. To this end we carry the features from the client to the
+underlying stream as we carry the version of the client today. This
+enables us to enhance the logic where we make protocol decisions on the
+basis of the version on the stream to also make protocol decisions on
+the basis of the features on the stream. With such functionality, the
+client can communicate to the server if it is a transport client, or if
+it has, for example, X-Pack installed. This enables us to support
+rolling upgrades from the OSS distribution to the default distribution
+without breaking client connectivity as we can now elect to serialize
+customs in the cluster state depending on whether or not the client
+reports to us using the feature capabilities that it can under these
+customs. This means that we would avoid sending a client pieces of the
+cluster state that it can not understand. However, we want to take care
+and always send the full cluster state during node-to-node communication
+as otherwise we would end up with different understanding of what is in
+the cluster state across nodes depending on which features they reported
+to have. This is why when deciding whether or not to write out a custom
+we always send the custom if the client is not a transport client and
+otherwise do not send the custom if the client is transport client that
+does not report to have the feature required by the custom.
+
+Co-authored-by: Yannick Welsch <yannick@welsch.lu>

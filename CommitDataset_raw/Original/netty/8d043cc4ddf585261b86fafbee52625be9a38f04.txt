@@ -1,0 +1,22 @@
+Do not return Access-Control-Allow-Headers on Non-Preflight Cors requests
+
+Motivation:
+
+The CorsHandler currently returns the Access-Control-Allow-Headers
+header as on a Non-Preflight CORS request (Simple request).
+As per the CORS specification the Access-Control-Allow-Headers header
+should only be returned on Preflight requests. (not on simple requests).
+
+https://www.w3.org/TR/2014/REC-cors-20140116/#access-control-allow-headers-response-header
+
+http://www.html5rocks.com/static/images/cors_server_flowchart.png
+
+Modifications:
+
+Modified CorsHandler.java to not add the Access-Control-Allow-Headers
+header when responding to Non-preflight CORS request.
+
+Result:
+
+Access-Control-Allow-Headers header will not be returned on a Simple
+request (Non-preflight CORS request).

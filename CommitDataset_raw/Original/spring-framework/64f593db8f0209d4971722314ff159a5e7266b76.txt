@@ -1,0 +1,69 @@
+Support meta-annotation attr overrides in the TCF
+
+Prior to this commit, the Spring TestContext Framework (TCF) supported
+the use of test-related annotations as meta-annotations for composing
+custom test stereotype annotations; however, attributes in custom
+stereotypes could not be used to override meta-annotation attributes.
+
+This commit addresses this by allowing attributes from the following
+annotations (when used as meta-annotations) to be overridden in custom
+stereotypes.
+
+- @ContextConfiguration
+- @ActiveProfiles
+- @DirtiesContext
+- @TransactionConfiguration
+- @Timed
+- @TestExecutionListeners
+
+This support depends on functionality provided by
+AnnotatedElementUtils. See the 'Notes' below for further details and
+ramifications.
+
+Notes:
+
+- AnnotatedElementUtils does not support overrides for the 'value'
+  attribute of an annotation. It is therefore not possible or not
+  feasible to support meta-annotation attribute overrides for some
+  test-related annotations.
+- @ContextHierarchy, @WebAppConfiguration, @Rollback, @Repeat, and
+  @ProfileValueSourceConfiguration define single 'value' attributes
+  which cannot be overridden via Spring's meta-annotation attribute
+  support.
+- Although @IfProfileValue has 'values' and 'name' attributes, the
+  typical usage scenario involves the 'value' attribute which is not
+  supported for meta-annotation attribute overrides. Furthermore,
+  'name' and 'values' are so generic that it is deemed unfeasible to
+  provide meta-annotation attribute override support for these.
+- @BeforeTransaction and @AfterTransaction do not define any attributes
+  that can be overridden.
+- Support for meta-annotation attribute overrides for @Transactional is
+  provided indirectly via SpringTransactionAnnotationParser.
+
+Implementation Details:
+
+- MetaAnnotationUtils.AnnotationDescriptor now provides access to the
+  AnnotationAttributes for the described annotation.
+- MetaAnnotationUtils.AnnotationDescriptor now provides access to the
+  root declaring class as well as the declaring class.
+- ContextLoaderUtils now retrieves AnnotationAttributes from
+  AnnotationDescriptor to look up annotation attributes for
+  @ContextConfiguration and @ActiveProfiles.
+- ContextConfigurationAttributes now provides a constructor to have its
+  attributes sourced from an instance of AnnotationAttributes.
+- ContextLoaderUtils.resolveContextHierarchyAttributes() now throws an
+  IllegalStateException if no class in the class hierarchy declares
+  @ContextHierarchy.
+- TransactionalTestExecutionListener now uses AnnotatedElementUtils to
+  look up annotation attributes for @TransactionConfiguration.
+- Implemented missing unit tests for @Rollback resolution in
+  TransactionalTestExecutionListener.
+- SpringJUnit4ClassRunner now uses AnnotatedElementUtils to look up
+  annotation attributes for @Timed.
+- TestContextManager now retrieves AnnotationAttributes from
+  AnnotationDescriptor to look up annotation attributes for
+  @TestExecutionListeners.
+- DirtiesContextTestExecutionListener now uses AnnotatedElementUtils to
+  look up annotation attributes for @DirtiesContext.
+
+Issue: SPR-11038

@@ -1,0 +1,16 @@
+Refactor PropertyPlaceholderConfigurer hierarchy
+
+PropertySourcesPlaceholderConfigurer accommodates recent changes in
+Environment and PropertySource APIs, e.g. no longer assuming enumerability
+of property names.
+
+PSPC reuses as much functionality as possible from
+AbstractPropertyPlaceholderConfigurer, but overrides
+postProcessBeanFactory() and defines its own variation on
+processProperties() in order to accept a PropertyResolver rather than
+a PropertySource.
+
+AbstractPropertyPlaceholderConfigurer introduces doProcessProperties()
+method to encapsulate that which is actually common, such as the
+visiting of each bean definition once a StringValueResolver has been
+created in the subclass.

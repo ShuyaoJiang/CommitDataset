@@ -1,0 +1,13 @@
+Fixed illegal reflective access by not relying on a sun.net.dns class. (#8318) (#8319)
+
+Motivation
+
+Applications should not depend on internal packages with Java 9 and later. This cause a warning now, but will break in future versions of Java.
+
+Modification
+
+This change adds methods to UnixResolverDnsServerAddressStreamProvider (following after #6844) that parse /etc/resolv.conf for domain and search entries. Then DnsNameResolver does not need to rely on sun.net.dns.ResolverConfiguration to do this.
+
+Result
+
+Fixes #8318. Furthermore, at least in my testing with Java 11, this also makes multiple search entries work properly (previously I was only getting the first entry).

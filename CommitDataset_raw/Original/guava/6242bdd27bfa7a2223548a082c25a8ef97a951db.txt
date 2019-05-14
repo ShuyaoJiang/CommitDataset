@@ -1,0 +1,34 @@
+Remove @Beta from APIs:
+
+collect
+- most Collectors (aside from BloomFilter and ImmutableRange*, as those whole classes are @Beta (though I did remove the redundant @Beta annotation from the Collector-returning methods for clarity))
+- Maps: asConverter, immutableEnumMap
+- MultimapBuilder
+- Streams: stream(Iterable), concat
+
+io
+- ByteStreams: copy, toByteArray
+- CharStreams: copy, toString
+- Files: as(Char|Byte)(Source|Sink)
+
+util.concurrent
+- Futures: addCallback, getDone, getUnchecked, immediateCancelledFuture, immediateFailedFuture, immediateFuture
+- ListeningScheduledExecutorService
+- Uninterruptibles
+
+other
+- HtmlEscapers
+- Splitter.splitToList
+- Ticker
+
+Fixes https://github.com/google/guava/pull/3287
+Fixes https://github.com/google/guava/issues/3251 (aside from ImmutableRange*, but those whole classes are @Beta, anyway)
+Addresses the main concerns of https://github.com/google/guava/issues/3285 but doesn't cover the broader request
+Fixes https://github.com/google/guava/issues/3340
+Partially addresses https://github.com/google/guava/issues/3239
+
+RELNOTES=Removed `@Beta` from a number of frequently used APIs.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=232681253

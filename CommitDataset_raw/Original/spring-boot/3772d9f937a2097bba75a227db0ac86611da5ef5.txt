@@ -1,0 +1,12 @@
+Update JarURLConnection to only require file read permission
+
+Previously, JarURLConnection didn't override getPermission(). This
+meant that it required all permissions. This was at odds with the
+Oracle JVM's concrete sun.net.www.protocol.jar.JarURLConnection which
+overrides getPermission to return a FilePermission with the read
+action for the path of the underlying jar.
+
+This commit updates our JarURLConnection to align its behaviour with
+sun.net.www.protocol.jar.JarURLConnection.
+
+Closes gh-5411

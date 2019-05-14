@@ -1,0 +1,8 @@
+Replace ChannelBuffer.toByteBuffer() with hasNioBuffer() and nioBuffer()
+
+... just like we do with byte arrays.  toByteBuffer() and
+toByteBuffers() had an indeterministic behavior and thus it could not
+tell when the returned NIO buffer is shared or not.  nioBuffer() always
+returns a view buffer of the Netty buffer.  The only case where
+hasNioBuffer() returns false and nioBuffer() fails is the
+CompositeChannelBuffer, which is not very commonly used and *slow*.

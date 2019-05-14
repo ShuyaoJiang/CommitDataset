@@ -1,0 +1,38 @@
+Improve transaction management for @Sql scripts
+
+Prior to this commit, the support for SQL script execution via @Sql
+provided an algorithm for looking up a required
+PlatformTransactionManager to use to drive transactions. However, a
+transaction manager is not actually required for all testing scenarios.
+
+This commit improves the transaction management support for @Sql so
+that SQL scripts can be executed without a transaction if a transaction
+manger is not present in the ApplicationContext. The updated algorithm
+now supports the following use cases.
+
+ - If a transaction manager and data source are both present (i.e.,
+   explicitly specified via the transactionManager and dataSource
+   attributes of @SqlConfig or implicitly discovered in the
+   ApplicationContext based on conventions), both will be used.
+
+ - If a transaction manager is not explicitly specified and not
+   implicitly discovered based on conventions, SQL scripts will be
+   executed without a transaction but requiring the presence of a data
+   source. If a data source is not present, an exception will be thrown.
+
+ - If a data source is not explicitly specified and not implicitly
+   discovered based on conventions, an attempt will be made to retrieve
+   it by using reflection to invoke a public method named
+   getDataSource() on the transaction manager. If this attempt fails,
+   an exception will be thrown.
+
+ - If a data source can be retrieved from the resolved transaction
+   manager using reflection, an exception will be thrown if the
+   resolved data source is not the data source associated with the
+   resolved transaction manager. This helps to avoid possibly
+   unintended configuration errors.
+
+ - If @SqlConfig.transactionMode is set to ISOLATED, an exception will
+   be thrown if a transaction manager is not present.
+
+Issue: SPR-11911

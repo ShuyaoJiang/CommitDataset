@@ -1,0 +1,16 @@
+SSLHandler may throw AssertionError if writes occur before channelAct… (#8486)
+
+Motivation:
+
+If you attempt to write to a channel with an SslHandler prior to channelActive being called you can hit an assertion. In particular - if you write to a channel it forces some handshaking (through flush calls) to occur.
+
+The AssertionError only happens on Java11+.
+
+Modifications:
+
+- Replace assert by an "early return" in case of the handshake be done already.
+- Add unit test that verifies we do not hit the AssertionError anymore and that the future is correctly failed.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8479.

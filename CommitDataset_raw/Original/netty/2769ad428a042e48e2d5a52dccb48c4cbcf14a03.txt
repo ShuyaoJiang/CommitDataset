@@ -1,0 +1,17 @@
+Check the bindFuture before writing a DNS query
+
+Related: #3149
+
+Motivation:
+
+DnsQueryContext, using the DatagramChannel bound in DnsNameResolver,
+blindly writes to the channel without checking the bind future for
+success.
+
+Modifications:
+
+Check the bindFuture before writing a DNS query to a DatagramChannel
+
+Result:
+
+Bug fixed

@@ -1,0 +1,15 @@
+HTTP/2 Non Active Stream RFC Corrections
+
+Motivation:
+codec-http2 couples the dependency tree state with the remainder of the stream state (Http2Stream). This makes implementing constraints where stream state and dependency tree state diverge in the RFC challenging. For example the RFC recommends retaining dependency tree state after a stream transitions to closed [1]. Dependency tree state can be exchanged on streams in IDLE. In practice clients may use stream IDs for the purpose of establishing QoS classes and therefore retaining this dependency tree state can be important to client perceived performance. It is difficult to limit the total amount of state we retain when stream state and dependency tree state is combined.
+
+Modifications:
+- Remove dependency tree, priority, and weight related items from public facing Http2Connection and Http2Stream APIs. This information is optional to track and depends on the flow controller implementation.
+- Move all dependency tree, priority, and weight related code from DefaultHttp2Connection to WeightedFairQueueByteDistributor. This is currently the only place which cares about priority. We can pull out the dependency tree related code in the future if it is generally useful to expose for other implementations.
+- DefaultHttp2Connection should explicitly limit the number of reserved streams now that IDLE streams are no longer created.
+
+Result:
+More compliant with the HTTP/2 RFC.
+Fixes https://github.com/netty/netty/issues/6206.
+
+[1] https://tools.ietf.org/html/rfc7540#section-5.3.4

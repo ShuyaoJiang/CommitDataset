@@ -1,0 +1,11 @@
+IPv6 address to string rfc5952
+
+Motivation:
+The java implementations for Inet6Address.getHostName() do not follow the RFC 5952 (http://tools.ietf.org/html/rfc5952#section-4) for recommended string representation. This introduces inconsistencies when integrating with other technologies that do follow the RFC.
+
+Modifications:
+-NetUtil.java to have another public static method to convert InetAddress to string. Inet4Address will use the java InetAddress.getHostAddress() implementation and there will be new code to implement the RFC 5952 IPV6 string conversion.
+-New unit tests to test the new method
+
+Result:
+Netty provides a RFC 5952 compliant string conversion method for IPV6 addresses

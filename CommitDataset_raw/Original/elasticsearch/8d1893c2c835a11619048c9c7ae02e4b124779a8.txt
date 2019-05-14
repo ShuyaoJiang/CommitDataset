@@ -1,0 +1,7 @@
+Ensure flush happen before closing an index (#40184)
+
+If there's an ongoing flush triggered by the translog flush threshold,
+we may fail to execute a flush because waitIfOngoing is false by
+default.
+
+Relates to #36342

@@ -1,0 +1,21 @@
+Add rolling upgrade multi cluster test module (#38277)
+
+This test starts 2 clusters, each with 3 nodes.
+First the leader cluster is started and tests are run against it and
+then the follower cluster is started and tests execute against this two cluster.
+
+Then the follower cluster is upgraded, one node at a time.
+After that the leader cluster is upgraded, one node at a time.
+Every time a node is upgraded tests are ran while both clusters are online.
+(and either leader cluster has mixed node versions or the follower cluster)
+
+This commit only tests CCR index following, but could be used for CCS tests as well.
+In particular for CCR, unidirectional index following is tested during a rolling upgrade.
+During the test several indices are created and followed in the leader cluster before or
+while the follower cluster is being upgraded.
+
+This tests also verifies that attempting to follow an index in the upgraded cluster
+from the not upgraded cluster fails. After both clusters are upgraded following the
+index that previously failed should succeed.
+
+Relates to #37231 and #38037

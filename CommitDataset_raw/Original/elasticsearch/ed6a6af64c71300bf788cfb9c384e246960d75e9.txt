@@ -1,0 +1,23 @@
+SAML: Make alias for signing key optional (elastic/x-pack-elasticsearch#4248)
+
+We specify an alias for signing key, but when we just have
+a single key in key store this is an additional setting which
+is annoying. This PR addresses this issue by making it optional.
+
+- Changes in SamlRealmSettings to make signing/encryption
+  key alias optional
+- Checks if none of the keys are useful for given operation
+  signing or encryption throws an error.
+- Checks for no of aliases in key-store, if more than one and alias
+  is not specified throws error.
+- If an alias is not specified and there is just one alias in
+  keystore then use it as the credential.
+- Unit Tests
+
+Note: A side effect of this change the above-mentioned behavior is
+it's also applicable for encryption keys currently, but it is going
+to change when fixing elastic/x-pack-elasticsearch#3980 for supporting multiple encryption keys.
+
+relates elastic/x-pack-elasticsearch#3981
+
+Original commit: elastic/x-pack-elasticsearch@2b5af1d8a8e9f43125cf6d1c9315e2bd60809f93

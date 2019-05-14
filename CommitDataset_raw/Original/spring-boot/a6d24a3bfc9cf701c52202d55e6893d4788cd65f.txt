@@ -1,0 +1,11 @@
+Allow bootWar to package webapp resources in dirs that overlap loader
+
+Previously, the presence of a src/main/webapp/org directory would
+cause the execution of BootWar to fail due to an attempt to write
+a duplicate org/ entry to the zip output stream.
+
+This commit updates BootZipCopyAction so that FileTreeElements that
+match a directory entry created while writing the loader classes are
+skipped.
+
+Closes gh-8972

@@ -1,0 +1,5 @@
+getMinGenerationForSeqNo should acquire read lock (#29126)
+
+The method Translog#getMinGenerationForSeqNo does not modify the current
+translog but only access, it therefore should acquire the readLock
+instead of writeLock.

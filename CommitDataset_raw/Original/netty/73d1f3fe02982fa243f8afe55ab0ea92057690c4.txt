@@ -1,0 +1,5 @@
+NETTY-384 Another deadlock in ChunkedWriteHandler
+
+ChunkedWriteHandler.discard() do not issue write requests to trigger exceptionCaught events and to notify write futures anymore.  Instead, it triggers exceptionCaught events and notifies write futures by itself.  Therefore, no write lock is involved during discard(), avoiding the reported dead lock.
+
+However, this is a temporary solution, and eventually Netty must introduce more robust event thread model.

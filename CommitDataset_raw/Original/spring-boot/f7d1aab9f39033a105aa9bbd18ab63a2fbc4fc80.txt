@@ -1,0 +1,17 @@
+Make ElasticSearchAutoConfiguration conditional on SD Elasticsearch
+
+ElasticSearchAutoConfiguration depends on two Spring Data Elasticsearch
+classes (TransportClientFactoryBean and NodeClientFactoryBean), however
+it’s only conditional on Elasticsearch itself being on the classpath.
+This lead to start up failures due to a ClassNotFoundException. Its
+@ConditionalOnClass configuration has been updated so that the
+auto-configuration will only be enabled if both Elasticsearch and Spring
+Data Elasticsearch are on the classpath.
+
+The dependencies on TransportClientFactoryBean and NodeClientFactoryBean
+were ‘hidden’ in ElasticsearchProperties. The logic that uses these
+types has been moved into ElasticSearchAutoConfiguration so that the
+usage of the types and the related @ConditionalOnClass configuration
+is in the same file.
+
+Fixes #1023

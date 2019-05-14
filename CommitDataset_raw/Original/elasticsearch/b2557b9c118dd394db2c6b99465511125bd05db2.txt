@@ -1,0 +1,9 @@
+Skip GeoIpProcessorFactoryTests on Windows (#29005)
+
+With this commit we skip all GeoIpProcessorFactoryTests on Windows.
+These tests use a MappedByteBuffer which will keep its file mappings
+until it is garbage-collected. As a consequence, the corresponding
+file appears to be still in use, Windows cannot delete it and the test
+will fail in teardown.
+
+Closes #29001

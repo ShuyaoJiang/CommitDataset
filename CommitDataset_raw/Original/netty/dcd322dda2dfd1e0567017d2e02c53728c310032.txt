@@ -1,0 +1,13 @@
+Fix regression in QueryStringEncoder
+
+Motivation:
+
+Commit #d675febf07d14d4dff82471829f974369705655a introduced a regression in QueryStringEncoder, resulting in whitespace being converted into a literal `+` sign instead of `%20`.
+
+Modification:
+
+Modify `encodeComponent` to pattern match and replace on the result of the call to `URLEncoder#encode`
+
+Result:
+
+Fixes regression

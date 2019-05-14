@@ -1,0 +1,9 @@
+Optimize Monitor.leave.
+
+No reason to check for whether we hold lock - lock.unlock will
+throw IMSE for us.
+
+No reason to signal if we are leaving a lock occupied with depth > 1.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=41204492

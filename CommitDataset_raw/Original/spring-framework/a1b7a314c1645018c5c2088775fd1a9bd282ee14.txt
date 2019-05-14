@@ -1,0 +1,10 @@
+Add BindException to DefaultHandlerExceptionResolver
+
+Previously DefaultHandlerExceptionResolver did not handle BindException
+but after this change it does. A BindException is raised when an
+@ModelAttribute annotated argument is not followed by a BindingResult
+argument. Hence this is unlikely to affect browser rendering.
+For programmatic clients however this change ensures an unhandled
+BindException is at least turned into a 400 error.
+
+Issue: SPR-9310

@@ -1,0 +1,10 @@
+DefaultHttp2ConnectionEncoder private constructors on inner classes
+
+Motivation:
+DefaultHttp2ConnectionEncoder.FlowControlledHeaders and DefaultHttp2ConnectionEncoder.FlowControlledData have private constructors which may result in static factory methods being generated to construct instances of these classes.
+
+Modifications:
+- Make constructors public for these private classes
+
+Result:
+Accessor for inner class constructor more correct and no possibiliy of synthetic method generation.

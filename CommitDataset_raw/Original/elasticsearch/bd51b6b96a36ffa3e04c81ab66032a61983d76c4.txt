@@ -1,0 +1,8 @@
+REST hl client: adjust wait_for_active_shards param in cluster health (#31266)
+
+The default wait_for_active_shards is NONE for cluster health, which
+differs from all the other API in master, hence we need to make sure to
+set the parameter whenever it differs from NONE (0). The test around
+this also had a bug, which is why this was not originally uncovered.
+
+Relates to #29331

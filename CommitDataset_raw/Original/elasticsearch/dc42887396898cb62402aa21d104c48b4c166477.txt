@@ -1,0 +1,25 @@
+Watcher: Move watcher-only packages into watcher hierarchy (elastic/x-pack-elasticsearch#2933)
+
+In order to prepare for separate source directories, this commit moves
+a few packages back into the watcher namespaces. A few of them have been
+moved out previously as we thought that it might make sense to have a
+dedicated notification API. This wont be the case for watcher on ES
+anymore, so we can safely move those back into the watcher space.
+
+Packages affected by this move:
+
+* org.elasticsearch.xpack.common.http
+* org.elasticsearch.xpack.common.text
+* org.elasticsearch.xpack.common.secret
+* org.elasticsearch.xpack.common.stats
+* org.elasticsearch.xpack.support
+* org.elasticsearch.xpack.notification
+
+Tests have been moved accordingly.
+
+The class `XContentUtils` has been split into one implementation for
+watcher and one for security as different methods were used.
+
+Relates elastic/x-pack-elasticsearch#2925
+
+Original commit: elastic/x-pack-elasticsearch@0aec64a7e29a64a2c0830ee35b988fb66027cb89

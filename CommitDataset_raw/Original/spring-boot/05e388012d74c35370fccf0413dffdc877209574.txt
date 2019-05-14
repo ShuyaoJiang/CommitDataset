@@ -1,0 +1,10 @@
+Fix for empty datasource-name in metrics
+
+If there is more than one DataSource and the non-primary bean-name is
+'datasource' an incorrect metric name is chosen.
+
+The metrics are named datasource.active and not datasource.xxx.active. To
+avoid this, the shortening of the bean-name only occurs if the bean-name
+is longer than 'datasource'.
+
+See gh-2320

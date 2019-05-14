@@ -1,0 +1,10 @@
+HTTP/2 SETTINGS ACK sequencing issue
+
+Motivation:
+DefaultHttp2ConnectionDecoder#onSettingsRead processes the settings, and then sends a SETTINGS ACK to the remote peer. Processing the settings may result in frames which violate the previous settings being send to the remote peer. The remote peer will not apply the new settings until it has received the SETTINGS ACK, and therefore we may violate the settings from the remote peer's perspective and the connection will be shutdown.
+
+Modifications:
+- We should send the SETTINGS ACK before we process the settings to ensure the peer receives the SETTINGS ACK before other frames which assume the settings have already been applied
+
+Result:
+Fixes https://github.com/netty/netty/issues/6520.

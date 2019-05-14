@@ -1,0 +1,10 @@
+ResponseBodyResultHandler ignores ResponseEntity
+
+Currently ResponseEntityResultHandler is ordered lower than
+ResponseBodyResultHandler by default whch means a ResponseEntity
+should not be picked by the ResponseBodyResultHandler.
+
+However as it is easy to have both ResponseEntity and @ResponseBody
+e.g. in @RestControler (or even by mistake) and in general it makes
+sense for ResponseBodyResultHandler to explicitly recognize and
+ignore the ResponseEntity return type.

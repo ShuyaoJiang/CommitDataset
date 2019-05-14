@@ -1,0 +1,16 @@
+Refactor ResourceResolverChain + resolver class names
+
+This change splits out resource transformation out from the
+ResourceResolverChain so that chain is focused entirely on resource
+resolution (as its name suggests). The invocation of transformers
+is left as a separate step, it uses a different (recursive)
+algorithm in any case and iterates over a different set of objects.
+
+Also ResourceResolverChain is now limited strictly to methods that
+a ResourceResolver should be able to use to delegate to remaining
+resolvers.
+
+Furthermore, ResourceResolverChain now maintains an internal index
+of the "current" resolver so that resolvers don't have to pass the
+chain when invoking it much like a (Servlet API) FilterChain works.
+If the last resolver calls the chain again, a null value is returned.

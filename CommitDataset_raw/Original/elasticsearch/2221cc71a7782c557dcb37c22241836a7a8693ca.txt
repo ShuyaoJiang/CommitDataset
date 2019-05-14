@@ -1,0 +1,12 @@
+SQL: Fix getTime() methods in JDBC (#40484)
+
+Previously, `getTime(colIdx/colLabel)` and
+`getObject(colIdx/colLabel, java.sql.Time.class)` methods were computing
+the time from a `ZonedDateTime` by applying day in millis modulo on the epoch millis
+of the `ZonedDateTime` object. This is wrong as we need to keep the time
+related fields at the timezone of the `ZonedDateTime` object and just
+set the date info to the epoch date (01/01/1970).
+
+Additionally fixes a testing issue as the original timezone id is converted
+to an offset string when parsing the response from the server.
+

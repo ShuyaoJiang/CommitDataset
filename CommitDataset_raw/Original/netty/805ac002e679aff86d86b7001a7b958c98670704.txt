@@ -1,0 +1,37 @@
+FIX: force a read operation for peer instead of self (#7454)
+
+* FIX: force a read operation for peer instead of self
+
+Motivation:
+When A is in `writeInProgress` and call self close, A should
+`finishPeerRead` for B(A' peer).
+
+Modifications:
+Call `finishPeerRead` with peer in `LocalChannel#doClose`
+
+Result:
+Clear confuse of code logic
+
+* FIX: preserves order of close after write in same event loop
+
+Motivation:
+If client and server(client's peer channel) are in same event loop, client writes data to
+server in `ChannelActive`. Server receives the data and write it
+back. The client's read can't be triggered becasue client's
+`ChannelActive` is not finished at this point and its `readInProgress`
+is false. Then server closes itself, it will also close the client's
+channel. And client has no chance to receive the data.
+
+Modifications:
+1. Add a test case to demonstrate the problem
+2. When `doClose` peer, we always call
+`peer.eventLoop().execute()` and `registerInProgress` is not needed.
+3. Remove test case
+`testClosePeerInWritePromiseCompleteSameEventLoopPreservesOrder`. This
+test case can't pass becasue of this commit. IMHO, I think it is OK,
+becasue it is reasonable that the client flushes the data to socket,
+then server close the channel without received the data.
+4. For mismatch test in SniClientTest, the client should receive server's alert before closed(caused by server's close)
+
+Result:
+The problem is gone.

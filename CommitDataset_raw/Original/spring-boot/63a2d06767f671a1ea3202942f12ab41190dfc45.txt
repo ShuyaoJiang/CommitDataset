@@ -1,0 +1,11 @@
+Explicitly disable security on management endpoints if requested
+
+Previously the management endpoint filter was applied to all requests
+if the user had disabled security.management.enabled, but since it
+had no security applied it was letting all requests through.
+
+The fix was to explicitly exclude the whole enclosing configuration
+and carefully ignore the management endpoints in the normal security
+chain.
+
+Fixes gh-100.

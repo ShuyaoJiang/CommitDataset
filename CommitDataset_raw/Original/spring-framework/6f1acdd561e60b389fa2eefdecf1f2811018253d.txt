@@ -1,0 +1,19 @@
+Optimize ResolvableType cache
+
+Prior to this commit, the ResolvableType static cache was holding a lot
+of duplicates for simple types. We are using too much metadata to compute
+the key when the class has no generic information. so setFoo(String foo)
+and setBar(String bar) would result in two entries in the cache because
+the TypeProvider is different. On a very simple application 65% of the
+entries in the cache were duplicate.
+
+When the type is a Class with no generic information, the ResolvableType
+instance is a simple wrapper around it so we might just as well not cache
+it at all as the cost of finding it back from the cache is higher than
+creating that simple wrapper.
+
+This commit adds an explicit check; if the type is a simple Class we just
+return a "resolved" ResolvableType instance for it. On a few test cases,
+this reduces the size of the cache by 85%
+
+Issue: SPR-12275

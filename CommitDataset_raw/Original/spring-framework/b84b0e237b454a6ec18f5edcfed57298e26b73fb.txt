@@ -1,0 +1,9 @@
+Delete spring-context's dependency on spring-beans-groovy
+
+Commit 5648fbfc3155ddf4ead7388cfd7bc9e90b86f9d8 introduced a
+compile-time dependency on spring-beans-groovy in the spring-context
+module which breaks the build on the CI server since the Animal Sniffer
+task cannot find a JAR file for spring-beans-groovy.
+
+This commit reverts that change so that the "sniffer" task once again
+succeeds.

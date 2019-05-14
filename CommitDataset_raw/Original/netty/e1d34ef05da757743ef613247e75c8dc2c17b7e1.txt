@@ -1,0 +1,11 @@
+SslHandler should call beginHanshake once for the initial handshake
+
+Motivation:
+Not all SSLEngine implementations permit beginHandshake being called while a handshake is in progress during the initial handshake. We should ensure we only go through the initial handshake code once to prevent unexpected exceptions from being thrown.
+
+Modifications:
+- Only call beginHandshake if there is not currently a handshake in progress
+
+Result:
+SslHandler's handshake method is compatible with OpenSSLEngineImpl in Android 5.0+ and 6.0+.
+Fixes https://github.com/netty/netty/issues/4718

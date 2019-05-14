@@ -1,0 +1,10 @@
+[ML] Write model_memory_limit with units into the cluster state (elastic/x-pack-elasticsearch#1934)
+
+This is step 2 of elastic/x-pack-elasticsearch#1604
+
+This change stores `model_memory_limit` as a string with `mb` unit.
+I considered using the `toString` method of `ByteSizeValue` but it
+can lead to accuracy loss. Adding the fixed `mb` unit maintains
+the accuracy, while making clear what unit the value is in.
+
+Original commit: elastic/x-pack-elasticsearch@4dc48f0ce8515bbde200042dd0df2756b495fef3

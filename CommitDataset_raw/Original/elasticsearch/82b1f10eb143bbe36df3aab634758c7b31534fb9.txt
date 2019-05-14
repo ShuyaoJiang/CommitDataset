@@ -1,0 +1,8 @@
+SNAPSHOT+TESTS: Rem. Mock Atomic Writes Randomness (#37011)
+
+* Randomly doing non-atomic writes causes rare 0 byte reads from `index-N` files in tests
+* Removing this randomness fixes these random failures and is valid because it does not reproduce a real-world failure-mode:
+  * Cloud-based Blob stores (S3, GCS, and Azure) do not have inconsistent partial reads of a blob, either you read a complete blob or nothing on them
+  * For file system based blob stores the atomic move we do (to atomically write a file) by setting `java.nio.file.StandardCopyOption#ATOMIC_MOVE` would throw if the file system does not provide for atomic moves
+* Closes #37005
+

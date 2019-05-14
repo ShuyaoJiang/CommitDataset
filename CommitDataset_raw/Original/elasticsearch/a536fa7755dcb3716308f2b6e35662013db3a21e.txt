@@ -1,0 +1,11 @@
+Treat put-mapping calls with `_doc` as a top-level key as typed calls. (#38032)
+
+Currently the put-mapping API assumes that because the type name is `_doc` then
+it is dealing with a typeless put-mapping call. Yet we still allow running the
+put-mapping API in a typed fashion with `_doc` as a type name. The current logic
+triggers surprising errors when doing a typed put-mapping call with `_doc` as a
+type name on an index that has a type already.
+
+This is a bit of a corner-case, but is more important on 6.x due to the fact
+that using the index API with `_doc` as a type name triggers typed calls to the
+put-mapping API with `_doc` as a type name.

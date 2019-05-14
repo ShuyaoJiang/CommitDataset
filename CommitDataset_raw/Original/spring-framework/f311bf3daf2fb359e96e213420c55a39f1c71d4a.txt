@@ -1,0 +1,16 @@
+Introduce TCP & UDP server port scanning utility
+
+Prior to this commit the Spring Framework did not provide a public means
+for scanning for available server ports. However, the Spring Framework
+internally used a FreePortScanner in integration tests within its own
+test suite. Furthermore, Spring Integration 2.2 provides similar support
+in a SocketUtils class in the spring-integration-test module.
+
+This commit introduces SocketUtils in spring-core to replace the
+FreePortScanner which was previously only used internally within
+Spring's test suite. This new implementation is inspired by both Spring
+Framework's FreePortScanner and Spring Integration's SocketUtils and
+consequently attempts to merge the best of both previous
+implementations.
+
+Issue: SPR-8032

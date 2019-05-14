@@ -1,0 +1,12 @@
+Prevent memory leaks with @Configuration beans
+
+Refactor ConfigurationClassEnhancer to allow cglib caching of
+generated classes.  Prior to this commit each enhanced @Configuration
+class would consume permgen space when created.
+
+The CallbackFilter and Callback Types are now defined as static final
+members so that they can be shared by all enhancers.  Only the
+callbackInstances remain specific to a @Configuration class and
+these are not used by cglib as part of the cache key.
+
+Issue: SPR-9851

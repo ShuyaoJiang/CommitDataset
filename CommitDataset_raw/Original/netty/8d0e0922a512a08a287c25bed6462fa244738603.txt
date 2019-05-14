@@ -1,0 +1,13 @@
+SocksCmdRequest and SocksCmdResponse are trying to convert host from IDN for the non-DOMAIN address types
+
+Motivation:
+
+In the SocksCmdRequest and SocksCmdResponse constructors a host param converts from IDN to ascii compatible form regardless address type.
+
+Modifications:
+
+Use `IDN#toASCII` only for `DOMAIN` address type.
+
+Result:
+
+More correct host handling in socks commands.

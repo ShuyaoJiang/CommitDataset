@@ -1,0 +1,12 @@
+Assert context uniqueness against merged config
+
+Prior to this commit, the uniqueness check for @ContextConfiguration
+attributes within a @ContextHierarchy was performed at a single test
+class level instead of against the merged configuration for all test
+class levels in the test class hierarchy.
+
+This commit addresses this issue by moving the uniqueness check
+algorithm from resolveContextHierarchyAttributes() to
+buildContextHierarchyMap() within ContextLoaderUtils.
+
+Issue: SPR-10997

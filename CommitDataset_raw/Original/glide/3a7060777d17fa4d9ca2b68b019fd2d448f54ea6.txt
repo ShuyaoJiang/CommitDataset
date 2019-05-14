@@ -1,0 +1,11 @@
+Create a CustomViewTarget to replace ViewTarget.
+
+The two main differences are:
+- It forces you to override the method where resources must be cleared. Not doing so results in recycled bitmaps being used and crashing apps. Not doing so was a common pattern among developers optimizing for lines of code instead of correctness.
+- No more setTag(object) use. Glide now targets 14+ which can safely use the id tag variant and avoid another class of runtime bugs caused by developers optimizing for lines of code instead of correctness by calling setTag() and overwriting Glide's data.
+
+Finally, we deprecate ViewTarget, SimpleTarget and BaseTarget. Apps should primarily be using Target, CustomViewTarget, ImageViewTarget and FutureTarget which either force the developer to implement all necessary methods, properly implement them themselves, or will not attempt to reclaim bitmaps. The deprecated classes continue to be used internally by some of the "correct" classes but can be merged down once the deprecated APIs are able to be removed.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=201729878

@@ -1,0 +1,19 @@
+[Monitoring] Upgrade Indices to remove usage of _type (elastic/x-pack-elasticsearch#1616)
+
+This is just the culmination of all of the minor PRs associated with 1068. It will:
+
+- Drop the `.monitoring-data-N` index
+- Drop use of `_type` in all cases (replaced by `doc` and a new `type` field)
+- Drop the API version from the template name (e.g., instead of `.monitoring-es-6` we now use `.monitoring-es`).
+- Change API version to `-6-` from `-2-`.
+- Both exporters handle versioned resources (templates, pipelines, and watches)
+- HTTP exporters will optionally (true by default) publish placeholders for the old, `-2` templates.
+
+When this is backported, it will need to:
+
+- Change `index_patterns` to `template` within the templates.
+- Downgrade the version requirements for the templates, pipeline, and watches _and_ the HTTP exporter itself (all require 6.0)
+
+This is a companion to the feature branch in X-Pack Kibana elastic/x-pack-kibana/pull/1318 and they need to be merged at the same time.
+
+Original commit: elastic/x-pack-elasticsearch@6031cfffa4ef5d93f2a3bcc5663d432232c41d4b

@@ -1,0 +1,9 @@
+TEST: Lower num of shards in testShrinkIndexPrimaryTerm
+
+In some cases testShrinkIndexPrimaryTerm creates then 'mutates' 210
+shards. If each shard opens more than 10 files (translog, lucene index),
+we exceeded the maximum allowed file handles. In our test, the number of
+file handles is limited to 2048 by HandleLimitFS. This commit reduces
+the number of shards in testShrinkIndexPrimaryTerm to avoid such errors.
+
+Closes #28153

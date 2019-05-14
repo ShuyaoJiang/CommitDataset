@@ -1,0 +1,10 @@
+Clarify pure wilcard matching with `query_string` (#26814)
+
+In 5.x pure wildcard queries `*` in `query_string` are rewritten to `exists` query for efficiency.
+Though this introduced a change in the document that match such queries because
+`exists` query also return documents with an empty value for the field.
+This change clarifies this behavior for 5.x and beyond.
+
+Closes #26801
+
+* review

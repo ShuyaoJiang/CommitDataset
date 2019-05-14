@@ -1,0 +1,5 @@
+Add raw sort values to SearchSortValues transport serialization (#36617)
+
+In order for CCS alternate execution mode (see #32125) to be able to do the final reduction step on the CCS coordinating node, we need to serialize additional info in the transport layer as part of each `SearchHit`. Sort values are already present but they are formatted according to the provided `DocValueFormat` provided. The CCS node needs to be able to reconstruct the lucene `FieldDoc` to include in the `TopFieldDocs` and `CollapseTopFieldDocs` which will feed the `mergeTopDocs` method used to reduce multiple search responses (one per cluster) into one.
+
+This commit adds such information to the `SearchSortValues` and exposes it through a new getter method added to `SearchHit` for retrieval. This info is only serialized at transport and never printed out at REST.

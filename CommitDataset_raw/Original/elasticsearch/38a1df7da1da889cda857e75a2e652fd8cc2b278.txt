@@ -1,0 +1,11 @@
+Use a port range per JVM in MockTransportService (#25565)
+
+Some tests use MockTransportService to do network based testing.
+Yet, we run tests in multiple JVMs that means
+concurrent tests could claim port that another JVM just released
+and if that test tries to simulate a disconnect it might be smart
+enough to re-connect depending on what is tested. To reduce the risk,
+since this is very hard to debug we use a different default
+port range per JVM unless the incoming settings overriding it.
+
+Closes #25301

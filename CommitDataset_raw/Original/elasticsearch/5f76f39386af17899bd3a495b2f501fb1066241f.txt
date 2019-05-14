@@ -1,0 +1,34 @@
+Rename seq# powered optimistic concurrency control parameters to ifSeqNo/ifPrimaryTerm  (#36757)
+
+This PR renames the parameters previously introduce to the following:
+
+### URL Parameters
+```
+PUT twitter/_doc/1?if_seq_no=501&if_primary_term=1
+{
+    "user" : "kimchy",
+    "post_date" : "2009-11-15T14:12:12",
+    "message" : "trying out Elasticsearch"
+}
+
+DELETE twitter/_doc/1?if_seq_no=501&if_primary_term=1
+```
+
+### Bulk API
+```
+POST _bulk
+{ "index" : { "_index" : "test", "_type" : "_doc", "_id" : "1", "if_seq_no": 501, "if_primary_term": 1 } }
+{ "field1" : "value1" }
+{ "delete" : { "_index" : "test", "_type" : "_doc", "_id" : "2", "if_seq_no": 501, "if_primary_term": 1 } }
+```
+
+### Java API
+```
+IndexRequest.ifSeqNo(long seqNo)
+IndexRequest.ifPrimaryTerm(long primaryTerm)
+DeleteRequest.ifSeqNo(long seqNo)
+DeleteRequest.ifPrimaryTerm(long primaryTerm)
+```
+
+Relates #36148
+Relates #10708

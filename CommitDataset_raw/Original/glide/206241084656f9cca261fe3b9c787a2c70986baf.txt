@@ -1,0 +1,9 @@
+Best effort attempt to avoid memory leaks
+
+The ImageManager will only retain weak references
+to the various loaders/transformations/ etc so 
+that if they do have a reference to a context
+Glide will not cause a memory leak. The only class
+this is imperfect for is StreamLoader which is 
+likely to be referenced by some callback passed
+in to another library, hence the warning note. 

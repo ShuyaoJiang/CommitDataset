@@ -1,0 +1,14 @@
+EventLoop.schedule with big delay fails (#7402)
+
+Motivation:
+
+Using a very huge delay when calling schedule(...) may cause an Selector error when calling select(...) later on. We should gaurd against such a big value.
+
+Modifications:
+
+- Add guard against a very huge value.
+- Added tests.
+
+Result:
+
+Fixes [#7365]

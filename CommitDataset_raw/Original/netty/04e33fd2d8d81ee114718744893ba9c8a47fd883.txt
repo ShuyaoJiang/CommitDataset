@@ -1,0 +1,11 @@
+NioEventLoop closes channel even if channel is not registered
+
+Motivation:
+If a channel is deregistered from an NioEventLoop the associated SelectionKey is cancelled. If the NioEventLoop has yet to process a pending event as a result of that SelectionKey then the NioEventLoop will see the SelecitonKey is invalid and close the channel. The NioEventLoop should not close a channel if it is not registered with that NioEventLoop.
+
+Modifications:
+- NioEventLoop.processSelectedKeys should check that the channel is still registered to itself before closing the channel
+
+Result:
+NioEventLoop doesn't close a channel that is no longer registered to it when the SelectionKey is invalid
+Fixes https://github.com/netty/netty/issues/5125

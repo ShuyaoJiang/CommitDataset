@@ -1,0 +1,28 @@
+Polishing for handling subtleties in the JDBC behavior: (elastic/x-pack-elasticsearch#2967)
+
+1. decouple JdbcDriver from other classes to not trigger static
+initialization (this happens through JDBC service discovery)
+2. reduce visibility of JdbcDriver#close so only on jar unloading it
+gets triggered
+3. mark 3 methods introduced in Jdbc 4.1 as unsupported (their semantics
+are somewhat weird)
+4. Move versioning info in one class
+5. Hook Version class in both JDBC entry points to perform cp sanity
+checks
+6. Remove JdbcDataSource#close (DebugLog are closed when the Driver gets
+unloaded by the DriverManager) as there can be multiple instances of DS
+but only one for Driver known by the DriverManager
+
+Replace Strings with constants
+Properly set TZ in security tests as well
+JdbcDataSource is more defensive with its internal properties
+JdbcConfiguration password parameter is aligned with JDBC DriverManager
+Remove usage of JdbcConnection API
+Removed JdbcConnection#setTimeZone - this encourages folks to use our
+private API which would tie us down.
+It is somewhat limiting for folks but it has less downsides overall and
+does not trip debugging (which adds a proxy unaware of this method).
+Update docs
+Add JdbcDataSource into the Jdbc suite
+
+Original commit: elastic/x-pack-elasticsearch@c713665d53f4b53e43a1602e19400613ebec930a

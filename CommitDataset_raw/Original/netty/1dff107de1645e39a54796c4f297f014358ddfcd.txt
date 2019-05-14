@@ -1,0 +1,55 @@
+Don't re-arm timerfd each epoll_wait (#7816)
+
+Motivation:
+The Epoll transport checks to see if there are any scheduled tasks
+before entering epoll_wait, and resets the timerfd just before.
+This causes an extra syscall to timerfd_settime before doing any
+actual work.   When scheduled tasks aren't added frequently, or
+tasks are added with later deadlines, this is unnecessary.
+
+Modification:
+Check the *deadline* of the peeked task in EpollEventLoop, rather
+than the *delay*.  If it hasn't changed since last time, don't
+re-arm the timer
+
+Result:
+About 2us faster on gRPC RTT 50pct latency benchmarks.
+
+Before (2 runs for 5 minutes, 1 minute of warmup):
+
+```
+50.0%ile Latency (in nanos):		64267
+90.0%ile Latency (in nanos):		72851
+95.0%ile Latency (in nanos):		78903
+99.0%ile Latency (in nanos):		92327
+99.9%ile Latency (in nanos):		119691
+100.0%ile Latency (in nanos):		13347327
+QPS:                           14933
+
+50.0%ile Latency (in nanos):		63907
+90.0%ile Latency (in nanos):		73055
+95.0%ile Latency (in nanos):		79443
+99.0%ile Latency (in nanos):		93739
+99.9%ile Latency (in nanos):		123583
+100.0%ile Latency (in nanos):		14028287
+QPS:                           14936
+```
+
+After:
+```
+50.0%ile Latency (in nanos):		62123
+90.0%ile Latency (in nanos):		70795
+95.0%ile Latency (in nanos):		76895
+99.0%ile Latency (in nanos):		90887
+99.9%ile Latency (in nanos):		117819
+100.0%ile Latency (in nanos):		14126591
+QPS:                           15387
+
+50.0%ile Latency (in nanos):		61021
+90.0%ile Latency (in nanos):		70311
+95.0%ile Latency (in nanos):		76687
+99.0%ile Latency (in nanos):		90887
+99.9%ile Latency (in nanos):		119527
+100.0%ile Latency (in nanos):		6351615
+QPS:                           15571
+```

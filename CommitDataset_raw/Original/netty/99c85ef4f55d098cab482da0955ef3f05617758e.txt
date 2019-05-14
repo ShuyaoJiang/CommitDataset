@@ -1,0 +1,10 @@
+cf171ff52555b9e984a3b9103287f6b897dc8626 Close Regression
+
+Motivation:
+cf171ff52555b9e984a3b9103287f6b897dc8626 introduced a change in behavior when dealing with closing channel in the read loop. This changed behavior may use stale state to determine if a channel should be shutdown and may be incorrect.
+
+Modifications:
+- Revert the usage of potentially stale state
+
+Result:
+Closing a channel in the read loop is based upon current state instead of potentially stale state.

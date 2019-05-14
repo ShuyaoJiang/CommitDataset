@@ -1,0 +1,19 @@
+Add upper limit for scroll expiry (#26448)
+
+This change adds a dynamic cluster setting named `search.max_keep_alive`.
+It is used as an upper limit for scroll expiry time in scroll queries and defaults to 1 hour.
+This change also ensures that the existing setting `search.default_keep_alive` is always smaller than `search.max_keep_alive`.
+
+Relates #11511
+
+* check style
+
+* add skip for bwc
+
+* iter
+
+* Add a maxium throttle wait time of 1h for reindex
+
+* review
+
+* remove empty line

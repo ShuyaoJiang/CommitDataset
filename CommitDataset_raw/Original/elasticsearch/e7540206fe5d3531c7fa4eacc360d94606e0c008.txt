@@ -1,0 +1,8 @@
+Filter out upgraded version index settings when starting index following (#38838)
+
+The `index.version.upgraded` and `index.version.upgraded_string` are likely
+to be different between leader and follower index. In the event that
+a follower index gets restored on a upgraded node while the leader index
+is still on non-upgraded nodes.
+
+Closes #38835

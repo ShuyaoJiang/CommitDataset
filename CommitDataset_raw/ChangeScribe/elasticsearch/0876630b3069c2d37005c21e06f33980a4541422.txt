@@ -1,0 +1,1274 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (checkstyle_suppressions.xml, version.properties, rest-high-level-signatures.txt, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch:  
+
+1. Changes to package org.elasticsearch.action:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.allocation:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.node.reload:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.repositories.delete:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.repositories.put:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.reroute:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.snapshots.delete:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.state:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.stats:  
+
+1. Changes to package org.elasticsearch.action.admin.cluster.storedscripts:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.alias:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.close:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.create:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.delete:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.mapping.put:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.settings.put:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.template.delete:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.template.put:  
+
+1. Changes to package org.elasticsearch.action.admin.indices.upgrade.post:  
+
+1. Changes to package org.elasticsearch.action.bulk:  
+
+1.1. Add a class for bulk primary execution context. It allows to:
+
+	Instantiate bulk primary execution context  with bulk shard request, primary index shard and primary index shard;
+	Find next non aborted;
+	Check if bulk primary execution context is aborted;
+	Handle advance;
+	Assert invariants;
+	Get current;
+	Get bulk shard request;
+	Get execution result;
+	Get retry counter;
+	Check if bulk primary execution context is operation executed;
+	Check if bulk primary execution context requires waiting for mapping update;
+	Check if bulk primary execution context requires immediate retry;
+	Check if bulk primary execution context is completed;
+	Check if bulk primary execution context is initial;
+	Check if bulk primary execution context has more operations to execute;
+	Get concrete index;
+	Get location  to sync;
+	Get current item;
+	Get primary;
+	Set request  to execute;
+	Get request  to execute;
+	Handle mark as requiring mapping update;
+	Reset bulk primary execution context for execution for retry;
+	Handle mark operation as no op;
+	Fail cause exception on mapping update;
+	Handle mark operation as executed;
+	Handle mark as completed;
+	Build shard response;
+
+1.2. Add a class for bulk primary execution context tests. It allows to:
+
+	Handle test aborted skipped;
+	Generate random request;
+	Handle test translog location
+
+2. Changes to package org.elasticsearch.action.index:  
+
+2. Changes to package org.elasticsearch.action.ingest:  
+
+2. Changes to package org.elasticsearch.action.search:  
+
+2. Changes to package org.elasticsearch.action.support:  
+
+2. Changes to package org.elasticsearch.action.support.master:  
+
+2. Changes to package org.elasticsearch.action.update:  
+
+2. Changes to package org.elasticsearch.blocks:  
+
+2. Changes to package org.elasticsearch.bootstrap:  
+
+2. Changes to package org.elasticsearch.client:  
+
+2.1. Add a class for machine learning client. It allows to:
+
+	Instantiate machine learning client  with rest high level client;
+	Put job;
+	Put job async;
+	Get job;
+	Get job async;
+	Get job stats;
+	Get job stats  async get job stats request;
+	Delete expired data;
+	Delete expired data async;
+	Delete job;
+	Delete job async;
+	Handle open job;
+	Handle open job async;
+	Close job;
+	Close job async;
+	Handle flush job;
+	Handle flush job async;
+	Forecast job;
+	Forecast job async;
+	Delete forecast;
+	Delete forecast  async delete forecast request;
+	Delete model snapshot;
+	Delete model snapshot async;
+	Revert model snapshot;
+	Revert model snapshot async;
+	Put datafeed;
+	Put datafeed async;
+	Update datafeed;
+	Update datafeed async;
+	Datafeed get datafeed request;
+	Get datafeed async;
+	Delete datafeed;
+	Delete datafeed async;
+	Start datafeed;
+	Start datafeed async;
+	Stop datafeed;
+	Stop datafeed async;
+	Get datafeed stats;
+	Get preview datafeed;
+	Get datafeed stats  async get datafeed stats request;
+	Handle preview datafeed async;
+	Update job;
+	Update job async;
+	Get buckets;
+	Get buckets  async get buckets request;
+	Get categories;
+	Get categories  async get categories request;
+	Get model snapshots;
+	Get model snapshots  async get model snapshots request;
+	Update model snapshot;
+	Update model snapshot async;
+	Get overall buckets;
+	Get overall buckets  async get overall buckets request;
+	Get records;
+	Get records  async get records request;
+	Post data;
+	Post data async;
+	Get calendars;
+	Get calendars  async get calendars request;
+	Get influencers;
+	Get influencers  async get influencers request;
+	Put calendar;
+	Put calendar async;
+	Put calendar job;
+	Put calendar job async;
+	Delete calendar job;
+	Delete calendar job async;
+	Delete calendar;
+	Delete calendar async;
+	Get calendar events;
+	Get calendar events  async get calendar events request;
+	Process machine learning client machine learning client post calendar event;
+	Process machine learning client machine learning client post calendar event async;
+	Delete calendar event;
+	Delete calendar event async;
+	Put filter;
+	Put filter async;
+	Get filter;
+	Get filter async;
+	Update filter;
+	Update filter async;
+	Delete filter;
+	Delete filter async;
+	Get ml info;
+	Get ml info async;
+	Find file structure;
+	Find file structure async;
+	Set upgrade mode;
+	Set upgrade mode async
+
+2.2. Add a class for machine learning IT. It allows to:
+
+	Clean machine learning IT;
+	Handle test put job;
+	Handle test get job;
+	Handle test delete job given wait for completion is true;
+	Handle test delete job given wait for completion is false;
+	Handle test open job;
+	Handle test close job;
+	Handle test flush job;
+	Handle test get job stats;
+	Handle test forecast job;
+	Handle test post data;
+	Handle test update job;
+	Handle test put datafeed;
+	Handle test update datafeed;
+	Handle test get datafeed;
+	Handle test delete datafeed;
+	Handle test start datafeed;
+	Handle test stop datafeed;
+	Handle test get datafeed stats;
+	Handle test preview datafeed;
+	Convert test delete expired data given nothing;
+	Create expired data;
+	Handle test delete expired data;
+	Handle test delete forecast;
+	Wait machine learning IT for forecast to complete;
+	Exists machine learning IT;
+	Handle test put calendar;
+	Handle test put calendar job;
+	Handle test delete calendar job;
+	Handle test get calendars;
+	Handle test delete calendar;
+	Handle test get calendar event;
+	Handle test post calendar event;
+	Handle test delete calendar event;
+	Handle test put filter;
+	Handle test get filters;
+	Handle test update filter;
+	Handle test delete filter;
+	Handle test get ml info;
+	Handle random valid job id;
+	Build job  for expired data tests;
+	Build job;
+	Put job;
+	Handle open job;
+	Wait machine learning IT for job to close;
+	Start datafeed;
+	Update model snapshot timestamp;
+	Create and put datafeed;
+	Create model snapshot;
+	Create model snapshots;
+	Handle test delete model snapshot;
+	Handle test update model snapshot;
+	Handle test revert model snapshot;
+	Handle test find file structure;
+	Handle test enable upgrade mode
+
+2.3. Add a class for migration client. It allows to:
+
+	Instantiate migration client  with rest high level client;
+	Get deprecation info;
+	Get deprecation info async
+
+2.4. Add a class for migration IT. It allows to:
+
+	Handle test get deprecation info;
+	Check completion status
+
+3. Changes to package org.elasticsearch.client.documentation:  
+
+3.1. Add a class for migration client documentation IT. It allows to:
+
+	Handle test get deprecation info;
+	Process  on response;
+	Process  on failure
+
+3.2. Add a class for ml client documentation IT. It allows to:
+
+	Clean ml client documentation IT;
+	Handle test create job;
+	Process  on response;
+	Process  on failure;
+	Handle test get job;
+	Handle test delete job;
+	Handle test open job;
+	Handle test close job;
+	Handle test update job;
+	Handle test put datafeed;
+	Handle test update datafeed;
+	Handle test get datafeed;
+	Handle test delete datafeed;
+	Handle test preview datafeed;
+	Handle test start datafeed;
+	Handle test stop datafeed;
+	Handle test get datafeed stats;
+	Handle test get buckets;
+	Handle test flush job;
+	Handle test delete forecast;
+	Handle test get job stats;
+	Handle test forecast job;
+	Handle test get overall buckets;
+	Handle test get records;
+	Handle test post data;
+	Handle test find file structure;
+	Handle test get influencers;
+	Handle test get categories;
+	Handle test delete expired data;
+	Handle test delete model snapshot;
+	Handle test get model snapshots;
+	Handle test revert model snapshot;
+	Handle test update model snapshot;
+	Handle test put calendar;
+	Handle test put calendar job;
+	Handle test delete calendar job;
+	Handle test get calendar;
+	Handle test delete calendar;
+	Handle test get calendar event;
+	Handle test post calendar event;
+	Handle test delete calendar event;
+	Handle test create filter;
+	Handle test get filters;
+	Handle test update filter;
+	Handle test delete filter;
+	Handle test get ml info;
+	Handle test set upgrade mode;
+	Create filter
+
+4. Changes to package org.elasticsearch.client.transport:  
+
+4. Changes to package org.elasticsearch.cluster:  
+
+4. Changes to package org.elasticsearch.cluster.health:  
+
+4. Changes to package org.elasticsearch.cluster.metadata:  
+
+4. Changes to package org.elasticsearch.cluster.routing:  
+
+4. Changes to package org.elasticsearch.cluster.routing.allocation:  
+
+4. Changes to package org.elasticsearch.cluster.service:  
+
+4. Changes to package org.elasticsearch.common:  
+
+4.1. Add a class for char arrays. It allows to:
+
+	Instantiate char arrays;
+	Convert utf 8 bytes;
+	Convert char arrays to utf 8 bytes;
+	Handle chars begins with;
+	Handle constant time equals;
+
+4.2. Add a class for char arrays tests. It allows to:
+
+	Convert test chars;
+	Convert test bytes;
+	Handle test chars begins with;
+	Handle test constant time equals;
+	Handle random alpha of length not beginning with
+
+4.3. Add a class for rounding tests. It allows to:
+
+	Handle test UTC time unit rounding;
+	Handle test UTC interval rounding;
+	Handle test time interval rounding;
+	Handle test day interval rounding;
+	Handle test day rounding;
+	Handle test time rounding;
+	Handle test time unit rounding DST;
+	Handle test rounding random;
+	Handle nasty date;
+	Handle test time interval CET DST end;
+	Handle test time interval CET DST start;
+	Handle test time interval kathmandu DST start;
+	Handle test interval rounding not divisible inteval;
+	Handle test interval rounding half day DST;
+	Handle test interval rounding random;
+	Handle test interval rounding monotonic CET;
+	Handle test ambiguous hours after DST switch;
+	Handle test lenient conversion DST;
+	Handle test edge cases transition;
+	Test DST europe rome;
+	Handle test DST america st johns;
+	Handle test DST END edgecases;
+	Assert interval;
+	Check if rounding tests is time with well defined rounding;
+	Get date between;
+	Get time;
+	Check if rounding tests is date;
+	Check if  matches safely;
+	Describe  to description;
+	Describe mismatch  safely mismatch description
+
+5. Changes to package org.elasticsearch.common.component:  
+
+5. Changes to package org.elasticsearch.common.joda:  
+
+5. Changes to package org.elasticsearch.common.logging:  
+
+5. Changes to package org.elasticsearch.common.rounding:  
+
+5.1. Add a class for rounding duel tests. It allows to:
+
+	Handle test duelling implementations;
+	Get time value
+
+6. Changes to package org.elasticsearch.common.settings:  
+
+6. Changes to package org.elasticsearch.common.time:  
+
+6.1. Add an interface declaration  for date math parser. It allows to:
+
+	Parse now long supplier;
+
+7. Changes to package org.elasticsearch.common.xcontent:  
+
+7. Changes to package org.elasticsearch.discovery:  
+
+7. Changes to package org.elasticsearch.dissect:  
+
+7.1. Add a class for dissect key. It allows to:
+
+	Instantiate dissect key;
+	Instantiate dissect key  with dissect key, dissect key modifier and dissect key modifier;
+	Get modifier;
+	Skip dissect key;
+	Skip right padding;
+	Get append position;
+	Get name;
+	Convert dissect key to string;
+	Process dissect key dissect key from string;
+	Find modifier
+
+7.2. Add a class for dissect key tests. It allows to:
+
+	Handle test no modifier;
+	Handle test append modifier;
+	Handle test append with order modifier;
+	Handle test append with order modifier no name;
+	Handle test order modifier without append;
+	Handle test field name modifier;
+	Handle test field value modifiers;
+	Test right padding modifiers;
+	Handle test multiple left modifiers;
+	Handle test skip key;
+	Handle test named skip key;
+	Handle test skip key with padding;
+	Handle test named empty skip key with padding;
+	Handle test invalid modifiers
+
+7.3. Add a class for dissect match tests. It allows to:
+
+	Handle test illegal args;
+	Handle test valid and fully matched;
+	Handle test not valid and fully matched;
+	Handle test get results idempotent;
+	Handle test append;
+	Handle test append with order;
+	Handle test reference
+
+7.4. Add a class for dissect parser tests. It allows to:
+
+	Handle test java doc examples;
+	Handle test logstash specs;
+	Handle test basic match;
+	Handle test basic match unicode;
+	Handle test match unicode;
+	Handle test match remainder;
+	Handle test append;
+	Handle test associate;
+	Handle test append and associate;
+	Handle test empty key;
+	Handle test named skip key;
+	Handle test consecutive delimiters;
+	Handle test append with consecutive delimiters;
+	Handle test skip right padding;
+	Handle test trimmed end;
+	Handle test leading delimiter;
+	Handle test miss;
+	Handle test bad pattern or key;
+	Handle test syslog;
+	Handle test apache log;
+	Handle test json specification;
+	Fail dissect parser tests;
+	Miss dissect parser tests;
+	Assert bad pattern;
+	Assert bad key;
+	Assert match;
+
+8. Changes to package org.elasticsearch.document:  
+
+8. Changes to package org.elasticsearch.example.customsuggester:  
+
+8.1. Add a class for custom suggester. It allows to:
+
+	Handle inner execute
+
+8.2. Add a class for custom suggester client yaml test suite IT. It allows to:
+
+	Instantiate custom suggester client yaml test suite IT  with client yaml test candidate;
+	Get parameters
+
+8.3. Add a class for custom suggester plugin. It allows to:
+
+	Get suggesters
+
+8.4. Add a class for custom suggestion builder. It allows to:
+
+	Instantiate custom suggestion builder;
+	Instantiate custom suggestion builder  with stream input;
+	Do write  to stream output;
+	Handle inner to X content;
+	Get writeable name;
+	Equals other custom suggestion builder;
+	Do hash code;
+	Process custom suggestion builder custom suggestion builder from X content;
+	Build query shard context
+
+8.5. Add a class for custom suggestion context. It allows to:
+
+	Instantiate custom suggestion context  with query shard context, options map and options map
+
+9. Changes to package org.elasticsearch.example.realm:  
+
+9. Changes to package org.elasticsearch.gateway:  
+
+9. Changes to package org.elasticsearch.gradle:  
+
+9.1. Add a class for export elasticsearch build resources task. It allows to:
+
+	Instantiate export elasticsearch build resources task;
+	Get output dir;
+	Get resources;
+	Get resources classpath;
+	Set output dir;
+	Get copy;
+	Do export
+
+9.2. Add a class for export elasticsearch build resources task IT. It allows to:
+
+	Test up  to date with sources configured;
+	Handle test implicit task dependency copy;
+	Handle test implicit task dependency input file of other;
+	Handle test incorrect usage
+
+10. Changes to package org.elasticsearch.gradle.test:  
+
+10. Changes to package org.elasticsearch.grok:  
+
+10. Changes to package org.elasticsearch.http.nio:  
+
+10. Changes to package org.elasticsearch.index:  
+
+10. Changes to package org.elasticsearch.index.engine:  
+
+10. Changes to package org.elasticsearch.index.mapper:  
+
+10. Changes to package org.elasticsearch.index.mapper.size:  
+
+10. Changes to package org.elasticsearch.index.query:  
+
+10.1. Add a class for query shard exception tests. It allows to:
+
+	Handle test create from query shard context;
+	Handle test create from index
+
+11. Changes to package org.elasticsearch.index.reindex:  
+
+11. Changes to package org.elasticsearch.index.replication:  
+
+11. Changes to package org.elasticsearch.index.seqno:  
+
+11. Changes to package org.elasticsearch.index.shard:  
+
+11.1. Add a class for global checkpoint listeners tests. It allows to:
+
+	Handle shutdown scheduler;
+	Handle test global checkpoint updated;
+	Accept exception;
+	Handle test listeners ready to be notified;
+	Handle test failing listener ready to be notified;
+	Handle test close;
+	Handle test add after close;
+	Handle test failing listener on update;
+	Handle test failing listener on close;
+	Handle test notification uses executor;
+	Handle test notification on closed uses executor;
+	Convert test listeners ready;
+	Handle test concurrency;
+	Handle test timeout;
+	Handle test timeout notification uses executor;
+	Handle test failing listener after timeout;
+	Handle test timeout canceled after listener notified;
+	Maybe multiple invocation protecting listener;
+	Await  quietly cyclic barrier
+
+12. Changes to package org.elasticsearch.index.store:  
+
+12. Changes to package org.elasticsearch.index.translog:  
+
+12. Changes to package org.elasticsearch.indexlifecycle:  
+
+12. Changes to package org.elasticsearch.indices.cluster:  
+
+12. Changes to package org.elasticsearch.indices.mapping:  
+
+12. Changes to package org.elasticsearch.indices.recovery:  
+
+12. Changes to package org.elasticsearch.indices.state:  
+
+12. Changes to package org.elasticsearch.indices.store:  
+
+12. Changes to package org.elasticsearch.ingest:  
+
+12. Changes to package org.elasticsearch.ingest.common:  
+
+12. Changes to package org.elasticsearch.integration:  
+
+12. Changes to package org.elasticsearch.join.query:  
+
+12. Changes to package org.elasticsearch.license:  
+
+12. Changes to package org.elasticsearch.node:  
+
+12. Changes to package org.elasticsearch.painless:  
+
+12.1. Add a class for context example tests. It allows to:
+
+	Handle test ingest processor script;
+	Handle test script fields script;
+	Handle test filter script;
+	Handle test min should match script
+
+13. Changes to package org.elasticsearch.painless.antlr:  
+
+13. Changes to package org.elasticsearch.painless.lookup:  
+
+13. Changes to package org.elasticsearch.painless.node:  
+
+13. Changes to package org.elasticsearch.painless.spi:  
+
+13. Changes to package org.elasticsearch.percolator:  
+
+13. Changes to package org.elasticsearch.plugins:  
+
+13. Changes to package org.elasticsearch.recovery:  
+
+13. Changes to package org.elasticsearch.repositories.hdfs:  
+
+13. Changes to package org.elasticsearch.repositories.url:  
+
+13. Changes to package org.elasticsearch.rest.action:  
+
+13. Changes to package org.elasticsearch.rest.action.admin.cluster:  
+
+13. Changes to package org.elasticsearch.rest.action.cat:  
+
+13. Changes to package org.elasticsearch.script:  
+
+13. Changes to package org.elasticsearch.script.expression:  
+
+13. Changes to package org.elasticsearch.search:  
+
+13. Changes to package org.elasticsearch.search.aggregations.bucket.histogram:  
+
+13. Changes to package org.elasticsearch.search.aggregations.bucket.significant:  
+
+13. Changes to package org.elasticsearch.search.aggregations.bucket.terms:  
+
+13. Changes to package org.elasticsearch.search.aggregations.support.values:  
+
+13. Changes to package org.elasticsearch.search.collapse:  
+
+13. Changes to package org.elasticsearch.search.fetch.subphase:  
+
+13. Changes to package org.elasticsearch.search.internal:  
+
+13. Changes to package org.elasticsearch.search.profile.query:  
+
+13. Changes to package org.elasticsearch.search.query:  
+
+13. Changes to package org.elasticsearch.search.suggest:  
+
+13. Changes to package org.elasticsearch.search.suggest.phrase:  
+
+13. Changes to package org.elasticsearch.search.suggest.term:  
+
+13. Changes to package org.elasticsearch.smoketest:  
+
+13. Changes to package org.elasticsearch.snapshots:  
+
+13. Changes to package org.elasticsearch.tasks:  
+
+13. Changes to package org.elasticsearch.test:  
+
+13. Changes to package org.elasticsearch.test.hamcrest:  
+
+13. Changes to package org.elasticsearch.test.rest.yaml:  
+
+13. Changes to package org.elasticsearch.test.rest.yaml.section:  
+
+13. Changes to package org.elasticsearch.transport:  
+
+13.1. Add a class for closeable connection. It allows to:
+
+	Add close listener;
+	Check if closeable connection is closed;
+	Close closeable connection
+
+14. Changes to package org.elasticsearch.transport.nio:  
+
+14. Changes to package org.elasticsearch.upgrades:  
+
+14.1. Add a class for rollup ID upgrade IT
+
+14.2. Add a class for watcher restart IT. It allows to:
+
+	Handle test watcher restart;
+	Ensure watcher stopped;
+	Ensure watcher started
+
+15. Changes to package org.elasticsearch.wildfly:  
+
+15. Changes to package org.elasticsearch.xpack.core:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.action:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.client:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.datafeed:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.job.config:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.job.messages:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.job.persistence:  
+
+15. Changes to package org.elasticsearch.xpack.core.ml.job.results:  
+
+15. Changes to package org.elasticsearch.xpack.core.rollup:  
+
+15. Changes to package org.elasticsearch.xpack.core.rollup.job:  
+
+15.1. Add a class for date histogram group config. It allows to:
+
+	Instantiate date histogram group config  with date histogram interval;
+	Instantiate date histogram group config  with date histogram interval, delay date histogram interval and delay date histogram interval;
+	Instantiate date histogram group config  with stream input;
+	Write  to stream output;
+	Convert date histogram group config to X content;
+	Get field;
+	Get interval;
+	Get delay;
+	Get time zone;
+	Rounding date histogram group config;
+	Validate mappings;
+	Check if date histogram group config equals;
+	Hash code;
+	Convert date histogram group config to string;
+	Process date histogram group config date histogram group config from X content;
+
+15.2. Add a class for date histogram group config serializing tests. It allows to:
+
+	Do parse instance;
+	Get instance reader;
+	Create test instance;
+	Handle test validate no mapping;
+	Handle test validate nomatching field;
+	Handle test validate field wrong type;
+	Handle test validate field mixture types;
+	Handle test validate field matching not aggregatable;
+	Handle test validate matching field;
+	Handle test validate week;
+	Handle test bwc serialization
+
+15.3. Add a class for histogram group config. It allows to:
+
+	Instantiate histogram group config;
+	Instantiate histogram group config  with stream input;
+	Get interval;
+	Get fields;
+	Validate mappings;
+	Convert histogram group config to X content;
+	Write  to stream output;
+	Check if histogram group config equals;
+	Hash code;
+	Convert histogram group config to string;
+	Process histogram group config histogram group config from X content
+
+15.4. Add a class for histogram group config serializing tests. It allows to:
+
+	Do parse instance;
+	Get instance reader;
+	Create test instance;
+	Handle test validate no mapping;
+	Handle test validate nomatching field;
+	Handle test validate field wrong type;
+	Handle test validate field matching not aggregatable;
+	Handle test validate matching field
+
+15.5. Add a class for metric config serializing tests. It allows to:
+
+	Do parse instance;
+	Get instance reader;
+	Create test instance;
+	Handle test validate no mapping;
+	Handle test validate nomatching field;
+	Handle test validate field wrong type;
+	Handle test validate field matching not aggregatable;
+	Handle test validate date field unsupported metric;
+	Handle test validate matching field
+
+16. Changes to package org.elasticsearch.xpack.core.security:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.action.token:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.action.user:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.authc:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.authc.support:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.authz.accesscontrol:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.support:  
+
+16. Changes to package org.elasticsearch.xpack.core.security.user:  
+
+16. Changes to package org.elasticsearch.xpack.core.ssl:  
+
+16. Changes to package org.elasticsearch.xpack.core.watcher.client:  
+
+16. Changes to package org.elasticsearch.xpack.core.watcher.crypto:  
+
+16. Changes to package org.elasticsearch.xpack.core.watcher.transport.actions.service:  
+
+16. Changes to package org.elasticsearch.xpack.ml:  
+
+16. Changes to package org.elasticsearch.xpack.ml.action:  
+
+16. Changes to package org.elasticsearch.xpack.ml.client:  
+
+16. Changes to package org.elasticsearch.xpack.ml.datafeed:  
+
+16. Changes to package org.elasticsearch.xpack.ml.integration:  
+
+16.1. Rename type JobProviderIT with JobResultsProviderIT
+
+17. Changes to package org.elasticsearch.xpack.ml.job:  
+
+17. Changes to package org.elasticsearch.xpack.ml.job.persistence:  
+
+17.1. Rename type JobProvider with JobResultsProvider
+
+17.2. Rename type JobProviderTests with JobResultsProviderTests
+
+18. Changes to package org.elasticsearch.xpack.ml.job.process:  
+
+18.1. Add a class for process builder utils. It allows to:
+
+	Instantiate process builder utils;
+	Add object if not null;
+	Add time value if not null;
+	Handle model config file present
+
+19. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect:  
+
+19.1. Add a class for autodetect builder tests. It allows to:
+
+	Set up tests;
+	Handle test build autodetect command;
+	Handle test build autodetect command default time field;
+	Handle test build autodetect command given persist model state;
+	Handle autodetect builder
+
+20. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.output:  
+
+20. Changes to package org.elasticsearch.xpack.ml.job.process.normalizer:  
+
+20.1. Add a class for normalizer builder. It allows to:
+
+	Instantiate normalizer builder  with environment, bucket span integer and bucket span integer;
+	Build normalizer builder
+
+20.2. Add a class for normalizer builder tests. It allows to:
+
+	Handle test build normalizer command
+
+21. Changes to package org.elasticsearch.xpack.ml.job.results:  
+
+21. Changes to package org.elasticsearch.xpack.ml.job.retention:  
+
+21. Changes to package org.elasticsearch.xpack.ml.rest.datafeeds:  
+
+21. Changes to package org.elasticsearch.xpack.ml.rest.job:  
+
+21. Changes to package org.elasticsearch.xpack.ml.support:  
+
+21. Changes to package org.elasticsearch.xpack.monitoring.collector.cluster:  
+
+21. Changes to package org.elasticsearch.xpack.monitoring.exporter.http:  
+
+21. Changes to package org.elasticsearch.xpack.restart:  
+
+21. Changes to package org.elasticsearch.xpack.rollup:  
+
+21. Changes to package org.elasticsearch.xpack.rollup.action:  
+
+21. Changes to package org.elasticsearch.xpack.rollup.config:  
+
+21. Changes to package org.elasticsearch.xpack.rollup.job:  
+
+21. Changes to package org.elasticsearch.xpack.rollup.rest:  
+
+21. Changes to package org.elasticsearch.xpack.security:  
+
+21. Changes to package org.elasticsearch.xpack.security.action.filter:  
+
+21. Changes to package org.elasticsearch.xpack.security.action.saml:  
+
+21. Changes to package org.elasticsearch.xpack.security.action.user:  
+
+21. Changes to package org.elasticsearch.xpack.security.audit:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.esnative:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.file:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.kerberos:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.ldap:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.ldap.support:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.pki:  
+
+21. Changes to package org.elasticsearch.xpack.security.authc.support.mapper:  
+
+21. Changes to package org.elasticsearch.xpack.security.authz:  
+
+21. Changes to package org.elasticsearch.xpack.security.ingest:  
+
+21. Changes to package org.elasticsearch.xpack.security.rest.action:  
+
+21. Changes to package org.elasticsearch.xpack.security.rest.action.user:  
+
+21. Changes to package org.elasticsearch.xpack.security.transport:  
+
+21. Changes to package org.elasticsearch.xpack.security.transport.nio:  
+
+21. Changes to package org.elasticsearch.xpack.security.user:  
+
+21.1. Add a class for user serialization tests. It allows to:
+
+	Convert test write;
+	Handle test system user read and write;
+	Handle test system user fails read;
+	Handle test X pack user read and write;
+	Handle test fake internal user serialization;
+	Handle test reserved user serialization
+
+22. Changes to package org.elasticsearch.xpack.sql.analysis.analyzer:  
+
+22. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar:  
+
+22. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.string:  
+
+22.1. Add a class for binary string function. It allows to:
+
+	Instantiate binary string function  with source, left expression, right expression and right expression;
+	Get operation;
+	Resolve type;
+	Resolve second parameter input type;
+	Fold binary string function;
+	Get script method name;
+	Get script with field;
+	Hash code;
+	Check if binary string function equals
+
+22.2. Add a class for binary string numeric function. It allows to:
+
+	Instantiate binary string numeric function  with source, left expression, right expression and right expression;
+	Get operation;
+	Resolve second parameter input type;
+	Make pipe;
+	Get data type
+
+22.3. Add a class for binary string numeric processor. It allows to:
+
+	Handle binary string numeric operation;
+	Apply count number;
+	Instantiate binary string numeric processor  with left processor, right processor, binary string numeric operation and binary string numeric operation;
+	Instantiate binary string numeric processor  with stream input;
+	Get writeable name;
+	Do process
+
+22.4. Add a class for binary string numeric processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test left function with valid input;
+	Handle test left function with edge cases;
+	Handle test left function input validation;
+	Test right function  with valid input;
+	Test right function  with edge cases;
+	Test right function input validation;
+	Handle test repeat function with valid input;
+	Handle test repeat function with edge cases;
+	Handle test repeat function inputs validation
+
+22.5. Add a class for binary string string function. It allows to:
+
+	Instantiate binary string string function  with source, left expression, right expression and right expression;
+	Resolve second parameter input type;
+	Get data type
+
+22.6. Add a class for binary string string processor. It allows to:
+
+	Handle binary string string operation;
+	Apply binary string string processor;
+	Instantiate binary string string processor  with stream input;
+	Instantiate binary string string processor  with left processor, right processor, binary string string operation and binary string string operation;
+	Get writeable name;
+	Do process
+
+22.7. Add a class for binary string string processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test position function with valid input;
+	Handle test position function with edge cases;
+	Handle test position function inputs validation
+
+22.8. Add a class for concat. It allows to:
+
+	Instantiate concat  with source, source 1 expression, source 2 expression and source 2 expression;
+	Resolve type;
+	Make pipe;
+	Handle nullable;
+	Handle foldable;
+	Fold concat;
+	Replace children;
+	Info concat;
+	Get script with field;
+	Get data type
+
+22.9. Add a class for concat function processor. It allows to:
+
+	Instantiate concat function processor  with source 1 processor, source 2 processor and source 2 processor;
+	Instantiate concat function processor  with stream input;
+	Get process;
+	Do process;
+	Get writeable name;
+	Check if concat function processor equals;
+	Hash code;
+	Write stream output
+
+22.10. Add a class for concat processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test concat function with valid input;
+	Handle test concat function with edge cases;
+	Handle test concat function inputs validation
+
+22.11. Add a class for insert. It allows to:
+
+	Instantiate insert  with source, src expression, start expression, length expression, replacement expression and replacement expression;
+	Resolve type;
+	Handle foldable;
+	Fold insert;
+	Make pipe;
+	Info insert;
+	Process insert insert as script;
+	Process insert insert as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+22.12. Add a class for insert function processor. It allows to:
+
+	Instantiate insert function processor  with source processor, start processor, length processor, replacement processor and replacement processor;
+	Instantiate insert function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Check if insert function processor equals;
+	Hash code;
+	Get source;
+	Start insert function processor;
+	Get length;
+	Get replacement;
+	Get writeable name
+
+22.13. Add a class for insert processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test insert with valid inputs;
+	Handle test insert with edge cases;
+	Handle test insert inputs validation
+
+22.14. Add a class for left. It allows to:
+
+	Instantiate left  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Info left
+
+22.15. Add a class for locate. It allows to:
+
+	Instantiate locate  with source, pattern expression, src expression, start expression and start expression;
+	Resolve type;
+	Make pipe;
+	Info locate;
+	Handle foldable;
+	Fold locate;
+	Process locate locate as script;
+	Process locate locate as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+22.16. Add a class for locate function processor. It allows to:
+
+	Instantiate locate function processor  with pattern processor, source processor, start processor and start processor;
+	Instantiate locate function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Check if locate function processor equals;
+	Hash code;
+	Get pattern;
+	Get source;
+	Start locate function processor;
+	Get writeable name
+
+22.17. Add a class for locate processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test locate function with valid input;
+	Handle test locate function with edge cases inputs;
+	Handle test locate function validating inputs
+
+22.18. Add a class for position. It allows to:
+
+	Instantiate position  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Make pipe;
+	Info position
+
+22.19. Add a class for repeat. It allows to:
+
+	Instantiate repeat  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Info repeat
+
+22.20. Add a class for replace. It allows to:
+
+	Instantiate replace  with source, src expression, pattern expression, replacement expression and replacement expression;
+	Resolve type;
+	Make pipe;
+	Info replace;
+	Handle foldable;
+	Fold replace;
+	Process replace replace as script;
+	Process replace replace as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+22.21. Add a class for replace function processor. It allows to:
+
+	Instantiate replace function processor  with source processor, pattern processor, replacement processor and replacement processor;
+	Instantiate replace function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Check if replace function processor equals;
+	Hash code;
+	Get source;
+	Get pattern;
+	Get replacement;
+	Get writeable name
+
+22.22. Add a class for replace processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test replace function with valid input;
+	Handle test replace function with edge cases;
+	Handle test replace function inputs validation
+
+22.23. Add a class for right. It allows to:
+
+	Instantiate right  with source, left expression, right expression and right expression;
+	Get operation;
+	Replace children;
+	Info right
+
+22.24. Add a class for substring. It allows to:
+
+	Instantiate substring  with source, src expression, start expression, length expression and length expression;
+	Resolve type;
+	Make pipe;
+	Handle foldable;
+	Fold substring;
+	Info substring;
+	Process substring substring as script;
+	Process substring substring as script from;
+	Get script with field;
+	Get data type;
+	Replace children
+
+22.25. Add a class for substring function processor. It allows to:
+
+	Instantiate substring function processor  with source processor, start processor, length processor and length processor;
+	Instantiate substring function processor  with stream input;
+	Write  to stream output;
+	Get process;
+	Do process;
+	Get source;
+	Start substring function processor;
+	Get length;
+	Check if substring function processor equals;
+	Hash code;
+	Get writeable name
+
+22.26. Add a class for substring processor tests. It allows to:
+
+	Create test instance;
+	Get instance reader;
+	Get named writeable registry;
+	Handle test substring function with valid input;
+	Handle test substring function with edge cases;
+	Handle test substring function inputs validation
+
+23. Changes to package org.elasticsearch.xpack.sql.expression.function.scalar.whitelist:  
+
+23. Changes to package org.elasticsearch.xpack.watcher:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.actions.email:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.actions.pagerduty:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.actions.webhook:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.common.http:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.execution:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.input.chain:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.input.http:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.notification.email.attachment:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.notification.jira:  
+
+23. Changes to package org.elasticsearch.xpack.watcher.notification.pagerduty:  
+
+23.1. Add a class for incident event tests. It allows to:
+
+	Handle test pager duty X content
+
+24. Changes to package org.elasticsearch.xpack.watcher.test.integration:  
+
+24. Changes to package org.elasticsearch.xpack.watcher.transport.actions.service:  
+

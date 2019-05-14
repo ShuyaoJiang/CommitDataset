@@ -1,0 +1,18 @@
+Added support for SSL Server Name Indication.
+
+Motivation:
+
+When we need to host multiple server name with a single IP, it requires
+the server to support Server Name Indication extension to serve clients
+with proper certificate. So the SniHandler will host multiple
+SslContext(s) and append SslHandler for requested hostname.
+
+Modification:
+
+* Added SniHandler to host multiple certifications in a single server
+* Test case
+
+Result:
+
+User could use SniHandler to host multiple certifcates at a time.
+It's server-side only.

@@ -1,0 +1,16 @@
+Add support for AWS session tokens (#30414)
+
+AWS supports the creation and use of credentials that are only valid for a
+fixed period of time. These credentials comprise three parts: the usual access
+key and secret key, together with a session token. This commit adds support for
+these three-part credentials to the EC2 discovery plugin and the S3 repository
+plugin.
+
+Note that session tokens are only valid for a limited period of time and yet
+there is no mechanism for refreshing or rotating them when they expire without
+restarting Elasticsearch.  Nonetheless, this feature is already useful for
+nodes that need only run for a few days, such as for training, testing or
+evaluation. #29135 tracks the work towards allowing these credentials to be
+refreshed at runtime.
+
+Resolves #16428

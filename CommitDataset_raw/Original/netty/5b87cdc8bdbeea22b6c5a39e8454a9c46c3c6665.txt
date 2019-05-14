@@ -1,0 +1,29 @@
+Reduce the perceived time taken to retrieve initialSeedUniquifier
+
+Motivation:
+
+When system is in short of entrophy, the initialization of
+ThreadLocalRandom can take at most 3 seconds.  The initialization occurs
+when ThreadLocalRandom.current() is invoked first time, which might be
+much later than the moment when the application has started.  If we
+start the initialization of ThreadLocalRandom as early as possible, we
+can reduce the perceived time taken for the retrieval.
+
+Modification:
+
+Begin the initialization of ThreadLocalRandom in InternalLoggerFactory,
+potentially one of the firstly initialized class in a Netty application.
+
+Make DefaultChannelId retrieve the current process ID before retrieving
+the current machine ID, because retrieval of a machine ID is more likely
+to use ThreadLocalRandom.current().
+
+Use a dummy channel ID for EmbeddedChannel, which prevents many unit
+tests from creating a ThreadLocalRandom instance.
+
+Result:
+
+We gain extra 100ms at minimum for initialSeedUniquifier generation.  If
+an application has its own initialization that takes long enough time
+and generates good amount of entrophy, it is very likely that we will
+gain a lot more.

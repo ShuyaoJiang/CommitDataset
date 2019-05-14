@@ -1,0 +1,18 @@
+Block older operations on primary term transition
+
+Today a replica learns of a new primary term via a cluster state update
+and there is not a clean transition between the older primary term and
+the newer primary term. This commit modifies this situation so that:
+ - a replica shard learns of a new primary term via replication
+   operations executed under the mandate of the new primary
+ - when a replica shard learns of a new primary term, it blocks
+   operations on older terms from reaching the engine, with a clear
+   transition point between the operations on the older term and the
+   operations on the newer term
+
+This work paves the way for a primary/replica sync on primary
+promotion. Future work will also ensure a clean transition point on a
+promoted primary, and prepare a replica shard for a sync with the
+promoted primary.
+
+Relates #24779

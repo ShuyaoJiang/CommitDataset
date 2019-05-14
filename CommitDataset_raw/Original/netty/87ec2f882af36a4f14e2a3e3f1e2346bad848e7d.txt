@@ -1,0 +1,55 @@
+Reduce overhead by ByteBufUtil.decodeString(...) which is used by `AbstractByteBuf.toString(...)` and `AbstractByteBuf.getCharSequence(...)` (#8388)
+
+Motivation:
+
+Our current implementation that is used for toString(Charset) operations on AbstractByteBuf implementation is quite slow as it does a lot of uncessary memory copies. We should just use new String(...) as it has a lot of optimizations to handle these cases.
+
+Modifications:
+
+Rewrite ByteBufUtil.decodeString(...) to use new String(...)
+
+Result:
+
+Less overhead for toString(Charset) operations.
+
+Benchmark                                         (charsetName)  (direct)  (size)   Mode  Cnt         Score         Error  Units
+ByteBufUtilDecodeStringBenchmark.decodeString          US-ASCII     false       8  thrpt   20  22401645.093 ? 4671452.479  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString          US-ASCII     false      64  thrpt   20  23678483.384 ? 3749164.446  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString          US-ASCII      true       8  thrpt   20  15731142.651 ? 3782931.591  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString          US-ASCII      true      64  thrpt   20  16244232.229 ? 1886259.658  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString             UTF-8     false       8  thrpt   20  25983680.959 ? 5045782.289  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString             UTF-8     false      64  thrpt   20  26235589.339 ? 2867004.950  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString             UTF-8      true       8  thrpt   20  18499027.808 ? 4784684.268  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString             UTF-8      true      64  thrpt   20  16825286.141 ? 1008712.342  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString            UTF-16     false       8  thrpt   20   5789879.092 ? 1201786.359  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString            UTF-16     false      64  thrpt   20   2173243.225 ?  417809.341  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString            UTF-16      true       8  thrpt   20   5035583.011 ? 1001978.854  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString            UTF-16      true      64  thrpt   20   2162345.301 ?  402410.408  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString        ISO-8859-1     false       8  thrpt   20  30039052.376 ? 6539111.622  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString        ISO-8859-1     false      64  thrpt   20  31414163.515 ? 2096710.526  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString        ISO-8859-1      true       8  thrpt   20  19538587.855 ? 4639115.572  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeString        ISO-8859-1      true      64  thrpt   20  19467839.722 ? 1672687.213  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld       US-ASCII     false       8  thrpt   20  10787326.745 ? 1034197.864  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld       US-ASCII     false      64  thrpt   20   7129801.930 ? 1363019.209  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld       US-ASCII      true       8  thrpt   20   9002529.605 ? 2017642.445  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld       US-ASCII      true      64  thrpt   20   3860192.352 ?  826218.738  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld          UTF-8     false       8  thrpt   20  10532838.027 ? 2151743.968  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld          UTF-8     false      64  thrpt   20   7185554.597 ? 1387685.785  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld          UTF-8      true       8  thrpt   20   7352253.316 ? 1333823.850  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld          UTF-8      true      64  thrpt   20   2825578.707 ?  349701.156  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld         UTF-16     false       8  thrpt   20   7277446.665 ? 1447034.346  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld         UTF-16     false      64  thrpt   20   2445929.579 ?  562816.641  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld         UTF-16      true       8  thrpt   20   6201174.401 ? 1236137.786  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld         UTF-16      true      64  thrpt   20   2310674.973 ?  525587.959  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld     ISO-8859-1     false       8  thrpt   20  11142625.392 ? 1680556.468  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld     ISO-8859-1     false      64  thrpt   20   8127116.405 ? 1128513.860  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld     ISO-8859-1      true       8  thrpt   20   9405751.952 ? 2193324.806  ops/s
+ByteBufUtilDecodeStringBenchmark.decodeStringOld     ISO-8859-1      true      64  thrpt   20   3943282.076 ?  737798.070  ops/s
+
+Benchmark result is saved to /home/norman/mainframer/netty/microbench/target/reports/performance/ByteBufUtilDecodeStringBenchmark.json
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1,030.173 sec - in io.netty.buffer.ByteBufUtilDecodeStringBenchmark
+[1030.460s][info   ][gc,heap,exit ] Heap
+[1030.460s][info   ][gc,heap,exit ]  garbage-first heap   total 516096K, used 257918K [0x0000000609a00000, 0x0000000800000000)
+[1030.460s][info   ][gc,heap,exit ]   region size 2048K, 127 young (260096K), 2 survivors (4096K)
+[1030.460s][info   ][gc,heap,exit ]  Metaspace       used 17123K, capacity 17438K, committed 17792K, reserved 1064960K
+[1030.460s][info   ][gc,heap,exit ]   class space    used 1709K, capacity 1827K, committed 1920K, reserved 1048576K

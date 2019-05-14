@@ -1,0 +1,19 @@
+Change step execution flow to be deliberate about type (#34126)
+
+This commit changes the way that step execution flows. Rather than have any step
+run when the cluster state changes or the periodic scheduler fires, this now
+runs the different types of steps at different times.
+
+`AsyncWaitStep` is run at a periodic manner, ie, every 10 minutes by default
+`ClusterStateActionStep` and `ClusterStateWaitStep` are run every time the
+cluster state changes.
+`AsyncActionStep` is now run only after the cluster state has been transitioned
+into a new step. This prevents these non-idempotent steps from running at the
+same time. It addition to being run when transitioned into, this is also run
+when a node is newly elected master (only if set as the current step) so that
+master failover does not fail to run the step.
+
+This also changes the `RolloverStep` from an `AsyncActionStep` to an
+`AsyncWaitStep` so that it can run periodically.
+
+Relates to #29823

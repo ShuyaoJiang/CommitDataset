@@ -1,0 +1,8 @@
+Reduce connections used by MockNioTransport (#32620)
+
+The MockNioTransport (similar to the MockTcpTransport) is used for integ
+tests. The MockTcpTransport has always only opened a single for all of
+its work. The MockNioTransport has awlays opened the default number of
+connections (13). This means that every test where two transports
+connect requires 26 connections. This is more than is necessary. This
+commit modifies the MockNioTransport to only require 3 connections.

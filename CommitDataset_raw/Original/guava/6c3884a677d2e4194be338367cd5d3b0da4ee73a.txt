@@ -1,0 +1,8 @@
+Change FileByteSource.read() to not unnecessarily copy the byte array in the normal case where the file size doesn't change.
+
+It was incorrectly assuming that if the first read loop filled the original array, the last read() call would have returned -1 if it was done, which is not the case.
+
+Guava bug: https://code.google.com/p/guava-libraries/issues/detail?id=1376
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=45616868

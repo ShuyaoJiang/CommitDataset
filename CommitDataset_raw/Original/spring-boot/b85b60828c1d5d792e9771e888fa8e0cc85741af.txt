@@ -1,0 +1,19 @@
+Perform background preinitialization after logging system setup
+
+Previously, BackgroundPreinitializer would kick off preinitialization
+on a separate thread in response to an ApplicationStartedEvent. This
+work would then race with the logging system being set up in response
+to an ApplicationEnvironmentPreparedEvent. When Logback’s being used
+this race is problematic. As part of Logback’s setup,
+LoggerContext.stop() is called. This calls LoggerContext.reset() which
+can fail with a ConcurrentModificationException if another thread tries
+to create a Logger at the same time. This is a known bug in Logback [1].
+
+This commit updates BackgroundPreinitializer to respond to
+an ApplicationEnvironmentPreparedEvent and to order itself so that it’s
+called after LoggingApplicationListener has responded to the same event
+by initializing the logging system.
+
+Closes gh-4871
+
+[1] http://jira.qos.ch/browse/LOGBACK-397

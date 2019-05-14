@@ -1,0 +1,15 @@
+Fix resource-chain XML syntax for cache
+
+This change moves the resource-cache configuration to the
+<resource-chain/> tag, since enabling/disabling resource cache should
+be driven by a property or a SpEL expression.
+
+So now that configuration can be set with XML attributes:
+
+  <mvc:resource-chain resource-cache="true"
+  cache-manager="resourceCache" cache-name="test-resource-cache">
+
+In order to mirror the JavaConfig behavior, the "resource-cache"
+attribute is required.
+
+Issue: SPR-12129

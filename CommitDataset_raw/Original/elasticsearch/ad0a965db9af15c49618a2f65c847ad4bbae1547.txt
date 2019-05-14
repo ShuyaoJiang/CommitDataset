@@ -1,0 +1,20 @@
+Protect scheduler engine against throwing listeners (#32998)
+
+There are two problems with the scheduler engine today. Both relate to
+listeners that throw.
+
+The first problem is that any triggered listener that throws a plain old
+exception will cause no additional listeners to be triggered for the
+event, and will also cause the scheduler to never be invoked again. This
+leads to lost events and is bad.
+
+The second problem is that any triggered listener that throws an error
+of the fatal kind will not lead to that error because caught by the
+uncaught exception handler. This is because the triggered listener is
+executed as a future task under a scheduled thread pool executor. A
+throwable there goes caught by the JDK framework and set as the outcome
+on the future task. Since we never inspect these tasks for their
+outcomes, nor is there a good place to do this, we have to handle these
+errors ourselves. To do this, we catch them and dispatch them to the
+uncaught exception handler via a forked thread. This is similar to our
+handling in Netty.

@@ -1,0 +1,25 @@
+Reduce the default initial capacity of ChannelOutboundBuffer
+
+Motivation:
+
+ChannelOutboundBuffer is basically a circular array queue of its entry
+objects.  Once an entry is created in the array, it is never nulled out
+to reduce the allocation cost.
+
+However, because it is a circular queue, the array almost always ends up
+with as many entry instances as the size of the array, regardless of the
+number of pending writes.
+
+At worst case, a channel might have only 1 pending writes at maximum
+while creating 32 entry objects, where 32 is the initial capacity of the
+array.
+
+Modifications:
+
+- Reduce the initial capacity of the circular array queue to 4.
+- Make the initial capacity of the circular array queue configurable
+
+Result:
+
+We spend 4 times less memory for entry objects under certain
+circumstances.

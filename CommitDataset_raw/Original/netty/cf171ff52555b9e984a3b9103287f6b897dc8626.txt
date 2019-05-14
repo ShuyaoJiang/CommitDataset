@@ -1,0 +1,13 @@
+maxBytesPerRead channel configuration
+
+Motiviation:
+The current read loops don't fascilitate reading a maximum amount of bytes. This capability is useful to have more fine grain control over how much data is injested.
+
+Modifications:
+- Add a setMaxBytesPerRead(int) and getMaxBytesPerRead() to ChannelConfig
+- Add a setMaxBytesPerIndividualRead(int) and getMaxBytesPerIndividualRead to ChannelConfig
+- Add methods to RecvByteBufAllocator so that a pluggable scheme can be used to control the behavior of the read loop.
+- Modify read loop for all transport types to respect the new RecvByteBufAllocator API
+
+Result:
+The ability to control how many bytes are read for each read operation/loop, and a more extensible read loop.

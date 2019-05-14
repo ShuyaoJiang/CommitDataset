@@ -1,0 +1,13 @@
+Removes completed snapshot from cluster state on master change (#24605)
+
+Previously, if a master node updated the cluster state to reflect that a
+snapshot is completed, but subsequently failed before processing a
+cluster state to remove the snapshot from the cluster state, then the
+newly elected master would not know that it needed to clean up the
+leftover cluster state.
+
+This commit ensures that the newly elected master sees if there is a
+snapshot in the cluster state that is in the completed state but has not
+yet been removed from the cluster state.
+
+Closes #24452

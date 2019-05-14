@@ -1,0 +1,7 @@
+Propagate ignore_unmapped to inner_hits (#29261)
+
+In 5.2 `ignore_unmapped` was added to `inner_hits` in order to ignore invalid mapping.
+This value was automatically set to the value defined in the parent query (`nested`, `has_child`, `has_parent`) but the refactoring of the parent/child in 5.6 removed this behavior unintentionally.
+This commit restores this behavior but also makes sure that we always automatically enforce this value when the query builder is used directly (previously this was only done by the XContent deserialization).
+
+Closes #29071

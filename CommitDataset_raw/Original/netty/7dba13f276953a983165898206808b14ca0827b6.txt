@@ -1,0 +1,10 @@
+HttpConversionUtil remove throws from method signature
+
+Motivation:
+HttpConversionUtil.toHttp2Headers currently has a throws Exception as part of the signature. This comes from the signature of ByteProcessor.process, but is not necessary because the ByteProcessor used does not throw.
+
+Modifications:
+- Remove throws Exception from the signature of HttpConversionUtil.toHttp2Headers.
+
+Result:
+HttpConversionUtil.toHttp2Headers interface does not propagate a throws Exception when it is used.

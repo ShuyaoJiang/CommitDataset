@@ -1,0 +1,7 @@
+{*Graph, Network}.java: change documentation of allowsSelfLoops() and allowsParallelEdges() to correct the type of exception that is thrown when one attempts to modify them in a way that the constraint prevents (e.g., adding a self-loop to a graph that doesn't allow them).
+
+Technically this is a contract change, but in fact the implementations were already throwing IllegalArgumentException, so in practice anyone that was depending on that documentation being accurate (by, say, catching UnsupportedOperationException) was already in trouble, so IMO we should just make this change without trying to worry about backward compatibility; this is just a bug fix.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147933338

@@ -1,0 +1,12 @@
+Refactor AuthenticationManagerConfiguration to make sure it works
+
+if user also adds @EnableWebMvcSecurity. The problem is that the ordering
+of the init() and configure() methods in the Spring Security configurers
+can force things to happen too early unless we are careful. It's still a bit
+twitchy I would say, but this relatively small change seems to fix the GS guide
+and not break any existing tests.
+
+I added a sample which mimic ths GS guide so we get an integration test that
+executes the new code paths.
+
+Fixes gh-1364

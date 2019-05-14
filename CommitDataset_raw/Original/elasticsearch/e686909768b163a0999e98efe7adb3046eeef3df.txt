@@ -1,0 +1,11 @@
+Build: Change test task sanity check to be per project (#33544)
+
+This commit changes the sanity check which ensures the test task was
+properly replaced with randomized testing to have a per project check,
+isntead of a global one. The previous global check assumed all test
+tasks within the root project and below should be randomized testing,
+but that is not the case for a multi project in which only one project
+is an elasticsearch plugin. While the new check is not able to emit all
+of the failed replacements in one error message, the efficacy of the
+check remains.
+

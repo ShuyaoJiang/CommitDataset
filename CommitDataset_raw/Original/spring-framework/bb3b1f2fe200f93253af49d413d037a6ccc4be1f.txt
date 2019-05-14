@@ -1,0 +1,16 @@
+Additional convenience methods in UriUtils
+
+The generic encode method in UriUtils that encodes any character
+outside the reserved character set for a URI is meant for "strict"
+encoding of URI variable values. This commit adds a couple more
+conveninence methods that accept a Map or array of URI variable
+values to encode.
+
+This facilitates the use case where the URI template is assumed to
+be encoded while URI variables are encoded strictly to avoid any
+possibility for unwanted reserved characters:
+
+Map<String, ?> encodedUriVars = UriUtils.encodeUriVariables(uriVars);
+uriComponentsBuilder.build(true).expand(encodedUriVars).toUri();
+
+Issue: SPR-14970

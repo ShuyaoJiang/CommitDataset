@@ -1,0 +1,13 @@
+Improve write completion handling in ChannelSendOperator
+
+Avoid re-using the WriteBarrier as the Subscription to both the
+completionSubscriber and the writeSubscriber.
+
+Instead DownstreamBridge is now called WriteCompletionBarrier and is
+both a Subscriber and Subscription, i.e. handles all signals to and
+from the completion Subscriber.
+
+This frees the request method implementation in WriteBarrier to assume
+it can only be called by the writeSubscriber and hence it's safe to
+pass on request signals to the write source outside the synchronized
+block.

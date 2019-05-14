@@ -1,0 +1,8 @@
+[TEST] Address rejected execution in SearchAsyncActionTests (#37028)
+
+SearchAsyncActionTests may fail with RejectedExecutionException as InitialSearchPhase may try to execute a runnable after the test has successfully completed, and the corresponding executor was already shut down. The latch was located in getNextPhase that is almost correct, but does not cover for the last finishAndRunNext round that gets executed after onShardResult is invoked.
+
+This commit moves the latch to count the number of shards, and allowing the test to count down later, after finishAndRunNext has been potentially forked. This way nothing else will be executed once the executor is shut down at the end of the tests.
+
+Closes #36221
+Closes #33699

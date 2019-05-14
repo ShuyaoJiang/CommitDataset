@@ -1,0 +1,11 @@
+HTTP/2 Graceful Shutdown Timeout
+
+Motivation:
+If any streams are still active the graceful shutdown code will wait until they are all closed before the connection is closed. In some situations this event may never occur, and thus a timeout should be supported so the socket can be closed even if all streams haven't been closed.
+
+Modifications:
+- Add a configurable timeout for when the graceful shutdown process is attempted.
+- Update unit tests to be faster, and use this graceful timeout
+
+Result:
+Local endpoint can protect from local or remote issues which prevent the channel from being closed during the graceful shutdown process.

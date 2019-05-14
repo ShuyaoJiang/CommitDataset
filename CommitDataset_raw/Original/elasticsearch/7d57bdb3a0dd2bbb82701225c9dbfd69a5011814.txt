@@ -1,0 +1,32 @@
+Follow stats structure (#34301)
+
+This commit modifies the follow stats API response structure to more
+clearly highlight meaning of the higher level fields. In particular,
+previously the response had a top-level key for each index. Instead, we
+nest the indices under an "indices" field which is now an array. The
+values in this array are objects containing two fields: "index" which is
+the name of the follower index, and "shards" which is an array where
+each value in the array is the follower stats for that shard. That is,
+we have gone from:
+
+{
+  "bar": [
+    {
+      "shard_id": 0...
+    }...
+  ]...
+}
+
+to
+
+{
+  "indices": [
+    {
+      "index": "bar",
+      "shards": [
+        {
+          "shard_id": 0...
+        }...
+      ]
+   }...
+}

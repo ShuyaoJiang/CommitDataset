@@ -1,0 +1,8 @@
+Enable rest tests via IDEs (#29439)
+
+Currently rest-based tests do not work from the IDE, as the security
+manager is configured to permit certain network operations when
+using the snapshot jars compiled by gradle.  We have an existing
+workaround that explicitly associates a codebase with the path
+from which the classes are loaded (in this case, the IDE build
+directory).  This PR adds the rest client to this workaround list.

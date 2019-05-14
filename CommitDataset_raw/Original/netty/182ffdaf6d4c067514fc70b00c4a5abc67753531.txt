@@ -1,0 +1,13 @@
+Only use manual safepoint polling in PlatformDependent0.copyMemory(...) when using java <= 8 (#8124)
+
+Motivation:
+
+Java9 and later does the safepoint polling by itself so there is not need for us to do it.
+
+Modifications:
+
+Check for java version before doing manual safepoint polling.
+
+Result:
+
+Less custom code and less overhead when using java9 and later. Fixes https://github.com/netty/netty/issues/8122.

@@ -1,0 +1,12 @@
+OpenSslEngine writePlaintextData WANT_READ with no data in BIO buffer
+
+Motivation:
+CVE-2016-4970
+
+OpenSslEngine.wrap calls SSL_write which may return SSL_ERROR_WANT_READ, and if in this condition there is nothing to read from the BIO the OpenSslEngine and SslHandler will enter an infinite loop.
+
+Modifications:
+- Use the error code provided by OpenSSL and go back to the EventLoop selector to detect if the socket is closed
+
+Result:
+OpenSslEngine correctly handles the return codes from OpenSSL and does not enter an infinite loop.

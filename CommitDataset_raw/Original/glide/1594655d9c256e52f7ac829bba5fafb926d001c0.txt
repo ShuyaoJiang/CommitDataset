@@ -1,0 +1,5 @@
+Rewind ByteBuffers in ByteBufferUtil.toFile.
+
+This avoids writing partial data if the buffer is not at position 0 when the method is called. This fixes a bug where using DiskCacheStrategy.ALL
+or DiskCacheStrategy.RESOURCE with GifDrawables would result in partial
+and invalid gif files being written to Glide’s disk cache.

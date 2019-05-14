@@ -1,0 +1,16 @@
+Re-enable Hibernate EntityManagerFactory tests
+
+HibernateEntityManagerFactoryIntegrationTests in the spring-orm module
+has been disabled for quite some time due to a dependency on the
+AnnotationBeanConfigurerAspect from the spring-aspects module. Since
+spring-aspects depends on spring-orm, a cyclical dependency would
+result if this code were re-enabled "as is".
+
+This commit removes the dependency on AnnotationBeanConfigurerAspect in
+HibernateEntityManagerFactoryIntegrationTests by deleting all test code
+and configuration related to @Configurable. In addition, this commit
+also deletes all SessionFactory-specific test code in
+HibernateEntityManagerFactoryIntegrationTests, allowing the test class
+to focus on Hibernate as a JPA provider.
+
+Issue: SPR-11922

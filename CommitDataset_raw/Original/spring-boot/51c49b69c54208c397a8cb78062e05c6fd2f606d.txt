@@ -1,0 +1,14 @@
+Support bom-based dependency management in the CLI
+
+Previously, the CLI’s dependency management used proprietary Properties
+file-based metadata to configure its dependency management. Since
+spring-boot-gradle-plugin’s move to using the separate dependency
+management plugin the CLI was the only user of this format.
+
+This commit updates the CLI to use Maven boms to configure its
+dependency management. By default it uses the spring-boot-dependencies
+bom. This configuration can be augmented and overridden using the new
+@DependencyManagementBom annotation which replaces @GrabMetadata.
+
+Closes gh-2688
+Closes gh-2439

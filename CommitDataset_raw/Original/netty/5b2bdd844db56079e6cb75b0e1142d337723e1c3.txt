@@ -1,0 +1,13 @@
+[#2662] Fix race in cancellation of TimerTasks which could let to NPE
+
+Motivation:
+
+Due some race-condition while handling canellation of TimerTasks it was possibleto corrupt the linked-list structure that is represent by HashedWheelBucket and so produce a NPE.
+
+Modification:
+
+Fix the problem by adding another MpscLinkedQueue which holds the cancellation tasks and process them on each tick. This allows to use no synchronization / locking at all while introduce a latency of max 1 tick before the TimerTask can be GC'ed.
+
+Result:
+
+No more NPE

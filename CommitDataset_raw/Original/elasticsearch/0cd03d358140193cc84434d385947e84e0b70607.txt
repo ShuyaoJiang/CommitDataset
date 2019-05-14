@@ -1,0 +1,19 @@
+Use RoleRetrievalResult for better caching (#34197)
+
+Security caches the result of role lookups and negative lookups are
+cached indefinitely. In the case of transient failures this leads to a
+bad experience as the roles could truly exist. The CompositeRolesStore
+needs to know if a failure occurred in one of the roles stores in order
+to make the appropriate decision as it relates to caching. In order to
+provide this information to the CompositeRolesStore, the return type of
+methods to retrieve roles has changed to a new class,
+RoleRetrievalResult. This class provides the ability to pass back an
+exception to the roles store. This exception does not mean that a
+request should be failed but instead serves as a signal to the roles
+store that missing roles should not be cached and neither should the
+combined role if there are missing roles.
+
+As part of this, the negative lookup cache was also changed from an
+unbounded cache to a cache with a configurable limit.
+
+Relates #33205

@@ -1,0 +1,10 @@
+DefaultChannelPipeline needs to release objects
+
+Motiviation:
+If user events or excpetions reach the tail end of the pipeline they are not released. This could result in buffer leaks.
+
+Motivation:
+- Use the ReferenceCountUtil.release to release objects for the userEventTriggered and exceptionCaught methods on DefaultChannelPipeline
+
+Result:
+2 less areas where buffer leaks can occur.

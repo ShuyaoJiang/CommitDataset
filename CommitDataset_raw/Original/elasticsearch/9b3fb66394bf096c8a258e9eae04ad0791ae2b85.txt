@@ -1,0 +1,17 @@
+Settings: Add secure versions of SSL passphrases (elastic/x-pack-elasticsearch#1852)
+
+This commit adds new settings for the ssl keystore (not the ES keystore)
+passphrase settings. New setting names are used, instead of trying to
+support the existing names in both yml and the ES keystore, so that
+there does not need to be complicated logic between the two. Note that
+the old settings remain the only way to set the ssl passphrases for the
+transport client, but the Settings object for transport clients are
+created in memory by users, so they are already as "secure" as having a
+loaded ES keystore. Also note that in the long term future (6.x
+timeframe?) these settings should be deprecated and the keys/certs
+themselves should be moved into the ES keystore, so there will be no
+need for separate keystores/passphrases.
+
+relates elastic/elasticsearch#22475
+
+Original commit: elastic/x-pack-elasticsearch@be5275fa3dd299234ef721b0702e8d6cdc200286

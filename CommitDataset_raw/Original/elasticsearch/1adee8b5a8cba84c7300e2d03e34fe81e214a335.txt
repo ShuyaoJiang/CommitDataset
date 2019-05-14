@@ -1,0 +1,8 @@
+Fix the MapperFieldType.rangeQuery API. (#26552)
+
+RangeQueryBuilder needs to perform too many `instanceof` checks in order to
+check for `date` or `range` fields in order to know what it should do with the
+shape relation, time zone and date format.
+
+This commit adds those 3 parameters to the `rangeQuery` factory method so that
+those instanceof checks are not necessary anymore.

@@ -1,0 +1,14 @@
+[#677] Overhaul HTTP codec
+
+This commit tries to simplify the handling of Http easier and more consistent. This has a effect of many channges. Including:
+ - HttpMessage was renamed to HttpHeader and the setContent and getContent methods were removed
+ - HttpChunk was renamed to HttpContent
+ - HttpChunkTrailer was renamed to LastHttpContent
+ - HttpCodecUtil was merged into HttpHeaders
+
+Now a "complete" Http message (request or response) contains of the following parts:
+ - HttpHeader (HttpRequestHeader or HttpResponseHeader)
+ - 0 - n HttpContent objects which contains parts of the content of the message
+ - 1 LastHttpContent which marks the end of the message and contains the remaining data of the content
+
+I also changed the sematic of HttpResponse and HttpRequest, these now represent a "complete" message which contains the HttpHeader and the HttpLastContent, and so can be used to eeasily send requests. The HttpMessageAggregator was renamed to HttpObjectAggregator and produce HttpResponse / HttpRequest message.

@@ -1,0 +1,13 @@
+Retry upload for any SocketException not just a ConnectException
+
+Previously, DevTools would retry the upload of the changes to an
+application in the event of a ConnectException. If a different
+network-level failure occurred, it would not be retried and would
+cause the file watching thread to die.
+
+This commit attempts to make things more robust by retrying all
+SocketExceptions and not just ConnectExceptions. A warning is
+logged when a failure occurs. A separate debug message that
+includes the exception is also logged.
+
+Closes gh-10317

@@ -1,0 +1,13 @@
+Correctly detect if Ocsp is supported
+
+Motivation:
+
+We only used the openssl version to detect if Ocsp is supported or not which is not good enough as even the version is correct it may be compiled without support for OCSP (like for example on ubuntu).
+
+Modifications:
+
+Try to enable OCSP while static init OpenSsl and based on if this works return true or false when calling OpenSsl.isOcspSupported().
+
+Result:
+
+Correctly detect if OSCP is supported.

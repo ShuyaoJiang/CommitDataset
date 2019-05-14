@@ -1,0 +1,20 @@
+Support 1012, 1013 and 1014 WebSocket status code
+
+Motivation:
+
+RFC 6455 doesn't define status codes 1012, 1013 and 1014.
+Yet, since then, IANA has defined them, web browsers support them, applications in the wild do use them but it's currently not possible to buid a Netty based client for those services.
+
+From https://www.iana.org/assignments/websocket/websocket.xhtml:
+
+* 1012: Service Restart
+* 1013: Try Again Later
+* 1014: The server was acting as a gateway or proxy and received an invalid response from the upstream server. This is similar to 502 HTTP Status Code.
+
+Modification:
+
+Make status codes 1012, 1013 and 1014 legit.
+
+Result:
+
+WebSocket status codes as defined by IANA are supported.

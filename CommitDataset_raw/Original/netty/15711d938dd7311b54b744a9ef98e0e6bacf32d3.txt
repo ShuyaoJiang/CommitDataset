@@ -1,0 +1,15 @@
+Fix address aliasing in sendmmsg0
+
+Motivation:
+
+When epoll datagram channel invokes sendmmsg0, _all_ of the messages go
+on the wire with the address of the _last_ packet in the list.
+
+Modifications:
+
+An array of addresses equal to the length of the messages is allocated
+on the stack to hold the address for each msg_hdr.msg_name.
+
+Result:
+
+Each message goes on the wire with the correct address.

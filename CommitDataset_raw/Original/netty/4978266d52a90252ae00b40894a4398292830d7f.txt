@@ -1,0 +1,57 @@
+Make cookie encoding conform better to RFC 6265 in STRICT mode.
+
+Motivation:
+
+- On the client, cookies should be sorted in decreasing order of path
+  length. From RFC 6265:
+
+      5.4.2. The user agent SHOULD sort the cookie-list in the following
+      order:
+
+        *  Cookies with longer paths are listed before cookies with
+           shorter paths.
+
+        *  Among cookies that have equal-length path fields, cookies with
+           earlier creation-times are listed before cookies with later
+           creation-times.
+
+      NOTE: Not all user agents sort the cookie-list in this order, but
+      this order reflects common practice when this document was
+      written, and, historically, there have been servers that
+      (erroneously) depended on this order.
+
+  Note that the RFC does not define the path length of cookies without a
+  path. We sort pathless cookies before cookies with the longest path,
+  since pathless cookies inherit the request path (and setting a path
+  that is longer than the request path is of limited use, since it cannot
+  be read from the context in which it is written).
+
+- On the server, if there are multiple cookies of the same name, only one
+  of them should be encoded. RFC 6265 says:
+
+      Servers SHOULD NOT include more than one Set-Cookie header field in
+      the same response with the same cookie-name.
+
+  Note that the RFC does not define which cookie should be set in the case
+  of multiple cookies with the same name; we arbitrarily pick the last one.
+
+Modifications:
+
+- Changed the visibility of the 'strict' field to 'protected' in
+  CookieEncoder.
+
+- Modified ClientCookieEncoder to sort cookies in decreasing order of path
+  length when in strict mode.
+
+- Modified ServerCookieEncoder to return only the last cookie of a given
+  name when in strict mode.
+
+- Added a fast path for both strict mode in both client and server code
+  for cases with only one cookie, in order avoid the overhead of sorting
+  and memory allocation.
+
+- Added unit tests for the new cases.
+
+Result:
+
+- Cookie generation on client and server is now more conformant to RFC 6265.

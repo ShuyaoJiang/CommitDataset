@@ -1,0 +1,13 @@
+Ensure we only call debugData.release() if we called  debugData.retain()
+
+Motivation:
+
+We need to ensure we only call debugData.release() if we called debugData.retain(), otherwise we my see an IllegalReferenceCountException.
+
+Modifications:
+
+Only call release() if we called retain().
+
+Result:
+
+No more IllegalReferenceCountException possible.

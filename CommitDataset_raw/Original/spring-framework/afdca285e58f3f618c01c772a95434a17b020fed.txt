@@ -1,0 +1,14 @@
+Avoid resume-suspend race condition
+
+This commit turns suspendReading() into a readingPaused() notification
+that is invoked after a succession of reads stops because there is no
+more demand. Sub-classes can use this notification to suspend, if that
+applies to them.
+
+Most importantly the notification is guaranteed not to overlap with
+checkOnDataAvailable() which means that suspend does not need to be
+atomic and guarded against resume. The two can and do compete all the
+time when reading ends with no demand, and a request for demand arrives
+concurrently.
+
+Issue: SPR-16207

@@ -1,0 +1,8 @@
+Remove dependency of Schedulers from ObservableRefCount (#6452)
+
+In the constructor of `ObservableRefCount` that takes `ConnectableObservable<T> source` as the argument, we set `timeout` to `0L`. In that specific use case of `ObservableRefCount`, `scheduler` is never needed. It's only referenced in `cancel()` method but if timeout is 0, it won't be triggered at all because there is early return. This commit removes the need to depend on `Schedulers.trampoline()` and instead passes null to be scheduler when the ref count is not time-based.
+
+The reasons for this change are the following:
+
+1. In projects that don't depend on `Schedulers` class, if there is no reference to `Schedulers`, the whole `Schedulers` can be stripped out of the library after optimizations (e.g., proguard). With constructor that references `Schedulers`, the optimizer can't properly strip it out. In our quick test of our Android app, we were able to reduce the RxJava library size dependency from 51KB to 37KB (after optimization but before compression) by simply avoiding access to `Schedulers` in `ObservableRefCount`.
+2. In terms of modularity, `ObservableRefCount` is just an operator so it by itself should probably not have dependency on what available pool of schedulers (`Schedulers`) there are. It should just know that there is some `Scheduler` that could be passed to `ObservableRefCount` when `ObservableRefCount` needs it.

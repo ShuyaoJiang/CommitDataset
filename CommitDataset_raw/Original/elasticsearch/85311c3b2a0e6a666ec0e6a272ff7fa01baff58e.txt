@@ -1,0 +1,6 @@
+Do not create the missing index when invoking getRole (#39039)
+
+In most of the places we avoid creating the `.security` index (or updating the mapping)
+for read/search operations. This is more of a nit for the case of the getRole call,
+that fixes a possible mapping update during a get role, and removes a dead if branch
+about creating the `.security` index.

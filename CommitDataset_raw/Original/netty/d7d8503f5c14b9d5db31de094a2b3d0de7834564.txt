@@ -1,0 +1,21 @@
+Add a line-based frame decoder with good performance.
+
+Using DelimiterBasedFrameDecoder with Delimiters.lineDelimiter() has
+quadratic performance in the size of the input buffer.  Needless to
+say, the performance degrades pretty quickly as the size of the buffer
+increases.  Larger MTUs or loopback connections can make it so bad that
+it appears that the code is "busy waiting", when in fact it's spending
+almost 100% of the CPU time in DelimiterBasedFrameDecoder.indexOf().
+
+Add a new LineBasedFrameDecoder that decodes line-delimited frames
+in O(n) instead of DelimiterBasedFrameDecoder's O(n^2) implementation.
+In OpenTSDB's telnet-style protocol decoder this resulted in throughput
+increases of an order of magnitude.
+
+Change DelimiterBasedFrameDecoder to automatically detect when the
+frames are delimited by line endings, and automatically switch to
+using LineBasedFrameDecoder under the hood.  This means that all Netty
+applications out there that using the combo DelimiterBasedFrameDecoder
+with Delimiters.lineDelimiter() will automatically benefit from the
+better performance of LineBasedFrameDecoder, without requiring a code
+change.

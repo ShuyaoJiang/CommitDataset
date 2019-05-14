@@ -1,0 +1,11 @@
+HttpObjectDecoder configurable initial buffer size
+
+Motivation:
+The initial buffer size used to decode HTTP objects is currently fixed at 128. This may be too small for some use cases and create a high amount of overhead associated with resizing/copying. The user should be able to configure the initial size as they please.
+
+Modifications:
+- Make HttpObjectDecoder's AppendableCharSequence initial size configurable
+
+Result:
+Users can more finely tune initial buffer size for increased performance or to save memory.
+Fixes https://github.com/netty/netty/issues/4807

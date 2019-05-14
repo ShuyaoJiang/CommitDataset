@@ -1,0 +1,28 @@
+Let OpenSslContext take pre-encoded pkcs#8 private key/cert bytes
+
+Motivation
+
+OpenSslContext is expecting Java's PrivateKey and X509Certificate objects as input
+(for JdkSslContext API compatibility reasons) but doesn't really use them beyond
+turning them into PEM/PKCS#8 strings.
+
+This conversion can be entirely skipped if the user can pass in private keys and
+certificates in a format that Netty's OpenSSL code can digest.
+
+Modifications
+
+Two new classes have been added that act as a wrapper around the pre-encoded byte[]
+and also retain API compatibility to JdkSslContext.
+
+Result
+
+It's possible to pass PEM encoded bytes straight into OpenSSL without having to
+parse them (e.g. File to Java's PrivateKey) and then encode them (i.e. PrivateKey
+into PEM/PKCS#8).
+
+File pemPrivateKeyFile;
+byte[] pemBytes = readBytes(pemPrivateKeyFile);
+PemPrivateKey pemPrivateKey = PemPrivateKey.valueOf(pemBytes);
+
+SslContextBuilder.forServer(pemPrivateKey)
+    .sslProvider(SslProvider.OPENSSL)

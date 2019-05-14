@@ -1,0 +1,14 @@
+Bat scripts to work with JAVA_HOME with parentheses (#39712)
+
+the elasticsearch.bat and elasticsearch-env.bat won't work if JAVA
+contains parentheses. This seems to be the limitation of FOR /F IN
+(command) DO syntax.
+The JAVA variable present in a command contains a path to a binary to
+start elasticsearch (with spaces & parens). We can workaround the
+problem of spaces and parentheses in this path by referring this
+variable with a CALL command.
+Note that executing binaries with CALL is an undocumented behaviour (but works)
+closes #38578
+closes #38624
+closes #33405
+closes #30606

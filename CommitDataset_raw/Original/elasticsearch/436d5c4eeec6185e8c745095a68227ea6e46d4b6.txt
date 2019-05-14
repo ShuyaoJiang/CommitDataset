@@ -1,0 +1,15 @@
+Fixes SecurityIntegTestCase so it always adds at least one alias (#33296)
+
+* Fixes SecurityIntegTestCase so it always adds at least one alias
+
+`SecurityIntegTestCase.createIndicesWithRandomAliases` could randomly
+fail because its not gauranteed that the randomness of which aliases to
+add to the `IndicesAliasesRequestBuilder` would always select at least
+one alias to add. This change fixes the problem by keeping track of
+whether we have added an alias to teh request and forcing the last
+alias to be added if no other aliases have been added so far.
+
+Closes #30098
+Closes #33123e
+
+* Addresses review comments

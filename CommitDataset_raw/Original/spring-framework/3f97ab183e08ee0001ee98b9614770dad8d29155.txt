@@ -1,0 +1,17 @@
+Avoid use of double constructor of BigDecimal
+
+Codacy warns about an Error Prone [1] use of the double constructor of
+BigDecimal in tests. The reason given is that it is a source of
+precision loss if the number does not have an exact double
+representation. The recommendation is to use the String constructor of
+BigDecimal instead as it does not require using a lossy argument.
+
+This commit contains the following changes:
+
+ - replace usage of the double constructor of BigDecimal with the
+   String constructor of BigDecimal in JdbcTemplateQueryTests
+ - update the copyright year
+
+ [1] http://errorprone.info/bugpattern/BigDecimalLiteralDouble
+
+Issue: SPR-15077

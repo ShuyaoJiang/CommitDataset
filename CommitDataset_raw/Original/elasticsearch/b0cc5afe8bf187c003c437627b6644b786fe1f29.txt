@@ -1,0 +1,13 @@
+Disable security for trial licenses by default (elastic/x-pack-elasticsearch#4120)
+
+This change disables security for trial licenses unless security is
+explicitly enabled in the settings. This is done to facilitate users
+getting started and not having to deal with some of the complexities
+involved in getting security configured. In order to do this and avoid
+disabling security for existing users that have gold or platinum
+licenses, we have to disable security after cluster formation so that
+the license can be retrieved.
+
+relates elastic/x-pack-elasticsearch#4078
+
+Original commit: elastic/x-pack-elasticsearch@96bdb889fc74d4871c43df71354a21549cc53a3e

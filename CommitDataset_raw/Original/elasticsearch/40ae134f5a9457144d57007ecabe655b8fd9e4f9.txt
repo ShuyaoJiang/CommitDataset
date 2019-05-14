@@ -1,0 +1,5 @@
+Move `BulkItemRequest` BWC to 5.x (#25511)
+
+The current BWC code in `BulkItemRequest` mutates the underlying `DocWriteRequests` which causes test failures and unexpected state (our test infra checks bwc serialization on the fly). This PR removes this logic from master. Another PR will add a BWC layer to 5.x only.
+
+This PR contains the logic in https://github.com/elastic/elasticsearch/pull/25510 , which is needed to run the tests.

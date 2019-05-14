@@ -1,0 +1,17 @@
+Avoid a clash with TomcatURLStreamHandlerFactory
+
+In the unlikely (outside the tests of a number of Spring Boot's
+modules) event that both Tomcat and Jetty are on the classpath,
+there's a risk that Tomcat will try to register its
+URLStreamHandlerFactory after JasperInitializer has registered its
+WarUrlStreamHandlerFactory. Should this happen, Tomcat will fail to
+start.
+
+TomcatURLStreamHandlerFactory registers a handler for the war: URLs
+produced by org.apache.tomcat.util.scan.JarFactory that's used by
+both Tomcat and Jetty's Jasper integration. This makes it a suitable
+replacement for WarUrlStreamHandlerFactory so this commit updates
+JasperIntializer to register TomcatURLStreamHandlerFactory when it's
+available, falling back to WarUrlStreamHandlerFactory when it's not.
+
+Closes gh-8622

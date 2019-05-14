@@ -1,0 +1,11 @@
+Handle terms query when detecting if a query can match nested docs (#34072)
+
+When nested objects are present in the mappings, we add a filter in
+queries to exclude them if there is no evidence that the query cannot
+match in this space. In 6x we visit the query in order to find a mandatory
+clause that can match root documents only. If we find one we can omit the
+nested documents filter. Currently only `term` and `range` queries are checked,
+this change adds the support for `terms` query to effectively remove the nested filter
+if a mandatory `terms` clause targets a non-nested field.
+
+Closes #34067

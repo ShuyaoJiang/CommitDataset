@@ -1,0 +1,14 @@
+Consistency between pooled/unpooled derived buffers
+
+Motivation:
+4bba7526e2f58018817972f38279cc232f519100 introduced changes which made pooled and unpooled derived buffers inconsistent in a few ways:
+- Pooled derived buffers always generated a duplicate buffer when duplicate() was called and always generated a sliced buffer when slice() was called. Unpooled derived buffers some times generated a sliced buffer when duplicate() was called.
+- The indexes that were set for duplicate buffers generated from slices were not always consistent.
+There were also some various bugs in the derived pooled buffer implementation.
+
+Modifications:
+- Make pooled/unpooled consistently generate duplicate buffers when duplicate() is called and sliced buffers when slice() is called.
+- Fix bugs in the derived pooled buffer
+
+Result:
+More consistent behavior from the derived pooled/unpooled buffers.

@@ -1,0 +1,16 @@
+Add back assertion on empty resource classes in ResourceCacheGenerator
+
+Currently we're failing to load some images that are present in cache
+due to a race condition. I haven't had any luck looking through the code
+to see why this happens. I suspect a race of some sort. I'm hoping that
+adding the exception back in with additional logging will help me move
+forward.
+
+I'm also hoping that this change avoids the worst of the behavior in the
+bug by failing only one request, rather than all requests. I may
+actually have to revert back to failing all requests if I can detect via
+ecatcher that this exception happens but no one reports it.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=209077692

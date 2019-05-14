@@ -1,0 +1,8 @@
+Fail query when a sort is provided in conjunction with rescorers (#26510)
+
+This change fixes a regression introduced in 6 that removes the skipping of the rescore phase
+when a sort other than _score is used.
+We now fail the request when a sort is provided in conjunction with rescore instead of just skipping the rescore phase
+This commit also adds an assert that checks if the topdocs are sorted by _score after the rescoring.
+This is the responsibility of the rescorer to make sure that topdocs are sorted after rescore so we
+just check that this condition is met in the rescore phase.

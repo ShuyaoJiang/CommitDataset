@@ -1,0 +1,16 @@
+[ML] Switch from max_running_jobs to xpack.ml.max_open_jobs (elastic/x-pack-elasticsearch#2232)
+
+This change makes 2 improvements to the max_running_jobs setting:
+
+1. Namespaces it by adding the xpack.ml. prefix
+2. Renames "running" to "open", because the "running" terminology
+   is not used elsewhere
+
+The old max_running_jobs setting is used as a fallback if the new
+xpack.ml.max_open_jobs setting is not specified.  max_running_jobs
+is deprecated and (to ease backporting in the short term) will be
+removed from 7.0 in a different PR closer to release of 7.0.
+
+Relates elastic/x-pack-elasticsearch#2185
+
+Original commit: elastic/x-pack-elasticsearch@18c539f9bba838c6b63b6dde5abca6f7bf23e6e1

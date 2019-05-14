@@ -1,0 +1,32 @@
+Do not inspect meta-annotations on Java annotations
+
+This commit introduces a new isInJavaLangAnnotationPackage(Annotation)
+method in AnnotationUtils. This method is now used in AnnotationUtils,
+AnnotatedElementUtils, and MetaAnnotationUtils to ensure that search
+algorithms do no search for meta-annotations on annotations in the
+"java.lang.annotation" package.
+
+The following are some empirical results from this change:
+
+- The number of times that the findAnnotation(Class,Class,Set) method in
+  AnnotationUtils is recursively invoked while executing
+  AnnotationUtilsTests drops from 51 to 29.
+
+- The number of times that the process(AnnotatedElement) method in
+  AnnotationUtils.AnnotationCollector is recursively invoked while
+  executing AnnotationUtilsTests.getRepeatableFromMethod() drops
+  from 16 to 2.
+
+- The number of times that the doProcess() method in
+  AnnotatedElementUtils is recursively invoked while executing the
+  "getAnnotationAttributes() On MetaCycleAnnotatedClass with missing
+  target meta-annotation" test in AnnotatedElementUtilsTests drops
+  from 23 to 5.
+
+- The number of times that the findAnnotationDescriptor(Class,Set,Class)
+  method in MetaAnnotationUtils is recursively invoked while executing
+  the "findAnnotationDescriptor() on MetaCycleAnnotatedClass with
+  missing target meta-annotation" test in MetaAnnotationUtilsTests drops
+  from 16 to 8.
+
+Issue: SPR-11483

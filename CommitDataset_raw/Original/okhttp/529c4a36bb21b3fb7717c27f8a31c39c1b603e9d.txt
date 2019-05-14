@@ -1,0 +1,9 @@
+Stop returning HTTP/1.0 from Connection.getProtocol().
+
+This was updating the protocol as a side-effect of an HTTP/1.0 response.
+This made the protocol field mutable, and the code more difficult to
+trace.
+
+One consequence of this change is that OkHttp will attempt HTTP/1.1 for
+all requests, even if a server returns HTTP/1.0 from the first response.
+This is closer to our implementation anyway.

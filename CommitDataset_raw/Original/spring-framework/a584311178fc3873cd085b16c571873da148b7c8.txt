@@ -1,0 +1,7 @@
+Fix StringDecoder#decodeToMono issue with empty input
+
+Before this change decodeToMono always created a StringBuilder to
+aggregate resulting in an "" (empty string) rather than an empty
+Mono for an empty input stream.
+
+Now we aggregate in the DataBuffer instead and then decode to String.

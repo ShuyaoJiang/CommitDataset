@@ -1,0 +1,21 @@
+Only require an exception CacheResolver if necessary
+
+Previously, a cache infrastructure with only a CacheResolver would have
+worked fine until the JSR-107 API is added to the classpath. When this is
+the case, the JCache support kicks in and an exception cache resolver is
+all of the sudden required.
+
+The CacheResolver _is_ different as the default implementation does look
+different attributes so if a custom CacheResolver is set, it is not
+possible to "reuse" it as a fallback exception CacheResolver.
+
+Now, an exception CacheResolver is only required if a JSR-107 annotation
+with an "exceptionCacheName" attribute is processed (i.e. the exception
+CacheResolver is lazily instantiated if necessary).
+
+The use case of having a CachingConfigurerSupport with only a
+CacheResolver was still broken though since the JCache support only looks
+for a JCacheConfigurer bean (per the generic type set on
+AbstractCachingConfiguration). This has been fixed as well.
+
+Issue: SPR-12850

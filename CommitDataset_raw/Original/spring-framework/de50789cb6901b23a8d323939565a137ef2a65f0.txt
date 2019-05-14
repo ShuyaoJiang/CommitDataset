@@ -1,0 +1,14 @@
+Introduce @EnableAsync
+
+Introduce @EnableAsync#order
+
+AsyncAnnotationBeanPostProcessor's 'order' property is now mutable;
+@EnableAsync's 'order()' attribute allows for setting it, but must
+have a default value, thus uses the new Ordered#NOT_ORDERED
+constant - a reserved negative number very unlikely to be otherwise
+used that may be interpreted as 'not ordered', useful in annotation
+defaulting scenarios where null is not an option.
+
+Introduce first working cut of AsyncConfiguration
+
+Remove AsyncCapability

@@ -1,0 +1,8 @@
+Glide libraries. Migrate Docs/Drive's Webp decoders to Glide libraries.
+
+I looked into reading the first few bytes of the file stream to detect if it is a WebP (as you suggested in WebpStreamBitmapDecoder in [] but I was a bit worried due to the format (https://en.wikipedia.org/wiki/WebP#Technology). It seems like you'd need to read a lot of bytes... but maybe this is safe...?
+
+Also of note, the tests are emulator tests which were previously running on x86 but are now on ARM. This is because Glide library tests run with --android_cpu=armeabi (the default). As it is the tests take 150-200s compared with 30-40s on x86. Since android_cpu is not a standard TAP flag it would need to be changed in [] to LEGACY_ANDROID_X86 (if my understanding is correct). I can look into changing after this is submitted if you'd like.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=102957832

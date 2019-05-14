@@ -1,0 +1,12 @@
+Allow custom builder to be used in SpringBootServletInitializer
+
+Previously, to use a custom SpringApplicationBuilder subclass in
+SpringBootServletInitializer, it was necessary to either override
+createRootApplicationContext or configure and duplicate the logic
+that configures the builder with initializers, the context class, etc.
+
+This commit introduces a new method, createSpringApplicationBuilder,
+that can be overridden to use a custom builder without having to
+duplicate any configuration logic.
+
+Closes gh-2694

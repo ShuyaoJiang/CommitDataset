@@ -1,0 +1,6 @@
+Guard against null in email admin watches (#32923)
+
+The Kibana settings docs that these watches rely on can sometimes
+contain no xpack settings. When this is the case, we will end up with a
+null pointer exception in the script. We need to guard against in these
+scripts so this commit does that.

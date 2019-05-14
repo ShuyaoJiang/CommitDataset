@@ -1,0 +1,13 @@
+Fix buffer leak in local transport when a close triggers the close of a remote peer and there are still messages in the inbound buffer.
+
+Motivation:
+
+We need to release all the buffers that may be put into our inbound queue since we closed the Channel to ensure we not leak any memory. This is fine as it basically gives the same guarantees as TCP which  means even if the promise was notified before its not really guaranteed that the "remote peer" will see the buffer at all.
+
+Modifications:
+
+Ensure we release all buffers in the inbound buffer if a doClose() is called.
+
+Result:
+
+No more leaks.

@@ -1,0 +1,19 @@
+Introduce multi-release JAR
+
+This commit introduces the ability for the core Elasticsearch JAR to be
+a multi-release JAR containing code that is compiled for JDK 8 and code
+that is compiled for JDK 9. At runtime, a JDK 8 JVM will ignore the JDK
+9 compiled classfiles, and a JDK 9 JVM will use the JDK 9 compiled
+classfiles instead of the JDK 8 compiled classfiles. With this work, we
+utilize the new JDK 9 API for obtaining the PID of the running JVM,
+instead of relying on a hack.
+
+For now, we want to keep IDEs on JDK 8 so when the build is in an IDE we
+ignore the JDK 9 source set (as otherwise the IDE would give compilation
+errors). However, with this change, running Gradle from the command-line
+now requires JAVA_HOME and JAVA_9_HOME to be set. This will require
+follow-up work in our CI infrastructure and our release builds to
+accommodate this change.
+
+Relates #28051
+

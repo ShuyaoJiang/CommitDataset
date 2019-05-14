@@ -1,0 +1,9 @@
+ForwardedHeaderFilter requestURI preserve encoding
+
+Previously ForwardedHeaderFilter would override the requestURI with a URL decoded value. This would cause
+problems when using a URL encoded requestURI since downstream Filters would not see the URL encoded
+value as they should.
+
+This commit resolves this issue by ensuring that the requestURI is properly encoded.
+
+Issues SPR-15422

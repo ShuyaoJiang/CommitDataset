@@ -1,0 +1,44 @@
+Reduce iterations for MinMaxPriorityQueueTest under GWT.
+
+I had a bunch of theories as to why these tests were slow (string construction, java.util.Random, collection construction). They are probably part of the story -- especially string construction, which I might still submit a CL to reduce -- but fundamentally, I think the slow thing is our many calls to isIntact(). Let's not make so many. Likely the non-GWT tests would catch any problems here, anyway, and we'll still run the tests under GWT, albeit with fewer iterations, in case we have an obvious bug there.
+
+This is a clear win internally: All MinMaxPriorityQueueTest methods are now under 10 seconds, and I'd previously seen ~6 over that mark, including 1 around a minute and 2 around 30 seconds. I'll get some external numbers next.
+
+at head, top 14 MinMaxPriorityQueueTest tests:
+00:04 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testExhaustive_pollAndPush
+00:06 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testIteratorTester
+00:06 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testIteratorTesterLarger
+00:10 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_smallHeapsPollLast
+00:11 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_smallHeapsPollFirst
+00:15 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testHeapIntact
+00:16 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRandomRemoves
+02:51 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRandomAddsAndRemoves_duplicateElements
+03:00 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRemoveAt
+04:13 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRandomAddsAndRemoves
+07:28 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_mediumHeapsPollFirst
+07:31 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_mediumHeapsPollLast
+16:31 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRemoveAt_exhaustive
+19:19 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_randomAccess
+
+with this CL, top 14 MinMaxPriorityQueueTest tests:
+00:01 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCreation_maximumSize_withContents
+00:01 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRemoveAt_exhaustive
+00:02 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRandomRemoves
+00:03 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testExhaustive_pollAndPush
+00:06 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testIteratorTester
+00:06 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testIteratorTesterLarger
+00:11 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_smallHeapsPollFirst
+00:11 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_smallHeapsPollLast
+00:16 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testHeapIntact
+00:17 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRandomAddsAndRemoves_duplicateElements
+00:19 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRemoveAt
+00:25 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testRandomAddsAndRemoves
+00:48 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_mediumHeapsPollFirst
+00:52 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_mediumHeapsPollLast
+02:02 com.google.common.collect.MinMaxPriorityQueueTest_gwt|testCorrectOrdering_randomAccess
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=175041179

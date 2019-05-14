@@ -1,0 +1,12 @@
+Properly close context hierarchy in tests
+
+Prior to this commit, some tests were creating a parent/child
+relationship but were only closing the child context. This could
+be an issue with the autoconfig module as a lot of auto-config
+kicks in by default.
+
+This commit adds a new test utility designed to properly handle
+those situations. Updated tests that were creating a context
+hierarchy to benefit from that.
+
+Fixes gh-1034

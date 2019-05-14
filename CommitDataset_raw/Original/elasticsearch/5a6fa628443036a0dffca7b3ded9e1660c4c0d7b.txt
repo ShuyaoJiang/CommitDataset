@@ -1,0 +1,19 @@
+Speed up PK lookups at index time. (#19856)
+
+At index time Elasticsearch needs to look up the version associated with the
+`_id` of the document that is being indexed, which is often the bottleneck for
+indexing.
+
+While reviewing the output of the `jfr` telemetry from a Rally benchmark, I saw
+that significant time was spent in `ConcurrentHashMap#get` and `ThreadLocal#get`.
+The reason is that we cache lookup objects per thread and segment, and for every
+indexed document, we first need to look up the cache associated with this
+segment (`ConcurrentHashMap#get`) and then get a state that is local to the
+current thread (`ThreadLocal#get`). So if you are indexing N documents per
+second and have S segments, both these methods will be called N*S times per
+second.
+
+This commit changes version lookup to use a cache per index reader rather than
+per segment. While this makes cache entries live for less long, we now only need
+to do one call to `ConcurrentHashMap#get` and `ThreadLocal#get` per indexed
+document.

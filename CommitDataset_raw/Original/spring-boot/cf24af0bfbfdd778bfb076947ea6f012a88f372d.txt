@@ -1,0 +1,40 @@
+Rework logging to prevent double initialization
+
+Prior to this commit LoggingSystem initialization would happen multiple
+times. Once to configure "quiet" logging, and again to configure correct
+settings once the Application was initialized. This could cause problems
+if `logging.groovy` logback files were used.
+
+The logging system is now only initialized once (when possible) by
+following these steps:
+
+- Standard logging initialization occurs via the actual logging
+  implementation used (e.g. logback will load a logback.xml file if it
+  exists)
+- beforeInitization() is called to prevent early log output.
+  Implementations now either use a Filter or simply set the root logging
+  level.
+- initialize() is called with an optional log configuration file (e.g
+  a custom logback.xml location) and an optional log output file (the
+  default is null indicating console only output).
+
+The initialize() method will attempt to prevent double initialization
+by checking if a standard configuration file exists. Double
+initialization now only occurs in the following situations:
+
+- The user has a standard configuration file (e.g. classpath:logback.xml)
+  but also specifies a logging.config property. Double initialization is
+  required since the specified configuration file supersedes the default.
+- The user has a standard configuration file (e.g. classpath:logback.xml)
+  and specifies a logging.file property. Double initialization is
+  required since the standard configuration may use a ${LOG_FILE}
+  reference.
+
+In addition this commit removes the `logging.console` option and now
+assumes that logging either occurs only to console or to both the
+console and a file. This restriction helps simplify the LoggingSystem
+implementations. If file only logging is required a custom logback.xml
+can be used.
+
+Fixes gh-1091
+See gh-1612, gh-1770

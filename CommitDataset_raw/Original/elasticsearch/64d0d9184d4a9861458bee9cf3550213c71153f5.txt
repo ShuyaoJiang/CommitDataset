@@ -1,0 +1,8 @@
+Fix IndexShardIT#testDurableFlagHasEffect to only test if operations have been synced
+
+With global checkpoints we also take into account if a global checkpoint must be fsynced.
+Yet, with recent addition of inlining global checkpoints into indexing operations from a
+test perspective unnecessary fsyncs might be reported if `Translog#syncNeeded` is checked.
+Now the test only check if the last write location triggers an fsync instead.
+
+Closes #24600

@@ -1,0 +1,11 @@
+Update the farmHashFingerprint64() javadoc to specify how FarmHash's numeric fingerprint is encoded by HashCode#asBytes().
+
+The HashFunction interface demands that an implementation output bytes [1]. But FarmHash's Fingerprint64() is defined (by its C++ reference implementation) as returning a 64 bit unsigned number and farmHashFingerprint64() doesn't specify how this number is encoded by HashCode#asBytes(). This change will assure users that HashCode#asLong() from Guava's implementation of FarmHash will yield the same value as would be returned by farmhash::Fingerprint64() on the same input. The current "byte-wise identical to C++" language isn't helpful because again, C++ FarmHash returns a uint64_t not bytes and the C++ language doesn't specify how this value is encoded in memory.
+
+No code changes are needed because the unit tests already compare the output of #asLong() with golden values.
+
+[1] The HashCode abstraction is nice but #asLong() and #asInt() are both are defined in terms of #asBytes()
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=170879437

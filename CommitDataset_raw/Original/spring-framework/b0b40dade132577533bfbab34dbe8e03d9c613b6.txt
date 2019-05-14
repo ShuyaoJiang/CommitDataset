@@ -1,0 +1,13 @@
+Detect cache hit with multiple @Cachables
+
+Fix CacheAspectSupport to consider a cache hit from any of the multiple
+@Cachables that may have been specified using the @Caching annotation.
+
+Prior to this commit the following scenario would never produce a hit:
+
+	@Caching(cacheable = {
+		@Cacheable(value = "c1", unless = "#result.size() < 4"),
+		@Cacheable(value = "c2", unless = "#result.size() > 3")
+	})
+
+Issue: SPR-11124

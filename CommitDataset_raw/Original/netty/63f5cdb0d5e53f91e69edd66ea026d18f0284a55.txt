@@ -1,0 +1,10 @@
+ByteBuf#ensureWritable(int, boolean) should not throw
+
+Motivation:
+The javadocs for ByteBuf#ensureWritable(int, boolean) indicate that it should not throw, and instead the return code should indicate the result of the operation. Due to a bug in AbstractByteBuf it is possible for a resize to be attempted on a buffer that may exceed maxCapacity() and therefore throw.
+
+Modifications:
+- If there is not enough space in the buffer, and force is false, then a resize should not be attempted
+
+Result:
+AbstractByteBuf#ensureWritable(int, boolean) enforces the javadoc constraints and does not throw.

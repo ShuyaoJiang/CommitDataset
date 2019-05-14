@@ -1,0 +1,12 @@
+Account for XContent overhead in in-flight breaker
+
+So far the in-flight request circuit breaker has only accounted for the
+on-the-wire representation of a request. However, we convert the raw
+request into XContent internally which increases the overhead.
+Therefore, we increase the value of the corresponding setting
+`network.breaker.inflight_requests.overhead` from one to two. While this
+value is still rather conservative (we assume that the representation as
+structured objects has no overhead compared to the byte[]), it is closer
+to reality than the current value.
+
+Relates #31613

@@ -1,0 +1,38 @@
+Support automatic discovery of default TELs
+
+Prior to this commit, there was no declarative mechanism for a custom
+TestExecutionListener to be registered as a default
+TestExecutionListener.
+
+This commit introduces support for discovering default
+TestExecutionListener implementations via the SpringFactoriesLoader
+mechanism. Specifically, the spring-test module declares all core
+default TestExecutionListeners under the
+org.springframework.test.context.TestExecutionListener key in its
+META-INF/spring.factories properties file, and third-party frameworks
+and developers can contribute to the list of default
+TestExecutionListeners in the same manner.
+
+ - AbstractTestContextBootstrapper uses the SpringFactoriesLoader to
+   look up the class names of all registered default
+   TestExecutionListeners and sorts the instantiated listeners using
+   AnnotationAwareOrderComparator.
+
+ - DefaultTestContextBootstrapper and WebTestContextBootstrapper now
+   rely on the SpringFactoriesLoader mechanism for finding default
+   TestExecutionListeners instead of hard coding fully qualified class
+   names.
+
+ - To ensure that default TestExecutionListeners are registered in the
+   correct order, each can implement Ordered or declare @Order.
+
+ - AbstractTestExecutionListener and all default TestExecutionListeners
+   provided by Spring now implement Ordered with appropriate values.
+
+ - Introduced "copy constructors" in MergedContextConfiguration and
+   WebMergedContextConfiguration
+
+ - SpringFactoriesLoader now uses AnnotationAwareOrderComparator
+   instead of OrderComparator.
+
+Issue: SPR-11466

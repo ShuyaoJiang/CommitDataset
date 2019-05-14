@@ -1,0 +1,12 @@
+A replica can be promoted and started in one cluster state update (#32042)
+
+When a replica is fully recovered (i.e., in `POST_RECOVERY` state) we send a request to the master
+to start the shard. The master changes the state of the replica and publishes a cluster state to that
+effect. In certain cases, that cluster state can be processed on the node hosting the replica
+*together* with a cluster state that promotes that, now started, replica to a primary. This can
+happen due to cluster state batched processing or if the master died after having committed the
+cluster state that starts the shard but before publishing it to the node with the replica. If the master
+also held the primary shard, the new master node will remove the primary (as it failed) and will also
+immediately promote the replica (thinking it is started). 
+
+Sadly our code in IndexShard didn't allow for this which caused [assertions](https://github.com/elastic/elasticsearch/blob/13917162ad5c59a96ccb4d6a81a5044546c45c22/server/src/main/java/org/elasticsearch/index/seqno/ReplicationTracker.java#L482) to be tripped in some of our tests runs.

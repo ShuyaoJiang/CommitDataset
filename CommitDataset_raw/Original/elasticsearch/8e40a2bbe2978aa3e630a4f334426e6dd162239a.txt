@@ -1,0 +1,12 @@
+[Zen2] Introduce vote withdrawal (#35446)
+
+If shutting down half or more of the master-eligible nodes, their votes must
+first be explicitly withdrawn to ensure that the cluster doesn't lose its
+quorum. This works via _voting tombstones_, stored in the cluster state, which
+tell the reconfigurator to remove nodes from the voting configuration.
+
+This change introduces voting tombstones to the cluster state, together with
+transport APIs for adding and removing them, and makes use of these APIs in
+`InternalTestCluster` to support tests which remove at least half of the
+master-eligible nodes at once (e.g. shrinking from two master-eligible nodes to
+one).

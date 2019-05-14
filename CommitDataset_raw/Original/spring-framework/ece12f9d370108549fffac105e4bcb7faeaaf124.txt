@@ -1,0 +1,23 @@
+Synthesize annotation from map w/ minimal attributes
+
+The initial support for synthesizing an annotation from a Map (or
+AnnotationAttributes) introduced in SPR-13067 required that the map
+contain key-value pairs for every attribute defined by the supplied
+annotationType. However, there are use cases that would benefit from
+being able to supply a reduced set of attributes and still have the
+annotation synthesized properly.
+
+This commit refines the validation mechanism in
+MapAnnotationAttributeExtractor so that a reduced set of attributes may
+be supplied. Specifically, if an attribute is missing in the supplied
+map the attribute will be set either to value of its alias (if an alias
+value configured via @AliasFor exists) or to the value of the
+attribute's default value (if defined), and otherwise an exception will
+be thrown.
+
+Furthermore, TransactionalTestExecutionListener has been refactored to
+take advantage of this new feature by synthesizing an instance of
+@TransactionConfiguration solely from the default values of its
+declared attributes.
+
+Issue: SPR-13087

@@ -1,0 +1,100 @@
+Fix big transfer and Write traffic shaping issues
+
+Motivation:
+
+Several issues were shown by various ticket (#2900 #2956).
+Also use the improvement on writability user management from #3036.
+And finally add a mixte handler, both for Global and Channels, with
+the advantages of being uniquely created and using less memory and
+less shaping.
+
+Issue #2900
+
+When a huge amount of data are written, the current behavior of the
+TrafficShaping handler is to limit the delay to 15s, whatever the delay
+the previous write has. This is wrong, and when a huge amount of writes
+are done in a short time, the traffic is not correctly shapened.
+
+Moreover, there is a high risk of OOM if one is not using in his/her own
+handler for instance ChannelFuture.addListener() to handle the write
+bufferisation in the TrafficShapingHandler.
+
+This fix use the "user-defined writability flags" from #3036 to
+allow the TrafficShapingHandlers to "user-defined" managed writability
+directly, as for reading, thus using the default isWritable() and
+channelWritabilityChanged().
+This allows for instance HttpChunkedInput to be fully compatible.
+
+The "bandwidth" compute on write is only on "acquired" write orders, not
+on "real" write orders, which is wrong from statistic point of view.
+
+Issue #2956
+
+When using GlobalTrafficShaping, every write (and read) are
+synchronized, thus leading to a drop of performance.
+ChannelTrafficShaping is not touched by this issue since synchronized is
+then correct (handler is per channel, so the synchronized).
+
+Modifications:
+The current write delay computation takes into account the previous
+write delay and time to check is the 15s delay (maxTime) is really
+exceeded or not (using last scheduled write time). The algorithm is
+simplified and in the same time more accurate.
+
+This proposal uses the #3036 improvement on user-defined writability
+flags.
+
+When the real write occurs, the statistics are update accordingly on a
+new attribute (getRealWriteThroughput()).
+
+To limit the synchronisations, all synchronized on
+GlobalTrafficShapingHandler on submitWrite were removed. They are
+replaced with a lock per channel (since synchronization is still needed
+to prevent unordered write per channel), as in the sendAllValid method
+for the very same reason.
+Also all synchronized on TrafficCounter on read/writeTimeToWait() are
+removed as they are unnecessary since already locked before by the
+caller.
+Still the creation and remove operations on lock per channel (PerChannel
+object) are synchronized to prevent concurrency issue on this critical
+part, but then limited.
+
+Additionnal changes:
+1) Use System.nanoTime() instead of System.currentTimeMillis() and
+minimize calls
+2) Remove / 10 ° 10 since no more sleep usage
+3) Use nanoTime instead of currentTime such that time spend is computed,
+not real time clock. Therefore the "now" relative time (nanoTime based)
+is passed on all sub methods.
+4) Take care of removal of the handler to force write all pending writes
+and release read too
+8) Review Javadoc to explicit:
+
+- recommandations to take into account isWritable
+
+- recommandations to provide reasonable message size according to
+traffic shaping limit
+
+- explicit "best effort" traffic shaping behavior when changing
+configuration dynamically
+
+Add a MixteGlobalChannelTrafficShapingHandler which allows to use only one
+handler for mixing Global and Channel TSH. I enables to save more memory and
+tries to optimize the traffic among various channels.
+
+Result:
+The traffic shaping is more stable, even with a huge number of writes in
+short time by taking into consideration last scheduled write time.
+
+The current implementation of TrafficShapingHandler using user-defined
+writability flags and default isWritable() and
+fireChannelWritabilityChanged works as expected.
+
+The statistics are more valuable (asked write vs real write).
+
+The Global TrafficShapingHandler should now have less "global"
+synchronization, hoping to the minimum, but still per Channel as needed.
+
+The GlobalChannel TrafficShapingHandler allows to have only one handler for all channels while still offering per channel in addition to global traffic shaping.
+
+And finally maintain backward compatibility.

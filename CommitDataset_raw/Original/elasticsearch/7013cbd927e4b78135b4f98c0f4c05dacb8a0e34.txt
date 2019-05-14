@@ -1,0 +1,16 @@
+Update MockTransportService to the age of Transport.Connection (#25320)
+
+MockTransportServices allows us to simulate network disruptions in our testing infra. Sadly it wasn't updated to the state of the art in Transport land. This PR brings it up to speed. Specifically:
+
+1) Opening a connection is now also blocked (before only node connections were blocked)
+2) Simplifies things using the latest connection based notification between TcpTransport and TransportService for when a disconnect happens.
+3) By 2, it fixes a race condition where we may fail to respond to a sent request when it is sent concurrently with the closing of a connection. The old code relied on a node based bridge between tcp transport and transport service. Sadly, the following doesn't work any more:
+
+```
+   if (transport.nodeConnected(node)) {
+            // this a connected node, disconnecting from it will be up the exception
+            transport.disconnectFromNode(node); <-- this may now be a noop and it doesn't mean that the transport service was notified of the disconnect between the nodeConnected check and here.
+   } else {
+            throw new ConnectTransportException(node, reason, e);
+   }
+```

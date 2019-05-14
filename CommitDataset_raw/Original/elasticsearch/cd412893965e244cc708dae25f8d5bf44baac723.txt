@@ -1,0 +1,11 @@
+Add local session timeouts to leader node (#37438)
+
+This is related to #35975. This commit adds timeout functionality to
+the local session on a leader node. When a session is started, a timeout
+is scheduled using a repeatable runnable. If the session is not accessed
+in between two runs the session is closed. When the sssion is closed,
+the repeating task is cancelled.
+
+Additionally, this commit moves session uuid generation to the leader
+cluster. And renames the PutCcrRestoreSessionRequest to
+StartCcrRestoreSessionRequest to reflect that change.

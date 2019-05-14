@@ -1,0 +1,9 @@
+Fix ordering problem in PropertySourcesPropertyValues
+
+This affected @ConfigurationProperties binding whenever there
+were multiple PropertySources (from any source) in the
+Environment and mor ethan one carried a value for a particular
+key. The rules for override are clear in Environment.getProperty()
+but they were being violated by the PropertySourcesPropertyValues.
+
+Fixes gh-916

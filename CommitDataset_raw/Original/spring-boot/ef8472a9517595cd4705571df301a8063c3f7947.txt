@@ -1,0 +1,16 @@
+Log all configured connectors when Tomcat is initialized
+
+Previously, Tomcat initialization would only log the port of the
+primary connector and would omit the scheme, whereas once Tomcat was
+started the port of every connector and their schemes would be logged.
+
+This commit makes things symmetrical by updating the logging performed
+at initialization to include every connector's port and scheme.
+
+During initialization the port number that the connector the has
+been configured with is logged. This means that, if the connector has
+been configured to bind to an free port, 0 will be logged. Once
+Tomcat has started, the number of the port that the connector has
+bound to is logged.
+
+Closes gh-1601

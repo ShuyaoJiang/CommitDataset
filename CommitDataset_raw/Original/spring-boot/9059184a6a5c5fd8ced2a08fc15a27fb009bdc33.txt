@@ -1,0 +1,9 @@
+Clarify commons-pool2 requirement for redis
+
+`JedisConnectionFactory` needs `commons-pool2` for quite some time now
+and our auto-configuration had a special case to handle redis if
+`commons-pool2` isn't available.
+
+This commit removes that code as using it would lead to a failure anyway.
+
+Closes gh-5718

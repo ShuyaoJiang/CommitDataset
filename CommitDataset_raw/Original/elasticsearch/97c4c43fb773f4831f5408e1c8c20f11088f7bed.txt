@@ -1,0 +1,8 @@
+Make slop optional when parsing `span_near` query (#25677)
+
+The slop parameter defaults to 0 in the Lucene SpanNearQuery, so we can set it
+to this default value also and don't have to require it being specified in the
+query when using the Rest API. Leaving `slop` a ctro arg in the Java API as it
+should normally be specified and we can keep it `final` that way.
+
+Closes #25642

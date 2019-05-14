@@ -1,0 +1,17 @@
+[Zen2] Elect freshest master in upgrade (#37122)
+
+Today when electing a master in Zen2 we use the cluster state version to
+determine whether a node has a fresh-enough cluster state to become master.
+However the cluster state version is not a reliable measure of freshness in the
+Zen1 world; furthermore in 6.x the cluster state version is not persisted. This
+means that when upgrading from 6.x via a full cluster restart a cluster state
+update may be lost if a stale master wins the initial election.
+
+This change fixes this by using the metadata version as a measure of freshness
+when in term 0, since this is persisted in 6.x and does more reliably indicate
+the freshness of nodes.
+
+It also makes changes parallel to elastic/elasticsearch-formal-models#40 to
+support situations in which nodes accept cluster state versions in term 0: this
+does not happen in a pure Zen2 cluster, but can happen in mixed clusters and
+during upgrades.

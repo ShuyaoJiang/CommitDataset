@@ -1,0 +1,10 @@
+Restore proper use of CacheLoader
+
+Since Guava 11, CacheLoader is only invoked with a LoadingCache but the
+GuavaCache wrapper is always invoking getIfPresent(), available on the
+main Guava Cache interface.
+
+Update GuavaCache#get to check for the presence of a LoadingCache and
+call the appropriate method.
+
+Issue: SPR-12842

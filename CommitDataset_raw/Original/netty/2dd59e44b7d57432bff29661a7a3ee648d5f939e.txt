@@ -1,0 +1,11 @@
+ALPN/NPN Examples Not using failure behavior compatible with all SslProviders
+
+Motivation:
+Examples that are using ALPN/NPN are using a failure mode which is not supported by the JDK SslProvider. The examples fail to run and throw an exception if the JDK SslProvider is used.
+
+Modifications:
+- Use SelectorFailureBehavior.NO_ADVERTISE
+- Use SelectedListenerFailureBehavior.ACCEPT
+
+Result:
+Examples can be run with both OpenSsl and JDK SslProviders.

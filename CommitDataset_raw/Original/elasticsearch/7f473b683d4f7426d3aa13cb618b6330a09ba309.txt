@@ -1,0 +1,10 @@
+Profiler: Don’t profile NEXTDOC for ConstantScoreQuery. (#33196)
+
+* Profiler: Don’t profile NEXTDOC for ConstantScoreQuery.
+
+A ConstantScore query will return the iterator of its inner query.
+However, when profiling, the constant score query is wrapped separately
+from its inner query, which distorts the times emitted by the profiler.
+Return the iterator directly in such a case.
+
+Closes #23430

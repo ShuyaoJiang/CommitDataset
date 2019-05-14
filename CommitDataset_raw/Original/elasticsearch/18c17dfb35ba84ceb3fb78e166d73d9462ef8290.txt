@@ -1,0 +1,6 @@
+S3 fixture should report 404 on unknown bucket (#31782)
+
+Today, `AmazonS3Fixture` returns 403 on attempts to access any inappropriate
+bucket, whether known or otherwise. In fact, S3 reports 404 on nonexistent
+buckets and 403 on inaccessible ones. This change enhances `AmazonS3Fixture` to
+distinguish these cases.

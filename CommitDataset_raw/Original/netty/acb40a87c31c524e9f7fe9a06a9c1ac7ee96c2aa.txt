@@ -1,0 +1,10 @@
+SniHandler reference count leak if pipeline replace fails
+
+Motivation:
+The SniHandler attempts to generate a new SslHandler from the selected SslContext in a and insert that SslHandler into the pipeline. However if the underlying channel has been closed or the pipeline has been modified the pipeline.replace(..) operation may fail. Creating the SslHandler may also create a SSLEngine which is of type ReferenceCounted. The SslHandler states that if it is not inserted into a pipeline that it will not take reference count ownership of the SSLEngine. Under these conditions we will leak the SSLEngine if it is reference counted.
+
+Modifications:
+- If the pipeline.replace(..) operation fails we should release the SSLEngine object.
+
+Result:
+Fixes https://github.com/netty/netty/issues/5678

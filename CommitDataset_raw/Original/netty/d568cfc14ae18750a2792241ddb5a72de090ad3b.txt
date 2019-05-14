@@ -1,0 +1,15 @@
+HTTP/2: Treat MAX_CONCURRENT_STREAMS exceeded as a stream error.
+
+Motivation:
+
+As per the HTTP/2 spec, exceeding the MAX_CONCURRENT_STREAMS should be treated as a stream error as opposed to a connection error.
+
+"An endpoint that receives a HEADERS frame that causes its advertised concurrent stream limit to be exceeded MUST treat this as a stream error (Section 5.4.2) of type PROTOCOL_ERROR or REFUSED_STREAM." http://httpwg.org/specs/rfc7540.html#rfc.section.5.1.2
+
+Modifications:
+
+Make the error a stream error.
+
+Result:
+
+It's a stream error.

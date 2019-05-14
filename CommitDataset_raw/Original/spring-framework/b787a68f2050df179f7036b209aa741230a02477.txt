@@ -1,0 +1,26 @@
+Avoid 'type mismatch' errors in ExtendedBeanInfo
+
+Prior to this commit, ExtendedBeanInfo would add non-indexed write
+methods without consideration for the presence of indexed read/write
+methods, which is invalid per the JavaBeans spec and per the behavior
+of java.beans.Introspector.  That is, a method with the signature
+
+    void setFoo(Foo foo)
+
+Should never be registered as a write method if the following method
+signature is also present in the class
+
+    void setFoo(int i, Foo foo)
+
+In most cases, this oversight caused no problems, but in certain
+situations where a bean actually contains such a mismatch of methods,
+"type mismatch" errors were thrown when ExtendedBeanInfo attempted the
+illegal addition against the underlying property descriptor.
+
+The implementation is now more careful about checking the parameter type
+of write methods -- if the property descriptor in question is an
+IndexedPropertyDescriptor, i.e. has an indexed write method, then any
+non-indexed write method candidate must have a single *array* parameter,
+which conforms to the spec and to Introspector behavior.
+
+Issue: SPR-8937

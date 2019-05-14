@@ -1,0 +1,49 @@
+[#2721] Improve Traffic Shaping handler
+
+Motivation:
+Currently Traffic Shaping is using 1 timer only and could lead to
+"partial" wrong bandwidth computation when "short" time occurs between
+adding used bytes and when the TrafficCounter updates itself and finally
+when the traffic is computed.
+Indeed, the TrafficCounter is updated every x delay and it is at the
+same time saved into "lastXxxxBytes" and set to 0. Therefore, when one
+request the counter, it first updates the TrafficCounter with the added
+used bytes. If this value is set just before the TrafficCounter is
+updated, then the bandwidth computation will use the TrafficCounter with
+a "0" value (this value being reset once the delay occurs). Therefore,
+the traffic shaping computation is wrong in rare cases.
+
+Secondly the traffic shapping should avoid if possible the "Timeout"
+effect by not stopping reading or writing more than a maxTime, this
+maxTime being less than the TimeOut limit.
+
+Thirdly the traffic shapping in read had an issue since the readOp
+was not set but should, turning in no read blocking from socket
+point of view.
+
+Modifications:
+The TrafficCounter has 2 new methods that compute the time to wait
+according to read or write) using in priority the currentXxxxBytes (as
+before), but could used (if current is at 0) the lastXxxxxBytes, and
+therefore having more chance to take into account the real traffic.
+
+Moreover the Handler could change the default "max time to wait", which
+is by default set to half of "standard" Time Out (30s:2 = 15s).
+
+Finally we add the setAutoRead(boolean) accordingly to the situation,
+as proposed in #2696 (this pull request is in error for unknown reason).
+
+Result:
+The Traffic Shaping is better take into account (no 0 value when it
+shouldn't) and it tries to not block traffic more than Time Out event.
+
+Moreover the read is really stopped from socket point of view.
+
+This version is similar to #2388 and #2450.
+This version is for V4.1, and includes the #2696 pull request
+to ease the merge process.
+It is compatible with master too.
+
+Including also #2748
+
+The test minimizes time check by reducing to 66ms steps (55s).

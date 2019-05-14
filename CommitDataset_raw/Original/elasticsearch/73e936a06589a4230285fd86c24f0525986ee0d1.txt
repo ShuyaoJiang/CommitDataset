@@ -1,0 +1,10 @@
+Fix serialization of the `_all` field. (#26143)
+
+By default we only serialize analyzers if the index analyzer is not the
+`default` analyzer or if the `search_analyzer` is different from the index
+`analyzer`. This raises issues with the `_all` field when the
+`index.analysis.analyzer.default_search` is set, since it automatically makes
+the `search_analyzer` different from the index `analyzer`. Then there are
+exceptions since we expect the `_all` configuration to be empty on 6.0 indices.
+
+Closes #26136

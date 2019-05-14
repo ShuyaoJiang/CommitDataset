@@ -1,0 +1,18 @@
+Zen2ify RareClusterStateIT (#38184)
+
+In Zen 1 there are commit timeout and publish timeout and these
+settings could be changed on-the-fly.
+
+In Zen 2, there is only commit timeout and this setting is static.
+RareClusterStateIT is actively using these settings and the fact, they
+are dynamic.
+
+This commit adds cancelCommitedPublication method to Coordinator to
+be used by tests. This method will cancel current committed publication
+if there is any.
+When there is BlockClusterStateProcessing on the non-master node, the
+publication will be accepted and committed, but not yet applied. So we
+can use the method above to cancel it.
+
+Also, this commit replaces callback + AtomicReference with ActionFuture,
+which makes test code easier to read.

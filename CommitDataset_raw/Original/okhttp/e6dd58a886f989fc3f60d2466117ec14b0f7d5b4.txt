@@ -1,0 +1,11 @@
+Drop the global static shared connection pool.
+
+Instead each new instance of OkHttpClient gets its own connection pool by
+default. This makes the OkHttpClient instances a little more heavyweight
+(in that two different instances yield two different connection pools, which
+means two different cleanup threads) but it also means there's less weird
+state sharing between instances.
+
+One drawback of this is that if an application wants to immediately free
+resources from an OkHttpClient it must call getConnectionPool().evictAll(),
+otherwise the connection pool thread will remain alive for 5 minutes.

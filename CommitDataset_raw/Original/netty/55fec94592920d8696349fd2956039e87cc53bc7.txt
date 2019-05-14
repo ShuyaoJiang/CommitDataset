@@ -1,0 +1,13 @@
+Also clear the authoritativeDnsServerCache when closing the Channel. (#8174)
+
+Motivation:
+
+At the moment we only clear the resolveCache when the Channel is closed. We should also do the same for the authoritativeDnsServerCache.
+
+Modifications:
+
+Add authoritativeDnsServerCache.clear() to the Channel closeFuture.
+
+Result:
+
+Correctly clear all caches.

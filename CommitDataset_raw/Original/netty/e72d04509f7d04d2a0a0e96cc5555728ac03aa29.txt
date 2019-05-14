@@ -1,0 +1,16 @@
+Fix a buffer leak in StreamBufferingEncoderTest
+
+Related: #3871
+
+Motivation:
+
+StreamBufferingEncoderTest does not release when writeGoAway() is
+called.
+
+Modifications:
+
+Release the buffer in mock object arguments
+
+Result:
+
+No buffer leak

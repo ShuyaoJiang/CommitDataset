@@ -1,0 +1,13 @@
+Use non deprecated xcontenthelper (#28503)
+
+* Move to non-deprecated XContentHelper.createParser(...)
+
+This moves away from one of the now-deprecated XContentHelper.createParser
+methods in favor of specifying the deprecation logger at parser creation time.
+
+Relates to #28449
+
+Note that this doesn't move all the `createParser` calls because some of them
+use the already-deprecated method that doesn't specify the XContentType.
+
+* Remove the deprecated (and now non-needed) createParser method

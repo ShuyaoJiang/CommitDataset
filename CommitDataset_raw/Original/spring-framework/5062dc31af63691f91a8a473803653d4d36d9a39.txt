@@ -1,0 +1,80 @@
+Support default profile (SPR-7508, SPR-7778)
+
+'default' is now a reserved profile name, indicating
+that any beans defined within that profile will be registered
+unless another profile or profiles have been activated.
+
+Examples below are expressed in XML, but apply equally when
+using the @Profile annotation.
+
+EXAMPLE 1:
+
+        <beans>
+            <beans profile="default">
+                <bean id="foo" class="com.acme.EmbeddedFooImpl"/>
+            </beans>
+            <beans profile="production">
+                <bean id="foo" class="com.acme.ProdFooImpl"/>
+            </beans>
+        </beans>
+
+    In the case above, the EmbeddedFooImpl 'foo' bean will be
+    registered if:
+        a) no profile is active
+        b) the 'default' profile has explicitly been made active
+
+    The ProdFooImpl 'foo' bean will be registered if the 'production'
+    profile is active.
+
+EXAMPLE 2:
+
+        <beans profile="default,xyz">
+            <bean id="foo" class="java.lang.String"/>
+        </beans>
+
+    Bean 'foo' will be registered if any of the following are true:
+        a) no profile is active
+        b) 'xyz' profile is active
+        c) 'default' profile has explicitly been made active
+        d) both (b) and (c) are true
+
+Note that the default profile is not to be confused with specifying no
+profile at all.  When the default profile is specified, beans are
+registered only if no other profiles are active; whereas when no profile
+is specified, bean definitions are always registered regardless of which
+profiles are active.
+
+The default profile may be configured programmatically:
+
+    environmnent.setDefaultProfile("embedded");
+
+or declaratively through any registered PropertySource, e.g. system properties:
+
+    -DdefaultSpringProfile=embedded
+
+Assuming either of the above, example 1 could be rewritten as follows:
+
+        <beans>
+            <beans profile="embedded">
+                <bean id="foo" class="com.acme.EmbeddedFooImpl"/>
+            </beans>
+            <beans profile="production">
+                <bean id="foo" class="com.acme.ProdFooImpl"/>
+            </beans>
+        </beans>
+
+It is unlikely that use of the default profile will make sense in
+conjunction with a statically specified 'springProfiles' property.
+For example, if 'springProfiles' is specified as a web.xml context
+param, that profile will always be active for that application,
+negating the possibility of default profile bean definitions ever
+being registered.
+
+The default profile is most useful for ensuring that a valid set of
+bean definitions will always be registered without forcing users
+to explictly specify active profiles.  In the embedded vs. production
+examples above, it is assumed that the application JVM will be started
+with -DspringProfiles=production when the application is in fact in
+a production environment.  Otherwise, the embedded/default profile bean
+definitions will always be registered.
+

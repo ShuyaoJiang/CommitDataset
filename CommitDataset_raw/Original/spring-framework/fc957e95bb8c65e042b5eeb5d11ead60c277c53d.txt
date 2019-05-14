@@ -1,0 +1,18 @@
+Configure ResourceUrlProvider in WebFlux
+
+Prior to this commit, no `ResourceUrlProvider` was configured
+in WebFlux (no bean was contributed by the WebFlux infrastructure).
+Also, several `ResourceTransformer` instances that extend the
+`ResourceTransformerSupport` base class need a `ResourceUrlProvider`
+to resolve absolute URLs when rewriting resource URLs. At this point,
+no `ResourceUrlProvider` was configured and they could only resolve
+relative URLs.
+
+This commit contributes a new `ResourceUrlProvider` to the WebFlux
+configuration; this bean can be reused by the WebFlux infrastructure and
+application code.
+
+This also automatically configure this shared `ResourceUrlProvider`
+instance on the resource chain where needed.
+
+Issue: SPR-17433

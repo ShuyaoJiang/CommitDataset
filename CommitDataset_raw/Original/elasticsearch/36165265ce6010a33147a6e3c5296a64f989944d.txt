@@ -1,0 +1,13 @@
+Fix put mappings java API documentation (#31955)
+
+The current docs of the put-mapping Java API is currently broken. It its current
+form, it creates an index and uses the whole mapping definition given as a JSON
+string as the type name. Since we didn't check the index created in the
+IndicesDocumentationIT so far this went unnoticed.
+
+This change adds test to catch this error to the documentation test, changes the
+documentation so it works correctly now and adds an input validation to
+PutMappingRequest#buildFromSimplifiedDef() which was used internally to reject
+calls where no mapping definition is given.
+
+Closes #31906

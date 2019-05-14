@@ -1,0 +1,7 @@
+Fix a race where 2 handlers in different threads access the same buffer
+
+- DefaultChannelPipeline detects such cases and creates an object called
+  'bridge' that works as a man-in-the-middle to deal with a race
+  condition
+- Slight performance drop is observed but still faster than v3. 
+  Couldn't find much from a profiler yet.

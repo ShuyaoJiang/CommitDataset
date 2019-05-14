@@ -1,0 +1,11 @@
+Update view of bean types when an override is detected
+
+Previously, when a bean was overridden and its type changes,
+BeanTypeRegistry could be left with a stale view of the bean's type.
+This would lead to incorrect bean condition evaluation as conditions
+would match or not match based on the bean's old type.
+
+This commit updates the type registry to refresh its view of a bean's
+type when its definition changes.
+
+Closes gh-13588

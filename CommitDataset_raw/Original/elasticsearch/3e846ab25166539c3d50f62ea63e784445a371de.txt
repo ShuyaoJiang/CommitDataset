@@ -1,0 +1,13 @@
+Handle throws on tasks submitted to thread pools
+
+When we submit a task to a thread pool for asynchronous execution, we
+are returned a future. Since we submitted to go asynchronous, these
+futures are not inspected for failure (we would have to block a thread
+to do that). While we have on failure handlers for exceptions that are
+thrown during execution, we do not handle throwables that are not
+exceptions and these end up silently lost. This commit adds a check
+after the runnable returns that inspects the status of the future. If an
+unhandled throwable occurred during execution, this throwable is
+propogated out where it will land in the uncaught exception handler.
+
+Relates #28667

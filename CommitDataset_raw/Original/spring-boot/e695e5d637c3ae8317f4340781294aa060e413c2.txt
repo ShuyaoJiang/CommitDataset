@@ -1,0 +1,28 @@
+Revisit JMS support
+
+Since ActiveMQ 5.8.0, the modules structure has been revisited and
+activemq-core no longer exists. The activemq-broker is required to
+create an embedded broker. Since Boot creates such broker by default
+if ConnectionFactory is present, a condition has been added to do so
+only when the necessary classes are present in the classpath.
+
+The default embedded broker is now configured to disable message
+persistence altogether as this requires an extra jar since 5.8.0, i.e.
+activemq-kahadb-store.
+
+Split the ActiveMQ auto configuration from the JmsTemplate auto
+configuration so these are totally independent.
+ActiveMQAutoConfiguration has been created to detect and configure
+the ActiveMQ broker if necessary.
+
+The brokerUrl parameter was ignored as long as the inMemory parameter
+was true. The actual brokerUrl to use is now determined by the user
+defined values of those parameters: if the brokerUrl is set, it is always
+used. If no brokerUrl is set, the value of inMemory determines if an
+embedded broker should be used (true) or a tcp connection to an
+existing local broker (false).
+
+JmsTemplateAutoConfiguration now creates a JmsTemplate only if a
+ConnectionFactory is available.
+
+Fixes gh-872, gh-882, gh-883

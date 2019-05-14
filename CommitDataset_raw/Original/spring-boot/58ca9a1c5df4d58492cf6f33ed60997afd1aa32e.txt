@@ -1,0 +1,38 @@
+Add a BuildInfo task for generating build.properties with Gradle
+
+The commit adds a new BuildInfo task that can be used to generate
+a build.properties file, intended for inclusion in the Actuator's
+info endpoint.
+
+A default instance of the task can be configure using the plugin's
+DSL:
+
+springBoot {
+	buildInfo()
+}
+
+Additional properties can also be configured using the DSL:
+
+springBoot {
+	buildInfo {
+		additionalProperties = [
+			'foo': 'bar'
+		]
+	}
+}
+
+When configured via the DSL, the Java plugin's classes task is
+configured to depend on the build info task. Alternatively, if more
+control is required, the task can be declared and configured manually:
+
+task buildInfo(type: org.springframework.boot.gradle.buildinfo.BuildInfo) {
+	additionalProperties = [
+		'foo': 'bar'
+	]
+}
+
+classes {
+	dependsOn buildInfo
+}
+
+See gh-2559

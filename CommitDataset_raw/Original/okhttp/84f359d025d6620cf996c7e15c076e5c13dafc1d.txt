@@ -1,0 +1,7 @@
+Fix DelegatingSSLSocketFactory for Android
+
+Commit 765a965 (pr #1835) did not modify all the necessary lines
+when changing the configureSocket() method over from a
+modify-in-place to a return-modified pattern. The problem
+only shows up on Android where the behavior is required for
+TLS_FALLBACK_SCSV tests to work.

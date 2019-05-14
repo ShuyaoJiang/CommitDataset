@@ -1,0 +1,14 @@
+Let OpenSslEngine.wrap(...) / OpenSslEngine.unwrap(...) behave like stated in the javadocs.
+
+Motivation:
+
+OpenSslEngine.wrap(...) and OpenSslEngie.unwrap(...) may consume bytes even if an BUFFER_OVERFLOW / BUFFER_UNDERFLOW is detected. This is not correct as it should only consume bytes if it can process them without storing data between unwrap(...) / wrap(...) calls. Beside this it also should only process one record at a time.
+
+Modifications:
+
+- Correctly detect BUFFER_OVERFLOW / BUFFER_UNDERFLOW and only consume bytes if non of them is detected.
+- Only process one record per call.
+
+Result:
+
+OpenSslEngine behaves like stated in the javadocs of SSLEngine.

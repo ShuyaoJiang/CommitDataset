@@ -1,0 +1,11 @@
+Avoid mentioning ImmutableSortedMap in the ImmutableMap implementation.
+
+I'm not sure why ProGuard couldn't strip this out already, but ImmutableSortedMap and several of *its* dependencies were getting retained when ProGuard stripped ImmutableMap, and this fixes it.
+
+Effects on ImmutableMapProGuard: ([]87770 bytes => 59284 bytes
+93 classes => 64 classes
+601 methods => 363 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146505055

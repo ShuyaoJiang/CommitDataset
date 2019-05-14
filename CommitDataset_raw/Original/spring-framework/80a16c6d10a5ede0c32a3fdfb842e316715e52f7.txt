@@ -1,0 +1,12 @@
+PathMatching options:configure all HandlerMappings
+
+Since SPR-11486 and SPR-10163, Path Matching options can be configured
+to customize path matching options for RequestMappingHandlerMapping.
+Prior to this commit, the defined pathMatcher and pathHelper instances
+were only used in RequestMappingHandlerMapping.
+
+This commit now registers pathMatcher and pathHelper beans under
+well-known names and share them with several HandlerMappings beans,
+such as ViewControllerMappings and ResourcesMappings.
+
+Issue: SPR-11753

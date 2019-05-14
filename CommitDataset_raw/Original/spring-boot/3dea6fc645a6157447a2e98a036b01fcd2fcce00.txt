@@ -1,0 +1,14 @@
+Fix bind TypeConverter delegation with collections
+
+Update `BindConverter` so that delegation to `SimpleTypeConverter` also
+works with Collections and Arrays.
+
+Prior to this commit, conversion that relied on a `PropertyEditor` would
+only work for simple types. For example, "String -> Class<?>" would use
+the `ClassEditor` but "String -> List<Class<?>>" would fail.
+
+The `BindConverter` now uses a minimal `ConversionService` as an adapter
+to the `SimpleTypeConverter`. This allows us to use the same delimited
+string conversion logic as the `ApplicationConverter`.
+
+Fixes gh-12166

@@ -1,0 +1,13 @@
+Watcher's ExecutionService is not thread-safe. (elastic/x-pack-elasticsearch#3861)
+
+If start, stop and/or clearExecutions are called concurrently, you could end up
+in an inconsistent state where `currentExecutions.sealAndAwaitEmpty` is called
+twice on the same instance.
+
+These `synchronized` keywords should make it a bit better, though I suspect
+there are other issues and thread safety of this class should be reviewed.
+
+This might have caused
+https://internal-ci.elastic.co/job/elastic+x-pack-elasticsearch+5.6+multijob-unix-compatibility/932/consoleFull
+
+Original commit: elastic/x-pack-elasticsearch@2f7e7a34d983b5c86e57bdb5aa43649d09bed469

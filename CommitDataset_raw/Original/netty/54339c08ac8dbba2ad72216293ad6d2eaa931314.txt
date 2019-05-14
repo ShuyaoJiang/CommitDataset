@@ -1,0 +1,14 @@
+Only try to calculate direct memory offset when sun.misc.Unsafe is present
+
+Motivation:
+
+We should only try to calculate the direct memory offset when sun.misc.Unsafe is present as otherwise it will fail with an NPE as PlatformDependent.directBufferAddress(...) will throw it.
+This problem was introduced by 66b9be3a469a2cdcc5d18a8b94c679940ce002a9.
+
+Modifications:
+
+Use offset of 0 if no sun.misc.Unsafe is present.
+
+Result:
+
+PooledByteBufAllocator also works again when no sun.misc.Unsafe is present.

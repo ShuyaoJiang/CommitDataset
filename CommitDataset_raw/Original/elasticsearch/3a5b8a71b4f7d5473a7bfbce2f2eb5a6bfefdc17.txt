@@ -1,0 +1,7 @@
+NETWORKING: Fix Portability of SO_LINGER=0 in Tests (#33895)
+
+* Setting SO_LINGER for open but not connected non-blocking sockets
+throws on OSX
+  * Fixed by only applying setting to connected sockets which will save
+the same number of FDs as doing it on open sockets anyway
+* closes #33879

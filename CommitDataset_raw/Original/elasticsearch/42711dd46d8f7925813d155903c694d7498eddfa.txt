@@ -1,0 +1,102 @@
+Adds single node allocation to shrink (#30206)
+
+* Adds ClusterState to AsyncActionStep.performAction
+
+This is needed so a new step can be created for the shrink action which
+can select a node to allocate to based on the current routing rules and
+the node attributes on teh discovery nodes.
+
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AsyncActionStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/DeleteStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ForceMergeStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/RolloverStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkSetAliasStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/UpdateSettingsStep.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/DeleteStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ForceMergeStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/RolloverStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkSetAliasStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/UpdateSettingsStepTests.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleService.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java
+
+* Adds single node allocation to shrink
+
+This change adds two new steps as the first steps of the shrink action:
+
+1. A `SetSingleNodeAllocateStep` which:
+    1. Determines which of the active nodes match the existing index
+allocation rules
+    2. Randomly (using Randomness so its deterministic for testing)
+picks one of the matching nodes
+    3. Updates the index settings to add a require allocation rule for
+the node that was picked (using the
+`index.routing.allocation.require._name` setting)
+2. An `AllocationRoutedStep` which ensures that at least one copy of
+each shard is allocated according to the new allocation rules
+
+Note that this change also modifies the `AllocationRoutedStep` to add a
+boolean field which determines whether the allocation is complete when
+at least one copy of each shard matches the allocation rulees or if it
+needs to wait for all shard copies to be allocated according to the
+rules.
+
+Lastly, a `randomStepKey()` method is added to `AbstractStepTestCase`
+for convenience.
+
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AllocateAction.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AllocationRoutedStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/SetSingleNodeAllocateStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkAction.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkSetAliasStep.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/action/admin/indices/
+settings/put/UpdateSettingsTestHelper.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AbstractStepTestCase.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AllocationRoutedStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/SetSingleNodeAllocateStepTests.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ShrinkActionTests.java
+
+* Fixes AllocationRoutedStep when `waitForAllShardCopies=false`
+
+This change fixes `AllocationRoutedStep` so that when
+`waitForAllShardCopies=false` we wait for any shard copy of each shard
+to be allocated according to the allocation rules rather than
+specifically the primary of each shard.
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AllocationRoutedStep.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AllocationRoutedStepTests.java
+
+* Corrects Licence headers and typo
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/SetSingleNodeAllocateStep.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/SetSingleNodeAllocateStepTests.java

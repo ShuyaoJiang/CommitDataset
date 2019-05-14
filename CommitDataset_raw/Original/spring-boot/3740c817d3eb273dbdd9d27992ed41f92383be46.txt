@@ -1,0 +1,14 @@
+Ensure that `@ConfigurationProperties` is mandatory
+
+Previously it was possible to bind a bean to the root prefix by just
+adding `@EnableConfigurationProperties` with the class of said bean.
+
+ This use case is misleading and prevents any meta-data to be generated
+ for that object since the annotation processor reacts on the presence of
+ the `@ConfigurationProperties` annotation.
+
+ If a class is included in the list of configuration properties bean to
+ create via the `@EnableConfigurationProperties` annotation we now make
+ sure that the `@configurationProperties` annotation is present on it.
+
+ Closes gh-3460

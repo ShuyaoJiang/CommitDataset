@@ -1,0 +1,30 @@
+Modify the cipher suite / TLS version selection behavior
+
+Motivation 1: Cipher selection and TLS protocol version selection
+should be performed over "enabled", not "support" values. Otherwise,
+ciphers / protocols that are disabled by default are re-enabled.
+Android would like to avoid enabling values that are considered unsafe
+and are disabled by the platform, apps or GMS core.
+
+Motivation 2: Opinionated cipher suite selection makes sense for
+OkHttp when bundled with apps. OkHttp probably has the best/newest
+information available when compared with the socket factory it
+encounters.
+
+However, with the Android platform usecase the socket factory (i.e.
+one from the platform, from GMS core, or installed by the app) might
+have better information (or reasons why specific suites should not be
+used and so it modifies the "enabled" set). Android would therefore
+prefer OkHttp to select from a default set specified by the socket
+factory, not a list hard-coded at release time.
+
+Unlike ciphers, for protocols there is no current need to
+go with the default enabled set so supporting "null" / "use default"
+is not required for protocols.
+
+Other change:
+
+The ConnectionSpec caching (see supportedSpec) has been removed from
+ConnectionSpec. This seems like an risky optimization to me in an
+environment where different SocketFactory instances could be encountered
+and doing it properly seems costly and of limited benefit.

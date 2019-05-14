@@ -1,0 +1,13 @@
+Print only printable request/response body in MVC Test
+
+Prior to this commit, PrintingResultHandler always printed the request
+or response body regardless of its content type. For binary content,
+however, the output was unreadable and therefore useless.
+
+This commit addresses this issue by only printing the request or
+response body if it is "printable" (i.e., if its content type is known
+to be text-based such as plain text, HTML, XHTML, XML, JSON, etc.). If
+the content type is unknown (e.g., unspecified for the HTTP request in
+the test), it is assumed that the body is printable.
+
+Issue: SPR-14776

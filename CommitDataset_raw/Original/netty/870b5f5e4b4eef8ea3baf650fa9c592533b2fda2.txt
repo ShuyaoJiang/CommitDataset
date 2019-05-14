@@ -1,0 +1,14 @@
+Not add inboundStreamHandler for outbound streams created by Http2MultiplexCodec.
+
+Motivation:
+
+We must not add the inboundStreamHandler for outbound streams creates by Http2MultiplexCodec as the user will specify a handler via Http2StreamChannelBootstrap.
+
+Modifications:
+
+- Check if the stream is for outbound and if so not add the inboundStreamHandler to the pipeline
+- Update tests so this is covered.
+
+Result:
+
+Fixes [#7178]

@@ -1,0 +1,9 @@
+[ML] Handle failures in the idiomatic way (elastic/x-pack-elasticsearch#1785)
+
+This commit changes a couple of places where our ExceptionsHelper
+class was throwing exceptions to instead return the exceptions.
+Then they can be passed to onFailure() methods or thrown depending
+on what's appropriate for the caller.  This is the standard Elastic
+way of handling failures.
+
+Original commit: elastic/x-pack-elasticsearch@fce07eb075a03fa8642fcb3221c6b493a13029be

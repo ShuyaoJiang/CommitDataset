@@ -1,0 +1,5 @@
+Fix for SslContextBuilder/MockWebServer disagreeing about localhost
+
+MockWebServer binds to getByName("localhost"), SslContextBuilder was using
+InetAddress.getByName(null) (null == any loopback). On Android, null
+returns IPv6 loopback, which has the name "ip6-localhost".

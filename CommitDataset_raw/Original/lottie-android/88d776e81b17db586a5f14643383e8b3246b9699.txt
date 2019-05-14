@@ -1,0 +1,11 @@
+Use save and restore instead of manually restoring clipRect
+
+Views/drawables/canvases are not supposed to be able to expand their
+clip rect so that views can properly clip their children.
+See these docs for more info: https://developer.android.com/reference/android/graphics/Canvas.html#clipRect(android.graphics.RectF, android.graphics.Region.Op)
+
+We were relying on undesired behavior before to restore the clip
+rect which seemed to work fine for software accelerated canvases
+but not hardware accelerated ones. Swiching to save/restore is not
+only more accurate but fixes clipping issues.
+Fixes #457

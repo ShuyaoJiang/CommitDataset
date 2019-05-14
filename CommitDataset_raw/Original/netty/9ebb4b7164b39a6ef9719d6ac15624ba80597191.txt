@@ -1,0 +1,39 @@
+Using distinct aliases when building the trust manager factory, and renamed trustCertChain into trustCertCollection.
+
+Motivation:
+
+SSLContext.buildTrustManagerFactory(...) builds a KeyStore to
+initialize the TrustManagerFactory from an array of X509Certificates,
+assuming that array is a chain and that each certificate will have a
+unique Subject Distinguised Name.
+However, the collection of certificates used as trust anchors is generally
+not a chain (it is an unordered collection), and it is legitimate for it
+to contain multiple certificates with the same Subject DN.
+The existing code uses the Subject DN as the alias name when filling in
+the `KeyStore`, thereby overwriting other certificates with the same
+Subject DN in this collection, so some certificates may be discarded.
+In addition, the code related to building trust managers can take an array of
+X509Certificate instances to use as trust anchors. The variable name is
+usually trustCertChain, and the documentation refers to them as a "chain".
+However, while it makes sense to talk about a "chain" from a keymanager
+point of view, these certificates are just an unordered collection in a
+trust manager. (There is no chaining requirement, having the Subject DN
+matching its predecessor's Issuer DN.)
+This can create confusion to for users not used with PKI concepts.
+
+Modifications:
+
+SSLContext.buildTrustManagerFactory(...) now uses a distinct alias for each
+array (simply using a counter, since this name is never used for reference
+later). This patch also includes a unit test with CA certificates using the
+same Subject DN.
+Also renamed trustCertChain into trustCertCollection, and changed the
+references to "chain" in the Javadoc.
+
+Result:
+
+Each loaded certificate now has a unique identifier when loaded, so it is
+now possible to use multiple certificates with the same Subject DN as
+trust anchors.
+Hopefully, renaming the parameter should also reduce confusion around PKI
+concepts.

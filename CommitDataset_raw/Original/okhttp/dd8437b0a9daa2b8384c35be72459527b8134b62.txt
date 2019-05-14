@@ -1,0 +1,5 @@
+Don't throw IllegalStateException after an IOException.
+
+We were a little too aggressive in checking our preconditions. If a previous
+write failed, we don't want the following write to crash. (It'll throw an
+IOException anyway.)

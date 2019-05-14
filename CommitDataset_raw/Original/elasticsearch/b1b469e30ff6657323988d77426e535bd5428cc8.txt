@@ -1,0 +1,12 @@
+Avoid class cast exception from index writer (#28989)
+
+When an index writer encounters a tragic exception, it could be a
+Throwable and not an Exception. Yet we blindly cast the tragic exception
+to an Exception which can encounter a ClassCastException. This commit
+addresses this by checking if the tragic exception is an Exception and
+otherwise wrapping the Throwable in a RuntimeException if it is not. We
+choose to wrap the Throwable instead of passing it around because
+passing it around leads to changing a lot of places where we handle
+Exception to handle Throwable instead. In general, we have tried to
+avoid handling Throwable and instead let those bubble up to the uncaught
+exception handler.

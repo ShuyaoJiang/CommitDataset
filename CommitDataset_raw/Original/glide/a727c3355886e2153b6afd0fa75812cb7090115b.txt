@@ -1,0 +1,10 @@
+Do not treat cancel as the same as clear in RequestFutureTarget
+
+Rx libraries always cancel futures after they complete, which does bad
+things if we treat the cancellation as a clear. In addition, we should
+follow the API and only actually cancel requests if
+mayInterruptIfRunning is true.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=149317023

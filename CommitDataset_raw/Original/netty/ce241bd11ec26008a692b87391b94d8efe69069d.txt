@@ -1,0 +1,15 @@
+Epoll flush/writabilityChange deadlock
+
+Motivation:
+b215794de31f28355e4469fcc04782f55076c80c recently introduced a change in behavior where writeSpinCount provided a limit for how many write operations were attempted per flush operation. However when the write quantum was meet the selector write flag was not cleared, and the channel unsafe flush0 method has an optimization which prematurely exits if the write flag is set. This may lead to no write progress being made under the following scenario:
+- flush is called, but the socket can't accept all data, we set the write flag
+- the selector wakes us up because the socket is writable, we write data and use the writeSpinCount quantum
+- we then schedule a flush() on the EventLoop to execute later, however it the flush0 optimization prematurely exits because the write flag is still set
+
+In this scenario the socket is still writable so the EventLoop may never notify us that the socket is writable, and therefore we may never attempt to flush data to the OS.
+
+Modifications:
+- When the writeSpinCount quantum is exceeded we should clear the selector write flag
+
+Result:
+Fixes https://github.com/netty/netty/issues/7729

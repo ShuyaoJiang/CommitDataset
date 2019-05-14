@@ -1,0 +1,20 @@
+Configurable back off for listener recovery
+
+Prior to this commit, DefaultMessageListenerContainer was recovering
+on failure using a fixed time interval, potentially in an infinite way.
+
+This commit adds an extra "backoff" property to the container that
+permits to fine tune the recovery interval using a BackOff instance.
+
+FixedBackOff provides a fixed interval between two attempts and a
+maximum number of retries. ExponentialBackOff increases an initial
+interval until a maximum interval has been reached. A BackOff instance
+can return a special "STOP" time value that indicates that no further
+attemps should be made. DefaultMessageListenerContainer uses this
+value to stop the container.
+
+protected method "sleepInbetweenRecoveryAttempts" has been renamed
+to "applyBackOff" and now returns a boolean that indicate if the
+back off has been applied and a new attempt should now be made.
+
+Issue: SPR-11746

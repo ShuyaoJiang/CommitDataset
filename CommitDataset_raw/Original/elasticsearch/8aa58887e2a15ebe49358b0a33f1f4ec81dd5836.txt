@@ -1,0 +1,8 @@
+Security: make native realm usage stats accurate (#30824)
+
+The native realm's usage stats were previously pulled from the cache,
+which only contains the number of users that had authenticated in the
+past 20 minutes. This commit changes this so that we pull the current
+value from the security index by executing a search request. In order
+to support this, the usage stats for realms is now asynchronous so that
+we do not block while waiting on the search to complete.

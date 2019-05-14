@@ -1,0 +1,14 @@
+Fix issue with creating ServletRequestAttributes
+
+Prevously the FrameworkServlet created a new ServletRequestAttributes
+instance for every request, unless the RequestContextHolder already
+contained an instance whose type is not ServletRequestAttributes.
+The main intent was that if RequestContextHolder contains a
+PortletRequestAttributes, it should be left in place.
+
+This change does an "instanceof" check against the request in
+RequestContextHolder instead of an "equals" check on the type.
+It still leaves PortletRequestAttributes in place but also allows
+the previous request to be any sub-class of ServletRequestAttributes.
+
+Issue: SPR-10025

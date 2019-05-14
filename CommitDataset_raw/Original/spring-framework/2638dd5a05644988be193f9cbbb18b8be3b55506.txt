@@ -1,0 +1,10 @@
+merge-dist.gradle disables artifactoryPublish
+
+Previously the project that was getting merged from would try to
+execute the artifactoryPublish on the build box. This caused issues
+since the mavenDescriptor did not exist.
+
+The merge-dist.gradle now disables the artifactoryPublish task if it
+exists (it will only exist on the build box).
+
+Issue: SPR-9859, SPR-7951

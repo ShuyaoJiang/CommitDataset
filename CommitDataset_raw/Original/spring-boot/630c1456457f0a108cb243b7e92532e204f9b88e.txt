@@ -1,0 +1,26 @@
+Fix order of JMS auto configuration
+
+Add additional @AutoConfigureAfter elements to ActiveMQAutoConfiguration
+and HornetQAutoConfiguration to ensure that they are configured after
+JndiConnectionFactoryAutoConfiguration.
+
+The possible sources for a JMS ConnectionFactory are:
+
+1. JNDI
+2. HornetQ (embedded broker or an external broker)
+3. ActiveMQ (embedded broker or an external broker)
+
+The last two auto configurations must run after JTA auto-configuration
+has completed as it may register additional beans that are necessary to
+enable XA.
+
+Previously, the HornetQ embedded broker would start regardless of the
+presence of a ConnectionFactory as a ConditionalOnMissingBean was
+missing. Furthermore, there was no order condition for the JNDI
+auto-configuration so it may just run after one of the broker has been
+found.
+
+JNDI takes now precedence to be consistent with the regular DataSource
+auto configuration.
+
+Fixes gh-1821

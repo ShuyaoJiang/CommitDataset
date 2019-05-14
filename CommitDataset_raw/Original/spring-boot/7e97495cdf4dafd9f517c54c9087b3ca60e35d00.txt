@@ -1,0 +1,10 @@
+Expose Jolokia directly rather than via an endpoint
+
+Jolokia is a 100% web concern and does not fit in the Endpoint
+infrastructure. This commit removes `JolokiaMvcEndpoint` and exposes
+the servlet directly instead while still being part of the
+management context. As such, the Jolokia servlet is exposed beneath
+the management context path and will move to a separate port when
+the management port is not the same as the main server port.
+
+Closes gh-9843

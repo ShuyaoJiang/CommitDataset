@@ -1,0 +1,10 @@
+remove requirement for shards/replicas in allocation check steps (#30855)
+
+As we are preparing to support policy updates/changes, we noticed
+that restricting allocation wait steps with pinned replicas/shard
+counts makes this difficult to continue from. For example,
+as user may update or switch a policy to increase replicas. If this
+is done, then the check will never pass and user intervention will
+be required. If we simply remove this restriction, we still check
+that the index is allocated correctly, but without depending on
+the newly configured replicas setting in the policy.

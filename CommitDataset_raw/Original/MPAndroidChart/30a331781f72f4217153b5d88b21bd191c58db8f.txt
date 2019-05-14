@@ -1,0 +1,46 @@
+Fix circles inherit alpha (Fixes #2620)
+
+ISSUE:
+When using multiple LineDataSets like the follows:
+
+    int solidColor = 0xFFFF00FF;
+    dataSet.setColor(solidColor);
+    dataSet.setCircleColor(solidColor);
+
+    int semiTransparentColor = 0x8A000000;
+    fadedSet.setColor(semiTransparentColor);
+
+    LineData data = new LineData(dataSet, fadedSet);
+
+the circles in 'dataSet' will rendered with the alpha from
+fadedSet (0x8A).
+
+The reason for this is that mRenderPaint is not reset properly
+before drawing the circles. The first time drawCircles is called
+the imageCache.fill(...) method is used where the color is set by
+mRenderPaint.setColor(set.getCircleColor(i)), restoring the alpha
+to 0xFF. The second time homever, imageCache.fill(...) is not called
+which means that mRenderPaint will use it's old color/alpha,
+which in this case is from fadedSet.
+
+TEST INFO:
+To trigger the issue, add the following to LineChartActivity1:
+
+    final ArrayList<Entry> fadedEntries = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+
+        float val = (float) (Math.random() * range) + 3;
+        fadedEntries.add(new Entry(i, val));
+    }
+    final LineDataSet fadedDateSet = new LineDataSet(fadedEntries, "Faded");
+    fadedDateSet.setColor(0x42000000);
+
+    dataSets.add(fadedDateSet); // add the datasets
+
+and launch the first item in the example app.
+
+SOLUTION:
+This commit replaces mRenderPaint with null when drawing the circle
+bitmap. If circleColor has been defined with a semi-transparent
+color, it will be drawn that way in the cached bitmap, hence the the
+bitmap itself does not need to be drawn with an alpha.

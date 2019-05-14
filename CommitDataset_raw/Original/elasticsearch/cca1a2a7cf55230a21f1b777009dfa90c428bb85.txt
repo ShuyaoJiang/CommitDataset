@@ -1,0 +1,14 @@
+Make licensing FIPS-140 compliant (#30251)
+
+Necessary changes so that the licensing functionality can be
+used in a JVM in FIPS 140 approved mode.
+* Uses adequate salt length in encryption
+* Changes key derivation to PBKDF2WithHmacSHA512 from a custom
+  approach with SHA512 and manual key stretching
+* Removes redundant manual padding
+
+Other relevant changes:
+* Uses the SAH512 hash instead of the encrypted key bytes as the
+  key fingerprint to be included in the license specification
+* Removes the explicit verification check of the encryption key
+  as this is implicitly checked in signature verification.

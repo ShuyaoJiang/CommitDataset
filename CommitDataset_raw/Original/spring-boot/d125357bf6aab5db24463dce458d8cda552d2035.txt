@@ -1,0 +1,49 @@
+Protect against JARs with different local headers
+
+Fix JarEntryData to re-read the local header, rather than relying on
+the central directory record.
+
+This protects against the situation where a JAR file is written with an
+'Extra Field Length' that is different in the local header to the
+central directory header.
+
+This appears to be the case with aspectj 1.7.4 which contains the
+following central directory file header for ProceedingJoinPoint:
+
+	50 4B 01 02     signature
+	14 03           version made by
+	0A 00           version required
+	00 00           general
+	08 00           compress methods
+	0E 40 59 43     last modified
+	2D 59 20 70     crc
+	EC 00 00 00     csize
+	8D 01 00 00     size
+	2A 00           fname len
+	00 00           ext field len
+	00 00           file comment len
+	00 00           disk num
+	00 00           int file att
+	00 00 A4 81     ext file att
+	97 F3 00 00     relative offset of the local file header
+	...             file name
+
+and the following local header:
+
+	50 4B 03 04     signature
+	0A 00           version required
+	00 00           general
+	08 00           compress method
+	0E 40 59 43     last modified
+	2D 59 20 70     crc
+	EC 00 00 00     csize
+	8D 01 00 00     size
+	2A 00           fname len
+	14 00           ext field len
+	...             file name
+	...             extra field
+
+Note that the 'ext field len' is 0x00 in the central record but 0x14 in
+the local record.
+
+Fixes gh-203

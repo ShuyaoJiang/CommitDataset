@@ -1,0 +1,18 @@
+Rework "Remove redundant spring-boot-starter dependency"
+
+This commit reworks 40d8726 as it has introduced an unfortunate side
+effect for those who are using a starter with optional starter
+dependencies.
+
+`spring-boot-starter-web` defines the json and the tomcat starter. The
+latter is part of a set of starters that do not bring the base starter
+and the former can be excluded to use gson rather than jackson.
+
+When such arrangement happens, spring-boot-starter-web no longer defines
+the base starter (and therefore doesn't bring the core dependencies
+that Spring Boot needs to bootstrap).
+
+This commit reviews the starters that define optional starters and
+reintroduce the base starter.
+
+Closes gh-14076

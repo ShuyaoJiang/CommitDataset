@@ -1,0 +1,8 @@
+Add explicit dependency to ConnectionFactory auto-configurations
+
+This commit makes sure tht `HealthIndicatorAutoConfiguration` runs after
+any producers of a `ConnectionFactory` and not only ActiveMQ. This was
+identified as part of #10081: `JmsAutoConfiguration` is actually the
+one that isn't necessary (spring-boot-actuator has no import on the
+`org.springframework.jms` and only `javax.jms.ConnectionFactory` is used
+as part of the JMS health indicator.

@@ -1,0 +1,19 @@
+Remove TLSv1.2 pinning in ssl reload tests (#38651)
+
+This change removes the pinning of TLSv1.2 in the
+SSLConfigurationReloaderTests that had been added to workaround an
+issue with the MockWebServer and Apache HttpClient when using TLSv1.3.
+The way HttpClient closes the socket causes issues with the TLSv1.3
+SSLEngine implementation that causes the MockWebServer to loop
+endlessly trying to send the close message back to the client. This
+change wraps the created http connection in a way that allows us to
+override the closing behavior of HttpClient.
+
+An upstream request with HttpClient has been opened at
+https://issues.apache.org/jira/browse/HTTPCORE-571 to see if the method
+of closing can be special cased for SSLSocket instances.
+
+This is caused by a JDK bug, JDK-8214418 which is fixed by
+https://hg.openjdk.java.net/jdk/jdk12/rev/5022a4915fe9.
+
+Relates #38646

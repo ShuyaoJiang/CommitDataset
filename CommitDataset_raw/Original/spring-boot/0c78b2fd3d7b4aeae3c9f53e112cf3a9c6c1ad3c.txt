@@ -1,0 +1,32 @@
+Handle fully-qualified Windows paths correctly in the CLI
+
+Previously, the CLI would always use the class loader to try to locate
+a source file. This was contrary to the SourceOptions javadoc which
+states that the class loader is “used to try and load files that are
+not found in the local filesystem”. This provide to be problematic on
+Windows when a fully-qualified source file was supplied. The driver
+letter colon slash (e.g. c:/) at the start of the path is considered
+invalid for a class path resource by URLClassPath.Loader resulting in an
+IllegalArgumentException being thrown.
+
+A workaround for this URLClassPath behaviour was added in a71c9b5d. It
+was removed as part of reworking LaunchedURLClassLoader to use a
+conventional delegation model in 87fe0b2a. It was then reinstated in
+cc140b2c. This work around is undesirable as it causes
+LaunchedURLClassLoader’s behaviour to diverge from URLClassLoader’s
+behaviour (this is contrary to the comments in the test added in
+a71c9b5d which incorrectly tests the two class loader with different
+class paths. If the two class loaders are created with the same class
+path then their behaviour is the same).
+
+This commit updates SourceOptions to make its behaviour match its
+javadoc so that a search of the class path is only performed if the
+filename doesn’t exist on the filesystem. Furthermore, when running on
+Windows, if the filename is an absolute path no further searching is
+performed as the path cannot reliably be used to search the class path
+due to the behaviour of URLClassPath.Loader when given a path that
+is an absolute file path on Windows. This ensures that the user is
+presented with an error message indicating that the file could not be
+found.
+
+Closes gh-5650

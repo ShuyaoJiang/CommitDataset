@@ -1,0 +1,12 @@
+Fix locale parsing error with en_en, tr_tr, etc
+
+Previously, StringUtils#parseLocaleString would parse locale strings
+having the same lowercase token for both language and country
+incorrectly, e.g. 'tr_tr' would parse to 'tr_TR_tr' as opposed to the
+expected 'tr_TR'.
+
+This commit fixes this behavior by using using String#lastIndexOf
+instead of String#indexOf when determining the location of the country
+code token.
+
+Issue: SPR-9420

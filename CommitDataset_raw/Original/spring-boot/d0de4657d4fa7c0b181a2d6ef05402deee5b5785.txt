@@ -1,0 +1,17 @@
+Reduce ConfigurationPropertyName GC pressure
+
+Rewrite `ConfigurationPropertyName` in an attempt to consume less memory
+and to reduce GC pressure from `toString()`.
+
+Prior to this commit the `toString()` method would always construct a
+new value from the name elements. This is sub-optimal since on on many
+occasions the `ConfigurationPropertyName` is created from an already
+well-formed String. The updated code now attempts to directly use the
+original value for both `toString` and `equals` whenever possible.
+
+Further refinements have also been made to the way that elements are
+stored. Rather than a list or objects, we now use arrays that contains
+the split points and types. This helps to reduce the amount of memory
+required to store the name.
+
+Closes gh-13414

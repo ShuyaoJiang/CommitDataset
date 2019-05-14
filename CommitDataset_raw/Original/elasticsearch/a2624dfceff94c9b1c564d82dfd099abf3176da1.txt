@@ -1,0 +1,3 @@
+Move primary term from ReplicationRequest to ConcreteShardRequest (#25822)
+
+Removes the primary term from the replication request and pushes it into the transport envelope. This makes it possible to remove the term from the ReplicationOperation universe. The primary term that is to be used for a replication operation is now determined in the reroute phase when the node decides to execute a primary action (and validated once the primary action gets to execute). This makes it possible to validate that the primary action was sent to the correct primary shard instance that it was meant to be sent to (currently we only validate primary actions using the allocation id, which can be reused for failed and reallocated primaries).

@@ -1,0 +1,12 @@
+EDNS Client Subnet is not encoded correctly when source prefix length is not a multiple of 8.
+
+Motivation:
+When the ECS source prefix length is not a mutiple of 8, the last byte the address inside the
+ECS OPT record is not padded properly.
+
+Modifications:
+DefaultDnsRecordEncoder.padWithZeros(...) was modified to add padding from the least
+significant bits.
+
+Result:
+ECS encoding bug fixed.

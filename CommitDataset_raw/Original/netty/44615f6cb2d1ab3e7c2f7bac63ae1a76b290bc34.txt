@@ -1,0 +1,13 @@
+Optimizations for Http2FrameLogger
+
+Motivation:
+
+The logger was always performing a hex dump of the ByteBufs regarless whether or not the log would take place.
+
+Modifications:
+
+Fixed the logger to avoid serializing the ByteBufs and calling the varargs method if logging is not enabled.
+
+Result:
+
+The loggers should run MUCH faster when disabled.

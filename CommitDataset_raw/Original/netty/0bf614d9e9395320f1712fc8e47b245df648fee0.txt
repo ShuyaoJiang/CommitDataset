@@ -1,0 +1,12 @@
+SocketGatheringWriteTest improvements
+
+Motivation:
+SocketGatherWriteTest has been observed to fail and it has numerous issues which when resolved may help reduce the test failures.
+
+Modifications:
+- A volatile counter and a spin/sleep loop is used to trigger test termination. Incrementing a volatile is generally bad practice and can be avoided in this situation. This mechanism can be replaced by a promise. This mechanism should also trigger upon exception or channel inactive.
+- The TestHandler maintains an internal buffer, but it is not released. We now only create a buffer on the server side and release it after comparing the expected results.
+- The composite buffer creation logic can be simplified, also the existing composite buffer doesn't take into account the buffer's reader index when building buf2.
+
+Result:
+Cleaner test.

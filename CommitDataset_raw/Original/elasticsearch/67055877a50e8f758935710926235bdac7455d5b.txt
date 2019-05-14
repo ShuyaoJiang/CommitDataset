@@ -1,0 +1,14 @@
+[ML] Avoid creating spurious 0 "actual" values for model plot documents (elastic/x-pack-elasticsearch#2535)
+
+Some model plot documents should not have an "actual" value, for example
+when no input events were seen for a meean/min/max detector in a particular
+bucket.  Prior to this change we would set the "actual" value to 0 for such
+model plot documents.  Following this change no "actual" value will be
+present in these documents.
+
+Only newly created model plot documents are affected.  Model plot documents
+that were incorrectly written in the past will remain wrong forever.
+
+relates elastic/x-pack-elasticsearch#2528
+
+Original commit: elastic/x-pack-elasticsearch@47a7365f5965f5a8ce24d4b0174a5af985b5c1f4

@@ -1,0 +1,11 @@
+Better implementation of AttributeMap and also add hasAttr(...). See [#2439]
+
+Motivation:
+The old DefaultAttributeMap impl did more synchronization then needed and also did not expose a efficient way to check if an attribute exists with a specific key.
+
+Modifications:
+* Rewrite DefaultAttributeMap to not use IdentityHashMap and synchronization on the map directly. The new impl uses a combination of AtomicReferenceArray and synchronization per chain (linked-list). Also access the first Attribute per bucket can be done without any synchronization at all and just uses atomic operations. This should fit for most use-cases pretty weel.
+* Add hasAttr(...) implementation
+
+Result:
+It's now possible to check for the existence of a attribute without create one. Synchronization is per linked-list and the first entry can even be added via atomic operation.

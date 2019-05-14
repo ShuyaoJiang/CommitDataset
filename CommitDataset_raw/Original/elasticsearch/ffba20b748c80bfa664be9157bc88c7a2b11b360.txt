@@ -1,0 +1,7 @@
+Do not preallocate bytes for channel buffer (#31400)
+
+Currently, when we open a new channel, we pass it an
+InboundChannelBuffer. The channel buffer is preallocated a single 16kb
+page. However, there is no guarantee that this channel will be read from
+anytime soon. Instead, this commit does not preallocate that page. That
+page will be allocated when we receive a read event.

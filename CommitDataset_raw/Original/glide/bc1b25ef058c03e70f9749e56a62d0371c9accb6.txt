@@ -1,0 +1,18 @@
+Support multiple, ordered, nullable thumbnail requests.
+
+I've basically just added a helper method that calls thumbnail()
+recursively for you. It seems like it eliminates some of the especially
+confusing nested thumbnail logic.
+
+Unfortunately it requires @SuppressWarnings("unchecked") whever it's
+used because it uses varags with a parameterized type (RequestBuilder).
+I can't currently use @SafeVarargs because that requires a final method.
+I can't make the method final without preventing mocking in tests
+(minor) and breaking the generated API (major). By splitting out a
+separate base class for RequestBuilder I actually probably can fix this
+in the future, but that's a pretty substantial change that I don't want
+to make right now.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=171694145

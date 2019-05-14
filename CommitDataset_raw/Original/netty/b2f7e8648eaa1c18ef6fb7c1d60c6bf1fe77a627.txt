@@ -1,0 +1,13 @@
+Fix ReferenceCountedOpenSslEngine.getEnabledProtocols() when using boringssl
+
+Motivation:
+
+Commit cd3bf3df58c3ab4462578284e7378571603a1721 made netty observe the latest version of netty-tcnative which changed the way how static fields are computed for various SSL.* values. This lead to have SSL_OP_NO_SSLv2 become 0 when using boringssl as boringssl not supports SSLv2 at all. In the logic of ReferenceCountedOpenSslEngine.getEnabledProtocols() we not expect to have a zero value and so our logic fails.
+
+Modifications:
+
+Check we actual support the protocol before return it as enabled.
+
+Result:
+
+SSLEngineTest.testEnablingAnAlreadyDisabledSslProtocol passes again with boringssl

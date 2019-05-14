@@ -1,0 +1,10 @@
+Use DelegatingFilterProxy for Spring Security
+
+Update SecurityFilterAutoConfiguration to use a DelegatingFilterProxy
+filter rather directly referencing the springSecurityFilterChain bean.
+
+Using a DelegatingFilterProxy helps to prevent early initialization of
+beans and makes Spring Security work in a similar to way to if were
+installed in a regular WAR deployment.
+
+Fixes gh-4154

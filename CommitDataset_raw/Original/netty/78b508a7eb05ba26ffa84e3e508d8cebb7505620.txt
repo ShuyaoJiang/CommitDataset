@@ -1,0 +1,10 @@
+AbstractHttp2ConnectionHandlerBuilder validateHeaders cannot be set with encoder/decoder
+
+Motivation:
+If validateHeaders is set in combination with the encoder/decoder it will be silently ignored. We should enforce the constraint that validateHeaders and encoder/decoder are mutually exclusive.
+
+Modifications:
+- Make sure either validateHeaders can be set or encoder/decoder.
+
+Result:
+AbstractHttp2ConnectionHandlerBuilder does not allow conflicting options to be set.

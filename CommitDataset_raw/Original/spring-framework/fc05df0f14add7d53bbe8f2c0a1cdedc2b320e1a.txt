@@ -1,0 +1,12 @@
+Expose path matching settings in MVC Java config
+
+Prior to this commit, one had to provide her own
+RequestMappingHandlerMapping instance (i.e extend
+WebMvcConfigurationSupport and override the requestMappingHandlerMapping
+method) in order to customize path matching properties on that bean.
+
+Since SPR-10163, XML config users can do that using the
+<mvc:path-matching/> XML tag. This commit adds the same feature to MVC
+Java config with a PathMatchConfigurer.
+
+Issue: SPR-11486

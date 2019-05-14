@@ -1,0 +1,12 @@
+Take content-type from ResponseEntity unconditionally
+
+From #9a894a we began using the content-type from the ResponseEntity
+but cross-checking it still against the requested content type.
+
+Arguably there isn't any purpose in cross-checking. The only possible
+outcomes are: a) it's compatible or b) it's not, which would result in
+406 (NOT_ACCEPTABLE). As we've been given explicitly the media type to
+use, it makes little sense to send 406, ignoring the wish to use that
+content type.
+
+Issue: SPR-16251

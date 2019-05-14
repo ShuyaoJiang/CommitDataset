@@ -1,0 +1,10 @@
+Separate acquiring safe commit and last commit (#28271)
+
+Previously we introduced a new parameter to `acquireIndexCommit` to
+allow acquire either a safe commit or a last commit. However with the
+new parameters, callers can provide a nonsense combination - flush first
+but acquire the safe commit. This commit separates acquireIndexCommit
+method into two different methods to avoid that problem. Moreover, this
+change should also improve the readability.
+
+Relates #28038

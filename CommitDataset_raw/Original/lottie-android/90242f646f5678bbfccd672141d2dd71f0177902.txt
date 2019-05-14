@@ -1,0 +1,33 @@
+Use JsonReader for json parsing (#572)
+
+Previously, Lottie used JsonObject for deserialization. That meant that:
+1) Deserialization is not guaranteed to be O(n) where n is the size of the json file.
+2) The entire json string must be loaded into memory.
+
+Switching to JsonReader has the following advantages:
+1) Reading is guaranteed to be O(n).
+2) Large files can be read in buffers.
+
+However, deserialization code is much more cumbersome because you can't query for things like the existence of a key, the length of an array, and you can't re-walk the same part of the json multiple times.
+
+@felipecsl Did some work (#137, #139, #145, #152) a year ago to prepare to decouple parsing logic so that people could use jackson or some other method of deserialization. However, JsonReader is now the most optimal solution so some of the factory code can be simplified in a future PR.
+
+## Performance
+Most animations deserialize ~50% faster than before.
+I was also able to deserialize a 50mb json file in 10s that couldn't come close to completing without OOMing before.
+
+|Animation|Old time (ms)|New time (ms)|% improvement|
+|----------|--------------|--------------|----------------|
+|Tadah|107|55|48%|
+|Nudge|100|51|49%|
+|Notifications|85|48|43%|
+|Star Wars|74|41|45%|
+|City|65|24|64%|
+|9squares|17|7|59%|
+|Empty State|9|4|56%|
+|Hello World|6|2|66%|
+|Hamburger Arrow|2|1|50%|
+
+Fixes #39 
+  
+  

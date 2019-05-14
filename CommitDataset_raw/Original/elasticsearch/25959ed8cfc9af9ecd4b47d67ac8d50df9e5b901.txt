@@ -1,0 +1,8 @@
+[Security] Include an empty json object in an json array when FLS filters out all fields (#30709)
+
+Prior to this change an json array element with no fields would be omitted from json array.
+Nested inner hits source filtering relies on the fact that the json array element numbering
+remains untouched and this causes AOOB exceptions in the ES side during the fetch phase
+without this change.
+
+Closes #30624

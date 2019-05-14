@@ -1,0 +1,11 @@
+Have circuit breaker succeed on unknown mem usage
+
+With this commit we implement a workaround for
+https://bugs.openjdk.java.net/browse/JDK-8207200 which is a race
+condition in the JVM that results in `IllegalArgumentException` to be
+thrown in rare cases when we determine memory usage via `MemoryMXBean`.
+As we do not want to fail requests in those cases we always return zero
+memory usage.
+
+Relates #31767
+Relates #33125

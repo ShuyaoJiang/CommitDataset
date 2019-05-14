@@ -1,0 +1,23 @@
+Make RabbitProperties’ parsed address behaviour the same for all properties
+
+Prior to this commit parsing addresses had an inconsistent effect on the
+various properties that can be contained in an address (host, port,
+username, password, and virtual host).
+
+Three different approaches were used:
+
+1. Return the property if no addresses were set. If there was one
+   address set, return the property from the address. Otherwise return
+   null. (host)
+2. Return the property if no address were set, otherwise return the
+   property from the first address (port)
+3. Return the property if no addresses were set, otherwise return the
+   property from the last address that had such property (username,
+   password, virtual host).
+
+This commit aims to make the behaviour consistent. If no addresses
+were set the property is returned. Otherwise the value extracted from
+the first address is returned. If the first address has no such value
+the property is returned.
+
+Closes gh-6424

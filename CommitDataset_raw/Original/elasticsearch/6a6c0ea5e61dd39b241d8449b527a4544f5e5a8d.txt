@@ -1,0 +1,11 @@
+Add an `include_type_name` option. (#29453)
+
+This adds an `include_type_name` option to the `indices.create`,
+`indices.get_mapping` and `indices.put_mapping` APIs, which defaults to `true`.
+When set to `false`, then mappings will be returned directly in the body of
+the `indices.get_mapping` API, without keying them by the type name, the
+`indices.create` will expect mappings directly under the `mappings` key, and
+the `indices.put_mapping` will use `_doc` as a type name and fail if a `type`
+is provided explicitly.
+
+Relates #15613

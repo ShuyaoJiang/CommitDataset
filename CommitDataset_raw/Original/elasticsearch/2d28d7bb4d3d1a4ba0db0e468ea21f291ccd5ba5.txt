@@ -1,0 +1,12 @@
+Drop node if asymmetrically partitioned from master (#39598)
+
+When a node is joining the cluster we ensure that it can send requests to the
+master _at that time_. If it joins the cluster and _then_ loses the ability to
+send requests to the master then it should be removed from the cluster. Today
+this is not the case: the master can still receive responses to its follower
+checks, and receives acknowledgements to cluster state publications, so has no
+reason to remove the node.
+
+This commit changes the handling of follower checks so that they fail if they
+come from a master that the other node was following but which it now believes
+to have failed.

@@ -1,0 +1,29 @@
+Test: speed up IndexPrivilegeTests (elastic/x-pack-elasticsearch#4348)
+
+The IndexPrivilegeTests have been notoriously slow for years.
+@polyfractal identified the primary issue, which is that these tests
+were running against an internal cluster with 1 or 2 data nodes and had
+the number of replicas set to 1 for indices by default and the methods
+in the test would perform a wait for green. This wait for green would
+take the full thirty seconds when there was a single data node as the
+index could never reach green health due to an unassigned replica. This
+could have been caught earlier by asserting the request did not timeout
+but this assertion was not present.
+
+This change does a few things to address the issues above. The first is
+that these tests now extend SecuritySingleNodeTestCase, which is a new
+class that extends ESSingleNodeTestCase and contains the necessary
+logic for the setup and teardown of security; much of which is based
+off of SecurityIntegTestCase. This means that these tests always run
+against a single node cluster and have a much simpler setup. The
+default index template for these tests applies settings so that indices
+are created with a single shard and no replicas.
+
+Assertions have been added to ensure the health checks with a wait for
+green status have not timed out. A handcoded wait for snapshots to
+finish has been replaced with an assertBusy call. Finally, the BadApple
+annotation has been removed from the test.
+
+Relates elastic/x-pack-elasticsearch#324
+
+Original commit: elastic/x-pack-elasticsearch@572919273dc2a1623300a72e356d3564e1ddde63

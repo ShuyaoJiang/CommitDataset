@@ -1,0 +1,10 @@
+Drop the mutable base URL.
+
+This was unsafe for switching between development and production
+backends. This is because requests that are triggered on a UI thread
+may be delayed in execution on a background thread. These could cause
+requests created for a development environment to be executed against
+a production environment, or vice-versa.
+
+Retrofit is the wrong layer for switching backends for load balancing
+or proximity. That can happen in an OkHttp interceptor instead.

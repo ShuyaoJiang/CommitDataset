@@ -1,0 +1,18 @@
+Allow not configure logging without config
+
+For CLI tools, we configure logging without reading the
+log4j2.properties file. This because any log statements in a CLI tool
+should dump to the console while reading from the log4j2.properties file
+would cause them to dump whereever the log configuration there indicates
+(e.g., possibly a remote machine). To do this, we added some code to the
+base implementation of all CLI tools to configure logging without a
+config file. This code is also executed when Elasticsearch starts up. In
+the past this was fine yet we previously added detection to
+Elasticsearch to find cases where we use logging before it is
+configured. Because of configuring logging without a config, this means
+we only catch uses of logging before the logging without config is
+performed. To correct this, we enable a CLI tool to skip enabling
+logging without a config and then in the Elasticsearch CLI we indeed
+utilize this to skip configuring logging without a config.
+
+Relates #26209

@@ -1,0 +1,10 @@
+HeldCertificate: a cert and its private key
+
+This class has been in MockWebServer for a long time, but it's always been
+in the internal package with an incomplete API. This change promotes it to
+a public API.
+
+It's not quite sufficient for use as-is; we also need to open source its
+companion class 'SslClient' that represents who we trust (as a list of
+root certificates) and who we are (as an optional held certificate plus
+the chain to a root certificate).

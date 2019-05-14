@@ -1,0 +1,25 @@
+Many changes to the C++ port.
+
+- Refactoring:
+ - All the files are now in a zxing folder,
+ - Changed the namespaces so that everything is either in zxing or
+zxing::qrcode.
+ - Moved most function implementations from the headers to source
+files.
+- Ported the new design from the Java code with LuminanceSource,
+BinaryBitmap, Binarizer, GlobalHistogramBinarizer and
+LocalBlockBinarizer.
+- Fixed two rare segmentation faults: one in
+GridSampler::checkAndNudgePoints, and one in
+ReedSolomonDecoder::decode. These would simply cause
+ArrayIndexOutOfBoundsExceptions in Java, but have to be checked
+explicitly in C++.
+- With help from Erno Mäkinen, used std::vector instead of ArrayRef in
+many places, as ArrayRef causes problems on Symbian phones.
+- Added scons build files.
+- Added a test application using ImageMagick.
+- More small changes.
+
+
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@1092 59b500cc-1b3d-0410-9834-0bbf25fbcc57

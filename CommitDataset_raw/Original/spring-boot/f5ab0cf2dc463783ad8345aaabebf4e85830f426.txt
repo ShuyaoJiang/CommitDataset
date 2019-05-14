@@ -1,0 +1,22 @@
+Update CLI install to prefer local snapshots to those in a remote repo
+
+Previously, InstallCommand used a custom Grape root and then walked
+the tree of files downloaded by Aether to determine which files it
+should install or uninstall. In some scenarios two files for the
+same module would be present: one named foo-1.0.0.BUILD-SNAPSHOT.jar
+and one named foo-1.0.0.BUILD-20140905.091809-2.jar. The former is
+from the local repository and the later is from a remote repository.
+In this case, the visitor would do the wrong thing and the latter
+would be installed into lib.
+
+This commit updates InstallCommand to determine the jars that it
+should process by consulting GroovyCompiler's classpath, rather than
+by walking Aether's cache. This approach selects the correct jar as
+Aether has already figured this out as part of resolving the
+dependency. It also brings InstallCommand into line with JarCommand.
+
+The previous implementation used Java 7-specific File APIs. As part
+of the above-described change this usage has been removed. The
+install command can now be used on Java 6.
+
+Fixes gh-1515

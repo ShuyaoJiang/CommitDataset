@@ -1,0 +1,13 @@
+Fix NPE in Http2ConnectionHandler.onHttpServerUpgrade
+
+Motivation:
+
+Performing a server upgrade with a new initial flow control window will cause an NPE in the DefaultHttp2RemoteFlowController. This is due to the fact that the monitor does not check whether or not the channel is writable.
+
+Modifications:
+
+Added a check for channel writability before calling `writePendingBytes`. Also fixed a unit test that was supposed to be testing this :).
+
+Result:
+
+Fixes #5301

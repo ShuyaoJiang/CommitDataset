@@ -1,0 +1,19 @@
+keep plugin up to date with structure changes (#3702)
+
+Looks like we need to split out the tests of core classes to core
+and index-lifecycle ones stay in index-lifecycle.
+
+I believe I got everything, although I may have missed at least one thing
+
+checked status with
+
+$ ./gradlew :x-pack-elasticsearch:plugin:index-lifecycle:check -Dtests.seed=39838421912001B4
+$ ./gradlew :x-pack-elasticsearch:plugin:core:check -Dtests.seed=39838421912001B4
+
+other things done in this PR:
+- removal of a few unused variables/thrown exceptions/imports
+- fix TimeseriesLifecycleTypeTests
+  - an all null AllocateAction was created
+- fix AllocateActionTests
+  - woops. -Dtests.seed=39838421912001B4 resulted in two `null`s and an emptyMap.
+    this resulted in a test failure.

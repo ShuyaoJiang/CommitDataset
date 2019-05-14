@@ -1,0 +1,21 @@
+Make RequestMappingHandlerMapping xml config easier
+
+Prior to this commit, it was necessary to override
+the HandlerMapping definition to change properties
+like useSuffixPatternMatch, useSuffixPatternMatch...
+Also, one couldn't set custom pathmatcher/pathhelper
+on RequestMappingHandlerMapping via XML configuration.
+
+This commits adds a new "mvc:annotation-driven"
+subelement called "mvc:path-matching" for the tag
+that allows to configure such properties:
+* suffix-pattern
+* trailing-slash
+* registered-suffixes-only
+* path-matcher
+* path-helper
+
+Note: this is a new take on this issue, since
+96b418cc has been reverted by e2b99c3.
+
+Issue: SPR-10163

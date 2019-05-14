@@ -1,0 +1,14 @@
+Improve error message when a non-directory is added to FileSystemWatcher
+
+Previously, if a file or non-existent directory was added to
+FileSystemWatcher, it would fail with the message “Folder must not be a
+file”. While it suggests that the folder needs to be a directory, it
+doesn’t make it clear that it also needs to exist. It also doesn’t
+tell the user which folder caused the problem.
+
+This commit updates the message to make it clear that the folder must
+exist and must be a directory, and the include the name of the
+problematic folder in the error message.
+
+Closes gh-3918
+

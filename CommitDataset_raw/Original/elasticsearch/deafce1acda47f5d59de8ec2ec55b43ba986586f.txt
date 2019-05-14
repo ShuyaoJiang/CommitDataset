@@ -1,0 +1,10 @@
+[ML] No need to add state doc mapping on job open in 7.x (#37759)
+
+When upgrading from 5.4 to 5.5 to 6.7 (inclusive) it was
+necessary to ensure there was a mapping for type "doc" on
+the ML state index before opening a job.  This was because
+5.4 created a multi-type ML state index.
+
+In version 7.x we can be sure that any such 5.4 index is no
+longer in use.  It would have had to be reindexed into the
+6.x index format prior to the upgrade to version 7.x.

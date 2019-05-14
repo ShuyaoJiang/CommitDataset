@@ -1,0 +1,31 @@
+Fix RejectedExecutionException when using DnsAddressResolverGroup
+
+Motivation:
+
+AddressResolverGroup adds a listener to the termination future of an
+EventExecutor when a new AddressResolver is created. The listener calls
+AddressResolver.close() when the EventExecutor is terminated to give the
+AddressResolver a chance to release its resources.
+
+When using DnsAddressResolverGroup, the AddressResolver.close() will
+eventually trigger DnsNameResolver.close(), which closes its underlying
+DatagramChannel.
+
+DatagramChannel.close() (or any Channel.close()) will travel through
+pipeline and trigger EventExecutor.execute() because
+DnsNameResolver.close() has been invoked from a non-I/O thread.
+(NB: A terminationFuture is always notified from the GlobalEventExecutor
+thread.)
+
+However, because we are doing this in the listener of the termination
+future of the terminated EventLoop we are trying to execute a task upon,
+the attempt to close the channel fails due to RejectedExecutionException.
+
+Modifications:
+
+- Do not call Channel.close() in DnsNameResolver.close() if the Channel
+  has been closed by EventLoop already
+
+Result:
+
+No more RejectedExecutionException when shutting down an event loop.

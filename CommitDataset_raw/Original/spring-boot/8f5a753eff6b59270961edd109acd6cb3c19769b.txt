@@ -1,0 +1,10 @@
+Fix propagation of local.mongo.port up the context hierarchy
+
+Previously, a StackOverflowError would occur when using a random port
+for embedded mongo as the logic for propagating the property up the
+context hierarchy would repeatedly use the leaf context's parent.
+
+This commit updates the logic to look to see if the current context
+has a parent, only calling the method again if it does.
+
+Closes gh-3956

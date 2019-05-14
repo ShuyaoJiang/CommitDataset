@@ -1,0 +1,22 @@
+Improve flexibility of EmbeddedChannel ID
+
+Motivation:
+
+EmbeddedChannelId#hashCode() and equals() do not behave correctly if an
+instance is serialized and then deserialized. Additionally,
+EmbeddedChannel does not allow use of any other type of ChannelId, and
+EmbeddedChannelId is (mostly) a singleton instance. This creates a
+problem for unit tests that construct multiple EmbeddedChannels and
+expect each channel to have a unique ID.
+
+Modifications:
+
+EmbeddedChannelId is modified so equals() will return true and
+hashCode() will return the same value for any instance of the class.
+EmbeddedChannel is modified to allow a ChannelId to be specified when
+the channel is constructed. Tests added for both changes.
+
+Result:
+
+EmbeddedChannelId now behaves correctly when deserialized, and
+EmbeddedChannels can now have unique IDs.

@@ -1,0 +1,10 @@
+OpenSslEngine wrap may not consume all data
+
+Motivation:
+If the OpenSslEngine has bytes pending in the non-application buffer and also generates wrapped data during the handshake then the handshake data will be missed. This will lead to a handshake stall and eventually timeout. This can occur if the non-application buffer becomes full due to a large certificate/hello message.
+
+Modification:
+- ReferenceCountedOpenSslEngine should not assume if no data is flushed from the non-application buffer that no data will be produced by the handshake.
+
+Result:
+New unit tests with larger certificate chains don't fail.

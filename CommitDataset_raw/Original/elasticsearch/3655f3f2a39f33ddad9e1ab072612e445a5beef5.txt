@@ -1,0 +1,8 @@
+Test: Remove irrelevant access after close test for stream (#26392)
+
+This commit removes the streams test for access after closing the bytes
+stream. Output streams being closed mean they can no longer be written
+to, but other methods to retrieve side state of the stream can still
+make sense, such as bytes() in this case.
+
+relates #12620

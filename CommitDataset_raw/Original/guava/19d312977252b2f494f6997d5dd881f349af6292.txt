@@ -1,0 +1,14 @@
+Changed Futures.addCallback() not to call onFailure() when onSuccess() throws.
+
+Note to test owners:
+
+This change revealed test bugs in your test. The old code swallowed EasyMock "interaction expected" exception and passed it to your onFailure() method, which is a usually a no-op.
+
+I didn't dig deeply enough into your code to understand if the offending interactions are supposed to happen. The fix is just blindly adding expect() call to make the tests pass.
+
+If you see a real bug, please let me know.
+
+Thanks!
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=38864384

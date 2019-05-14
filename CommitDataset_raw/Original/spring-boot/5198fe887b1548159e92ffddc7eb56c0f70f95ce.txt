@@ -1,0 +1,14 @@
+Stop auto-config of MethodValidationPP triggering early init
+
+Previously, if a user's configuration class provided a custom
+Validator bean, that configuration class would be initialized very
+early so that the Validator could be used to create the
+auto-configured MethodValidationPostProcessor. This early
+initialization could problems as it may prevent any of the
+configuration class's dependencies from being post-processed.
+
+This commit updates the injection of the Validator bean to be lazy,
+thereby preventing the creation of the auto-configured
+MethodValidationPostProcessor from triggering early initialization.
+
+Closes gh-9416

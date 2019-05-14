@@ -1,0 +1,13 @@
+Ensure we always encode all data in JdkZlibEncoder. (#8305)
+
+Motivation:
+
+In theory our estimation of the needed buffer could be off and so we need to ensure we grow it if there is no space left.
+
+Modifications:
+
+Ensure we grow the buffer if there is no space left in there but we still have data to deflate.
+
+Result:
+
+Correctly deflate data in all cases.

@@ -1,0 +1,5 @@
+Simplify initialization of WebSession Mono
+
+The DefaultWebSessionManager now uses Mono.defer to protect the call
+to getSession from parsing session cookies immediately. This allows
+pre-initializing the Mono<WebSession> upfront vs using a lock.

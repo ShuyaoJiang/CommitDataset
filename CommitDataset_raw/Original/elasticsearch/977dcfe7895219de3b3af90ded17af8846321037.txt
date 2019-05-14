@@ -1,0 +1,7 @@
+Deprecate global_ordinals_hash and global_ordinals_low_cardinality (#26173)
+
+* Deprecate global_ordinals_hash and global_ordinals_low_cardinality
+
+This change deprecates the `global_ordinals_hash` and `global_ordinals_low_cardinality` and
+makes the `global_ordinals` execution hint choose internally if global ords should be remapped or use the segment ord directly.
+These hints are too sensitive and expert to be exposed and we should be able to take the right decision internally based on the agg tree.

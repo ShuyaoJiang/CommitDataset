@@ -1,0 +1,11 @@
+HTTP/2 close only send GO_AWAY if one has not already been sent
+
+Motivation:
+Http2ConnectionHandler will always send a GO_AWAY when the channel is closed. This may cause problems if the user is attempting to control when GO_AWAY is sent and the content of the GO_AWAY.
+
+Modifications:
+- When the channel is closed Http2ConnectionHandler should only send a GO_AWAY if one has not already been sent
+
+Result:
+The user has more control over when GO_AWAY is sent
+Fixes https://github.com/netty/netty/issues/5307

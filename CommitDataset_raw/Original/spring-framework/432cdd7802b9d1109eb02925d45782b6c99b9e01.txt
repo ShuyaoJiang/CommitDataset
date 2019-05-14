@@ -1,0 +1,22 @@
+Add ResponseEntity.of(Optional) variant
+
+When dealing with `Optional` values in a Controller handler (for
+example, values coming from a Spring Data repository), developers might
+reuse this code snippet quite often:
+
+```
+@GetMapping("/user")
+public ResponseEntity<Optional<User>> fetchUser() {
+  Optional<User> user = //...
+  return user.map(ResponseEntity::ok).orElse(notFound().build());
+}
+```
+
+This commit adds a new static method on `ResponseEntity` for that,
+simplifying the previous snippet with `return ResponseEntity.of(user);`
+
+Note that in case more specific HTTP response headers are required by
+the application, developers should use other static methods to
+explicitly tell  which headers should be used in each case.
+
+Issue: SPR-17187

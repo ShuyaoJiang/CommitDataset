@@ -1,0 +1,8 @@
+Pass a Locale to String.format calls.
+Then, run Guava tests in locale hi-IN to catch future dependencies on the default locale.
+Finally, as a convenience in debugging problems, write Maven logs in UTF-8 rather than ASCII. (This is likely already the case in "normal" Maven runs, but our guava_moe_test target was stuck on ASCII.)
+
+This CL covers all the String.format calls in Guava, fixing <https://github.com/google/guava/issues/1567>. There are many other calls in internal com.google.common code. We may want to consider additional testing and avoidance strategies, e.g., a RootLocale.format convenience method and an error-prone check for no-Locale calls.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=83859950

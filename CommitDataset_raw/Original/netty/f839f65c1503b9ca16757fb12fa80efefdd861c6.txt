@@ -1,0 +1,13 @@
+Do not defer closing of Channel when in flush
+
+Motivation:
+
+Previously, we deferred the closing of the Channel when we were flushing. This is problematic as this means that if the user adds a ChannelFutureListener, that will close the Channel, the closing will not happen until we are done with flushing. This can lead to more data is sent than expected.
+
+Modifications:
+
+- Do not defer closing when in flush
+
+Result:
+
+Correctly respect order of events and closing the Channel ASAP

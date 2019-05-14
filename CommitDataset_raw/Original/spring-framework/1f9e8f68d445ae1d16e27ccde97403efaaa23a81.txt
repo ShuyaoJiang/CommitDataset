@@ -1,0 +1,11 @@
+Add support for Objenesis proxy creation.
+
+Extended DefaultAopProxyFactory to create Objenesis based proxies if the
+library is on the classpath. This allows classes without a default
+constructor being CGLib proxied. We're now falling back to original CGLib
+based behavior in case the proxy creation using Objenesis fails.
+
+Objenesis 2.0 is now inlined into spring-core to avoid interfering with
+other Objenesis versions on the classpath.
+
+Issue: SPR-10594

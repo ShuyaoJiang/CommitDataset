@@ -1,0 +1,13 @@
+Obey lock order if working with store to get metadata snapshots (#24787)
+
+Today when we get a metadata snapshot from the index shard we ensure
+that if there is no engine started on the shard that we lock the index
+writer before we go and fetch the store metadata. Yet, if we concurrently
+recover that shard, recovery finalization might fail since it can't acquire
+the IW lock on the directory. This is mainly due to the wrong order of aquiring
+the IW lock and the metadata lock. Fetching store metadata without a started engine
+should block on the metadata lock in Store.java but since IndexShard locks the writer
+first we get into a failed recovery dance especially in test. In production
+this is less of an issue since we rarely get into this siutation if at all.
+
+Closes #24481

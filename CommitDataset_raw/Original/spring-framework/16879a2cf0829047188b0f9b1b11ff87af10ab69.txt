@@ -1,0 +1,8 @@
+Harden synchronization around  SockJS heartbeats
+
+Create an explicit heartbeat task with an experiration flag so that
+it can be cancelled reliably vs relying on the ScheduledFutureTask
+cancel method which may return true even if the task is already
+running.
+
+Issue: SPR-14356

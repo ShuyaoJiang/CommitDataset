@@ -1,0 +1,10 @@
+AbstractFuture should not wrap CancellationException
+
+Motivation:
+AbstractFuture currently wraps CancellationException in a ExecutionException. However the interface of Future says that this exception should be directly thrown.
+
+Modifications:
+- Throw CancellationException from AbstractFuture.get
+
+Result:
+Interface contract for CancellationException is honored in AbstractFuture.

@@ -1,0 +1,14 @@
+Manage dependencies for test clusters (#35304)
+
+* Manage dependencies for test clusters
+
+Create a configuration and add the distribution to it automatically.
+A task is created and added as a dependency to any task that uses a test
+cluster.
+The task extracts all the zip archives ( only zip support for now )
+in the configuration.
+We do this only once because most tests mostly use the same distribution
+and thus we can avoid extracting it multiple times.
+With this we will be able to start the node from the same files which
+will most of the time live in OS caches or COW if the
+configuration requires it.

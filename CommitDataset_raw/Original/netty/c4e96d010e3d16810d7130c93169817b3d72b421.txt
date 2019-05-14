@@ -1,0 +1,10 @@
+HTTP/2 WeightedFairQueueByteDistributor Bug
+
+Motivation:
+If a stream is not able to send any data (flow control window for the stream is exhausted) but has descendants who can send data then WeightedFairQueueByteDistributor may incorrectly modify the pseudo time and also double add the associated state to the parent's priority queue. The pseudo time should only be modified if a node is moved in the priority tree, and not if there happens to be no active streams in its descendent tree and a descendent is moved (e.g. removed from the tree because it wrote all data and the last data frame was EOS). Also the state objects for WeightedFairQueueByteDistributor should only appear once in any queue. If this condition is violated the pseudo time accounting would be biased at and assumptions in WeightedFairQueueByteDistributor would be invalidated.
+
+Modifications:
+- WeightedFairQueueByteDistributor#isActiveCountChangeForTree should not allow re-adding to the priority queue if we are currently processing a node in the distribution algorithm. The distribution algorithm will re-evaluate if the node should be re-added on the tail end of the recursion.
+
+Result:
+Fixes https://github.com/netty/netty/issues/5980

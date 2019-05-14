@@ -1,0 +1,18 @@
+Fix flacky test introduced by af2f343648f4cb3deca5314174e0e579f9fec846
+
+Motivation:
+
+af2f343648f4cb3deca5314174e0e579f9fec846 introduced a test-case which was flacky due of multiple problems:
+
+- we called writeAndFlush(...) in channelRead(...) and assumed it will only be called once. This is true most of the times but it may be called multile times if the data is fragemented.
+- we didnt guard against the possibility that channelRead(...) is called with an empty buffer
+
+Modifications:
+
+- Call writeAndFlush(...) in channelActive(...) so we are sure its only called once and close the channel once we wrote the data
+- only compare the data after we received a close so we are sure there isnt anything extra received
+- check for exception and if we catched one fail the test.
+
+Result:
+
+No flacky test anymore and easier to debug issues that accour because of a catched exception.

@@ -1,0 +1,10 @@
+Catch exceptions from PlatformDependent#getSystemClassLoader
+
+Motivation:
+PlatformDependent#getSystemClassLoader may throw a wide variety of exceptions based upon the environment. We should handle all exceptions and continue initializing the slow path if an exception occurs.
+
+Modifications:
+- Catch Throwable in cases where PlatformDependent#getSystemClassLoader is used
+
+Result:
+Fixes https://github.com/netty/netty/issues/6038

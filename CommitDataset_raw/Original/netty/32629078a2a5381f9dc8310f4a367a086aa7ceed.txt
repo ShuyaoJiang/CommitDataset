@@ -1,0 +1,25 @@
+Mark setting of sun.nio.ch.bugLevel as privileged
+
+Motivation:
+
+Writing to a system property requires permissions. Yet the code for
+setting sun.nio.ch.bugLevel is not marked as privileged. In a
+restrictive environment (e.g., under a security policy that only grants
+the requisite permissions the Netty transport jar but not to application
+code triggering the Netty initialization), writing to this system
+property will not succeed even if the security policy would otherwise
+permit it.
+
+Modifications:
+
+This commt marks the necessary code block as privileged. This enables
+writing to this system property. The idea is that we are saying the
+Netty code is trusted, and as long as the Netty code has been granted
+the necessary permissions, then we will allow the caller access to these
+resources even though the caller itself might not have the requisite
+permissions.
+
+Result:
+
+The system property sun.nio.ch.bugLevel can be written to in a
+restrictive security environment.

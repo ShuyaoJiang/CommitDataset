@@ -1,0 +1,15 @@
+Fix NPE when using Http2ServerUpgradeCodec with Http2FrameCodec and Http2MultiplexCodec
+
+Motiviation:
+
+At the moment an NPE is thrown if someone tries to use the Http2ServerUpgradeCodec with Http2FrameCodec and Http2MultiplexCodec.
+
+Modifications:
+
+- Ensure the handler was added to the pipeline before calling on*Upgrade(...) methods.
+- Add tests
+- Fix adding of handlers after upgrade.
+
+Result:
+
+Fixes [#7173].

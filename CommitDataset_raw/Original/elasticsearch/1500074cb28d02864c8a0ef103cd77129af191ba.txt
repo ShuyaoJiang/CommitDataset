@@ -1,0 +1,15 @@
+[ML] Add method to find the established memory use for a job (elastic/x-pack-elasticsearch#2449)
+
+"Established" memory use will be one of the building blocks for smarter node
+allocation.
+
+In order for a job to be considered to have established memory usage it must:
+- Have generated at least 20 buckets of results
+- Have generated at least one model size stats document
+- Have low variability of model bytes in model size stats documents in the
+  time period covered by the last 20 buckets, which is defined as having a
+  coefficient of variation of no more than 0.1
+
+Relates elastic/x-pack-elasticsearch#546
+
+Original commit: elastic/x-pack-elasticsearch@5032eb01d884977a0808a16a030b31a11291d709

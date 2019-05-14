@@ -1,0 +1,16 @@
+Fix source compatibility for some Kotlin callsites. (#4887)
+
+We had a problem where boolean vals needed to be reverted back to
+boolean funs. I'd like to go back to vals later, but supporting existing
+source patterns is more important.
+
+We also had a problem where single abstract method types (SAM types)
+could be supplied as lambas when calling into Java but not when calling
+into Kotlin.
+
+I found these by pointing KotlinSourceCompatibilityTest at the OkHttp
+
+Get there like this:
+  git co 7eb897ab2e223632b3316bf46a15d37307a3d3b6^
+  git co 7eb897ab2e223632b3316bf46a15d37307a3d3b6 okhttp/build.gradle
+  git co 7eb897ab2e223632b3316bf46a15d37307a3d3b6 build.gradle

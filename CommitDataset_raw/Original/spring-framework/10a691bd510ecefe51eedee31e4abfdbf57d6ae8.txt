@@ -1,0 +1,13 @@
+Support inlined SQL statements in @Sql
+
+Prior to this commit, it was only possible to declare SQL statements
+via @Sql within external script resources (i.e., classpath or file
+system resources); however, many developers have inquired about the
+ability to inline SQL statements with @Sql analogous to the support for
+inlined properties in @TestPropertySource.
+
+This commit introduces support for declaring _inlined SQL statements_
+in `@Sql` via a new `statements` attribute. Inlined statements are
+executed after statements in scripts.
+
+Issue: SPR-13159

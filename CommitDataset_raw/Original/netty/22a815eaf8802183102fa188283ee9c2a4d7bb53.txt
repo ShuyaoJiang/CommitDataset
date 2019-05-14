@@ -1,0 +1,15 @@
+Revamp channel handler API
+
+- Merged LifeCycleAwareChannelHandler into ChannelHandler
+- Replaced ChannelUpstreamHandler and ChannelDownstreamHandler with
+  ChannelReader and ChannelWriter
+  - These two new interfaces are much more type-safe than its ancestor.
+- Simplified channel state model as described in #68
+- Handler creates send/receive buffer.
+  - Previously, Netty created them, but it led to more memory copies and
+    inflexibility.  I'm going to allow a handler to create a bounded
+    queue for example.
+  - It currently uses Queue<T> but I'll define a new interface and make
+    ChannelBuffer implement it (e.g. Queue<Byte>)
+- Introduced AttributeMap which replaces attachments in Channel and
+  ChannelHandlerContext and ChannelLocal

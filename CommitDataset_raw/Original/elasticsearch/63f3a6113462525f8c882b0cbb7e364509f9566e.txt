@@ -1,0 +1,14 @@
+Refactor Sniffer and make it testable (#29638)
+
+This commit reworks the Sniffer component to simplify it and make it possible to test it.
+
+In particular, it no longer takes out the host that failed when sniffing on failure, but rather relies on whatever the cluster returns. This is the result of some valid comments from #27985. Taking out one single host is too naive, hard to test and debug.
+
+A new Scheduler abstraction is introduced to abstract the tasks scheduling away and make it possible to plug in any test implementation and take out timing aspects when testing.
+
+Concurrency aspects have also been improved, synchronized methods are no longer required. At the same time, we were able to take #27697 and #25701 into account and fix them, especially now that we can more easily add tests.
+
+Last but not least, unit tests are added for the Sniffer component, long overdue.
+
+Closes #27697
+Closes #25701

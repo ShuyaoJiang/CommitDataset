@@ -1,0 +1,16 @@
+Adding int-to-object map implementation.
+
+Motivation:
+
+Maps with integer keys are used in several places (HTTP/2 code, for
+example). To reduce the memory footprint of these structures, we need a
+specialized map class that uses ints as keys.
+
+Modifications:
+
+Added IntObjectHashMap, which is uses open addressing and double hashing
+for collision resolution.
+
+Result:
+
+A new int-based map class that can be shared across Netty.

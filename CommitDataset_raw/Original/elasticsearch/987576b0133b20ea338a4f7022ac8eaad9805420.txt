@@ -1,0 +1,12 @@
+Consistently use loopback address for ssl profile (#37487)
+
+This change fixes failures in the SslMultiPortTests where we attempt to
+connect to a profile on a port it is listening on but the connection
+fails. The failure is due to the profile being bound to multiple
+addresses and randomization will pick one of these addresses to
+determine the listening port. However, the address we get the port for
+may not be the address we are actually connecting to. In order to
+resolve this, the test now sets the bind host for profiles to the
+loopback address and uses the same address for connecting.
+
+Closes #37481

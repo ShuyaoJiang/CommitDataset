@@ -1,0 +1,17 @@
+Fix unintended timeout in negative DNS lookup cache test
+
+Motivation:
+
+DNS lookups in DnsNameResolverTest can take longer than expected due to
+retries. The hard limit of 5 seconds is being applied to
+testNegativeTtl(), making the first uncached lookup cause a timeout.
+
+Modifications:
+
+Do not use JUnit's Timeout annotation but implement simple timeout
+mechanism that apples only to cached lookups.
+
+Result:
+
+testNegativeTtl() should not fail when an initial negative lookup
+requires a retry.

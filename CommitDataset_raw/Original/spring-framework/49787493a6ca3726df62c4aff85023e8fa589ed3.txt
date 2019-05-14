@@ -1,0 +1,7 @@
+Proper Undertow PooledByteBuffer release
+
+This commit changes the way Undertow's PooledByteBuffers are dealt with.
+Previously, these buffers where closed as soon as all data was read. As
+of this commit, the UndertowServerHttpRequest returns PooledDataBuffers
+from getBody(), so that the buffers are released when release() is
+called.

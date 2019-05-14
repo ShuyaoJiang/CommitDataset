@@ -1,0 +1,10 @@
+Decouple nio constructs from the tcp transport (#27484)
+
+This is related to #27260. Currently, basic nio constructs (nio
+channels, the channel factories, selector event handlers, etc) implement
+logic that is specific to the tcp transport. For example, NioChannel
+implements the TcpChannel interface. These nio constructs at some point
+will also need to support other protocols (ex: http).
+
+This commit separates the TcpTransport logic from the nio building
+blocks.

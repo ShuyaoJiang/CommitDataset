@@ -1,0 +1,11 @@
+DefaultHttp2ConnectionEncoder#writeHeaders shouldn't send GO_AWAY if stream is closed
+
+Motivation:
+DefaultHttp2ConnectionEncoder#writeHeaders attempts to find a stream object, and if one doesn't exist it tries to create one. However in the event that the local endpoint has received a RST_STREAM frame before writing the response headers we attempt to create a stream. Since this stream ID is for the incorrect endpoint we then generate a GO_AWAY for what appears to be a protocol error, but can instead be failed locally.
+
+Modifications:
+- Just fail the local promise in the above situation instead of sending a GO_AWAY
+
+Result:
+Less severe consequences if the server asynchronously sends headers after a RST_STREAM has been received.
+Fixes https://github.com/netty/netty/issues/6906.

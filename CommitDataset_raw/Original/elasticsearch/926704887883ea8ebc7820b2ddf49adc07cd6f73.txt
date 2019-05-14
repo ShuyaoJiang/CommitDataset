@@ -1,0 +1,11 @@
+Remove dead code for checking exclusive options
+
+Previously we manually checked if mutually exclusive options are passed
+on the command line. Yet, after an upgrade to our option parser
+dependency, we were able to use built-in functionality to establish
+these mutually exclusive options and the parser would take care of
+checking if such options are passed on the command line. However, the
+previous manually checking code is now dead and was left behind. This
+commit removes that dead code.
+
+Relates #19278

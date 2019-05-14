@@ -1,0 +1,27 @@
+[ML] Ignore unknown fields when parsing ML cluster state (elastic/x-pack-elasticsearch#1924)
+
+ML has two types of custom cluster state:
+
+1. jobs
+2. datafeeds
+
+These need to be parsed from JSON in two situations:
+
+1. Create/update of the job/datafeed
+2. Restoring cluster state on startup
+
+Previously we used exactly the same parser in both situations, but this
+severely limits our ability to add new features.  This is because the
+parser was very strict.  This was good when accepting create/update
+requests from users, but when restoring cluster state from disk it meant
+that we could not add new fields, as that would prevent reloading in
+mixed version clusters.
+
+This commit introduces a second parser that tolerates unknown fields for
+each object that is stored in cluster state.  Then we use this more
+tolerant parser when parsing cluster state, but still use the strict
+parser when parsing REST requests.
+
+relates elastic/x-pack-elasticsearch#1732
+
+Original commit: elastic/x-pack-elasticsearch@754e51d1ece29f321d2789dd0e9009edae994b58

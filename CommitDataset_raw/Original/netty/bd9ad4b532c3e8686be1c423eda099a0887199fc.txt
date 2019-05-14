@@ -1,0 +1,17 @@
+Perform cross-tests between NIO and epoll transport
+
+Motivation:
+
+The epoll testsuite tests the epoll transport only against itself (i.e. epoll x epoll only).  We should test the epoll transport also against the well-tested NIO transport, too.
+
+Modifications:
+
+- Make SocketTestPermutation extensible and reusable so that the epoll testsuite can take advantage of it.
+- Rename EpollTestUtils to EpollSocketTestPermutation and make it extend SocketTestPermutation.
+- Overall clean-up of SocketTestPermutation
+  - Use Arrays.asList() for simplicity
+  - Add combo() method to remove code duplication
+
+Result:
+
+The epoll transport is now also tested against the NIO transport.  SocketTestPermutation got cleaner.

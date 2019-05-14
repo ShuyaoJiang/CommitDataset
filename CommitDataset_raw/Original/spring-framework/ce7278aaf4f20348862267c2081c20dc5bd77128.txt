@@ -1,0 +1,44 @@
+Optimize HTTP headers management
+
+Several benchmarks underlined a few hotspots for CPU and GC pressure in
+the Spring Framework codebase:
+
+1. `org.springframework.util.MimeType.<init>(String, String, Map)`
+2. `org.springframework.util.LinkedCaseInsensitiveMap.convertKey(String)`
+
+Both are linked with HTTP request headers parsing and response headers
+writin during the exchange processing phase.
+
+1) is linked to repeated calls to `HttpHeaders.getContentType`
+within a single request handling. The media type parsing operation
+is expensive and the result doesn't change between calls, since
+the request headers are immutable at that point.
+
+This commit improves this by caching the parsed `MediaType` for the
+`"Content-Type"` request header in the `ReadOnlyHttpHeaders` class.
+This change is available for both Spring MVC and Spring WebFlux.
+
+2) is linked to insertions/lookups in the `LinkedCaseInsensitiveMap`,
+which is the data structure behind `HttpHeaders`.
+Those operations are creating a lot of garbage (including a lot of
+`String` created by `toLowerCase`). We could choose a more efficient
+data structure for storing HTTP headers data.
+
+As a first step, this commit is focusing on Spring WebFlux and
+introduces `MultiValueMap` implementations mapped by native HTTP headers
+for the following servers: Tomcat, Jetty, Netty and Undertow.
+Such implementations avoid unnecessary copying of the headers
+and leverages as much as possible optimized operations provided by the
+native implementations.
+
+This change has a few consequences:
+
+* `HttpHeaders` can now wrap a `MultiValueMap` directly
+* The default constructor of `HttpHeaders` is still backed by a
+`LinkedCaseInsensitiveMap`
+* The HTTP request headers for the websocket HTTP handshake now need to
+be cloned, because native headers are likely to be pooled/recycled by
+the server implementation, hence gone when the initial HTTP exchange is
+done
+
+Issue: SPR-17250

@@ -1,0 +1,15 @@
+Ensure handlerAdded(...) and handlerRemoved(...) is always called from the right thread
+
+Motiviation:
+
+We should ensure that handlerAdded(...) and handlerRemoved(...) is always called from the EventExecutor that also invokes the other methods of the ChannelHandler. Also we need to ensure we always call handlerAdded(...) before any other method can be calld to ensure correct ordering.
+
+Motifications:
+
+- Ensure that the right thread is used to call the methods
+- Ensure correct ordering
+- Add tests
+
+Result:
+
+Respect the thread-model for handlerAdded(...) and handlerRemoved(...) and preserve correct ordering in all cases.

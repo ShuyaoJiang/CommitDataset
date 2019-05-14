@@ -1,0 +1,9 @@
+Only use jar shortcut for matching URLs
+
+Update JAR `Handler` logic so that the existing `jarFile` is only used
+if the requested URL starts with the same path. Prior to this commit it
+was possible to construct a URL with another URL as context. This could
+mean that the `handler` was shared and the already resolved `jarFile`
+contained in the handler wasn't necessarily suitable.
+
+Fixes gh-12483

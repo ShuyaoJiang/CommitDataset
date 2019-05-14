@@ -1,0 +1,21 @@
+Upgrade to Hibernate 5.1
+
+Upgrade to Hibernate 5.1, whilst still retaining compatibility with
+Hibernate 4.3. This commit introduces the following changes:
+
+* Add SpringPhysicalNamingStrategy to provides lowercase/underscore
+  table names support. This should be equivalent to the previous
+  SpringNamingStrategy that was used with Hibernate 4. No
+  ImplicitNamingStrategy is provided since the Hibernate 5 defaults
+  appear to be roughly equivalent to the conventions used in Spring
+  Boot 1.3
+  spring.jpa.hibernate.naming.
+
+* Migrate  `spring.jpa.hibernate.naming-strategy` to
+  `spring.jpa.hibernate.naming.strategy` and provide additional
+  properties for physical and implicit.
+
+* Add `spring.jpa.hibernate.use-new-id-generator-mappings` property and
+  default to `false` when on Hibernate 5 to retain back compatibility.
+
+See gh-2763

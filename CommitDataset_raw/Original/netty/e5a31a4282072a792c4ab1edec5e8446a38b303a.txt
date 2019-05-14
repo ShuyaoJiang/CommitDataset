@@ -1,0 +1,34 @@
+Automatically detect shaded packagePrefix
+
+Motivation:
+
+Shading requires renaming binary components (.so, .dll; for tcnative,
+epoll, etc). But the rename then requires setting the
+io.netty.packagePrefix system property on the command line or runtime,
+which is either a burden or not feasible.
+
+If you don't rename the binary components everything appears to
+work, until a dependency on a second version of the binary component is
+added. At that point, only one version of the binary will be loaded...
+which is what shading is supposed to prevent. So for valid shading, the
+binaries must be renamed.
+
+Modifications:
+
+Automatically detect the package prefix by comparing the actual class
+name to the non-shaded expected class name. The expected class name must
+be obfuscated to prevent shading utilities from changing it.
+
+Result:
+
+When shading and using binary components, runtime configuration is no
+longer necessary.
+
+Pre-existing shading users that were not renaming the binary components
+will break, because the packagePrefix previously defaulted to "". Since
+these pre-existing users had broken configurations that only _appeared_
+to work, this breakage is considered a Good Thing. Users may workaround
+this breakage temporarily by setting -Dio.netty.packagePrefix= to
+restore packagePrefix to "".
+
+Fixes #6963

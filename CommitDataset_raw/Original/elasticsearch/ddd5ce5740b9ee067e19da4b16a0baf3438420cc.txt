@@ -1,0 +1,5 @@
+TEST: Avoid invalid ranges in ShardChangesActionTests (#33976)
+
+If numWrites is between 2 and 9, we will issue an invalid range because
+the from_seq_no is negative. This commit makes sure that numWrites is at
+least 10, and adds an explicit test to verify invalid request ranges.

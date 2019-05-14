@@ -1,0 +1,9 @@
+Node selector per client rather than per request (#31471)
+
+We have made node selectors configurable per request, but all 
+of other language clients don't allow for that.
+A good reason not to do so, is that having a different node selector 
+per request breaks round-robin. This commit makes NodeSelector 
+configurable only at client initialization. It also improves the docs 
+on this matter, important given that a single node selector can still 
+affect round-robin.

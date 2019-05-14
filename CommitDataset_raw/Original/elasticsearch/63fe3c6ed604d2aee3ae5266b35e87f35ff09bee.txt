@@ -1,0 +1,9 @@
+Fix PrimaryAllocationIT Race Condition (#37355)
+
+* Fix PrimaryAllocationIT Race Condition
+
+* Forcing a stale primary allocation on a green index was tripping the assertion that was removed
+   * Added a test that this case still errors out correctly
+* Made the ability to wipe stopped datanode's data public on the internal test cluster and used it to ensure correct behaviour on the fixed test
+   * Previously it simply passed because the test finished before the index went green and would NPE when the index was green at the time of the shard store status request, that would then come up empty
+* Closes #37345

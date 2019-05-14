@@ -1,0 +1,22 @@
+Roll back the eventbus portion of CL 100292134.
+
+*** Reason for rollback ***
+
+Nested test classes now work under Android: []
+*** Original change description ***
+
+Suppress tests under Android.
+- ByteStreamsTest.testNewDataOutput_writeChars may show a legitimate bug, whether in our code or in the Android library.
+- CloserTest.testCreate looks up the JDK version. We should update this to look up the Android version if applicable.
+- Android seems to have trouble with:
+  - nested test classes
+  - test classes without default constructors (which are necessarily constructed in suite() methods).
+
+I've also improved some failure messages in ByteStreamsTest.
+
+(Not...
+
+***
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=101455589

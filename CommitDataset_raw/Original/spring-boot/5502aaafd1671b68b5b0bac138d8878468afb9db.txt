@@ -1,0 +1,14 @@
+Use mainClassName consistently across BootRun, BootJar, and BootWar
+
+Previously, BootRun used the main property to configure the name of
+the main class to run while BootJar and BootWar used the mainClass
+property. Both were different to the application plugin which provides
+a mainClassName project property.
+
+This commit updates BootRun, BootJar, and BootWar to change the name
+of the property used to configure the name of the main class to be
+mainClassName. This makes the three Boot-specific tasks consistent
+with each other, and also aligns them with Gradle's own application
+plugin.
+
+Closes gh-10622

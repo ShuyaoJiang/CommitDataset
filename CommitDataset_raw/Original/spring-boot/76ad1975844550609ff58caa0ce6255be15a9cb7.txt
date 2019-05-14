@@ -1,0 +1,14 @@
+Deallocate servlet after forcing initialization in mappings endpoint
+
+Previously, when using Tomcat, a call to mappings endpoint would force
+the initialization of any DispatcherServlets in the context. This was
+done by calling allocate on Tomcat's StandardWrapper. This left the
+wrapper in a state that would cause it to block for two seconds during
+shutdown as the wrapper has an outstanding allocation.
+
+This commit immediately deallocates the servlet after it has been
+allocated. This ensures that the DispatcherServlet has been initialized
+while also leaving the wrapper in a state that it can shut down
+immediately when asked to do so.
+
+Closes gh-14898

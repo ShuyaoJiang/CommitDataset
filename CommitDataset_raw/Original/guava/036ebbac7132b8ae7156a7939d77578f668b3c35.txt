@@ -1,0 +1,24 @@
+
+- Make AbstractService's Futures implement ListenableFuture by reimplementing the custom Transition class on top of AbstractListenableFuture.
+- Remove asciiHtmlEscaper, replaced with Html.htmlContentEscaper.
+- Make Service.start() and stop() return a ListenableFuture.
+- Eliminate the distinction between Range and DiscreteRange and move operations that used to live in DiscreteRange into ContiguousSet.
+- Preserve strict/lenient validation when deriving IDN instances from other IDN instances. No test changes yet; wanted to get feedback on the approach first.
+- Add a deprecated version of Ranges.integers() and Ranges.longs() to temporarily fix builds.
+- MapMaker:
+	- containsValue should fail on collected key
+	- refine expiration javadocs
+	- structure all reads similarly, documenting more assumptions
+	- more white-box tests
+- Use constants in UriEscapers instead of PercentEscaper, deprecating the latter.
+- Make Javadoc (and occasionally FindBugs) happier.
+- Rename package.html files to package-info.html, which are preferred as for JDK 5 (see `man javadoc`).
+- Avoid stack overflow.
+- Make InternetDomainName lenient validation a little less lenient.
+- Remove all usages of Ranges.longs() and Ranges.integers().
+
+Revision created by MOE tool push_codebase.
+MOE_MIGRATION=946
+
+
+git-svn-id: https://guava-libraries.googlecode.com/svn/trunk@262 8138a162-5c33-11de-8abc-d1c337b90d21

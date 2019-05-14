@@ -1,0 +1,8 @@
+Check for existence of ResourceBundle before creating MessageSource
+
+Irritatingly a ResourceBundleMessageSource never gives up trying to
+create a resource bundle for every message resolution, so to stop
+it logging all those warnings (and probably sucking performance-wise)
+we need to disable the MessageSource if a bundle is not provided.
+
+Fixes gh-1019

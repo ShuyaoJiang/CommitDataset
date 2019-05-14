@@ -1,0 +1,17 @@
+Fix test-specific configuration metadata
+
+Most of the config keys defined by the `spring-boot-test-autoconfigure`
+module can't be overridden because they are mapped with `@PropertyMapping`
+on an annotation. It is confusing that such keys are exposed in content
+assistance as using them will have no effect.
+
+This commit removes the annotation processor from the build so that the
+`@ConfigurationProperties` beans aren't processed anymore. Instead, manual
+metadata is written for the two only keys that are effectively used in
+regular configuration.
+
+As a result, the `additional-spring-configuration-metadata` file has been
+renamed to `spring-configuration-metadata` since nothing is processing it
+anymore.
+
+Closes gh-7887

@@ -1,0 +1,16 @@
+Allow /health to be accessed anonymously irresepctive of its sensitivity
+
+The changes in 3bb598a overload the health endpoint's sensitive
+property such that it's now considered sensitive if management
+security is enabled. When an endpoint is sensitive anonymous
+access is prevented. This breaks the health endpoint which should
+return a filtered view of the server's health when it's accessed
+anonymously rather than rejecting the request.
+
+This commit introduces AnonymouslyAccessibleMvcEndpoint, a marker
+extension of the MvcEndpoint interface. It is implemented by
+HealthMvcEndpoint. ManagementSecurityAutoConfiguration has been
+updated to allow anonymous access to endpoints that aren't sensitive
+or that implement AnonymouslyAccessibleMvcEndpoint.
+
+Fixes gh-2015

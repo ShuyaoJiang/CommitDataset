@@ -1,0 +1,3 @@
+Fold RestGetAllSettingsAction in RestGetSettingsAction (#30561)
+
+We currently have a separate endpoint for retrieving settings from all indices. We introduced such endpoint when removing comma-separated feature parsing for GetIndicesAction. The RestGetAllSettingsAction duplicates the code to print out the response that we already have in GetSettingsResponse (since it became a ToXContentObject), and uses the get index API internally instead of the get settings API, but the response is the same, hence we can fold get all settings and get settings in a single API, which is what this commit does.

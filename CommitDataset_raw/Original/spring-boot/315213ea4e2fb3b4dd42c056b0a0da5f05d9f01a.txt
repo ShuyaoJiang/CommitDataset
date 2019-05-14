@@ -1,0 +1,22 @@
+Support Jackson based XML serialization and Jackson2ObjectMapperBuilder
+
+This commit introduces support for Jackson based XML serialization, using the
+new MappingJackson2XmlHttpMessageConverter provided by Spring Framework
+4.1. It is automatically activated when Jackson XML extension is detected on the
+classpath.
+
+Jackson2ObjectMapperBuilder is now used to create ObjectMapper and XmlMapper
+instances with the following customized properties:
+ - MapperFeature.DEFAULT_VIEW_INCLUSION is disabled
+ - DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES is disabled
+
+JodaModuleAutoConfiguration and Jsr310ModuleAutoConfiguration have been removed
+since their behaviors are now handled directly by the ObjectMapper builder.
+
+In addition to the existing @Bean of type ObjectMapper support, it is now
+possible to customize Jackson based serialization properties by declaring
+a @Bean of type Jackson2ObjectMapperBuilder.
+
+Fixes gh-1237
+Fixes gh-1580
+Fixes gh-1644

@@ -1,0 +1,142 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.handler.codec.http2:  
+
+1.1. Add a class for hpack decoder benchmark. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Decode bh blackhole;
+	Add name char sequence;
+	Get serialized headers
+
+1.2. Add a class for hpack decoder test. It allows to:
+
+	Get hex;
+	Decode hpack decoder test;
+	Set hpack decoder test;
+	Handle test decode ULE 128 int max;
+	Handle test decode ULE 128 int overflow 1;
+	Convert test decode ULE 128 int overflow;
+	Handle test decode ULE 128 long max;
+	Handle test decode ULE 128 long overflow 1;
+	Convert test decode ULE 128 long overflow;
+	Handle test set table size with max unsigned 32 bit value succeeds;
+	Handle test set table size over limit fails;
+	Handle test literal huffman encoded with empty name and value;
+	Handle test literal huffman encoded with padding greater than 7 throws;
+	Handle test literal huffman encoded with decoding EOS throws;
+	Convert test literal huffman encoded with padding not corresponding;
+	Handle test incomplete index;
+	Handle test unused index;
+	Handle test illegal index;
+	Handle test insidious index;
+	Handle test dynamic table size update;
+	Handle test dynamic table size update required;
+	Handle test illegal dynamic table size update;
+	Handle test insidious max dynamic table size;
+	Handle test max valid dynamic table size;
+	Handle test reduce max dynamic table size;
+	Handle test too large dynamic table size update;
+	Handle test missing dynamic table size update;
+	Handle test literal with incremental indexing with empty name;
+	Handle test literal with incremental indexing complete eviction;
+	Handle test literal with incremental indexing with large value;
+	Handle test literal without indexing with empty name;
+	Handle test literal without indexing with large name;
+	Handle test literal without indexing with large value;
+	Handle test literal never indexed with empty name;
+	Handle test literal never indexed with large name;
+	Handle test literal never indexed with large value;
+	Handle test decode larger than max header list size updates dynamic table;
+	Handle test decode counts names only once;
+	Handle test account for header overhead;
+	Handle test incomplete header field representation;
+	Handle unknown pseudo header;
+	Disable header validation;
+	Handle request pseudo header in response;
+	Handle response pseudo header in request;
+	Handle pseudo header after regular header;
+	Get failed validation doesnt corrupt hpack
+
+1.3. Rename type DecoderULE128Benchmark with HpackDecoderULE128Benchmark
+
+1.4. Add a class for hpack dynamic table. It allows to:
+
+	Instantiate hpack dynamic table;
+	Get length;
+	Get size;
+	Get capacity;
+	Get entry;
+	Add hpack header field;
+	Remove hpack dynamic table;
+	Handle clear;
+	Set capacity
+
+1.5. Add a class for hpack encoder benchmark. It allows to:
+
+	Handle setup;
+	Tear hpack encoder benchmark;
+	Encode bh blackhole
+
+1.6. Add a class for hpack encoder test. It allows to:
+
+	Set hpack encoder test;
+	Convert test set max header table size;
+	Handle test set max header table size overflow;
+	Handle test will encode 16 MB header by default;
+	Handle test set max header list size enforced after set
+
+1.7. Add a class for hpack header. It allows to:
+
+	Instantiate hpack header;
+	Create headers;
+	Handle random bytes
+
+1.8. Add a class for hpack header field. It allows to:
+
+	Get size of;
+	Instantiate hpack header field  with name char sequence, value char sequence and value char sequence;
+	Get size;
+	Hash code;
+	Check if hpack header field equals;
+	Convert hpack header field to string
+
+1.9. Add a class for hpack huffman test. It allows to:
+
+	Handle test huffman;
+	Handle test decode EOS;
+	Handle test decode illegal padding;
+	Handle test decode extra padding;
+	Handle test decode extra padding 1 byte;
+	Convert test decode extra padding;
+	Handle test decode extra padding 3 byte;
+	Handle test decode extra padding 4 byte;
+	Handle test decode extra padding 29 bit;
+	Handle test decode partial symbol;
+	Make buf;
+	Round trip;
+	Decode hpack huffman decoder;
+	Handle new huffman decoder
+
+1.10. Rename type StaticTable with HpackStaticTable
+
+1.11. Rename type HpackTest with HpackTest
+
+1.12. Rename type HpackUtil with HpackUtil
+
+1.13. Add a class for hpack util benchmark. It allows to:
+
+	Handle setup;
+	Handle old equals;
+	Handle new equals;
+	Handle new test encoder
+
+1.14. Add a class for test header listener. It allows to:
+
+	Instantiate test header listener  with headers list;
+	Add name char sequence
+

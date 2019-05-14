@@ -1,0 +1,19 @@
+Stop setting org.jboss.logging.provider when using Logback
+
+This fix for gh-1928 to address a problemw with Log4j was to set
+a system property that forces JBoss Logging to use SLF4J. This has the
+unwanted side-effect of crashing Glassfish. We no longer support Log4j
+so gh-1928 is no longer a concern. However, you can shoot yourself in
+the foot by having Logback and Log4j2 on the classpath in that
+particular order, but the latter has to be without its
+log4j-slf4j-impl module. At this point you don't get any warnings or
+error output at startup, but JBoss Logging uses Log4j2 while
+everything else uses SLF4J and Logback. As a result, any logging
+that's performed through JBoss Logging is silently lost.
+
+Given the problems caused by setting the system property, and the
+contrived nature of the arrangement that's necessary to cause a
+problem when the property isn't set, this commit updates
+LogbackLoggingSystem so that the system property is no longer set.
+
+Closes gh-8669

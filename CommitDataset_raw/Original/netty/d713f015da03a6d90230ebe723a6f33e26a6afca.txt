@@ -1,0 +1,18 @@
+Made websocket maxFramePayloadSize configurable from WebSocketServerProtocolHandler.
+
+Motivation:
+
+Currently there's no way to configure maxFramePayloadSize from
+WebSocketServerProtocolHandler, which is the most used entry point of
+WebSocket server.
+
+Modifications:
+
+Added another constructor for maxFramePayloadSize.
+
+Result:
+
+We can configure max frame size for websocket packet in
+WebSocketServerProtocolHandler. It will also keep backward compatibility
+with default max size: 65536. (65536 is hard-coded max size in previous
+version of Netty)

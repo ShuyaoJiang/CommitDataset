@@ -1,0 +1,7 @@
+SQL: Fix fulltext CSV spec tests (elastic/x-pack-elasticsearch#2608)
+
+Column type autodetect of integer types is broken in JDBC CSV library when it is used in tr-TR locale. The library is using toLowerCase() calls with default locale, which causes it to convert autodetected type name "Int" to lowercase "ınt" in tr-TR locale and not recognize it as an int type afterwards.
+
+This commit adds a temporary workaround that makes the prevents that test from failing by specifying explicit column types in all tests where integer columns are present.
+
+Original commit: elastic/x-pack-elasticsearch@86ca2acd8ca3baa3e329edb8378ee85046a31a72

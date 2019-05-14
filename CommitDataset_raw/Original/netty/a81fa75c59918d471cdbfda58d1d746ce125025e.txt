@@ -1,0 +1,6 @@
+Fix #239: IdleStateHandler starts two timers
+
+1) ReadTimeoutHandler is also affected by this bug - fixed
+2) Reverted IdleStateHandler.beforeAdd() and channelConnected() -
+without isAttached() check, timeout can be inaccurate if beforeAdd() is
+called long before channelConnected().

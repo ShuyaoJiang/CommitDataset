@@ -1,0 +1,14 @@
+Correctly include the stream id when convert from Http2HeadersFrame to HttpMessage
+
+Motivation:
+
+We did not correctly set the stream id in the headers of HttpMessage when converting a Http2HeadersFrame. This is based on https://github.com/netty/netty/pull/7778 so thanks to @jprante.
+
+Modifications:
+
+- Correctly set the id when possible in the header.
+- Add test case
+
+Result:
+
+Correctly include stream id.

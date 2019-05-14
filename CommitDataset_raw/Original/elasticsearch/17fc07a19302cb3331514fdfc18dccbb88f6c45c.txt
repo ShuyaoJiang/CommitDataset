@@ -1,0 +1,14 @@
+Switch XContentBuilder from BytesStreamOutput to ByteArrayOutputStream (#28945)
+
+This switches the underlying byte output representation used by default in
+`XContentBuilder` from `BytesStreamOutput` to a `ByteArrayOutputStream` (an
+`OutputStream` can still be specified manually)
+
+This is groundwork to allow us to decouple `XContent*` from the rest of the ES
+core code so that it may be factored into a separate jar.
+
+Since `BytesStreamOutput` was not using the recycling instance of `BigArrays`,
+this should not affect the circuit breaking capabilities elsewhere in the
+system.
+
+Relates to #28504

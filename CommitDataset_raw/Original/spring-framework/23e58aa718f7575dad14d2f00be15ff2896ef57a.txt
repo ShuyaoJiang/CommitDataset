@@ -1,0 +1,14 @@
+Preserve programmatically set context config locations
+
+Prior to this fix, ContextLoader(Listener)'s would overwrite any
+value set directly against a WebApplicationContext's #setConfigLocation
+method. This is a likely scenario when using Spring 3.1's new
+WebApplicationInitializer support.
+
+Now a check is performed to ensure that the ContextLoader init-param
+value is non-null before doing the overwriting.
+
+Added tests to ensure that all expected precedence, overwriting and
+defaulting of context config locations works as expected.
+
+Issue: SPR-8510

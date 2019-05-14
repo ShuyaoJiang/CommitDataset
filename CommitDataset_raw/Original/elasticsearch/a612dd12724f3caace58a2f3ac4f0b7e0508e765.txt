@@ -1,0 +1,3 @@
+Zen2: Add node id to log output of CoordinatorTests (#33929)
+
+With recent changes to the logging framework, the node name can no longer be injected into the logging output using the node.name setting, which means that for the CoordinatorTests (which are simulating a cluster in a fully deterministic fashion using a single thread), as all the different nodes are running under the same test thread, we are not able to distinguish which log lines are coming from which node. This commit readds logging for node ids in the CoordinatorTests, making two very small changes to DeterministicTaskQueue and TestThreadInfoPatternConverter.

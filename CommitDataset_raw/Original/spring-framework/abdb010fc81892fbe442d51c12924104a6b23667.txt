@@ -1,0 +1,20 @@
+Rename SQL script annotations in the TCF
+
+Prior to this commit, SQL script annotations and related classes in the
+TestContext framework (TCF) were named DatabaseInitializer*. However,
+these annotations are not used only for initialization and are
+therefore misleading when used for cleaning up the database.
+
+This commit refines the names of annotations and related classes for
+configuring SQL scripts to be executed for integration tests in the TCF
+as follows:
+
+- @DatabaseInitializer -> @Sql
+- @DatabaseInitializers -> @SqlGroup
+- DatabaseInitializerTestExecutionListener -> SqlScriptsTestExecutionListener
+
+A special thanks goes out to the following attendees of the Zurich
+Hackergarten meeting last night for their collective brainstorming:
+@aalmiray, @atsticks, @ollin, @simkuenzi, @tangresh, @vyazelenko.
+
+Issue: SPR-7655

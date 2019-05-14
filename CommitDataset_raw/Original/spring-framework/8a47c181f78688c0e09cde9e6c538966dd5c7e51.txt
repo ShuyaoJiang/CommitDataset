@@ -1,0 +1,12 @@
+Assign Jetty SockJS tests to "performance" test group
+
+This change designates Jetty SockJS integration tests to run as part of
+the "performance", but not the main "publication", CI build due to
+recurring low-level failures suspected to be Jetty issues, e.g.
+"java.io.IOException: Cannot append to finished buffer" or
+"java.io.IOException: Out of order Continuation frame encountered".
+
+The tests will still run at once a day with the performance build but
+should not fail the main build with false negatives. Also note that
+an Undertow variant of the exact same tests, which hasn't been failing,
+will continue to run as part of the main build.

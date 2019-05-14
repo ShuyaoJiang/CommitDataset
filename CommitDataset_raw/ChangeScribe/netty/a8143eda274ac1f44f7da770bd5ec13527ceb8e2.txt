@@ -1,0 +1,140 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.example.stomp:  
+
+1. Changes to package io.netty.handler.codec.stomp:  
+
+1.1. Add a class for default last stomp content subframe. It allows to:
+
+	Instantiate default last stomp content subframe  with content byte buf;
+	Get copy;
+	Duplicate default last stomp content subframe;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain default last stomp content subframe;
+	Touch default last stomp content subframe;
+	Convert default last stomp content subframe to string
+
+1.2. Add a class for default stomp content subframe. It allows to:
+
+	Instantiate default stomp content subframe  with content byte buf;
+	Get copy;
+	Duplicate default stomp content subframe;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain default stomp content subframe;
+	Touch default stomp content subframe;
+	Handle decoder result;
+	Set decoder result;
+	Convert default stomp content subframe to string
+
+1.3. Add a class for default stomp headers subframe. It allows to:
+
+	Instantiate default stomp headers subframe  with stomp command;
+	Instantiate default stomp headers subframe  with stomp command, default stomp headers and default stomp headers;
+	Get command;
+	Get headers;
+	Handle decoder result;
+	Set decoder result;
+	Convert default stomp headers subframe to string
+
+1.4. Add an interface declaration  for last stomp content subframe. It allows to:
+
+	Handle content;
+	Get copy;
+	Duplicate;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain;
+	Touch;
+	Ref cnt;
+	Handle release;
+	Handle decoder result;
+	Set decoder result;
+	Duplicate last stomp content subframe;
+	Retain last stomp content subframe;
+	Touch last stomp content subframe;
+
+1.5. Add an interface declaration  for stomp content subframe. It allows to:
+
+	Get copy;
+	Duplicate stomp content subframe;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain stomp content subframe;
+	Touch stomp content subframe;
+
+1.6. Add an interface declaration  for stomp headers subframe. It allows to:
+
+	Get command;
+	Get headers
+
+1.7. Add an interface declaration  for stomp subframe
+
+1.8. Add a class for stomp subframe aggregator. It allows to:
+
+	Instantiate stomp subframe aggregator;
+	Check if stomp subframe aggregator is start message;
+	Check if stomp subframe aggregator is content message;
+	Check if stomp subframe aggregator is last content message;
+	Check if stomp subframe aggregator is aggregated;
+	Check if stomp subframe aggregator is content length invalid;
+	Handle new continue response;
+	Close stomp subframe aggregator after continue response;
+	Ignore content  after continue response;
+	Begin aggregation
+
+1.9. Add a class for stomp subframe aggregator test. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Handle test single frame decoding;
+	Handle test single frame with body and content length;
+	Handle test single frame with body and no content length;
+	Handle test single frame with split body and no content length;
+	Handle test single frame chunked;
+	Handle test multiple frames decoding;
+	Test stomp subframe aggregator test too long frame exception
+
+1.10. Add a class for stomp subframe decoder. It allows to:
+
+	Instantiate stomp subframe decoder;
+	Decode ctx channel handler context;
+	Read command;
+	Read headers;
+	Get content length;
+	Skip null character;
+	Skip control characters;
+	Read line;
+	Read header;
+	Handle invalid header;
+	Handle invalid line length;
+	Reset decoder
+
+1.11. Add a class for stomp subframe decoder test. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Handle test single frame decoding;
+	Handle test single frame with body and content length;
+	Handle test single frame with body without content length;
+	Handle test single frame chunked;
+	Handle test multiple frames decoding;
+	Handle test validate headers decoding disabled;
+	Handle test validate headers decoding enabled
+
+1.12. Add a class for stomp subframe encoder. It allows to:
+
+	Encode ctx channel handler context;
+	Encode content;
+	Encode frame
+
+1.13. Add a class for stomp subframe encoder test. It allows to:
+
+	Handle setup;
+	Handle teardown;
+	Handle test frame and content encoding
+

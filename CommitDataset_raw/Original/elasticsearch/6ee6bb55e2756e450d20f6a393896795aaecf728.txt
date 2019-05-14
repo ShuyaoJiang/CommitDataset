@@ -1,0 +1,13 @@
+SQL: Introduce HISTOGRAM grouping function (#36510)
+
+Introduce Histogram grouping function for bucketing/grouping data based
+ on a given range. Both date and numeric histograms are supported using
+ the appropriate range declaration (numbers vs intervals).
+
+SELECT HISTOGRAM(number, 50) AS h FROM index GROUP BY h
+SELECT HISTOGRAM(date, INTERVAL 1 YEAR) AS h FROM index GROUP BY h
+
+In addition add multiply operator for Intervals
+Add docs for intervals and histogram
+
+Fix #36509

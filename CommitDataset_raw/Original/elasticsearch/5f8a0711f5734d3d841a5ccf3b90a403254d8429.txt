@@ -1,0 +1,15 @@
+Watcher: Set index and type dynamically in index action (elastic/x-pack-elasticsearch#3264)
+
+The index action allowed to set the id of a document dynamically,
+however this was not allowed for the index or the type.
+
+If a user wants to execute a search, modify the found documents and
+index them back, then this would only work across a single index and a
+single type. This change allows the watch writer to just take a search
+result, read index and type out of that and configure this as part of
+the index action.
+
+On top of that the integration tests have been changed to become fast
+running unit tests.
+
+Original commit: elastic/x-pack-elasticsearch@640b085dd4e0f4d8e4903d391c583878a7932825

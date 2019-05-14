@@ -1,0 +1,15 @@
+Flush of underlying response in ContentCachingResponseWrapper
+
+Prior to this commit, when adding a ShallowEtagHeaderFilter to an
+application, the ServletResponse would be wrapped by a
+ContentCachingResponseWrapper. When any part of the Spring
+infrastructure calls `flushBuffer` on the wrapped response, the call is
+delegated to the actual response, which is committed. It's not possible
+to alter the response (headers, content) anymore - the ETag filter can't
+act.
+
+This change prevents the `flushBuffer` call to be delegated and only
+commits the underlying response once the cached content is copied to the
+actual response stream.
+
+Issue: SPR-13717

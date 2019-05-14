@@ -1,0 +1,10 @@
+Initialize primary term for shrunk indices
+
+Today when an index is shrunk, the primary terms for its shards start
+from one. Yet, this is a problem as the index will already contain
+assigned sequence numbers across primary terms. To ensure document-level
+sequence number semantics, the primary terms of the target shards must
+start from the maximum of all the shards in the source index. This
+commit causes this to be the case.
+
+Relates #25307

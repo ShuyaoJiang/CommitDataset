@@ -1,0 +1,9 @@
+Set using collection copies when possible
+
+Update `Map` and `Collection` binders to create a copy of the existing
+collection whenever possible. Prior to this commit the binder would
+always mutate the existing value and then call the setter with the
+same instance. This could cause issues if the setter expected a
+different instance.
+
+Fixes gh-12322

@@ -1,0 +1,23 @@
+Add an Epoll benchmark
+
+Motivation:
+Optimizing the Epoll channel needs an objective measure of how fast
+it is.
+
+Modification:
+Add a simple, closed loop,  ping-pong benchmark.
+
+Result:
+Benchmark can be used to measure #7816
+
+Initial numbers:
+
+```
+Result "io.netty.microbench.channel.epoll.EpollSocketChannelBenchmark.pingPong":
+  22614.403 ±(99.9%) 797.263 ops/s [Average]
+  (min, avg, max) = (21093.160, 22614.403, 24977.387), stdev = 918.130
+  CI (99.9%): [21817.140, 23411.666] (assumes normal distribution)
+
+Benchmark                              Mode  Cnt      Score     Error  Units
+EpollSocketChannelBenchmark.pingPong  thrpt   20  22614.403 ± 797.263  ops/s
+```

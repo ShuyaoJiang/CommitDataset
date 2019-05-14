@@ -1,0 +1,7 @@
+Improve MockTcpTransport memory usage (#35402)
+
+The MockTcpTransport is not friendly in regards to memory usage. It must
+allocate multiple byte arrays for every message. This improves the
+memory situation by failing fast if the message is improperly formatted.
+Additionally, it uses reusable big arrays for at least half of the
+allocated byte arrays.

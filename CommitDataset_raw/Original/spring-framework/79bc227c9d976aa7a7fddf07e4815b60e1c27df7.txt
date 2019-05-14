@@ -1,0 +1,18 @@
+Remove SimpleResultHandler
+
+There is really no need for a result handler dedicated to a void
+return value and it's actually problematic to have it.
+
+Each result handler treats void as necessary. For an @ResponseBody
+method it means an empty body. For view resolution it means no specific
+value was returned and we should procede with selecting a default view
+name. Having a dedicated void result handler can interfere with this
+especially since view resolution needs to be last in order.
+
+At the same time there are cases when no result handling is needed
+and the response is fully handled within the HandlerAdapter. This is
+the case with WebHandler and the SimpleHandlerAdapter. For that case
+we simply return mono.then(aVoid -> Mono.empty()) which effectively
+returns an empty Mono and no result handling follows. The
+HandlerAdapter already says you can return no values at all if the
+response is fully handled.

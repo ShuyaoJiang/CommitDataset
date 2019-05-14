@@ -1,0 +1,15 @@
+Fix ByteBufUtilBenchmark on utf8 encodings.
+
+Motivation
+----------
+The performance tests for utf8 also used the getBytes on ASCII,
+which is incorrect and also provides different performance numbers.
+
+Modifications
+-------------
+Use CharsetUtil.UTF_8 instead of US_ASCII for the getBytes calls.
+
+Result
+------
+Accurate and semantically correct benchmarking results on utf8
+comparisons.

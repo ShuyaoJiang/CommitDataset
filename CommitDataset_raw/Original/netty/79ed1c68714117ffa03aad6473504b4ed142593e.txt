@@ -1,0 +1,22 @@
+Ability to scoop up events that reach the tail of the ChannelPipeline.
+
+Motivation
+
+There is currently no way to enforce the position of a handler in a ChannelPipeline and assume you wanted to write something like a custom Channel type that acts as a proxy between two other Channels.
+
+ProxyChannel(Channel client, Channel server) {
+  client calls write(msg) -> server.write(msg)
+  client calls flush() -> server.flush()
+  server calls fireChannelRead(msg) -> client.write(msg)
+  server calls fireChannelReadComplete() -> client.flush()
+}
+
+In order to make it work reliably one needs to be able to scoop up the various events at the head and tail of the pipeline. The head side of the pipeline is covered by Unsafe and it's also relatively safe to count on the user to not use the addFirst() method to manipulate the pipeline. The tail side is always at a risk of getting broken because addLast() is the goto method to add handlers.
+
+Modifications
+
+Adding a few extra methods to DefaultChannelPipeline that expose some of the events that reach the pipeline's TailContext.
+
+Result
+
+Fixes #7484

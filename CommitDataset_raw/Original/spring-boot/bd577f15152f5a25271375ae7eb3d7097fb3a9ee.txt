@@ -1,0 +1,18 @@
+Rework Jetty startup so connectors are only started once
+
+Previously the server was started to make the ServletContext
+available, then, to prevent requests from being handled before the
+application context had been started, the connectors were stopped.
+Once application context startup had completed, the connectors were
+then started again. In addition to being somewhat inefficient, this
+caused problems on FreeBSD where stopping the connector didn't free
+up the port quickly enough for the subsequent start to then be able
+to bind to it.
+
+This commit updates the Jetty startup logic to be closer to the logic
+that's used for Tomcat. Before the server is started, the configured
+connectors are cached and then removed. The server is then started
+without any connectors. Once application context startup has
+completed, the connectors are reinstated and started.
+
+Fixes #968

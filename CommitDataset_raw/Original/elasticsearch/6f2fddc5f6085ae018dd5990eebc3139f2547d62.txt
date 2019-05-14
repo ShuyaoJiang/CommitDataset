@@ -1,0 +1,13 @@
+Watcher: Fix encoding of UTF8 data in HttpClient (elastic/x-pack-elasticsearch#3398)
+
+The HttpClient uses an Apache HTTP client class named StringEntity to
+encode a HTTP request body. This one however assumes ISO-8859-1 as its
+charset when encoding the string based body to bytes.
+
+This commit switches to a byte array based body, then sets the content
+type header and falls back to the old text/plain content type if no
+content type header is specified.
+
+relates elastic/x-pack-elasticsearch#3397
+
+Original commit: elastic/x-pack-elasticsearch@d5a6e7f0c7f65e507564b9aaab91be97e0beb77c

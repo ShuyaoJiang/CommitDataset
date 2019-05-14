@@ -1,0 +1,14 @@
+Ensure that WebApplicationType.NONE results in a non-web environment
+
+Following the changes made in a7f148091eb9 the environment was being
+bound to the SpringApplication instance after it had, if necessary
+being converted to a standard, i.e non-web environment. This meant
+that if a property in the environment set the web application type
+to NONE it would have no effect on the type of environment used by
+the application.
+
+This commit reorders the binding of the environment to the
+Spring Application instance so that it happens before the environment
+is potentially converted.
+
+Closes gh-9161

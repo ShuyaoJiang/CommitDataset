@@ -1,0 +1,22 @@
+Show SSL usage when security is not disabled (#40672)
+
+It is possible to have SSL enabled but security disabled if security
+was dynamically disabled by the license type (e.g. trial license).
+
+e.g. In the following configuration:
+
+    xpack.license.self_generated.type: trial
+    # xpack.security not set, default to disabled on trial
+    xpack.security.transport.ssl.enabled: true
+
+The security feature will be reported as
+
+    available: true
+    enabled: false
+
+And in this case, SSL will be active even though security is not
+enabled.
+
+This commit causes the X-Pack feature usage to report the state of the
+"ssl" features unless security was explicitly disabled in the
+settings.

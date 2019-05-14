@@ -1,0 +1,10 @@
+Recognize wildcards in media types with a suffix
+
+The "includes" and "isCompatibleWith" methods of MediaType take into
+account media types with suffices (e.g. application/soap+xml) including
+wildcards with suffices (e.g. application/*+xml). However before this
+change, the isWildcardSubtype() method returned true only for subtype
+"*". Now a media type such as application/*+xml is also recognized as
+having a wildcard subtype.
+
+Issue: SPR-9841

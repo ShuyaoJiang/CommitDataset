@@ -1,0 +1,11 @@
+Invoke target.toString() safely in ReflectionTestUtils
+
+ReflectionTestUtils invokes toString() on target objects in order to
+build exception and logging messages, and prior to this commit problems
+could occur if the invocation of toString() threw an exception.
+
+This commit addresses this issue by ensuring that all invocations of
+toString() on target objects within ReflectionTestUtils are performed
+safely within try-catch blocks.
+
+Issue: SPR-14363

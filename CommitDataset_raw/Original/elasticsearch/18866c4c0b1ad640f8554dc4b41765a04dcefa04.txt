@@ -1,0 +1,13 @@
+Make hits.total an object in the search response (#35849)
+
+This commit changes the format of the `hits.total` in the search response to be an object with
+a `value` and a `relation`. The `value` indicates the number of hits that match the query and the
+`relation` indicates whether the number is accurate (in which case the relation is equals to `eq`)
+or a lower bound of the total (in which case it is equals to `gte`).
+This change also adds a parameter called `rest_total_hits_as_int` that can be used in the
+search APIs to opt out from this change (retrieve the total hits as a number in the rest response).
+Note that currently all search responses are accurate (`track_total_hits: true`) or they don't contain
+`hits.total` (`track_total_hits: true`). We'll add a way to get a lower bound of the total hits in a
+follow up (to allow numbers to be passed to `track_total_hits`).
+
+Relates #33028

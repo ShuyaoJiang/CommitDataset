@@ -1,0 +1,11 @@
+Only configure remove devtools security if Spring Security is enabled
+
+Previously, RemoteDevToolsAutoConfiguration would try to configure
+Spring Security if it was on the classpath. This led to a failure if
+Spring Security was on the classpath but its auto-configuration was
+disabled.
+
+This commit updates the auto-configuration to be conditional on the
+presence of Spring Security’s ObjectPostProcessor bean.
+
+See gh-3889

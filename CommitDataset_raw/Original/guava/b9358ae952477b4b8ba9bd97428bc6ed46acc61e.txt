@@ -1,0 +1,16 @@
+Make ImmutableSortedSet implement NavigableSet.
+(Under GWT, it still implements only SortedSet.)
+From Louis: http://codereview.appspot.com/5590046/
+
+Also:
+Add suite-builder tests for ContiguousSet headSet/tailSet/subSet, and make the existing tests run the NavigableSet suite instead of just the Set suite (plus, do the same for some other ImmutableSortedSet tests).
+These reveal that ContiguousSet has the legal but somewhat antisocial behavior of throwing IllegalArgumentException for inputs outside its "restricted range" and the probably illegal but unlikely to matter behavior of throwing IAE for subSet(x, false, x, false); change both.
+Add GWT suite-builder tests for ContiguousSet, and make the existing GWT ImmutableSortedSet tests run the SortedSet suite (plus, add some missing ALLOWS_NULL_QUERIES features to the existing ImmutableSet tests).
+To allow those tests to cover the SortedSet methods, separate SortedSetTestSuiteBuilder out from NavigableSetTestSuiteBuilder, include splitting SetNavigationTester (and renaming MapNavigationTester, too, to keep the non-GWT glob simple).
+Along the way, promote TestIntegerSetGenerator and its SampleElements out of ContiguousSetNonGwtTest. (I think that this may have been necessary for GWT compatibility, but I forget.)
+Finally, some small cleanup:
+- Make less use of the scary ImmutableSortedSet(Comparator) constructor, and add warnings to its documentation. (A similar constructor has produced GWT bugs in ImmutableList subclasses, which I plan to look at next.)
+- Make /* @Override */ methods use @Override (if possible), or strip them with @GwtIncompatible (if not needed under GWT).
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=28502805

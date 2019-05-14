@@ -1,0 +1,7 @@
+NETWORKING: Fix Netty Leaks by upgrading to 4.1.28 (#32511)
+
+* Upgrade to `4.1.28` since the problem reported in #32487 is a bug in Netty itself (see https://github.com/netty/netty/issues/7337)
+* Fixed other leaks in test code that now showed up due to fixes improvements in leak reporting in the newer version
+* Needed to extend permissions for netty common package because it now sets a classloader at runtime after changes in https://github.com/netty/netty/commit/63bae0956aeb42e875ad303a2281989ad92acbf2
+* Adjusted forbidden APIs check accordingly
+* Closes #32487

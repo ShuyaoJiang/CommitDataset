@@ -1,0 +1,23 @@
+Support named dispatchers in MockServletContext
+
+Currently the getNamedDispatcher(String) method of MockServletContext
+always returns null. This poses a problem in certain testing scenarios
+since one would always expect at least a default Servlet to be present.
+This is specifically important for web application tests that involve
+the DefaultServletHttpRequestHandler which attempts to forward to the
+default Servlet after retrieving it by name. Furthermore, there is no
+way to register a named RequestDispatcher with the MockServletContext.
+
+This commit addresses these issues by introducing the following in
+MockServletContext.
+
+ - a new defaultServletName property for configuring the name of the
+   default Servlet, which defaults to "default"
+ - named RequestDispatchers can be registered and unregistered
+ - a MockRequestDispatcher is registered for the "default" Servlet
+   automatically in the constructor
+ - when the defaultServletName property is set to a new value the
+   the current default RequestDispatcher is unregistered and replaced
+   with a MockRequestDispatcher for the new defaultServletName
+
+Issue: SPR-9587

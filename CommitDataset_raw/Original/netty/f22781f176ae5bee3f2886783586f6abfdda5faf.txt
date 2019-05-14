@@ -1,0 +1,15 @@
+Correctly handle hostnames with and without trailing dot in the DefaultDnsCache and use it for searchdomains. (#8181)
+
+Motivation:
+
+We should ensure we return the same cached entries for the hostname and hostname ending with dot. Beside this we also should use it for the searchdomains as well.
+
+Modifications:
+
+- Internally always use hostname with a dot as a key and so ensure we correctly handle it in the cache.
+- Also query the cache for each searchdomain
+- Add unit tests
+
+Result:
+
+Use the same cached entries for hostname with and without trailing dot. Query the cache for each searchdomain query as well

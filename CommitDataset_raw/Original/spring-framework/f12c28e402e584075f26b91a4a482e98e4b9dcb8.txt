@@ -1,0 +1,7 @@
+Avoid copying in DefaultServerHttpRequestBuilder
+
+This commit avoids copying HTTP headers when mutating an HTTP request.
+Instead, we're now unwrapping the `ReadOnlyHttpHeaders` (which is most
+likely backed by the native request headers).
+
+Issue: SPR-17250

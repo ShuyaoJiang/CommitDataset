@@ -1,0 +1,13 @@
+Ensure uncompressed ByteBuf is released when an exception happens during decoding.
+
+Motivation:
+
+We need to ensure the uncompressed ByteBuf is released if an exception happens while calling decode(...). If we miss to do so we leak buffers.
+
+Modifications:
+
+Correctly release buffer on exception.
+
+Result:
+
+No more memory leak.

@@ -1,0 +1,12 @@
+NioEventLoop ensures that all submitted tasks are executed immediately.
+
+Motivation:
+If a task was submitted when wakenUp value was true, the task didn't get a chance to call Selector#wakeup.
+So we need to check task queue again before executing select operation. If we don't, the task might be pended until select operation was timed out.
+It might be pended until idle timeout if IdleStateHandler existed in pipeline.
+
+Modifications:
+Execute Selector#select in a non-blocking manner if there's a task submitted when wakenUp value was true.
+
+Result:
+Every tasks in NioEventLoop will not be pended.

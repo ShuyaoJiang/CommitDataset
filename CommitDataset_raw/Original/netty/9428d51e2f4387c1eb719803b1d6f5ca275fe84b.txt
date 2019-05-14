@@ -1,0 +1,17 @@
+Add support for sendmmsg(...) and so allow to write multiple DatagramPackets with one syscall. Related to [#2719]
+
+Motivation:
+
+On linux with glibc >= 2.14 it is possible to send multiple DatagramPackets with one syscall. This can be a huge performance win and so we should support it in our native transport.
+
+Modification:
+
+- Add support for sendmmsg by reuse IovArray
+- Factor out ThreadLocal support of IovArray to IovArrayThreadLocal for better separation as we use IovArray also without ThreadLocal in NativeDatagramPacketArray now
+- Introduce NativeDatagramPacketArray which is used for sendmmsg(...)
+- Implement sendmmsg(...) via jni
+- Expand DatagramUnicastTest to test also sendmmsg(...)
+
+Result:
+
+Netty now automatically use sendmmsg(...) if it is supported and we have more then 1 DatagramPacket in the ChannelOutboundBuffer and flush() is called.

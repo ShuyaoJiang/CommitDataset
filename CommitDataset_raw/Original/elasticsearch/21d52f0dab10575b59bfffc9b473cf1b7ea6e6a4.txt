@@ -1,0 +1,23 @@
+Ensure that local cluster alias is never treated as remote (#37121)
+
+With #36997 we added support for providing a local cluster alias with a
+`SearchRequest`. We intended to make sure that when provided as part of
+a search request, the cluster alias would never be used for connection
+lookups. Yet due to a bug we would still end up looking up the
+connection from the remote ones.
+
+This commit adds a test to make sure that whenever we set the cluster
+alias to the `SearchRequest` (which can only be done at transport), such
+alias is used as index prefix in the returned hits. No errors are thrown
+despite no remote clusters are configured indicating that such alias is
+never used for connection look-ups.
+
+Also, we add explicit support for the empty cluster alias when printing
+ out index names through `RemoteClusterAware#buildRemoteIndexName`.
+In fact we don't want to print out `:index` when the cluster alias is
+set to empty string, but rather `index`. Yet, the semantic of empty
+string is different compared to `null` as it will still disable final
+reduction. This will be used in CCS when searching against remote
+clusters as well as the local one, the local one will have empty prefix
+yet it will need to disable final reduction so that its results will be
+properly merged with the ones coming from the remote clusters.

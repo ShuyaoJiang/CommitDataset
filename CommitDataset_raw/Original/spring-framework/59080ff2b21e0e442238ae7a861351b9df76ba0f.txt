@@ -1,0 +1,12 @@
+Cope with generic methods during SpEL compilation
+
+This commit allows the SpEL compiler to cope with generic methods
+being used in expressions involving numeric operands. Due to the
+use of unbound type variables the methods may look like they
+return Object but in fact they are returning objects of a numeric
+type that are suitable for compilation. The changes here ensure
+the runtime types are looked at if the discovered declared types
+are not providing enough information. This impacts all the
+operands involving numerics (mathematical and relational).
+
+Issue: SPR-12040

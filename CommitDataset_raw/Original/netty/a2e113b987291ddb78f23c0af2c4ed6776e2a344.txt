@@ -1,0 +1,13 @@
+Use ByteProcessor.FIND_LF to find end of line
+
+Motivation:
+
+Each call of ByteBuf.getByte(int) method does boundary checking. This can be eliminated by using ByteBuf.forEachByte(ByteProcessor) method and ByteProcessor.FIND_LF processor.
+
+Modifications:
+
+Find end of line with ByteProcessor.FIND_LF
+
+Result:
+
+A little better performance of LineBasedFrameDecoder.

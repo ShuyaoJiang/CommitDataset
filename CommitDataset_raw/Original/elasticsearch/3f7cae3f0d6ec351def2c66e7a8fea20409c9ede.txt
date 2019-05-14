@@ -1,0 +1,15 @@
+SQL: Implement GREATEST and LEAST functions (#35879)
+
+Add GREATEST(expr1, expr2, ... exprN) and LEAST(expr1, expr2, exprN)
+functions which are in the family of CONDITIONAL functions.
+
+Implementation follows PostgreSQL behaviour, so the functions return
+`NULL` when all of their arguments evaluate to `NULL`.
+
+Renamed `CoalescePipe` and `CoalesceProcessor` to `ConditionalPipe` and
+`ConditionalProcessor` respectively, to be able to reuse them for
+`Greatest` and `Least` evaluations. To achieve that `ConditionalOperation`
+has been added to differentiate between the functionalities at execution
+time.
+
+Closes: #35878

@@ -1,0 +1,14 @@
+Fail snapshot operations early on repository corruption (#30140)
+
+A NullPointerException is thrown when trying to create or delete
+a snapshot in a repository that has been written to by an older 
+Elasticsearch after writing to it with a newer Elasticsearch version.
+
+This is because the way snapshots are formatted in the repository 
+snapshots index file changed in #24477.
+
+This commit changes the parsing of the repository index file so that 
+it now detects a corrupted index file and fails early the snapshot 
+operation.
+
+closes #29052

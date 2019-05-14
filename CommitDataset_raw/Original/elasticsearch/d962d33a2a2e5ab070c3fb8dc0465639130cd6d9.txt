@@ -1,0 +1,52 @@
+SQL: Replace the cli fixture with in-process testing (elastic/x-pack-elasticsearch#3889)
+
+I'm really really sad to be removing the cli-fixture but I've had
+trouble with it leaking recently it is pretty slow. Beyond that, we'd
+prefer that our test fixture only fixture things that are external
+depndencies.
+
+So, yeah, I'm removing it. So we get faster tests and no chance of
+leaking processes. We lose some "realness" in the tests. Instead of
+interacting with the CLI like a real user we embed it in the test
+process. That means we don't test the forking, we don't test the
+executable jar, and we don't test the jLine console detection stuff. On
+the other hand we were kind of forcing the jLine console detection stuff
+in a funky way with the fixture anyway. And we test the executable jar
+in the packaging tests. And that'll have to do.
+
+I haven't renamed `RemoteCli` because it'd bloat this commit with
+mechanical changes that'd make it hard to review. I'll rename it in a
+followup commit.
+
+This also updates jLine so we can disable blinking to matching
+parentheses during testing. I have no clue why, but this wasn't
+happening when we used the fixture. The trouble with the blinking is
+that it is based on *time* so it slows things down. Worse, it works
+inconsistently! Sometimes it spits out sensible ascii codes and
+sometimes it, well, spits out weird garbage. When you use it in person
+it works fine though. So we keep it on when not testing.
+
+Cleans up some redundancy in when testing CLI errors. Less copy and
+paste good.
+
+I was tempted to disable the xterm emulation entirely while working on
+this because upgrading jLine changed a few things and it was a real pain
+to update. But If we turned that off then we'd have *nothing* testing
+the colors and such. That'd be a shame because we use color in the
+output to commicate stuff. I like it so I don't want to break it.
+
+While I was there, I replaces the cli connector's `PrintWriter` with a
+`BufferedWriter`. The `PrintWriter` was kind of a trap because `println`
+would fail to work properly on windows because we force the terminal
+into xterm mode and it doesn't know what to do with windows line
+endings. Windows.....
+
+Additionally I fixed a race condition between disabling echo when
+reading passwords and fast writers. We were disabling the echo shortly
+after sending the prompt. A fast enough writer could send us text before
+the echo disable kicked in. Now I delegate to `LineReader#readLine`
+with a special echo mask that disables echo. This is both easier to test
+and doesn't seem to have the race condition. This race condition was
+failing the tests because they are so much faster now. Yay!
+
+Original commit: elastic/x-pack-elasticsearch@d0ec0273964630a3a113ab27009fdff6a182ecb2

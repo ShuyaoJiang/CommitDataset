@@ -1,0 +1,7 @@
+Define async APIs and switch Job to use HttpEngine directly.
+
+Using HttpEngine directly introduces some duplicated code with
+HttpURLConnection. It also breaks the response cache. I think
+this is the best route going forward; and eventually we could
+invert this relationship to have HttpURLConnection depending on
+Job directly rather than vice versa.

@@ -1,0 +1,18 @@
+Fix classpaths regarding slf4j versions
+
+ - Defined global slf4jVersion as '1.6.1' in the Gradle build.
+
+ - Replaced dependencies on slf4j-log4j12 with slf4j-jcl where possible;
+   however, spring-test-mvc still depends on jcl-over-slf4j and
+   slf4j-log4j12 (see SPR-10070).
+
+ - Reenabled HibernateSessionFlushingTests.
+
+ - Verified that the following tests pass in the Gradle build and within
+   Eclipse:
+   - HibernateSessionFlushingTests
+   - HibernateTransactionManagerTests (Hibernate 3)
+   - HibernateTransactionManagerTests (Hibernate 4)
+   - RequestResponseBodyMethodProcessorTests
+
+Issue: SPR-9421, SPR-10066

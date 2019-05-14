@@ -1,0 +1,14 @@
+Do not lose default mapper on metadata updates (#33153)
+
+When applying index metadata updates we run through the mappings
+updating them if needed. Today if there is not an update to the default
+mapper, we can lose the default mapping. This means that, for example,
+if we apply a settings update to an index we will lose the default
+mapper. This happens because we were not guarding updating the default
+mapping with a check that the default mapping was updated in the
+metadata update. When there is no update in the metadata update, we need
+to continue to preserve the previous default mapping. This commit
+achieves this by moving the updating of the default mapping under the
+same guard that we use for updating the default mapping source. We add a
+test that fails before putting the update under a guard and now passes
+after moving the update under the guard.

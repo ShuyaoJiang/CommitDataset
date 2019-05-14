@@ -1,0 +1,15 @@
+[Kerberos] Move tests based on SimpleKdc to evil-tests (#33492)
+
+We have a test dependency on Apache Mina when using SimpleKdcServer
+for testing Kerberos. When checking for LDAP backend connectivity,
+the code checks for deadlocks which require additional security
+permissions accessClassInPackage.sun.reflect. As this is only for
+test and we do not want to add security permissions to production,
+this commit moves these tests and related classes to
+x-pack evil-tests where they can run with security manager disabled.
+The plan is to handle the security manager exception in the upstream issue
+DIRMINA-1093
+and then once the release is available to run these tests with security
+manager enabled.
+
+Closes #32739

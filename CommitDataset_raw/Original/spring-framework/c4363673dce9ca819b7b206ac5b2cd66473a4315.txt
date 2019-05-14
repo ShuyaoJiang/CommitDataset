@@ -1,0 +1,22 @@
+Delegate parent environment to child app contexts
+
+Calls to AbstractApplicationContext#setParent delegate the parent
+context environment to the child.
+
+This ensures that any property sources added to the parent are available
+to the child as well as ensuring that any profiles activated are
+activated everywhere.
+
+Child contexts may still choose to replace their environment (through an
+ApplicationContextInitializer, for example).  In any case, however, in
+the root/child web application context relationship established by
+ContextLoader + DispatcherServlet, the child is guaranteed to have
+already been given the parent environment by the time it is delegated
+to any ACIs.
+
+See AbstractApplicationContext#setParent for implementation
+
+See FrameworkServlet#createWebApplicationContext for order in which
+setParent then initializeWebApplicationContext are called.
+
+Issue: SPR-8185

@@ -1,0 +1,5 @@
+Use serializable exception in GCP listeners (#33657)
+
+We used TimeoutException here but that's not serializable. This commit
+switches to a serializable exception so that we can test for the
+exception type on the remote side.

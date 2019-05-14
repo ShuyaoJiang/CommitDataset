@@ -1,0 +1,13 @@
+Fix possible overflow when calculate in the size of the out buffer in Base64
+
+Motivation:
+
+We not correctly guarded against overflow and so call Base64.encode(...) with a big buffer may lead to an overflow when calculate the size of the out buffer.
+
+Modifications:
+
+Correctly guard against overflow.
+
+Result:
+
+Fixes [#6620].

@@ -1,0 +1,12 @@
+Ensure that TestJarFile uses insertion order for jar's entries
+
+Previously, the order of the entries in a TestJarFile was determined
+by the underlying file system rather than by the order in which
+they were added. This could lead to unpredicatable ordering and
+failures in tests that verify archive entry ordering.
+
+This commit updates TestJarFile to add entries to the archive in
+insertion order.
+
+See gh-11695
+See gh-11696

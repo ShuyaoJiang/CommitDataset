@@ -1,0 +1,13 @@
+Don't use a separate thread in the launcher to call app's main method
+
+Using a separate thread to call the application's main method is
+unnecessary – the context class loader of the current thread can be
+updated instead – and makes exception and exit code handling more
+complicated than it needs to be.
+
+This commit updates the Launcher so that it calls the main method
+runner using the current (main) thread. As a result, any exception
+that's thrown will be caught by the JVM and result in a non-zero exit
+code being returned from the process.
+
+Closes gh-5922

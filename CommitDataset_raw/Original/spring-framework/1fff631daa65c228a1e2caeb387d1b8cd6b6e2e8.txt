@@ -1,0 +1,15 @@
+Fix SubProtocolHandler duplicate registration
+
+Prior to this change, duplicate SubProtocolHandlers could be registered
+when configuring STOMP with several registrations:
+
+    public void registerStompEndpoints
+          (final StompEndpointRegistry registry) {
+      this.endpointRegistry.addEndpoint("/stompOverWebSocket");
+      this.endpointRegistry.addEndpoint("/stompOverSockJS").withSockJS();
+    }
+
+This commit registers sub-protocols in a Set instead of a list (see
+SubProtocolWebSocketHandler), thus fixing the issue.
+
+Issue: SPR-12403

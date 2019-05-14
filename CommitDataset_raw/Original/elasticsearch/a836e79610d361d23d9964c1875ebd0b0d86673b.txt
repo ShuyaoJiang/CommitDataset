@@ -1,0 +1,22 @@
+Do not fail snapshot when deleting a missing snapshotted file (#30332)
+
+When deleting or creating a snapshot for a given shard, elasticsearch 
+usually starts by listing all the existing snapshotted files in the repository. 
+Then it computes a diff and deletes the snapshotted files that are not 
+needed anymore. During this deletion, an exception is thrown if the file 
+to be deleted does not exist anymore.
+
+This behavior is challenging with cloud based repository implementations 
+like S3 where a file that has been deleted can still appear in the bucket for 
+few seconds/minutes (because the deletion can take some time to be fully 
+replicated on S3). If the deleted file appears in the listing of files, then the 
+following deletion will fail with a NoSuchFileException and the snapshot 
+will be partially created/deleted.
+
+This pull request makes the deletion of these files a bit less strict, ie not 
+failing if the file we want to delete does not exist anymore. It introduces a 
+new BlobContainer.deleteIgnoringIfNotExists() method that can be used 
+at some specific places where not failing when deleting a file is 
+considered harmless.
+
+Closes #28322

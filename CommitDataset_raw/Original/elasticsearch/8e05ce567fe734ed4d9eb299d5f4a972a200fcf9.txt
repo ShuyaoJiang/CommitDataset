@@ -1,0 +1,12 @@
+[ML] Rename input_fields to column_names in file structure (#33568)
+
+This change tightens up the meaning of the "input_fields" field
+in the file structure finder output.  Previously it was permitted
+but not calculated for JSON and XML files.  Following this change
+the field is called "column_names" and is only permitted for
+delimited files.
+
+Additionally the way the column names are set for headerless
+delimited files is refactored to encapsulate the way they're
+named to one line of the code rather than having the same
+logic in two places.

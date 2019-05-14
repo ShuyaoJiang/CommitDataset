@@ -1,0 +1,11 @@
+Add Graphs.transpose() static utility methods for viewing the transpose of a graph. See: https://en.wikipedia.org/wiki/Transpose_graph
+
+Add Graphs.asBasicGraph(). One downside to having BasicGraph *under* Graph in the type hierarchy (still overall a good idea though :P) is that people are likely to write methods that accept "BasicGraph<N>", even though they COULD accept "Graph<N, ?>". A little bit of javadoc is not going to stop that from happening, so might as well make it less painful to handle. Also, if someone e.g. wants to make a MutableBasicGraph copy of a Graph, there was really no way to do that before. They can now do:
+
+Graphs.copyOf(Graphs.asBasicGraph(myGraph));
+
+Note that we cannot simply change the MutableBasicGraph version of copyOf() to accept a Graph<N, ?>, because then it would have the same type erasure as the MutableGraph version of copyOf() but a different return type. ImmutableBasicGraph.copyOf() has the same issue, because ImmutableBasicGraph extends ImmutableGraph which has it's own copyOf().
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=130939830

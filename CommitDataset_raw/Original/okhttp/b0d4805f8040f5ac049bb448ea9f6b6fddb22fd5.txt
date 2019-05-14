@@ -1,0 +1,8 @@
+Fix problems with connection recycling and recovery.
+
+We were incorrectly attempting to recycle connections terminated by the end
+of a socket stream.
+
+And we were keeping the 'Accept-Encoding: gzip' header on a recovered request,
+which was suppressing our transparentGzip flag from getting the 'true' value
+it requires.

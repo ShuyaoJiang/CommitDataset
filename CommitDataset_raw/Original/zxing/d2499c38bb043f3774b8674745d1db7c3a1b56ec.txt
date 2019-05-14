@@ -1,0 +1,5 @@
+C++: ITFReader.cpp was throwing wrong exception
+
+ITFReader.cpp:75 was catching and re-throwing Exception instead of ReaderException, causing scanning to terminate prematurely in some cases (i.e. core/test/data/blackbox/ean13-1/23.JPG). The calling function, MultiFormatOneDReader::doDecode, is only catching ReaderException's. An Exception would be passed all the way up to the caller, even if scanning hasn't finished yet for other decoders for other rows.
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@1493 59b500cc-1b3d-0410-9834-0bbf25fbcc57

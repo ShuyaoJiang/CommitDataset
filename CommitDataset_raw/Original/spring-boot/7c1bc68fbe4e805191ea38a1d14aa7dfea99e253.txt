@@ -1,0 +1,14 @@
+Consider JUnit Jupiter test classes in TestTypeExcludeFilter
+
+Previously, TestTypeExcludeFilter only looked for JUnit 4 class
+and method annotations when determining if a class was a test class.
+As a result, if an application was using JUnit Jupiter, its test
+classes would not be exluded during component scanning.
+
+This commit expands TestTypeExcludeFilter to also identify classes
+using JUnit Jupiter. This includes classes (meta-)annotated with
+@ExtendWith and methods (meta-)annotated with @Testable. The later
+provides detection of Jupiter's @Test, @TestFactory, and @RepeatedTest
+annotations all of which are meta-annotated with @Testable.
+
+Closes gh-6898

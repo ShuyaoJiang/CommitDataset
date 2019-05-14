@@ -1,0 +1,11 @@
+Removes minimum master nodes default number (#26803)
+
+* Removes minimum master nodes default number
+
+At the moment the elasticsearch.yml contains the minimum master node setting commented out but with a value of 3. This has lead to users uncommenting the value and assuming it is a good default without reading that they need to change it to a quorum of master eligible nodes causing split brain in their cluster and defeating the point of the setting.
+
+The default of 3 is not even a good default for our recommended setup of 3 dedicated master eligible nodes.
+
+This changes the value o fthe commented out setting to something that will not produce valid config and should highlight that the value needs to be changed so users no longer uncomment the line without considering what the correct value for their setup should be.
+
+* Addresses review comment

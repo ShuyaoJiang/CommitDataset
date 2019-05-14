@@ -1,0 +1,11 @@
+TransportUnfollowAction should increase settings version (#37859)
+
+The TransportUnfollowAction updates the index settings but does not 
+increase the settings version to reflect that change.
+
+This issue has been caught while working on the replication of closed 
+indices (#33888). The IndexFollowingIT.testUnfollowIndex() started to 
+fail and this specific assertion tripped. It does not happen on master 
+branch today because index metadata for closed indices are never 
+updated in IndexService instances, but this is something that is going 
+to change with the replication of closed indices.

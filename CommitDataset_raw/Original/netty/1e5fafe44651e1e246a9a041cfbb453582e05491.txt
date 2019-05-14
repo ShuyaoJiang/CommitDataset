@@ -1,0 +1,11 @@
+Simplify CharSequenceValueConverter#convertToBoolean
+
+Motivation:
+CharSequenceValueConverter#convertToBoolean has a few manual conditionals which can be removed if we use AsciiString.contentEqualsIgnoreCase. Also by comparing an AsciiString to a String we will incur conversions to char that can be avoided if we compare against AsciiString.
+
+Modifications:
+- Use AsciiString.contentEqualsIgnoreCase
+- Compare against a AsciiString
+
+Result:
+Simplified CharSequenceValueConverter#convertToBoolean which favors AsciiString comparison.

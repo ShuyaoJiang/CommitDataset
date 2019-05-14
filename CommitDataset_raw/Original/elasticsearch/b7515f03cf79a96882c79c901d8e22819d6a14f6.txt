@@ -1,0 +1,10 @@
+LdapUserSearch rebind with bind DN after user bind (elastic/x-pack-elasticsearch#4209)
+
+Fixes an inconsistency bug in which `LdapSession`s built by
+`LdapUserSearchSessionFactory` are different if the factory is
+configured to use a connection pool or not. The bind status of the
+connection, or the connection(s) from the pool, passed through to
+the newly minted `LdapSession` are now identical. Connections are
+bind to the bind_dn configuration entry in the realm config.
+
+Original commit: elastic/x-pack-elasticsearch@094af063eab68b5e642b25f5aa33d0cd69a1901b

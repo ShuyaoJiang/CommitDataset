@@ -1,0 +1,10 @@
+Reduce garbage from allocations in deprecation logger (#38780)
+
+1. Setting length for formatWarning String to avoid AbstractStringBuilder.ensureCapacityInternal calls
+2. Adding extra check for parameter array length == 0 to avoid unnecessarily creating StringBuilder in LoggerMessageFormat.format
+
+Helps to narrow the performance gap in throughout for geonames benchmark (#37411) by 3%. For more details: https://github.com/elastic/elasticsearch/issues/37530#issuecomment-462758384 
+
+Relates to #37530
+Relates to #37411
+Relates to #35754

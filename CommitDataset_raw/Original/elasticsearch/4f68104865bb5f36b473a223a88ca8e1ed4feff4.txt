@@ -1,0 +1,7 @@
+Don't count hits via the collector if the hit count can be computed from index stats. (#33701)
+
+This is something that we were already doing when sorting by field, which is
+now also done when sorting by score. As-is this change will speed up top-k
+`term` queries. This could work for `match_all` queries as well when we
+implement the `setMinCompetitiveScore` API on their Scorer.
+

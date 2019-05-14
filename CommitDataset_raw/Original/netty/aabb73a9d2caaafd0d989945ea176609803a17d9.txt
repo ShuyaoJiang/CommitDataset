@@ -1,0 +1,13 @@
+Add SniCompletionEvent which allows to easily retrieve the hostname that was used to select the SslContext.
+
+Motivation:
+
+At the moment its a bit "hacky" to retrieve the hostname that was used during SNI as you need to hold a reference to SniHandler and then call hostname() once the selection is done. It would be better to fire an event to let the user know we did the selection.
+
+Modifications:
+
+Add a SniCompletionEvent that can be used to get the hostname that was used to do the selection and was included in the SNI extension.
+
+Result:
+
+Easier usage of SNI.

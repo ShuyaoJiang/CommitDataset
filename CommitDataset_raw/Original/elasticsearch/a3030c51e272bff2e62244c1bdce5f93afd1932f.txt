@@ -1,0 +1,36 @@
+[ILM] Add unfollow action (#36970)
+
+This change adds the unfollow action for CCR follower indices.
+
+This is needed for the shrink action in case an index is a follower index.
+This will give the follower index the opportunity to fully catch up with
+the leader index, pause index following and unfollow the leader index.
+After this the shrink action can safely perform the ilm shrink.
+
+The unfollow action needs to be added to the hot phase and acts as
+barrier for going to the next phase (warm or delete phases), so that
+follower indices are being unfollowed properly before indices are expected
+to go in read-only mode. This allows the force merge action to execute
+its steps safely.
+
+The unfollow action has three steps:
+* `wait-for-indexing-complete` step: waits for the index in question
+  to get the `index.lifecycle.indexing_complete` setting be set to `true`
+* `wait-for-follow-shard-tasks` step: waits for all the shard follow tasks
+  for the index being handled to report that the leader shard global checkpoint
+  is equal to the follower shard global checkpoint.
+* `pause-follower-index` step: Pauses index following, necessary to unfollow
+* `close-follower-index` step: Closes the index, necessary to unfollow
+* `unfollow-follower-index` step: Actually unfollows the index using 
+  the CCR Unfollow API
+* `open-follower-index` step: Reopens the index now that it is a normal index
+* `wait-for-yellow` step: Waits for primary shards to be allocated after
+  reopening the index to ensure the index is ready for the next step
+
+In the case of the last two steps, if the index in being handled is
+a regular index then the steps acts as a no-op.
+
+Relates to #34648
+
+Co-authored-by: Martijn van Groningen <martijn.v.groningen@gmail.com>
+Co-authored-by: Gordon Brown <gordon.brown@elastic.co>

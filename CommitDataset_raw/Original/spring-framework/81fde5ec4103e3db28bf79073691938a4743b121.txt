@@ -1,0 +1,15 @@
+Ensure that MethodParameter.findParameterIndex() is thread-safe
+
+Prior to this commit, parallel invocations of
+MethodParameter.findParameterIndex() (invoked indirectly via
+SynthesizingMethodParameter.forParameter() and
+MethodParameter.forParameter()) could intermittently lead to an
+IllegalArgumentException being thrown due to a race condition in the
+internal implementation of the JDK's
+java.lang.reflect.Executable.getParameters() method.
+
+This commit addresses this issue by introducing a fallback for-loop
+that iterates over the candidate parameters a second time using
+equality checks instead of identity checks.
+
+Issue: SPR-17534

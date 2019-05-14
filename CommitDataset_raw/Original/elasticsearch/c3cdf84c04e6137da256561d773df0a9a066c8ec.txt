@@ -1,0 +1,10 @@
+Fix SSLContext pinning to TLSV1.2 in reload tests (#38341)
+
+This commit fixes the pinning of SSLContexts to TLSv1.2 in the
+SSLConfigurationReloaderTests. The pinning was added for the initial
+creation of clients and webservers but the updated contexts would
+default to TLSv1.3, which is known to cause hangs with the
+MockWebServer that we use.
+
+Relates #38103
+Closes #38247

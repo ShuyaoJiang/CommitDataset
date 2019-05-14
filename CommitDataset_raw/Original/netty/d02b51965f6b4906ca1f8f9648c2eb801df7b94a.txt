@@ -1,0 +1,13 @@
+Don't deregister Channel as part of closing it when using native kqueue transport (#8881)
+
+Motivation:
+
+In https://github.com/netty/netty/pull/8665 we changed how we handle the registration of Channels to KQueue but missed to removed some code which would deregister the Channel before it actual closed the underlying socket. This could lead to have events triggered still while not have a mapping to the Channel anymore.
+
+Modifications:
+
+Remove deregister call during socket closure.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8849.

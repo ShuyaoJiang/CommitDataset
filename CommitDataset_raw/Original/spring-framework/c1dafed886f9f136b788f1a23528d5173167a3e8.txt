@@ -1,0 +1,14 @@
+Refine AntPathMatcher.combine when p1 contains '.'
+
+Refine AntPathMatcher.combine rules to allow direct concatenation of
+patterns when pattern1 does not contain '*.'. Prior to this commit
+direct concatenation was allowed when pattern1 did not contain '.',
+this prevented calls of the form:
+
+	pathMatcher.combine("/1.0", "/foo/test")
+
+from working as expected.
+
+This commit also applies some general cleanup to the `combine` method.
+
+Issue: SPR-10554

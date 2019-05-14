@@ -1,0 +1,19 @@
+Split ConfigurationPropertySource for iteration
+
+Create separate `IterableConfigurationPropertySource` and
+`ConfigurationPropertySource` interfaces so that it's possible to
+work out if a source can truly iterate the values that it contains.
+
+Prior to this commit there was only a single
+`ConfigurationPropertySource` interface, which returned an empty
+Iterator when values could not be iterated. This design made it
+impossible to tell the difference between a source that was empty, and
+a source that could not be iterated.
+
+The `ConfigurationPropertySources` class has been updated to adapt
+non-enumerable and enumerable Spring PropertySources to the correct
+`ConfigurationPropertySource` interface. It also deals with the edge
+case of the `SystemPropertySource` running in a security restricted
+environment.
+
+Fixes gh-9057

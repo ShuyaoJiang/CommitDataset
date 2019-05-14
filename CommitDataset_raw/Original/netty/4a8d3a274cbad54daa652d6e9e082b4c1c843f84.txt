@@ -1,0 +1,36 @@
+Including the setup code in the benchmark method to avoid JMH Invocation level hiccups.
+
+Motivation:
+
+The usage of Invocation level for JMH fixture methods (setup/teardown) inccurs in a significant overhead
+in the benchmark time (see org.openjdk.jmh.annotations.Level documentation).
+
+In the case of CodecInputListBenchmark, benchmarks are far too small (less than 50ns) and the Invocation
+level setup offsets the measurement considerably.
+On such cases, the recommended fix patch is to include the setup/teardown code in the benchmark method.
+
+Modifications:
+
+Include the setup/teardown code in the relevant benchmark methods.
+Remove the setup/teardown methods from the benchmark class.
+
+Result:
+
+We run the entire benchmark 10 times with default parameters we observed:
+- ArrayList benchmark affected directly by JMH overhead is now from 15-80% faster.
+- CodecList benchmark is now 50% faster than original (even with the setup code being measured).
+- Recyclable ArrayList is ~30% slower.
+- All benchmarks have significant different means (ANOVA) and medians (Moore)
+
+Mode: Throughput (Higher the better)
+
+Method	              Full params		Factor	    Modified (Median)	Original (Median)
+recyclableArrayList	 (elements = 1)		0.615520967	21719082.75	        35285691.2
+recyclableArrayList	 (elements = 4)		0.699553431	17149442.76	        24514843.31
+arrayList	         (elements = 4)		1.152666631	27120407.18	        23528404.88
+codecOutList	     (elements = 1)		1.527275908	67251089.04	        44033359.47
+codecOutList	     (elements = 4)		1.596917095	59174088.78	        37055204.03
+arrayList	         (elements = 1)		1.878616889	62188238.24	        33103204.06
+
+Environment:
+Tests run on a Computational server with CPU: E5-1660-3.3GHZ  (6 cores + HT), 64 GB RAM.

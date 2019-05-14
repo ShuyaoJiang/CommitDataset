@@ -1,0 +1,29 @@
+Do not bother closing SSL enging inbound if the outbound has already been closed.
+
+Motivation:
+
+Invoking the javax.net.ssl.SSLEngine.closeInbound() method will send a
+fatal alert and invalidate the SSL session if a close_notify alert has
+not been received.
+From the javadoc:
+If the application initiated the closing process by calling
+closeOutbound(), under some circumstances it is not required that the
+initiator wait for the peer's corresponding close message. (See section
+7.2.1 of the TLS specification (RFC 2246) for more information on
+waiting for closure alerts.) In such cases, this method need not be
+called.
+Always invoking the closeInbound() method without regard to whether or
+not the closeOutbound() method has been invoked could lead to
+invalidating perfectly valid SSL sessions.
+
+Modifications:
+
+Added an instance variable to track whether the
+SSLEngine.closeOutbound() method has been invoked. When the instance
+variable is true, the SSLEngine.closeInbound() method doesn't need to be
+invoked.
+
+Result:
+
+SSL sessions will not be invalidated if the outbound side has been
+closed but a close_notify alert hasn't been received.

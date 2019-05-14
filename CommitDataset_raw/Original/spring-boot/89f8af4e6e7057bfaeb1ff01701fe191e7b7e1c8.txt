@@ -1,0 +1,13 @@
+Make the configuration of the document root consistent across containers
+
+Previously, if getValidDocumentRoot() returned null, only the embedded
+Tomcat container would use a temporary directory. This left Jetty and
+Undertow unable to provide a URL for the root of the servlet context,
+i.e. servletContext.getResource("/") would return null.
+
+This commit updates the embedded containers for Jetty and Undertow to
+behave in the same way as Tomcat. A test has been added to verify that
+all three containers can produce a non-null URL for the root of the
+servlet context.
+
+Closes gh-2878

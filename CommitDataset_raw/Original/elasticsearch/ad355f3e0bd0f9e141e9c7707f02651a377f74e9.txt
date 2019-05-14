@@ -1,0 +1,8 @@
+Forbid direct usage of ContentType.create() methods (#26457)
+
+It's easy to create a wrong Content-Type header when converting a 
+XContentType to a Apache HTTP ContentType instance.
+
+This commit the direct usages of ContentType.create() methods in favor of a Request.createContentType(XContentType) method that does the right thing.
+
+Closes #26438

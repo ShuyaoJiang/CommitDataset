@@ -1,0 +1,11 @@
+Add CcrRestoreSourceService to track sessions (#36578)
+
+This commit is related to #36127. It adds a CcrRestoreSourceService to
+track Engine.IndexCommitRef need for in-process file restores. When a
+follower starts restoring a shard through the CcrRepository it opens a
+session with the leader through the PutCcrRestoreSessionAction. The
+leader responds to the request by telling the follower what files it
+needs to fetch for a restore. This is not yet implemented.
+
+Once, the restore is complete, the follower closes the session with the
+DeleteCcrRestoreSessionAction action.

@@ -1,0 +1,14 @@
+SingleThreadEventExecutor ignores startThread failures
+
+Motivation:
+
+When doStartThread throws an exception, e.g. due to the actual executor being depleted of threads and throwing in its rejected execution handler, the STEE ends up in started state anyway. If we try to execute another task in this executor, it will be queued but the thread won't be started anymore and the task will linger forever.
+
+Modifications:
+
+- Ensure we not update the internal state if the startThread() method throws.
+- Add testcase
+
+Result:
+
+Fixes [#7483]

@@ -1,0 +1,23 @@
+Add finalReduce flag to SearchRequest (#38104)
+
+With #37000 we made sure that fnial reduction is automatically disabled
+whenever a localClusterAlias is provided with a SearchRequest.
+
+While working on #37838, we found a scenario where we do need to set a
+localClusterAlias yet we would like to perform a final reduction in the
+remote cluster: when searching on a single remote cluster.
+
+Relates to #32125
+
+This commit adds support for a separate finalReduce flag to
+SearchRequest and makes use of it in TransportSearchAction in case we
+are searching against a single remote cluster.
+
+This also makes sure that num_reduce_phases is correct when searching
+against a single remote cluster: it makes little sense to return
+`num_reduce_phases` set to `2`, which looks especially weird in case
+the search was performed against a single remote shard. We should
+perform one reduction phase only in this case and `num_reduce_phases`
+should reflect that.
+
+* line length

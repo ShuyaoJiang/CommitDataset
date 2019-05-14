@@ -1,0 +1,9 @@
+SniffNodesSampler should close connection after handling responses (#24632)
+
+With the current implementation, SniffNodesSampler might close the
+current connection right after a request is sent but before the response
+is correctly handled. This causes to timeouts in the transport client
+when the sniffing is activated.
+
+closes #24575
+closes #24557

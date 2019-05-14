@@ -1,0 +1,9 @@
+Core: Remove plain execute method on TransportAction (#30998)
+
+TransportAction has many variants of execute. One of those variants
+executes by returning a future, which is then often blocked on by
+calling get(). This commit removes this variant of execute, instead
+using a helper method for tests that want to block, or having tests
+pass in a PlainActionFuture directly as a listener.
+
+Co-authored-by: Simon Willnauer <simonw@apache.org>

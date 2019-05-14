@@ -1,0 +1,14 @@
+VoidChannelPromise not notified when exception is thrown.
+
+Motivation:
+
+When a VoidChannelPromise is used by the user we need to ensure we propergate the exception through the ChannelPipeline otherwise the exception will just be swallowed and so the user has no idea whats going on.
+
+Modifications:
+
+- Always call tryFailure / trySuccess even when we use the VoidChannelPromise
+- Add unit test
+
+Result:
+
+Fixes [#6622].

@@ -1,0 +1,15 @@
+Test: use the same settings object to construct tribe settings
+
+This changes the SecurityTribeIT tests to use the same settings object when creating the settings
+for the tribe node. Previously two different objects were being created and we would read regular
+settings from one and secure settings from another. This causes problems since randomization means
+that there may be settings added on the first call that do not get added on the second call. One
+example is the randomization of when to only use a keystore or to use both a keystore and a
+truststore. On the first call, we would add settings for both a keystore and a truststore but on
+the second call only the keystore settings were added. This lead to failures as we would not be
+able to open a password protected truststore since the password was never added to the secure
+settings.
+
+relates elastic/x-pack-elasticsearch#2005
+
+Original commit: elastic/x-pack-elasticsearch@bbdb3ec662f586bc9a63fa72329345b69050f69f

@@ -1,0 +1,18 @@
+Add typless client side GetIndexRequest calls and response class (#37778)
+
+The HLRC client currently uses `org.elasticsearch.action.admin.indices.get.GetIndexRequest`
+and `org.elasticsearch.action.admin.indices.get.GetIndexResponse` in its get index calls. Both request and
+response are designed for the typed APIs, including some return types e.g. for `getMappings()` which in
+the maps it returns still use a level including the type name.
+In order to change this without breaking existing users of the HLRC API, this PR introduces two new request
+and response objects in the `org.elasticsearch.client.indices` client package. These are used by the
+IndicesClient#get and IndicesClient#exists calls now by default and support the type-less API. The old request
+and response objects are still kept for use in similarly named, but deprecated methods.
+
+The newly introduced client side classes are simplified versions of the server side request/response classes since
+they don't need to support wire serialization, and only the response needs fromXContent parsing (but no
+xContent-serialization, since this is the responsibility of the server-side class).
+Also changing the return type of `GetIndexResponse#getMapping` to
+`Map<String, MappingMetaData> getMappings()`, while it previously was returning another map
+keyed by the type-name. Similar getters return simple Maps instead of the ImmutableOpenMaps that the 
+server side response objects return.

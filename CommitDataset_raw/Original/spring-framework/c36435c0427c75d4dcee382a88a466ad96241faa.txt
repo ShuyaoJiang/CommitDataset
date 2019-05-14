@@ -1,0 +1,13 @@
+Execute HandlerInterceptors in registration order
+
+Prior to this commit, registering `HandlerInterceptor`s using the
+`InterceptorRegistry` would not guarantee their order of execution. In
+fact, `HandlerInterceptor`s would always be executed before
+`MappedInterceptor`s.
+
+This change makes `MappedInterceptor` implement the `HandlerInterceptor`
+interface, in order to register all interceptors in a single ordered
+list. The order of execution of interceptors is now guaranteed in the
+`HandlerExecutionChain` built by `AbstractHandlerMapping`.
+
+Issue: SPR-12673

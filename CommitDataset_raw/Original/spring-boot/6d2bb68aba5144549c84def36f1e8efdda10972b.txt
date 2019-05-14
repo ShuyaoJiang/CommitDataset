@@ -1,0 +1,11 @@
+Ensure that ErrorPageFilter handles errors during async dispatch
+
+Previously, the ErrorPageFilter was not invoked for async dispatches.
+This meant that an error that was set during an async dispatch would
+go undetected and a 200 response with an empty body would be returned.
+
+This commit updates ErrorPageFilter to configure its
+OncePerRequestFilter so that async dispatches are filtered and the
+correct error handling is performed.
+
+Closes gh-2711

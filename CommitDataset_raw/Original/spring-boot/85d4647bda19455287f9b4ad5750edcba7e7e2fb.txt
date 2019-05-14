@@ -1,0 +1,8 @@
+Downgrade to Groovy 2.4.13
+
+There's an extra ClassLoader in the hierarchy of the TCCL in Groovy
+2.4 vs Groovy 2.5 so we require an extra getParent() call to avoid
+being able to load classes that are visible to the launched URL
+class loader.
+
+Closes gh-11745

@@ -1,0 +1,8 @@
+Only use Converters which are @ConfigurationPropertiesBinder qualified
+
+Users sometimes create beans of type Converter and don't expect that to
+automatically trigger a cascade of early initialization. This change adds
+a qualifier to the Converters that are used by @ConfigurationProperties,
+so they can be isolated (and simple).
+
+Fixes gh-2669

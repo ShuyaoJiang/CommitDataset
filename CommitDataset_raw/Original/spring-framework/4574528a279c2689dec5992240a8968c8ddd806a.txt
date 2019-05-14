@@ -1,0 +1,5 @@
+Comprehensive update to the framework's TimeZone handling, including a new TimeZoneAwareLocaleContext and a LocaleContextResolver for Spring MVC
+
+A few noteworthy minor changes: LocaleContext.getLocale() may return null in special cases (not by default), which our own accessing classes are able to handle now. If there is a non-null TimeZone user setting, we're exposing it to all collaborating libraries, in particular to JSTL, Velocity and JasperReports. Our JSR-310 and Joda-Time support falls back to checking the general LocaleContext TimeZone now, adapting it to their time zone types, if no more specific setting has been provided. Our DefaultConversionService has TimeZone<->ZoneId converters registered. And finally, we're using a custom parseTimeZoneString method now that doesn't accept the TimeZone.getTimeZone(String) GMT fallback for an invalid time zone id anymore.
+
+Issue: SPR-1528

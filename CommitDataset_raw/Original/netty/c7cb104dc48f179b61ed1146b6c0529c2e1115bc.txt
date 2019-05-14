@@ -1,0 +1,10 @@
+EPOLL Shutdown and Half Closed
+
+Motivation:
+The EPOLL module was not completly respecting the half closed state. It may have missed events, or procssed events when it should not have due to checking isOpen instead of the appropriate shutdown state.
+
+Modifications:
+- use FileDescriptor's isShutdown* methods instead of isOpen to check for processing events.
+
+Result:
+Half closed code in EPOLL module is more correct.

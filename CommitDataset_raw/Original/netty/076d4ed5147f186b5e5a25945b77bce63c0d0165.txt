@@ -1,0 +1,14 @@
+[#4205] Correctly set EPOLLOUT flag whe writeBytes(...) was not able to write everything
+
+Motivation:
+
+writeBytes(...) missed to set EPOLLOUT flag when not all bytes were written. This could lead to have the EpollEventLoop not try to flush the remaining bytes once the socket becomes writable again.
+
+Modifications:
+
+- Move setting EPOLLOUT flag logic to one point so we are sure we always do it.
+- Move OP_WRITE flag logic to one point as well.
+
+Result:
+
+Correctly try to write pending data if socket becomes writable again.

@@ -1,0 +1,15 @@
+Support non thread-safe ScriptEngine in ScriptTemplateView
+
+This commit adds a new sharedEngine property to ScriptTemplateConfigurer
+and ScriptTemplateView in order to support non thread-safe ScriptEngine
+implementations like Nashorn.
+
+When this flag is set to false, the engine is retrieved from a
+ThreadLocal<ScriptEngine> field instead of a ScriptEngine one.
+
+Also as part of this commit, all the initialization logic has been moved from
+ScriptTemplateConfigurer to ScriptTemplateView since the script engine can
+now be lazily initialized multiple time in the view when sharedEngine is
+set to false.
+
+Issue: SPR-13034

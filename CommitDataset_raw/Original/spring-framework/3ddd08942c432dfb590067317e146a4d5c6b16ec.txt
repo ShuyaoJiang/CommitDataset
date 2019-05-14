@@ -1,0 +1,20 @@
+Polishing the new RESTful interface to the petclinic webapp (SPR-5487):
+
+* Eliminated redundant 'clinic' servlet mapping (was: http://localhost:8080/petclinic/clinic/owners; now: http://localhost:8080/petclinic/owners)
+* A parameterless GET for /owners now returns the list of all owners, rather than an error.
+* /owners/form is now /owners/search (distinguishes the 'search form' resource from the 'edit owner form' resource)
+* Eliminated any need for redirects, <welcome-file-list/>, and index.jsp. Deleted all of them.
+* Updated /owners/{oid}/edit to submit using PUT instead of POST
+* Updated URI for edit pet form from /owners/{oid}/pets/{pid} to /owners/{oid}/pets/{pid}/edit (the edit form is a distinct resource)
+* Updated /owners/{oid}/pets/{pid}/edit to submit using PUT instead of POST
+
+Changes unrelated to the web interface:
+
+* Partitioned up JSPs into new owners, pets, and vets folders.
+* Renamed those JSPs, e.g. ownerForm.jsp -> owners/form.jsp; findOwners.jsp -> owners/search.jsp; owners.jsp -> owners/list.jsp
+* Updated various controllers to respect the changes to the URI templates, etc.
+* Updated .classpath to include all necessary projects and libs to run the webapp successfully in WTP
+* Updated JSP error checking rules to relax validation of fragments like header.jsp and footer.jsp
+
+
+

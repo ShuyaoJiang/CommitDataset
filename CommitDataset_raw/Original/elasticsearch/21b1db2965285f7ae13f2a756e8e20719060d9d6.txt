@@ -1,0 +1,9 @@
+Remove assemble from build task when assemble removed
+
+Removes the `assemble` task from the `build` task when we have
+removed `assemble` from the project. We removed `assemble` from
+projects that aren't published so our releases will be faster. But
+That broke CI because CI builds with `gradle precommit build` and,
+it turns out, that `build` includes `check` and `assemble`. With
+this change CI will only run `check` for projects without an
+`assemble`.

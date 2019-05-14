@@ -1,0 +1,24 @@
+Allow callers to pass in a custom host resolver implementation.
+
+An HTTP client interacts with the network in two main ways: DNS
+lookups and connections to HTTP servers. OkHttp already abstracts
+the latter by allowing callers to pass in custom SocketFactory
+objects, but does not yet abstract the former.
+
+This change takes the existing internal Dns interface, which is
+currently used for testing, and turns it into a publicly
+accessible HostResolver interface. This allows callers to
+completely abstract all network interaction points.
+
+Examples of what this can be used for:
+
+1. Use alternative DNS implementations with different
+   performance / caching / ordering / parallelization / ...
+   characteristics than standard InetAddress.getAllByName.
+2. Resolve hosts using different DNS servers than the system
+   resolvers, or even non-DNS protocols (e.g., MDNS or even
+   NetBIOS/WINS) that are not supported by the system resolver.
+3. Do DNS lookups on specific networks, similarly to what
+   android_getaddrinfofornet does.
+
+Change-Id: I6e488acd938067e4c078c6ffe4d5eddb5f3951de

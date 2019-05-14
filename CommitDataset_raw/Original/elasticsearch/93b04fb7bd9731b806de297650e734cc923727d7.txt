@@ -1,0 +1,7 @@
+The default _parent field should not try to load global ordinals (#25851)
+
+The default _parent field tries to load global ordinals because it is created with eager_global_ordinals=true.
+This leads to an IllegalStateException because this field does not have doc_values.
+This change explicitely sets eager_global_ordinals to false in order to avoid the ISE on startup.
+
+Fixes #25849

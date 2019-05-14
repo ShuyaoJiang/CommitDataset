@@ -1,0 +1,11 @@
+DefaultHttp2RemoteFlowController may not write all pending bytes
+
+Motivation:
+DefaultHttp2RemoteFlowController attempts to write as many bytes as possible to transition the channel to not writable, and then relies on notification of channelWritabilityChange to continue writing. However the amount of bytes written by DefaultHttp2RemoteFlowController may not be the same number of bytes that is actually written to the channel due to other ChannelHandlers (SslHandler, compression, etc...) in the pipeline. This means there is a potential for the DefaultHttp2RemoteFlowController to be waiting for a channel writaiblity change event that will never come, and thus not write all queued data.
+
+Modifications:
+- DefaultHttp2RemoteFlowController should write pending bytes until there are no more, or until the channel is not writable.
+
+Result:
+DefaultHttp2RemoteFlowController will write all pending data.
+Fixes https://github.com/netty/netty/issues/4242

@@ -1,0 +1,9 @@
+Fix a bug in AbstractFuture.addListener where we failed to follow the contract precisely.
+
+ListenableFuture.addListener says that listeners should execute 'immediately' when the future is done.  However, because the old version of addListener only checked the listeners field, it is possible to observe that the future is done and that your listener would not execute immediately.  This cl fixes that by adding an explicit check for isDone.
+
+RELNOTES=Close a short race where you could observe that an AbstractFuture was done, but that listeners wouldn't execute immediately.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=212281545

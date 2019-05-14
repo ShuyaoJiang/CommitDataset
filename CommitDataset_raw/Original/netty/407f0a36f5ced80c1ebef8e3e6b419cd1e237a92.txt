@@ -1,0 +1,11 @@
+Simplify bundle generation / Add io.netty.versions.properties to all JARs
+
+- Fixes #2003 properly
+- Instead of using 'bundle' packaging, use 'jar' packaging.  This is
+  more robust because some strict build tools fail to retrieve the
+  artifacts from a Maven repository unless their packaging is not 'jar'.
+- All artifacts now contain META-INF/io.netty.version.properties, which
+  provides the detailed information about the build and repository.
+- Removed OSGi testsuite temporarily because it gives false errors
+  during split package test and examination.
+- Add io.netty.util.Version for easy retrieval of version information

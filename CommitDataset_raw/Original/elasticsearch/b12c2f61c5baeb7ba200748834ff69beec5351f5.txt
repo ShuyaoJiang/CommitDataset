@@ -1,0 +1,13 @@
+Use exact numDocs in synced-flush and metadata snapshot (#30228)
+
+Since #29458, we use a searcher to calculate the number of documents for
+a commit stats. Sadly, that approach is flawed. The searcher might no
+longer point to the last commit if it's refreshed. As synced-flush
+requires an exact numDocs to work correctly, we have to exclude all
+soft-deleted docs.
+
+This commit makes synced-flush stop using CommitStats but read an exact
+numDocs directly from an index commit.
+
+Relates #29458
+Relates #29530

@@ -1,0 +1,26 @@
+Support conditional updates in ServletWebRequest
+
+Prior to this commit, `ServletWebRequest.checkNotModified` would only
+support conditional GET/HEAD requests with "If-Modified-Since" and/or
+"If-None-Match" request headers. In those cases, the server would return
+"HTTP 304 Not Modified" responses if the resource didn't change.
+
+This commit adds support for conditional update requests, such as
+POST/PUT/DELETE requests with "If-Unmodified-Since" request headers.
+If the underlying resource has been modified since the specified date,
+the server will return a "409 Precondition failed" response status
+to prevent concurrent updates.
+
+Even if the modification status of the resource is reversed here
+(modified vs. not modified), we're keeping here the same intent for the
+return value, which signals if the response requires more processing or
+if the handler method can return immediately:
+
+```
+if (request.checkNotModified(lastModified)) {
+  // shortcut exit - no further processing necessary
+  return null;
+}
+```
+
+Issue: SPR-13863

@@ -1,0 +1,9 @@
+Refactor BindingContext initialization
+
+In preparation for SPR-15132.
+
+Turn the BindingContextFactory into ModelInitializer (both package
+private) since creating BindingContext itself is quite simple.
+
+The ModelInitializer also has only one field and no need to be aware
+of fields the RequestMappingHandlerAdapter.

@@ -1,0 +1,20 @@
+Watcher accounts constructed lazily (#36656)
+
+This fixes two bugs about watcher notifications:
+* registering accounts that had only secure settings was not possible before;
+these accounts are very much practical for Slack and PagerDuty integrations.
+* removes the limitation that, for an account with both secure and cluster settings,
+the admin had to first change/add the secure settings and only then add the
+dependent dynamic cluster settings. The reverse order would trigger a
+SettingsException for an incomplete account.
+
+The workaround is to lazily instantiate account objects, hoping that when accounts
+are instantiated all the required settings are in place. Previously, the approach
+was to greedily validate all the account settings by constructing the account objects,
+even if they would not ever be used by actions. This made sense in a world where
+all the settings were set by a single API. But given that accounts have dependent
+settings (that must be used together) that have to be changed using different APIs
+(POST _nodes/reload_secure_settings and PUT _cluster/settings), the settings group
+would technically be in an invalid state in between the calls.
+This fix builds account objects, and validates the settings, when they are
+needed by actions.

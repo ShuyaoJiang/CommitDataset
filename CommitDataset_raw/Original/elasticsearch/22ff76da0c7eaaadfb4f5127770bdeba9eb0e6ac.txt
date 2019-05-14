@@ -1,0 +1,40 @@
+Promote replica on the highest version node (#25277)
+
+* Promote replica on the highest version node
+
+This changes the replica selection to prefer to return replicas on the highest
+version when choosing a replacement to promote when the primary shard fails.
+
+Consider this situation:
+
+- A replica on a 5.6 node
+- Another replica on a 6.0 node
+- The primary on a 6.0 node
+
+The primary shard is sending sequence numbers to the replica on the 6.0 node and
+skipping sending them for the 5.6 node. Now assume that the primary shard fails
+and (prior to this change) the replica on 5.6 node gets promoted to primary, it
+now has no knowledge of sequence numbers and the replica on the 6.0 node will be
+expecting sequence numbers but will never receive them.
+
+Relates to #10708
+
+* Switch from map of node to version to retrieving the version from the node
+
+* Remove uneeded null check
+
+* You can pretend you're a functional language Java, but you're not fooling me.
+
+* Randomize node versions
+
+* Add test with random cluster state with multiple versions that fails shards
+
+* Re-add comment and remove extra import
+
+* Remove unneeded stuff, randomly start replicas a few more times
+
+* Move test into FailedNodeRoutingTests
+
+* Make assertions actually test replica version promotion
+
+* Rewrite test, taking Yannick's feedback into account

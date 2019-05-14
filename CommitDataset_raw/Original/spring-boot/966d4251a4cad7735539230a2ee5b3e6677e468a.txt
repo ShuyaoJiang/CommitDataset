@@ -1,0 +1,12 @@
+Warn against custom request factories in RestTemplateBuilder
+
+This commit adds a javadoc note about a usability issue described in
+gh-11255. While `RestTemplateBuilder` is an immutable class, providing a
+custom instance of request factory and deriving several
+builders/templates from that point may have some unexpected behavior,
+since that instance is shared amongst builders instances.
+
+This issue is fixed in Spring Boot 2.0 with a replacement method that
+leverages a `Supplier<ClientHttpRequestFactory>` instead.
+
+See gh-11255

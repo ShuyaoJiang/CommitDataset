@@ -1,0 +1,11 @@
+[#2643] Throw TooLongFrameException instead of using fireExceptionCaught
+
+Motivation:
+
+It's not always the case that there is another handler in the pipeline that will intercept the exceptionCaught event because sometimes users just sub-class. In this case the exception will just hit the end of the pipeline.
+
+Modification:
+Throw the TooLongFrameException so that sub-classes can handle it in the exceptionCaught(...) method directly.
+
+Result:
+Sub-classes can correctly handle the exception,

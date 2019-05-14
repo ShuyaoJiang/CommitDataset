@@ -1,0 +1,12 @@
+Abandon failure analysis if start of cycle cannot be determined
+
+Previously, BeanCurrentlyInCreationFailureAnalyzer would return
+a FailureAnalysis for any BeanCurrentlyInCreationException even if
+it could not determine where the cycle begins. This could lead to an
+inaccurate diagram of the cycle being output.
+
+This commit updates BeanCurrentlyInCreationFailureAnalyzer so that
+it abandons its analysis and returns null if it is unable to determine
+where the cycle begins.
+
+Closes gh-8164

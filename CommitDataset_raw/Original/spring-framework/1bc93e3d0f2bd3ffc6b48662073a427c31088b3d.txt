@@ -1,0 +1,24 @@
+Revisit nullability annotations
+
+This commit introduces the following changes.
+
+1) It adds a new Spring @NonNull annotation which allows to apply
+@NonNullApi semantic on a specific element, like @Nullable does.
+Combined with @Nullable, it allows partial null-safety support when
+package granularity is too broad.
+
+2) @Nullable and @NonNull can apply to ElementType.TYPE_USE in order
+to be used on generic type arguments (SPR-15942).
+
+3) Annotations does not apply to ElementType.TYPE_PARAMETER anymore
+since it is not supported yet (applicability for such use case is
+controversial and need to be discussed).
+
+4) @NonNullApi does not apply to ElementType.FIELD anymore since in a
+lot of use cases (private, protected) it is not part for the public API
++ its usage should remain opt-in. A dedicated @NonNullFields annotation
+has been added in order to set fields default to non-nullable.
+
+5) Updated Javadoc and reference documentation.
+
+Issue: SPR-15756

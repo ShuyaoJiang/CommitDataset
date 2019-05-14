@@ -1,0 +1,25 @@
+reduce lock contention in resource leak
+
+Motivation:
+ResourceLeakDetector shows two main problems, racy access and heavy lock contention.
+
+Modifications:
+This PR fixes this by doing two things:
+1.  Replace the sampling counter with a ThreadLocalRandom.  This has two benefits.
+    First, it makes the sampling ration no longer have to be a power of two.  Second,
+    it de-noises the continuous races that fight over this single value.  Instead,
+    this change uses slightly more CPU to decide if it should sample by using TLR.
+2.  DefaultResourceLeaks need to be kept alive in order to catch leaks.  The means
+    by which this happens is by a singular, doubly-linked list.  This creates a
+    large amount of contention when allocating quickly.  This is noticeable when
+    running on a multi core machine.
+
+    Instead, this uses a concurrent hash map to keep track of active resources
+    which has much better contention characteristics.
+
+Results:
+Better concurrent hygiene.  Running the gRPC QPS benchmark showed RLD taking about
+3 CPU seconds for every 1 wall second when runnign with 12 threads.
+
+There are some minor perks to this as well.  DefaultResourceLeak accounting is
+moved to a central place which probably has better caching behavior.

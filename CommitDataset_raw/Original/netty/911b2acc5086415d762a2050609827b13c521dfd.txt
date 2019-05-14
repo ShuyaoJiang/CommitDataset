@@ -1,0 +1,20 @@
+HTTP/2 Child Channel reading and flushing
+
+Motivation:
+If a child channel's read is triggered outside the parent channel's read
+loop then it is possible a WINDOW_UPDATE will be written, but not
+flushed.
+If a child channel's beginRead processes data from the inboundBuffer and
+then readPending is set to false, which will result in data not being
+delivered if in the parent's read loop and more data is attempted to be
+delievered to that child channel.
+
+Modifications:
+- The child channel must force a flush if a frame is written as a result
+of reading a frame, and this is not in the parent channel's read loop
+- The child channel must allow a transition from dequeueing from
+beginRead into the parent channel's read loop to deliver more data
+
+Result:
+The child channel flushes data when reading outside the parent's read
+loop, and has frames delivered more reliably.

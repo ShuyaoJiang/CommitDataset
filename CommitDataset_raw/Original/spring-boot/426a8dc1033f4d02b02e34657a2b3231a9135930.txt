@@ -1,0 +1,11 @@
+Store container installs in home directory
+
+Previously, deployment tests were storing the container archives in the
+default location (that is `/tmp`) for a total weight of 160MB. In case
+the temp directory is cleaned on CI, these have to be downloaded again.
+
+We're now configuring cargo to store these archives in the home directory
+instead. This should improve the speed and the stability of the
+deployment tests
+
+Closes gh-3861

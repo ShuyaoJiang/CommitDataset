@@ -1,0 +1,8 @@
+High-level client: list tasks failure to not lose nodeId (#31001)
+
+This commit reworks testing for `ListTasksResponse` so that random
+fields insertion can be tested and xcontent equivalence can be checked
+too. Proper exclusions need to be configured, and failures need to be
+tested separately. This helped finding a little problem, whenever there
+is a node failure returned, the nodeId was lost as it was never printed
+out as part of the exception toXContent.

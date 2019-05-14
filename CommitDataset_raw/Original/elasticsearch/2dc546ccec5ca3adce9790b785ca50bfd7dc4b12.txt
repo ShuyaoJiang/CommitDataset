@@ -1,0 +1,13 @@
+Don't break allocation if resize source index is missing (#29311)
+
+DiskThresholdDecider currently assumes that the source index of a resize operation (e.g. shrink)
+is available, and throws an IndexNotFoundException otherwise, thereby breaking any kind of shard
+allocation. This can be quite harmful if the source index is deleted during a shrink, or if the source
+index is unavailable during state recovery.
+
+While this behavior has been partly fixed in 6.1 and above (due to #26931), it relies on the order in
+which AllocationDeciders are executed (i.e. that ResizeAllocationDecider returns NO, ensuring that
+DiskThresholdDecider does not run, something that for example does not hold for the allocation
+explain API).
+
+This change adds a more complete fix, and also solves the situation for 5.6.

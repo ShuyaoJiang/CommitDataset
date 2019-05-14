@@ -1,0 +1,53 @@
+Revamp DNS codec
+
+Motivation:
+
+There are various known issues in netty-codec-dns:
+
+- Message types are not interfaces, which can make it difficult for a
+  user to implement his/her own message implementation.
+- Some class names and field names do not match with the terms in the
+  RFC.
+- The support for decoding a DNS record was limited. A user had to
+  encode and decode by him/herself.
+- The separation of DnsHeader from DnsMessage was unnecessary, although
+  it is fine conceptually.
+- Buffer leak caused by DnsMessage was difficult to analyze, because the
+  leak detector tracks down the underlying ByteBuf rather than the
+  DnsMessage itself.
+- DnsMessage assumes DNS-over-UDP.
+- To send an EDNS message, a user have to create a new DNS record class
+  instance unnecessarily.
+
+Modifications:
+
+- Make all message types interfaces and add default implementations
+- Rename some classes, properties, and constants to match the RFCs
+  - DnsResource -> DnsRecord
+  - DnsType -> DnsRecordType
+  - and many more
+- Remove DnsClass and use an integer to support EDNS better
+- Add DnsRecordEncoder/DnsRecordDecoder and their default
+  implementations
+  - DnsRecord does not require RDATA to be ByteBuf anymore.
+  - Add DnsRawRecord as the catch-all record type
+- Merge DnsHeader into DnsMessage
+- Make ResourceLeakDetector track AbstractDnsMessage
+- Remove DnsMessage.sender/recipient properties
+  - Wrap DnsMessage with AddressedEnvelope
+  - Add DatagramDnsQuest and DatagramDnsResponse for ease of use
+  - Rename DnsQueryEncoder to DatagramDnsQueryEncoder
+  - Rename DnsResponseDecoder to DatagramDnsResponseDecoder
+- Miscellaneous changes
+  - Add StringUtil.TAB
+
+Result:
+
+- Cleaner APi
+- Can support DNS-over-TCP more easily in the future
+- Reduced memory footprint in the default DnsQuery/Response
+  implementations
+- Better leak tracking for DnsMessages
+- Possibility to introduce new DnsRecord types in the future and provide
+  full record encoder/decoder implementation.
+- No unnecessary instantiation for an EDNS pseudo resource record

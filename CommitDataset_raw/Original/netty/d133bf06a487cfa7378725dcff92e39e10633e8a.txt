@@ -1,0 +1,13 @@
+Allow to schedule tasks up to Long.MAX_VALUE (#7972)
+
+Motivation:
+
+We should allow to schedule tasks with a delay up to Long.MAX_VALUE as we did pre 4.1.25.Final.
+
+Modifications:
+
+Just ensure we not overflow and put the correct max limits in place when schedule a timer. At worse we will get a wakeup to early and then schedule a new timeout.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7970.

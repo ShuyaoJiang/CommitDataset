@@ -1,0 +1,15 @@
+Clarify how to set compiler and runtime JDKs (#29101)
+
+This commit enhances the error messages reported when JAVA_HOME and
+RUNTIME_JAVA_HOME are not correctly set to point towards the minimum
+compiler and minimum runtime JDKs that are expected by the builds. The
+previous error message would say:
+
+Java 1.9 or above is required to build Elasticsearch
+
+which is confusing if the user does have a JDK 9 installation and is
+even the version that they have on their path yet they have JAVA_HOME
+pointing to another JDK installation. The error message reported after
+this change is:
+
+the environment variable JAVA_HOME must be set to a JDK installation directory for Java 1.9 but is [/usr/java/jdk-8] corresponding to [1.8]

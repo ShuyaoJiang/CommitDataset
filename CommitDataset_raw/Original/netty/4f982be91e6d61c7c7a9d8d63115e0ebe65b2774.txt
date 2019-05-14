@@ -1,0 +1,10 @@
+DefaultPromise internal state dependent on Signal
+
+Motivation:
+DefaultPromise's internal state depends upon specific Signal objects. These Signal objects can be used externally which causes the DefaultPromise object API to not function correct and state to become corrupted.
+
+Modifications:
+- DefaultPromise shouldn't depend upon Signal for its internal state
+
+Result:
+Fixes https://github.com/netty/netty/issues/7707

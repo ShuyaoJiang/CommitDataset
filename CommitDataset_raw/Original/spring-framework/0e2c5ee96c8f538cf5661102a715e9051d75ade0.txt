@@ -1,0 +1,23 @@
+Enhance ParameterizableViewController
+
+This change two new capabilities to ParameterizableViewController:
+
+ - configure a View instance (in addition to view name)
+ - configure response status code
+
+The status code may be useful to send a 404 while also writing to the
+body using a view.
+
+The status code may also be used to override the redirect status code
+of RedirectView. Even today it's possible to configure a "redirect:"
+prefixed view name but the status code could not be selected. When a
+3xx status is set, the code is passed on to the RedirectView while the
+view name is automatically prefixed with "redirect:" (if not already).
+
+For full control over RedirectView it is now also possible to
+parameterize the controller with a View instance.
+
+As one more possible resulting variation, given status 204 and no view
+the request is considered handled (controller returns null).
+
+This change is preparation for SPR-11543.

@@ -1,0 +1,5 @@
+Fatal errors should crash the dispatcher thread
+
+This is an imperfect fix as uncaught exceptions reaching OkHttpCall which are not fatal still only log, but most of the adapters are defending against anything getting this far already.
+
+Also contained is a fix for the RxJava 2 async adapter. Non-200 responses delivered to the body observer would be forwarded to onError. If that callback threw a fatal exception, it would be re-delivered to the body observer despite it having already called a downstream terminal method. The fatal error should have been propagated by the async observer instead of attempting to make its way back downstream.

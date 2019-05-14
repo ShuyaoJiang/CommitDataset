@@ -1,0 +1,18 @@
+[ML] Increase default limit on ML jobs per node from 10 to 20 (elastic/x-pack-elasticsearch#3141)
+
+Following the changes of elastic/x-pack-elasticsearch#2975 the hard limit on the number of ML jobs
+per node is no longer the only limiting factor.  Additionally there is
+now a limit based on the estimated memory usage of the jobs, and this is
+expected to provide a more sensible limit that accounts for differing
+resource requirements per job.
+
+As a result, it makes sense to raise the default for the hard limit on
+the number of jobs, on the assumption that the memory limit will prevent
+the node becoming overloaded if an attempt is made to run many large jobs.
+Increasing the hard limit will allow more small jobs to be run than was
+previously the case by default.
+
+Of course, this change to the default will have no effect for customers
+who have already overridden the default in their config files.
+
+Original commit: elastic/x-pack-elasticsearch@9fed1d1237ddd954d7d973d4ea404b79451e9e69

@@ -1,0 +1,10 @@
+percolator: Do not take duplicate query extractions into account for minimum_should_match attribute
+
+If a percolator query contains duplicate query clauses somewhere in the query tree then
+when these clauses are extracted then they should not affect the msm.
+
+This can lead a percolator query that should be a valid match not become a candidate match,
+because at query time, the msm that is being used by the CoveringQuery would never match with
+the msm used at index time.
+
+Closes #28315

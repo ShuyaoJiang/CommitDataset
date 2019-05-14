@@ -1,0 +1,78 @@
+Introduce (Annotation)SessionFactoryBuilder types
+
+Large refactoring of existing *SessionFactoryBean hierarchy designed to
+support configuration of Hibernate SessionFactory objects within
+@Configuration class @Bean methods without forcing use of a
+FactoryBean type, which is generally discouraged due to awkwardness
+of programming model and lifecycle issues.  Refactored and new types
+include:
+
+    * Removal of AbstractSessionFactoryBean, replacing it with
+      SessionFactoryBeanSupport abstract base class
+
+    * Introduction of SessionFactoryBuilder and
+      AnnotationSessionFactoryBuilder types, both direct subclasses of
+      SessionFactoryBuilderSupport. These types are intended for direct
+      use within @Bean methods. They expose method-chainable set*
+      methods allowing for concise and convenient use. See JavaDoc
+      on both types for usage examples.
+
+    * LocalSessionFactoryBean and AnnotationSessionFactoryBean types are
+      now subclasses, respectively, of the *Builder types above.
+
+LSFB and ASFB backward-compatibility has been maintained almost
+entirely. The one exception is that there is no longer a protected
+convertHibernateAccessException() method available in the hierarchy.
+This method was not likely often used anyway and has been replaced
+by the new (and public) setPersistenceExceptionTranslator() which
+accepts instances of type HibernateExceptionTranslator as introduced in
+SPR-8076.
+
+LSFB and ASFB setter method signatures have changed. They no longer
+return void in standard JavaBeans style but rather, and due to extending
+the *Builder types above, return the 'this' reference. This posed a
+problem because the Spring container has to date been unable to detect
+and provide dependency injection against non-void returning setter
+methods. This limitation was due to the way that the default JavaBeans
+Introspector class and its getBeanInfo() method works, and prompted the
+introduction and intergration of ExtendedBeanInfo, already completed in
+SPR-8079. So have no concern if you notice this signature change - it
+all works.
+
+Certain deprecations have been made:
+
+    * All LSFB/ASFB methods related to Hibernate's CacheProvider SPI,
+      reflecting its deprecation in Hibernate 3.3 in favor of the new
+      RegionFactory SPI. Note these methods have been preserved only
+      on the FactoryBean types. The new *SessionFactoryBuilder
+      supertypes do not expose CacheProvider services at all.
+
+    * All protected LSFB/ASFB methods that accept a Hibernate
+      Configuration parameter, such as newSessionFactory(Configuration),
+      postProcessMappings(Configuration) and
+      postProcessConfiguration(Configuation), in favor of no-arg methods
+      with the same names. Due to the nature of the hierarchy
+      refactoring mentioned above, the Configuration instance is always
+      available when these methods are called, thus no need to pass it
+      in as a parameter.
+
+In the process, our approach to automatic detection of Hibernate dialect
+has been improved (it was in fact broken before). Thanks to James
+Roper for his suggestion in SPR-7936 as to how to fix this.
+
+See HibernateSessionFactoryConfigurationTests as a starting point for
+understanding the new builder-style approach to SessionFactory creation.
+Note especially use of the SessionFactoryBuilder#doWithConfiguration
+method which allows for direct programmatic configuration of the Native
+Hibernate (Annotation)Configuration API.
+
+As a final note, AnnotationConfiguration has been deprecated in
+Hibernate 3.6, and great pains have been taken to ensure that users
+of any supported Hibernate version (3.2 -> 3.6) will never need to
+(a) cast from Configuration to AnnotationConfiguration or (b)
+experience deprecation warnings due to being forced to use the
+AnnotationConfiguration API. Explore the JavaDoc around the
+doWithConfiguration() method and HibernateConfigurationCallback type
+for complete details.
+
+Issue: SPR-8066, SPR-7936, SPR-8076, SPR-8098

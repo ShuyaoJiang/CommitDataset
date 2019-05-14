@@ -1,0 +1,21 @@
+Expose all permits acquisition in IndexShard and TransportReplicationAction (#35540)
+
+This pull request exposes two new methods in the IndexShard and 
+TransportReplicationAction classes in order to allow transport replication 
+actions to acquire all index shard operation permits for their execution.
+
+It first adds the acquireAllPrimaryOperationPermits() and the 
+acquireAllReplicaOperationsPermits() methods to the IndexShard class 
+which allow to acquire all operations permits on a shard while exposing 
+a Releasable. It also refactors the TransportReplicationAction class to 
+expose two protected methods (acquirePrimaryOperationPermit() and 
+acquireReplicaOperationPermit()) that can be overridden when a transport 
+replication action requires the acquisition of all permits on primary and/or 
+replica shard during execution.
+
+Finally, it adds a TransportReplicationAllPermitsAcquisitionTests which
+ illustrates how a transport replication action can grab all permits before 
+adding a cluster block in the cluster state, making subsequent operations 
+that requires a single permit to fail).
+
+Related to elastic #33888

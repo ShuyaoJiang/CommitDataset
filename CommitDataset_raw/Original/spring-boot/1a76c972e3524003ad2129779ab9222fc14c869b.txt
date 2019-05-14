@@ -1,0 +1,18 @@
+Always install new GrapeEngine
+
+Previously, GrapeEngineInstaller would only install its GrapeEngine
+if an engine had not already been installed. As the Grape class stores
+the engine in a static field, this meant that the engine would only be
+installed once for the lifetime of Grape's classloader. This caused
+an ordering issue in SampleIntegrationTests.
+
+The test for the integration sample clears the
+disableSpringSnapshotRepos system property to allow M1 of the
+integration DSL to be resolved. However, this property is only
+examined and honoured in AetherGrapeEngine's constructor. If another
+test had run and had already created and installed an
+AetherGrapeEngine, the new AetherGrapeEngine that allowed the use of
+snapshot repositories would not be installed and the test would fail.
+
+This commit updates GrapeEngineInstaller so that it always installs
+its GrapeEngine, overwriting any previously installed engine.

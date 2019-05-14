@@ -1,0 +1,16 @@
+[ML] Tolerate a body without timestamp for get_buckets with a timestamp (elastic/x-pack-elasticsearch#2640)
+
+When getting a single bucket, the get_buckets API can take a timestamp
+either in the body or in the URL.  Prior to this change, if a timestamp
+was specified in the URL but a body not containing a timestamp was specified
+(either empty or containing other parameters like exclude_interim or sort)
+then it would cause a bad_request exception.  This in turn causes problems
+for clients that cannot send a body when GETting and always send a body when
+POSTing.
+
+This change fixes get_buckets to always read any timestamp in the URL, even
+when a body is sent.
+
+relates elastic/x-pack-elasticsearch#2515
+
+Original commit: elastic/x-pack-elasticsearch@5c23dd972edb6f95aa7ccd868306f60abcf330b1

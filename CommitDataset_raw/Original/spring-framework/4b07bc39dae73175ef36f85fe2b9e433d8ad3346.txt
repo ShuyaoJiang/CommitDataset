@@ -1,0 +1,14 @@
+Always set heart-beat header in STOMP CONNECTED frames
+
+Since SPR-10954, the SimpleBrokerMessageHandler supports `heart-beats`.
+
+Even if the STOMP spec states that the `heart-beat` header is OPTIONAL,
+and if absent considered as `heart-beat: 0,0`,
+some clients rely on this to be set in CONNECTED frames.
+
+This commit adds this header information even if no task
+scheduler/heart-beat have been configured.
+
+See: https://stomp.github.io/stomp-specification-1.2.html#Heart-beating
+
+Issue: SPR-10954

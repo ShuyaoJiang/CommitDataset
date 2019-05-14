@@ -1,0 +1,50 @@
+Support initial delay attribute for scheduled tasks
+
+java.util.concurrent's ScheduledExecutorService and its #schedule*
+methods allow for an 'initialDelay' parameter in milliseconds.
+Similarly, Spring's TaskExecutor abstraction allows for a concrete
+'startTime' expressed as a Date. However, Spring's <task:scheduled> XML
+element and @Scheduled annotation have, to date, not allowed for an
+initial delay parameter that can be propagated down to the underlying
+TaskScheduler/ScheduledExecutorService.
+
+This commit introduces initial-delay and #initialDelay attributes to
+task:scheduled and @Scheduled respectively, both indicating the number
+of milliseconds to wait before the first invocation of the method in
+question. Specifying a delay in this fashion is only valid in
+conjunction with fixed-rate and fixed-delay tasks (i.e. not with cron
+or trigger tasks).
+
+The principal changes required to support these new attributes lie in
+ScheduledTaskRegistrar, which previously supported registration of
+tasks in the form of a Runnable and a Long parameter indicating (in the
+case of fixed-rate and fixed-delay tasks), the interval with which the
+task should be executed. In order to accommodate a third (and optional)
+'initialDelay' parameter, the IntervalTask class has been added as a
+holder for the Runnable to be executed, the interval in which to run
+it, and the optional initial delay. For symmetry, a TriggerTask and
+CronTask have also been added, the latter subclassing the former. And a
+'Task' class has been added as a common ancestor for all the above.
+
+One oddity of the implementation is in the naming of the new
+setters in ScheduledTaskRegistrar. Prior to this commit, the setters
+were named #setFixedDelayTasks, #setFixedRateTasks, etc, each accepting
+a Map<Runnable, long>. In adding new setters for each task type, each
+accepting a List<IntervalTask>, List<CronTask> etc, naturally the
+approach would be to use method overloading and to introduce methods
+of the same name but with differing parameter types. Unfortunately
+however, Spring does not support injection against overloaded methods
+(due to fundamental limitations of the underlying JDK Introspector).
+This is not a problem when working with the ScheduledTaskRegistrar
+directly, e.g. from within a @Configuration class that implements
+SchedulingConfigurer, but is a problem from the point of view of the
+ScheduledTasksBeanDefinitionParser which parses the <task:scheduled>
+element - here the ScheduledTaskRegistrar is treated as a Spring bean
+and is thus subject to these limitations. The solution to this problem
+was simply to avoid overloading altogether, thus the naming of the new
+methods ending in "List", e.g. #setFixedDelayTasksList, etc. These
+methods exist primarily for use by the BeanDefinitionParser and are
+not really intended for use by application developers. The Javadoc for
+each of the new methods makes note of this.
+
+Issue: SPR-7022

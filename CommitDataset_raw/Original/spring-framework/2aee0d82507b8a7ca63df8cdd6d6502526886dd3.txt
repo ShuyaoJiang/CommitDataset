@@ -1,0 +1,13 @@
+Improve MessageMethodArgumentResolver
+
+This commit validates that the payload type of the message is
+assignable to the one declared in the method signature. If that
+is not the case, a meaningful exception message is thrown with
+the types mismatch.
+
+Prior to this commit, only the Message interface could be defined
+in the method signature: it is now possible to define a sub-class
+of Message if necessary which will match as long as the Message
+parameter is assignable to that type.
+
+Issue: SPR-11584

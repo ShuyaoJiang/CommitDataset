@@ -1,0 +1,7 @@
+Remove TranslogRecoveryPerformer (#24858)
+
+Splits TranslogRecoveryPerformer into three parts:
+- the translog operation to engine operation converter
+- the operation perfomer (that indexes the operation into the engine)
+- the translog statistics (for which there is already RecoveryState.Translog)
+This makes it possible for peer recovery to use the same IndexShard interface as bulk shard requests (i.e. Engine operations instead of Translog operations). It also pushes the "fail on bad mapping" logic outside of IndexShard. Future pull requests could unify the BulkShard and peer recovery path even more.

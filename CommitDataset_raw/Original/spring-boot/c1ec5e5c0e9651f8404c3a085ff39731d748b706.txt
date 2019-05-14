@@ -1,0 +1,47 @@
+Support @Grab without a version or group
+
+Usually, use of @Grab requires you to specify a group, module, and
+version when identifying a dependency. This can be done in two
+different ways:
+
+@Grab(group='alpha', module='bravo', version='1.0.0')
+@Grab('alpha:bravo:1.0.0')
+
+This commit allows users to only specify a module: the group is
+inferred and the version is the one dictated by the boot CLI. Both
+forms are supported:
+
+@Grab(module='bravo')
+@Grab('bravo')
+
+Groovy's global AST transformations, which is how Grab is implemented,
+do not support ordering and we need to augment the AST for the Grab
+annotation before its processed by the Grab AST transformation. To
+work around this, reflection is used to get hold of the compile
+operations in the conversion phase, and a new AST transformation is
+inserted immediately before the first AST transformation operation.
+
+To allow a module's groupId and version to be resolved consistently,
+META-INF/springcli.properties has been enhanced to include properties
+for each module that we want to support in the following form:
+
+<module>.groudId = <groudId>
+<module>.version = <version>
+
+<groupId> and <version> are taken from the Maven project's
+dependencies and VPP, a Velocity-based pre-processor, is used to
+automatically generate the enhanced properties file.
+
+To prevent pollution of spring-boot-cli's class path with the
+dependencies that are only required to populate springcli.properties,
+a separate project, spring-boot-cli-properties, has been created.
+spring-boot-cli depends upon this now project causing it to, via the
+shade plug, include the properties file in its jar.
+
+Previously DependencyCustomizer allow a dependency to be added by
+specifying its full coordinates, i.e. a group ID, artifact ID, and
+version. This commit updates DependencyCustomizer to only require
+an artifact/module ID. The group ID and version are then resolved
+using the same mechanism as the enhanced @Grab support.
+
+[#56328644] [bs-312] Allow @Grab without version

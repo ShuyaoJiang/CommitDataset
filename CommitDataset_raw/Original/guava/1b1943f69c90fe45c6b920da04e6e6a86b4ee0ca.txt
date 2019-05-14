@@ -1,0 +1,15 @@
+Add/document constructors for Forwarding* and their Standard* nested classes.
+Fix visibility of ForwardingNavigableSet.StandardDescendingSet constructor so that it's usable outside the package, e.g.,
+
+public static final class MySet<E> extends ForwardingNavigableSet<E> {
+@Override protected NavigableSet<E> delegate() {
+return delegate;
+}
+
+@Override public NavigableSet<E> descendingSet() {
+return new StandardDescendingSet(); // StandardDescendingSet() has protected access in com.google.common.collect.ForwardingNavigableSet.StandardDescendingSet
+}
+}
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=27336831

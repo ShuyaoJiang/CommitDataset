@@ -1,0 +1,22 @@
+Annotate all public AbstractTester subclasses with @Ignore.
+
+This prevents our internal Android test-suite builder from trying to run them directly.
+(The tests continue to run on the JVM (JUnit 3) test runner, which doesn't look for the JUnit 4 @Ignore annotation. Yes, it's a little strange that the Android test-suite builder respects the JUnit 4 annotation even for these JUnit 3 tests.)
+(I'm not 100% sure what happens to our generated TestSuiteBuilder suites under Android, as they're currently broken for other reasons (b/30575968). If this CL causes any problem for them, we'll have to deal with it later. I'm fairly sure that we're safe, though, as we generate code that constructs the test and calls its methods directly.)
+
+This in turn lets us back out our binary-under-test hack.
+
+And that means we no longer trigger b/69965697, so we start running more tests under Android:
+
+29 => 88 for collect.testing
+1526 => 1698 for labs.collect
+2519 => 5772(!) for collect
+(no change for primitives)
+
+(Note: I believe we're still ignoring suite() methods. That's kind of a good thing, since those would further increase the number of tests to run. I'm not sure if we even can run suite() methods with the default runner, as I believe it looks only for "test*" methods. I've been hoping to eventually split all the suite() methods into separate classes and put them through the generated-TestSuiteBuilder-test magic, but as noted above, that doesn't work for Android at the moment, anyway.)
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=181351240

@@ -1,0 +1,31 @@
+Reduce the amount of garbage produced by JarFile
+
+Previously, working with a JarFile created a large amount of garbage
+that was allocated on the thread local allocation buffer (TLAB).
+The TLAB allocations made a significant contribution to GC pressure
+and slowed down startup. This commit reduces the amount of garbage
+by making a number of changes.
+
+Reading from a RandomAccessDataFile has been reworked to avoid
+creating new RandomAccessFile instances. A single RandomAccessFile
+is now created for an entire jar file and it is used to read data from
+anywhere in that jar file, including entries in nested jar files. To
+ensure that reads remain thread-safe, a lock is taken on the
+RandomAccessFile that is shared by all RandomAccessDataFile instances
+that are provided access to (portions of) the same jar file.
+
+Reading all of the bytes from a RandomAccessData has been reworked to
+avoid the use of an InputStream that was created, used to read the
+data, and then thrown away. In place of the InputStream-based
+mechanism a method has been introduced that returns all of the
+RandomAccessData as a byte[]. Building on this change, a method has
+also been introduced to read a portion of a RandomAccessData as a
+byte[]. This avoids the need to create a new RandomAccessData
+subsection where the subsection was only used to read its entire
+contents and then thrown away.
+
+Decoding of an MS-DOS datetime has been reworked to use LocalDataTime
+rather than GregorianCalendar. The former produces less garbage than
+the latter.
+
+Closes gh-12226

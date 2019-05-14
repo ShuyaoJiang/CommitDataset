@@ -1,0 +1,17 @@
+Use sendError in ResponseStatusExceptionResolver
+
+Prior to this commit, the `ResponseStatusExceptionResolver` would use:
+* `HttpServletResponse.sendError` if both a status and a reason are set
+on the `@ResponseStatus` annotation
+* `HttpServletResponse.setStatus` if only a status is set on the
+`@ResponseStatus` annotation
+
+This is actually a change of behavior, since this Resolver was using
+`sendError` in all cases previously.
+
+Because this change can create issues such as
+https://github.com/spring-projects/spring-boot/issues/3623
+this commit rollbacks those changes and clarifies the behavior on the
+javadoc of the annotation itself.
+
+Issue: SPR-11193, SPR-13226

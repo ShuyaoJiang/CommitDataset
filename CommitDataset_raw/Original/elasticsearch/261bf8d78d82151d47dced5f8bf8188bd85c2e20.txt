@@ -1,0 +1,11 @@
+[Test] LocalExporterTests should wait for exporters to terminate in a finally block (elastic/x-pack-elasticsearch#1581)
+
+At the end of the test, LocalExporterTests checks if no more monitoring
+ data are exporter by checking multiple times the last time nodes_stats
+ documents were exported, stopping after 10 seconds. It does this in a
+ @After annotated method but it would be better to do this in a finally
+ block. Also, it should search for node_stats documents only if the
+ monitoring indices exist and are searchable to avoid some "all shards
+ failed" failures.
+
+Original commit: elastic/x-pack-elasticsearch@90ffb4affd55d0f25fdc546cf7ec0a0051e8a0ec

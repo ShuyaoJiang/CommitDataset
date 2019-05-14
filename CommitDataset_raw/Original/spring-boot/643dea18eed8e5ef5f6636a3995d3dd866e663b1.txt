@@ -1,0 +1,12 @@
+Accommodate with Lombok generation ordering
+
+Previously, if lombok was running before the configuration metadata
+annotation processor, duplicated keys were created as both the
+getter/setter and the special lombok handling applied.
+
+This commit makes sure to be lenient by removing duplicate metadata
+entries. This commit also makes sure to identify the getter of a
+nested group if present. That way, the sourceMethod is set consistently
+and avoid the creation of a duplicate group.
+
+Closes gh-8886

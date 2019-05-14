@@ -1,0 +1,9 @@
+Integrate retention leases to recovery from remote (#38829)
+
+This commit is the first step in integrating shard history retention
+leases with CCR. In this commit we integrate shard history retention
+leases with recovery from remote. Before we start transferring files, we
+take out a retention lease on the primary. Then during the file copy
+phase, we repeatedly renew the retention lease. Finally, when recovery
+from remote is complete, we disable the background renewing of the
+retention lease.

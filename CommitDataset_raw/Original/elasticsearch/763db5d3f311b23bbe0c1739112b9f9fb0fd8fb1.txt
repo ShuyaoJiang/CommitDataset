@@ -1,0 +1,7 @@
+Fix testCannotShrinkLeaderIndex (#38529)
+
+This test should no longer pass when the functionality it is intended to
+test is broken, as it now indexes a number of documents and verifies
+that the index is staying on the same step until after indexing and
+replication of those documents is finished. This prevents the test from
+passing if the leader index progresses in its lifecycle during that time.

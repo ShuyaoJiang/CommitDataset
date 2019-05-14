@@ -1,0 +1,20 @@
+Support Froyo.
+
+This makes a bunch of sad changes for compatibility:
+ - Using String.length() rather than String.isEmpty()
+ - Using String.getBytes(String) rather than String.getBytes(Charset)
+ - Using new String(..., String) rather than new String(..., Charset)
+ - Avoiding TimeUnit.DAYS
+
+I've tested this and the HTTP tests run perfectly fine on Froyo.
+The HTTPS tests time out due to a bug in Froyo that prevents
+its TLS library from working as a server. I manually verified
+that TLS works as a client without problem.
+
+I also tested this on Gingerbread. It passes all tests except
+for testConnectViaHttpProxyToHttpsUsingProxySystemProperty, which
+fails because of a bug in Gingerbread's java.net.ProxySelector.
+
+This change introduces caching reflective objects for NPN access.
+That'll make clients that make multiple SSL connections slightly
+more efficient.

@@ -1,0 +1,18 @@
+Override placeholder/error/fallback equivalents when id or drawable is set.
+
+Glide will always check for a placeholder/error/fallback drawable first
+and only check the id equivalents if the drawable is null. Previously,
+when setting a placeholder/errror/fallback id on a RequestOptiosn
+object, we did not unset the drawable equivalents. As a result, it
+wasn't previously possible to replace a placeholder/error/fallback
+drawable by setting the equivalent id.
+
+After this change any calls to placeholder/error/fallback will always
+replace previous calls, regardless of whether and id or drawable is
+provided.
+
+Fixes #3068.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=195990546

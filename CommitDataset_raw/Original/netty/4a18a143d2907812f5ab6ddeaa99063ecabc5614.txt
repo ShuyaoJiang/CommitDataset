@@ -1,0 +1,13 @@
+Only set lastReadTime if an read actually happened before in IdleStateHandler.
+
+Motivation:
+
+IdleStateHandler and ReadTimeoutHandler could mistakely not fire an event even if no channelRead(...) call happened.
+
+Modifications:
+
+Only set lastReadTime if a read happened before.
+
+Result:
+
+More correct IdleStateHandler / ReadTimeoutHandler.

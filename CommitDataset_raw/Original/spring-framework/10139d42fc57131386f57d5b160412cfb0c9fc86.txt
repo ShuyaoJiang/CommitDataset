@@ -1,0 +1,12 @@
+Revisit meaning of response.close() in HTTP client
+
+Prior to this issue, SPR-15920 added this new `close()` method which was
+supposed to be called to clean resources after response processing.
+
+This commit changes the meaning of that method: calling `close()` will
+close the underlying HTTP connection. This has to be called if the
+response body is not consumed by the application, since at that point
+the underlying connection might be in an inconsistent state if shared in
+a connection pool.
+
+Issue: SPR-15993

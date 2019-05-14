@@ -1,0 +1,21 @@
+Correctly propagate write failures from ChunkedWriteHandler (#8716)
+
+Motivation:
+
+ChunkedWriteHandler should report write operation as failed
+in case *any* chunked was not written. Right now this is not
+true for the last chunk.
+
+Modifications:
+
+* Check if the appropriate write operation was succesfull when
+  reporting the last chunk
+
+* Skip writing chunks if the write operation was already marked
+  as "done"
+
+* Test cases to cover write failures when dealing with chunked input
+
+Result:
+
+Fix https://github.com/netty/netty/issues/8700

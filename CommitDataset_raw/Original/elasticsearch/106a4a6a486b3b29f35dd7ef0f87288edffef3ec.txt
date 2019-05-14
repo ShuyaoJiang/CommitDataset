@@ -1,0 +1,5 @@
+Unmute WildFly tests in FIPS JVM (#32814)
+
+WildflyIT test fails in a FIPS JVM due to the amount of output in stderr. The excessive stderr output is due to https://bugs.openjdk.java.net/browse/JDK-8202893 and is not an indication of a failure that should be tracked.
+This commit adjusts the limit to something more lenient that would allow the test to succeed.
+Reverts #32543

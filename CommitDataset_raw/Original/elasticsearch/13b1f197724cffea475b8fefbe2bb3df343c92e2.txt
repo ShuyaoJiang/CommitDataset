@@ -1,0 +1,8 @@
+[Painless] Add extensive tests for def to primitive casts (#36455)
+
+This adds tests for each possible cast of def to a primitive type both implicit 
+and explicit. This also fixes a minor bug where we were only checking the type 
+of a def to be Number in some explicit casts. This does not work because it 
+allows possible unintended casts from BigInteger and BigDecimal to primitive 
+types since they both extend Number but are not included as part of the 
+Painless casting model.

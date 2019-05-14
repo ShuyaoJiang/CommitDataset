@@ -1,0 +1,13 @@
+Always include initial handshake exception when throwing SslHandshakeException (#9008)
+
+Motivation:
+
+A callback may already have stored a initial handshake exception in ReferenceCountedOpenSslEngine so we should include it when throwing a SslHandshakeException to ensure the user has all the infos when debugging.
+
+Modifications:
+
+Include initial handshake exception
+
+Result:
+
+Include all erros when throwing the SslHandshakeException.

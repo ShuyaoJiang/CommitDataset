@@ -1,0 +1,15 @@
+Add Reactive CORS support
+
+This is a port of Spring MVC CORS support for Spring Web Reactive:
+ - CORS classes keep the same name but are in the
+   web.cors.reactive package
+ - CorsConfiguration is reused because not tied to Servlet API
+ - CORS HandlerMapping integration is done at
+   AbstractHandlerMapping level
+ - AbstractUrlHandlerMapping and AbstractHandlerMethodMapping
+   have been slightly modified to call
+   AbstractHandlerMapping#processCorsRequest()
+ - Both global CORS configuration + @CrossOrigin support have
+   been implemented
+
+Issue: SPR-14545

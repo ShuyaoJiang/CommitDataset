@@ -1,0 +1,10 @@
+Always pass a host to NetworkSecurityPolicy.isCleartextTrafficPermitted().
+
+Previously we were misinterpretting which hosts this method applied to.
+Suppose an Android app was configured to require TLS for bank.com and
+not for any other address. The NetworkSecurityPolicy.isCleartextTrafficPermitted()
+method would return false because cleartext traffic wasn't universally
+permitted. And OkHttp would incorrectly forbid cleartext communication
+to other hosts like puppies.com.
+
+Closes: https://github.com/square/okhttp/issues/2640

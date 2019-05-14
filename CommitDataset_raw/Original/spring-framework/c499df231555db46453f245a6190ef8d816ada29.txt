@@ -1,0 +1,10 @@
+Fix issue with resolving Errors controller argument
+
+The ErrorsMethodArgumentResolver expects the preceding @ModelAttribute
+in the controller method signature to be the last one added in the
+model -- an assumption that can break if a model attribute is added
+earlier (e.g. through a @ModelAttribute method) and more attributes
+are added as well. This fix ensures when an @ModelAttribute is resolved
+as a controller method argument it has the highest index in the model.
+
+Issue: SPR-9378

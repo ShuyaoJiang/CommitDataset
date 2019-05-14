@@ -1,0 +1,18 @@
+Remove RPM and Debian integration tests
+
+We have tests that manually unpackage the RPM and Debian package
+distributions and start a cluster manually (not from the service) and
+run a basic suite of integration tests against them. This is problematic
+because it is not how the packages are intended to be used (instead,
+they are intended to be installed using the package installation tools,
+and started as services) and so violates assumptions that we make about
+directory paths. This commit removes these integration tests, instead
+relying on the packaging tests to ensure the packages are not
+broken. Additionally, we add a sanity check that the package
+distributions can be unpackaged. Finally, with this change we can remove
+some leniency from elasticsearch-env about checking for the existence of
+the environment file which the leniency was there solely for these
+integration tests.
+
+Relates #27725
+

@@ -1,0 +1,13 @@
+LiveBeansView does not rely on application contexts order anymore
+
+This commit makes sure that the `unregister` order of registered
+application contexts has no incidence on the removal of the LiveBeansView
+MBean.
+
+Rather than using the last application context's name to compute the
+identity of the MBean to remove, the identity is stored when the MBean is
+created.
+
+This commit also adds missing tests.
+
+Issue: SPR-14848

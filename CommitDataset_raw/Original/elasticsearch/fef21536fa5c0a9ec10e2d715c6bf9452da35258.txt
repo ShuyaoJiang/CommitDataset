@@ -1,0 +1,17 @@
+Bundle java in distributions (#38013)
+
+* Bundle java in distributions
+
+Setting up a jdk is currently a required external step when installing
+elasticsearch. This is particularly problematic for the rpm/deb packages
+as installing a jdk in the same package installation command does not
+guarantee any order, so must be done in separate steps. Additionally,
+JAVA_HOME must be set and often causes problems in selecting a correct
+jdk when, for example, the system java is an older unsupported version.
+
+This commit bundles platform specific openjdks into each distribution.
+In addition to eliminating the issues above, it also presents future
+possible improvements like using jlink to build jdk images only
+containing modules that elasticsearch uses.
+
+closes #31845

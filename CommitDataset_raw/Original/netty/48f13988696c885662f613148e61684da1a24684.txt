@@ -1,0 +1,17 @@
+Disable caching of PooledByteBuf for different threads.
+
+Motivation:
+
+We introduced a PoolThreadCache which is used in our PooledByteBufAllocator to reduce the synchronization overhead on PoolArenas when allocate / deallocate PooledByteBuf instances. This cache is used for both the allocation path and deallocation path by:
+  - Look for cached memory in the PoolThreadCache for the Thread that tries to allocate a new PooledByteBuf and if one is found return it.
+  - Add the memory that is used by a PooledByteBuf to the PoolThreadCache of the Thread that release the PooledByteBuf
+
+This works out very well when all allocation / deallocation is done in the EventLoop as the EventLoop will be used for read and write. On the otherside this can lead to surprising side-effects if the user allocate from outside the EventLoop and and pass the ByteBuf over for writing. The problem here is that the memory will be added to the PoolThreadCache that did the actual write on the underlying transport and not on the Thread that previously allocated the buffer.
+
+Modifications:
+
+Don't cache if different Threads are used for allocating/deallocating
+
+Result:
+
+Less confusing behavior for users that allocate PooledByteBufs from outside the EventLoop.

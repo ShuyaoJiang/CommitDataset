@@ -1,0 +1,11 @@
+HTTP/2 Headers Code Using String instead of AsciiString
+
+Motivation:
+The HTTP/2 headers code should be using binary string (currently AsciiString) objects instead of String objects. The DefaultHttp2HeadersEncoder was still using String for sensitiveHeaders.
+
+Modifications:
+- Remove the usage of String from DefaultHttp2HeadersEncoder.
+- Introduce an interface to determine if a header name/value is sensitive or not to 1. prevent necessarily creating/copying sets. 2. Allow the name/value to be considered when checking if sensitive.
+
+Result:
+No more String in DefaultHttp2HeadersEncoder and less required set creation/operations.

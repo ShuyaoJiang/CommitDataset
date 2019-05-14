@@ -1,0 +1,16 @@
+Bypass conversion when possible
+
+Prior to this commit conversion between like types would often result in
+a copy of the object. This can be problematic in the case of large byte
+arrays and objects that do not have a default constructor.
+
+The ConversionService SPI now includes canBypassConvert methods that can
+be used to deduce when conversion is not needed. Several existing
+converters have been updated to ensure they only apply when source and
+target types differ.
+
+This change introduces new methods to the ConversionService that will
+break existing implementations. However, it anticipated that most users
+are consuming the ConversionService interface rather then extending it.
+
+Issue: SPR-9566

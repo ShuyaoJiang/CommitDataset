@@ -1,0 +1,14 @@
+Fix offset calculation in PooledByteBufAllocator when used
+
+Motivation:
+
+When we create new chunk with memory aligned, the offset of direct memory should be
+'alignment - address & (alignment - 1)', not just 'address & (alignment - 1)'.
+
+Modification:
+
+Change offset calculating formula to offset = alignment - address & (alignment - 1) in PoolArena.DirectArena#offsetCacheLine and add a unit test to assert that.
+
+Result:
+
+Correctly calculate offset.

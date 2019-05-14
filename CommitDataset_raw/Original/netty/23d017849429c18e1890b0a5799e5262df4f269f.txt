@@ -1,0 +1,29 @@
+Introduce EventExecutor.shutdownGracefully() that deprecates shutdown()
+
+shutdownGracefully() provides two optional parameters that give more
+control over when an executor has to be shut down.
+
+- Related issue: #1307
+- Add shutdownGracefully(..) and isShuttingDown()
+- Deprecate shutdown() / shutdownNow()
+- Replace lastAccessTime with lastExecutionTime and update it after task
+  execution for accurate quiet period check
+  - runAllTasks() and runShutdownTasks() update it automatically.
+  - Add updateLastExecutionTime() so that subclasses can update it
+- Add a constructor parameter that tells not to add an unncessary wakeup
+  task in execute() if addTask() wakes up the executor thread
+  automatically.  Previously, execute() always called wakeup() after
+  addTask(), which often caused an extra dummy task in the task queue.
+- Use shutdownGracefully() wherever possible / Deprecation javadoc
+- Reduce the running time of SingleThreadEventLoopTest from 40s to 15s
+  using custom graceful shutdown parameters
+
+- Other changes made along with this commit:
+  - takeTask() does not throw InterruptedException anymore.
+    - Returns null on interruption or wakeup
+  - Make sure runShutdownTasks() return true even if an exception was
+    raised while running the shutdown tasks
+  - Remove unnecessary isShutdown() checks
+  - Consistent use of SingleThreadEventExecutor.nanoTime()
+
+Replace isWakeupOverridden with a constructor parameter

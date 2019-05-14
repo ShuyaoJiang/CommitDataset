@@ -1,0 +1,9 @@
+Optimize CharStreams.copy to take advantage of known Readable/Appendable types.
+
+The most common Readable is a Reader which has good support for reading char arrays, the most common Appendable is either a StringBuilder or a Writer, both of which have good support for writing char arrays.  Furthermore the default implementation of Reader.read(CharBuffer)  is less than ideal (copies the characters an extra time) and the default implementation of StringBuilder.append(CharBuffer) calls charAt() on every character (instead of trying to access the underlying array()) which incurs lots of bounds checks.  Similarly Writer.append(CharBufffer) calls toString() on the CharBuffer which incurs an extra copy.  So depending on the combination of types involved we may copy the bytes 4 times instead of 2.
+
+By adding specialized implementations we can avoid this overhead most of the time and deal with simple char arrays for our temporary buffers.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=161868537

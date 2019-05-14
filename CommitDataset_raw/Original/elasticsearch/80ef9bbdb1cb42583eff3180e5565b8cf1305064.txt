@@ -1,0 +1,7 @@
+Remove parameterization from TcpTransport (#27407)
+
+This commit is a follow up to the work completed in #27132. Essentially
+it transitions two more methods (sendMessage and getLocalAddress) from
+Transport to TcpChannel. With this change, there is no longer a need for
+TcpTransport to be aware of the specific type of channel a transport
+returns. So that class is no longer parameterized by channel type.

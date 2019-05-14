@@ -1,0 +1,10 @@
+Decode path vars when url decoding is turned off
+
+When URL decoding is turned off in AbstractHandlerMapping, the
+extracted path variables are also not encoded. Turning off URL decoding
+may be necessary for request mapping to work correctly when the path
+may contain the (encoded) special character '/'. At the same time there
+is no good reason not to leave path variables encoded. This change
+ensures path variables are encoded when URL decoding is turned off.
+
+Issue: SPR-9098

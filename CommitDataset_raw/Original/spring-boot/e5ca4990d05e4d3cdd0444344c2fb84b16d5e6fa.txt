@@ -1,0 +1,10 @@
+Fix bootstrap-hosts property detection with list
+
+Previously, if `spring.couchbase.bootstrap-hosts` was specified in YAML
+or with the `[Idx]` notation, the auto-configuration would not kick in.
+
+This is due to a limitation of `@ConditionalOnProperty` on a property of
+type Collection. This commit workarounds this limitation for now with a
+dedicated condition.
+
+Closes gh-7508

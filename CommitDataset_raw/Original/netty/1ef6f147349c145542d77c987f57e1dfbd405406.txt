@@ -1,0 +1,21 @@
+Trigger exceptionCaught() when VoidChannelPromise fails
+
+Related: #3190
+
+Motivation:
+
+When an outbound handler method raises an exception, its promise is
+marked as failed.  If the promise is done already, the exception is
+logged.
+
+When the promise is void, exceptionCaught() must be triggered to notify
+a user. However, ChannelHandlerInvokerUtil simply swallows it.
+
+Modifications:
+
+Do not swallow an exception when the promise is void.
+
+Result:
+
+A user who uses a void promise for an outbound operation will be
+notified on failure.

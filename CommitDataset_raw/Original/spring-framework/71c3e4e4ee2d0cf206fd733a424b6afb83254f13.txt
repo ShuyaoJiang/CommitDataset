@@ -1,0 +1,12 @@
+Fix empty URLs handling in ResourceUrlEncodingFilter
+
+Prior to this commit, the ResourceUrlEncodingFilter would fail with a
+StringIndexOutOfBoundsException when:
+
+* the current request has a servlet context
+* the URL to encode is relative and is shorter than the context value
+
+This change defensively checks for those lengths and delegates to the
+parent implementation if necessary.
+
+Issue: SPR-13018

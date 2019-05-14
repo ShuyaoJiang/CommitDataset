@@ -1,0 +1,13 @@
+SQL: Fix issue with wrong data type for scripted Grouping keys (#35969)
+
+When the grouping key of a GROUP BY is a painless script (functions are
+involved), the data type of the key was incorrect in certain cases
+(Boolean, IP, Date). This resulted in returning wrong data type for this
+columns in the query results. E.g.:
+
+```
+SELECT COUNT(*), a > 10 AS a FROM t GROUP BY a
+```
+
+Fixes: #35662
+

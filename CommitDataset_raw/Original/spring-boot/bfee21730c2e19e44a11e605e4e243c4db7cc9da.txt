@@ -1,0 +1,11 @@
+Detect path of exploded war correctly on Windows
+
+Previously, AbstractEmbeddedServletContainerFactory detected an
+exploded war by looking for `/WEB-INF/` in the path of its code
+source's location. This failed on Windows due to the use of `\` rather
+than `/` separators.
+
+This commit updates AbstractEmbeddedServletContainerFactory to
+uses the OS's separator rather than hardcoding `/`.
+
+Closes gh-8100

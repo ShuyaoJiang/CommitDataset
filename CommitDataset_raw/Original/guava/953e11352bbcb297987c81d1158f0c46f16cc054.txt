@@ -1,0 +1,18 @@
+Fixed a bug in rejectTypeVariable() where we failed to account for the owner type's type variables. For example:
+
+abstract class From<K> {
+class To<V> {
+TypeToken<To<V>> type() {
+return new TypeToken<To<V>>(getClass()) {};
+}
+}
+
+static <K> TypeToken<From<K>.To<?>> cheat() {
+return new From<K>().new To<String>() {}.type();
+}
+
+TypeToken<From<String>.To<?>> notReallyString = TheClass.<String>cheat();
+notReallyString.rejectTypeVariables(); // Should throw
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=45444012

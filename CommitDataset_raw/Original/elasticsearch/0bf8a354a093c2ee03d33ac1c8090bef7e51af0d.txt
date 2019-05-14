@@ -1,0 +1,7 @@
+Use `global_ordinals_hash` execution mode when sorting by sub aggregations. (#26014)
+
+This is a safer default since sorting by sub aggregations prevents these
+aggregations from being deferred. `global_ordinals_hash` will at least
+make sure that we do not use memory for buckets that are not collected.
+
+Closes #24359

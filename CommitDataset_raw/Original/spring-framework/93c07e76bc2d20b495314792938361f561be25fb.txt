@@ -1,0 +1,14 @@
+Return null instead of empty cookies array in Spring MVC Test
+
+Prior to this commit, MockHttpServletRequestBuilder always supplied an
+array of cookies to the MockHttpServletRequest that it built, even if
+the array was empty.
+
+However, this violates the contract of HttpServletRequest. According to
+the Servlet API, the getCookies() method "returns null if no cookies
+were sent."
+
+This commit ensures that MockHttpServletRequestBuilder no longer
+configures an empty array of cookies in the mock request that it builds.
+
+Issue: SPR-13314

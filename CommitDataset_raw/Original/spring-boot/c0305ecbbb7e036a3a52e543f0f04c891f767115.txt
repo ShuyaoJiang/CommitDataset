@@ -1,0 +1,8 @@
+Take care registering DataSourceInitializer
+
+The DataSourceInitializer is instantiated early by the
+DataSourceInitializerPostProcessor, so it has to live in
+isolation (in its own @Configuration) to prevent early
+instantiation of the DataSourceAutoConfiguration.
+
+Fixes gh-1166

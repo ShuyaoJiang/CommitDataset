@@ -1,0 +1,13 @@
+Ensure the same ByteBufAllocator is used in the EmbeddedChannel when compress / decompress. Related to [#5294]
+
+Motivation:
+
+The user may specify to use a different allocator then the default. In this case we need to ensure it is shared when creating the EmbeddedChannel inside of a ChannelHandler
+
+Modifications:
+
+Use the config of the "original" Channel in the EmbeddedChannel and so share the same allocator etc.
+
+Result:
+
+Same type of buffers are used.

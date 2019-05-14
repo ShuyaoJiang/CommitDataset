@@ -1,0 +1,8 @@
+[ML] Increase datafeed integration test timeout for slow machines (#39311)
+
+The assertBusy() that waits the default 10 seconds for a
+datafeed to complete very occasionally times out on slow
+machines.  This commit increases the timeout to 60 seconds.
+It will almost never actually take this long, but it's
+better to have a timeout that will prevent time being
+wasted looking at spurious test failures.

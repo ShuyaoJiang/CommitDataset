@@ -1,0 +1,18 @@
+Polish Elasticsearch health indicator
+
+ - Nest the configuration class in HealthIndicatorAutoConfiguration,
+   bringing it into line with the other health indicator configuration
+   classes
+ - Include the statistics from the response in the health’s details
+ - Map YELLOW to UP rather than UNKNOWN as it indicates that the cluster
+   is running but that “the primary shard is allocated but replicas are
+   not” [1]. The details can be used to determine the precise state of
+   the cluster.
+ - Add a property to configure the time that the health indicator will
+   wait to receive a response from the cluster
+ - Document the configuration properties
+ - Update the tests to cover the updated functionality
+
+See gh-2399
+
+[1] http://www.elastic.co/guide/en/elasticsearch/reference/1.x/cluster-health.html

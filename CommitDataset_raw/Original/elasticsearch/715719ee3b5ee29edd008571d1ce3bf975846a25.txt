@@ -1,0 +1,13 @@
+Remove warn-date from warning headers (#37622)
+
+This commit removes the warn-date from warning headers. Previously we
+were stamping every warning header with when the request
+occurred. However, this has a severe performance penalty when
+deprecation logging is called frequently, as obtaining the current time
+and formatting it properly is expensive. A previous change moved to
+using the startup time as the time to stamp on every warning header, but
+this was only to prove that the timestamping was expensive. Since the
+warn-date is optional, we elect to remove it from the warning
+header. Prior to this commit, we worked in Kibana to make the warn-date
+treated as optional there so that we can follow-up in Elasticsearch and
+remove the warn-date. This commit does that.

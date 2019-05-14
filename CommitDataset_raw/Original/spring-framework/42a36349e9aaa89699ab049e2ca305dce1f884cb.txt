@@ -1,0 +1,10 @@
+Support nested meta-annotations in AnnotationUtils
+
+Prior to this commit, AnnotationUtils.findAnnotation(Class, Class)
+claimed to recursively search through annotations; however, only one
+level of annotations was supported by the algorithm.
+
+This commit alters the search algorithm so that nested meta-annotations
+(i.e., meta-annotations on meta-annotations) are also supported.
+
+Issue: SPR-11448

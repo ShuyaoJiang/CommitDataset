@@ -1,0 +1,30 @@
+Update cipher suites to track Chrome 51 and Firefox 47.
+
+I've updated the cipher suites spreadsheet to track rankings of the
+cipher suites by client.
+
+https://docs.google.com/spreadsheets/d/1C3FdZSlCBq_-qrVwG1KDIzNIB3Hyg_rKAcgmSzOsHyQ/edit#gid=0
+
+With this update we're adding support for the following cipher suites:
+
+  * TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+  * TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+  * TLS_RSA_WITH_AES_256_GCM_SHA384
+    Recently added to Chrome.
+
+  * TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+  * TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+    Recently added to Chrome and Firefox. Newly available in Android 7.0.
+
+We're dropping support for the following cipher suites:
+
+  * TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+    This isn't supported by recent versions of Firefox or Chrome.
+
+  * TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+  * TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+    These two cipher suites were dropped by Chrome between v.46 and 51. They
+    are still present in the current release of Firefox.
+
+With this update TLS connections that work in Chrome 51 should work in OkHttp
+and vice versa.

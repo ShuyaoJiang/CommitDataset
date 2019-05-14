@@ -1,0 +1,10 @@
+Allow beans to be used as Hibernate naming strategies
+
+Previously, custom Hibernate naming strategies could only be
+configured via properties. This allowed a fully-qualified classname to
+be specified, but did not allow a naming strategy instance to be used.
+
+This commit updates HibernateJpaConfiguration to use
+ImplicitNamingStrategy and PhysicalNamingStrategy beans if they
+exist. If both a bean exists and the equivalent property has been set,
+the bean wins.

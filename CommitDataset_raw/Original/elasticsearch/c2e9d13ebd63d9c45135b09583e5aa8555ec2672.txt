@@ -1,0 +1,13 @@
+Default include_type_name to false in the yml test harness. (#38058)
+
+This PR removes the temporary change we made to the yml test harness in #37285
+to automatically set `include_type_name` to `true` in index creation requests
+if it's not already specified. This is possible now that the vast majority of
+index creation requests were updated to be typeless in #37611. A few additional
+tests also needed updating here.
+
+Additionally, this PR updates the test harness to set `include_type_name` to
+`false` in index creation requests when communicating with 6.x nodes. This
+mirrors the logic added in #37611 to allow for typeless document write requests
+in test set-up code. With this update in place, we can remove many references
+to `include_type_name: false` from the yml tests. 

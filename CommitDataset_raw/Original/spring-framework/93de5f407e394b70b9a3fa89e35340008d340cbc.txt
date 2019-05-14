@@ -1,0 +1,9 @@
+Avoid duplicate registration of [RequestBody|ResponseBody]Advice @ControllerAdvice
+
+Prior to this commit, if a @ControllerAdvice implemented both
+RequestBodyAdvice and ResponseBodyAdvice, it was registered twice in
+RequestMappingHandlerAdapter.
+
+This commit ensures that such instances are only registered once.
+
+Closes gh-22638

@@ -1,0 +1,10 @@
+SslHandler dervies jdkCompatibilityMode from SSLEngine
+
+Motivation:
+Some SSLEngine implementations (e.g. ReferenceCountedOpenSslContext) support unwrapping/wrapping multiple packets at a time. The SslHandler behaves differently if the SSLEngine supports this feature, but currently requires that the constructor argument between the SSLEngine creation and SslHandler are coordinated. This can be difficult, or require package private access, if extending the SslHandler.
+
+Modifications:
+- The SslHandler should inspect the SSLEngine to see if it supports jdkCompatibilityMode instead of relying on getting an extra constructor argument which maybe out of synch with the SSLEngine
+
+Result:
+Easier to override SslHandler and have consistent jdkCompatibilityMode between SSLEngine and SslHandler.

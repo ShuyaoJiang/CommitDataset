@@ -1,0 +1,10 @@
+Call onDispose before first read
+
+The cancellation callback in asynchronousReadFileChannel must be called
+before the first read I/O or otherwise if cancellation signals happens
+immediately the onDispose callback may be missed.
+
+The DefaultBufferFactory workaround however remains in place until an
+expected additional fix arrives with Reactor Core 3.2.9.
+
+See gh-22107

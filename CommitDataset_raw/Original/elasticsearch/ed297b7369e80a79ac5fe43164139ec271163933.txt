@@ -1,0 +1,12 @@
+Only update response headers if we have a new one (#37590)
+
+Currently when adding a response header, we do some de-duplication, and
+maybe drop the header on the floor if we have reached capacity. Yet, we
+still update the thread local tracking the response headers. This is
+really expensive because under the hood there is a shared reference that
+we synchronize on. In the case of a request processed across many shards
+in a tight loop, this contention can be detrimental to performance. We
+can avoid updating the thread local in these cases though, when the
+response header is duplicate of one that we have already seen, or when
+it's dropped on the floor. This commit addresses these performance
+issues by avoiding the unnecessary set.

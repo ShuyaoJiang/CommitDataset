@@ -1,0 +1,11 @@
+Try out @OverridingMethodsMustInvokeSuper, and remove some unnecessary work in AbstractMapTester.
+
+The first couple locations I found to use @OverridingMethodsMustInvokeSuper were cases where we're already doing the right thing, so that's "disappointing."
+
+On the plus side, while I was looking into this, I noticed that AbstractMapTester is redoing all the work of its superclass (at least assuming that no one tries to override resetMap() rather that resetContainer() -- if anyone should be overriding that at all...). So I fixed that. Maybe, if we're lucky, it will make our GWT and Android tests faster -- at least internally, where we actually run our suite-builder suites on those platforms. But the GWT test times are variable enough that it's hard to be sure without a bunch of runs, and the Android tests aren't running at the moment (b/30863522), so... I don't know if this really helps or not.
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=175986858

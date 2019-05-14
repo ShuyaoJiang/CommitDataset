@@ -1,0 +1,10 @@
+Improve error handling in SpringPackageScanClassResolver
+
+Previously, SpringPackageScanResolver was handling as subset of the
+failures that Liquibase’s DefaultPackageScanResolver handles. This could
+lead to a failure due to a LinkageError in certain environments.
+
+This commit updates SpringPackageScanClassResolver to align its error
+handling with what Liquibase does.
+
+Fixes gh-1853

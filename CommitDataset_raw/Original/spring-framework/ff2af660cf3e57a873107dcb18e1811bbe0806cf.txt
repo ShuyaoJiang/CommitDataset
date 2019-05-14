@@ -1,0 +1,20 @@
+PathPatternParser encodes patterns as it parses them
+
+Before this commit there was no special handling for URL encoding
+of the path pattern string coming into the path pattern parser. No
+assumptions were made about it being in an encoded form or not.
+
+With this change it is assumed incoming path patterns are not
+encoded and as part of parsing the parser builds PathPattern
+objects that include encoded elements. For example parsing "/f o"
+will create a path pattern of the form "/f%20o". In this form
+it can then be used to match against encoded paths.
+
+Handling encoded characters is not trivial and has resulted in
+some loss in matching speed but care has been taken to
+avoid unnecessary creation of additional heap objects.  When
+matching variables the variable values are return in a
+decoded form. It is hoped the speed can be recovered, at least
+for the common case of non-encoded incoming paths.
+
+Issue: SPR-15640

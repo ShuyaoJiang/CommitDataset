@@ -1,0 +1,7 @@
+Use AmazonS3.doesObjectExist() method in S3BlobContainer (#27723)
+
+This pull request changes the S3BlobContainer.blobExists() method implementation 
+to make it use the AmazonS3.doesObjectExist() method instead of 
+AmazonS3.getObjectMetadata(). The AmazonS3 implementation takes care of 
+catching any thrown AmazonS3Exception and compares its response code with 404, 
+returning false (object does not exist) or lets the exception be propagated.

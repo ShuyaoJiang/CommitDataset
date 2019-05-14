@@ -1,0 +1,13 @@
+Allow numBytes == 0 when calling Http2LocalFlowController.consumeBytes.
+
+Motivation:
+
+Sometimes people use a data frame with length 0 to end a stream(such as jetty http2-server). So it is possible that data.readableBytes and padding are all 0 for a data frame, and cause an IllegalArgumentException when calling flowController.consumeBytes.
+
+Modifications:
+
+Return false when numBytes == 0 instead of throwing IllegalArgumentException.
+
+Result:
+
+Fix IllegalArgumentException.

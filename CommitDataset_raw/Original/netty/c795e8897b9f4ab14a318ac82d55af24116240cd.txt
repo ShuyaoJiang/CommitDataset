@@ -1,0 +1,15 @@
+Convert Http2Error.STREAM_CLOSED to ClosedChannelException when using child channels
+
+Motivation:
+
+We should convert Http2Exceptions that are produced because of STREAM_CLOSED to ClosedChannelException when hand-over to the child channel to make it more consistent with other transports.
+
+Modifications:
+
+- Check if STREAM_CLOSED is used and if so create a new ClosedChannelException (while preserve the original exception as cause) and use it in the child channel
+- Ensure STREAM_CLOSED is used in DefaultHttp2RemoteFlowController when writes are failed because of a closed stream.
+- Add testcase
+
+Result:
+
+More consistent and correct exception usage.

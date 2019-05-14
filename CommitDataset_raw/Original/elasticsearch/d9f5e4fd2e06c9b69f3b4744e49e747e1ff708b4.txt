@@ -1,0 +1,11 @@
+Pin TLS1.2 in SSLConfigurationReloaderTests
+
+Ensure that the SSLConfigurationReloaderTests can run with JDK 11
+by pinning the HttpClient to TLS version to TLS1.2. This is necessary
+becase even if the MockWebServer is set to user TLS1.2, we don't
+set its enabled protocols, so if it receives a TLS1.3 request (which
+is the default behavior for HttpClient in JDK11), it will use TLS1.3
+and the original issue will manifest again.
+
+Relates  #33127
+Resolves #32124

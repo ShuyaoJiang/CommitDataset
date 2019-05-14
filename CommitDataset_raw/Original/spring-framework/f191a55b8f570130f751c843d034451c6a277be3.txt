@@ -1,0 +1,10 @@
+Preserve comments when using JibxMarshaller
+
+Prior to this commit, JibxMarshaller used a SAX ContentHandler to
+marshal to StAX XMLEventWriters, which inadvertently resulted in the
+deletion of XML comments.
+
+After this commit, JibxMarshaller adapts the XMLEventWriter into an
+XMLStreamWriter and comments are preserved.
+
+Issue: SPR-9768

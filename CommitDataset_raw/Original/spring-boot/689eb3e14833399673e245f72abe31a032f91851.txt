@@ -1,0 +1,22 @@
+Add URLs from parent classloader in executable jar
+
+$ (cd spring-boot-tools; mvn clean install -DskipTests=true)
+$ (cd spring-boot-samples/spring-boot-sample-simple/; mvn clean package)
+$ java -jar spring-boot-samples/spring-boot-sample-simple/target/spring-boot-sample-simple-1.1.0.BUILD-SNAPSHOT.jar
+
+(vanilla executable jar archive: works)
+
+$ java -cp spring-boot-samples/spring-boot-sample-simple/target/spring-boot-sample-simple-1.1.0.BUILD-SNAPSHOT.jar:spring-boot-tools/spring-boot-loader/src/test/resources/jars/app.jar org.springframework.boot.loader.JarLauncher
+
+(jar archive plus vanilla plugin: works)
+
+$ (cd spring-boot-samples/spring-boot-sample-simple/target; rm -rf app && mkdir $_ && cd $_ && jar -xf ../*.jar)
+$ java -cp spring-boot-samples/spring-boot-sample-simple/target/app/ org.springframework.boot.loader.JarLauncher
+
+(exploded directory: works)
+
+$ java -cp spring-boot-tools/spring-boot-loader/s:spring-boot-tools/spring-boot-loader/src/test/resources/jars/app.jar org.springframework.boot.loader.JarLauncher
+
+(exploded directory with plugin jar: works)
+
+Potential fix for gh-529

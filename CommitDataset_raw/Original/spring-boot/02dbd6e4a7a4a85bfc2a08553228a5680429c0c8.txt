@@ -1,0 +1,11 @@
+Allow JarURLConnection to be created with a relative URL
+
+Previously, JarURLConnection assumed that that URL with which it was
+created would contain the absolute path of the underlying jar file.
+This meant that when it was created with a relative URL, it could fail
+to find an entry or throw a StringIndexOutOfBoundsException.
+
+This commit updates the logic for normalizing the input URL so that
+both absolute and relative URLs are supported.
+
+Closes gh-6109

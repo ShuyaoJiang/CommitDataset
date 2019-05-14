@@ -1,0 +1,30 @@
+Reduce recovery time with compress or secure transport (#36981)
+
+Today file-chunks are sent sequentially one by one in peer-recovery. This is a
+correct choice since the implementation is straightforward and recovery is
+network bound in most of the time. However, if the connection is encrypted, we
+might not be able to saturate the network pipe because encrypting/decrypting
+are cpu bound rather than network-bound.
+
+With this commit, a source node can send multiple (default to 2) file-chunks
+without waiting for the acknowledgments from the target.
+
+Below are the benchmark results for PMC and NYC_taxis.
+
+- PMC (20.2 GB)
+
+| Transport | Baseline | chunks=1 | chunks=2 | chunks=3 | chunks=4 |
+| ----------| ---------| -------- | -------- | -------- | -------- |
+| Plain     | 184s     | 137s     | 106s     | 105s     | 106s     |
+| TLS       | 346s     | 294s     | 176s     | 153s     | 117s     |
+| Compress  | 1556s    | 1407s    | 1193s    | 1183s    | 1211s    |
+
+- NYC_Taxis (38.6GB)
+
+| Transport | Baseline | chunks=1 | chunks=2 | chunks=3 | chunks=4 |
+| ----------| ---------| ---------| ---------| ---------| -------- |
+| Plain     | 321s     | 249s     | 191s     |  *       | *        |
+| TLS       | 618s     | 539s     | 323s     | 290s     | 213s     |
+| Compress  | 2622s    | 2421s    | 2018s    | 2029s    | n/a      |
+
+Relates #33844

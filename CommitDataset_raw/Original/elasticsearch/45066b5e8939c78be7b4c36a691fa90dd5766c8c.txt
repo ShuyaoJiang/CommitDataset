@@ -1,0 +1,18 @@
+Verify primary mode usage with assertions (#32667)
+
+Primary terms were introduced as part of the sequence-number effort (#10708) and added in ES
+5.0. Subsequent work introduced the replication tracker which lets the primary own its replication
+group (#25692) to coordinate recovery and replication. The replication tracker explicitly exposes
+whether it is operating in primary mode or replica mode, independent of the ShardRouting object
+that's associated with a shard. During a primary relocation, for example, the primary mode is
+transferred between the primary relocation source and the primary relocation target. After
+transferring this so-called primary context, the old primary becomes a replication target and the
+new primary the replication source, reflected in the replication tracker on both nodes. With the
+most recent PR in this area (#32442), we finally have a clean transition between a shard that's
+operating as a primary and issuing sequence numbers and a shard that's serving as a replication
+target. The transition from one state to the other is enforced through the operation-permit system,
+where we block permit acquisition during such changes and perform the transition under this
+operation block, ensuring that there are no operations in progress while the transition is being
+performed. This finally allows us to turn the best-effort checks that were put in place to prevent
+shards from being used in the wrong way (i.e. primary as replica, or replica as primary) into hard
+assertions, making it easier to catch any bugs in this area.

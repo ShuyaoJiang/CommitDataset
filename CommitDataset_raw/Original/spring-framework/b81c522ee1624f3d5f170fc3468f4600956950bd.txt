@@ -1,0 +1,18 @@
+Handle exceptions properly in SpringJUnit4ClassRunner
+
+JUnit 4.9 introduced a regression in BlockJUnit4ClassRunner.runChild()
+such that exceptions thrown from methodBlock() cause the current test
+execution to abort immediately. As a result, the failing test method is
+unrooted, and subsequent test methods are never invoked. Furthermore,
+RunListeners registered with JUnit are not properly notified.
+
+In conjunction with SPR-11908, SpringJUnit4ClassRunner was updated to
+use the aforementioned changes to BlockJUnit4ClassRunner.runChild().
+Consequently, SpringJUnit4ClassRunner now suffers from the same
+regression.
+
+This commit addresses this issue by ensuring that any exceptions thrown
+during the invocation of methodBlock() are properly wrapped in a JUnit
+Fail Statement.
+
+Issue: SPR-12613

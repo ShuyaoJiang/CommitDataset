@@ -1,0 +1,8 @@
+Painless: Remove caching of Painless scripts in GenericElasticsearchScript (#34116)
+
+When a script uses the special-cased SearchScript or ExecutableScript, Painless is 
+internally caching the GenericElasticsearchScript that is generated via compile as part of 
+the newInstance method for the factories. This breaks the model for class bindings as the 
+class binding expects to not have any stored information for each instance generated via 
+newInstance from the factory. This change fixes the issue by creating a new instance of 
+the GenericElasticsearchScript each time newInstance is called against the factory.

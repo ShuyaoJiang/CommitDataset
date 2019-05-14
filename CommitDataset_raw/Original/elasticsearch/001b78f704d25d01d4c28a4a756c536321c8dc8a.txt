@@ -1,0 +1,28 @@
+Replace IndexMetaData.Custom with Map-based custom metadata (#32749)
+
+This PR removes the deprecated `Custom` class in `IndexMetaData`, in favor
+of a `Map<String, DiffableStringMap>` that is used to store custom index
+metadata. As part of this, there is now no way to set this metadata in a
+template or create index request (since it's only set by plugins, or dedicated
+REST endpoints).
+
+The `Map<String, DiffableStringMap>` is intended to be a namespaced `Map<String,
+String>` (`DiffableStringMap` implements `Map<String, String>`, so the signature
+is more like `Map<String, Map<String, String>>`). This is so we can do things
+like:
+
+``` java
+Map<String, String> ccrMeta = indexMetaData.getCustom("ccr");
+```
+
+And then have complete control over the metadata. This also means any
+plugin/feature that uses this has to manage its own BWC, as the map is just
+serialized as a map. It also means that if metadata is put in the map that isn't
+used (for instance, if a plugin were removed), it causes no failures the way
+an unregistered `Setting` would.
+
+The reason I use a custom `DiffableStringMap` here rather than a plain
+`Map<String, String>` is so the map can be diffed with previous cluster state
+updates for serialization.
+
+Supersedes #32683

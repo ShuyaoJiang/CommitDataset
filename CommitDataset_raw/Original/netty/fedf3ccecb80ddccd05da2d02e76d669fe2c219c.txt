@@ -1,0 +1,31 @@
+Harden ref-counting concurrency semantics (#8583)
+
+
+Motivation
+
+#8563 highlighted race conditions introduced by the prior optimistic
+update optimization in 83a19d565064ee36998eb94f946e5a4264001065. These
+were known at the time but considered acceptable given the perf
+benefit in high contention scenarios.
+
+This PR proposes a modified approach which provides roughly half the
+gains but stronger concurrency semantics. Race conditions still exist
+but their scope is narrowed to much less likely cases (releases
+coinciding with retain overflow), and even in those
+cases certain guarantees are still assured. Once release() returns true,
+all subsequent release/retains are guaranteed to throw, and in
+particular deallocate will be called at most once.
+
+Modifications
+
+- Use even numbers internally (including -ve) for live refcounts
+- "Final" release changes to odd number (equivalent to refcount 0)
+- Retain still uses faster getAndAdd, release uses CAS loop
+- First CAS attempt uses non-volatile read
+- Thread.yield() after a failed CAS provides a net gain
+
+Result
+
+More (though not completely) robust concurrency semantics for ref
+counting; increased latency under high contention, but still roughly
+twice as fast as the original logic. Bench results to follow

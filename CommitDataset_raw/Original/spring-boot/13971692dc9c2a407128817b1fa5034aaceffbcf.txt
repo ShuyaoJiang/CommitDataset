@@ -1,0 +1,11 @@
+Docs and actuator endpoints can be enabled when endpoints.enabled=false
+
+Previously, if endpoints.enabled was false setting
+endpoints.docs.enabled=true or endpoints.actuator.enabled=true would
+have no effect as their entire configuration class was conditional
+on endpoints.enabled being true.
+
+This commit updates the conditions on the configuration class so that
+it is conditional on either the actuator or docs endpoint being enabled.
+
+Closes gh-5007

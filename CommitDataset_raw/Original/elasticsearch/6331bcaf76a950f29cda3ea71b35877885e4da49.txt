@@ -1,0 +1,10 @@
+Create keystore on package install (#28928)
+
+This commit removes the ability to specify that a plugin requires the
+keystore and instead creates the keystore on package installation or
+when Elasticsearch is started for the first time. The reason that we opt
+to create the keystore on package installation is to ensure that the
+keystore has the correct permissions (the package installation scripts
+run as root as opposed to Elasticsearch running as the elasticsearch
+user) and to enable removing the keystore on package removal if the
+keystore is not modified.

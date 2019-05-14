@@ -1,0 +1,8 @@
+Fix warn that fails compile
+
+We don't throw any exception in `close` so we shouldn't declare
+that we do. Declaring that we do angers that java gods because
+we might throw `InterruptedException` which is evil to throw
+in `close`.
+
+Original commit: elastic/x-pack-elasticsearch@49ca8143d751d5e95c58055b98abd97a5739748b

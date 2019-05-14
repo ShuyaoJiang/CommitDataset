@@ -1,0 +1,10 @@
+Load bootstrap elastic user password from keystore (elastic/x-pack-elasticsearch#1942)
+
+This is related to elastic/x-pack-elasticsearch#1217. This commit adds a ClusterStateListener at
+node startup. Once the cluster and security index are ready, this
+listener will attempt to set the elastic user's password with the
+bootstrap password pulled from the keystore. If the password is not in
+the keystore or the elastic password has already been set, nothing will
+be done.
+
+Original commit: elastic/x-pack-elasticsearch@7fc4943c458ca67fa3fb9d66b6756cba2143dd1f

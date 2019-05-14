@@ -1,0 +1,37 @@
+Detect split packages at build time
+
+Split packages are a well-known anti-pattern for OSGi and a blocker for
+Eclipse Virgo (which prevents split packages being accessed via its
+Import-Library construct).
+
+Split packages are also unhelpful with a traditional linear classpath
+as a split package name does not uniquely identify the Spring framework
+JAR from which it came, thus complicating problem diagnosis and
+maintenance.
+
+Juergen Hoeller supports this position in the following comment in
+SPR-9990:
+
+>FWIW, I generally find split packages a bad practice, even without
+>OSGi in the mix. For the Spring Framework codebase, I consider a
+>split-package arrangement a design accident that we want to detect
+>in any case - and that we're willing to fix if it happened.
+>
+>I'm actually equally concerned about the source perspective: After
+>all, we want a package to be comprehensible from a single glance
+>at the project, not requiring the developer to jump into several
+>source modules to understand the overall layout of a package.
+
+Split packages have crept into Spring framework twice in recent months
+- see SPR-9811 and SPR-9988. Currently, they are only detected once
+the Spring framework has been converted to OSGi bundles and these
+bundles have been tested with Eclipse Virgo.
+
+This commit adds a build-time check for split packages to the Spring
+framework build.
+
+Issue: SPR-9990
+
+Conflicts:
+
+	build.gradle

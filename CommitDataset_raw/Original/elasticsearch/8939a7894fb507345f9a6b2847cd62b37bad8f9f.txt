@@ -1,0 +1,8 @@
+Zen2: Move disruption tests to Zen2 (#35724)
+
+- Moves disruption tests to Zen2
+- Registers a few missing settings
+- Removes .put(TestZenDiscovery.USE_ZEN2.getKey(), true) from tests where Zen2 is now enabled
+by default through the parent test class
+- Moves QuorumGatewayIT back to Zen1, as it is not stable with Zen2 as it currently relies on
+dangling indices due to the lack of proper CS persistence, which triggers secondary failures

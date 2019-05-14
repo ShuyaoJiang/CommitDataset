@@ -1,0 +1,9 @@
+Allow locale to be overridden by "Accept-Language"
+
+Previously, when `spring.mvc.locale` was specified, that locale was used
+regardless of the client's preferences. This commit adds an extra
+`spring.mvc.locale-resolver` property that can control how the locale is
+resolved. The default is `ACCEPT_HEADER` but can be set to `FIXED` to
+restore the previous behaviour.
+
+Closes gh-6083

@@ -1,0 +1,10 @@
+Make locale parsing less lenient. (#26361)
+
+The `locale` field of `date` fields accepts almost any string and unknown
+locales are simply ignored, which is trappy. We should fail on unknown languages
+or countries.
+
+This commit also makes `-` an accepted separator in addition to `_` since `-`
+is the recommended separator (https://tools.ietf.org/html/rfc5646#section-2.1).
+`_` is probably still worth supporting since it is the separator used by
+`Locale#toString()`.

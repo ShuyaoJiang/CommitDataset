@@ -1,0 +1,7 @@
+Fix Zip race condition
+
+ItemObserver onNext might not acquire the write lock due to an
+onCompleted being handled by another thread. When handling
+onCompleted, the ItemObserver does not check for any values that are
+ready to be emitted, which might cause OperationZip to never emit
+OnNext or OnCompleted.

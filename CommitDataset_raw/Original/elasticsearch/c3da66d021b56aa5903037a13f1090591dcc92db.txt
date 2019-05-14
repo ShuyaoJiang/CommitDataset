@@ -1,0 +1,70 @@
+Implement adaptive replica selection (#26128)
+
+* Implement adaptive replica selection
+
+This implements the selection algorithm described in the C3 paper for
+determining which copy of the data a query should be routed to.
+
+By using the service time EWMA, response time EWMA, and queue size EWMA we
+calculate the score of a node by piggybacking these metrics with each search
+request.
+
+Since Elasticsearch lacks the "broadcast to every copy" behavior that Cassandra
+has (as mentioned in the C3 paper) to update metrics after a node has been
+highly weighted, this implementation adjusts a node's response stats using the
+average of the its own and the "best" node's metrics. This is so that a long GC
+or other activity that may cause a node's rank to increase dramatically does not
+permanently keep a node from having requests routed to it, instead it will
+eventually lower its score back to the realm where it is a potential candidate
+for new queries.
+
+This feature is off by default and can be turned on with the dynamic setting
+`cluster.routing.use_adaptive_replica_selection`.
+
+Relates to #24915, however instead of `b=3` I used `b=4` (after benchmarking)
+
+* Randomly use adaptive replica selection for internal test cluster
+
+* Use an action name *prefix* for retrieving pending requests
+
+* Add unit test for replica selection
+
+* don't use adaptive replica selection in SearchPreferenceIT
+
+* Track client connections in a SearchTransportService instead of TransportService
+
+* Bind `entry` pieces in local variables
+
+* Add javadoc link to C3 paper and javadocs for stat adjustments
+
+* Bind entry's key and value to local variables
+
+* Remove unneeded actionNamePrefix parameter
+
+* Use conns.longValue() instead of cached Long
+
+* Add comments about removing entries from the map
+
+* Pull out bindings for `entry` in IndexShardRoutingTable
+
+* Use .compareTo instead of manually comparing
+
+* add assert for connections not being null and gte to 1
+
+* Copy map for pending search connections instead of "live" map
+
+* Increase the number of pending search requests used for calculating rank when chosen
+
+When a node gets chosen, this increases the number of search counts for the
+winning node so that it will not be as likely to be chosen again for
+non-concurrent search requests.
+
+* Remove unused HashMap import
+
+* Rename rank -> rankShardsAndUpdateStats
+
+* Rename rankedActiveInitializingShardsIt -> activeInitializingShardsRankedIt
+
+* Instead of precalculating winning node, use "winning" shard from ranked list
+
+* Sort null ranked nodes before nodes that have a rank

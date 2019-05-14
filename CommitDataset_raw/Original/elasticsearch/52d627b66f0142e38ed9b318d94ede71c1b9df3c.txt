@@ -1,0 +1,4 @@
+[TEST] Do not call RandomizedTest.scaledRandomIntBetween from multiple threads
+
+KeyedLockTests calls RandomizedTest.scaledRandomIntBetween from multiple threads which uses RandomizedTest.isNightly()
+whereas that method is not concurrency-safe (see implementation of GroupEvaluator.isGroupEnabled)

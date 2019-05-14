@@ -1,0 +1,11 @@
+Fix CompositeBytesReference#slice to not throw AIOOBE with legal offsets. (#35955)
+
+CompositeBytesReference#slice has two bugs:
+ - One that makes it fail if the reference is empty and an empty slice is
+   created, this is #35950 and is fixed by special-casing empty-slices.
+ - One performance bug that makes it always create a composite slice when
+   creating a slice that ends on a boundary, this is fixed by computing `limit`
+   as the index of the sub reference that holds the last element rather than
+   the next element after the slice.
+
+Closes #35950

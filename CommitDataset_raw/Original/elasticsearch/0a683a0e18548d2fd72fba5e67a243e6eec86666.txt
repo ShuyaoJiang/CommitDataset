@@ -1,0 +1,14 @@
+Remove InternalClient and InternalSecurityClient (elastic/x-pack-elasticsearch#3054)
+
+This change removes the InternalClient and the InternalSecurityClient. These are replaced with
+usage of the ThreadContext and a transient value, `action.origin`, to indicate which component the
+request came from. The security code has been updated to look for this value and ensure the
+request is executed as the proper user. This work comes from elastic/x-pack-elasticsearch#2808 where @s1monw suggested
+that we do this.
+
+While working on this, I came across index template registries and rather than updating them to use
+the new method, I replaced the ML one with the template upgrade framework so that we could
+remove this template registry. The watcher template registry is still needed as the template must be
+updated for rolling upgrades to work (see elastic/x-pack-elasticsearch#2950).
+
+Original commit: elastic/x-pack-elasticsearch@7dbf2f263e73331f380fd5101188483cd5abe5ba

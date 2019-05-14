@@ -1,0 +1,14 @@
+Implement flush-future properly / Make channel options type-safe
+
+- AbstractChannel keeps the expected number of written bytes so that
+  the ChannelFuture of a flush() operation is notified on right timing.
+  - Added ChannelBufferHolder.size() to make this possible
+- Added AbstractChannel.isCompatible() so that only compatible EventLoop
+  is accepted by a channel on registration
+- Added ChannelOption to make channel options type-safe
+- Moved writeSpinCount property to ChannelConfig and removed Nio*Config
+- Miscellaneous cleanup
+
+introducing
+ChannelOption
+

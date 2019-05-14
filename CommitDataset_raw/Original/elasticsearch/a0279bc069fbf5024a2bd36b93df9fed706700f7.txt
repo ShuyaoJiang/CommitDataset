@@ -1,0 +1,12 @@
+Responses can use Writeable.Reader interface (#34655)
+
+In order to remove Streamable from the codebase, Response objects need
+to be read using the Writeable.Reader interface which this change
+enables. This change enables the use of Writeable.Reader by adding the
+`Action#getResponseReader` method. The default implementation simply
+uses the existing `newResponse` method and the readFrom method. As
+responses are migrated to the Writeable.Reader interface, Action
+classes can be updated to throw an UnsupportedOperationException when
+`newResponse` is called and override the `getResponseReader` method.
+
+Relates #34389

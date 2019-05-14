@@ -1,0 +1,22 @@
+Handle async operation events
+
+Problem:
+The following exception is observed on an async timeout:
+"java.lang.IllegalStateException: It is invalid to call
+isReady() when the response has not been put into non-blocking mode"
+
+Current Implementation:
+The async operation events sent by the web container are not propagated
+to the internal implementation. When timeout/error happens and if the
+application does not complete the async operation, the web container
+will complete it. At that point if the application tries to read/write,
+the operation will fail with an exception (above) that there is not
+async operation started.
+
+Proposed Solution:
+On async timeout or error, make calls to:
+- AbstractRequestBodyPublisher.onError,
+- AbstractResponseBodyProcessor.onError,
+- AbstractResponseBodyFlushProcessor.onError
+As a result of these calls the async operation will be completed and no
+more invocations of read/write will be made.

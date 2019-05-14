@@ -1,0 +1,14 @@
+AUTO_CLOSE should not be marked as deprecated. (#7967)
+
+Motivation:
+
+A long time ago we deprecated AUTO_CLOSE but it turned out this feature is still useful because if a write error is detected there still maybe data to read, and if we close the channel automatically we will lose data
+
+Modifications:
+
+- Remove `@Deprecated` tag for AUTO_CLOSE, setAutoClose(...) and isAutoClose(...)
+- Fix javadocs on ChannelConfig to correctly tell the default value of AUTO_CLOSE.
+
+Result:
+
+Less warnings.

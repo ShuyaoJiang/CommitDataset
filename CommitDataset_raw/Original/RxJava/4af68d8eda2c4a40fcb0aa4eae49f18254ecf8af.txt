@@ -1,0 +1,107 @@
+Reverting to Previous SafeObserver
+
+- Performance difference between changes are trivial at best so preferring to keep code that is easier to understand.
+
+Test numbers:
+
+```
+Old SafeObserver
+
+Run: 0 - 3,751,704 ops/sec
+Run: 1 - 34,619,086 ops/sec
+Run: 2 - 30,483,715 ops/sec
+Run: 3 - 27,746,023 ops/sec
+Run: 4 - 54,078,608 ops/sec
+Run: 5 - 55,107,045 ops/sec
+Run: 6 - 53,935,396 ops/sec
+Run: 7 - 54,947,168 ops/sec
+Run: 8 - 57,024,246 ops/sec
+Run: 9 - 55,059,712 ops/sec
+Run: 10 - 56,904,832 ops/sec
+Run: 11 - 55,919,967 ops/sec
+Run: 12 - 55,076,087 ops/sec
+Run: 13 - 55,066,685 ops/sec
+Run: 14 - 55,025,476 ops/sec
+
+Run: 0 - 3,839,266 ops/sec
+Run: 1 - 34,115,371 ops/sec
+Run: 2 - 29,675,175 ops/sec
+Run: 3 - 28,677,042 ops/sec
+Run: 4 - 55,405,652 ops/sec
+Run: 5 - 55,260,220 ops/sec
+Run: 6 - 55,147,464 ops/sec
+Run: 7 - 54,261,126 ops/sec
+Run: 8 - 53,941,505 ops/sec
+Run: 9 - 54,324,501 ops/sec
+Run: 10 - 55,125,576 ops/sec
+Run: 11 - 56,102,870 ops/sec
+Run: 12 - 55,061,834 ops/sec
+Run: 13 - 55,476,039 ops/sec
+Run: 14 - 55,073,054 ops/sec
+
+Run: 0 - 3,704,536 ops/sec
+Run: 1 - 34,694,514 ops/sec
+Run: 2 - 30,778,227 ops/sec
+Run: 3 - 28,441,329 ops/sec
+Run: 4 - 54,116,946 ops/sec
+Run: 5 - 55,204,699 ops/sec
+Run: 6 - 54,859,450 ops/sec
+Run: 7 - 55,214,757 ops/sec
+Run: 8 - 55,005,500 ops/sec
+Run: 9 - 55,339,118 ops/sec
+Run: 10 - 55,501,903 ops/sec
+Run: 11 - 55,074,570 ops/sec
+Run: 12 - 55,102,187 ops/sec
+Run: 13 - 55,756,278 ops/sec
+Run: 14 - 54,768,411 ops/sec
+
+New SafeObserver
+
+Run: 0 - 3,983,308 ops/sec
+Run: 1 - 34,767,250 ops/sec
+Run: 2 - 30,806,957 ops/sec
+Run: 3 - 29,855,113 ops/sec
+Run: 4 - 57,451,453 ops/sec
+Run: 5 - 55,515,152 ops/sec
+Run: 6 - 56,086,822 ops/sec
+Run: 7 - 56,295,529 ops/sec
+Run: 8 - 55,371,905 ops/sec
+Run: 9 - 55,816,653 ops/sec
+Run: 10 - 55,793,296 ops/sec
+Run: 11 - 56,011,426 ops/sec
+Run: 12 - 55,568,521 ops/sec
+Run: 13 - 55,396,137 ops/sec
+Run: 14 - 56,353,267 ops/sec
+
+Run: 0 - 3,933,367 ops/sec
+Run: 1 - 34,498,342 ops/sec
+Run: 2 - 30,233,584 ops/sec
+Run: 3 - 29,179,785 ops/sec
+Run: 4 - 55,761,874 ops/sec
+Run: 5 - 55,948,124 ops/sec
+Run: 6 - 55,264,801 ops/sec
+Run: 7 - 56,267,020 ops/sec
+Run: 8 - 57,474,567 ops/sec
+Run: 9 - 55,879,657 ops/sec
+Run: 10 - 55,998,880 ops/sec
+Run: 11 - 56,044,073 ops/sec
+Run: 12 - 55,498,515 ops/sec
+Run: 13 - 56,204,720 ops/sec
+Run: 14 - 55,845,954 ops/sec
+
+Run: 0 - 3,981,914 ops/sec
+Run: 1 - 34,160,822 ops/sec
+Run: 2 - 30,873,631 ops/sec
+Run: 3 - 29,135,067 ops/sec
+Run: 4 - 55,845,330 ops/sec
+Run: 5 - 55,101,883 ops/sec
+Run: 6 - 55,724,276 ops/sec
+Run: 7 - 56,085,564 ops/sec
+Run: 8 - 55,639,942 ops/sec
+Run: 9 - 56,464,955 ops/sec
+Run: 10 - 55,453,275 ops/sec
+Run: 11 - 56,115,463 ops/sec
+Run: 12 - 56,509,945 ops/sec
+Run: 13 - 53,863,348 ops/sec
+Run: 14 - 55,866,858 ops/sec
+```

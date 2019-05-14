@@ -1,0 +1,5 @@
+Ensure streams are removed from connection within test lifetime
+
+After the recent fix, if the call is canceled while writing request headers, the stream is eventually removed from the connection. But this is done on a separate thread, and there was previously no guarantee that it would happen before tearDown() is called and the connection pool is evicted, preventing the connection from being evicted before the next test starts.
+
+Together with https://github.com/square/okhttp/pull/4492, this will hopefully fix https://github.com/square/okhttp/issues/4470.

@@ -1,0 +1,11 @@
+Fix threshold frequency computation in Suggesters (#34312)
+
+The `term` and `phrase` suggesters have different options to filter candidates
+based on their frequencies. The `popular` mode for instance filters candidate
+terms that occur in less docs than the original term. However when we compute this threshold
+we use the total term frequency of a term instead of the document frequency. This is not inline
+with the actual filtering which is always based on the document frequency. This change fixes
+this discrepancy and clarifies the meaning of the different frequencies in use in the suggesters.
+It also ensures that the threshold doesn't overflow the maximum allowed value (Integer.MAX_VALUE).
+
+Closes #34282

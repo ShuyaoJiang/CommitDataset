@@ -1,0 +1,6 @@
+Introduce Mapping ActionListener (#39538)
+
+* Introduce Safer Chaining of Listeners
+
+* The motivation here is to make reasoning about chains of `ActionListener` a little easier, by providing a safe method for nesting `ActionListener` that guarantees that a response is never dropped. Also, it dries up the code a little by removing the need to repeat `listener::onFailure` and `listener.onResponse` over and over.
+* Refactored a number of obvious/easy spots to use the new listener constructor

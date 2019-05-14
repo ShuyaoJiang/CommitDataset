@@ -1,0 +1,13 @@
+Switch RequestContextListener to Filter
+
+Update WebMvcAutoConfiguration to use a RequestContextFilter instead of
+a RequestContextListener.
+
+Using a filter is required for some Spring Session operations (see
+https://github.com/spring-projects/spring-session/issues/129).
+
+This update also has the added benefit of allowing the Response to be
+accessed from RequestContextHolder.getRequestAttributes() by casting it
+to ServletRequestAttributes.
+
+Fixes gh-2637

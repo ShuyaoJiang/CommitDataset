@@ -1,0 +1,9 @@
+Fix issue with subscribe destination
+
+The original fix for SPR-11423:
+https://github.com/spring-projects/spring-framework/commit/32e5f57e647022d9ea82c03670936bf31f8467de
+
+was insufficient when using an external broker since the original
+destination header has to be in the "native headers" map (i.e. with
+STOMP headers) in order to be included in messages broadcast by
+the broker.

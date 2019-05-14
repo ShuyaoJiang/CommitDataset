@@ -1,0 +1,14 @@
+Make JAR files on classpath a special case for archive
+
+If the user adds a JAR file to the classpath in "spring jar -cp ..."
+he expected it to end up in the classpath of the executable jar
+(i.e. in the nested lib/ directory). Before this change it would
+have gone in the root of the executable JAR, causing errors at runtime.
+
+The fix is slightly awkward, since it assumes that any JAR in the
+"roots" of the ResourceMatcher come from the classpath (which *is*
+the case currently, but might not always be at least in principle).
+Seems like a reasonable compromise given it's a quick change
+and some tests have been included.
+
+Fixes gh-565

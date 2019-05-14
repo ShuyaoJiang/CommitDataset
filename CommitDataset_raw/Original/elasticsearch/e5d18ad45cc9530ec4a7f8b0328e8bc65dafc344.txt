@@ -1,0 +1,39 @@
+SQL: GROUP BY use composite instead of terms aggregation (elastic/x-pack-elasticsearch#4282)
+
+Rewrote the GROUP BY to use composite aggregation instead of terms 
+(and everything that comes with it) but instead rely on composite aggregation
+
+This not only works better but simplifies the code complexity since
+composite is a straight, two-level tree:
+
+1. root/group-by/composite-keys
+2. (metric) aggregations
+
+This removes a lot of complexity from all stages that involve creating,
+assembling and especially parsing the results.
+By moving to composite agg, the aggregation/GROUP BY are now pageable
+so the consumer/listener had to be extended to include a dedicated
+cursor and specific (bucket) extractors inline with the scroll requests.
+
+While at it, also improved the support for implicit GROUP BY by
+formalizing it (previously it supported only counts and no other
+agg).
+
+In addition:
+Fixed a JDBC bug that caused incorrect timeout to be passed
+Improved the returned RowSet a bit and add better naming
+Pick up @Nullable move from core
+Make sure to specify the TimeZone for DateTimeHistogram extraction
+Add missing javadoc
+To avoid delegating NamedWriteableRegistry (NWR) and to keep the scope
+clean, SQL writeables now handle their own serialization, keeping the
+boundary between the Elasticsearch's NWR in place.
+Pass NamedWriteableRegistry only when looking at the next page
+To keep in line with the existing patter and simplify the code
+bureaucracy, the deserialization happens directly.
+Since the SearchSourceBuilder deserialization happens explicitly (and
+it's otherwise opaque), the declarative invocation isn't necessary
+anymore.
+Add a bit more randomization in tests
+
+Original commit: elastic/x-pack-elasticsearch@f5af0463866266dcd2cb65bec8ab388cb92dec85

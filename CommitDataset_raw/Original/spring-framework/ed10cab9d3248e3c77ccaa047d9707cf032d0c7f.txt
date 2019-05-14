@@ -1,0 +1,10 @@
+Remove DispatcherHandler static factory methods
+
+The typical way to load DispatcherHandler is to use
+WebHttpHandlerBuilder#applicationContext which also detecs filters,
+exception handlers, as well as other beans that are injected into every
+ServerWebExchange -- custom session manager, localecontext resolver,
+codecs for form data, multipart data, etc
+
+WebHttpHandlerBuilder is the preferred and way so removing the ones on
+DispatcherHandler. They could always be added back later.

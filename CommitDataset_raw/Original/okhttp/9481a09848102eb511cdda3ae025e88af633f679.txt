@@ -1,0 +1,5 @@
+Be more liberal adding headers to the HPACK encoder dynamic table.
+
+Previously, if a header name was in the static table we'd avoid adding it
+to the dynamic table. Since most common headers are in the static table,
+we were missing the chance to save on bytes sent.

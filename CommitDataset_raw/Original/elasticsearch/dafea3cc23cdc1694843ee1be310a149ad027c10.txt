@@ -1,0 +1,12 @@
+Minor search controller changes (#36479)
+
+This commit contains a few minor changes to our search code:
+
+- adjust the visibility of a couple of methods in our search code to package private from public or protected.
+- make some of the `SearchPhaseController` methods static where possible
+- rename one of the `SearchPhaseController#reducedQueryPhase` methods (used only for scroll requests) to `reducedScrollQueryPhase` without the `isScrollRequest` argument which was always set to `true`
+- replace leniency in `SearchPhaseController#setShardIndex` with an assert to make sure that we never set the shard index twice
+- remove two null checks where the checked field can never be null
+- resolve an unchecked warning
+- replace `List#toArray` invocation that creates an array providing the true size with array creation of length 0
+- correct a couple of typos in comments

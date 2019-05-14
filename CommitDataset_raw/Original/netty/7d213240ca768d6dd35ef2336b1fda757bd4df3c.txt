@@ -1,0 +1,11 @@
+HttpConversionUtil TE filtering robustness
+
+Motivation:
+HttpConversionUtil#toHttp2Headers has special code to filter the TE header name. However this filtering code may result in adding the <TE, TRAILERS> tuple in scenarios that are not appropriate. For example if a value containing trailers is seen it will be added, but the value could not actually be equal to trailers. Also CSV values are not supported.
+
+Modifications:
+- Account for CSV header values
+- Account for the value containing 'trailers' but not actually being equal to 'trailers'
+
+Result:
+More robust parsing of the TE header.

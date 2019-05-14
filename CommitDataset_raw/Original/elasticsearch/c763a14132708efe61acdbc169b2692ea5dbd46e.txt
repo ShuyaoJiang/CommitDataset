@@ -1,0 +1,13 @@
+Pass InputStream when creating XContent parser (elastic/x-pack-elasticsearch#4001)
+
+* Pass InputStream when creating XContent parser
+
+Rather than passing the raw `BytesReference` in when creating the xcontent
+parser, this passes the StreamInput (which is an InputStream), this allows us to
+decouple XContent from BytesReference.
+
+This is the x-pack side of https://github.com/elastic/elasticsearch/pull/28754
+
+* Use the streamInput variant, not sourceAsString
+
+Original commit: elastic/x-pack-elasticsearch@dd5d8b1654c681c55ab7552f6f66a41bf3d44be5

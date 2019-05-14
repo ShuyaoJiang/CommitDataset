@@ -1,0 +1,19 @@
+Consolidate flushes even when no read in progress
+
+Motivation:
+
+Currently FlushConsolidationHandler only consolidates if a read loop is
+active for a Channel, otherwise each writeAndFlush(...) call will still
+be flushed individually. When these calls are close enough, it can be
+beneficial to consolidate them even outside of a read loop.
+
+Modifications:
+
+When we allow a flush to "go through", don't perform it immediately, but
+submit it on the channel's executor. Under high pressure, this gives
+other writes a chance to enqueue before the task gets executed, and so
+we flush multiple writes at once.
+
+Result:
+
+Lower CPU usage and less context switching.

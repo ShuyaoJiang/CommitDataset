@@ -1,0 +1,7 @@
+Remove timezone validation on rollup range queries (#40647)
+
+We enforced the timezone of range queries when using the rollup
+search endpoint, but this validation is not needed.  Since
+rollup dates are stored in UTC, and range queries are always
+converted to UTC (even if specifying a `time_zone`) the validation
+is not needed and can prevent legitimate queries from running.

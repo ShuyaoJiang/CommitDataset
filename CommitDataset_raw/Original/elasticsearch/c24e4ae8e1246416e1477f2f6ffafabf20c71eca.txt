@@ -1,0 +1,13 @@
+Enhancements to IndicesQueryCache. (#39099)
+
+This commit adds the following:
+ - more tests to IndicesServiceCloseTests, one of them found a bug in the order
+   in which `IndicesQueryCache#onClose` and
+   `IndicesService.indicesRefCount#decRef` are called.
+ - made `IndicesQueryCache.stats2` a synchronized map. All writes to it are
+   already protected by the lock of the Lucene cache, but the final read from
+   an assertion in `IndicesQueryCache#close()` was not so this change should
+   avoid any potential visibility issues.
+ - human-readable `toString`s to make debugging easier.
+
+Relates #37117

@@ -1,0 +1,13 @@
+Correctly delete SelfSignedCertificate once done with it.
+
+Motivation:
+
+In OpenSsl init code we create a SelfSignedCertificate which we not explicitly delete. This can lead to have the deletion delayed.
+
+Modifications:
+
+Delete the SelfSignedCertificate once done with it.
+
+Result:
+
+Fixes [#6716]

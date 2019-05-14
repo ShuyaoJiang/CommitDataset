@@ -1,0 +1,13 @@
+Clear disabled SSL protocols before enabling provided SSL protocols
+
+Motivation:
+
+Attempts to enable SSL protocols which are currently disabled fail when using the OpenSslEngine. Related to https://github.com/netty/netty/issues/4736
+
+Modifications:
+
+Clear out all options that have disabled SSL protocols before attempting to enable any SSL protocol.
+
+Result:
+
+setEnabledProtocols works as expected.

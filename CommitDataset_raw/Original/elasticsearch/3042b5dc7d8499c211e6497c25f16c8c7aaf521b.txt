@@ -1,0 +1,9 @@
+Stop exporting HOSTNAME from scripts
+
+Today we explicitly export the HOSTNAME variable from scripts. This is
+probably a relic from the days when the scripts were not run on bash but
+instead assume a POSIX-compliant shell only where HOSTNAME is not
+guaranteed to exist. Yet, bash guarantees that HOSTNAME is set so we do
+not need to set it in scripts. This commit removes this legacy.
+
+Relates #25807

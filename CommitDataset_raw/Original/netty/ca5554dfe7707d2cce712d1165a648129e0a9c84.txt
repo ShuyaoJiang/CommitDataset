@@ -1,0 +1,8 @@
+[#1236] Fix problem where adding a new ChannelHandler could block the eventloop
+
+This change also introduce a few other changes which was needed:
+ * ChannelHandler.beforeAdd(...) and ChannelHandler.beforeRemove(...) were removed
+ * ChannelHandler.afterAdd(...) -> handlerAdded(...)
+ * ChannelHandler.afterRemoved(...) -> handlerRemoved(...)
+ * SslHandler.handshake() -> SslHandler.hanshakeFuture() as the handshake is triggered automatically after
+   the Channel becomes active

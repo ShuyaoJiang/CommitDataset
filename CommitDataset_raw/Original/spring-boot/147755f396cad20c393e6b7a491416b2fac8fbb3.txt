@@ -1,0 +1,11 @@
+Support VcapApplicationListener Number Credentials
+
+Update VcapApplicationListener to support Number based credentials.
+Previously, any service credential value that wasn't a String would
+be discarded. This was particularly a problem for services that exposed
+a port as a JSON Number.  This change takes numbers in the credential
+payload into account, converting them to Strings so that they will pass
+through the properties system properly. There's no real downside to this
+as Spring will coerce them back into Numbers if needed by an application.
+
+Fixes gh-2707

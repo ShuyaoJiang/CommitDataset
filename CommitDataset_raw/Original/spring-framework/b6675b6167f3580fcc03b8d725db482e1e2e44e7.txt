@@ -1,0 +1,16 @@
+Revisit empty body response support in HTTP client
+
+Prior to this commit, HTTP responses without body (response status 204
+or 304, Content-Length: 0) were handled properly by RestTemplates. But
+some other cases were not properly managed, throwing exceptions for
+valid HTTP responses.
+
+This commit better handles HTTP responses, using a response wrapper that
+can tell if a response:
+
+* has no message body (HTTP status 1XX, 204, 304 or Content-Length:0)
+* has an empty message body
+
+This covers rfc7230 Section 3.3.3.
+
+Issue: SPR-8016

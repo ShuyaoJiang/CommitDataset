@@ -1,0 +1,10 @@
+[ML] Refactor job deletion logic into the transport action (#33891)
+
+The job deletion logic was scattered around a few places:
+the transport action, the job manager and the deletion task.
+Overloading the task with deletion logic also meant extra
+dependencies in the core package which should be unnecessary.
+
+This commit consolidates all this logic into the transport action
+and replaces the deletion task with a plain one that needs not be
+aware of deletion logic.

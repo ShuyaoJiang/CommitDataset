@@ -1,0 +1,15 @@
+[#2647] Respect IOV_MAX when call writev in native transport
+
+Motivation:
+
+epoll transport fails on gathering write of more then 1024 buffers. As linux supports max. 1024 iov entries when calling writev(...) the epoll transport throws an exception.
+
+Thanks again to @blucas to provide me with a reproducer and so helped me to understand what the issue is.
+
+Modifications:
+
+Make sure we break down the writes if to many buffers are uses for gathering writes.
+
+Result:
+
+Gathering writes work with any number of buffers

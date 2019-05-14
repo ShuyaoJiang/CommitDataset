@@ -1,0 +1,13 @@
+Fix AbstractDiskHttpData int conversion from long
+
+Motivations:
+The chunkSize might be oversized after comparison (size being > of int
+capacity) if file size is bigger than an integer.
+
+Modifications:
+Change it to long.
+
+Result:
+There is no more int oversized.
+
+Same fix for 4.1 and Master

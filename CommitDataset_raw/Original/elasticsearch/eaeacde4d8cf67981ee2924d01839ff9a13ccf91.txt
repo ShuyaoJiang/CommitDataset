@@ -1,0 +1,17 @@
+Throw an exception when unable to read Certificate (#40092)
+
+With SUN security provider, a CertificateException is thrown when
+attempting to parse a Certificate from a PEM file on disk with
+`sun.security.provider.X509Provider#parseX509orPKCS7Cert`
+
+When using the BouncyCastle Security provider (as we do in fips
+tests) the parsing happens in
+CertificateFactory#engineGenerateCertificates which doesn't throw
+an exception but returns an empty list.
+
+In order to have a consistent behavior, this change makes it so
+that we throw a CertificateException when attempting to read
+a PEM file from disk and failing to do so in either Security
+Provider
+
+Resolves: #39580

@@ -1,0 +1,16 @@
+Prevent resource transformation of gzipped CSS files
+
+When resolved through the `GzipResourceResolver`, CSS files can be
+resolved as their pre-gzipped variant, if a ".gz" file is present in the
+configured resource locations.
+
+Such resources are gzipped and thus should not be transformed by
+`CssLinkResourceTransformer`s, since rewriting those would need to
+uncompress/transform/recompress. This would lead to poorer performances
+than resolving plain resources and delegating compression to the
+container.
+
+This commit checks for `GzippedResource` instances in
+`CssLinkResourceTransformer` and avoids processing them.
+
+Issue: SPR-14773

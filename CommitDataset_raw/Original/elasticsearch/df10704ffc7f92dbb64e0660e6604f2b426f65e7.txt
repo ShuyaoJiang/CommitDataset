@@ -1,0 +1,11 @@
+Fix use of time zone in date_histogram rewrite (#31407)
+
+Currently, DateHistogramAggregationBuilder#rewriteTimeZone uses the aggregation
+date math parser and time zone to check whether all values in a read have the
+same timezone to speed up computation. However, the upper and lower bounds to
+check are retrieved as longs in epoch_millis, so they don't need to get parsed
+using a time zone or a parser other than "epoch_millis". This changes this
+behaviour that was causing problems when the field type mapping was specifying
+only "epoch_millis" as a format but a different timezone than UTC was used.
+
+Closes #31392

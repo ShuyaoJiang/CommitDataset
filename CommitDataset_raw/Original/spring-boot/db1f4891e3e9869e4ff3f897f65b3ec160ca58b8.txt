@@ -1,0 +1,11 @@
+Don’t rely on org.json:json being pulled in transitively
+
+Previously, spring-boot required org.json:json to be on the compile
+classpath, but it was only there by virtue of it being a transitive
+dependency of another of spring-boot’s dependency. This commit makes
+it clear that spring-boot has an (optional) dependency on org.json:json
+by having an explicit dependency declaration for it. Additionally, the
+name of the version property and the alphabetical ordering in
+spring-boot-dependencies have been corrected.
+
+Closes gh-3290

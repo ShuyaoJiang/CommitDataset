@@ -1,0 +1,5 @@
+CachedIntrospectionResults uses full WeakReference for any non-safe ClassLoader arrangement
+
+Previously, CachedIntrospectionResults had three modes of caching, with the intermediate mode relying on WeakReferences in the JDK PropertyDescriptor implementation. Since the JDK is actually using SoftReferences there these days, losing information in case of a GC run with tough memory constraints, we want to allow for hard references in PropertyDescriptor objects and therefore use a full WeakReference for the CachedIntrospectionResults object itself.
+
+Issue: SPR-10028

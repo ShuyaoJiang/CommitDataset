@@ -1,0 +1,12 @@
+Prevent Jetty tests from polluting URL’s URLStreamHandlerFactory
+
+The JVM only allows URL.setURLStreamHandlerFactory to be called once.
+This is problematic as the JSP support in embedded Tomcat and embedded
+Jetty both call this method.
+
+This commit uses reflection to null out URL’s factory field before and
+after the embedded Jetty tests have run. This ensures that they can
+run successfully if Tomcat has already installed its factory and that
+Tomcat-related tests can also run afterwards.
+
+See gh-5290

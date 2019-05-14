@@ -1,0 +1,19 @@
+Improved error message in FixedChannelPool
+
+Motivation:
+
+`FixedChannelPool` allows users to configure `acquireTimeoutMillis`
+and expects given value to be greater or equal to zero when timeout
+action is supplied. However, validation error message said that
+value is expected to be greater or equal to one. Code performs
+check against zero.
+
+Modifications:
+
+Changed error message to say that value greater or equal to
+zero is expected. Added test to check that zero is an acceptable
+value.
+
+Result:
+
+Exception with right error message is thrown.

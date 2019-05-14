@@ -1,0 +1,5 @@
+[TEST] Enforce skip headers when needed (#34735)
+
+The java yaml test runner supports sending request headers, yet not all clients support headers. This commit makes sure that we enforce adding a skip section with feature "headers" whenever headers are used in a do section as part of a test. That decreases the chance for new tests to break client builds due to the missing skip section.
+
+Closes #34650

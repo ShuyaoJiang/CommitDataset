@@ -1,0 +1,11 @@
+Use private directory for temporary files
+
+This change ensures that the temporary directory used for java.io.tmpdir
+is a private temporary directory. To achieve this we use mktemp on macOS
+and Linux to give us a private temporary directory and the value of the
+environment variable TMP on Windows. For this to work with our
+packaging, we add java.io.tmpdir=${ES_TMPDIR} to our packaged
+jvm.options, we set ES_TMPDIR respectively in our startup scripts, and
+resolve the value of the template ${ES_TMPDIR} at startup.
+
+Relates #27609

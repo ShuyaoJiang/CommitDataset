@@ -1,0 +1,8 @@
+Decouple XContentType from StreamInput/Output (#28927)
+
+This removes the readFrom and writeTo methods from XContentType, instead using
+the more generic `readEnum` and `writeEnum` methods. Luckily they are both
+encoded exactly the same way, so there is no compatibility layer needed for
+backwards compatibility.
+
+Relates to #28504

@@ -1,0 +1,11 @@
+Unpooled and Wrapped Buffer Leak
+
+Motivation:
+There are a few buffer leaks related to how Unpooled.wrapped and Base64.encode is used.
+
+Modifications:
+- Fix usages of Bas64.encode to correct leaks
+- Clarify interface of Unpooled.wrapped* to ensure reference count ownership is clearly defined.
+
+Result:
+Reference count code is more clearly defined and less leaks are possible.

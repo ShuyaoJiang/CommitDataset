@@ -1,0 +1,10 @@
+[Test] Fix DiscoveryNodesTests.testDeltas() (#28361)
+
+The DiscoveryNodes.Delta was changed in #28197. Previous/Master nodes
+are now always set in the `Delta` (before the change they were set only
+if the master changed) and the `masterChanged()` method is now based on
+object equality and nodes ephemeral ids (before the change it was based
+on nodes id).
+
+This commit adapts the DiscoveryNodesTests.testDeltas() to reflect the
+changes.

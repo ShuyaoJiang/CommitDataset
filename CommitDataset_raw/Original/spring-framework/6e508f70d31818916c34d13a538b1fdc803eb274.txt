@@ -1,0 +1,11 @@
+Add locking to AbstractRequestExpectationManager
+
+This commit ensures that verifying a request, which includes finding
+and updating expectations, is done synchronously to avoid concurrent
+modification exceptions.
+
+Technically SimpleRequestExpectationManager is not even expected to see
+concurrent requests by definition but with
+UnorderedRequestExpectationManager it can happen.
+
+Issue: SPR-15029

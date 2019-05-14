@@ -1,0 +1,23 @@
+Finish work on http2 child channel implementation and http2 frame api.
+
+Motivation:
+
+Our http2 child channel implementation was not 100 % complete and had a few bugs. Beside this the performance overhead was non-trivial.
+
+Modifications:
+
+There are a lot of modifications, the most important....
+  * Http2FrameCodec extends Http2ConnectionHandler and Http2MultiplexCodec extends Http2FrameCodec to reduce performance heads and inter-dependencies on handlers in the pipeline
+  * Correctly handle outbound flow control for child channels
+  * Support unknow frame types in Http2FrameCodec and Http2MultiplexCodec
+  * Use a consistent way how to create Http2ConnectionHandler, Http2FrameCodec and Http2MultiplexCodec (via a builder)
+  * Remove Http2Codec and Http2CodecBuilder as the user should just use Http2MultipleCodec and Http2MultiplexCodecBuilder now
+  * Smart handling of flushes from child channels to reduce overhead
+  * Reduce object allocations
+  * child channels always use the same EventLoop as the parent Channel to reduce overhead and simplify implementation.
+  * Not extend AbstractChannel for the child channel implementation to reduce overhead in terms of performance and memory usage
+  * Remove Http2FrameStream.managedState(...) as the user of the child channel api should just use Channel.attr(...)
+
+Result:
+
+Http2MultiplexCodec (and so child channels) and Http2FrameCodec are more correct, faster and more feature complete.

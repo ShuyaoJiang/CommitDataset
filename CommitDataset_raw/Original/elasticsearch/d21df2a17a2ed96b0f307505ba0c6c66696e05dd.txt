@@ -1,0 +1,11 @@
+Use Sequence number powered OCC for processing updates (#37308)
+
+Updates perform realtime get, perform the requested update and then index the document again
+using optimistic concurrency control. This PR changes the logic to use sequence numbers instead
+of versioning. 
+
+Note that the current versioning logic isn't suffering from the same problem as external OCC
+requests because the get and indexing is always done on the same primary.
+
+Relates #36148 
+Relates #10708 

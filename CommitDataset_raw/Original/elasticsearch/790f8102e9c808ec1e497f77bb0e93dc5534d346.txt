@@ -1,0 +1,17 @@
+Modify `BigArrays` to take name of circuit breaker (#36461)
+
+This commit modifies BigArrays to take a circuit breaker name and
+the circuit breaking service. The default instance of BigArrays that
+is passed around everywhere always uses the request breaker. At the
+network level, we want to be using the inflight request breaker. So this
+change will allow that.
+
+Additionally, as this change moves away from a single instance of
+BigArrays, the class is modified to not be a Releasable anymore.
+Releasing big arrays was always dispatching to the PageCacheRecycler,
+so this change makes the PageCacheRecycler the class that needs to be
+managed and torn-down.
+
+Finally, this commit closes #31435 be making the serialization of
+transport messages use the inflight request breaker. With this change,
+we no longer push the global BigArrays instnace to the network level.

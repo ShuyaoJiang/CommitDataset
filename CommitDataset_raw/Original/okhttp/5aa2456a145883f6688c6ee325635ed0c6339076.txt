@@ -1,0 +1,8 @@
+Fix TLS requiresTunnel which was being computed incorrectly.
+
+We were only returning 'true' once we were already in a tunnel.
+This was bogus. In theory a TLS tunnel sending extra data could
+be corrupted due to this bug.
+
+Also migrate one of the TLS tunnel tests to use SslContextBuilder
+instead of TestSSLContext.

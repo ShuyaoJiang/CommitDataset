@@ -1,0 +1,9 @@
+Prevent CCR recovery from missing documents (#38237)
+
+Currently the snapshot/restore process manually sets the global
+checkpoint to the max sequence number from the restored segements. This
+does not work for Ccr as this will lead to documents that would be
+recovered in the normal followering operation from being recovered.
+
+This commit fixes this issue by setting the initial global checkpoint to
+the existing local checkpoint.

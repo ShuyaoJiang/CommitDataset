@@ -1,0 +1,10 @@
+Fail fast if both uri and client attributes are set
+
+Previously, an URI and individual client attributes can be set to
+configure the mongo client. In such a scenario, the URI is ignored.
+
+This commit changes the URI to be "null" and the creation of the client
+to fail if both the uri and client attributes are set. If no client
+attributes are set, the uri is used as before.
+
+Closes gh-6739

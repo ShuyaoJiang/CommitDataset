@@ -1,0 +1,19 @@
+Fix IndexOutOfBoundsException from SslHandler on JDK 8
+
+Motivation:
+
+When SslHandler.unwrap() copies SSL records into a heap buffer, it does
+not update the start offset, causing IndexOutOfBoundsException.
+
+Modifications:
+
+- Copy to a heap buffer before calling unwrap() for simplicity
+- Do not copy an empty buffer to a heap buffer.
+  - unwrap(... EMPTY_BUFFER ...) never involves copying now.
+- Use better parameter names for unwrap()
+- Clean-up log messages
+
+Result:
+
+- Bugs fixed
+- Cleaner code

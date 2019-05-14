@@ -1,0 +1,13 @@
+PoolChunkList.allocate(...) should return false without the need to walk all the contained PoolChunks when the requested capacity is too big.
+
+Motivation:
+
+PoolChunkList.allocate(...) should return false without the need to walk all the contained PoolChunks when the requested capacity is larger then the capacity that can be allocated out of the PoolChunks in respect to the minUsage() and maxUsage() of the PoolChunkList.
+
+Modifications:
+
+Precompute the maximal capacity that can be allocated out of the PoolChunks that are contained in the PoolChunkList and use this to fast return from the allocate(...) method if an allocation capacity larger then that is requested.
+
+Result:
+
+Faster detection of allocations that can not be handled by the PoolChunkList and so faster allocations in general via the PoolArena.

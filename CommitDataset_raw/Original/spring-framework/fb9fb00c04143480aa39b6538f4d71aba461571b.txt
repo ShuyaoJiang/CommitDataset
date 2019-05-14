@@ -1,0 +1,18 @@
+Update GenericWAC to implement ConfigurableWAC
+
+GenericWebApplicationContext now implements
+ConfigurableWebApplicationContext in order to be compatible with
+Framework/DispatcherServlet and ContextLoader/Listener, especially with
+regard to changes in SPR-7672 that allow for programmatic use of these
+types within Servlet 3.0+ environments.  For the first time, it's now
+reasonable to imagine injecting a GWAC into DispatcherServlet; the most
+robust way to accommodate this possibility is for GWAC to implement
+CWAC.
+
+The implementation is in name only, allowing for interchangable use of
+GWAC anywhere, for example, an XWAC could otherwise go.  Methods such
+as setConfigLocation will throw UnsupportedOperationException if the
+configLocation value actually contains text.  Other methods are
+implemented as no-ops or to throw UOE as appropriate.
+
+Issue: SPR-7672

@@ -1,0 +1,13 @@
+Fix possible AttributeMap corruption on double removal
+
+Motivation:
+
+When remove0() is called multiple times for an DefaultAttribute it can cause corruption of the internal linked-list structure.
+
+Modifications:
+
+- Ensure remove0() can not cause corruption by null out prev and next references.
+
+Result:
+
+No more corruption possible

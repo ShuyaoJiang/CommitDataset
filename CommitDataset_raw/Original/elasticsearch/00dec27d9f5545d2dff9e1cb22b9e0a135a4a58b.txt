@@ -1,0 +1,15 @@
+SQL: Relax RemoteFailure parsing so that it also parses error metadata (elastic/x-pack-elasticsearch#3938)
+
+The current parsing of errors in the RemoteFailure class is strict and
+fails on any field that is not one of [caused_by, reason, root_cause,
+stack_trace, type]. Sadly some exceptions adds more headers or
+metadata when they are printed as XContent and such fields can't be
+easily ignored at parsing time.
+
+This commit changes the RemoteFailure.parseFromResponse() method so that
+it parses errors using the same behavior as the high level rest client:
+it parses any unknown field as a metadata if it's string value or an
+array of string and just ignores and skips everything else without
+throwing an exception.
+
+Original commit: elastic/x-pack-elasticsearch@1348706807a694263e10c6169eee76372c782a20

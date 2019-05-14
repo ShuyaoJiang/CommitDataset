@@ -1,0 +1,10 @@
+Add setting to bypass Rollover action (#36235)
+
+Adds a setting that indicates that an index is done indexing, set by ILM
+when the Rollover action completes. This indicates that the Rollover
+action should be skipped in any future invocations, as long as the index
+is no longer the write index for its alias.
+
+This enables 1) an index with a policy that involves the Rollover action
+to have the policy removed and switched to another one without use of
+the move-to-step API, and 2) integrations with Beats and CCR.

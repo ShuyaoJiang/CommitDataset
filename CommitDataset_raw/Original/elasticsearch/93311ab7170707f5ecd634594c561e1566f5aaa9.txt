@@ -1,0 +1,16 @@
+Restore local checkpoint tracker on promotion
+
+When a shard is promoted to replica, it's possible that it was
+previously a replica that started following a new primary. When it
+started following this new primary, the state of its local checkpoint
+tracker was reset. Upon promotion, it's possible that the state of the
+local checkpoint tracker has not yet restored from a successful
+primary-replica re-sync. To account for this, we must restore the state
+of the local checkpoint tracker when a replica shard is promoted to
+primary. To do this, we stream the operations in the translog, marking
+the operations that are in the translog as completed. We do this before
+we fill the gaps on the newly promoted primary, ensuring that we have a
+primary shard with a complete history up to the largest maximum sequence
+number it has ever seen.
+
+Relates #25553

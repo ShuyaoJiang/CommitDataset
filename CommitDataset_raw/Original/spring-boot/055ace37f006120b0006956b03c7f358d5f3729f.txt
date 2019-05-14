@@ -1,0 +1,18 @@
+Support <springProperty> in logback configurations
+
+Include support for a new <springProperty> element which can be used in
+`logback-spring.xml` files to add properties from the Spring
+Environment. For example:
+
+	<configuration>
+		...
+		<springProperty name="destination" source="my.loggger.extradest"/>
+		<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+			<file>${destination}</file>
+				...
+			</file>
+		</appender>
+		...
+	</configuration>
+
+Fixes gh-1788

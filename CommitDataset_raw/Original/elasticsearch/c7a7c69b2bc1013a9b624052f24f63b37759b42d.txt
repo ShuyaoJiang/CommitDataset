@@ -1,0 +1,14 @@
+Simplify NioChannel creation and closing process (#25504)
+
+Currently an NioChannel is created and it is UNREGISTERED. At some point
+it is registered with a selector. From that point on, the channel can
+only be closed by the selector. The fact that a channel might not be
+associated with a selector has significant implications for concurrency
+and the channel shutdown process. The only thing that is simplified by
+allowing channels to be in a state independent of a selector is some
+testing scenarios.
+
+This PR modifies channels so that they are given a selector at creation
+time and are always associated with that selector. Only that selector
+can close that channel. This simplifies the channel lifecycle and
+closing intricacies.

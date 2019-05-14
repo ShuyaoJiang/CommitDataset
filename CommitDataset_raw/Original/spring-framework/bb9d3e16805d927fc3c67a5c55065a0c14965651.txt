@@ -1,0 +1,12 @@
+Renamed RouterFunction composition methods
+
+Renamed `RouterFunction.andSame()` to `and()`, and `and()` to
+`andOther()`. The reason for this change is that we can expect most
+RouterFunctions to be parameterized over ServerResponse, and thus it
+makes sense to use the shortest composition method (`and()`) for
+composing router functions of the same type.
+
+When a user composes different response types, such as composing a
+`RouterFunction<RenderingResponse>` with an
+`RouterFunction<EntityResponse<?>`, the `andOther` method is to be used,
+but this is a less common scenario.

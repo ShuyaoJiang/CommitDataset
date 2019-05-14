@@ -1,0 +1,9 @@
+Change default order of OAuth2 resource server filter chain
+
+The default is now SecurityProperties.ACCESS_OVERRIDE_ORDER-1
+(instead of 3), and the user can set it with
+security.oauth2.resource.filter-order (as opposed to being hard
+coded). The filter is provided by Spring OAuth2 so this change is
+a BeanPostProcessor to call a setter on that object.
+
+Fixes gh-5072

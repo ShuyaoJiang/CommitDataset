@@ -1,0 +1,12 @@
+Only assert single commit iff index created on 6.2
+
+We introduced a single commit assertion when opening an index but create
+a new translog. However, this assertion is not held in this situation.
+
+1. A replica with two commits c1 and c2 starts peer-recovery with c1
+2. The recovery is sequence-based recovery but the primary is before 6.2 so
+it sent true for “createNewTranslog”
+3. Replica opens engine and create translog. We expect "open index and
+create translog" have 1 commit but we have c1 and c2.
+
+This commit makes sure to assert this iff the index was created on 6.2+.

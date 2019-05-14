@@ -1,0 +1,13 @@
+Forbid trappy methods from java.time (#28476)
+
+ava.time has the functionality needed to deal with timezones with varying 
+offsets correctly, but it also has a bunch of methods that silently let you
+forget about the hard cases, which raises the risk that we'll quietly do the
+wrong thing at some point in the future.
+
+This change adds the trappy methods to the list of forbidden methods to try and
+help stop this from happening.
+
+It also fixes the only use of these methods in the codebase so far:
+IngestDocument#deepCopy() used ZonedDateTime.of() which may alter the offset of
+the given time in cases where the offset is ambiguous.

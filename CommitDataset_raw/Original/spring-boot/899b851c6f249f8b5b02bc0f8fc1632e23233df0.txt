@@ -1,0 +1,11 @@
+Remove META-INF/INDEX.LIST when repackaging a jar file
+
+META-INF/INDEX.LIST files are pointless in an executable jar and
+moving application classes from the root of the jar to
+BOOT-INF/classes breaks the index, resulting in an
+InvalidJarIndexException being thrown.
+
+This commit updates the Repackager to automatically remove a
+META-INF/INDEX.LIST file from a jar file that is being repackaged.
+
+Closes gh-6601

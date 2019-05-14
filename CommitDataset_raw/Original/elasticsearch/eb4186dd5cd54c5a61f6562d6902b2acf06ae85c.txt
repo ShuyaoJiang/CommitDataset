@@ -1,0 +1,9 @@
+[ML] Stop datafeed when job fails (elastic/x-pack-elasticsearch#3107)
+
+The problem here was that when the autodetect process crashes
+we set the job state to FAILED but we did not remove the
+communicator from the map in AutodetectProcessManager.
+
+relates elastic/x-pack-elasticsearch#2773
+
+Original commit: elastic/x-pack-elasticsearch@9b8eafb4d0b7a944bd01e55785f34726d8504666

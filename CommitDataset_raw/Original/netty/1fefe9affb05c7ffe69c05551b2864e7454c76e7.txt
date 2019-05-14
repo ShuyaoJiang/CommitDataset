@@ -1,0 +1,18 @@
+[#4087] Correctly forward bytes when remove codec and handle channelInactive / channelReadComplete(...)
+
+Motivation:
+
+We missed to correctly implement the handlerRemoved(...) / channelInactive(...) and channelReadComplete(...) method, this leaded to multiple problems:
+
+ - Missed to forward bytes when the codec is removed from the pipeline
+ - Missed to call decodeLast(...) once the Channel goes in active
+ - No correct handling of channelReadComplete that could lead to grow of cumulation buffer.
+
+Modifications:
+
+- Correctly implement methods and forward to the internal ByteToMessageDecoder
+- Add unit test.
+
+Result:
+
+Correct behaviour

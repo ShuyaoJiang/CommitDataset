@@ -1,0 +1,8 @@
+Deprecate/move CGLIB methods AopUtils=>ClassUtils
+
+isCglibProxy* methods in AopUtils are useful in lower-level modules,
+i.e. those that cannot depend on .aop.  Therefore copied these methods
+to ClassUtils; deprecated the existing ones in AopUtils and now
+delegating to the new location; switched all usage of
+AopUtils#isCglibProxy* within the framework to use
+ClassUtils#isCglibProxy* instead.

@@ -1,0 +1,18 @@
+Support Part/MultiPartFile arrays in ArgumentResolvers
+
+Prior to this commit, parts of a multipart HTTP request could be
+injected in @RequestPart and @RequestParam annotated arguments, when
+using types:
+* MultipartFile, Collection<MultiPartFile>
+* javax.servlet.Part, Collection<Part>
+
+This commits updates @RequestParam and @RequestPart argument resolvers
+and now allows the array versions of those types:
+* Part[]
+* MultiPartFile[]
+
+Note that the MockHtpServletRequest backing tests for standard
+Servlets implementations now uses a MultiValueMap to store parts
+(versus a simple hashmap).
+
+Issue: SPR-11353

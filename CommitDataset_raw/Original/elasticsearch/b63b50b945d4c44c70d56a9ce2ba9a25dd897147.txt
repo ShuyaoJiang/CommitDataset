@@ -1,0 +1,17 @@
+Give precedence to index creation when mixing typed templates with typeless index creation and vice-versa. (#37871)
+
+Currently if you mix typed templates and typeless index creation or typeless
+templates and typed index creation then you will end up with an error because
+Elasticsearch tries to create an index that has multiple types: `_doc` and
+the explicit type name that you used.
+
+This commit proposes to give precedence to the index creation call so that
+the type from the template will be ignored if the index creation call is
+typeless while the template is typed, and the type from the index creation
+call will be used if there is a typeless template.
+
+This is consistent with the fact that index creation already "wins" if a field
+is defined differently in the index creation call and in a template: the
+definition from the index creation call is used in such cases.
+
+Closes #37773

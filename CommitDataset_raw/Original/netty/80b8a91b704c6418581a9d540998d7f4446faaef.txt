@@ -1,0 +1,18 @@
+Use offset finding eol avoid repeated scaning.
+
+Motivation:
+
+A large frame will be componsed by many packages. Every time the package
+arrived, findEndOfLine will be called from the start of the buffer. It
+will cause the complexity of reading frame equal to  O(n^2). This can be
+eliminated by using a offset to mark the last scan position, when new
+package arrived, just find the delimter from the mark. The complexity
+will be O(n).
+
+Modification:
+
+Add a offset to mark the last scan position.
+
+Result:
+
+Better performance for read large frame.

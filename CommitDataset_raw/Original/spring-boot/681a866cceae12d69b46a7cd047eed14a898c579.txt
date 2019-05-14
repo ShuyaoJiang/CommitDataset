@@ -1,0 +1,20 @@
+Exclude Java agents from class loader created by PropertiesLauncher
+
+PropertiesLauncher creates a ClassLoader that is used by the Launcher
+to load an application’s classes. During the creation of this
+ClassLoader URLs from its ClassLoader. This resulted resulting in Java
+agents that are added to the system class loader via the -javaagent
+launch option being available on both the system class loader and the
+created class loader. Java agents are intended to always be loaded by
+the system class loader. Making them available on another class loader
+breaks this model.
+
+This is the same problem that was in ExecutableArchiveLauncher and
+that was fixed in ee08667e (see gh-863).
+
+This commit updates PropertiesLauncher so that it skips the URLs of
+any Java agents (found by examining the JVM’s input arguments) when
+copying URLs over to the new ClassLoader, thereby ensuring that Java
+agents are only ever loaded by the system class loader.
+
+Closes gh-4911

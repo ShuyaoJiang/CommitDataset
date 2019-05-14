@@ -1,0 +1,9 @@
+Switching to non-power-of-2 bloom filter sizes, and making serialization more
+future-proof.
+Unfortunately, this changes the serialized form, since hashBitsPerFunction was
+hardwired
+to the BloomFilter, and that really assumed power-of-two tables.
+Also, this fixes a nasty exponential-slowdown bug that was in the previous version of BloomFilter (that code was added to support serialization, and deleted as part of the new strategy for serialization)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=27307766

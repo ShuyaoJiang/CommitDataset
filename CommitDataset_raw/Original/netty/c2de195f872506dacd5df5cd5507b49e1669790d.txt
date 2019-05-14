@@ -1,0 +1,30 @@
+Improve performance of AsciiString.equals(Object).
+
+Motivation:
+
+The current implementation does byte by byte comparison, which we have seen
+can be a performance bottleneck when the AsciiString is used as the key in
+a Map.
+
+Modifications:
+
+Use sun.misc.Unsafe (on supporting platforms) to compare up to eight bytes at a time
+and get closer to the performance of String.equals(Object).
+
+Result:
+
+Significant improvement (2x - 6x) in performance over the current implementation.
+
+Benchmark                                             (size)   Mode   Samples        Score  Score error    Units
+i.n.m.i.PlatformDependentBenchmark.arraysBytesEqual       10  thrpt        10 118843477.518 2347259.347    ops/s
+i.n.m.i.PlatformDependentBenchmark.arraysBytesEqual       50  thrpt        10 43910319.773   198376.996    ops/s
+i.n.m.i.PlatformDependentBenchmark.arraysBytesEqual      100  thrpt        10 26339969.001   159599.252    ops/s
+i.n.m.i.PlatformDependentBenchmark.arraysBytesEqual     1000  thrpt        10  2873119.030    20779.056    ops/s
+i.n.m.i.PlatformDependentBenchmark.arraysBytesEqual    10000  thrpt        10   306370.450     1933.303    ops/s
+i.n.m.i.PlatformDependentBenchmark.arraysBytesEqual   100000  thrpt        10    25750.415      108.391    ops/s
+i.n.m.i.PlatformDependentBenchmark.unsafeBytesEqual       10  thrpt        10 248077563.510  635320.093    ops/s
+i.n.m.i.PlatformDependentBenchmark.unsafeBytesEqual       50  thrpt        10 128198943.138  614827.548    ops/s
+i.n.m.i.PlatformDependentBenchmark.unsafeBytesEqual      100  thrpt        10 86195621.349  1063959.307    ops/s
+i.n.m.i.PlatformDependentBenchmark.unsafeBytesEqual     1000  thrpt        10 16920264.598    61615.365    ops/s
+i.n.m.i.PlatformDependentBenchmark.unsafeBytesEqual    10000  thrpt        10  1687454.747     6367.602    ops/s
+i.n.m.i.PlatformDependentBenchmark.unsafeBytesEqual   100000  thrpt        10   153717.851      586.916    ops/s

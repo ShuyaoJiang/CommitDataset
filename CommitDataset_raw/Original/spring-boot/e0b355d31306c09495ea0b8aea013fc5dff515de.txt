@@ -1,0 +1,28 @@
+Avoid ClassNotFoundException caused by areturn verification
+
+The verifier's type checker is required to check that a type returned
+from a method (an areturn instruction) is assignable to the method's
+declared return type. When the return type is an interface, the JLS
+states that it should be treated as java.lang.Object. This means that
+no analysis of the type being returned is required and verification
+passes. When the return type is a class, the type being returned must
+be analyzed to ensure that it is compatible. This analysis causes the
+return type to be loaded during verification.
+
+Prior to this commit, BasicBatchConfigurer's
+createAppropriateTransactionManager method had a return type of
+AbstractPlatformTransactionManager and a branch that could return
+a JpaTransactionManager. This caused the verifier to attempt to load
+JpaTransactionManager so that it could check that it was assignable
+to AbstractPlatformTransactionManager. This would fail when
+spring-orm is not on the classpath as JpaTransactionManager could not
+be loaded.
+
+This commit updates BasicBatchConfigurer to change the return type
+of createAppropriateTransactionManager so that it returns a
+PlatformTransactionManager which is an interface. As described above,
+this relaxes the verification of any areturn instructions in the
+method and, in this particular case stops the verifier from trying to
+load JpaTransactionManager.
+
+Closes gh-8181

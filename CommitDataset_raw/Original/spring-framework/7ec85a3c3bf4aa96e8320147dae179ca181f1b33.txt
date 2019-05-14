@@ -1,0 +1,14 @@
+Support suppressed exceptions in the TestContext framework
+
+Prior to this commit, if multiple TestExecutionListener 'after' methods
+threw an exception, only the first such exception was rethrown.
+Subsequent exceptions were logged, but there was no way to access or
+process them other than via the log file.
+
+This commit addresses this shortcoming by making use of the support for
+suppressed exceptions introduced in Java 7. Specifically, if multiple
+TestExecutionListener 'after' methods throw an exception, the first
+exception will be rethrown with subsequent exceptions suppressed in the
+first one.
+
+Issue: SPR-14459

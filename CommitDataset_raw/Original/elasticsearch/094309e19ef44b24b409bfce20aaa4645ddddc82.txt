@@ -1,0 +1,11 @@
+Fix failing CCR retention lease test
+
+Finally! This commit should fix the issues with the CCR retention lease
+that has been plaguing build failures. The issue here is that we are
+trying to prevent the clear session requests from being executed until
+after we have been able to validate that retention leases are being
+renewed. However, we were only blocking the clear session requests but
+not blocking them when they are proxied through another node. This
+commit addresses that.
+
+Closes #39268

@@ -1,0 +1,11 @@
+HTTP/2 Closed Streams Conditional Priority Tree Removal
+
+Motivation:
+The HTTP/2 specification allows for closed (and streams in any state) to exist in the priority tree. The current code removes streams from the priority tree as soon as they are closed (subject to the removal policy). This may lead to undesired distribution of resources from the peer's perspective.
+
+Modifications:
+- We should only remove streams from the priority tree when they have no descendant streams in a viable state.
+- We should track when tree edges change or nodes are removed if inviable nodes can then be removed.
+
+Result:
+Priority tree doesn't remove closed streams until descendant are all closed, or there are no descendants.

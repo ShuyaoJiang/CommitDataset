@@ -1,0 +1,12 @@
+Remove canSetPolicy, canUpdatePolicy, and canRemovePolicy (#33037)
+
+* Remove canSetPolicy, canUpdatePolicy and canRemovePolicy
+
+Since we now store a pre-compiled list of steps for an index's phase in the
+`PolicyStepsRegistry`, we no longer need to worry about updating policies as any
+updates won't affect the current phase, and will only be picked up on phase
+transitions.
+
+This also removes the tests that test these methods
+
+Relates to #29823

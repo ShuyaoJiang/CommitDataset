@@ -1,0 +1,8 @@
+Do not enable cglib if spring.aop.proxy-target-class is configured
+
+This commit makes sure to honour the `spring.aop.proxy-target-class`
+property if set by the user. Previously, the
+`PersistenceExceptionTranslationPostProcessor` was always configured to
+use cglib, regardless of the value of that property.
+
+Closes gh-8887

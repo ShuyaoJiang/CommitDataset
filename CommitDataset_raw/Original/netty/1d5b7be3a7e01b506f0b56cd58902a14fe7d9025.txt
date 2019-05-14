@@ -1,0 +1,23 @@
+Fix three bugs in CompositeByteBuf (#8773)
+
+Motivation
+
+In #8758, @doom369 reported an infinite loop bug in CompositeByteBuf
+which was introduced in #8437.
+
+This is the same small fix for that, along with fixes for two other bugs
+found while re-inspecting the changes and adding unit tests.
+
+Modification
+
+- Replace recursive call to toComponentIndex with toComponentIndex0 as
+intended
+- Add missed "lastAccessed" racy cache invalidation in capacity(int)
+method
+- Fix incorrect determination of initial offset in non-zero cIndex case
+of updateComponentOffsets method
+- New unit tests for previously uncovered methods
+
+Results
+
+Fewer bugs.

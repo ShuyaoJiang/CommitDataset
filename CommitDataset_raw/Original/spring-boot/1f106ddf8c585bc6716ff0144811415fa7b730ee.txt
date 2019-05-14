@@ -1,0 +1,13 @@
+Enable connection validation by default
+
+Hikari and Commons DBCP2 are already validating that the connection is
+valid before borrowing it from the pool. This commit makes that behaviour
+consistent by enabling that feature for the Tomcat and Commons DBCP data
+sources.
+
+Since a validation query is required in those cases, the infrastructure
+of `DataSourceHealthIndicator` has been merged in a single place: the
+`DatabaseDriver` enum provides not only the driver class names but also
+the validation query, if any.
+
+Closes gh-4906

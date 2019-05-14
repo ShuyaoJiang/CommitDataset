@@ -1,0 +1,23 @@
+[ML] Add created_by info to usage stats (#40518)
+
+This change adds information about which UI path
+(if any) created ML anomaly detector jobs to the
+stats returned by the _xpack/usage endpoint.
+
+Counts for the following possibilities are expected:
+
+* ml_module_apache_access
+* ml_module_apm_transaction
+* ml_module_auditbeat_process_docker
+* ml_module_auditbeat_process_hosts
+* ml_module_nginx_access
+* ml_module_sample
+* multi_metric_wizard
+* population_wizard
+* single_metric_wizard
+* unknown
+
+The "unknown" count is for jobs that do not have a
+created_by setting in their custom_settings.
+
+Closes #38403

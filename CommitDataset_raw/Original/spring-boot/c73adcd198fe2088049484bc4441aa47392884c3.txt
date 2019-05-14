@@ -1,0 +1,12 @@
+Add a defaultValue attribute to config meta-data
+
+Update `ConfigurationMetadataAnnotationProcessor` to include the
+'defaultValue' of a property when possible. For example the
+'defaultValue' or 'server.port' is '8080'.
+
+Default values are detected by inspecting the field assignments of
+@ConfigurationProperties items. In order to detect field values some
+internals of the Java compiler are used. To save a dependency on
+'tools.jar' internal javac classes are accessed using reflection.
+
+See gh-1001

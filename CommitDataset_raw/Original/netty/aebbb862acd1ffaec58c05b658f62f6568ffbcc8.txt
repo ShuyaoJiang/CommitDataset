@@ -1,0 +1,17 @@
+Add support for ALPN when using openssl + NPN client mode and support for CipherSuiteFilter
+
+Motivation:
+
+To support HTTP2 we need APLN support. This was not provided before when using OpenSslEngine, so SSLEngine (JDK one) was the only bet.
+Beside this CipherSuiteFilter was not supported
+
+Modifications:
+
+- Upgrade netty-tcnative and make use of new features to support ALPN and NPN in server and client mode.
+- Guard against segfaults after the ssl pointer is freed
+- support correctly different failure behaviours
+- add support for CipherSuiteFilter
+
+Result:
+
+Be able to use OpenSslEngine for ALPN / NPN for server and client.

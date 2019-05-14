@@ -1,0 +1,11 @@
+HTTP/2 Prevent modification of activeStreams while iterating
+
+Motivation:
+The Http2Connection interface exposes an activeStreams() method which allows direct iteration over the underlying collection. There are a few places that make copies of this collection to avoid modification while iterating, and a few places that do not make copies. The copy operation can be expensive on hot code paths and also we are not consistently iterating over the activeStreams collection.
+
+Modifications:
+- The Http2Connection interface should reduce the exposure of the underlying collection and just expose what is necessary for the interface to function.  This is just a means to iterate over the collection.
+- The DefaultHttp2Connection should use this new interface and protect it's internal state while iteration is occurring.
+
+Result:
+Reduction in surface area of the Http2Connection interface.  Consistent iteration of the set of active streams.  Concurrent modification exceptions are handled in 1 encapsulated spot.

@@ -1,0 +1,10 @@
+Decouple ClusterStateTaskListener & ClusterApplier (#30809)
+
+Today, the `ClusterApplier` and `MasterService` both use the
+`ClusterStateTaskListener` interface to notify their callers when asynchronous
+activities have completed. However, this is not wholly appropriate: none of the
+callers into the `ClusterApplier` care about the `ClusterState` arguments that
+they receive.  This change introduces a dedicated ClusterApplyListener
+interface for callers into the `ClusterApplier`, to distinguish these listeners
+from the real `ClusterStateTaskListener`s that are waiting for responses from
+the `MasterService`.

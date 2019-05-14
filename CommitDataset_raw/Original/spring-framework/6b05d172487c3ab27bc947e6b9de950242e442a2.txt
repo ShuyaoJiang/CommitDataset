@@ -1,0 +1,8 @@
+Response headers always in sync with native response
+
+ServerHttpResponse implementations now immediately propagate
+HttpHeaders changes as they so there is no need to call applyHeaders().
+
+The writeHeaders from ServerHttpResponse is also removed. RxNetty and
+Reactor Net both support implicitly completing if the handler
+completes without explicitly writing the headers or the response body.

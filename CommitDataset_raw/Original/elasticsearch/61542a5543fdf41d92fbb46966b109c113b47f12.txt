@@ -1,0 +1,10 @@
+Wait for Netty threads after Security tests (elastic/x-pack-elasticsearch#4390)
+
+This commit adds waits for two Netty threads that run in the background
+and require explicit calls to await inactivity in them. This shows up
+as an issue in security tests since we always use netty and do not have
+these waits so these threads can trip the thread leak detector.
+
+relates elastic/x-pack-elasticsearch#4367
+
+Original commit: elastic/x-pack-elasticsearch@76d84553bacc1e1d8e4e58f92f35ac0eca4974de

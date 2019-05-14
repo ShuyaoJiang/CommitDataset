@@ -1,0 +1,16 @@
+fix index refresh in test within 20_mix_typeless_typeful (#39198)
+
+the test "Implicitly create a typeless ... typed template"
+fails occasionally because the index operation hasn't
+propogated to update the index mapping in time for the
+following assertion about a dynamically mapped field "bar".
+
+error failed with:
+
+```
+field [test-1.mappings.my_type.properties.bar] doesn't have a true value
+Expected: not null
+     but: was null
+```
+
+refreshing the index should resolve this timing issue.

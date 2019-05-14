@@ -1,0 +1,13 @@
+Allow ndots=0 in DnsNameResolver and search domains - fixes #5570
+
+Motivation:
+
+The ndots = 0 is a valid value for ndots, it means that when using a non dotted name, the resolution should first try using a search and if it fails then use subdomains. Currently it is not allowed. Docker compose uses this when wiring up containers as names have usually no dots inside.
+
+Modification:
+
+Modify DnsNameResolver to accept ndots = 0 and handle the case in the resolution procedure. In this case a direct search is done and then a fallback on the search path is performed.
+
+Result:
+
+The ndots = 0 case is implemented.

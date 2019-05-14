@@ -1,0 +1,19 @@
+CorsHandler to respect http connection (keep-alive) header.
+
+Motivation:
+
+The CorsHandler currently closes the channel when it responds to a preflight (OPTIONS)
+request or in the event of a short circuit due to failed validation.
+
+Especially in an environment where there's a proxy in front of the service this causes
+unnecessary connection churn.
+
+Modifications:
+
+CorsHandler now uses HttpUtil to determine if the connection should be closed
+after responding and to set the Connection header on the response.
+
+Result:
+
+Channel will stay open when the CorsHandler responds unless the client specifies otherwise
+or the protocol version is HTTP/1.0

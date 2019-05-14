@@ -1,0 +1,20 @@
+Client: Wrap synchronous exceptions (#28919)
+
+In the past the Low Level REST Client was super careful not to wrap
+any exceptions that it throws from synchronous calls so that callers can
+catch the exceptions and work with them. The trouble with that is that
+the exceptions are originally thrown on the async thread pool and then
+transfered back into calling thread. That means that the stack trace of
+the exception doesn't have the calling method which is *super* *ultra*
+confusing.
+
+This change always wraps exceptions transferred from the async thread
+pool so that the stack trace of the thrown exception contains the
+caller's stack. It tries to preserve the type of the throw exception but
+this is quite a fiddly thing to get right. We have to catch every type
+of exception that we want to preserve, wrap with the same type and
+rethrow. I've preserved the types of all exceptions that we had tests
+mentioning but no other exceptions. The other exceptions are either
+wrapped in `IOException` or `RuntimeException`.
+
+Closes #28399

@@ -1,0 +1,12 @@
+Scripting: Add instance and compiled classes to script contexts (#24868)
+
+This commit modifies the compile method of ScriptService to be context
+aware. The ScriptContext is now a generic class which contains both the
+instance type and compiled type for a script. Instance type may be
+stateful (for example, pre loading field information for the index a
+script will execute on, like in expressions), while the compiled type is
+stateless and used to construct instance type instances. This change is
+only a first step to cutover ScriptService to the new paradigm. It only
+converts callers to the script service, and has a small shim to wrap
+compilation from the script engines to support the current two fixed
+instance types, SearchScript and ExecutableScript.

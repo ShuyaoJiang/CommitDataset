@@ -1,0 +1,7 @@
+Remove tcp profile from low level nio channel (#27441)
+
+This is related to #27260. Currently every nio channel has a profile
+field. Profile is a concept that only relates to the tcp transport. Http
+channels will not have profiles. This commit moves the profile from the
+nio channel to the read context. The context is the level that protocol
+specific features and logic should live.

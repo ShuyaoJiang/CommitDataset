@@ -1,0 +1,10 @@
+Introduce FastThreadLocal which uses an EnumMap and a predefined fixed set of possible thread locals
+
+Motivation:
+Provide a faster ThreadLocal implementation
+
+Modification:
+Add a "FastThreadLocal" which uses an EnumMap and a predefined fixed set of possible thread locals (all of the static instances created by netty) that is around 10-20% faster than standard ThreadLocal in my benchmarks (and can be seen having an effect in the direct PooledByteBufAllocator benchmark that uses the DEFAULT ByteBufAllocator which uses this FastThreadLocal, as opposed to normal instantiations that do not, and in the new RecyclableArrayList benchmark);
+
+Result:
+Improved performance

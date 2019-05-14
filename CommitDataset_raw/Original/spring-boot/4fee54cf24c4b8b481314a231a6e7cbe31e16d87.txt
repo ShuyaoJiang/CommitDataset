@@ -1,0 +1,12 @@
+Expose a TestDispatcherServlet bean in the MockMvcAutoConfiguration
+
+This commit also contains changes to `ServletContextInitializerBeans`.
+`ServletContextInitializerBeans` can now be configured to only look
+for specific ServletContextInitializer subclasses, defaulting to
+ServletContextIntializer.class. `SpringBootMockMvcBuilderCustomizer`
+only cares about filters so it was unnecessary to look for all
+`ServletContextInitializer`s. Additionally, adapting `Servlet` beans
+caused a cycle once the `DispatcherServlet` bean was added and the
+customizer only needs to adapt `Filter` beans.
+
+Closes gh-13241

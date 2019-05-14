@@ -1,0 +1,13 @@
+[#2586] Use correct EventExecutor to notify for bind failures on late registration
+
+Motivation:
+
+We used the wrong EventExecutor to notify for bind failures if a late registration was done.
+
+Modifications:
+
+Use the correct EventExecutor to notify and only use the GlobelEventExecutor if the registration fails itself.
+
+Result:
+
+The correct Thread will do the notification.

@@ -1,0 +1,17 @@
+Fix the tcnative lib loading problem in OSGi
+
+Motivation:
+
+As the issue #5539 say, the OpenSsl.class will throw `java.lang.UnsatisfiedLinkError: org.apache.tomcat.jni.Library.version(I)I` when it is invoked. This path try to resolve the problem by modifying the native library loading logic of OpenSsl.class.
+
+Modifications:
+
+The OpenSsl.class loads the tcnative lib by `NativeLibraryLoader.loadFirstAvailable()`. The native library will be loaded in the bundle `netty-common`'s ClassLoader, which is diff with the native class's ClassLoader. That is the root cause of throws `UnsatisfiedLinkError` when the native method is invoked.
+So, it should load the native library by the its bundle classloader firstly, then the embedded resources if failed.
+
+Result:
+
+First of all, the error threw by native method problem will be resolved.
+Secondly, the native library should work as normal in non-OSGi env. But, this is hard. The loading logic of `Library.class` in `netty-tcnative` bundle is simple: try to load the library in PATH env. If not found, it falls back to the originally logic `NativeLibraryLoader.loadFirstAvailable()`.
+
+Signed-off-by: XU JINCHUAN <xsir@msn.com>

@@ -1,0 +1,6 @@
+Fix NPE on composite aggregation with sub-aggregations that need scores (#28129)
+
+The composite aggregation defers the collection of sub-aggregations to a second pass that visits documents only if they
+appear in the top buckets. Though the scorer for sub-aggregations is not set on this second pass and generates an NPE if any sub-aggregation
+tries to access the score. This change creates a scorer for the second pass and makes sure that sub-aggs can use it safely to check the score of
+the collected documents.

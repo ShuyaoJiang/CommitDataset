@@ -1,0 +1,9 @@
+Fix NPE in ResourceHttpMessageConverter
+
+ResourceHttpMessageConverter tries to use the filename to determine the
+media type, but for Resource implementations such as ByteArrayResource
+it is null, which causes NullPointerException. The fix checks whether
+getFilename returns null before attempting to determine the media type
+by it.
+
+Issue: SPR-10848

@@ -1,0 +1,16 @@
+Disable streaming when reading to Resources in RestTemplate
+
+Prior to this commit, the `ResourceHttpMessageConverter` would support
+converting from an `HttpInputMessage` to a `InputStreamResource`. This
+is valid when reading resources on the server side, but it's not
+compatible with the way `RestTemplate` works.
+
+The API exposed by `RestOperations` imply that the HTTP server response
+should be fully consumed and properly closed by the time the `exchange`
+method returns. In other words, this HTTP client does not support
+streaming the HTTP response.
+
+This commit allows the `ResourceHttpMessageConverter` to be configured
+to disable read streaming when used in `RestTemplate`.
+
+Issue: SPR-14882

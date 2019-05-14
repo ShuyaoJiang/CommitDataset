@@ -1,0 +1,18 @@
+Add @SafeVarargs to PromiseAggregator#add and PromiseNotifier#(...) https://github.com/netty/netty/issues/3147
+
+Motivation:
+
+8fbc513 introduced stray warnings in callsites of
+PromiseAggregator#add and PromiseNotifier#(...).
+
+Modifications:
+
+This commit adds the @SafeVarargs annotation to PromiseAggregator#add
+and PromiseNotifier#(...). As Netty is built with JDK7, this is a
+recognized annotation and should not affect runtime VM versions 1.5 and
+1.6.
+
+Result:
+
+Building Netty with JDK7 will no longer produce warnings in the
+callsites mentioned above.

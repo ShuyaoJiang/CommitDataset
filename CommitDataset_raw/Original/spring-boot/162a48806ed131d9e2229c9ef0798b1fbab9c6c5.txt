@@ -1,0 +1,12 @@
+Update custom layout sample so it builds with Java 9
+
+Previously, the custom layout sample did not configure the source
+and target for the compiler. This meant that both defaulted to 1.5
+which is not supported by Java 9's javac. The oldest support version
+is 1.6.
+
+This commit sets the maven.compiler.source and maven.compiler.target
+properties to 1.8 (the lowest version support by Boot 2.0) allowing
+the sample to build with both Java 8 and Java 9.
+
+See gh-10515

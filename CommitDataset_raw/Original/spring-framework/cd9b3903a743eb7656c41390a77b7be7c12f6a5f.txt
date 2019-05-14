@@ -1,0 +1,12 @@
+Introduce CorsFilter and CorsConfigurationMapping
+
+This commit introduces the following changes:
+ - The new CorsConfigurationMapping class allows to share the mapped
+   CorsConfiguration logic between AbstractHandlerMapping and CorsFilter
+ - In AbstractHandlerMapping, the Map<String, CorsConfiguration>
+   corsConfiguration property has been renamed to corsConfigurations
+ - CorsFilter allows to process CORS requests at filter level, using any
+   CorsConfigurationSource implementation (for example
+   CorsConfigurationMapping)
+
+Issue: SPR-13192

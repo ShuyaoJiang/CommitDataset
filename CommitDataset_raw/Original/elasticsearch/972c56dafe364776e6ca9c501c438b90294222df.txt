@@ -1,0 +1,23 @@
+Begin migrating SQL's next page (elastic/x-pack-elasticsearch#2271)
+
+Scrolling was only implemented for the `SqlAction` (not jdbc or cli)
+and it was implemented by keeping request state on the server. On
+principle we try to avoid adding extra state to elasticsearch where
+possible because it creates extra points of failure and tends to
+have lots of hidden complexity.
+
+This replaces the state on the server with serializing state to the
+client. This looks to the user like a "next_page" key with fairly
+opaque content. It actually consists of an identifier for the *kind*
+of scroll, the scroll id, and a base64 string containing the field
+extractors.
+
+Right now this only implements scrolling for `SqlAction`. The plan
+is to reuse the same implementation for jdbc and cli in a followup.
+
+This also doesn't implement all of the required serialization.
+Specifically it doesn't implement serialization of
+`ProcessingHitExtractor` because I haven't implemented serialization
+for *any* `ColumnProcessors`.
+
+Original commit: elastic/x-pack-elasticsearch@a8567bc5ec6602e252e7e16215fc875d7123b360

@@ -1,0 +1,10 @@
+Introduce fips_mode setting and associated checks (#32326)
+
+* Introduce fips_mode setting and associated checks
+
+Introduce xpack.security.fips_mode.enabled setting ( default false)
+When it is set to true, a number of Bootstrap checks are performed:
+- Check that Secure Settings are of the latest version (3)
+- Check that no JKS keystores are configured
+- Check that compliant algorithms ( PBKDF2 family ) are used for
+  password hashing

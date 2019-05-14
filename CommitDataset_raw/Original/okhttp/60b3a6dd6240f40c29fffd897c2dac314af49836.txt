@@ -1,0 +1,9 @@
+Be more careful about synchronization.
+
+SpdyConnection needs to guard its own state separately from
+the SpdyWriter, which permits slow blocking calls. Split these
+into multiple independent locks.
+
+Also use independent right-sized thread pools for reading (exactly
+one thread all the time) delayed writing (0 or 1 threads) and
+callbacks (any number of threads).

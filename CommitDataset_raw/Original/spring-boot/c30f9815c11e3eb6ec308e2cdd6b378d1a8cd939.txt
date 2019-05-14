@@ -1,0 +1,11 @@
+Fix detection of Autowired constructor with Kotlin
+
+Previously, the import selector wrongly assumed that we should not
+use constructor injection with Kotlin. Rather than looking up for the
+primary constructor, we retrieve available constructors on the Java
+counter-part.
+
+This commit applies the same logic as in the constructor parameter
+binder and checks for the primary constructor for Kotlin types.
+
+See gh-8762

@@ -1,0 +1,16 @@
+[ML] Stop the ML memory tracker before closing node (#39111)
+
+The ML memory tracker does searches against ML results
+and config indices.  These searches can be asynchronous,
+and if they are running while the node is closing then
+they can cause problems for other components.
+
+This change adds a stop() method to the MlMemoryTracker
+that waits for in-flight searches to complete.  Once
+stop() has returned the MlMemoryTracker will not kick
+off any new searches.
+
+The MlLifeCycleService now calls MlMemoryTracker.stop()
+before stopping stopping the node.
+
+Fixes #37117

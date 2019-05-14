@@ -1,0 +1,10 @@
+Deduplicate followup request handling.
+
+This code's currently both gnarly and subtle; there's a lot of
+nuance to the HTTP behavior, and a lot of state, but it isn't
+obvious in the state of the objects doing the work.
+
+Deduplicating work in HttpURLConnection with Job is a shy first
+step. It also points out some potential problems with Job, where
+we don't handle method changes or cookies correctly. That's
+critical!

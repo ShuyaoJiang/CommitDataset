@@ -1,0 +1,15 @@
+Ensure changes requests return the latest mapping version (#37633)
+
+Today we keep the mapping on the follower in sync with the leader's
+using the mapping version from changes requests. There are two rare
+cases where the mapping on the follower is not synced properly:
+
+1. The returned mapping version (from ClusterService) is outdated than
+the actual mapping. This happens because we expose the latest cluster
+state in ClusterService after applying it to IndexService.
+
+2. It's possible for the FollowTask to receive an outdated mapping than
+the min_required_mapping. In that case, it should fetch the mapping
+again; otherwise, the follower won't have the right mapping.
+
+Relates to #31140

@@ -1,0 +1,7 @@
+Core: Fix epoch millis java time formatter (#33302)
+
+The existing implemention could not deal with negative numbers as well
+as +- 999 milliseconds around the epoch.
+
+This commit uses Instant.ofEpochMilli() and parses the input to
+a number instead of using a date formatter.

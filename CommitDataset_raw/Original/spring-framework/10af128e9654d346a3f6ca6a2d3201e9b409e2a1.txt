@@ -1,0 +1,11 @@
+Update thread pool settings in STOMP/WebSocket config
+
+The clientInboundChannel and clientOutboundChannel now use twice
+the number of available processors by default to accomodate for some
+degree of blocking in task execution on average.
+
+In practice these settings still need to be configured explicitly in
+applications but these should serve as better default values than
+the default values in ThreadPoolTaskExecutor.
+
+Issue: SPR-11450

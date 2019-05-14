@@ -1,0 +1,13 @@
+Remove WeakOrderedQueue from WeakHashMap when FastThreadLocal value was removed if possible.
+
+Motivation:
+
+We should remove the WeakOrderedQueue from the WeakHashMap directly if possible and only depend on the semantics of the WeakHashMap if there is no other way for us to cleanup it.
+
+Modifications:
+
+Override onRemoval(...) to remove the WeakOrderedQueue if possible.
+
+Result:
+
+Less overhead and quicker collection of WeakOrderedQueue for some cases.

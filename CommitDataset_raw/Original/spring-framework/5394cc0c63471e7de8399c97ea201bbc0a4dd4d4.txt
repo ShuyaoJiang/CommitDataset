@@ -1,0 +1,13 @@
+WebClientException should allow access to status code of the response
+
+This commit changes the WebClient so that it now throws a
+`WebClientResponseException` for `ResponseSpec.bodyTo`. This newly
+introduces exception contains the status code, headers, and body of the
+response message.
+
+As a consequence of the above, we had to change `onStatus` so that the
+`exceptionFunction` now returns a `Mono<Throwable>` rather than a
+`Throwable`, which it was before. The Mono allows for asynchronous
+operations, such as reading the contents of the body.
+
+Issue: SPR-15824

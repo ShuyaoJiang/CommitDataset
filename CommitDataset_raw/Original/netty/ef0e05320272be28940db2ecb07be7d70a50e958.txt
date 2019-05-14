@@ -1,0 +1,19 @@
+Preserve the host name of address when parsing /etc/hosts file
+
+Motivation:
+
+When an InetNameResolver resolves a name, it is expected to reserve the
+requested host name in the resolved InetAddress.
+
+DefaultHostsFileEntriesResolver does not preserve the host name. For
+example, resolving 'localhost' will return an InetAddress whose address
+is '127.0.0.1', but its getHostString() will not return 'localhost' but
+just '127.0.0.1'.
+
+Modifications:
+
+Fix the construction of parsed InetAddresses in HostsFileParser
+
+Result:
+
+Host name is preserved in the resolved InetAddress

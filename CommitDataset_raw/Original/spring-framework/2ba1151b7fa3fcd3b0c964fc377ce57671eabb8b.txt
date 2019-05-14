@@ -1,0 +1,23 @@
+Support XML config fully in web integration tests
+
+Prior to this commit, it was impossible to use all features of XML
+configuration (e.g., the <qualifier> tag) in web-based integration
+tests (loaded using @WebAppConfiguration, @ContextConfiguration, etc.)
+if the Groovy library was on the classpath. The reason is that the
+GroovyBeanDefinitionReader used internally by
+GenericGroovyXmlWebContextLoader disables XML validation for its
+internal XmlBeanDefinitionReader, and this prevents some XML
+configuration features from working properly. For example, the default
+value for the 'type' attribute (defined in the spring-beans XSD) of the
+<qualifier> tag gets ignored, resulting in an exception when the
+application context is loaded.
+
+This commit addresses this issue by refactoring the implementation of
+loadBeanDefinitions() in GenericGroovyXmlWebContextLoader to use an
+XmlBeanDefinitionReader or GroovyBeanDefinitionReader depending on the
+file extension of the resource location from which bean definitions
+should be loaded. This aligns the functionality of
+GenericGroovyXmlWebContextLoader with the existing functionality of
+GenericGroovyXmlContextLoader.
+
+Issue: SPR-12768

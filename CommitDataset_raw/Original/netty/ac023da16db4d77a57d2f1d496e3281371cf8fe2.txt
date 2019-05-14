@@ -1,0 +1,13 @@
+Correctly handle overflow in Native.kevent(...) when EINTR is detected (#9024)
+
+Motivation:
+When kevent(...) returns with EINTR we do not correctly decrement the timespec
+structure contents to account for the time duration. This may lead to negative
+values for tv_nsec which will result in an EINVAL and raise an IOException to
+the event loop selection loop.
+
+Modifications:
+Correctly calculate new timeoutTs when EINTR is detected
+
+Result:
+Fixes #9013.

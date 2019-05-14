@@ -1,0 +1,11 @@
+Move compression config to ConnectionProfile (#35357)
+
+This is related to #34483. It introduces a namespaced setting for
+compression that allows users to configure compression on a per remote
+cluster basis. The transport.tcp.compress remains as a fallback
+setting. If transport.tcp.compress is set to true, then all requests
+and responses are compressed. If it is set to false, only requests to
+clusters based on the cluster.remote.cluster_name.transport.compress
+setting are compressed. However, after this change regardless of any
+local settings, responses will be compressed if the request that is
+received was compressed.

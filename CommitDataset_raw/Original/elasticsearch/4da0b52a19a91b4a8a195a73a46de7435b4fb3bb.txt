@@ -1,0 +1,25 @@
+[TEST] Force a stop to save rollup state before continuing (#32787)
+
+We only upgrade the ID when the state is saved in one of four scenarios:
+
+- when we reach a checkpoint (every 50 pages)
+- when we run out of data
+- when explicitly stopped
+- on failure
+
+The test was relying on the pre-upgrade to finish, save state and then
+the post-upgrade to start, hit the end of data and upgrade ID.  THEN
+get the new doc and apply the new ID.
+
+But I think this is vulnerable to timing issues. If the pre-upgrade
+portion shutdown before it saved the state, when restarting we would run
+through all the data from the beginning with the old ID, meaning both
+docs would still have the old scheme.
+
+This change makes the pre-upgrade wait for the job to go back to STARTED
+so that we know it persisted the end point.  Post-upgrade, it stops and
+restarts the job to ensure the state was persisted and the ID upgraded.
+
+That _should_ rule out the above timing issue.
+
+Closes #32773

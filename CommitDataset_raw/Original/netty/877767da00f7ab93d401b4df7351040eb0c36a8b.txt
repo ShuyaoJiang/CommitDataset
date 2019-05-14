@@ -1,0 +1,10 @@
+EpollEventLoop ensures that all submitted tasks are executed immediately.
+
+Motivation:
+If a task was submitted when wakenUp value was 1, the task didn't get a chance to produce wakeup event. So we need to check task queue again before calling epoll_wait. If we don't, the task might be pended until epoll_wait was timed out. It might be pended until idle timeout if IdleStateHandler existed in pipeline.
+
+Modifications:
+Execute epoll_wait in a non-blocking manner if there's a task submitted when wakenUp value was 1.
+
+Result:
+Every tasks in EpollEventLoop will not be pended.

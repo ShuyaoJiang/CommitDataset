@@ -1,0 +1,24 @@
+Do not send duplicate DNS queries when the same query is in progress already
+
+Related issue: #5179
+
+Motivation:
+
+When you attempt to make a lot of connection attempts to the same target
+host at the same time and our DNS resolver does not have a record for it
+in the cache, the DNS resolver will send as many DNS queries as the
+number of connection attempts.
+
+As a result, DNS server will reject or drop the requests, making the
+name resolution attempt fail.
+
+Modifications:
+
+- Add InflightNameResolver that keeps the list of name resolution
+  queries and subscribes to the future of the matching query instead of
+  sending a duplicate query.
+
+Result:
+
+- The AddressResolvers created by DnsAddressResolverGroup do not send
+  duplicate DNS queries anymore

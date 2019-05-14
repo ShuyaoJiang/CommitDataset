@@ -1,0 +1,11 @@
+Remove support for internal versioning for concurrency control (#38254)
+
+Elasticsearch has long [supported](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#index-versioning) compare and set (a.k.a optimistic concurrency control) operations using internal document versioning. Sadly that approach is flawed and can sometime do the wrong thing. Here's the relevant excerpt from the resiliency status page:
+
+> When a primary has been partitioned away from the cluster there is a short period of time until it detects this. During that time it will continue indexing writes locally, thereby updating document versions. When it tries to replicate the operation, however, it will discover that it is partitioned away. It won’t acknowledge the write and will wait until the partition is resolved to negotiate with the master on how to proceed. The master will decide to either fail any replicas which failed to index the operations on the primary or tell the primary that it has to step down because a new primary has been chosen in the meantime. Since the old primary has already written documents, clients may already have read from the old primary before it shuts itself down. The version numbers of these reads may not be unique if the new primary has already accepted writes for the same document 
+
+We recently [introduced](https://www.elastic.co/guide/en/elasticsearch/reference/6.x/optimistic-concurrency-control.html) a new sequence number based approach that doesn't suffer from this dirty reads problem. 
+
+This commit removes support for internal versioning as a concurrency control mechanism in favor of the sequence number approach.
+
+Relates to #1078

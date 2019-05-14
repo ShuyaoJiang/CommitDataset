@@ -1,0 +1,3 @@
+ Prevent cause from being null in ShardOperationFailedException  (#32640)
+
+`ShardOperationFailedException` and corresponding implementors seem to suggest that the cause may be null, case that is also handled in a few places. Yet, it does not seem to be possible in practice for the cause to be null, hence we can clean that up and enforce the cause to be a non null value. This is best done by making `ShardOperationFailedException` an abstract class rather than an interface, which holds the basic member instance that all the subclasses have in common and can also enforce that cause, status and reason are non null.

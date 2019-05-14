@@ -1,0 +1,64 @@
+Pluggable resource leak detector
+
+Allow users of Netty to plug in their own leak detector for the purpose
+of instrumentation.
+
+Motivation:
+
+We are rolling out a large Netty deployment and want to be able to
+track the amount of leaks we're seeing in production via custom
+instrumentation. In order to achieve this today, I had to plug in a
+custom `ByteBufAllocator` into the bootstrap and have it initialize a
+custom `ResourceLeakDetector`. Due to these classes mostly being marked
+`final` or having private or static methods, a lot of the code had to
+be copy-pasted and it's quite ugly.
+
+Modifications:
+
+* I've added a static loader method for the `ResourceLeakDetector` in
+`AbstractByteBuf` that tries to instantiate the class passed in via the
+`-Dio.netty.customResourceLeakDetector`, otherwise falling back to the
+default one.
+* I've modified `ResourceLeakDetector` to be non-final and to have the
+reporting broken out in to methods that can be overridden.
+
+Result:
+
+You can instrument leaks in your application by just adding something
+like the following:
+
+```java
+public class InstrumentedResourceLeakDetector<T> extends
+ResourceLeakDetector<T> {
+
+    @Monitor("InstanceLeakCounter")
+    private final AtomicInteger instancesLeakCounter;
+
+    @Monitor("LeakCounter")
+    private final AtomicInteger leakCounter;
+
+    public InstrumentedResourceLeakDetector(Class<T> resource) {
+        super(resource);
+        this.instancesLeakCounter = new AtomicInteger();
+        this.leakCounter = new AtomicInteger();
+    }
+
+    @Override
+    protected void reportTracedLeak(String records) {
+        super.reportTracedLeak(records);
+        leakCounter.incrementAndGet();
+    }
+
+    @Override
+    protected void reportUntracedLeak() {
+        super.reportUntracedLeak();
+        leakCounter.incrementAndGet();
+    }
+
+    @Override
+    protected void reportInstancesLeak() {
+        super.reportInstancesLeak();
+        instancesLeakCounter.incrementAndGet();
+    }
+}
+```

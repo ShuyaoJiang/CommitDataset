@@ -1,0 +1,13 @@
+[#2665] Continue writing on IOException when using DatagramChannel
+
+Motivation:
+
+As a DatagramChannel supports to write to multiple remote peers we must not close the Channel once a IOException accours as this error may be only valid for one remote peer.
+
+Modification:
+
+Continue writing on IOException.
+
+Result:
+
+DatagramChannel can be used even after an IOException accours during writing.

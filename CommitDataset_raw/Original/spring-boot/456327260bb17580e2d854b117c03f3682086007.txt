@@ -1,0 +1,11 @@
+Fail fast when a Zip64 jar is encountered
+
+Previously, jars (either top-level or nested) in Zip64 format were
+treated as normal jar files. This would lead to a failure later on
+when an attempt was made to read an entry from the file.
+
+This commit updates the loader to fail fast when it encounters a
+Zip64 jar file. Such files are identified by the number of entries
+in the central directory end record being 0xFFFF.
+
+Closes gh-8735

@@ -1,0 +1,16 @@
+Add ApplicationProtocolConfig.DISABLED
+
+Motivation:
+
+When ALPN/NPN is disabled, a user has to instantiate a new
+ApplicationProtocolConfig with meaningless parameters.
+
+Modifications:
+
+- Add ApplicationProtocolConfig.DISABLED, the singleton instance
+- Reject the constructor calls with Protocol.NONE, which doesn't make
+  much sense because a user should use DISABLED instead.
+
+Result:
+
+More user-friendly API when ALPN/NPN is not needed by a user.

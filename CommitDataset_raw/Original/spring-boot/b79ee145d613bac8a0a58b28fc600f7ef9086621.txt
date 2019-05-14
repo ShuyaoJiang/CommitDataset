@@ -1,0 +1,17 @@
+Configure worker for Undertow’s access log to use daemon threads
+
+Previously, the worker used non-daemon threads which meant that they
+prevented the JVM from shutting down. Ideally, we’d avoid this problem
+by closing the worker and access log receiver as part of stopping
+Undertow, however, due to an apparent bug in Undertow [1], it’s not
+possible to do so cleanly.
+
+This commit configures the access log worker to use daemon threads so
+that they do not prevent the JVM from shutting down. Unfortunately,
+this means that the threads will still be running after the context has
+been closed but before the JVM shuts down but that appears to be
+unavoidable due to the aforementioned Undertow bug.
+
+Closes gh-4793
+
+[1] https://issues.jboss.org/browse/UNDERTOW-597

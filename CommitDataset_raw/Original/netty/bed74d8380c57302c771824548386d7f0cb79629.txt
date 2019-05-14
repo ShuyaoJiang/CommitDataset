@@ -1,0 +1,21 @@
+Method to check if a Http2 header is present and has a given value
+
+Motivation:
+
+With HTTP1, it's very easy to check if a header is present and has a
+given value: you can simply invoke
+io.netty.handler.codec.http.HttpHeaders#contains(java.lang.CharSequence, java.lang.CharSequence, boolean)
+
+It is not possible to do the same with HTTP2. You have to get the list
+of all headers (returned as String) and then iterate over it invoking
+String#equals or String#equalsIgnoreCase
+
+Modifications:
+
+I've added io.netty.handler.codec.http2.Http2Headers#contains and
+implemented it in DefaultHttp2Headers, EmptyHttp2Headers and ReadOnlyHttp2Headers.
+
+Result:
+
+You can use AsciiString constants to check if a header is present in a
+consice and efficient manner.

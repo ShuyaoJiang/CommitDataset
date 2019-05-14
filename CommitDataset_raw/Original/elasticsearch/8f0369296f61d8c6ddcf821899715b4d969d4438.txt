@@ -1,0 +1,12 @@
+Prohibit using `nested_filter`, `nested_path` and new `nested` Option at the same time in FieldSortBuilder (#26490)
+
+Currently we allow both "old" and "new" way of setting nested sorts on the
+FieldSortBuilder at the same time. This should throw an error, instead the user
+should choose one of the two possible options.
+
+Also adding testing for the now deprecated nestedPath/nestedFilter parameters,
+inlcuding checks that they emmit warnings on parsing and that the new
+NestetedSortBuilder overwrites the deprecated parameters when building the
+SortField.
+
+Relates to #17286

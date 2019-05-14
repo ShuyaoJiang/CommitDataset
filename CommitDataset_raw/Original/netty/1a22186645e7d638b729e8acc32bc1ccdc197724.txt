@@ -1,0 +1,21 @@
+Adding short-curcuit option for CORS
+
+Motivation:
+CORS request are currently processed, and potentially failed, after the
+target ChannelHandler(s) have been invoked. This might not be desired, for
+example a HTTP PUT or POST might have been performed.
+
+Modifications:
+Added a shortCurcuit option to CorsConfig which when set will
+cause a validation of the HTTP request's 'Origin' header and verify that
+it is valid according to the configuration. If found invalid an 403
+"Forbidden" response will be returned and not further processing will
+take place.
+
+This is indeed no help for non browser request, like using curl, which
+can set the 'Origin' header.
+
+Result:
+Users can now configure if the 'Origin' header should be validated
+upfront and have the request rejected before any further processing
+takes place.

@@ -1,0 +1,12 @@
+[ML] Preserve _meta on results index mapping update (elastic/x-pack-elasticsearch#2274)
+
+When mappings are updated for an index are updated most settings are
+merged, but not _meta.  This change ensures that _meta is set when we
+add per-job term mappings to our results index mappings.  In order to
+keep the logic for updating mappings after upgrade working, we now
+have to put ALL the mappings for our results along with the latest _meta
+section when updating per-job term mappings.
+
+relates elastic/x-pack-elasticsearch#2265
+
+Original commit: elastic/x-pack-elasticsearch@f58c11a13e9f6728a876634002b46b0487f79bdd

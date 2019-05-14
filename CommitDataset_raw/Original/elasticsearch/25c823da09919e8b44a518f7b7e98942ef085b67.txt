@@ -1,0 +1,16 @@
+Skip shard deprecation messages in REST tests (#30630)
+
+A 6.x node can send a deprecation message that the default number of
+shards will change from five to one in 7.0.0. In a mixed cluster,
+whether or not a create index request sees five or one shard and
+produces a deprecation message depends on the version of the master
+node. This means that during BWC tests a test can see this deprecation
+message depending on the version of the master node. In 6.x when we
+introduced this deprecation message we assumed that whereever we see
+this deprecation message is expected. However, in a mixed cluster test
+we need a similar mechanism but it would only apply if the version of
+the master node is earlier than 7.0.0. This commit takes advantage of a
+recent change to expose the version of the master node to do sections of
+REST tests. With this in hand, we can skip asserting on the deprecation
+message if the version of the master node is before 7.0.0 and otherwise
+seeing that deprecation message would be completely unexpected.

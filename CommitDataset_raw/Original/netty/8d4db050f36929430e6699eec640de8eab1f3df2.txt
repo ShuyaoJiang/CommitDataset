@@ -1,0 +1,19 @@
+Have hosts file support for DnsNameResolver, close #4074
+
+Motivation:
+
+On contrary to `DefaultNameResolver`, `DnsNameResolver` doesn't currently honor hosts file.
+
+Modifications:
+
+* Introduce `HostsFileParser` that parses `/etc/hosts` or `C:\Windows\system32\drivers\etc\hosts` depending on the platform
+* Introduce `HostsFileEntriesResolver` that uses the former to resolve host names
+* Make `DnsNameResolver` check his `HostsFileEntriesResolver` prior to trying to resolve names against the DNS server
+* Introduce `DnsNameResolverBuilder` so we now have a builder for `DnsNameResolver`s
+* Additionally introduce a `CompositeNameResolver` that takes several `NameResolver`s and tries to resolve names by delegating sequentially
+* Change `DnsNameResolver.asAddressResolver` to return a composite and honor hosts file
+
+Result:
+
+Hosts file support when using `DnsNameResolver`.
+Consistent behavior with JDK implementation.

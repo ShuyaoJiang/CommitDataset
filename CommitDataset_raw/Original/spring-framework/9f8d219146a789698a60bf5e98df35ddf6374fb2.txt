@@ -1,0 +1,17 @@
+Remove default profile during environment merge
+
+This change fixes a minor bug with the implementation of
+ConfigurableEnvironment#merge, introduced in SPR-9444. During a merge
+of two environments A and B, where A has default profiles [prod] and B
+has default profiles [default] (the so-called 'reserved default
+profile'), B would complete the merge process having a collection of
+profiles reading [default, prod], which is incorrect.
+
+This commit explicitly ensure's that B's reserved default profile is
+removed if A has a set of default profiles greater than zero. If A
+consists only of [default], B will inherit it during the merge
+correctly; if A consists of [p1, p2], B will result in [p1, p2] as
+well; if B consists of [p1] and A of [p2, p3], B will result in
+[p1, p2, p3] post-merge.
+
+Issue: SPR-9761, SPR-9444

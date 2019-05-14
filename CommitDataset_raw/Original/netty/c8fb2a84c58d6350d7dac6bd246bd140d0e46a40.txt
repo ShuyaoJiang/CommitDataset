@@ -1,0 +1,26 @@
+Fix race condition of DefaultChannelGroup by introducing a closed flag.
+
+Motivation:
+
+Doc of ChannelGroup says, that it can be used to manage server and child channels at once.
+However, in DefaultChannelGroup, there is a race condition. When a server channel accepts a child, it schedules its
+registration on an event loop, which takes some time. If the ChannelGroup, which is supposed
+to close server and child channels at once, is closed after the child channel has been scheduled
+for registration and before this registration actually happens, this child channel is not closed
+and remains connected. This could lead to connection leaks.
+
+Modifications:
+
+To fix this, the DefaultChannelGroup is changed to has a closed flag.
+This flag is set to true, just before the close() method is actually closing channels.
+The add() method checks after adding a new channel, if this flag has been set to true.
+If yes, the new channel is closed. If not, we have the guarantee, that this channel will be
+closed by the ChannelGroup, because setting the closed flag to true happens-before closing any channels.
+
+This behaviour can be activated by two new constructors. The old constructors are still there and behave like before.
+Therefore, no existing code should be affected directly.
+
+Result:
+
+If activating this feature, the DefaultChannelGroup can be used, for managing server and child channels at once.
+But this activating this feature means also, that a ChannelGroup cannot be reused after calling close().

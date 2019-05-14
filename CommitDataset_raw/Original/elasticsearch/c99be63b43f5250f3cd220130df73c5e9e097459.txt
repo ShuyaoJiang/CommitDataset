@@ -1,0 +1,5 @@
+Avoid serialising state if it was already serialised (#39179)
+
+When preparing the state to send to other nodes, we're serializing it for each node, despite using putIfAbsent.
+This commit checks if the state was already serialized for this node version before performing the potentially expensive computation.
+The map is not used by multiple threads, so computeIfAbsent is not needed (and could not be used here easily, because IOException could be thrown).

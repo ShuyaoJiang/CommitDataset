@@ -1,0 +1,11 @@
+Fix dependency order between JdbcTemplate and database migration tools
+
+This commit makes sure that Flyway/Liquibase migrates the schema if
+necessary before a `JdbcTemplate` is made available as an injection
+point.
+
+This commit also adds a test that validates simple datasource
+initialization (spring.datasource.*) happens before a `JdbcTemplate`
+bean can be used.
+
+Closes gh-13155

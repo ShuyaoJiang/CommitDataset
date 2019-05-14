@@ -1,0 +1,6 @@
+Ensure that gcs client creation is privileged (#25938)
+
+This is related to #25932. Currently when we create the
+`GoogleCloudStorageService` client we do not wrap that call in a
+doPrivileged block. The call might open a connection. This commit
+ensures that the creation is wrapped in a doPrivileged block.

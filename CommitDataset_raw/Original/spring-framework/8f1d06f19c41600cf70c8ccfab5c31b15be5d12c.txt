@@ -1,0 +1,19 @@
+Reorder HTTP headers processing in RequestMappingHandlerAdapter
+
+Prior to this change, the `RequestMappingHandlerAdapter` would first add
+a "Cache-Control" HTTP header to the response (depending on its
+`WebContentGenerator` configuration and `@SessionAttributes` on the
+handler class); then, the Adapter would delegate the actual handler the
+processing of the request.
+This leads to issues, as the handler does not have full control to the
+response and has to deal with pre-existing headers in the response. This
+means that the Adapter and the handler can add incompatible
+Cache-Control directives without knowing it, since one cannot see the
+headers added by the other until the response is committed.
+
+This commit switches the order of execution: first, the handler is
+called (possibly adding HTTP headers), then the RMHA processes the
+response and adds "Cache-Control" directives *only if there's no
+Cache-Control header already defined*.
+
+Issue: SPR-13867

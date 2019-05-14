@@ -1,0 +1,20 @@
+Support RequestedAuthnContext (#31238)
+
+* Support RequestedAuthnContext
+
+This implements limited support for RequestedAuthnContext by :
+- Allowing SP administrators to define a list of authnContextClassRef
+to be included in the RequestedAuthnContext of a SAML Authn Request
+- Veirifying that the authnContext in the incoming SAML Asertion's
+AuthnStatement contains one of the requested authnContextClassRef
+- Only EXACT comparison is supported as the semantics of validating
+the incoming authnContextClassRef are deployment dependant and
+require pre-established rules for MINIMUM, MAXIMUM and BETTER
+
+Also adds necessary AuthnStatement validation as indicated by [1] and
+[2]
+
+[1] https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf
+    3.4.1.4, line 2250-2253
+[2] https://kantarainitiative.github.io/SAMLprofiles/saml2int.html
+    [SDP-IDP10]

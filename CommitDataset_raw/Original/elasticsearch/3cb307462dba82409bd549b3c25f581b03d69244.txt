@@ -1,0 +1,13 @@
+Consolidates the logic for cleaning up snapshots on master election (#24894)
+
+In #24605, logic was implemented to ensure that completed snapshots were
+properly removed from the cluster state upon a change in master nodes.
+This commit removes redundant logic that also attempted to clean up
+completed snapshots from the cluster state on master election, but only
+covered a limited case that was remedied in #24605.
+
+This commit also adds a test to ensure cleaning up of completed
+snapshots at the right moment in time when a master election happens
+before finalizing a snapshot, as well as adds a check to handle the case
+where the old master and new master could attempt to finalize the
+snapshot and write the same blob to the repository simultaneously.

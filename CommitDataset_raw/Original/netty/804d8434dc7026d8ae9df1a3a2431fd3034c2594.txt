@@ -1,0 +1,11 @@
+HTTP/2 goaway connection state update sequencing (#8080)
+
+Motivation:
+The Http2Connection state is updated by the DefaultHttp2ConnectionDecoder after the frame listener is notified of the goaway frame. If the listener sends a frame synchronously this means the connection state will not know about the goaway it just received and we may send frames that are not allowed on the connection. This may also mean a stream object is created but it may never get taken out of the stream map unless some other event occurs (e.g. timeout).
+
+Modifications:
+- The Http2Connection state should be updated before the listener is notified of the goaway
+- The Http2Connection state modification and validation should be self contained when processing a goaway instead of partially in the decoder.
+
+Result:
+No more creating streams and sending frames after a goaway has been sent or received.

@@ -1,0 +1,10 @@
+[#473] Fix elevated context switching in SingleThreadEventExecutor
+
+- Remove polling in SingleThreadEventExecutor
+- Create a dedicated scheduled task scheduler called 'TaskScheduler'
+- TaskScheduler is created per EventLoopGroup / EventExecutorGroup
+- SingleThreadEventExecutor delegates all scheduled execution requests
+  to TaskScheduler provided as a constructor parameter
+- TaskScheduler is a specialized form of single threaded 
+  ScheduledExecutorService which requires an EventExecutor as a
+  parameter for all requests.

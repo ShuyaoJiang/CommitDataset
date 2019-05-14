@@ -1,0 +1,16 @@
+Uncouple persistent task state and status (#31031)
+
+This pull request removes the relationship between the state 
+of persistent task (as stored in the cluster state) and the status 
+of the task (as reported by the Task APIs and used in various 
+places) that have been confusing for some time (#29608).
+
+In order to do that, a new PersistentTaskState interface is added. 
+This interface represents the persisted state of a persistent task. 
+The methods used to update the state of persistent tasks are 
+renamed: updatePersistentStatus() becomes updatePersistentTaskState() 
+and now takes a PersistentTaskState as a parameter. The 
+Task.Status type as been changed to PersistentTaskState in all 
+places were it make sense (in persistent task customs in cluster 
+state and all other methods that deal with the state of an allocated 
+persistent task).

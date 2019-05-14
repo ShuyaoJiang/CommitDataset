@@ -1,0 +1,13 @@
+[#2605] Use SO_REUSEADDR on EpollServerSocketChannel to match defaults of java.nio.ServerSocketChannel impl
+
+Motivation:
+
+When using openjdk and oracle jdk's nio (while using the nio transport) the ServerSocketChannel uses SO_REUSEADDR by default. Our native transport should do the same to make it easier to switch between the different implementations and get the expected result.
+
+Modification:
+
+Change EpollServerSocketChannelConfig to set SO_REUSEADDR on the created socket.
+
+Result:
+
+SO_REUSEADDR is used by default on servers.

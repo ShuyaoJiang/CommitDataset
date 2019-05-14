@@ -1,0 +1,11 @@
+EpollEventLoopGroup support Executor
+
+Motivation:
+NioEventLoopGroup supports constructors which take an executor but EpollEventLoopGroup does not. EPOLL should be consistent with NIO where ever possible.
+
+Modifications:
+- Add constructors to EpollEventLoopGroup which accept an Executor as a parameter
+
+Result:
+EpollEventLoopGroup is more consistent with NioEventLoopGroup
+Fixes https://github.com/netty/netty/issues/5161

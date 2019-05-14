@@ -1,0 +1,10 @@
+Fix extension discovery when endpoint instance is sub-classed
+
+This commit fixes endpoint extension discovery when the related endpoint
+is sub-classed. Previously, a strict by type check was applied against
+the `endpoint` attribute of `EndpointExtension`.
+
+Rather than using a `Class` check, this commit extracts the id of an
+endpoint and uses it to match its extension, if any.
+
+Closes gh-13082

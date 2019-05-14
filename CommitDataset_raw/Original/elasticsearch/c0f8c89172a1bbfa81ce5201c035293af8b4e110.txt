@@ -1,0 +1,44 @@
+Introduce shard history retention leases (#37167)
+
+This commit is the first in a series which will culminate with
+fully-functional shard history retention leases.
+
+Shard history retention leases are aimed at preventing shard history
+consumers from having to fallback to expensive file copy operations if
+shard history is not available from a certain point. These consumers
+include following indices in cross-cluster replication, and local shard
+recoveries. A future consumer will be the changes API.
+
+Further, index lifecycle management requires coordinating with some of
+these consumers otherwise it could remove the source before all
+consumers have finished reading all operations. The notion of shard
+history retention leases that we are introducing here will also be used
+to address this problem.
+
+Shard history retention leases are a property of the replication group
+managed under the authority of the primary. A shard history retention
+lease is a combination of an identifier, a retaining sequence number, a
+timestamp indicating when the lease was acquired or renewed, and a
+string indicating the source of the lease. Being leases they have a
+limited lifespan that will expire if not renewed. The idea of these
+leases is that all operations above the minimum of all retaining
+sequence numbers will be retained during merges (which would otherwise
+clear away operations that are soft deleted). These leases will be
+periodically persisted to Lucene and restored during recovery, and
+broadcast to replicas under certain circumstances.
+
+This commit is merely putting the basics in place. This first commit
+only introduces the concept and integrates their use with the soft
+delete retention policy. We add some tests to demonstrate the basic
+management is correct, and that the soft delete policy is correctly
+influenced by the existence of any retention leases. We make no effort
+in this commit to implement any of the following:
+ - timestamps
+ - expiration
+ - persistence to and recovery from Lucene
+ - handoff during primary relocation
+ - sharing retention leases with replicas
+ - exposing leases in shard-level statistics
+ - integration with cross-cluster replication
+
+These will occur individually in follow-up commits.

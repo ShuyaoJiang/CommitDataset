@@ -1,0 +1,22 @@
+Introduce ConfigurableWebEnvironment
+
+Changes introduced in Spring 3.1 for Environment support inadvertently
+established a cyclic dependency between the
+org.springframework.web.context and
+org.springframework.web.context.support packages, specifically through
+web.context.ContextLoader's invocation of
+web.context.support.WebApplicationContextUtils#initServletPropertySources.
+
+This commit introduces ConfigurableWebEnvironment to break this cyclic
+dependency. All web.context.ConfigurableWebApplicationContext types now
+return web.context.ConfigurableWebEnvironment from their #getEnvironment
+methods; web.context.support.StandardServletEnvironment now implements
+ConfigurableWebEnvironment and makes the call to
+web.context.support.WebApplicationContextUtils#initServletPropertySources
+within its implementation of #initPropertySources. This means that
+web.context.ContextLoader now invokes
+web.context.ConfigurableWebEnvironment#initPropertySources instead of
+web.context.support.WebApplicationContextUtils#initServletPropertySources
+and thus the cycle is broken.
+
+Issue: SPR-9439

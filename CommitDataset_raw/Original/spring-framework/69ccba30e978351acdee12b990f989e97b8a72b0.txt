@@ -1,0 +1,12 @@
+Introduce write aggregator to DataBufferUtils
+
+As a consequence of dropping CompositeByteBuf (see prior commit),
+DataBuffers fluxes that are aggregated with Flux.reduce(BiFunction) are
+now required to be released, as the composite no longer holds a
+reference to subsequent data buffers.
+
+For this purpose, DataBufferUtils now has a writeAggregator that can be
+used with Flux.reduce, and that released the subsequent buffers
+properly.
+
+Issue: SPR-16351

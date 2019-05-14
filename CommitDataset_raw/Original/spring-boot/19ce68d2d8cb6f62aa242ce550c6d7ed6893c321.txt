@@ -1,0 +1,12 @@
+Prefix endpoint's path to controller endpoint mappings with no path
+
+Previously, if a controll endpoint included a mapping with no path,
+it would be mapped to the root of the application rather than the
+root of the endpoint's path.
+
+This commit updates the handler mappings for both reactive and Servlet
+web applications to treat a mapping with no paths as being a mapping
+with a single empty path. This ensures that a path with the endpoint's
+path prepended is used for the mapping.
+
+Closes gh-12104

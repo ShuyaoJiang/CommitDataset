@@ -1,0 +1,7 @@
+Remove PipelineExecutionService#executeIndexRequest (#29537)
+
+With the move long ago to execute all single-document indexing requests
+as bulk indexing request, the method
+PipelineExecutionService#executeIndexRequest is unused and will never be
+used in production code. This commit removes this method and cuts over
+all tests to use PipelineExecutionService#executeBulkRequest.

@@ -1,0 +1,12 @@
+Fix SQL CLI tests in windows (elastic/x-pack-elasticsearch#2738)
+
+We put the CLI in unix mode so if we send it
+`\r\n` (the default in windows) then it'll
+spit out extra "you are on a line continuation"
+characters (`|`). Instead, we can use `\n`
+directly and everything works.
+
+I've also added a timeout to the reads from the
+CLI because it makes the tests easier to debug.
+
+Original commit: elastic/x-pack-elasticsearch@69f69f4092ce80c439fa957c84074853d37c8d92

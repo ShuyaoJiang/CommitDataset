@@ -1,0 +1,6 @@
+`type` and `id` are lost upon serialization of `Translog.Delete`. (#24586)
+
+This was introduced in #24460: the constructor of `Translog.Delete` that takes
+a `StreamInput` does not set the type and id. To make it a bit more robust, I
+made fields final so that forgetting to set them would make the compiler
+complain.

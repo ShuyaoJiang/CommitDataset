@@ -1,0 +1,16 @@
+AbstractScheduledEventExecutor.schedule(...) must accept delay <= 0.
+
+Motivation:
+
+As the javadoc of ScheduledExecutorService state:
+
+Zero and negative delays (but not periods) are also allowed in schedule methods,and are treated as requests for immediate execution.
+
+Modifications:
+
+- Correctly handle delay <= 0.
+- Add unit tests.
+
+Result:
+
+Fixes [#6627].

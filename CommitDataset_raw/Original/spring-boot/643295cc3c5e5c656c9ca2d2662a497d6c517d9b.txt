@@ -1,0 +1,10 @@
+Separate Application Listener and Initializer
+
+Update SpringApplication so that ApplicationListener and
+ApplicationInitializer methods must be called separately. This helps
+to prevent unexpected side effects when calling the setters and
+also encourages separation of concerns.
+
+The few situations where a class was both an ApplicationInitializer
+and ApplicationListener are now handled by registering an inner
+listener from the `initialize` method.

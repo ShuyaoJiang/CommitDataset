@@ -1,0 +1,13 @@
+Fixed|SimpleChannelPool.close() should only return after complete. (#7927)
+
+Motivation:
+
+We need to ensure we only return from close() after all work is done as otherwise we may close the EventExecutor before we dispatched everything.
+
+Modifications:
+
+Correctly wait on operations to complete before return.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7901.

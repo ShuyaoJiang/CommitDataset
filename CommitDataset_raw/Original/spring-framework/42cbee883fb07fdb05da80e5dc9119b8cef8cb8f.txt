@@ -1,0 +1,21 @@
+Add generics to AbstractCacheManager#caches
+
+Facilitates type-safe programmatic configuration from @Bean methods:
+
+    @Bean
+    public CacheManager cacheManager() {
+        SimpleCacheManager cm = new SimpleCacheManager();
+        cm.setCaches(Arrays.asList(
+            new ConcurrentMapCache("default"),
+            new ConcurrentMapCache("primary"),
+            new ConcurrentMapCache("secondary")
+        ));
+        return cm;
+    }
+
+Prior to this change, the code above would have raised errors on the
+Arrays.asList() call because it returns a Collection<? extends Cache>
+as opposed to Collection<Cache>.
+
+After this change, AbstractCacheManager expects
+Collection<? extends Cache> throughout.

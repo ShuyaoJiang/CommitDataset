@@ -1,0 +1,15 @@
+Fix decoding issue in Reactor TcpClient
+
+When decoding STOMP messages unread portions of a given input ByteBuf
+must be kept until more input is received and the next complete STOMP
+frame can be parsed.
+
+In Reactor Net 2.x this was handled for us through the "remainder"
+field in NettyChannelHandlerBridge. The Reactor Netty 0.6 upgrade
+however applied only a simple map operator on the input ByteBuf
+after which the buffer is relased.
+
+This commit replaces the use of a simple map operator for decoding
+and installs a ByteToMessageDecoder in the Netty channel pipeline
+which has a built-in ability to preserve and merge unread input into
+subsequent input buffers.

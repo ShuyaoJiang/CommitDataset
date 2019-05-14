@@ -1,0 +1,22 @@
+Improve initialization of Assume class
+
+Prior to this commit, the org.springframework.tests.Assume class could
+fail to load resulting in a NoClassDefFoundError if parsing of the
+'testGroups' system property failed. This is because the parsing took
+place while initializing a static field.
+
+This commit addresses this issue by moving the 'testGroups' system
+property lookup to a dedicated method that is lazily invoked upon
+demand instead of eagerly when loading the Assume class itself.
+
+In addition, when an error occurs, TestGroup.parse() now logs the
+complete original value of the supplied test groups string instead of
+potentially omitting the "all-" prefix. This results in more
+informative error messages similar to the following.
+
+  java.lang.IllegalStateException: Failed to parse 'testGroups' system
+  property: Unable to find test group 'bogus' when parsing testGroups
+  value: 'all-bogus'. Available groups include:
+  [LONG_RUNNING,PERFORMANCE,JMXMP,CI]
+
+Issue: SPR-15163

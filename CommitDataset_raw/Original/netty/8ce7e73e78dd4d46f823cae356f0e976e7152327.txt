@@ -1,0 +1,13 @@
+Prevent extra peformance hit by fillInStackTrace() when create a new annotated connect exception.
+
+Motivation:
+
+To make it easier to debug connect exceptions we create new exceptions which also contain the remote address. For this we basically created a new instance and call setStackTrace(...). When doing this we pay an extra penality because it calls fillInStackTrace() when calling the super constructor.
+
+Modifications:
+
+Create special sub-classes of Exceptions that override the fillInStackTrace() method and so eliminate the overhead.
+
+Result:
+
+Less overhead when "annotate" connect exceptions.

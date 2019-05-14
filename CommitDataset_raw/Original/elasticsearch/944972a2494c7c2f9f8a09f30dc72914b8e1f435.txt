@@ -1,0 +1,11 @@
+Deprecate HLRC EmptyResponse used by security (#37540)
+
+The EmptyResponse is essentially the same as returning a boolean, which
+is done in other places. This commit deprecates all the existing
+EmptyResponse methods and creates new boolean methods that have method
+params reordered so they can exist with the deprecated methods. A
+followup PR in master will remove the existing deprecated methods, fix
+the parameter ordering and deprecate the incorrectly ordered parameter
+methods.
+
+Relates #36938

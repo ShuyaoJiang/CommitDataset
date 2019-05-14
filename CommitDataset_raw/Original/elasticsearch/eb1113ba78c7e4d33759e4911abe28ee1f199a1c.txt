@@ -1,0 +1,11 @@
+SQL: Fix function resolution (#34137)
+
+Remove CamelCase to CAMEL_CASE conversion when resolving
+a function. Only convert user input to upper case and then
+try to match with aliases or primary names.
+
+Keep the internal conversion FunctionName to FUNCTION__NAME
+which provides flexibility when registering functions by their class
+name.
+
+Fixes: #34114

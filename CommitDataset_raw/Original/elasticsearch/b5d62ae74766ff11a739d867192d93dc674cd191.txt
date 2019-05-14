@@ -1,0 +1,10 @@
+Introduce ParentJoinFieldMapper, a field mapper that creates parent/child relation within documents of the same index (#24978)
+
+* Introduce ParentJoinFieldMapper, a field mapper that creates parent/child relation within documents of the same index
+
+This change adds a new field mapper named ParentJoinFieldMapper. This mapper is a replacement for the ParentFieldMapper but instead of using the types in the mapping
+it uses an internal field to materialize parent/child relation within a single index.
+This change also adds a fetch sub phase that automatically retrieves the join name (parent or child name) and the parent id for child documents in the response hit fields.
+The compatibility with `has_parent`, `has_child` queries and `children` agg will be added in a follow up.
+
+Relates #20257

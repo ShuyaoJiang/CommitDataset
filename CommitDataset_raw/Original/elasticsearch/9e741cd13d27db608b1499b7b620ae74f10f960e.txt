@@ -1,0 +1,12 @@
+Tests: Add ability to generate random new fields for xContent parsing test (#23437)
+
+For the response parsing we want to be lenient when it comes to parsing
+new xContent fields. In order to ensure this in our testing, this change
+adds a utility method to XContentTestUtils that takes xContent bytes
+representation as input and recursively a random field on each object
+level.
+
+Sometimes we also want to exclude a whole subtree from this treatment 
+(e.g. skipping "_source"), other times an element (e.g. "fields", "highlight" 
+in SearchHit) can have arbitraryly named objects. Those cases can be 
+specified as exceptions.

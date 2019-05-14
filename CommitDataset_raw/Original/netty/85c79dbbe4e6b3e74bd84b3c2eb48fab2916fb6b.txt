@@ -1,0 +1,11 @@
+HTTP to HTTP/2 tranlation errors
+
+Motivation:
+HttpUtil.toHttp2Headers is currently not translating HTTP request headers to HTTP/2 request headers correctly.  The path, scheme, and authority are tranlation process are not respecting the HTTP/2 RFC https://tools.ietf.org/html/rfc7540#section-8.1.2.3 and HTTP RFC https://tools.ietf.org/html/rfc7230#section-5.3.
+
+Modifications:
+- path, scheme, authority must be set according to rules defined in https://tools.ietf.org/html/rfc7540#section-8.1.2.3
+- HTTP/1.x URIs must be handled as defined in https://tools.ietf.org/html/rfc7230#section-5.3
+
+Result:
+More correct translation from HTTP/1.x requests to HTTP/2 requests.

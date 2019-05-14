@@ -1,0 +1,14 @@
+Configure Glassfish sample to use parent-last class loader delegation
+
+Glassfish bundles an old and incomplete version of Glassfish. By
+default, this leads to some of Jackson's classes being loaded from
+inside the war file and others being loaded from Glassfish itself.
+This mixture of versions does not end well and the application fails
+to deploy.
+
+This commit adds a Glassfish-specific deployment descriptor to
+invert the web app class loader's delegation model. Rather than
+preferring classes available from its parent, it will now prefer
+those packaged inside the war file.
+
+Closes gh-9391

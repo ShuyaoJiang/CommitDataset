@@ -1,0 +1,10 @@
+Add AggregateMetricReader able to aggregate counters and gauges
+
+Different physical sources for the same logical metric just need to
+publish them with a period-separated prefix, and this reader will
+aggregate (by truncating the metric names, dropping the prefix).
+
+Very useful (for instance) if multiple application instances are
+feeding to a central (e.g. redis) repository and you want to
+display the results. Useful in conjunction with a
+MetricReaderPublicMetrics for hooking up to the /metrics endpoint.

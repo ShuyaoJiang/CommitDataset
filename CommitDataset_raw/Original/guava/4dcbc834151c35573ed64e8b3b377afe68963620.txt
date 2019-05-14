@@ -1,0 +1,17 @@
+Write compare method in a way that won't look buggy to Error Prone.
+
+This change modifies Java compare methods that are using int casts from longs in
+a usually broken way. Int casts in Java will truncate a long value and
+consequently may alter the sign of the value being cast. Compare methods may be
+implemented using a subtract, iff values are known not to be near overflowing
+limits. When the values are longs you can get:
+
+int compare(MyLongHolder other) {
+  return (int)(other.x - x);
+}
+
+As the cast won’t preserve the sign of the subtract it is buggy and can lead to
+broken sort orders.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=110206257

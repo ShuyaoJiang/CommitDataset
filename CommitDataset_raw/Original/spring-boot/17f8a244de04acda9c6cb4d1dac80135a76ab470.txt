@@ -1,0 +1,17 @@
+Fix property names with successive capital letters
+
+Previously, if a property name had successive capital letters, the
+generated meta-data would clean it in such a way it is defined as a
+regular word. For instance a `myFOO` property would be written as
+`my-foo` in the meta-data.
+
+It turns out this decision is wrong as the binder has no way to compute
+back the name of the property and therefore `my-foo` wouldn't bind to
+`setMyFOO` as it should.
+
+This commit updates the meta-data name generation algorithm to properly
+identify such cases: `myFOO` now translates to `my-f-o-o`. While the
+generated name is a bit ugly, it now provides a consistent binding
+experience.
+
+Closes gh-5330

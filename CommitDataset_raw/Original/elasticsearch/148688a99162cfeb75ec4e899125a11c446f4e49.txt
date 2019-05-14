@@ -1,0 +1,3 @@
+Reduces poll time to 1s for integ test
+
+`IndexLifecycleInitialisationIT.testMasterFailover()` intermittently failed because the timeout of 10 seconds to check if the index had been deleted was not long enough sometimes with the poll interval set to 3 seconds. This change sets the poll interval to 1 seconds for the test so that the lifecycle is more responsive. This also means the default value for the poll interval can be safely changed without affecting the test.

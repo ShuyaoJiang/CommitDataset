@@ -1,0 +1,5 @@
+Engine.close should only return when resources are freed (#25852)
+
+Currently Engine.close can return immediately if the engine is already at the process of shutting down (due to a concurrent close call or an engine failure). This is a shame because some of our testing infra wants to do things like checking the index. This commit changes the logic to make sure that all calls to close wait until resources are freed. Failing the engine is still non blocking.
+
+Fixes #25817

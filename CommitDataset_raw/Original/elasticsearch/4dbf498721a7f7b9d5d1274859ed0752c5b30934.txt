@@ -1,0 +1,20 @@
+[Rollup] Job deletion should be invoked on the allocated task (#34574)
+
+We should delete a job by directly talking to the allocated 
+task and telling it to shutdown. Today we shut down a job 
+via the persistent task framework. This is not ideal because, 
+while the job has been removed from the persistent task 
+CS, the allocated task continues to live until it gets the 
+shutdown message.
+
+This means a user can delete a job, immediately delete 
+the rollup index, and then see new documents appear in
+ the just-deleted index. This happens because the indexer
+ in the allocated task is still running and indexes a few 
+more documents before getting the shutdown command.
+
+In this PR, the transport action is changed to a TransportTasksAction, 
+and we invoke onCancelled() directly on the matching job. 
+The race condition still exists after this PR (albeit less likely), 
+but this was a precursor to fixing the issue and a self-contained
+chunk of code. A second PR will followup to fix the race itself.

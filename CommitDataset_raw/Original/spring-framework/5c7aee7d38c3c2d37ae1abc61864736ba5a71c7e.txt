@@ -1,0 +1,14 @@
+Updating MySQLMaxValueIncrementer to not rely on MYISAM
+
+We should no longer rely on MYISAM for the sequence table since this
+engine might not always be available. After this change the storage
+engine used by the sequence table can be MYISAM or INNODB since the
+sequences are allocated using a new connection without being
+affected by any other transactions that might be in progress.
+
+To allow users to fall back on the original functionality of using
+MYISAM tables for the incrementer, we add a `useNewConnection` flag to
+indicate whether or not to use a new connection for the incrementer.
+This flag defaults to true.
+
+Issue: SPR-15107

@@ -1,0 +1,11 @@
+SQL: Return error with ORDER BY on non-grouped. (#34855)
+
+Previously, for some queries the validation for ORDER BY
+fields didn't kick in since a HAVING close or an ORDER BY
+with scalar function would add `Filter` and `Project` plans
+between the `OrderBy` and the `Aggregate`.
+
+Now the LogicalPlan tree beneath `OrderBy` is traversed and
+the ORDER BY fields are properly verified.
+
+Fixes: #34590

@@ -1,0 +1,10 @@
+Remove finicky exception message assertion
+
+In SimpleNioTransportTests we assert that an IOException has a certain
+message. This message appears that it is not dependible (and might
+change based on platform).
+
+Our other transport tests (mock and netty) do not make this assertion.
+Instead they only assert on our application exception message. This
+commit removes the IOException message assertion. And retains the
+ConnectTransportException message assertion.

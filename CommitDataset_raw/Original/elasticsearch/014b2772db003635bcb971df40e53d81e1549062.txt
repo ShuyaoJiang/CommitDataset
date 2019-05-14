@@ -1,0 +1,6 @@
+[TEST] Fix testReplicaTermIncrementWithConcurrentPrimaryPromotion
+
+The assertion in the test was not broad enough. If the timing is very unlucky, the
+shard is already promoted to primary before the indexOnReplica even gets to execute.
+
+Closes #32645

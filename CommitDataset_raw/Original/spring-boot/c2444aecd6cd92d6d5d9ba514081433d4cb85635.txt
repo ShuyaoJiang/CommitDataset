@@ -1,0 +1,9 @@
+Continue with default location if CONFIG_LOGGING fails
+
+Tomcat in particular sets an environment variable in it's shell scripts
+that people commonly use to start the container. So if people deploy a war
+file to a stock Tomcat server they can't override the logging config, even
+with the default location. With this change at least that should work
+(for logback and log4j anyway). Tested with logback.
+
+See gh-1432

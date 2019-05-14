@@ -1,0 +1,10 @@
+Watcher: Ensure watcher service calls are properly caught (elastic/x-pack-elasticsearch#3906)
+
+In order to prevent exceptions to bubble up to the thread pool exception
+handler, this properly wraps all the calls for the watcher service
+within an executor into an AbstractRunnable to catch and log a possible
+exception.
+
+relates elastic/x-pack-elasticsearch#3854
+
+Original commit: elastic/x-pack-elasticsearch@c0b39e6b5ba16901f6c294d5cd036d25bc902aaf

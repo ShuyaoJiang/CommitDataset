@@ -1,0 +1,5 @@
+[TEST] Reduce number of buckets created in InternalDateHistogramTests
+
+New that we test with min_doc_count set to 0 as well, we may end up generating a lot more buckets. This commit adjusts the min bound and max bound, as well as the offset for each randomly generated agg instance so that we don't end up hitting the 10.000 max buckets limit.
+
+Relates to #36064

@@ -1,0 +1,14 @@
+More correct fix for using ChannelInitializer with custom EventExecutor. (#8633)
+
+Motivation:
+
+8331248671b9c0ea07cf8dbdfa5d8d2f89fdf459 did make some changes to fix a race in ChannelInitializer when using with a custom EventExecutor. Unfortunally these where a bit racy and so the testcase failed sometimes.
+
+Modifications:
+
+- More correct fix when using a custom EventExecutor
+- Adjust the testcase to be more correct.
+
+Result:
+
+Proper fix for https://github.com/netty/netty/issues/8616.

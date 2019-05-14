@@ -1,0 +1,14 @@
+Internal: Add versionless alias for rest client codebase in policy files (#26521)
+
+Security manager policy files contains grants for specific codebases,
+where a codebase is a jar file. We use a system property containing the
+name of the jar file to resolve the jar file location when parsing the
+policy file. However, this means the version of the jars must be
+modified when versions of dependencies change. This is particularly
+messy for elasticsearch, where we now have a dependency on the rest
+client, and need to support both a snapshot version for testing and non
+snapshot for release.
+
+This commit adds an alias for the elasticsearch rest client without a
+version to be used in policy files. That allows the policy files to not care whether
+the rest client is a snapshot or release.

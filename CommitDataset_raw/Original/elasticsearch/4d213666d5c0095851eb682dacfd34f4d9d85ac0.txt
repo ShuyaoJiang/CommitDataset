@@ -1,0 +1,20 @@
+SQL: Move Exception classes to follow ES format (elastic/x-pack-elasticsearch#3721)
+
+This commit moves the exception classes that SQL uses to follow the
+Elasticsearch convention. In the places where varargs were used, the
+`LoggerMessageFormat` (`{}`) standard is used instead.
+
+In also removes on Exception - `ExecutionException` since it seemed to not ever
+be beefed up, it can be re-added later if needed.
+
+This removes the varargs version of `ClientException` to push the formatting
+back on the caller, since `ClientException` cannot depend on Elasticsearch for
+formatting the arguments.
+
+There were also a couple of places where we incorrectly passed the Throwable
+cause as a var-arg and were unintentionally swallowing it since `String.format`
+discards unused arguments.
+
+Relates to elastic/x-pack-elasticsearch#2880
+
+Original commit: elastic/x-pack-elasticsearch@5f5d580e57fbd4d8104f8afa181a9af09811bd10

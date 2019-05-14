@@ -1,0 +1,10 @@
+[Rollup] Don't randomize index name in test
+
+The test job helper randomizes the index name with 1-10 characters,
+which can lead to randomized index names to overlap and show fewer
+caps than the test expects.
+
+The solution is to just use index names "0"-"24" to ensure none
+of the names overlap, and thus the caps don't overlap.
+
+Original commit: elastic/x-pack-elasticsearch@74a6d13213c4676084cea246f58c2b1580795b24

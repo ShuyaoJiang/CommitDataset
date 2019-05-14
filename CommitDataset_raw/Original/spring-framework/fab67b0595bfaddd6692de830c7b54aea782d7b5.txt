@@ -1,0 +1,5 @@
+CachedIntrospectionResults and co consistently avoid synchronization (through use of ConcurrentReferenceHashMap)
+
+As a side effect, through ConcurrentReferenceHashMap, we're using soft references for non-cache-safe bean classes.
+
+Issue: SPR-11867

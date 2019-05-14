@@ -1,0 +1,23 @@
+Add header name to ex. msg in HeaderResultMatchers
+
+Prior to this commit, the longValue() in HeaderResultMatchers added the
+expected response header name to generated assertion failure messages;
+however, both string() methods did not. This made it more difficult to
+analyze the cause of failed tests.
+
+Furthermore, while investigating a solution for this issue it became
+apparent that longValue() throws a NullPointerException if the response
+does not contain the specified header.
+
+This commit addresses these issues as follows:
+
+ - All methods in HeaderResultMatchers now include the response header
+   name in generated assertion failure messages.
+
+ - HeaderResultMatchers.longValue() now avoids NullPointerExceptions by
+   explicitly asserting that the response contains the specified header.
+
+ - The unit tests in HeaderAssertionTests have been expanded to test
+   most foreseeable use cases.
+
+Issue: SPR-10659

@@ -1,0 +1,16 @@
+When cache names clash include clash manager name in all prefixes
+
+Previously, when multiple cache managers had a cache with the same name,
+the prefix for the first cache that was processed would not include its
+cache manager’s name, but all subsequent prefixes would include the
+cache manager’s name. This was inconsistent, and due to the cache
+managers being unordered, the prefixing was not deterministic.
+
+This commit updates the prefixing logic so that when there is a clash,
+all of the affected prefixes will include the name of the cache manager.
+For example, with cache managers named first and second and each
+with a cache named users, the prefixes will be cache.first_users and
+cache.second_users rather than cache.users and
+cache.{first|second}_users.
+
+Closes gh-2824

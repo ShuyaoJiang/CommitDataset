@@ -1,0 +1,12 @@
+Detect ConfigurableWebBindingInitializer bean and register with MVC
+
+Previously, to use a custom ConfigurableWebBindingInitializer, it was
+necessary to extend WebMvcConfigurationSupport and override
+getConfigurableWebBindingInitializer. This had the unwanted
+side-effect of switching off the auto-configuration of Spring MVC.
+
+This commit updates the auto-configuration to look for a
+ConfigurableWebBindingInitializer bean and register it with Spring
+MVC.
+
+Closes gh-2526

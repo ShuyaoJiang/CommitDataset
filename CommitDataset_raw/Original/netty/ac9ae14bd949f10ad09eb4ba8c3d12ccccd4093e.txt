@@ -1,0 +1,10 @@
+HTTP/2 SimpleChannelPromiseAggregator failure condition
+
+Motivation:
+If a SimpleChannelPromiseAggregator is failed before any new promises are generated, the failure is not propegated through to the aggregated promise.
+
+Modifications:
+- Failures should be allowed to occur even if no new promises have been generated
+
+Result:
+Failures are always allowed.

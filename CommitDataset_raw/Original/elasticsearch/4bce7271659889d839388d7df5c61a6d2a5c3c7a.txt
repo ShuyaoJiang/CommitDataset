@@ -1,0 +1,16 @@
+Refactor simple_query_string to handle text part like multi_match and query_string (#26145)
+
+This change is a continuation of #25726 that aligns field expansions for the simple_query_string with the query_string and multi_match query.
+The main changes are:
+
+ * For exact field name, the new behavior is to rewrite to a matchnodocs query when the field name is not found in the mapping.
+
+ * For partial field names (with * suffix), the expansion is done only on keyword, text, date, ip and number field types. Other field types are simply ignored.
+
+ * For all fields (*), the expansion is done on accepted field types only (see above) and metadata fields are also filtered.
+
+The use_all_fields option is deprecated in this change and can be replaced by setting `*` in the fields parameter.
+This commit also changes how text fields are analyzed. Previously the default search analyzer (or the provided analyzer) was used to analyze every text part
+, ignoring the analyzer set on the field in the mapping. With this change, the field analyzer is used instead unless an analyzer has been forced in the parameter of the query.
+
+Finally now that all full text queries can handle the special "*" expansion (`all_fields` mode), the `index.query.default_field` is now set to `*` for indices created in 6.

@@ -1,0 +1,11 @@
+Reindex from Remote allow date math (#40303)
+
+Previously, reindexing from remote using date math in the source index
+name did not work if the math contained / or ,. A workaround was to
+then URL escape the index name in the request.
+
+With this change, we now support any index name in the remote request
+that the remote source supports, doing the URL escape when sending the
+request.
+
+Related to #23533

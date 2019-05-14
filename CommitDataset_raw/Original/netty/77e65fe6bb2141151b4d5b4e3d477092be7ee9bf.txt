@@ -1,0 +1,11 @@
+Base64 reduce byte manipulation operations
+
+Motivation:
+Base64#decode4to3 generally calculates an int value where the contents of the decodabet straddle bytes, and then uses a byte shifting or a full byte swapping operation to get the resulting contents. We can directly calculate the contents and avoid any intermediate int values and full byte swap operations. This will reduce the number of operations required during the decode operation.
+
+Modifications:
+- remove the intermediate int in the Base64#decond4to3 method.
+- manually do the byte shifting since we are already doing bit/byte manipulations here anyways.
+
+Result:
+Base64#decode4to3 requires less operations to compute the end result.

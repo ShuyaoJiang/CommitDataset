@@ -1,0 +1,10 @@
+Avoid self-deadlock in the translog (#29520)
+
+Today when reading an operation from the current generation fails
+tragically we attempt to close the translog. However, by invoking close
+before releasing the read lock we end up in self-deadlock because
+closing tries to acquire the write lock and the read lock can not be
+upgraded to a write lock. To avoid this, we move the close invocation
+outside of the try-with-resources that acquired the read lock. As an
+extra guard against this, we document the problem and add an assertion
+that we are not trying to invoke close while holding the read lock.

@@ -1,0 +1,14 @@
+Calculate correct count for tiny/small/normal allocation
+
+Motivation:
+
+Disable ThreadLocal Cache, then allocate Pooled ByteBuf and release all these buffers, PoolArena's tiny/small/normal allocation count is incorrect.
+
+Modifications:
+
+- Calculate PoolArena's tiny/small/normal allocation one time
+- Add testAllocationCounter TestCase
+
+Result:
+
+Fixes #6282 .

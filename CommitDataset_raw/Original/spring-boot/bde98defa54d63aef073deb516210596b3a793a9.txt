@@ -1,0 +1,10 @@
+Update Gradle plugin to only repackage main jar
+
+Previously, Repackage would attempt to repackage every jar in the
+project. This would cause it to incorrectly attempt to repackage source
+and javadoc jars.
+
+This commit updates Repackage so that it ignores any jar with a
+classifier. Hopefully this is a reasonable approximation for ignoring
+'special' jars that should not be repackaged such as sources and
+javadoc.

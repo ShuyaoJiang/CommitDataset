@@ -1,0 +1,11 @@
+Fix using relative custom config path
+
+Previously a user could set a custom config path to a relative directory
+using ES_PATH_CONF. In a previous change related to enabling GC logging
+by default, we forced the working directory for Elasticsearch to be
+ES_HOME. This had the impact of causing all relative paths to be
+relative to ES_HOME, against the intent of the user. This commit
+addresses this by making ES_PATH_CONF absolute before we switch the
+working directory to ES_HOME.
+
+Relates #28700

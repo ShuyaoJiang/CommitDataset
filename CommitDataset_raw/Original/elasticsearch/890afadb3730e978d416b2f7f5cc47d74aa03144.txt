@@ -1,0 +1,13 @@
+[test] packaging: add windows boxes (#30402)
+
+Adds windows server 2012r2 and 2016 vagrant boxes to packaging tests.
+They can only be used if IDs for their images are specified, which are
+passed to gradle and then to vagrant via env variables. Adds options
+to the project property `vagrant.boxes` to choose between linux and
+windows boxes.
+
+Bats tests are run only on linux boxes, and portable packaging tests run
+on all boxes. Platform tests are only run on linux boxes since they are
+not being maintained.
+
+For #26741

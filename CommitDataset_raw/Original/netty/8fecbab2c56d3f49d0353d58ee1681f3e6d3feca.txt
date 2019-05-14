@@ -1,0 +1,23 @@
+Handle null "origin" header in "Old Hixie 75 handshake" as proper bad request. (#8864)
+
+Motivation:
+
+Gracefully respond on bad client request.
+We have a set of errors produced by Android 7.1.1/7.1.2 clients where both headers `HttpHeaderNames.SEC_WEBSOCKET_VERSION` and `HttpHeaderNames.ORIGIN` are not present. Absence of the first headers leads to WebSocketServerHandshaker00 be applied as a handshaker. However, null 2nd header causes
+
+```
+java.lang.NullPointerException: value
+ io.netty.util.internal.ObjectUtil.checkNotNull(ObjectUtil.java:33)
+ io.netty.handler.codec.DefaultHeaders.addObject(DefaultHeaders.java:327)
+ io.netty.handler.codec.http.DefaultHttpHeaders.add(DefaultHttpHeaders.java:123)
+ io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker00.newHandshakeResponse(WebSocketServerHandshaker00.java:162)
+```
+Which causes connection close with unclear reason.
+
+Modification:
+
+Added null-check, and in case of null an appropriate WebSocketHandshakeException is thrown.
+
+Result:
+
+In case of null `HttpHeaderNames.ORIGIN` header a WebSocketHandshakeException is caught by WebSocketServerProtocolHandler which sends a graceful `BAD_REQUEST`.

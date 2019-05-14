@@ -1,0 +1,10 @@
+Fix build failure
+
+Commit e26e06d5dd broke the full build as the generated zip file for
+the size is not generated. Actually, the site plugin has a jar goal that
+is exactly meant for what we need to do.
+
+This commit removes the use of the assembly plugin and invokes the
+jar goal of the site plugin when the full profile is enabled.
+
+Relates to #749

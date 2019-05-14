@@ -1,0 +1,12 @@
+EpollRecvByteAllocatorHandle doesn't inform delegate of more data
+
+Motivation:
+EpollRecvByteAllocatorHandle intends to override the meaning of "maybe more data to read" which is a concept also used in all existing implementations of RecvByteBufAllocator$Handle but the interface doesn't support overriding. Because the interfaces lack the ability to propagate this computation EpollRecvByteAllocatorHandle attempts to implement a heuristic on top of the delegate which may lead to reading when we shouldn't or not reading data.
+
+Modifications:
+- Create a new interface ExtendedRecvByteBufAllocator and ExtendedHandle which allows the "maybe more data to read" between interfaces
+- Deprecate RecvByteBufAllocator and change all existing implementations to extend ExtendedRecvByteBufAllocator
+- transport-native-epoll should require ExtendedRecvByteBufAllocator so the "maybe more data to read" can be propagated to the ExtendedHandle
+
+Result:
+Fixes https://github.com/netty/netty/issues/6303.

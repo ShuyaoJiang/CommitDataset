@@ -1,0 +1,8 @@
+Ensure that ActionListener is called exactly once
+
+This bug was introduced in #36893 and had the effect that
+execution would continue after calling onFailure on the the
+listener in checkIfTokenIsValid in the case that the token is
+expired. In a case of many consecutive requests this could lead to
+the unwelcome side effect of an expired access token producing a
+successful authentication response.

@@ -1,0 +1,5 @@
+Don't bootstrap security index on start-up but authenticate bootstrap password locally (elastic/x-pack-elasticsearch#2272)
+
+Today we try to bootstrap the security index with the bootstrap password and recommend the user to change the password with the user tool. This is trappy for instance if you happen to configure multiple nodes with a different bootstrap passwords (which is possible) it's unclear which password made it too bootstrap. Yet, we tell in the logs but it can still be very confusing. In general it should be possible to bootstrap with the user tool from any node unless the user is already created in the native user store. This change uses the bootstrap.password from the local node and always authenticate against it until the user is bootstrapped even if the passwords are different on different nodes. This will also work for authenticating against the cluster for instance if a user deletes the .security index or if that index has not been upgraded.
+
+Original commit: elastic/x-pack-elasticsearch@8cebecb287ff45eb737b6385cc97568fe07a7aed

@@ -1,0 +1,6 @@
+TESTS: Fix Buf Leaks in HttpReadWriteHandlerTests (#32377)
+
+* TESTS: Fix Buf Leaks in HttpReadWriteHandlerTests
+
+* Release all ref counted things that weren't getting properly released
+* Mannually force channel promise to be completed because mock channel doesn't do it and it prevents one `release` call in `io.netty.channel.ChannelOutboundHandlerAdapter#write` from firing

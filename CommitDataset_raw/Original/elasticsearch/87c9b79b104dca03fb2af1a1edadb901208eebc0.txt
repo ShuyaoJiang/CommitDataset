@@ -1,0 +1,20 @@
+Return the _source of inner hit nested as is without wrapping it into its full path context
+
+Due to a change happened via #26102 to make the nested source consistent
+with or without source filtering, the _source of a nested inner hit was
+always wrapped in the parent path. This turned out to be not ideal for
+users relying on the nested source, as it would require additional parsing
+on the client side. This change fixes this, the _source of nested inner hits
+is now no longer wrapped by parent json objects, irregardless of whether
+the _source is included as is or source filtering is used.
+
+Internally source filtering and highlighting relies on the fact that the
+_source of nested inner hits are accessible by its full field path, so
+in order to now break this, the conversion of the _source into its binary
+form is performed in FetchSourceSubPhase, after any potential source filtering
+is performed to make sure the structure of _source of the nested inner hit
+is consistent irregardless if source filtering is performed.
+
+PR for #26944
+
+Closes #26944

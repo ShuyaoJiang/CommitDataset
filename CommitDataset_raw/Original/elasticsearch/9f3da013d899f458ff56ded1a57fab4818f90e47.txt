@@ -1,0 +1,25 @@
+Date/Time parsing: Use java time API instead of exception handling (#37222)
+
+* Add benchmark
+
+* Use java time API instead of exception handling
+
+when several formatters are used, the existing way of parsing those is
+to throw an exception catch it, and try the next one. This is is
+considerably slower than the approach taken in joda time, so that
+indexing is reduced when a date format like `x||y` is used and y is the
+date format being used.
+
+This commit now uses the java API to parse the date by appending the
+date time formatters to each other and does not rely on exception
+handling.
+
+* fix benchmark
+
+* fix tests by changing formatter, also expose printer
+
+* restore optional printing logic to fix tests
+
+* fix tests
+
+* incorporate review comments

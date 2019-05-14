@@ -1,0 +1,13 @@
+HLRC: Add get rollup job (#33921)
+
+Adds support for the get rollup job to the High Level REST Client. I had
+to do three interesting and unexpected things:
+1. I ported the rollup state wiping code into the high level client
+tests. I'll move this into the test framework in a followup and remove
+the x-pack version.
+2. The `timeout` in the rollup config was serialized using the
+`toString` representation of `TimeValue` which produces fractional time
+values which are more human readable but aren't supported by parsing. So
+I switched it to `getStringRep`.
+3. Refactor the xcontent round trip testing utilities so we can test
+parsing of classes that don't implements `ToXContent`.

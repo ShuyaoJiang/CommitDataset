@@ -1,0 +1,24 @@
+Fix peer recovery flushing loop (#28350)
+
+Today after writing an operation to an engine, we will call 
+`IndexShard#afterWriteOperation` to flush a new commit if needed. The 
+`shouldFlush` condition is purely based on the uncommitted translog size
+and the translog flush threshold size setting. However this can cause a
+replica execute an infinite loop of flushing in the following situation.
+
+1. Primary has a fully baked index commit with its local checkpoint 
+equals to max_seqno
+2. Primary sends that fully baked commit, then replays all retained
+translog operations to the replica
+3. No operations are added to Lucence on the replica as seqno of these
+operations are at most the local checkpoint
+4. Once translog operations are replayed, the target calls 
+`IndexShard#afterWriteOperation` to flush. If the total size of the
+replaying operations exceeds the flush threshold size, this call will
+`Engine#flush`. However the engine won't flush as its index writer does
+not have any uncommitted operations. The method
+`IndexShard#afterWriteOperation` will keep flushing as the condition
+`shouldFlush` is still true.
+
+This issue can be avoided if we always flush if the `shouldFlush` 
+condition is true.

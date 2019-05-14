@@ -1,0 +1,14 @@
+Use LinkedHashmap to preserve insert order
+
+In several places in the spring-webmvc module, URL patterns / objects
+relationships are kept in `HashMap`s. When matching with actual URLs,
+the algorithm uses a pattern comparator to sort the matching patterns
+and select the most specific. But the underlying collection
+implementation does not keep the original order which can lead to
+inconsistencies.
+
+This commit changes the underlying collection implementation to
+`LinkedHashmap`s, in order to keep the insert order if the comparator
+does not reorder entries.
+
+Issue: SPR-13798

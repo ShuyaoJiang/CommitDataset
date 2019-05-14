@@ -1,0 +1,20 @@
+Fix single quote parsing in NamedParameterUtils
+
+Prior to this change, single quotes were incorrectly parsed by
+NamedParameterUtils#parseSqlStatement, resulting in incorrect parameter
+counts:
+
+    ParsedSql sql = NamedParameterUtils
+            .parseSqlStatement("SELECT 'foo''bar', :xxx FROM DUAL");
+    assert sql.getTotalParameterCount() == 0 // incorrect, misses :xxx
+
+That is, presence of the single-quoted string caused the parser to
+overlook the named parameter :xxx.
+
+This commit fixes the parsing error such that:
+
+    ParsedSql sql = NamedParameterUtils
+            .parseSqlStatement("SELECT 'foo''bar', :xxx FROM DUAL");
+    assert sql.getTotalParameterCount() == 1 // correct
+
+Issue: SPR-8280

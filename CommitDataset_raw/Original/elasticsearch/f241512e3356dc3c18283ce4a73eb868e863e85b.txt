@@ -1,0 +1,15 @@
+SQL support for field level security (elastic/x-pack-elasticsearch#2162)
+
+This adds support for field level security to SQL by creating a new type of flow for securing requests that look like sql requests. `AuthorizationService` verifies that the user can execute the request but doesn't check the indices in the request because they are not yet ready. Instead, it adds a `BiFunction` to the context that can be used to check permissions for an index while servicing the request. This allows requests to cooperatively secure themselves. SQL does this by implementing filtering on top of its `Catalog` abstraction and backing that filtering with security's filters. This minimizes the touch points between security and SQL.
+
+Stuff I'd like to do in followups:
+
+What doesn't work at all still:
+1. `SHOW TABLES` is still totally unsecured
+2. `DESCRIBE TABLE` is still totally unsecured
+3. JDBC's metadata APIs are still totally unsecured
+
+What kind of works but not well:
+1. The audit trail doesn't show the index being authorized for SQL.
+
+Original commit: elastic/x-pack-elasticsearch@86f88ba2f56b7b2d9d02f15036ed11d982acac0f

@@ -1,0 +1,12 @@
+DNS Resolver should be more consistent with JDK resolution
+
+Motivation:
+If there are multiple DNS servers to query Java's DNS resolver will attempt to resolve A and AAAA records in sequential order and will terminate with a failure once all DNS servers have been exhausted. Netty's DNS server will share the same DnsServerAddressStream for the different record types which may send the A question to the first host and the AAAA question to the second host. Netty's DNS resolution also may not progress to the next DNS server in all situations and doesn't have a means to know when resolution has completed.
+
+Modifications:
+- DnsServerAddressStream should support new methods to allow the same stream to be used to issue multiple queries (e.g. A and AAAA) against the same host.
+- DnsServerAddressStream should support a method to determine when the stream will start to repeat, and therefore a failure can be returned.
+- Introduce SequentialDnsServerAddressStreamProvider for sequential use cases
+
+Result:
+Fixes https://github.com/netty/netty/issues/6926.

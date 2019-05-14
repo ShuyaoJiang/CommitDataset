@@ -1,0 +1,11 @@
+Do not set data paths on no local storage required
+
+Today when configuring the data paths for the environment, we set data
+paths to either the specified path.data or default to data relative to
+the Elasticsearch home. Yet if node.local_storage is false, data paths
+do not even make sense. In this case, we should reject if path.data is
+set, and instead of defaulting data paths to data relative to home, we
+should set this to empty paths. This commit does this.
+
+Relates #27587
+

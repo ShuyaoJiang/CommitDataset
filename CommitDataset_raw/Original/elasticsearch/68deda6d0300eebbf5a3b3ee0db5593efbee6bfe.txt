@@ -1,0 +1,10 @@
+FastVectorHighlighter should not cache the field query globally (#25197)
+
+This commit removes the global caching of the field query and replaces it with
+a caching per field. Each field can use a different `highlight_query` and the rewriting of
+some queries (prefix, automaton, ...) depends on the targeted field so the query used for highlighting
+must be unique per field.
+There might be a small performance penalty when highlighting multiple fields since the query needs to be rewritten
+once per highlighted field with this change.
+
+Fixes #25171

@@ -1,0 +1,10 @@
+Fix `QuartzAutoConfigurtion` failure with multiple `Executor` beans
+
+`QuartzAutoConfigurtion` currently blows up if there are multiple
+`Executor` beans in the context.
+
+This commit changes the configuration to retrieve `Executor` bean using
+`ObjectProvider#getIfUnique` which won't fail in scenarios where there
+are multiple `Executor` beans with none marked as `@Primary`.
+
+Closes gh-9434

@@ -1,0 +1,17 @@
+Add support for server-side renegotiation when using OpenSslEngine.
+
+Motivation:
+
+JDK SslEngine supports renegotion, so we should at least support it server-side with OpenSslEngine as well.
+
+That said OpenSsl does not support sending messages asynchronly while the renegotiation is still in progress, so the application need to ensure there are not writes going on while the renegotiation takes place. See also https://rt.openssl.org/Ticket/Display.html?id=1019 .
+
+Modifications:
+
+- Add support for renegotiation when OpenSslEngine is used in server mode
+- Add unit tests.
+- Upgrade to netty-tcnative 1.1.33.Fork9
+
+Result:
+
+Better compatibility with the JDK SSLEngine implementation.

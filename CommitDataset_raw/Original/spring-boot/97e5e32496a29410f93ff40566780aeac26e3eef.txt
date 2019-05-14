@@ -1,0 +1,14 @@
+Make sure the MetricsFilter uses committed response's status
+
+Previously, if an exception was thrown during request handling after
+the response had been committed, i.e. after the status and headers
+had been written, the metrics filter would assume that it was a 500
+response. This was potentially inaccurate as the status had already
+been sent to the client and before the exception was thrown and it
+may have been something other than a 500.
+
+This commit updates MetricsFilter so that it will use the
+status from the response if the response has been committed even when
+an exception is thrown.
+
+Closes gh-7277

@@ -1,0 +1,8 @@
+Simplify TranslogWriter#closeWithTragicEvent (#29412)
+
+This commit simplifies the exception handling in
+TranslogWriter#closeWithTragicEvent. When invoking this method, the
+inner close method could throw an exception which we always catch and
+suppress into the exception that led us to tragically close. This commit
+moves that repeated logic into closeWithTragicException and now callers
+simply need to catch, invoke closeWithTragicException, and rethrow.

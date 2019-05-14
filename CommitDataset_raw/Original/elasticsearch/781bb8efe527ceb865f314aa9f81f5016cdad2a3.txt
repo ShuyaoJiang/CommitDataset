@@ -1,0 +1,8 @@
+Build: Add elastic maven to repos used by BuildPlugin (#32549)
+
+This commit adds the elastic repo, alongside maven central, to any
+plugin using BuildPlugin. This is necessary now because the default
+distribution, which the test framework uses by default, is now only
+hosted on elastic maven. While inside the elasticsearch build this does
+not matter, those that build external plugins with our build-tools could
+have tests fail to find the distribution dependency.

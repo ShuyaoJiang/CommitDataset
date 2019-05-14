@@ -1,0 +1,8 @@
+Emit settings deprecation logging on empty update
+
+When executing a cluster settings update that leaves the cluster state
+unchanged, we skip validation and this avoids deprecation logging for
+deprecated settings in the cluster state. This commit addresses this by
+running validation even if the settings are unchanged.
+
+Relates #27017

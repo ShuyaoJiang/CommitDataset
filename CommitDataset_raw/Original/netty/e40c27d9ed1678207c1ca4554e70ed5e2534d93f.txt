@@ -1,0 +1,15 @@
+Avoid object allocations for HTTP2 child streams.
+
+Motivation:
+
+We are allocating a hash map for every HTTP2 Stream to store it's children.
+Most streams are leafs in the priority tree and don't have children.
+
+Modification:
+
+ - Only allocate children when we actually use them.
+ - Make EmptyIntObjectMap not throw a UnsupportedOperationException on remove, but return null instead (as is stated in it's javadoc).
+
+Result:
+
+Fewer unnecessary allocations.

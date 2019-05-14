@@ -1,0 +1,5 @@
+AbstractQueryBuilder to no longer extend ToXContentBytes (#25948)
+
+ToXContentToBytes is used as a base class that adds toString and buildAsBytes method implementation to classes that implement ToXContent. With the ongoing cleanups, this class is limited and doesn't add a lot of value, given that buildAsBytes can be replaced with XContentHelper.toXContent and toString can be replaced with Strings.toString(this).
+
+The plan would be to remove ToXContentToBytes entirely, and AbstractQueryBuilder is the first place where we can remove its usage.

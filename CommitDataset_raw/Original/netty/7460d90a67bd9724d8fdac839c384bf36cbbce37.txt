@@ -1,0 +1,13 @@
+Add listener to returned Future rather than passed in Promise
+
+Motivation
+
+It's cleaner to add listeners to returned Futures rather than provided Promises because the latter can have strange side effects in terms of listeners firing and called methods returning. Adding listeners preemtively may yield also to more OPS than necessary when there's an Exception in the to be called method.
+
+Modifications
+
+Add listener to returned ChannelFuture rather than given ChannelPromise
+
+Result
+
+Cleaner completion and exception handling

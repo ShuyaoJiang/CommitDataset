@@ -1,0 +1,7 @@
+Test: bound number of requests in IndexLifecycleManagerIntegTests
+
+The IndexLifecycleManagerIntegTests has a method that tests concurrency and executes a large number
+of requests in parallel. On some machines, this can actually overwhelm a thread pool and cause the
+test to fail for the wrong reasons. This commit bounds the total number of requests to 100.
+
+Original commit: elastic/x-pack-elasticsearch@07613ada51f9a67e95067c3d2f721d378416a54e

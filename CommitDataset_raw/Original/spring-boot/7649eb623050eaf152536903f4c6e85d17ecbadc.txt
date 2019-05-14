@@ -1,0 +1,10 @@
+Allow auto-configure sort with incomplete chain
+
+Update `AutoConfigurationSorter` so that all `@AutoConfigureBefore` and
+`@AutoConfigureAfter` classes are considered even if they are ultimately
+not part of the requested set.
+
+Prior to this commit, given classes ordered with annotations such that
+A -> B -> C a call to sort only [A, B] could return the incorrect order.
+
+Fixes gh-12660

@@ -1,0 +1,13 @@
+Fix minor issue in MockHttpServletRequest
+
+Previously MockHttpServletRequest#sendRedirect did not set the HTTP status
+or the Location header. This does not conform to the HttpServletRequest
+interface.
+
+MockHttpServletRequest will now:
+
+  - Set the HTTP status to 302 on sendRedirect
+  - Set the Location header on sendRedirect
+  - Ensure the Location header and getRedirectedUrl are kept in synch
+
+Issue: SPR-9594

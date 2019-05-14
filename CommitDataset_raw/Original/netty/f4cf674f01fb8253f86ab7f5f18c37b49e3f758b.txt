@@ -1,0 +1,15 @@
+Fix NPE when trying to build a DnsNameResolver with a null resolvedAddressTypes (#8445)
+
+Motivation:
+
+It should be possible to build a DnsNameResolver with a null resolvedAddressTypes, defaulting then to DEFAULT_RESOLVE_ADDRESS_TYPES (see line 309).
+
+Sadly, `preferredAddressType` is then called on line 377 with the original parameter instead of the instance attribute, causing an NPE when it's null.
+
+Modification:
+
+Call preferredAddressType with instance attribuet instead of constructor parameter.
+
+Result:
+
+No more NPE

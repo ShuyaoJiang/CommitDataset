@@ -1,0 +1,10 @@
+HTTP/2 HelloWorld clear text NPE
+
+Motivation:
+HelloWorldHttp2Handler throws a NPE when converting from HTTP/1.x headers to HTTP/2 headers because there is no Host header.
+
+Modifications:
+- HelloWorldHttp2Handler should check if the Host header is present before setting it in the HTTP/2 headers
+
+Result:
+No more NPE in HelloWorldHttp2Handler.

@@ -1,0 +1,13 @@
+Fix ConnectionFactory auto-configuration with XA
+
+Previously, the regular jms connection factory was always overriding
+the xaConnectionFactory when using ActiveMQ. While
+ActiveMQAutoConfiguration is namely shielded with a condition on a
+missing ConnectionFactory bean, said configuration class also imports the
+XA and regular configuration classes that both can create the connection
+factory.
+
+This commit adds a ConditionalOnMissingBean in the second class that is
+imported in case the XA configuration has already defined what it needs.
+
+Fixes gh-1727

@@ -1,0 +1,10 @@
+Fix PropertiesConfigAdapter delegation logic
+
+This change replaces fallback logic in PropertiesConfigAdapter and its
+descendants such that instead of falling back to default "empty" config
+it delegates to superinterface default implementation of the same class.
+
+This allows default implementation to call back to other properties,
+like DatadogConfig.uri() does.
+
+See gh-11135

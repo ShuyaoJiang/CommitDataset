@@ -1,0 +1,15 @@
+Watcher: Reload properly on remote shard change (#33167)
+
+When a node dies that carries a watcher shard or a shard is relocated to
+another node, then watcher needs not only trigger a reload on the node
+where the shard relocation happened, but also on other nodes where
+copies of this shard, as different watches may need to be loaded.
+
+This commit takes the change of remote nodes into account by not only
+storing the local shard allocation ids in the WatcherLifeCycleService,
+but storing a list of ShardRoutings based on the local active shards.
+
+This also fixes some tests, which had a wrong assumption. Using
+`TestShardRouting.newShardRouting` in our tests for cluster state
+creation led to the issue of always creating new allocation ids which
+implicitely lead to a reload.

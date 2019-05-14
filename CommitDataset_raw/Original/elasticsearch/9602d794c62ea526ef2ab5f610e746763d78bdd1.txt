@@ -1,0 +1,13 @@
+Separate out validation of groups of settings (#34184)
+
+Today, a setting can declare that its validity depends on the values of other
+related settings. However, the validity of a setting is not always checked
+against the correct values of its dependent settings because those settings'
+correct values may not be available when the validator runs.
+
+This commit separates the validation of a settings updates into two phases,
+with separate methods on the `Setting.Validator` interface. In the first phase
+the setting's validity is checked in isolation, and in the second phase it is
+checked again against the values of its related settings. Most settings only
+use the first phase, and only the few settings with dependencies make use of
+the second phase.

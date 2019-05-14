@@ -1,0 +1,40 @@
+SQL: Replace Node's reflection with explicit code  (elastic/x-pack-elasticsearch#3490)
+
+This isn't pretty but it removes our need to compile with parameter
+names in the debug symbols and the use of reflection during tree
+transforms. `instanceof` is still used. It does so by forcing all
+subclasses of `Node` to implement two methods like this:
+
+```
+    @Override
+    protected NodeInfo<PercentileRank, Expression> info() {
+        return info(this, PercentileRank::new, field(), value());
+    }
+
+    @Override
+    protected Expression replaceChildren(List<Expression> newChildren) {
+        if (newChildren.size() != 2) {
+            throw new IllegalArgumentException("Expected [2] children but got [" + newChildren.size() + "]");
+        }
+        return new PercentileRank(location(), newChildren.get(0), newChildren.get(1));
+    }
+```
+
+Every. Single. One.
+
+This is tedious and painful and you have to do each one perfectly,
+but it *is* checked by the compiler so it is less scary then the reflection
+based approach it is replacing. Marginally. It is still pretty terrifying because
+it requires so many tiny changes. While the compiler *does* check that
+you've made all the right methods it doesn't check that you've implemented
+them correctly.
+
+Technically relates elastic/x-pack-elasticsearch#2871 but doesn't really close the "OO all the things" spirit
+of elastic/x-pack-elasticsearch#2871.
+
+A change like this deserves a million tests. Instead, I've created a hacky
+reflection based test that attempts to verify that all subclasses of `Node`
+implement these method correctly for some test verifiable definition of
+"correct".
+
+Original commit: elastic/x-pack-elasticsearch@a69ab634f4f1a00534bf87dc8d245590143f6166

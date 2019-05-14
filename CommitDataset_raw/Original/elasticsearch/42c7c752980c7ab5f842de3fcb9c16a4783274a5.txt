@@ -1,0 +1,10 @@
+Fix starting on Windows from another drive (#29086)
+
+The cd command on Windows has an oddity regarding changing
+directories. If the drive of the current directory is a different drive
+than than of the directory that was passed to the cd command, cd acts in
+query mode and does not change the current directory. Instead, a flag is
+needed to put the cd command into set mode so that the directory
+actually changes. This causes a problem when starting Elasticsearch from
+a directory different than the one where it is installed and this commit
+fixes the issue.

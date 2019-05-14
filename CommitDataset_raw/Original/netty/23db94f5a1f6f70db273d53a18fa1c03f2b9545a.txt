@@ -1,0 +1,17 @@
+Fix Java 6 compatibility issue in DnsNameResolver
+
+Related: #3173
+
+Motivation:
+
+DnsNameResolver was using InetSocketAddress.getHostString() which is
+only available since Java 7.
+
+Modifications:
+
+Use InetSocketAddress.getHostName() in lieu of getHostString() when the
+current Java version is less than 7.
+
+Result:
+
+DnsNameResolver runs fine on Java 6.

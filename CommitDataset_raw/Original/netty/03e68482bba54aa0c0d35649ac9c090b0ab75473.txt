@@ -1,0 +1,4 @@
+Remove ChannelBuf/ByteBuf.Unsafe
+
+- Fixes #826
+Unsafe.isFreed(), free(), suspend/resumeIntermediaryAllocations() are not that dangerous. internalNioBuffer() and internalNioBuffers() are dangerous but it seems like nobody is using it even inside Netty. Removing those two methods also removes the necessity to keep Unsafe interface at all.

@@ -1,0 +1,21 @@
+[#2925] Bug fix for NormalMemoryRegionCache overbooked for PoolThreadCache
+
+Motivation:
+
+When create NormalMemoryRegionCache for PoolThreadCache, we overbooked
+cache array size. This means unnecessary overhead for thread local cache
+as we will create multi cache enties for each element in cache array.
+
+Modifications:
+
+change:
+int arraySize = Math.max(1, max / area.pageSize);
+to:
+int arraySize = Math.max(1, log2(max / area.pageSize) + 1);
+
+Result:
+
+Now arraySize won't introduce unnecessary overhead.
+
+ Changes to be committed:
+	modified:   buffer/src/main/java/io/netty/buffer/PoolThreadCache.java

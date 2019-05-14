@@ -1,0 +1,8 @@
+Replace UnsafeByteBuf with ByteBuf.unsafe() again
+
+* UnsafeByteBuf is gone. I added ByteBuf.unsafe() back.
+* To avoid extra instantiation, all ByteBuf implementations implement the ByteBuf.Unsafe interface.
+* To hide this implementation detail, all ByteBuf implementations are package-private.
+* AbstractByteBuf and SwappedByteBuf are public and they do not implement ByteBuf.Unsafe because they don't need to.
+* unwrap() is not an unsafe operation anymore.
+* ChannelBuf also has unsafe() and Unsafe. ByteBuf.Unsafe extends ChannelBuf.unsafe(). ChannelBuf.unsafe() provides free() operation so that a user does not need to down-cast the buffer in freeInbound/OutboundBuffer().

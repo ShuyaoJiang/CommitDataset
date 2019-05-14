@@ -1,0 +1,10 @@
+HTTP/2 defines using String instead of CharSequence
+
+Motivation:
+Http2CodecUtils has some static variables which are defined as Strings instead of CharSequence. One of these defines is used as a header name and should be AsciiString.
+
+Modifications:
+- Change the String defines in Http2CodecUtils to CharSequence
+
+Result:
+Types are more consistently using CharSequence and adding the upgrade header will require less work.

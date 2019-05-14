@@ -1,0 +1,13 @@
+Do not load global state when deleting a snapshot (#29278)
+
+When deleting a snapshot, it is not necessary to load and to parse the
+global metadata of the snapshot to delete. Now indices are stored in
+the snapshot metadata file, we have all the information to resolve the
+shards files to delete.
+
+This commit removes the readSnapshotMetaData() method that was used to
+load both global and index metadata files. Test coverage should be
+enough as SharedClusterSnapshotRestoreIT already contains several
+deletion tests.
+
+Related to #28934

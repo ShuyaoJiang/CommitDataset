@@ -1,0 +1,44 @@
+Introduce global checkpoint background sync
+
+It is the exciting return of the global checkpoint background
+sync. Long, long ago, in snapshot version far, far away we had and only
+had a global checkpoint background sync. This sync would fire
+periodically and send the global checkpoint from the primary shard to
+the replicas so that they could update their local knowledge of the
+global checkpoint. Later in time, as we sped ahead towards finalizing
+the initial version of sequence IDs, we realized that we need the global
+checkpoint updates to be inline. This means that on a replication
+operation, the primary shard would piggy back the global checkpoint with
+the replication operation to the replicas. The replicas would update
+their local knowledge of the global checkpoint and reply with their
+local checkpoint. However, this could allow the global checkpoint on the
+primary to advance again and the replicas would fall behind in their
+local knowledge of the global checkpoint. If another replication
+operation never fired, then the replicas would be permanently behind. To
+account for this, we added one more sync that would fire when the
+primary shard fell idle. However, this has problems:
+ - the shard idle timer defaults to five minutes, a long time to wait
+   for the replicas to learn of the new global checkpoint
+ - if a replica missed the sync, there was no follow-up sync to catch
+   them up
+ - there is an inherent race condition where the primary shard could
+   fall idle mid-operation (after having sent the replication request to
+   the replicas); in this case, there would never be a background sync
+   after the operation completes
+ - tying the global checkpoint sync to the idle timer was never natural
+
+To fix this, we add two additional changes for the global checkpoint to
+be synced to the replicas. The first is that we add a post-operation
+sync that only fires if there are no operations in flight and there is a
+lagging replica. This gives us a chance to sync the global checkpoint to
+the replicas immediately after an operation so that they are always kept
+up to date. The second is that we add back a global checkpoint
+background sync that fires on a timer. This timer fires every thirty
+seconds, and is not configurable (for simplicity). This background sync
+is smarter than what we had previously in the sense that it only sends a
+sync if the global checkpoint on at least one replica is lagging that of
+the primary. When the timer fires, we can compare the global checkpoint
+on the primary to its knowledge of the global checkpoint on the replicas
+and only send a sync if there is a shard behind.
+
+Relates #26591

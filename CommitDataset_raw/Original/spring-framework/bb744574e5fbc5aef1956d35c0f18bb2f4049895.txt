@@ -1,0 +1,9 @@
+Remove optional javax.mail dependency from WebFlux
+
+The MultipartHttpMessageWriter now directly encodes part header values
+defaulting to UTF-8 and also specifies the charset in the
+Content-Type header for the entire request.
+
+This should work with something commonly used like Apache Commons
+FileUpload which checks request.getCharacterEncoding() and uses it
+for reading headers.

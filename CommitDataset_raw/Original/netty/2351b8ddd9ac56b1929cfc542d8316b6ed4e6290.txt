@@ -1,0 +1,7 @@
+Add FixedCompositeByteBuf which can be used to write an array of ByteBuf in an efficient way.
+
+This implementation does not produce as much GC pressure as CompositeByteBuf and so is prefered,
+for writing an array of ByteBufs. Be aware that FixedCompositeByteBuf is readonly.
+
+When using this in a project that make heavy use of CompositeByteBuf for writes we was able to cut
+down allocation to a half.

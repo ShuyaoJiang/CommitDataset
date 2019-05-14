@@ -1,0 +1,11 @@
+Update hasPublicSuffix javadoc
+
+"google" is a public suffix, and "google.foo" is under public suffix "foo". Therefore hasPublicSuffix() should have returned true for both of them. In fact both TLDs (.google and .foo) are owned by Google Registry, i. e. us!
+
+I tested calling InternetDomainName.from("google").hasPublicSuffix(), which returns true as expected. Same goes for "google.foo".
+
+I suspect this javadoc has not been updated after the last round of gTLD expansion. This method really should only return false for domains that are under nonexistent TLDs, like "google.invalid", or fake TLDs themselves, like "invalid" (see https://en.wikipedia.org/wiki/.invalid).
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=171993370

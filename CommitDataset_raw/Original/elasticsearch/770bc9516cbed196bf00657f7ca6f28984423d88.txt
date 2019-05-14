@@ -1,0 +1,9 @@
+Switch sql audit tests from index to the log file (elastic/x-pack-elasticsearch#2753)
+
+This is *way* faster because we don't have to wait for the audit
+events from previous test runs to drain into the index. And we
+don't have to wait for the index's refresh cycle. We have to parse
+the log lines which is a bit more brittle but it feels worth it
+at this point.
+
+Original commit: elastic/x-pack-elasticsearch@4b1758fc329e7661c81922acd60e5fec9575d962

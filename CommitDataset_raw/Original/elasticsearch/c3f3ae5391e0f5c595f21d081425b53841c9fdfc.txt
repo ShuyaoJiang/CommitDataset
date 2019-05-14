@@ -1,0 +1,11 @@
+Watcher: Remove all traces from execution on master node (elastic/x-pack-elasticsearch#2383)
+
+As there are no master node operations anymore.
+
+* TransportActions are regular Actions now
+* Watcher requests are now ActionRequests, no MasterNodeRequests anymore
+* REST spec does not contain master node timeout parameters anymore
+* WatcherLifeCycleService does not have a check anymore if watcher is able to run distributed, this will be a given in 7.0
+* Some serialization BWC checks against version 5 have been removed
+
+Original commit: elastic/x-pack-elasticsearch@4607dd538c933d39ba8f31bf610d425bec08c2ee

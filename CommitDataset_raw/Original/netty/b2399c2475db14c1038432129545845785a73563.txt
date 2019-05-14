@@ -1,0 +1,10 @@
+EPOLL Shutdown Input Half Closed
+
+Motivation:
+EPOLL attempts to support half closed socket, but fails to call shutdown to close the read portion of the file descriptor.
+
+Motivation:
+- If half closed is supported shutting down the input should call underlying Native.shutdown(...) to make sure the peer is notified of the half closed state.
+
+Result:
+EPOLL half closed is more correct.

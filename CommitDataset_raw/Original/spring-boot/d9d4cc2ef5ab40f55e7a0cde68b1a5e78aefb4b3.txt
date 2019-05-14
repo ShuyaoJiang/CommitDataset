@@ -1,0 +1,19 @@
+Ensure request context is setup before security filter runs
+
+Previously, OrderedRequestContextFilter was ordered such that it
+ran after Spring Security's Filter. This meant that the request
+context was unavailable to any Filters in Spring Security's Filter
+chain. Specifically, this caused a failure when using @EnableOAuth2Sso
+as OAuth2ClientAuthenticationProcessingFilter, which is added to
+Spring Security's Filter chain would be unable to use the
+request-scoped bean upon which it depends.
+
+This commit updates the order of OrderedRequestContextFilter so that
+the request context is set up before Spring Security's Filter runs.
+The tests for SampleGitHubApplication have been updated to use
+TestRestTemplate rather than MockMvc. This is necessary as the latter,
+via ServletTestExecutionListener, automatically populates the request
+context holder, masking the fact that the request context filter was
+setting it up too late.
+
+Closes gh-4270

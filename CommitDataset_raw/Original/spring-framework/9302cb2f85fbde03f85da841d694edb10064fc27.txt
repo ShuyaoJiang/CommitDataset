@@ -1,0 +1,10 @@
+Support Kotlin suspending functions in MethodParameter
+
+Before this commit, the return type for Kotlin suspending functions
+(as returned by MethodParameter#getParameterType and
+MethodParameter#getGenericReturnType methods) was incorrect.
+
+This change leverages Kotlin reflection instead of Java one
+to return the correct type.
+
+Closes gh-21058

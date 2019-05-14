@@ -1,0 +1,25 @@
+Parse @PropertySource annotations on SpringApplication sources
+
+If any of the sources has a @PropertySource annotation (or many)
+then we can add those properties to the Environment. It's a nice
+convenient way of specifying a custom external properties location
+for an app.
+
+One problem is that Spring will come along and parse the same
+annotations later as part of the @Configuration parsing. The
+user has pretty limited control over how that is done, and it
+will never be done in a "natural" way for a Boot application
+(which would prefer that the default application.properties
+is applied *last*, whereas Spring will apply the @PropertySource
+last).
+
+To get round that problem we add the property sources with
+a different name (key in the PropertySources in Environment),
+prefixing named property sources with "boot.", and adding
+others with a name that is the same as the resource location
+(instead of its description, which is the default for
+Spring).
+
+Another problem is that Spring doesn't know about YAML, so
+the user is currently restricted to using properties files
+with this annotation.

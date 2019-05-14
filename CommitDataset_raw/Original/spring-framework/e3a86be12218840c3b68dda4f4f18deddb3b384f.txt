@@ -1,0 +1,9 @@
+Make ConcurrentReferenceHashMap more JIT friendly
+
+Update `ConcurrentReferenceHashMap` to make some methods more inline
+friendly, and to manually inline a few others. These minor optimizations
+don't make a great deal of difference for most applications, but seem
+worthwhile since we use `ConcurrentReferenceHashMap` for many internal
+caches.
+
+Closes gh-22566

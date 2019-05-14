@@ -1,0 +1,10 @@
+Add Decoder#decodeOne()
+
+This commit adds a Decoder#decodeOne() method in order
+to handle correctly the streaming versus one value
+deserialization based on the type provided by the user.
+
+For example, if a List parameter is provided in a controller
+method, Jackson will be called once, while if the user provides
+a Flux or an Observable parameter, Jackson will be called for
+each element.

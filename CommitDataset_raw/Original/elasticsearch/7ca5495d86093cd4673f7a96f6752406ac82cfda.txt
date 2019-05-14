@@ -1,0 +1,44 @@
+Allow custom authorization with an authorization engine  (#38358)
+
+For some users, the built in authorization mechanism does not fit their
+needs and no feature that we offer would allow them to control the
+authorization process to meet their needs. In order to support this,
+a concept of an AuthorizationEngine is being introduced, which can be
+provided using the security extension mechanism.
+
+An AuthorizationEngine is responsible for making the authorization
+decisions about a request. The engine is responsible for knowing how to
+authorize and can be backed by whatever mechanism a user wants. The
+default mechanism is one backed by roles to provide the authorization
+decisions. The AuthorizationEngine will be called by the
+AuthorizationService, which handles more of the internal workings that
+apply in general to authorization within Elasticsearch.
+
+In order to support external authorization services that would back an
+authorization engine, the entire authorization process has become
+asynchronous, which also includes all calls to the AuthorizationEngine.
+
+The use of roles also leaked out of the AuthorizationService in our
+existing code that is not specifically related to roles so this also
+needed to be addressed. RequestInterceptor instances sometimes used a
+role to ensure a user was not attempting to escalate their privileges.
+Addressing this leakage of roles meant that the RequestInterceptor
+execution needed to move within the AuthorizationService and that
+AuthorizationEngines needed to support detection of whether a user has
+more privileges on a name than another. The second area where roles
+leaked to the user is in the handling of a few privilege APIs that
+could be used to retrieve the user's privileges or ask if a user has
+privileges to perform an action. To remove the leakage of roles from
+these actions, the AuthorizationService and AuthorizationEngine gained
+methods that enabled an AuthorizationEngine to return the response for
+these APIs.
+
+Ultimately this feature is the work included in:
+#37785
+#37495
+#37328
+#36245
+#38137
+#38219
+
+Closes #32435

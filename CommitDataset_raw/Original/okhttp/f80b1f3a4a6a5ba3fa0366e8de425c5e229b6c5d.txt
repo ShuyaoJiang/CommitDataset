@@ -1,0 +1,11 @@
+Fix a bug where the response cache could be corrupted.
+
+When streaming a response, we copy data from our buffer to the cached file
+on disk. Unfortunately we were copying N bytes from the front of the buffer
+when we wanted N bytes from the back of the buffer.
+
+Typically these are the same, but certain access patterns can cause them
+to be different, corrpting the cached file on disk.
+
+This was uncovered by migrating the cache tests from operating on
+HttpURLConnection's API to our new API.

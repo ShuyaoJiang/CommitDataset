@@ -1,0 +1,11 @@
+MvcUriCB no longer extends UriCB
+
+Before 4.2 the MvcUriComponentsBuilder exposed only static factory
+methods and therefore there should be no reason for it to extend
+UriComponentsBuilder (design oversight). It's also highly unlikely
+for application code to treat MvcUriCB as UriCB since there is no
+need and no way to obtain an instance (constructor is protected).
+
+This change removes the base class declaration from MvcUriCB.
+
+Issue: SPR-12617

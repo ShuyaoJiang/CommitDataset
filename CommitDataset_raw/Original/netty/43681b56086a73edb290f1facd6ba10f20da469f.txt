@@ -1,0 +1,10 @@
+Avoid vectored writes for small websocket messages
+
+Motivation:
+The WebSocket08FrameEncoder contains an optimization path for small messages which copies the message content into the header buffer to avoid vectored writes. However this path is in the current implementation never taken because the target buffer is preallocated only for exactly the size of the header.
+
+Modification:
+For messages below a certain treshold allocate the buffer so that the message can be directly copied. Thereby the optimized path is taken.
+
+Result:
+A speedup of about 25% for 100byte messages. Declines with bigger message sizes. I have currently set the treshold to 1kB which is a point where I could still see a few percent speedup, but we should also avoid burning too many CPU cycles.

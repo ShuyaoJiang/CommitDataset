@@ -1,0 +1,12 @@
+Fix Native EPOLL Build Failure
+
+Motiviation:
+If sendmmsg is already defined then the native epoll module failed to build because of conflicting definitions.
+The mmsghdr type was also redefined on systems that already supported this structure.
+
+Modifications:
+Provide a way so that systems which already define sendmmsg and mmsghdr can build
+Provide a way so that systems which don't define sendmmsg and mmsghdr can build
+
+Result:
+The native EPOLL module can build in more environments

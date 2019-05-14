@@ -1,0 +1,11 @@
+[ML] Fix ML memory tracker for old jobs (#37311)
+
+Jobs created in version 6.1 or earlier can have a
+null model_memory_limit.  If these are parsed from
+cluster state following a full cluster restart then
+we replace the null with 4096mb to make the meaning
+explicit.  But if such jobs are streamed from an
+old node in a mixed version cluster this does not
+happen.  Therefore we need to account for the
+possibility of a null model_memory_limit in the ML
+memory tracker.

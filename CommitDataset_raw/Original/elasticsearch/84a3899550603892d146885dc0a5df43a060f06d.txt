@@ -1,0 +1,8 @@
+Simplify Azure blobStore method signatures (#26752)
+
+While working on #26751, I found that we are passing the container name on every single method although we don't need it as it is stored within the blobstore object already.
+
+This commit simplifies a bit that part of the code.
+
+It also removes `repositoryName` from AzureBlobStore which was not used anymore.
+Also we move some properties in AzureBlobContainer to `private` members.

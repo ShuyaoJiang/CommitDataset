@@ -1,0 +1,18 @@
+Record trace with response status of 500 following unhandled exception
+
+Previously, if the filter chain threw an unhandled exception,
+WebRequestTraceFilter would record a trace with a response status of
+200. This occurred because response.getStatus() would return 200 as
+the container had not yet caught the exception and mapped it to an
+error response.
+
+This commit updates WebRequestTraceFilter to align its behaviour with
+MetricsFilter. It now assumes that the response status will be a 500
+and only updates that to the status of the response if the call to the
+filter chain returns successfully.
+
+To avoid making a breaking change to the signature of the protected
+enhanceTrace method, an HttpServletResponseWrapper is used to include
+the correct status in the trace.
+
+Closes gh-5331

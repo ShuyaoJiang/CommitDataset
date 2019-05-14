@@ -1,0 +1,15 @@
+Add some performance enhancements to Striped:
+
+1. Enhance bulkGet to not call getAt() for runs of identical stripes
+2. Introduce a new Striped implementation for LazyWeak Striped instances with
+small numbers of stripes
+
+To justify this I also added a caliper benchmark.
+
+It is a minor runtime improvement in all but cases where there are a small
+number of stripes where it is a major improvement
+
+The LAZY_SMALL appears to be superior in all cases until the stripes size gets very large where the large array size becomes a potential issue.  Due to this i have introduced a static integer LARGE_LAZY_CUTOFF at 1024 so that lazyWeak striped instances with more than that many stripes use the legacy implementation.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=59821299

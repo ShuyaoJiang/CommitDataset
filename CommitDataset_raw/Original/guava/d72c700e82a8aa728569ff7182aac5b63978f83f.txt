@@ -1,0 +1,15 @@
+Fix GWT behavior of "opportunistic" ImmutableList subclasses.
+The "standard" ImmutableLists were fine, but Lists.charactersOf() and
+TransformedImmutableList were broken.
+Under Java, they inherited working implementations of their methods; under GWT,
+they inherited versions that forwarded to an empty "delegate" collection.
+I've overridden all forwarding methods in the GWT emulation in order to avoid
+this.
+I've also added tests for charactersOf(), which reveal that GWT
+String/StringBuilder doesn't perform index checks, so I've added manual checks.
+TransformedImmutableList could probably stand to have some tests, too, but at
+least it will be exercised indirectly through the asList() views implemented
+atop it in Louis's coming CL, which is in fact what revealed these problems.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=28741879

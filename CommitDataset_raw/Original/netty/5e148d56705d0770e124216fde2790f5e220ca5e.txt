@@ -1,0 +1,13 @@
+[#5639] Ensure fireChannelActive() is also called if Channel is closed in connect promise.
+
+Motivation:
+
+We need to ensure we also call fireChannelActive() if the Channel is directly closed in a ChannelFutureListener that is belongs to the promise for the connect. Otherwise we will see missing active events.
+
+Modifications:
+
+Ensure we always call fireChannelActive() if the Channel was active.
+
+Result:
+
+No missing events.

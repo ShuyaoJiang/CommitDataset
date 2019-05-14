@@ -1,0 +1,9 @@
+Minor refactoring in StringDecoder + polish
+
+1. Avoid re-creating the List with delimited byte arrays on every
+request if using the default delimiters which don't vary by charset.
+
+2. Replace flatMap with flatMapIterable for splitOnDelimiter.
+
+3. Avoid going through DataBufferUtils#join, and unnecessarily creating
+Flux from the List, since the join method needs a list anyway.

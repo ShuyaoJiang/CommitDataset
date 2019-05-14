@@ -1,0 +1,14 @@
+[Security] Cross cluster wildcard security (elastic/x-pack-elasticsearch#1290)
+
+Support the resolution of remote index names, including those that contain wildcards in the cluster name or index part)
+
+Specifically these work:
+- `GET /remote*:foo/_search`
+- `GET /*:foo/_search`
+- `GET /*:foo,*/_search`
+- `GET /remote:*/_search`
+- `GET /*:*/_search`
+
+This change assumes that every user is allowed to attempt a cross-cluster search against any remote index, and the actual authorisation of indices happens on the remote nodes. Thus ` GET /*:foo/_search` will expand to search the `foo` index on every registered remote without consideration of the roles and privileges that the user has on the source cluster.
+
+Original commit: elastic/x-pack-elasticsearch@b45041aaa39e065be9f47e434e549e49e3a9c124

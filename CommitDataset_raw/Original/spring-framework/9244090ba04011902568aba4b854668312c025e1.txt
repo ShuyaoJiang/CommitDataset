@@ -1,0 +1,21 @@
+Support DI of individual constructor args in @Nested tests
+
+Prior to this commit it was impossible to have an individual
+constructor argument in a @Nested (i.e., inner) test class injected via
+@Autowired, @Qualifier, or @Value.
+
+This is due to a bug in javac on JDK versions prior to 9, whereby
+annotation lookups performed directly via the
+java.lang.reflect.Parameter API fail for inner class constructors.
+
+Specifically, the parameter annotations array in the compiled byte code
+for the user's test class excludes an entry for the implicit enclosing
+instance parameter for an inner class constructor.
+
+This commit introduces a workaround in ParameterAutowireUtils for this
+off-by-one error by transparently looking up annotations on the
+preceding Parameter object (i.e., index - 1). In addition, this commit
+relies on the change recently introduced in MethodParameter in order to
+compensate for the same JDK bug (see SPR-16652).
+
+Issue: SPR-16653

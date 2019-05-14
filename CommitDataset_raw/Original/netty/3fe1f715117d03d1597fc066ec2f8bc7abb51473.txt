@@ -1,0 +1,15 @@
+Do not treat errors as decoder exception (redux)
+
+Motivation: Today when Netty encounters a general error while decoding
+it treats this as a decoder exception. However, for fatal causes this
+should not be treated as such, instead the fatal error should be carried
+up the stack without the callee having to unwind causes. This was
+probably done for byte to byte message decoder but is now done for all
+decoders.
+
+Modifications: Instead of translating any error to a decoder exception,
+we let those unwind out the stack (note that finally blocks still
+execute) except in places where an event needs to fire where we fire
+with the error instead of wrapping in a decoder exception.
+
+Result: Fatal errors will not be treated as innocent decoder exceptions.

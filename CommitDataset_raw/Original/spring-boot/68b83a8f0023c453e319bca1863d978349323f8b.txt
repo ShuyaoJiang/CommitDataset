@@ -1,0 +1,16 @@
+Improve handling of loader.path in PropertiesLauncher
+
+Previously, if loader.path directly specified a jar file that contained
+nested archives (.zip or .jar), launching would fail unless those
+nested archives were uncompressed. However, if loader.path specified a
+directory that contained such a jar file the launch would succeed. This
+was because the nested archives within the jar were ignored.
+
+This commit updates PropertiesLauncher so that its behaviour in the
+scenarios described above is consistent by not looking for archives
+nested with a jar that’s be specified on loader.path. The javadoc for
+loader.path has also been updated to make it clear that loader.path
+can points to directories or jar files, bringing it into line with
+the reference guide.
+
+Closes gh-3701

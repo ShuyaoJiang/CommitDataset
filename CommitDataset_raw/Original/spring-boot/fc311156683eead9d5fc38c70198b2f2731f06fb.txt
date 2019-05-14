@@ -1,0 +1,19 @@
+Rely soley on underlying logger for isEnabled in Liquibase logger
+
+Previously, CommonsLoggingLiquibaseLogger referred to its
+configured level and the underlying Commons Logging log when
+determining if logging was enabled for a particular level. This did
+not work as intended as setLogLevel was never called leaving the
+configured level stuck at its default value of INFO. As a result of
+this any logging at levels below INFO would not be output,
+irrespective of the configuration of the underlying logging framework.
+
+This commit updates CommonsLoggingLiquibaseLogger to rely purely on
+the Commons Logging log when determining whether or not logging for
+a particular level is enabled. This brings the implementation into
+line with liquibase-slf4j [1] which provides similar functionality,
+albeit using SLF4J rather than Commons Logging
+
+Closes gh-2916
+
+[1] https://github.com/mattbertolini/liquibase-slf4j/blob/master/src/main/java/liquibase/ext/logging/slf4j/Slf4jLogger.java

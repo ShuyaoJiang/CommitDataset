@@ -1,0 +1,16 @@
+When Logback is the logging system, ensure that JBoss logging uses it
+
+Previously, if Logback was being used as Boot's logging system, but
+Log4J was also on the classpath before SLF4J and Logback, JBoss
+Logging would use Log4J for its logging. This lead to warning messages
+being produced as Log4J was not configured:
+
+log4j:WARN No appenders could be found for logger (org.jboss.logging).
+log4j:WARN Please initialize the log4j system properly.
+
+This commit updates LogbackLoggingSystem to set the
+org.jboss.logging.provider to "slf4j". This ensure that JBoss Logging
+will use SLF4J and Logback as intended even when Log4J is also on the
+classpath.
+
+Closes gh-1928

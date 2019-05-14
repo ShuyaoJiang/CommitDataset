@@ -1,0 +1,11 @@
+Clear send behavior rule in CloseWhileRelocatingShardsIT (#38159)
+
+The current CloseWhileRelocatingShardsIT test adds some "send behavior" 
+rule to a target node's mocked transport service in order to detect when shard 
+relocating are started. These rules are never cleared and prevent the test to 
+complete normally after the rebalance is re-enabled again.
+
+This commit changes the test so that rules are cleared and most verifications 
+are done before the rebalance is reenabled again.
+
+Closes #38090

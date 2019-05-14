@@ -1,0 +1,17 @@
+Watcher: Fix pagerduty action to send context data (elastic/x-pack-elasticsearch#3185)
+
+The pagerduty action allows to send contexts, which contains an array
+of texts or images, each with a link.
+
+The field of this data was named 'context' instead of 'contexts' and
+thus those contects were never correctly parsed on the pagerduty side.
+
+Unfortunately pagerduty accepts any JSON, thus this was not caught so
+far.
+
+This commit allows parsing of the old field name to retain BWC, but when
+written out via toXContent, it will always use the 'contexts' field name.
+
+relates elastic/x-pack-elasticsearch#3184
+
+Original commit: elastic/x-pack-elasticsearch@50f0b65d5684d35fad3e02fe08bd3d45d92a4237

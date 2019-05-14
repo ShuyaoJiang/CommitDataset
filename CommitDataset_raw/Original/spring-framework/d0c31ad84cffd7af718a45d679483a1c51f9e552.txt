@@ -1,0 +1,12 @@
+Allow recursive use of @ComponentScan
+
+Prior to this change, @ComponentScan annotations were only processed at
+the first level of depth.  Now, the set of bean definitions resulting
+from each declaration of @ComponentScan is checked for configuration
+classes that declare @ComponentScan, and recursion is performed as
+necessary.
+
+Cycles between @ComponentScan declarations are detected as well. See
+CircularComponentScanException.
+
+Issue: SPR-8307

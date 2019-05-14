@@ -1,0 +1,13 @@
+Ensure read components can be discarded when COMPOSITE_CUMULATOR is used.
+
+Motivation:
+
+ByteToMessageDecoder must ensure that read components of the CompositeByteBuf can be discard by default when discardSomeReadBytes() is called. This may not be the case before as because of the default maxNumComponents that will cause consolidation.
+
+Modifications:
+
+Ensure we not do any consolidation to actually be abel to discard read components
+
+Result:
+
+Less memory usage and allocations.

@@ -1,0 +1,15 @@
+Replace toArray(new T[size]) with toArray(new T[0]) to eliminate zero-out and allow the VM to optimize. (#8075)
+
+Motivation:
+
+Using toArray(new T[0]) is usually the faster aproach these days. We should use it.
+
+See also https://shipilev.net/blog/2016/arrays-wisdom-ancients/#_conclusion.
+
+Modifications:
+
+Replace toArray(new T[size]) with toArray(new T[0]).
+
+Result:
+
+Faster code.

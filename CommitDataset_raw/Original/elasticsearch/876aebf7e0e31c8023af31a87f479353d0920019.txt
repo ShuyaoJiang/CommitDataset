@@ -1,0 +1,27 @@
+SQL: Make extract work for any datetime function (elastic/x-pack-elasticsearch#3756)
+
+This allows any datetime function to be present in `EXTRACT` which feels
+more consistent. `EXTRACT(FOO FROM bar)` is now just sugar for
+`FOO(bar)`. This is *much* simpler to explain in the documentation then
+"these 10 fields are supported by extract and they are the same as this
+subset of the datetime functions."
+
+The implementation of this is a little simpler then the old way. Instead
+of resolving the function in the parser we create an
+`UnresolvedFunction` that looks *almost* just like what we'd create for
+a single argument function and resolve the function in the `Analyzer`.
+This feels like a net positive as it allows us to group `EXTRACT`
+resolution failures with other function resolution failures.
+
+This also creates `UnresolvedFunctionTests` and
+`UnresolvedAttributeTests`. I had to create `UnresolvedFunctionTests`
+because `UnreolvedFunction` now has three boolean parameters which is
+incompatible with the generic `NodeSubclassTests`'s requirement that all
+ctor parameters be unique. I created `UnresolvedAttributeTests` because
+I didn't want `UnresolvedFunctionTests` to call `NodeSubclassTests` and
+figured that we'd want `UnresolvedAttributeTest` eventually and now felt
+like as good a time as any.
+
+Added a 
+
+Original commit: elastic/x-pack-elasticsearch@358aada308d8ed317ae0d328aac65cd0791548f1

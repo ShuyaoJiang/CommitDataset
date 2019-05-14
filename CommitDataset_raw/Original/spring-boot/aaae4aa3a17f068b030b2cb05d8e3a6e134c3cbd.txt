@@ -1,0 +1,15 @@
+Prevent restarts from switching off Log4J2-based logging
+
+During a restart, the Restarter runs all registered shutdown hooks. This
+breaks Log4J2 as it leaves it in a shutdown state that leaves logging
+switched off such that no output it produced when the application starts
+up again.
+
+This commit introduces a new RestartListener abstraction.
+RestartListeners are notified prior to the application being restarted.
+A Log4J2-specific implementation is provided that prepares Log4J2 for
+restart by removing any shutdown callbacks from its shutdown callback
+registry. This prevents the restart from shutting down Log4J2, ensuring
+that it still functions when the application restarts.
+
+Closes gh-4279

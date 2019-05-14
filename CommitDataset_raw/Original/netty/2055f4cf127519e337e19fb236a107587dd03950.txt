@@ -1,0 +1,14 @@
+Correctly handle the case when BUFFER_OVERFLOW happens during unwrap but the readable bytes are bigger then the expected applicationBufferSize
+
+Motivation:
+
+We need to ensure we handle the case when BUFFER_OVERFLOW happens during unwrap but the readable bytes are bigger then the expected applicationBufferSize. Otherwise we may produce an IllegalArgumentException as we will try to allocate a buffer with capacity < 0.
+
+Modifications:
+
+- Guard against this case.
+- Ensure we not double release buffer on exception when doing unwrap.
+
+Result:
+
+No more exception when running testsuite with java 9.

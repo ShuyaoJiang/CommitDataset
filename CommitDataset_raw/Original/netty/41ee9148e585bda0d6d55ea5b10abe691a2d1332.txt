@@ -1,0 +1,10 @@
+HTTP/2 InboundHttp2ToHttpAdapterTest serverChannel NPE
+
+Motivation:
+InboundHttp2ToHttpAdapterTest.bootstrapEnv does not wait for the serverConnectedChannel to be initialized before returning. Some methods rely only this behavior and throw a NPE because it may not be set.
+
+Modifications:
+- Add a CountDownLatch to ensure the serverConnectedChannel is initialized
+
+Result:
+No more NPE.

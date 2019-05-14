@@ -1,0 +1,8 @@
+Fix custom AUTO issue with Fuzziness#toXContent (#35807)
+
+Currently when a Fuzziness instance with custom AUTO distance values gets
+written to XContent, the customized lower and upper distance values are ommited
+and can consequently not be parsed back. This changes this to write the String
+including the optional custom values when writing to XContent and fixes the
+tests that should have caught this in the first place, e.g. by adding the custom
+low and high distance values to the equality check.

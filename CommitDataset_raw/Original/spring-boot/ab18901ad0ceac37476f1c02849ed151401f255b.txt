@@ -1,0 +1,18 @@
+Ensure that entry is completely configured before putting to the stream
+
+Previously, BootZipCopyAction would put the next entry to the stream
+and then, in the case of a stored entry, configure its size, CRC32
+etc. This had the benefit of being able to copy the entry into the
+zip once, capturing its bytes for the calculation of the CRC32 as it
+was copied. Unfortunately, while this produced zip files that could
+be read by the JVM, other zip tools failed. For example, Go's zip
+support that's used by CloudFoundry could not unzip the archive.
+
+This commit updates BootZipCopy action to completely configure the
+entry before putting it to the stream. This has the downside of
+copying the file twice (once for the CRC32 and once to actually write
+it to the zip stream) but this appears to be unavoidable as we have to
+produce archives that can be unzipped without problems on all
+platforms.
+
+Closes gh-8816

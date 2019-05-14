@@ -1,0 +1,9 @@
+Fixed missed stopping of SchedulerEngine (#39193)
+
+The SchedulerEngine is used in several places in our code and not all
+of these usages properly stopped the SchedulerEngine, which could lead
+to test failures due to leaked threads from the SchedulerEngine. This
+change adds stopping to these usages in order to avoid the thread leaks
+that cause CI failures and noise.
+
+Closes #38875

@@ -1,0 +1,12 @@
+Only access parameters in WebRequestTraceFilter when they are included
+
+Previously, WebRequestTraceFilter would call request.getParameterMap()
+before deciding whether or not the parameters should be included in
+the trace. For a POST request, this had the unwanted side-effect
+of always reading the request body.
+
+This commit updates WebRequestTraceFilter so that it checks that
+parameters are to be included in the trace before calling
+request.getParameterMap()
+
+Closes gh-5089

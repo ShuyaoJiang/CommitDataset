@@ -1,0 +1,12 @@
+Make all of GsonHttpMessageConvertersConfiguration conditional on Gson
+
+Previously GsonHttpMessageConvertersConfiguration was unconditional
+with its nested configuration class being
+@ConditionalOnClass(Gson.class). This led to the unnecessary
+registration of the GsonHttpMessageConvertersConfiguration bean when
+Gson isn't on the classpath.
+
+This commit moves the condition up onto the outer class so that no
+Gson-related beans are created when Gson is not on the classpath.
+
+Closes gh-2778

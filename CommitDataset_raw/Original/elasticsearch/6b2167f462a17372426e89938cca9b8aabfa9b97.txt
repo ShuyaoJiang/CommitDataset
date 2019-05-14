@@ -1,0 +1,21 @@
+Begin moving XContent to a separate lib/artifact (#29300)
+
+* Begin moving XContent to a separate lib/artifact
+
+This commit moves a large portion of the XContent code from the `server` project
+to the `libs/xcontent` project. For the pieces that have been moved, some
+helpers have been duplicated to allow them to be decoupled from ES helper
+classes. In addition, `Booleans` and `CheckedFunction` have been moved to the
+`elasticsearch-core`  project.
+
+This decoupling is a move so that we can eventually make things like the
+high-level REST client not rely on the entire ES jar, only the parts it needs.
+
+There are some pieces that are still not decoupled, in particular some of the
+XContent tests still remain in the server project, this is because they test a
+large portion of the pluggable xcontent pieces through
+`XContentElasticsearchException`. They may be decoupled in future work.
+Additionally, there may be more piecese that we want to move to the xcontent lib
+in the future that are not part of this PR, this is a starting point.
+
+Relates to #28504

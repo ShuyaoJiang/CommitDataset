@@ -1,0 +1,3 @@
+Fix NullPointerException in MockUncasedHostProvider (#28424)
+
+The MockUncasedHostProvider accesses nodes that are not fully built yet, where TransportService.getNode() returns null, which means that the null entries end up in the list of seedNodes that UnicastZenPing then uses.

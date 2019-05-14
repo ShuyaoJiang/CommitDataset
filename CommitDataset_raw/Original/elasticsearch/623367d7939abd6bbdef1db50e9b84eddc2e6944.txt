@@ -1,0 +1,120 @@
+Add composite aggregator (#26800)
+
+* This change adds a module called `aggs-composite` that defines a new aggregation named `composite`.
+The `composite` aggregation is a multi-buckets aggregation that creates composite buckets made of multiple sources.
+The sources for each bucket can be defined as:
+  * A `terms` source, values are extracted from a field or a script.
+  * A `date_histogram` source, values are extracted from a date field and rounded to the provided interval.
+This aggregation can be used to retrieve all buckets of a deeply nested aggregation by flattening the nested aggregation in composite buckets.
+A composite buckets is composed of one value per source and is built for each document as the combinations of values in the provided sources.
+For instance the following aggregation:
+
+````
+"test_agg": {
+  "terms": {
+    "field": "field1"
+  },
+  "aggs": {
+    "nested_test_agg":
+      "terms": {
+        "field": "field2"
+      }
+  }
+}
+````
+... which retrieves the top N terms for `field1` and for each top term in `field1` the top N terms for `field2`, can be replaced by a `composite` aggregation in order to retrieve **all** the combinations of `field1`, `field2` in the matching documents:
+
+````
+"composite_agg": {
+  "composite": {
+    "sources": [
+      {
+	"field1": {
+          "terms": {
+              "field": "field1"
+            }
+        }
+      },
+      {
+	"field2": {
+          "terms": {
+            "field": "field2"
+          }
+        }
+      },
+    }
+  }
+````
+
+The response of the aggregation looks like this:
+
+````
+"aggregations": {
+  "composite_agg": {
+    "buckets": [
+      {
+        "key": {
+          "field1": "alabama",
+          "field2": "almanach"
+        },
+        "doc_count": 100
+      },
+      {
+        "key": {
+          "field1": "alabama",
+          "field2": "calendar"
+        },
+        "doc_count": 1
+      },
+      {
+        "key": {
+          "field1": "arizona",
+          "field2": "calendar"
+        },
+        "doc_count": 1
+      }
+    ]
+  }
+}
+````
+
+By default this aggregation returns 10 buckets sorted in ascending order of the composite key.
+Pagination can be achieved by providing `after` values, the values of the composite key to aggregate after.
+For instance the following aggregation will aggregate all composite keys that sorts after `arizona, calendar`:
+
+````
+"composite_agg": {
+  "composite": {
+    "after": {"field1": "alabama", "field2": "calendar"},
+    "size": 100,
+    "sources": [
+      {
+	"field1": {
+          "terms": {
+            "field": "field1"
+          }
+        }
+      },
+      {
+	"field2": {
+          "terms": {
+            "field": "field2"
+          }
+	}
+      }
+    }
+  }
+````
+
+This aggregation is optimized for indices that set an index sorting that match the composite source definition.
+For instance the aggregation above could run faster on indices that defines an index sorting like this:
+
+````
+"settings": {
+  "index.sort.field": ["field1", "field2"]
+}
+````
+
+In this case the `composite` aggregation can early terminate on each segment.
+This aggregation also accepts multi-valued field but disables early termination for these fields even if index sorting matches the sources definition.
+This is mandatory because index sorting picks only one value per document to perform the sort.

@@ -1,0 +1,8 @@
+Add metric flusher to export remaining metrics on shutdown
+
+Before this change the app context closes and metrics that have not
+yet been exported ccan be orphaned. The design of this feature is simple:
+use Closeable where possible, so that it will be called automatically
+by Spring on shutdown.
+
+Fixes gh-5771

@@ -1,0 +1,17 @@
+XmlFrameDecoder is corrupt
+
+Motivation:
+
+Two problems:
+1. Decoder assumption that as soon as it finds </ element it can decrement opened xml brackets counter. It can lead to bugs when closing bracket is not in byteBuf yet.
+2. Not proper handling of more than two root elements in XML document. First element will be processed properly, second one not. It is caused by assumption that byteBuf readerIndex is 0 at the begging of decoding.
+
+Modifications:
+
+Both problems were resolved by fixes:
+1. decrement opened brackets count only if </ > enclosing bracket is found
+2. consider readerIndex higher than 0 when counting output frame length
+
+Result:
+
+Both problems were resolved

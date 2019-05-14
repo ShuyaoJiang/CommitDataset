@@ -1,0 +1,23 @@
+Tasks: Document that status is not semvered (#34270)
+
+The `status` part of the tasks API reflects the internal status of a
+running task. In general, we do not make backwards breaking changes to
+the `status` but because it is internal we reserve the right to do so. I
+suspect we will very rarely excercise that right but it is important
+that we have it so we're not boxed into any particular implementation
+for a request.
+
+In some sense this is policy making by documentation change. In another
+it is clarification of the way we've always thought of this field.
+
+I also reflect the documentation change into the Javadoc in a few
+places. There I acknowledge Kibana's "special relationship" with
+Elasticsearch. Kibana parses `_reindex`'s `status` field and, because
+we're friends with those folks, we should talk to them before we make
+backwards breaking changes to it. We *want* to be friends with everyone
+but there is only so much time in the day and we don't *want* to make
+backwards breaking fields to `status` at all anyway. So we hope that
+breaking changes documentation should be enough for other folks.
+
+Relates to #34245.
+

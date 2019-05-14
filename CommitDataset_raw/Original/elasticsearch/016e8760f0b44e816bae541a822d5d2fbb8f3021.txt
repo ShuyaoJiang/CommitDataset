@@ -1,0 +1,11 @@
+Turn off real-mem breaker in single node tests
+
+With this commit we disable the real-memory circuit breaker in tests
+that inherit from `ESSingleNodeTestCase`. As this breaker is based on
+real memory usage over which we have no (full) control in tests and
+their purpose is also not to test the circuit breaker, we use the
+deterministic circuit breaker implementation that only accounts for
+explicitly reserved memory.
+
+Closes #32047
+Relates #32071

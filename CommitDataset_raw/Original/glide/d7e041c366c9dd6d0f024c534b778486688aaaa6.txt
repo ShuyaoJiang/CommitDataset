@@ -1,0 +1,5 @@
+Avoid looping forever on RuntimeExceptions in ConcurrencyHelper.
+
+If the exception threw a non-timeout exception while the debugger was
+attached, we’d busy loop until it was detached. Now we only loop while
+timeout exceptions are thrown and the debugger is attached.

@@ -1,0 +1,11 @@
+Core: Drop nodeName from AbstractComponent (#34487)
+
+`AbstractComponent` is trouble because its name implies that
+*everything* should extend from it. It *is* useful, but maybe too
+broadly useful. The things it offers access too, the `Settings` instance
+for the entire server and a logger are nice to have around, but not
+really needed *everywhere*. The `Settings` instance especially adds a
+fair bit of ceremony to testing without any value.
+
+This removes the `nodeName` method from `AbstractComponent` so it is
+more clear where we actually need the node name.

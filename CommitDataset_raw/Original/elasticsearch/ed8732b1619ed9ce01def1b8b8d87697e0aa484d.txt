@@ -1,0 +1,37 @@
+Use soft-deleted docs to resolve strategy for engine operation (#35230)
+
+A CCR test failure shows that the approach in #34474 is flawed.
+Restoring the LocalCheckpointTracker from an index commit can cause both
+FollowingEngine and InternalEngine to incorrectly ignore some deletes.
+
+Here is a small scenario illustrating the problem:
+
+1. Delete doc with seq=1 => engine will add a delete tombstone to Lucene
+
+2. Flush a commit consisting of only the delete tombstone
+
+3. Index doc with seq=0  => engine will add that doc to Lucene but soft-deleted
+
+4. Restart an engine with the commit (step 2); the engine will fill its
+LocalCheckpointTracker with the delete tombstone in the commit
+
+5. Replay the local translog in reverse order: index#0 then delete#1
+
+6. When process index#0, an engine will add it into Lucene as a live doc
+and advance the local checkpoint to 1 (seq#1 was restored from the
+commit - step 4).
+
+7. When process delete#1, an engine will skip it because seq_no=1 is
+less than or equal to the local checkpoint.
+
+We should have zero document after recovering from translog, but here we
+have one.
+
+Since all operations after the local checkpoint of the safe commit are
+retained, we should find them if the look-up considers also soft-deleted
+documents. This PR fills the disparity between the version map and the
+local checkpoint tracker by taking soft-deleted documents into account
+while resolving strategy for engine operations.
+
+Relates #34474
+Relates #33656

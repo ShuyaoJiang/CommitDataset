@@ -1,0 +1,18 @@
+Read the time of a JarEntryData using MSDOS Date Time format
+
+The format is rather unusual.
+
+The time is 16 bits: 5 bits for the hour, 6 bits for the minutes, and 5
+bits for the seconds. 5 bits only allows 32 values (0-31) so the number
+must be doubled, meaning that the time is only accurate to the nearest
+two seconds. Also, the JDK rounds this down by subtracting one. The
+doubling and rounding is performed by shifting one place to the left
+and masking off the right-most bit respectively.
+
+The date is 16 bits: 7 bits for the year, 4 bits for the month, and 5
+bits for the day. The year is from 1980, i.e. the earliest date that
+can be represented is 1980-01-01.
+
+See http://mindprod.com/jgloss/zip.html for more details of the format.
+
+Fixes gh-2826

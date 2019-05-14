@@ -1,0 +1,32 @@
+Align ReactiveWebApplicationContext with framework
+
+Refactor `ReactiveWebApplicationContext` implementations to align closer
+with the `WebApplicationContext` implementations defined in
+Spring Framework.
+
+The following classes are now provided:
+
+  - `AnnotationConfigReactiveWebApplicationContext` -- A refreshable
+    reactive web context with support for `@Configuration` classes.
+
+  - `GenericReactiveWebApplicationContext` -- A non-refreshable reactive
+    GenericApplicationContext.
+
+  - `ReactiveWebServerApplicationContext` --  A non-refreshable reactive
+    GenericApplicationContext with support for server discovery.
+
+  - `AnnotationConfigReactiveWebServerApplicationContext` -- A
+    non-refreshable reactive `GenericApplicationContext` with support
+    for `@Configuration` classes and server discovery.
+
+These classes roughly align to the following Servlet equivalents:
+
+  - `AnnotationConfigWebApplicationContext` (Spring Framework)
+  - `GenericWebApplicationContext` (Spring Framework)
+  - `ServletWebServerApplicationContext` (Spring Boot)
+  - `AnnotationConfigServletWebServerApplicationContext` (Spring Boot)
+
+An additional `ConfigurableReactiveWebEnvironment` interface as also
+been introduced, primarily for `@ConditionalOnWebApplication` to use.
+
+Fixes gh-10852

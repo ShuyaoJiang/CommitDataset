@@ -1,0 +1,13 @@
+watcher: Fix integration tests to ensure correct start/stop of Watcher (#35271)
+
+Ensure that Watcher is correctly started and stopped between tests for
+SmokeTestWatcherWithSecurityIT,
+SmokeTestWatcherWithSecurityClientYamlTestSuiteIT,
+SmokeTestWatcherTestSuiteIT, WatcherRestIT,
+XDocsClientYamlTestSuiteIT, and XPackRestIT
+
+The change here is to throw an `AssertionError` instead of `break;` to
+allow the `assertBusy()` to continue to busy wait until the desired
+state is reached.
+
+closes #33291, closes #29877, closes #34462, closes #30705, closes #34448

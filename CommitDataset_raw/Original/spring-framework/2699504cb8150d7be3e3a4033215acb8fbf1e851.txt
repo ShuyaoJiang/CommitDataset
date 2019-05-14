@@ -1,0 +1,23 @@
+Introduce concurrency tests for Spring's JUnit 4 support
+
+Whereas the existing TestContextConcurrencyTests verify support for
+concurrency in the TestContextManager and TestContext, this commit
+introduces SpringJUnit4ConcurrencyTests that verify support for
+concurrent test execution in Spring's JUnit 4 support, namely in the
+SpringRunner, SpringClassRule, and SpringMethodRule.
+
+The tests executed by this new test class come from a hand-picked
+collection of test classes within the test suite that is intended to
+cover most categories of tests that are currently supported by the
+TestContext Framework on JUnit 4.
+
+Note, however, that the chosen test classes intentionally do not
+include any classes that fall under the following categories.
+
+ - tests that make use of Spring's @DirtiesContext support
+
+ - tests that make use of JUnit 4's @FixMethodOrder support
+
+ - tests that commit changes to the state of a shared in-memory database
+
+Issue: SPR-5863

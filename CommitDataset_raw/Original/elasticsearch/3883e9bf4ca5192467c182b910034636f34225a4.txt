@@ -1,0 +1,7 @@
+Split RolloverStep into Wait and Action steps (#35524)
+
+RolloverAction will now periodically check the rollover conditions using
+the Rollover API with the dry_run option as an AsyncWaitStep, then run
+the rollover itself by calling the Rollover API with no conditions,
+which will always roll over, as an AsyncActionStep. This will resolve
+race condition issues in policies using RolloverAction.

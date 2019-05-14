@@ -1,0 +1,15 @@
+Update ContentNegotiationManager for unknown path exts
+
+This change refines the logic of "mapping" content negotiation
+strategies with regards to how to handle cases where no mapping is
+found.
+
+The request parameter strategy now treats request parameter values that
+do not match any mapped media type as 406 errors.
+
+The path extension strategy provides a new flag called
+"ignoreUnknownExtensions" (true by default) that when set to false also
+results in a 406. The same flag is also exposed through the
+ContentNegotiationManagerFactoryBean and the MVC Java config.
+
+Issue: SPR-10170

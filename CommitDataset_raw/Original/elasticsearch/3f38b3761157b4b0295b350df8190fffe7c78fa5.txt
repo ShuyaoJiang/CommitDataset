@@ -1,0 +1,7 @@
+Handle failure to release retention leases in ILM (#39281)
+
+It is possible that the Unfollow API may fail to release shard history
+retention leases when unfollowing, so this needs to be handled by the
+ILM Unfollow action. There's nothing much that can be done automatically
+about it from the follower side, so this change makes the ILM unfollow
+action simply ignore those failures.

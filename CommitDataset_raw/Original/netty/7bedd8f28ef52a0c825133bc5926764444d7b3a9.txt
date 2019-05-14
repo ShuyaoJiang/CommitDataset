@@ -1,0 +1,3 @@
+Simplify the exception handling of ChannelOutboundHandler.write()
+
+DefaultChannelHandlerContext does not trigger exceptionCaught() immediately when ChannelOutboundHandler.write() raises an exception.  It just records the exception until flush() is triggered.  On invokeFlush(), if there's any exception recorded, DefaultChannelHandlerContext will fail the promise without calling ChannelOutboundHandler.flush().  If more than one exception were raised, only the first exception is used as the cause of the failure and the others will be logged at warn level.

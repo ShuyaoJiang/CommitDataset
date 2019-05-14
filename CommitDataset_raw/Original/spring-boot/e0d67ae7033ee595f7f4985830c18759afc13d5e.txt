@@ -1,0 +1,17 @@
+Avoid Atmosphere using a null URL to create a URLClassLoader
+
+Unlike Java 8, 9, and 10, Java 11 does not tolerate a null URL being
+used to create a URLClassLoader. The Atmosphere sample looks for
+a resource named /WEB-INF/classes which only exists in a packaged
+war application. In all other cases the resulting URL is null.
+Atmosphere uses this to create a URLClassLoader which fails on Java
+11.
+
+This commit updates the sample to customize the handlers path. There
+are other web application-specific assumptions in Atmosphere, such as
+the scanning of WEB-INF/lib by default. This change appears to get
+the sample going, but we should, perhaps, consider removing it in the
+longer term, particularly as Boot itself has no Atmosphere
+integration.
+
+See gh-14028

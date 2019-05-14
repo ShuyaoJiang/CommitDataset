@@ -1,0 +1,11 @@
+Bind empty string to empty collection or array of rich types
+
+Previously, when an empty String was bound to a collection or
+array of rich types it would fail as there was no converter capable
+of creating a Collection<RichType> or RichType[] from the String.
+
+This commit updates IndexedElementsBinder to apply special treatment
+to empty String values. Now, when such a value is being processed,
+an empty Collection or array is the result.
+
+Closes gh-12965

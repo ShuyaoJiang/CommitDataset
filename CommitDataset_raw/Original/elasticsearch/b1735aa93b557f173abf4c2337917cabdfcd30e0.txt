@@ -1,0 +1,16 @@
+Support both typed and typeless 'get mapping' requests in the HLRC. (#37796)
+
+From previous PRs, we've already added support for include_type_name to
+the get mapping API. We had also taken an approach to the HLRC where the
+server-side `GetMappingResponse#fromXContent` could only handle typeless
+input.
+
+This PR updates the HLRC for 'get mapping' to be in line with our new approach:
+
+* Add a typeless 'get mappings' method to the Java HLRC, that accepts new
+client-side request and response objects. This new response only handles
+typeless mapping definitions.
+* Switch the old version of `GetMappingResponse` back to expecting typed
+mappings, and deprecate the corresponding method on the HLRC.
+
+Finally, the PR also does some small, related clean-up around 'get field mappings'.

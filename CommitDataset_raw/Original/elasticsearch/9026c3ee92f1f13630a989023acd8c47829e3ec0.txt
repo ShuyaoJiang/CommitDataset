@@ -1,0 +1,5 @@
+Ensure realtime `_get` and `_termvectors` don't run on the network thread (#33814)
+
+The change in #27500 introduces this regression that causes `_get` and `_term_vector`
+actions to run on the network thread if the realtime flag is set.
+This fixes the issue by delegating to the super method forking on the corresponding threadpool.

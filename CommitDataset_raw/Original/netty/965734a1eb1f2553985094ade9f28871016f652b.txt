@@ -1,0 +1,14 @@
+Limit the number of bytes to use to copy the content of a direct buffer to an Outputstream (#7813)
+
+Motivation:
+
+Currently copying a direct ByteBuf copies it fully into the heap before writing it to an output stream.
+The can result in huge memory usage on the heap.
+
+Modification:
+
+copy the bytebuf contents via an 8k buffer into the output stream
+
+Result:
+
+Fixes #7804

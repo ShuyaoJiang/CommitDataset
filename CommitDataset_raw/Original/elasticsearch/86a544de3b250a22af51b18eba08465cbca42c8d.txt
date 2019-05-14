@@ -1,0 +1,7 @@
+Ensure we never read from a closed MockSecureSettings object (#25322)
+
+If secure settings are closed after the node has been constructed
+no key-store access is permitted. We should also try to be as close as possible
+to the real behavior if we mock secure settings. This change also adds
+the same behavior as bootstrap has to InternalTestCluster to ensure we fail
+if we try to read from secure settings after the node has been constructed.

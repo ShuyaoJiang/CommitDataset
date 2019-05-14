@@ -1,0 +1,9 @@
+TEST: Avoid merges in testRecoveryWithOutOfOrderDelete
+
+Since LUCENE-8263, testRecoveryWithOutOfOrderDelete may trigger merges
+because of the deletes. In the test, we try to retain index#0 but
+reclaim delete#1. However, if a merge is triggered, we will remove both
+index#0 and delete#1.
+
+This commit disables merges in this test. Another option is to index
+more documents in the segment_2 to reduce the deletion ratio.

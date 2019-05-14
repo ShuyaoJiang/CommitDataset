@@ -1,0 +1,14 @@
+[#4754] Correctly detect websocket upgrade
+
+Motivation:
+
+If the Connection header contains multiple values (which is valid) we fail to detect a websocket upgrade
+
+Modification:
+
+- Add new method which allows to check if a header field contains a specific value (and also respect multiple header values)
+- Use this method to detect handshake
+
+Result:
+
+Correct detect handshake if Connection header contains multiple values (seperated by ',').

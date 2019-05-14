@@ -1,0 +1,12 @@
+[Test] Modify assert statement for ssl handshake (#32072)
+
+There have been changes in error messages for `SSLHandshakeException`.
+This has caused a couple of failures in our tests.
+This commit modifies test verification to assert on exception type of
+class `SSLHandshakeException`.
+There was another issue in Java11 which caused NPE. The bug has now
+been fixed on Java11 - early access build 22.
+Bug Ref: https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8206355
+Enable the skipped tests due to this bug.
+
+Closes #31940 

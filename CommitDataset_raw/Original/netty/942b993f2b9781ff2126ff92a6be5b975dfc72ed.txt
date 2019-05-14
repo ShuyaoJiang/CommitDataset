@@ -1,0 +1,14 @@
+Only enable validation of headers if original headers were validating as well.
+
+Motiviation:
+
+In our replace(...) methods we always used validation for the newly created headers while the original headers may not use validation at all.
+
+Modifications:
+
+- Only use validation if the original headers used validation as well.
+- Ensure we create a copy of the headers in replace(...).
+
+Result:
+
+Fixes [#5226]

@@ -1,0 +1,11 @@
+Optional @XmlRootElement check in Jaxb2Marshaller
+
+Before this commit, the Jaxb2Marshaller required all supported classes
+to be annotated with @XmlRootElement. This commit adds a property
+'checkForXmlRootElement' (default is true) which allows for un-annotated
+classes.
+
+This is especially useful for JAXB2 implementations that can use
+external binding files, such as EclipseLink MOXy.
+
+Issue: SPR-9757

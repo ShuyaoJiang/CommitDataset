@@ -1,0 +1,12 @@
+Plugins: Consolidate plugin and module loading code (#28815)
+
+At one point, modules and plugins were very different. But effectively
+now they are the same, just from different directories. This commit
+unifies the loading methods so they are simply two different
+directories. Note that the main codepath to load plugin bundles had
+duplication (was not calling getPluginBundles) since previous
+refactorings to add meta plugins. Note this change also rewords the
+primary exception message when a plugin descriptor is missing, as the
+wording asking if the plugin was built before 2.0 isn't really
+applicable anymore (it is highly unlikely someone tries to install a 1.x
+plugin on any modern version).

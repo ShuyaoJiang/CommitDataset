@@ -1,0 +1,7 @@
+Remove usage of transient settings to enable allocations in full restart upgrade docs (#29670)
+
+Since we disable allocation using persistent settings, we should be consistent and remove
+the setting from the persistent storage. Otherwise an accidental restart will leed for shards
+not being allocated.
+
+Relates to https://github.com/elastic/elasticsearch/pull/28757

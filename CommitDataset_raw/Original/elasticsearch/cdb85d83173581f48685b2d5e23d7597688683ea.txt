@@ -1,0 +1,20 @@
+Watcher: Run tests without security enabled (elastic/x-pack-elasticsearch#3060)
+
+In order to support the repository split, this changes the
+`AbstractWatcherIntegrationTestCase` to not run with security enabled.
+
+We have a dedicated QA project called `smoke-test-watcher-with-security`,
+where tests that explicitely need security should be running.
+
+This commit removes the possibility to enable security as part of the
+test case. In addition some tests have been moved over to the dedicated
+project.
+
+In addition the `timewarp` functionality cannot be configured with a
+system property anymore. This would not have worked anyway, because
+tests were already dependent on that  functionality and did not have any
+other means of running. A bit of redundant code was removed due to this.
+
+Relates elastic/x-pack-elasticsearch#2925
+
+Original commit: elastic/x-pack-elasticsearch@b24b365ad157b5c4ce05eb2698199f04c01c6e79

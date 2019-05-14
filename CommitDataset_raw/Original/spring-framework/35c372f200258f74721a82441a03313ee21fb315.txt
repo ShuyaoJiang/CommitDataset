@@ -1,0 +1,35 @@
+Support Groovy scripts in the TCF
+
+Spring Framework 4.0 introduced first-class support for a Groovy-based
+DSL for defining the beans for an ApplicationContext. However, prior to
+this commit, the Spring TestContext Framework (TCF) did not provide any
+out-of-the-box support for using Groovy scripts as path-based resource
+locations when loading an application context for tests.
+
+This commit addresses this issue by introducing first-class support for
+using Groovy scripts to load the ApplicationContext for integration
+tests managed by the TCF. Specifically, the following changes have been
+made in the TCF to support Groovy scripts.
+
+ - Introduced getResourceSuffixes() in AbstractContextLoader in order
+   to support multiple resource suffixes in the default detection
+   process. This feature is used by the new Groovy/Xml context loaders.
+
+ - Introduced GenericGroovyXmlContextLoader and
+   GenericGroovyXmlWebContextLoader which support both Groovy scripts
+   and XML config files for loading bean definitions. Furthermore,
+   these loaders support "-context.xml" and "Context.groovy" as
+   resource suffixes when detecting defaults. Note that a default XML
+   config file will be detected before a default Groovy script.
+
+ - DelegatingSmartContextLoader and WebDelegatingSmartContextLoader now
+   use reflection to choose between using GenericGroovyXmlContextLoader
+   and GenericGroovyXmlWebContextLoader vs. GenericXmlContextLoader and
+   GenericXmlWebContextLoader as their XML loaders, depending on
+   whether Groovy is present in the classpath.
+
+ - Groovy scripts can be configured via the 'locations' or 'value'
+   attributes of @ContextConfiguration and can be mixed seamlessly with
+   XML config files.
+
+Issue: SPR-11233

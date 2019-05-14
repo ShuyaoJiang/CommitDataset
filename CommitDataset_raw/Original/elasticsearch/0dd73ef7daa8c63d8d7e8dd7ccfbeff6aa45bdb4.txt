@@ -1,0 +1,8 @@
+[ML] Move consuming and closing results stream to result processor (#36314)
+
+The results iterator is consuming and closing the results stream
+once it is done. It seems this should not be the responsibility
+of the results iterator. It stops the iterator from being reusable
+for different processes where closing the stream is not desirable.
+This commit is moving the consuming and closing of the results stream
+into the autodetect result processor.

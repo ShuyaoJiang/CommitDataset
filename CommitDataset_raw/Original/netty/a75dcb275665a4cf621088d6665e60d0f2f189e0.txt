@@ -1,0 +1,20 @@
+Made it easier to use custom ChannelId instances with Channel implementations that rely on the AbstractChannel(Channel parent) constructor.
+
+Motivation:
+
+The AbstractChannel(Channel parent) constructor was previously hard-coded to always
+call DefaultChannelId.newInstance(), and this made it difficult to use a custom
+ChannelId implementation with some commonly used Channel implementations.
+
+Modifications:
+
+Introduced newId() method in AbstractChannel, which by default returns
+DefaultChannelId.newInstance() but can be overridden by subclasses. Added
+ensureDefaultChannelId() test to AbstractChannelTest, to ensure the prior
+behavior of calling DefaultChannelId.newInstance() still holds with the
+AbstractChannel(Channel parent) constructor.
+
+Result:
+
+AbstractChannel now has the protected newId() method, but there is no functional
+difference.

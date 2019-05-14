@@ -1,0 +1,9 @@
+Move to Error step if ClusterState* steps throw (#35069)
+
+Previously, if ClusterStateActionSteps or ClusterStateWaitSteps threw an
+exception executing, the exception would only be caught and logged by
+the generic ClusterStateUpdateTask machinery and the index would become
+stuck on that step.
+
+Now, exceptions thrown in these steps will be caught and the index will
+be moved to the Error step.

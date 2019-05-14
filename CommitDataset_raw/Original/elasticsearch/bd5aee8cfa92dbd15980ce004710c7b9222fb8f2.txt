@@ -1,0 +1,16 @@
+Split disruption test suite
+
+The disruption tests sit in a single test suite which causes these tests
+to be single-threaded. We can split this test suite into multiple suites
+(logically, of course) enabling them to be run in parallel reducing the
+total run time of all integration tests in core. This commit splits the
+discovery with service disruptions test suite into three suites
+ - master disruptions
+ - discovery disruptions
+ - cluster disruptions
+
+The last one could probably be better named, it is meant to represent
+performing actions in the cluster (indexing, failing a shard, etc.)
+while a disruption is taking place.
+
+Relates #24662

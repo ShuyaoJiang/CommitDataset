@@ -1,0 +1,13 @@
+Add NoHandlerFoundException to DispatcherServlet
+
+Prior to this commit, the DispatcherServlet would send an error
+response using the HttpServlet API when no Handler was found to
+handle this request.
+
+Now the DispatcherServlet can be configured to throw a
+NoHandlerFoundException, when the throwExceptionIfNoHandlerFound
+property is set to "true".
+Those exceptions can be later on caught by default or custom
+HandlerExceptionResolvers/ExceptionHandlers.
+
+Issue: SPR-10481

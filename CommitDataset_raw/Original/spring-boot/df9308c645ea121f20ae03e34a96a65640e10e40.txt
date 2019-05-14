@@ -1,0 +1,12 @@
+HttpTunnelServer should only check for disconnect after first connection
+
+Previously, ServerThread would check for a disconnect as soon as it
+had been started. This raced with it handling its first connection. If
+the check for disconnect won the race it would incorrectly determine
+that the disconnect timeout had been reached and wouldn’t respond to
+the connection.
+
+This commit updates ServerThread so that it only checks the disconnect
+timeout once it’s handled at least one connection.
+
+Closes gh-4668

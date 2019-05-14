@@ -1,0 +1,9 @@
+Fix task ordering in rolling upgrade tests
+
+The configuration of the upgraded cluster task was missing a dependency
+on the stopping of the second old node in the cluster. In some cases
+(e.g., --parallel) Gradle would then try to run the configuration of a
+node in the upgraded cluster before it had even configured the old nodes
+in the cluster.
+
+Relates #28036

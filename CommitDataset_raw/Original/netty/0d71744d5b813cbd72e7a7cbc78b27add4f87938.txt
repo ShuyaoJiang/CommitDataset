@@ -1,0 +1,10 @@
+IllegalRefCountException in FullHttp[Request|Response].hashCode()
+
+Motivation:
+FullHttp[Request|Response].hashCode() uses a releasable object and in vulnerable to a IllegalRefCountException if that object has been released.
+
+Modifications:
+- Ensure the released object is not used.
+
+Result:
+No more IllegalRefCountException.

@@ -1,0 +1,13 @@
+[#5720] Static initializers can cause deadlock
+
+Motivation:
+
+SystemPropertyUtil requires InternalLoggerFactory requires ThreadLocalRandom requires SystemPropertyUtil. This can lead to a dead-lock.
+
+Modifications:
+
+Ensure ThreadLocalRandom does not require SystemPropertyUtil during initialization.
+
+Result:
+
+No more deadlock possible.

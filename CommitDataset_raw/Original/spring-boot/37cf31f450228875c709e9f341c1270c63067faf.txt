@@ -1,0 +1,15 @@
+Upgrade to Couchbase Java Client 2.3.7
+
+In version 2.3.6 and earlier, an attempt to create a Bucket or a
+ClusterInfo would fail fast with a ConnectException in the cause of
+the Couchbase server was done. In 2.3.7 this remains true for a
+Bucket but is no longer the case for ClusterInfo. The latter now
+retries for 75 seconds by default and when it eventually fails a
+ConnectException is no longer part of the cause chain.
+
+This commit makes the auto-configured ClusterInfo depend on the
+auto-configured Bucket. This means that the Bucket is always created
+before the ClusterInfo, thereby ensuring that things fail gracefully
+with useful diagnostics when the server is unavailable.
+
+Closes gh-8092

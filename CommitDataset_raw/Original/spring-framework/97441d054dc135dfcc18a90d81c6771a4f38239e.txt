@@ -1,0 +1,15 @@
+Avoid HandlerMapping attribute in ResourceUrlProvider
+
+The use of the HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE
+in ResourceUrlProvider (as a way of saving lookup path determination)
+leads to incorrect results. For example when the request is forwarded
+the current requestUri may no longer be compariable to the value of the
+PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE. Also where the request is mapped
+using a pattern, the value of PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE is
+not the same as the lookup path.
+
+This change removes the use of the attribute from ResourceUrlProvider
+and instead always determines the lookup path when getForRequestUrl
+is called.
+
+Issue: SPR-12332

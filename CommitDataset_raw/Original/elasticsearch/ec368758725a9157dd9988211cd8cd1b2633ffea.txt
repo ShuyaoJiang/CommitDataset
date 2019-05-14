@@ -1,0 +1,15 @@
+Sql security take 1 (elastic/x-pack-elasticsearch#2106)
+
+Add some basic security testing/integration.
+
+The good news:
+1. Basic security now works. Users without access to an index can't run sql queries against it. Without this change they could.
+2. Document level security works! At least so far as I can tell.
+
+The work left to do:
+1. Field level security doesn't work properly. I mean, it kind of works in that the field's values don't leak but it just looks like they all have null values.
+2. We will need to test scrolling.
+3. I've only added tests for the rest sql action. I'll need to add tests for jdbc and the CLI as well.
+4. I've only added tests for `SELECT` and have ignored stuff like `DESCRIBE` and `SHOW TABLES`.
+
+Original commit: elastic/x-pack-elasticsearch@b9909bbda01d625e7f58d77dc967b160c9d9c7a0

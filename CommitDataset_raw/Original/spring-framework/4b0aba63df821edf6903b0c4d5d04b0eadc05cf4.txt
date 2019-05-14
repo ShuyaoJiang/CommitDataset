@@ -1,0 +1,17 @@
+Default JmsListenerContainerFactory lookup
+
+Prior to this commit, the default JmsListenerContainerFactory to use
+must be explicitly set. Since having a single container factory is a
+fairly common use case, we look up the default one automatically
+using the bean name "jmsListenerContainerFactory".
+
+It is still possible to provide an explicit default but since it refers
+more to "the" container factory to use, the parameter has been
+renamed to "containerFactory" which is shorter and more explicit.
+
+The lookup strategy is lazy: if all endpoints are providing an
+explicit container factory and no container factory with the
+"jmsListenerContainerFactory" bean name exists, no exception
+will be thrown.
+
+Issue : SPR-11706

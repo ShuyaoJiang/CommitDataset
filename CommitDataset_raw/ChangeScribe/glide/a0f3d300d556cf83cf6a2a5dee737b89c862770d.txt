@@ -1,0 +1,110 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. 
+ This change set is mainly composed of:  
+
+1. Changes to package com.bumptech.glide.load.data:  
+
+1.1. Add a class for buffered output stream. It allows to:
+
+	Instantiate buffered output stream  with output stream, array pool and array pool;
+	Write buffered output stream;
+	Handle flush;
+	Handle flush buffer;
+	Maybe flush buffer;
+	Close buffered output stream;
+	Handle release
+
+1.2. Add a class for buffered output stream test. It allows to:
+
+	Set buffered output stream test;
+	Handle constructor obtains buffer from array pool;
+	Handle close returns buffer obtained from constructor;
+	Write buffered output stream test with empty buffer and single byte does not write to stream;
+	Write buffered output stream test with empty buffer and data smaller than buffer does not write to stream;
+	Write buffered output stream test with empty buffer and data with offset size smaller than buffer does not write to stream;
+	Write buffered output stream test with empty buffer and data with padding size smaller than buffer does not write to stream;
+	Write buffered output stream test with empty buffer and data equal to buffer size writes data to stream;
+	Write buffered output stream test with empty buffer and data greater than buffer size writes data to stream;
+	Write buffered output stream test with empty buffer and data with offset and length equal to buffer size writes data to stream;
+	Write buffered output stream test with empty buffer and data with padding and length equal to buffer size writes data;
+	Write buffered output stream test with empty buffer and data with offset and length greater than buffer writes data to stream;
+	Write buffered output stream test with empty buffer and data with padding and length greater than buffer writes data;
+	Write single byte when buffer  almost full writes buffer to stream;
+	Handle flush with single byte in buffer writes buffer to stream;
+	Handle flush after writing byte after buffer full writes byte to stream;
+	Handle flush after previous flush with single byte writes only single byte;
+	Convert close with single byte in buffer writes buffer;
+	Convert close after writing byte after buffer full writes byte;
+	Close buffered output stream test after previous flush with single byte writes only single byte;
+	Write buffered output stream test with data in buffer buffer less than remaining does not write to stream;
+	Handle flush after write with data in buffer buffer less than remaining writes to stream;
+	Convert close after write with data in buffer buffer less than remaining writes;
+	Write buffered output stream test with buffer equal to remaining less than length writes to stream;
+	Handle flush after write buffer equal to remaining does nothing;
+	Convert close after write buffer equal;
+	Write buffered output stream test with offset buffer equal to remaining less than length writes to stream;
+	Handle flush after write offset buffer equal to remaining less than length writes to stream;
+	Convert close after write offset buffer equal;
+	Write buffered output stream test with padded buffer equal to remaining less than length writes to stream;
+	Handle flush after write padded buffer equal to remaining less than length writes to stream;
+	Convert close after write padded buffer equal;
+	Write buffered output stream test with buffer greater than remaining less than length writes up to buffer to stream;
+	Handle flush after write buffer greater than remaining less than length writes all;
+	Close buffered output stream test after write buffer greater than remaining less than length writes all;
+	Write buffered output stream test with offset buffer greater than remaining less than length writes up to buffer;
+	Handle flush after write offset buffer greater than remaining less than length writes all;
+	Close buffered output stream test after write offset buffer greater than remaining less than length writes all;
+	Write buffered output stream test with padded buffer greater than remaining less than length writes up to buffer;
+	Handle flush after write padded buffer greater than remaining less than length writes all;
+	Close buffered output stream test after write padded buffer greater than remaining less than length writes all;
+	Write buffered output stream test with buffer greater than remaining equal to length writes up to buffer to stream;
+	Handle flush after write buffer greater than remaining equal to length writes all;
+	Convert close after write buffer greater than remaining equal;
+	Write buffered output stream test with offset buffer greater than remaining equal to length writes up to buffer to stream;
+	Handle flush after write offset buffer greater than remaining equal to length writes all;
+	Convert close after write offset buffer greater than remaining equal;
+	Write buffered output stream test with padded buffer greater than remaining equal to length writes up to buffer to stream;
+	Handle flush after write padded buffer greater than remaining equal to length writes all;
+	Convert close after write padded buffer greater than remaining equal;
+	Write buffered output stream test with buffer greater than remaining greater than length writes up to buffer to stream;
+	Handle flush after write buffer greater than remaining greater than length writes all;
+	Close buffered output stream test after write buffer greater than remaining greater than length writes all;
+	Write buffered output stream test with offset buffer greater than remaining greater than length writes up to buffer;
+	Handle flush after write offset buffer greater than remaining greater than length writes all to stream;
+	Convert close after write offset buffer greater than remaining greater than length writes all;
+	Write buffered output stream test with padded buffer greater than remaining greater than length writes up to buffer;
+	Handle flush after write padded buffer greater than remaining greater than length writes all to stream;
+	Convert close after write padded buffer greater than remaining greater than length writes all;
+	Write buffered output stream test with buffer more than remains greater than twice length writes all;
+	Handle flush after write buffer more than remains greater than twice length writes all;
+	Close buffered output stream test after write buffer more than remains greater than twice length writes all;
+	Write buffered output stream test with offset buffer more than remains greater than twice length writes all;
+	Handle flush after write offset buffer more than remains greater than twice length writes all;
+	Close buffered output stream test after write offset buffer more than remains greater than twice length writes all;
+	Write buffered output stream test with padded buffer more than remains greater than twice length writes all;
+	Handle flush after write padded buffer more than remains greater than twice length writes all;
+	Close buffered output stream test after write padded buffer more than remains greater than twice length writes all;
+	Handle flush flushes underlying stream;
+	Handle overflow buffer does not flush underlying stream;
+	Close closes underlying stream;
+	Close when underlying stream throws closes stream;
+	Handle flush with zero bytes written does not write to stream;
+	Write throws  if offset is less than zero;
+	Run;
+	Write throws  if length is less than zero;
+	Write throws  if offset is greater than length;
+	Write throws  if lengths is greater than length;
+	Write throws  if length and offsets is greater than length;
+	Write buffered output stream test with zero length buffer does nothing;
+	Write buffered output stream test with zero length buffer and zero offset and length does nothing;
+	Write buffered output stream test after write with zero length buffer writes expected;
+	Write buffered output stream test after write zero length buffer and zero offset and length writes expected;
+	So buffered output stream test far;
+	Remaining buffered output stream test;
+	Handle next;
+	Handle next with padding;
+	Handle next with offset;
+	Convert up;
+	All buffered output stream test
+

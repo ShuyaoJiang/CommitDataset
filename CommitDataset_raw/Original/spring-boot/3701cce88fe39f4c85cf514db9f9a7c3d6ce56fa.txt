@@ -1,0 +1,15 @@
+Allow loader.path to refer to nested jars
+
+Previously, each entry in loader.path could only refer to a standard
+jar file. Refering to such a jar would add all of the classes in
+the root of the jar to the class path.
+
+This commit adds support for referencing a directory within a jar file
+that contains one or more nested jars. For example:
+
+$ java -jar -Dloader.path='jar:file:./lib.jar/!BOOT-INF/lib' my.jar
+
+This will add all of the classes in all of that jars in the
+BOOT-INF/lib directory of lib.jar to the class path.
+
+See gh-8334

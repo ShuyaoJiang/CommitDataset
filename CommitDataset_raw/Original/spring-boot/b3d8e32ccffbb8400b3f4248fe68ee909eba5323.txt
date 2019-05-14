@@ -1,0 +1,18 @@
+Fix overlapping property name binding to Maps
+
+Update RelaxedDataBinder so that multiple overlapping nested property
+names can be bound to a Map.
+
+Prior to this commit, properties of the following form could not be
+bound to Maps:
+
+  foo: baz
+  foo.bar: spam
+
+This was due to BeanWrapperImpl throwing an InvalidPropertyException
+when binding `map[foo][bar]` because `foo` is already bound to `baz`.
+
+The updated code now detects such cases and instead uses the binding
+property `map[foo.bar]`.
+
+Fixes gh-2610

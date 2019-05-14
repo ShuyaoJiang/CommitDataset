@@ -1,0 +1,12 @@
+Fix Reactive Server auto-configuration ordering
+
+This commit ensures that Tomcat is the first reactive server configured
+if the Tomcat dependency is on classpath.
+
+Spring Boot chose Reactor Netty as the default for the reactive web
+starter, but the Reactor Netty dependency can be used also for its HTTP
+client. In case developers are adding Tomcat, Undertow or Jetty on their
+classpath, we must configure those and consider Reactor Netty for the
+client only.
+
+Fixes gh-12176

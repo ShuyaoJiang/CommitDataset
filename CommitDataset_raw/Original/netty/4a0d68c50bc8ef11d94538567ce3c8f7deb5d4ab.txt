@@ -1,0 +1,13 @@
+[#3881] FixedChannelPool creates 1 more channel than maxConnections
+
+Motivation:
+
+FixedChannelPool should enforce a number of maximal used channels, but due a bug we fail to correctly enforce this.
+
+Modifications:
+
+Change check to correctly only acquire channel if we not hit the limit yet.
+
+Result:
+
+Correct limiting.

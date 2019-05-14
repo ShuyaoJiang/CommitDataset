@@ -1,0 +1,11 @@
+Request body buffering is not transport-specific.
+
+Previously we were only buffering the request body when the transport
+was HTTP. But we should buffer it for both SPDY and HTTP transports.
+
+Closes https://github.com/square/okhttp/issues/1132
+
+Also recover gracefully when retrying an empty POST body. This
+is a related bug.
+
+Closes https://github.com/square/okhttp/issues/1131

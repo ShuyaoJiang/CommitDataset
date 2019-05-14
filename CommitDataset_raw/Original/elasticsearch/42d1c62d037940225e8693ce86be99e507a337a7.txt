@@ -1,0 +1,17 @@
+SQL: Nicer failure message one EXISTS (elastic/x-pack-elasticsearch#3384)
+
+We don't support the SQL `EXISTS` keyword. It looks like:
+```
+SELECT * FROM test WHERE EXISTS (SELECT * FROM foo WHERE test.id =
+foo.id)
+```
+
+It is basically a `JOIN` that doesn't return columns. Since we don't
+support `JOIN`, we don't support `EXISTS`.
+
+This PR improves the error message from "unresolved blah blah blah" to
+"EXISTS is not yet supported".
+
+relates elastic/x-pack-elasticsearch#3176
+
+Original commit: elastic/x-pack-elasticsearch@548d57c8c1d336b71311368a0103c06250609e5c

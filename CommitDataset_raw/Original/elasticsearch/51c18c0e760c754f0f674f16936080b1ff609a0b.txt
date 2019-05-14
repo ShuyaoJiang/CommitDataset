@@ -1,0 +1,11 @@
+Reload SSL context on file change for LDAP (#36937)
+
+In #30509 we changed the way SSL configuration is reloaded when the
+content of a file changes. As a consequence of that implementation
+change the LDAP realm ceased to pick up changes to CA files (or other
+certificate material) if they changed.
+
+This commit repairs the reloading behaviour for LDAP realms, and adds
+a test for this functionality.
+
+Resolves: #36923

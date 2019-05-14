@@ -1,0 +1,52 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect:  
+
+1. Changes to package org.elasticsearch.xpack.ml.job.process.autodetect.writer:  
+
+1.1. Add a class for autodetect control msg writer. It allows to:
+
+	Instantiate autodetect control msg writer  with length encoded writer;
+	Create os output stream;
+	Write flush control message;
+	Write flush message;
+	Write forecast message;
+	Write reset buckets message;
+	Write control code followed  by time range;
+	Write update model plot message;
+	Write update detector rules message;
+	Write update filters message;
+	Write update scheduled events message;
+	Write start background persist message
+
+1.2. Add a class for autodetect control msg writer tests. It allows to:
+
+	Set up mocks;
+	Handle test write flush control message given advance time;
+	Handle test write flush control message given skip time;
+	Handle test write flush control message given skip and advance time;
+	Handle test write flush control message given calc interim results with no time params;
+	Handle test write flush control message given plain flush;
+	Handle test write flush control message given calc interim results with time params;
+	Handle test write flush control message given calc interim and advance time;
+	Handle test write flush message;
+	Handle test write reset buckets message;
+	Handle test write update model plot message;
+	Handle test write update detector rules message;
+	Handle test write update filters message;
+	Handle test write update scheduled events message;
+	Handle test write update scheduled events message given empty;
+	Handle test write start background persist message;
+	Create rule
+
+2. Changes to package org.elasticsearch.xpack.ml.process.writer:  
+
+2.1. Add a class for abstract control msg writer. It allows to:
+
+	Instantiate abstract control msg writer  with length encoded writer;
+	Fill command buffer;
+	Write message
+

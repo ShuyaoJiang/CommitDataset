@@ -1,0 +1,21 @@
+Add a possibility to create HttpMessage instances with pre-existing Headers
+
+Motivation:
+
+Allow passing HttpHeaders instance to DefaultHttpMessage
+in order to avoid eager creation of Headers to
+allow users reuse their Headers instance.
+
+Modifications:
+
+Added a constructor with HttpHeaders to DefaultHttpMessage,
+Modified DefaultHttpResponse and DefaultHttpRequest
+to receive HttpHeaders instances.
+Modified DefaultFullHttpReqest and DefaultFullHttpResponse
+to receive HttpHeaders, and updated `duplicate` and
+`copy` to use new constructors.
+
+Result:
+
+Users can now pass HttpHeaders instance when
+constructing Http Requests and Responses.

@@ -1,0 +1,13 @@
+Update test as response may be received before server has deleted file
+
+Previously, the heap dump endpoint test asserted that the temporary
+heap dump file had been deleted as soon as the client received a
+response. This led to intermittent test failures as the input
+stream is closed after its contents have been sent to the client,
+creating a race condition between the client receiving the response
+and then asserting that the file had been deleted and the server
+close the input stream and deleting the temporary file.
+
+This commit updates the test so that, after receiving the response, it
+will wait for up to 5 seconds for the server to have deleted the
+temporary heap dump file.

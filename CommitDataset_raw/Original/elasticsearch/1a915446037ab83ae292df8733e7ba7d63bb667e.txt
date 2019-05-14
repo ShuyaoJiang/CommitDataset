@@ -1,0 +1,5 @@
+Fixing 503 Service Unavailable errors during fetch phase  (#39086)
+
+When ESRejectedExecutionException gets thrown on the coordinating node while trying to fetch hits, the resulting exception will hold no shard failures, hence `503` is used as the response status code. In that case, `429` should be returned instead. Also, the status code should be taken from the cause if available whenever there are no shard failures instead of blindly returning `503` like we currently do.
+
+Closes #38586

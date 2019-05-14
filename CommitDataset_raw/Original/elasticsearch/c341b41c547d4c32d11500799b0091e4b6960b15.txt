@@ -1,0 +1,11 @@
+[TEST] Temporarily silence MovAvgIT tests due to change in double comparisons
+
+#29409 removed the nearlyEquals() double comparison snippet, which
+makes these tests very flaky because they can generate very large or
+very small doubles which don't work well with absolute error comparison.
+
+We need to either refactor these tests to guarantee they stay in a small
+range (which could be difficult due to holt/holt-winters) or re-implement
+the more robust double comparison.
+
+Tracking issue: #29456

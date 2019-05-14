@@ -1,0 +1,14 @@
+UnknownHostException mentions hostname with search domain added
+
+Motivation:
+
+When a hostname cannot be resolved, the message in the UnknownHostException mentions the hostname with the last attempted search domain appended, which is kind of confusing. I would prefer to see the original hostname supplied to the method in the exception.
+
+Modifications:
+
+Store the pristine hostname in the resolver context and use it to create the exception message instead of the hostname with search domain.
+Add unit test to check that the exception does not mention the search domain.
+
+Result:
+
+The exception mentions the unmodified hostname in the message.

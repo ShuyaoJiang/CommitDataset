@@ -1,0 +1,12 @@
+Publish events about broker's availability
+
+Components that are using a StompBrokerRelayMessageHandler may want
+to know whether or not the broker's unavailable. If they're sending
+messages to the relay via an asynchronous channel there's currently
+no way for them to find this out.
+
+This commit enhances StompBrokerRelayMessageHandler to publish
+application events when the broker's availability changes:
+BrokerBecameAvailableEvent and BrokerBecameUnavailableEvent.
+Irrespective of the number of relay sessions only a single event is
+published for each change in the broker's availability.

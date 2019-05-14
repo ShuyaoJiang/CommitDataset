@@ -1,0 +1,18 @@
+Do not try to use cleaner if no unsafe
+
+Motivation:
+
+If unsafe is unavailable, we can not use the cleaner anyway. If we try
+to set it up, we get an annoying log message about unsafe being
+unavailable (when debug logging is enabled). We know this will fail, so
+we should not even bother and avoid the log message.
+
+Modifications:
+
+This commit adds a guard against setting up the cleaner if it is not
+going to be available because unsafe is unavailable.
+
+Result:
+
+We do not try to set up the cleaner if unsafe is unavailable, and we do
+not get an annoying log message.

@@ -1,0 +1,20 @@
+Update deployment test exclusions after web starter validation changes
+
+The changes made in a6c1668b mean that the web starter no longer
+depends on spring-boot-starter-validation. Instead, it depends
+directly on hibernate-validator. This means that the exclusion of the
+validation starter in the TomEE deployment test app no longer matches
+anything and hibernate-validator is packaged in the war. This breaks
+the application as TomEE ships with Bean Validation 2.0 and the
+version of Hibernate Validator being used requires 2.1.
+
+This commit updates the exclusions in the TomEE deployment app so that
+hibernate-validator is excluded once again. This allows the app to
+use TomEE's bundled Bean Validation implementation.
+
+The stale spring-boot-starter-validation exclusion has been removed
+from the Wildfly deployment test app. It is redundant as Wildfly ships
+with Bean Validation 2.1. This brings this test app into line with
+the Glassfish test app.
+
+Closes gh-5454

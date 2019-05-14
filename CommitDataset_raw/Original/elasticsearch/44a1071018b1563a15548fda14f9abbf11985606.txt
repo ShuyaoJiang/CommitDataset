@@ -1,0 +1,10 @@
+Make recovery source partially non-blocking (#37291)
+
+Today a peer-recovery may run into a deadlock if the value of
+node_concurrent_recoveries is too high. This happens because the
+peer-recovery is executed in a blocking fashion. This commit attempts
+to make the recovery source partially non-blocking. I will make three
+follow-ups to make it fully non-blocking: (1) send translog operations,
+(2) primary relocation, (3) send commit files.
+
+Relates #36195

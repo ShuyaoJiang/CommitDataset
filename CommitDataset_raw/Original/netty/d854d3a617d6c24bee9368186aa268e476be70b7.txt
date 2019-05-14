@@ -1,0 +1,19 @@
+Fix chunk type for stream identifier
+
+Motivation:
+The problem with the current snappy implementation is that it does
+not comply with framing format definition found on
+https://code.google.com/p/snappy/source/browse/trunk/framing_format.txt
+
+The document describes that chunk type of the stream identifier is defined
+as 0xff. The current implentation uses 0x80.
+
+Modifications:
+This patch replaces the first byte of the chunk type of the stream identifier
+with 0xff.
+
+Result:
+After this modification the snappy implementation is compliant to the
+framing format described at
+https://code.google.com/p/snappy/source/browse/trunk/framing_format.txt.
+This results in a better compatibility with other implementations.

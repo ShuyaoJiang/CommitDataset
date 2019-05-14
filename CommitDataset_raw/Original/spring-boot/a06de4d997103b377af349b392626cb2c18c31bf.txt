@@ -1,0 +1,16 @@
+Stop error page filter from commiting response prematurely
+
+Previously, the error page filter used sendError to set the response
+status when handling an exception and before forwarding the request
+to the error controller. Following the fix for gh-11814, this meant
+that the error controller was unable to write its response and the
+containers default error page was returned instead.
+
+This commit updates the error page filter to use setStatus rather than
+sendError. This ensures that the response has the correct status code
+while allowing the error controller to write its body. Tests have
+been added to the Tomcat deployment test suite to verify that the
+error page filter behaves as intended when dealing with a sent error
+and an exception for requests accepting HTML, JSON, or anything.
+
+Closes gh-12787

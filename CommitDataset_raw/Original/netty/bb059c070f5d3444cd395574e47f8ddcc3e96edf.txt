@@ -1,0 +1,15 @@
+Decoupling allocation from writing in HTTP/2 outbound flow control
+
+Motivation:
+
+The current DefaultHttp2RemoteFlowController's writePendingBytes currently operates in 2 passes. The first allocates bytes and optionally writes some frames. The second pass just loops across all active streams and writes all remaining bytes.
+
+If streams can be removed/added as a side effect of writing (EOS or error) then we need to take more care when the write actually occurs. Moving all of the writes to the second loop (across active streams) is simpler since we can just make a copy of the list and not worry about any restructuring of the priority tree that may result.
+
+Modifications:
+
+Modified DefaultHttp2RemoteFlowController.writePendingBytes to only allocate bytes on the first pass and then write any allocated bytes on the second pass.
+
+Result:
+
+Side effects resulting from writing should no longer impact the flow control algorithm.

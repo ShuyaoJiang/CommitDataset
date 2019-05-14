@@ -1,0 +1,8 @@
+SQL: Fix test for UnresolvedRelation
+
+`UnresolvedRelation`'s equality test would sometimes not properly mutate
+the object under test. This is because `ESTestCase#randomValueOtherThan`
+will only run its provider one time if passed `null` for the "other
+than" value.
+
+Original commit: elastic/x-pack-elasticsearch@7b13e8dc9842fbc4854c1e6fba2d018bfcf59085

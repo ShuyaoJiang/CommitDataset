@@ -1,0 +1,14 @@
+Watcher: Ensure no template deletion race in mixed cluster environment (elastic/x-pack-elasticsearch#1964)
+
+When having a mixed cluster with 5.6 and 6.0 nodes, the template upgrade
+service has a cluster state listener that deletes the old watches and
+triggered_watches index template. However during that time the 5.6 node
+WatcherIndexTemplateRegistry checks if the templates are missing and
+adds them back. This results in a race, because the new .watches index
+template does not get added by the WatcherIndexTemplateRegistry when the
+6.0 node is node a master node.
+
+This commit circumvents this issue, by only deleting the watches and
+triggered watches template during the upgrade process.
+
+Original commit: elastic/x-pack-elasticsearch@71380f460abbfd9769d8468cf2b91f30dd8dadaa

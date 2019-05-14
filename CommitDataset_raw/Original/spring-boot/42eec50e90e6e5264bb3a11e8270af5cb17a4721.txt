@@ -1,0 +1,13 @@
+Perform background preinitialization once per class loader
+
+Background preinitialization triggers static initialization of a
+number of components that are slow to initialize. As the
+initialization is static, it's only necessary once per class loader.
+
+Previously, a new background preinitialization thread would be
+created and started for each ApplicationEnvironmentPreparedEvent.
+This commit updates the preinitializer to only create and start the
+thread if preinitialization has not already been started for the
+current class loader.
+
+Closes gh-9869

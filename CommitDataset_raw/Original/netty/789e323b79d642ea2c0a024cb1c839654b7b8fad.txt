@@ -1,0 +1,27 @@
+Handle an empty ByteBuf specially in HttpObjectEncoder
+
+Related: #2983
+
+Motivation:
+
+It is a well known idiom to write an empty buffer and add a listener to
+its future to close a channel when the last byte has been written out:
+
+  ChannelFuture f = channel.writeAndFlush(Unpooled.EMPTY_BUFFER);
+  f.addListener(ChannelFutureListener.CLOSE);
+
+When HttpObjectEncoder is in the pipeline, this still works, but it
+silently raises an IllegalStateException, because HttpObjectEncoder does
+not allow writing a ByteBuf when it is expecting an HttpMessage.
+
+Modifications:
+
+- Handle an empty ByteBuf specially in HttpObjectEncoder, so that
+  writing an empty buffer does not fail even if the pipeline contains an
+  HttpObjectEncoder
+- Add a test
+
+Result:
+
+An exception is not triggered anymore by HttpObjectEncoder, when a user
+attempts to write an empty buffer.

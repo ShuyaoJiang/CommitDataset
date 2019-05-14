@@ -1,0 +1,15 @@
+Reduce the memory copies in JdkZlibEncoder
+
+Motivation:
+
+At the moment we use a lot of unnecessary memory copies in JdkZlibEncoder. This is caused by either allocate a to small ByteBuf and expand it later or using a temporary byte array.
+Beside this the memory footprint of JdkZlibEncoder is pretty high because of the byte[] used for compressing.
+
+Modification:
+
+- Override allocateBuffer(...) and calculate the estimatedsize in there, this reduce expanding of the ByteBuf later
+- Not use byte[] in the instance itself but allocate a heap ByteBuf and write directly into the byte array
+
+Result:
+
+Less memory copies and smaller memory footprint

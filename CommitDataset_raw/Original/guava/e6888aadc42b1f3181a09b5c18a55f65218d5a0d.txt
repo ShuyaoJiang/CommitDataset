@@ -1,0 +1,21 @@
+Change the behavior of Service.Listener and ServiceManager.Listener such that we guarantee that listener callbacks (for a single listener) will never be called concurrently.  Previously, the only semantics we guaranteed was about the order in which callbacks were submitted to executor.execute.  This significantly strengthens those guarantees.
+
+This is being done to resolve the flake that cpovirk@ identified here:
+https://sponge.[]/target?id=58fc52ba-a5f8-4619-83d3-ea0a28b9ee72&target=//javatests/com/google/common/util/concurrent:MediumTests
+
+The flaky test could be fixed either by using a SerializingExecutor in the test
+or by changing the semantics of Service/SeriveManager.addListener to guarantee
+serial callback execution.  I've opted for the latter since this is a very rare
+and confusing race and it is unlikely that any user would actually want their
+callbacks to execute concurrently.
+
+To implement this I've deleted ExecutionQueue and introduced a new object
+called SerialListenerQueue that is essentially
+ExecutionQueue+SerializingExecutor.  I've implemented it this way rather than
+by combining ExecutionQueue with SerializingExecutor since:
+1. ExecutionQueue	relies on poorly documented features of ConcurrentLinkedQueue
+2. ExecutionQueue is itself quite complicated
+3. that would introduce an extra queue operation per callback execution
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=63836415

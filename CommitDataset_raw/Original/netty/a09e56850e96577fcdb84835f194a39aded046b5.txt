@@ -1,0 +1,14 @@
+[#5882] Ensure we even process tasks if processing of ready channels throws an Exception in event loop.
+
+Motivation:
+
+If an exception is thrown while processing the ready channels in the EventLoop we should still run all tasks as this may allow to recover. For example a OutOfMemoryError may be thrown and runAllTasks() will free up memory again. Beside this we should also ensure we always allow to shutdown even if an exception was thrown.
+
+Modifications:
+
+- Call runAllTasks() in a finally block
+- Ensure shutdown is always handles.
+
+Result:
+
+More robust EventLoop implementations for NIO and Epoll.

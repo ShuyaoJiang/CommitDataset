@@ -1,0 +1,8 @@
+HLRC: Create server agnostic request and response (#32912)
+
+The HLRC has historically reused the same Request and Response classes
+that the server module uses. This commit deprecates the use of any
+server module Request and Response classes, and adds a small bit of
+validation logic that differs from server slightly, in that it does not
+assume a check for a null ValidationException class is not enough to
+determine if validation failed.

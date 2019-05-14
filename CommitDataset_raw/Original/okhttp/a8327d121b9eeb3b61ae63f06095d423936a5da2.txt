@@ -1,0 +1,37 @@
+Fix for a socket leak in OkHttp on Android
+
+When the preferred Android network changes from
+cell -> wifi or wifi -> cell the HTTP connection
+pool in use is abandoned to avoid reuse of
+connections on the old network. This was added
+in commit 8bced3e.
+
+The design for the connection pool was such that
+continuous use of the connection pool was required to
+clean up idle / expired connections. If a connection
+pool becomes idle (as when it is dereferenced on a
+network change) it is possible for some connections
+to remain in the pool indefinitely.
+
+After the preferred network change, because the old
+connection pool was no longer referenced the pool
+would be garbage collected and Android's "Strict Mode"
+would complain about sockets not being closed.
+
+The only existing way to avoid this was to call
+"evictAll()", which would have had issues when a
+large number of connections were returned to the pool
+after evictAll() was called. It also wouldn't work
+for SPDY connections which are shared but not reference
+counted, which makes knowing whether it is safe to
+close them difficult.
+
+The cleanModeRunnable serves two purposes:
+
+1) While scheduled / executing, it pins the connection
+pool in memory to avoid it being garbage collected.
+2) It continues to close connections (safely) until the
+pool is empty.
+
+If a connection is then added back to the pool the
+cleanModeRunnable is restarted.

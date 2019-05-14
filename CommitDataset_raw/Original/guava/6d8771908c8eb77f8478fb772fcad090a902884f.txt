@@ -1,0 +1,73 @@
+Run nested classes in the open-source build.
+
+Evidently Maven looks only at top-level classes by default -- perhaps by scanning for .java files and then looking for the corresponding top-level classes?
+http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
+
+I'd found a suggestion here that I might just need to override the default excludes:
+https://confluence.atlassian.com/clover/using-clover-with-maven-+-surefire-test-+-inner-test-classes-285840787.html
+But I couldn't find a way to get that to work -- which makes sense in light of the .java point above. I'm guessing that the linked page is not actually trying to explain exactly how Maven skips nested classes, only that it does so at all.
+
+The syntax is documented here:
+http://maven.apache.org/surefire/maven-surefire-plugin/examples/inclusion-exclusion.html#Regular_Expression_Support
+
+The regex here should match everything that the old default did, and it now pulls in nested classes, too, since it operates on .class files, as documented in the previous link. For the old default, see:
+http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
+(The old default also includes Test* and *TestCase, but those don't appear to match any new test classes for us, so I didn't bother complicating the regex for them.)
+
+Correction: *Our* old value was "**/*Test.java," since we set that manually.
+That dates back to CL 41635188.
+I'm not sure why I thought that was the default at the time, but evidently the Maven docs of the day were just plain wrong, claiming that the defaults include only "IT" classes:
+https://web.archive.org/web/20130102062549/http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#includes
+Anyway, we were already omitting *Tests.java.
+I initially planned to include *Tests.java, but then I discovered that this includes PackageSanityTests classes.
+I *thought* I had seen all tests run successfully anyway, but now I'm seeing failures[*], so I've gone back to omitting PackageSanityTests classes.
+(And "*Tests.java" doesn't match any tests other than PackageSanityTests classes.)
+
+Continuing to omit PackageSanityTests is reasonable enough, at least in the short term:
+
+- (minor) We sometimes want to run it in a different VM. That said, that problem is solvable in other ways, and we already elected to be lazy and skip it entirely: https://github.com/google/guava/commit/cc2b970f45d28a9258dbd9c01fda97a4ba293c20 (Of course it turns out that we were skipping it entirely already. And in fact, that commit didn't intentionally remove PackageSanityTests; it just changed our build macros to reflect in the open-source build something that was already happening internally -- that PackageSanityTests wasn't part of our main test target (though it is run in a separate test target). The commit's actual purpose was to avoid publishing some unrelated files.)
+
+- We probably don't really want to run against benchmark classes. At best, doing so seems wasteful. And worse, it's causing failures. Likely AbstractPackageSanityTests should be configured to skip benchmarks, just as it today skips tests. But I'd rather save that for yet another CL.
+
+The bottom line here might be that this is another reason to move from Maven to Bazel (at least assuming that Bazel's test runner is equivalent to our internal one). cc=ronshapiro :)
+
+[*]
+java.lang.NoClassDefFoundError: com/google/common/util/concurrent/FutureFallback
+	at java.lang.Class.getDeclaredConstructors0(Native Method)
+	at java.lang.Class.privateGetDeclaredConstructors(Class.java:2673)
+	at java.lang.Class.getDeclaredConstructors(Class.java:2022)
+	at com.google.inject.spi.InjectionPoint.forConstructorOf(InjectionPoint.java:243)
+	at com.google.inject.internal.ConstructorBindingImpl.create(ConstructorBindingImpl.java:96)
+	at com.google.inject.internal.InjectorImpl.createUninitializedBinding(InjectorImpl.java:629)
+	at com.google.inject.internal.InjectorImpl.createJustInTimeBinding(InjectorImpl.java:845)
+	at com.google.inject.internal.InjectorImpl.createJustInTimeBindingRecursive(InjectorImpl.java:772)
+	at com.google.inject.internal.InjectorImpl.createJustInTimeBindingRecursive(InjectorImpl.java:761)
+	at com.google.inject.internal.InjectorImpl.getJustInTimeBinding(InjectorImpl.java:256)
+	at com.google.inject.internal.InjectorImpl.getBindingOrThrow(InjectorImpl.java:205)
+	at com.google.inject.internal.InjectorImpl.getInternalFactory(InjectorImpl.java:853)
+	at com.google.inject.internal.FactoryProxy.notify(FactoryProxy.java:46)
+	at com.google.inject.internal.ProcessedBindingData.runCreationListeners(ProcessedBindingData.java:50)
+	at com.google.inject.internal.InternalInjectorCreator.initializeStatically(InternalInjectorCreator.java:133)
+	at com.google.inject.internal.InternalInjectorCreator.build(InternalInjectorCreator.java:106)
+	at com.google.inject.internal.InjectorImpl.createChildInjector(InjectorImpl.java:217)
+	at com.google.inject.internal.InjectorImpl.createChildInjector(InjectorImpl.java:224)
+	at com.google.caliper.runner.CaliperMain.exitlessMain(CaliperMain.java:120)
+	at com.google.caliper.runner.CaliperMain.main(CaliperMain.java:81)
+	at com.google.caliper.runner.CaliperMain.main(CaliperMain.java:69)
+	at com.google.common.base.WhitespaceMatcherBenchmark.main(WhitespaceMatcherBenchmark.java:56)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at com.google.common.reflect.Invokable$MethodInvokable.invokeInternal(Invokable.java:197)
+	at com.google.common.reflect.Invokable.invoke(Invokable.java:100)
+	at com.google.common.testing.NullPointerTester.testParameter(NullPointerTester.java:349)
+	at com.google.common.testing.NullPointerTester.testMethodParameter(NullPointerTester.java:220)
+	at com.google.common.testing.NullPointerTester.testMethod(NullPointerTester.java:188)
+	at com.google.common.testing.NullPointerTester.testStaticMethods(NullPointerTester.java:134)
+	at com.google.common.testing.ClassSanityTester.doTestNulls(ClassSanityTester.java:197)
+	at com.google.common.testing.AbstractPackageSanityTests.testNulls(AbstractPackageSanityTests.java:231)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=157867713

@@ -1,0 +1,13 @@
+Fix handling of mandatory meta plugins
+
+This commit fixes an issue with setting plugin.mandatory to include a
+meta-plugin. The issue here is that the names that we collect are the
+underlying plugins, not the meta-plugin. We should not use the
+underlying plugins instead using the names of non-meta plugins and the
+names of meta-plugins. This commit addresses this. The strategy here is
+that when we look at the installed plugins on the filesystem, we keep
+track of which ones are meta-plugins and carry this information up to
+where check which plugins are installed against the mandatory plugins.
+
+Relates #28710
+

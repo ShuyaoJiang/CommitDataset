@@ -1,0 +1,12 @@
+[ML] Ensure immutability of MlMetadata (#31957)
+
+The test failure in #31916 revealed that updating
+rules on a job was modifying the detectors list
+in-place. That meant the old cluster state and the
+updated cluster state had no difference and thus the
+change was not propagated to non-master nodes.
+
+This commit fixes that and also reviews all of ML
+metadata in order to ensure immutability.
+
+Closes #31916

@@ -1,0 +1,7 @@
+Remove Throwable usage from transport modules (#30845)
+
+Currently nio and netty modules use the CompletableFuture class for
+managing listeners. This is unfortunate as that class accepts
+Throwable. This commit adds a class CompletableContext that wraps
+the CompletableFuture but does not accept Throwable. This allows the
+modification of netty and nio logic to no longer handle Throwable.

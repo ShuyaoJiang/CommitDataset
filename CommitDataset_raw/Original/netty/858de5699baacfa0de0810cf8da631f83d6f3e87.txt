@@ -1,0 +1,14 @@
+[#2924] Correctly update head in MemoryRegionCache.trim()
+
+Motivation:
+When MemoryRegionCache.trim() is called, some unused cache entries will be freed (started from head). However, in MeoryRegionCache.trim() the head is not updated, which make entry list's head point to an entry whose chunk is null now and following allocate of MeoryRegionCache will return false immediately.
+
+In other word, cache is no longer usable once trim happen.
+
+Modifications:
+
+Update head to correct idx after free entries in trim().
+
+Result:
+
+MemoryRegionCache behaves correctly even after calling trim().

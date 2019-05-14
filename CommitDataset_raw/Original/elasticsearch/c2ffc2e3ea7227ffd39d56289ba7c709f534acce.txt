@@ -1,0 +1,7 @@
+Log send failure at debug level if channel closed (#39807)
+
+Currently we log exceptions due to channel close at the debug level in
+the normal exception handler. Currently we log all send failures due to
+channel close at the warn level. This commit changes that to only log at
+warn if the send failure is not due to channel closed. Additionally, it
+adds the ssl engine closed as a channel close exception.

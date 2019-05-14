@@ -1,0 +1,9 @@
+aggs: Changed how top_hits initialises leaf collectors
+
+Both TopDocsCollector and LeafCollector were being kept around at the aggregator level. In case the nested aggregator would do a post collection then this could cause pushing down docids to top hits child aggregators that already moved the next LeafCollector (causing assertions to trip and incorrect results).
+
+By keeping track of the LeafCollector in a seperate map at the leaf bucket level this problem can simply not happen any more as the place holding LeafCollector is no longer shared.
+
+Also LeafCollector instances for TopDocsCollectors are no longer pre-created as the beginning a new segment is evaluated. There is no guarantee that TopHitsAggregator encounters a document for a particular bucket and there has to be logic to create LeafCollector instances which have not been seen before.
+
+Closes #26738

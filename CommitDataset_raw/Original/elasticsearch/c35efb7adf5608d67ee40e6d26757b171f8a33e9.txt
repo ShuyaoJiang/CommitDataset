@@ -1,0 +1,13 @@
+Replace global checkpoint sync test
+
+This commit replaces the REST test that the global checkpoint sync
+action runs successfully as a privileged user. The test needs to be
+replaced because it has a small race condition. Namely, the check that
+the post-operation global checkpoint sync was successful could run
+before the sync finishes running. To address this, we replace the REST
+test with a test where we have a little more control and can assert busy
+to avoid this race from failing the test.
+
+Relates elastic/x-pack-elasticsearch#2749
+
+Original commit: elastic/x-pack-elasticsearch@ea585b843cdcc6a0509e720061056ea241b125c7

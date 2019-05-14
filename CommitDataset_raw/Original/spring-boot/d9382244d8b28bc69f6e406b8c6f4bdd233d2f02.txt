@@ -1,0 +1,13 @@
+Handle mixture of encoded and unencoded chars in JarURLConnection
+
+Previously, JarURLConnection would corrupt a URL that contained a
+mixture of encoded and unencoded double-byte characters. URLs that
+only contained unencoded double-byte characters were not affected as
+they are passed through as-is.
+
+This commit updates JarURLConnection.JarEntryName to correctly handle
+characters with a value that won't fit in a single signed byte (a
+value greater than 127). Such characters are now URL encoded and then
+written to the output stream as multiple bytes.
+
+Closes gh-5194

@@ -1,0 +1,17 @@
+Fix example for Http Upload
+
+Motivation:
+The example mis handle two elements:
+1) Last message is a LastHttpContent and is not taken into account by
+the server handler
+2) The client makes a sync on last write (chunked) but there is no flush
+before, therefore the sync is waiting forever.
+
+Modifications:
+1) Take into account the message LastHttpContent in simple Get.
+2) Removes sync but add flush for each post and multipost parts
+
+Results:
+Example is no more blocked after get test.
+
+Should be done also in 4.0 and Master (similar changes)

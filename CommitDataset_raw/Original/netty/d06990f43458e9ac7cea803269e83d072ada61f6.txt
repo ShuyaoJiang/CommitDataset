@@ -1,0 +1,10 @@
+OpenSSL ByteBuffer BIO
+
+Motivation:
+Currently Netty utilizes BIO_new_bio_pair so we can control all FD lifetime and event notification but delegates to OpenSSL for encryption/decryption. The current implementation sets up a pair of BIO buffers to read/write encrypted/plaintext data. This approach requires copying of data from Java ByteBuffers to native memory BIO buffers, and also requires both BIO buffers to be sufficiently large to hold application data. If direct ByteBuffers are used we can avoid coyping to/from the intermediate BIO buffer and just read/write directly from the direct ByteBuffer memory. We still need an internal buffer because OpenSSL may generate write data as a result of read calls (e.g. handshake, alerts, renegotiation, etc..), but this buffer doesn't have to be be large enough to hold application data.
+
+Modifications:
+- Take advantage of the new ByteBuffer based BIO provided by netty-tcnative instead of using BIO_read and BIO_write.
+
+Result:
+Less copying and lower memory footprint requirement per TLS connection.

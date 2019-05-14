@@ -1,0 +1,14 @@
+Sanitize request URL in ResourceUrlEncodingFilter
+
+Prior to this change, ResourceUrlEncodingFilter and ResourceUrlProvider
+would try to resolve the resource path using the full request URL (i.e.
+request path and request parameters), whereas the request path is the
+only information to consider.
+This would lead to StringIndexOutOfBoundsExceptions when the path +
+request params information was given to the AntPathMatcher.
+
+This commit makes the appropriate change to both
+ResourceUrlEncodingFilter and ResourceUrlProvider, in order to only
+select the request path.
+
+Issue: SPR-13374

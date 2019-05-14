@@ -1,0 +1,13 @@
+[#2586] Use correct EventLoop to notify delayed bind failures
+
+Motivation:
+
+When a bind fails AbstractBootstrap will use the GlobalEventExecutor to notify the ChannelPromise. We should use the EventLoop of the Channel if possible.
+
+Modification:
+
+Use EventLoop of the Channel if possible to use the correct Thread to notify and so guaranteer the right order of events.
+
+Result:
+
+Use the correct EventLoop for notification

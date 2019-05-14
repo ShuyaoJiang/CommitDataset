@@ -1,0 +1,20 @@
+Support non chunked HTTP request bodies larger than Integer.MAX_VALUE.
+
+Motivation:
+
+Request bodies can easily be larger than Integer.MAX_VALUE in practice.
+There's no reason, or intention, for Netty to impose this artificial constraint.
+
+Worse, it currently does not fail if the body is larger than this value;
+it just silently only reads the first Integer.MAX_VALUE bytes and discards the rest.
+
+This restriction doesn't effect chunked transfers, with no Content-Length header.
+
+Modifications:
+
+Force the use of `long HttpUtil.getContentLength(HttpMessage, long)` instead of
+`long HttpUtil.getContentLength(HttpMessage, long)`.
+
+Result:
+
+Netty will support HTTP request bodies of up to Long.MAX_VALUE length.

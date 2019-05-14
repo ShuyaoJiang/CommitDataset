@@ -1,0 +1,15 @@
+Avoid further 'type mismatch' errors in ExtendedBeanInfo
+
+This change fixes further cases under JDK 6 in which setting a bridged
+(e.g. String-returning) read method can conflict with an existing
+corresponding bridge write method that accepts an Object parameter.
+
+This appears to be a implementation difference between JDKs 6 and 7,
+where the JDK 6 Introspector adds bridge methods and JDK 7 does not.
+
+The solution here is to consistently null-out any existing write method
+before setting the read method. We were doing this elsewhere in
+ExtendedBeanInfo already, but these two changes make the approach
+consistent throuhout.
+
+Issue: SPR-8806

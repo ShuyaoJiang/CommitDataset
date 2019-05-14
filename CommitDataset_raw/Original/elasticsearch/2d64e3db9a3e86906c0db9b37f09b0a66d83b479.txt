@@ -1,0 +1,17 @@
+Adds trace logging to IndicesRequestCache (#34180)
+
+* Adds trace logging to IndicesRequestCache
+
+This change adds trace level logging to `IndicesrrequestCache` witht eh
+primary aim of helping to identify the cause of teh failures in
+https://github.com/elastic/elasticsearch/issues/32827. The cache will
+log at trace level when a cache hit or miss occurs including the reader
+version and the cache key. Note that this change adds a
+`cacheKeyRenderer` whcih supplies a human readable String of the cache
+key since the actual cache key itself is a `BytesReference` containing
+the wire protocol serialised form of the request.
+
+Logging is also added for the case where a search timeout occurs and fr
+that reason the cache entry is invalidated.
+
+* Adds comment to remaind us to remove cacheKeyRenderer

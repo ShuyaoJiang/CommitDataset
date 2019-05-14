@@ -1,0 +1,13 @@
+[#2720] Check if /proc/sys/net/core/somaxconn exists before try to parse it
+
+Motivation:
+
+As /proc/sys/net/core/somaxconn does not exists on non-linux platforms you see a noisy stacktrace when debug level is enabled while the static method of NetUtil is executed.
+
+Modifications:
+
+Check if the file exists before try to parse it.
+
+Result:
+
+Less noisy logging on non-linux platforms.

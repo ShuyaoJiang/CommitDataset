@@ -1,0 +1,6 @@
+Do not add index event listener if CCR disabled (#37432)
+
+Currently we add the CcrRestoreSourceService as a index event
+listener. However, if ccr is disabled, this service is null and we
+attempt to add a null listener throwing an exception. This commit only
+adds the listener if ccr is enabled.

@@ -1,0 +1,8 @@
+[ILM] Fix Move To Step API causing ILM to hang (#34618)
+
+The Move To Step API now checks to see if the target step is an
+AsyncActionStep, and if so, runs it.
+
+Previously, AsyncActionSteps would only be run when they are entered by
+executing the previous step, so if an AsyncActionStep was entered via
+the Move To Step API, ILM would never touch that index again.

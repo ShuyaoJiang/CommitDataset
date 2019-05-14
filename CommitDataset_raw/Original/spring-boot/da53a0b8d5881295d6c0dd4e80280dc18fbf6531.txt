@@ -1,0 +1,11 @@
+Fix HTTP status error template rendering in WebFlux
+
+Prior to this commit, a change in `HttpStatus.toString` since SPR-16898
+prevented the default WebFlux `ErrorWebExceptionHandler` to render
+template views for exact HTTP status (e.g. "404.html").
+This issue does not affect the resolution of series, like "4xx.html".
+
+This commit fixes `DefaultErrorWebExceptionHandler` to use
+`HttpStatus.value()` when attempting to resolve error views.
+
+Closes gh-15083

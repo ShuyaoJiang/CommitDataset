@@ -1,0 +1,13 @@
+Async return values refactoring in Spring MVC
+
+Revise Javadoc on AsyncHandlerMethodReturnValueHandler to clarify its
+main purpose is to prioritze custom async return value handlers ahead
+of built-in ones. Also replace the interface from built-in handlers
+which are prioritized already.
+
+Remove DeferredResultAdapter and ResponseBodyEmitterAdapter --
+introduced in 4.3 for custom async return value handling, since for
+5.0 we will add built-in support for reactive types and the value of
+these contracts becomes very marginal.
+
+Issue: SPR-15365

@@ -1,0 +1,17 @@
+Add support for directly decoding/encoding DNS PTR Records
+
+Motivation:
+
+The current implementation will provide a DnsRawRecord, which, while
+containing the host name it resolves to, would require the user to
+decode the name using the decode method currently private to
+DefaultDnsRecordDecoder, which in fact means copying it.
+
+Modifications:
+
+Introduce DnsPtrRecord, which is a specialization of DnsRecord which
+provides a decoded host name.
+
+Result:
+
+PTR Records are much easier to work with, as the name is decoded already.

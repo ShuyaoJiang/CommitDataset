@@ -1,0 +1,16 @@
+Fix leak and corruption bugs in CompositeByteBuf (#8438)
+
+Motivation:
+
+I came across two bugs:
+- Components removed due to capacity reduction aren't released
+- Offsets aren't set correctly on empty components that are added
+between existing components
+
+Modifications:
+
+Add unit tests which expose these bugs, fix them.
+
+Result:
+
+Bugs are fixed

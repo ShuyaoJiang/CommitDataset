@@ -1,0 +1,12 @@
+Fix deadlock issue in DeferredResult
+
+Previously DeferredResult locked around the setting of the result
+including handling up to the part of submitting a dispatch. This
+can cause a deadlock if a timeout occurs at the same time since
+the Tomcat timeout thread has its own locking that permits only
+one thread to do timeout or dispatch processing.
+
+The fix reduces the locking to cover only the attempt to set the
+DeferredResult but not the dispatching.
+
+Issue: SPR-10485

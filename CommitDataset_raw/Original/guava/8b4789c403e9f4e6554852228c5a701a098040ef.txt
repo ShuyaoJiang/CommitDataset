@@ -1,0 +1,18 @@
+I tripped and rewrote HashBiMap in the fully compact form, with no redundant code or storage, like I had assumed was too much work.
+
+Memory consumption effects:
+Unsized: 52 bytes/entry vs. 64 for server-side implementation vs. 74 for CompactHash* implementation
+Sized: 40 bytes/entry vs. 64 for server-side implementation vs. 56 for CompactHash* implementation
+
+(NB: I did not include storage of hash codes, as included in the other implementations.  If we wanted that it'd add another 8 bytes/entry sized, and probably 12 bytes/entry unsized.)
+
+Effects on HashBiMapProGuard:
+17833 bytes vs. 30172 bytes for server-side implementation vs. 31159 bytes for CompactHash* implementation
+13 classes vs. 29 classes for server-side implementation vs. 27 classes for CompactHash* implementation
+99 methods vs. 132 methods for server-side implementation vs. 173 methods for CompactHash* implementation
+
+RELNOTES=Rewrites Java 7 HashBiMap, and fixes some bugs in both versions.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=177814345

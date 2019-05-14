@@ -1,0 +1,39 @@
+[CCR] Added auto follow patterns feature (#33118)
+
+Auto Following Patterns is a cross cluster replication feature that
+keeps track whether in the leader cluster indices are being created with
+names that match with a specific pattern and if so automatically let
+the follower cluster follow these newly created indices.
+
+This change adds an `AutoFollowCoordinator` component that is only active
+on the elected master node. Periodically this component checks the
+ the cluster state of remote clusters if there new leader indices that
+match with configured auto follow patterns that have been defined in
+`AutoFollowMetadata` custom metadata.
+
+This change also adds two new APIs to manage auto follow patterns. A put
+auto follow pattern api:
+
+```
+PUT /_ccr/_autofollow/{{remote_cluster}}
+{
+   "leader_index_pattern": ["logs-*", ...],
+   "follow_index_pattern": "{{leader_index}}-copy",
+   "max_concurrent_read_batches": 2
+   ... // other optional parameters
+}
+```
+
+and delete auto follow pattern api:
+
+```
+DELETE /_ccr/_autofollow/{{remote_cluster_alias}}
+```
+
+The auto follow patterns are directly tied to the remote cluster aliases
+configured in the follow cluster.
+
+Relates to #33007
+
+
+Co-authored-by: Jason Tedor jason@tedor.me

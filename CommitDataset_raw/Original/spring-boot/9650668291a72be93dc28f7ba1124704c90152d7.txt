@@ -1,0 +1,10 @@
+Remove dependency from `root` to `condition`
+
+Remove the slightly unusual dependency from the root autoconfigure
+pacakge to `condition`. Prior to this commit the link was required in
+ordere to populate the `ConditionEvaluationReport`. We now introduce
+a `AutoConfigurationImportListener` strategy that allows anyone to
+listen for AutoConfigurationImportEvents. The listener implementation
+is now used to update the ConditionEvaluationReport.
+
+Fixes gh-8073

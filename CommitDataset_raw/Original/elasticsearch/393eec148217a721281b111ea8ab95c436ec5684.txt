@@ -1,0 +1,4 @@
+Set maxScore for empty TopDocs to Nan rather than 0 (#32938)
+
+We used to set `maxScore` to `0` within `TopDocs` in situations where there is really no score as the size was set to `0` and scores were not even tracked. In such scenarios, `Float.Nan` is more appropriate, which gets converted to `max_score: null` on the REST layer. That's also more consistent with lucene which set `maxScore` to `Float.Nan` when merging empty `TopDocs` (see `TopDocs#merge`).
+

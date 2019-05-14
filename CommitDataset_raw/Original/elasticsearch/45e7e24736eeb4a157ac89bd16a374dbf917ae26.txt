@@ -1,0 +1,8 @@
+Restrict Document list access in ParseContext (#29463)
+
+Today we expose a mutable list of documents in ParseContext via
+ParseContext#docs(). This, on the one hand places knowledge how
+to access nested documnts in multiple places and on the other
+allows for potential illegal access to nested only docs after
+the docs are reversed. This change restricts the access and
+streamlines nested / non-root doc access.

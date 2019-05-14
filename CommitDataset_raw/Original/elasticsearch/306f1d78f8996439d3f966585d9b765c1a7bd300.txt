@@ -1,0 +1,7 @@
+[CCR] Retry when no index shard stats can be found (#34852)
+
+Index shard stats for the follower shard are fetched, when a shard follow task is started.
+This is needed in order to bootstap the shard follow task with the follower global checkpoint.
+
+Sometimes index shard stats are not available (e.g. during a restart) and
+we fail now, while it is very likely that these stats will be available some time later.

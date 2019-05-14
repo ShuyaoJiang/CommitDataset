@@ -1,0 +1,9 @@
+Allow to disable only heap or direct buffer pool
+
+- Fixes #1315
+
+If a user specifies the arena size of 0, the pool is now disabled
+instead of raising an IllegalArgumentException. Using this, you can
+disable only heap or direct buffer pool easily. Once disabled,
+PooledByteBufAllocator will delegate the allocation request to
+UnpooledByteBufAllocator.

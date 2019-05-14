@@ -1,0 +1,7 @@
+Introduce translog size and age based retention policies (#25147)
+
+This PR extends the TranslogDeletionPolicy to allow keeping the translog files longer than what is needed for recovery from lucene. Specifically, we allow specifying the total size of the files and their maximum age (i.e., keep up to 512MB but no longer than 12 hours). This will allow making ops based recoveries more common. 
+
+Note that the default size and age still set to 0, maintaining current behavior. This is needed as the other components in the system are not yet ready for a longer translog retention. I will adapt those in follow up PRs.
+
+Relates to #10708 

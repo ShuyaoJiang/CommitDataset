@@ -1,0 +1,16 @@
+Don't swallow intermediate write failures in MessageToMessageEncoder (#8454)
+
+Motivation:
+
+If the encoder needs to flush more than one outbound message it will
+create a new ChannelPromise for all but the last write which will
+swallow failures.
+
+Modification:
+
+Use a PromiseCombiner in the case of multiple messages and the parent
+promise isn't the `VoidPromise`.
+
+Result:
+
+Intermediate failures are propagated to the original ChannelPromise.

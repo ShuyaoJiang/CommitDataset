@@ -1,0 +1,13 @@
+Add maven profile to run tests with -Dio.netty.noUnsafe=true
+
+Motivation:
+
+We had reports of failures before when sun.misc.Unsafe was not present. We should run our tests also with it disable to ensure everything works even if sun.misc.Unsafe is not present on the system.
+
+Modifications:
+
+Add a new profile which allows to run tests without Unsafe (using -PnoUnsafe)
+
+Result:
+
+Better testing of netty for systems where sun.misc.Unsafe is not present.

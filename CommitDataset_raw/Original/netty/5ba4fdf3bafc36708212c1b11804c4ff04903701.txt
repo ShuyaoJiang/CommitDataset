@@ -1,0 +1,16 @@
+HttpObjectAggregator only set Content-Length is not already set.
+
+Motivation:
+
+HEAD requests will have a Content-Length set that doesn't match the
+actual length. So we only want to set Content-Length header if it isn't
+already set.
+
+Modifications:
+
+If check around setting the Content-Length.
+
+Result:
+
+A HEAD request will no correctly return the specified Content-Length
+instead of the body length.

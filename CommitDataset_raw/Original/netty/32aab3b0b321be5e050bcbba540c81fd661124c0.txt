@@ -1,0 +1,26 @@
+Fix false sharing between head and tail reference in MpscLinkedQueue
+
+Motivation:
+
+The tail node reference writes (by producer threads) are very likely to
+invalidate the cache line holding the headRef which is read by the
+consumer threads in order to access the padded reference to the head
+node. This is because the resulting layout for the object is:
+
+- header
+- Object AtomicReference.value -> Tail node
+- Object MpscLinkedQueue.headRef -> PaddedRef -> Head node
+
+This is 'passive' false sharing where one thread reads and the other
+writes.  The current implementation suffers from further passive false
+sharing potential from any and all neighbours to the queue object as no
+pre/post padding is provided for the class fields.
+
+Modifications:
+
+Fix the memory layout by adding pre-post padding for the head node and
+putting the tail node reference in the same object.
+
+Result:
+
+Fixed false sharing

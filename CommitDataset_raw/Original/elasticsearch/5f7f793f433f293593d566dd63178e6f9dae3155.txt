@@ -1,0 +1,18 @@
+Propagate max_auto_id_timestamp in peer recovery (#33693)
+
+Today we don't store the auto-generated timestamp of append-only
+operations in Lucene; and assign -1 to every index operations
+constructed from LuceneChangesSnapshot. This looks innocent but it
+generates duplicate documents on a replica if a retry append-only
+arrives first via peer-recovery; then an original append-only arrives
+via replication. Since the retry append-only (delivered via recovery)
+does not have timestamp, the replica will happily optimizes the original
+request while it should not.
+
+This change transmits the max auto-generated timestamp from the primary
+to replicas before translog phase in peer recovery. This timestamp will
+prevent replicas from optimizing append-only requests if retry
+counterparts have been processed.
+
+Relates #33656 
+Relates #33222

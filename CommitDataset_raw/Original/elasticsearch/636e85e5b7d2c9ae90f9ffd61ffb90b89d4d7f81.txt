@@ -1,0 +1,11 @@
+percolator: Hint what clauses are important in a conjunction query based on fields
+
+The percolator field mapper doesn't need to extract all terms and ranges from a bool query with must or filter clauses.
+In order to help to default extraction behavior, boost fields can be configured, so that fields that are known for not being
+selective enough can be ignored in favor for other fields or clauses with specific fields can forcefully take precedence over other clauses.
+This can help selecting clauses for fields that don't match with a lot of percolator queries over other clauses and thus improving performance of the percolate query.
+
+For example a status like field is something that should configured as an ignore field.
+Queries on this field tend to match with more documents and so if clauses for this fields
+get selected as best clause then that isn't very helpful for the candidate query that the
+percolate query generates to filter out percolator queries that are likely not going to match.

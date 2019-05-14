@@ -1,0 +1,29 @@
+Improve error message for 6.x style realm settings (#36876)
+
+Realm settings were changed in #30241 in a non-BWC way.
+If you try and start a 7.x node using a 6.x config style, then the
+default error messages do not adequately describe the cause of
+the problem, or the solution.
+
+This change detects the when realms are using the 6.x style and fails
+with a specific error message.
+
+This detection is a best-effort, and will detect issues when the
+realms have not been modified to use the 7.x style, but may not detect
+situations where the configuration was partially changed.
+
+e.g. We can detect this:
+
+    xpack.security.authc:
+      realms.pki1.type: pki
+      realms.pki1.order: 3
+      realms.pki1.ssl.certificate_authorities: [ "ca.crt" ]
+
+But this (where the "order" has been updated, but the "ssl.*" has not)
+will fall back to the standard "unknown setting" check
+
+    xpack.security.authc:
+      realms.pki.pki1.order: 3
+      realms.pki1.ssl.certificate_authorities: [ "ca.crt" ]
+
+Closes: #36026

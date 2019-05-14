@@ -1,0 +1,10 @@
+OioServerChannel Default Max Messages Per Read Too High
+
+Motivation:
+A few implementations of OioServerChannel have a default max messages per read set to 16. We should set the default to 1 to prevent blocking on a read before setting a socket that has just been accepted.
+
+Modifications:
+- OioSctpServerChannel and OioServerSocketChannel metadata changed to use the default (1) max messages per read
+
+Result:
+Oio based servers will complete accepting a socket before potentially blocking waiting to accept other sockets.

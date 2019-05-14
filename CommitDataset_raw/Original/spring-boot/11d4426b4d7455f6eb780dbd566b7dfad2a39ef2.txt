@@ -1,0 +1,16 @@
+Provide client factory with supplier in RestTemplateBuilder
+
+This commit removes
+`RestTemplateBuilder.requestFactory(ClientHttpRequestFactory factory)`
+because it can be misleading. This builder class is meant to be
+immutable, but calling that method and then timeout related ones will
+affect the `ClientHttpRequestFactory` instance.
+
+Instead, this method is replaced with a
+`Supplier<ClientHttpRequestFactory>` that is called every time a
+`RestTemplate` is being built.
+
+That approach may reduce the reusability of request factories, but it is
+much more consistent.
+
+Closes gh-11255

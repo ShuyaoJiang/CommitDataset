@@ -1,0 +1,7 @@
+Introduce AddressedEnvelope message type for generic representation of an addressed message
+
+- Fixes #1282 (not perfectly, but to the extent it's possible with the current API)
+- Add AddressedEnvelope and DefaultAddressedEnvelope
+- Make DatagramPacket extend DefaultAddressedEnvelope<ByteBuf, InetSocketAddress>
+- Rename ByteBufHolder.data() to content() so that a message can implement both AddressedEnvelope and ByteBufHolder (DatagramPacket does) without introducing two getter methods for the content
+- Datagram channel implementations now understand ByteBuf and ByteBufHolder as a message with unspecified remote address.

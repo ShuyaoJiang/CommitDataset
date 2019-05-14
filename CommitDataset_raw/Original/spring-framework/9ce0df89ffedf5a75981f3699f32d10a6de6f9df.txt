@@ -1,0 +1,11 @@
+Support Class meta-annotation attributes with ASM
+
+Prior to this commit, AnnotationAttributesReadingVisitor treated Class
+annotation attributes as Strings instead of Classes. As a result,
+look-ups for Class attributes in meta-annotations failed with an
+IllegalArgumentException.
+
+This commit fixes this issue by consistently treating Class attributes
+as Classes in AnnotationAttributesReadingVisitor.
+
+Issue: SPR-11557

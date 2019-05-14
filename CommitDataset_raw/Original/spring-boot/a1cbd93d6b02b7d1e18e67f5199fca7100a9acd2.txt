@@ -1,0 +1,8 @@
+Ensure local Elasticsearch nodes are closed
+
+Update ElasticsearchAutoConfiguration to ensure that local nodes are
+closed when the context is closed. Prior to this commit the close()
+method of the Client would be called which had no effect for local
+Nodes.
+
+Fixes gh-2480

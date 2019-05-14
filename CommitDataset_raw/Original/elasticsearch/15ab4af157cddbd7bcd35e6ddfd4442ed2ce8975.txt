@@ -1,0 +1,19 @@
+[Monitoring] Align indices/index stats with local cluster state (elastic/x-pack-elasticsearch#4079)
+
+A small bug in the `IndexStatsCollector` can potentially returns
+statistics for newly created indices that does not exist yet in the
+collector's `ClusterState` local instance.
+
+It happens because an instance of the current `ClusterState` is
+captured and passed to all the collectors before they are executed (so
+that they all share the same view of the state of the cluster). On
+some clusters, if an index is created after the `ClusterState` is
+captured but before the `IndicesStatsRequest` is executed then it can
+appears in the index stats but have no corresponding entry in the
+local cluster state.
+
+This commit changes the IndexStatsCollector so that it only return
+statistics for indices that already exist in the cluster state. This
+way a consistent view is possible between indices/index/shard stats.
+
+Original commit: elastic/x-pack-elasticsearch@da173ae0b0985a44fe09c810c864f07da192624d

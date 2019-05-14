@@ -1,0 +1,16 @@
+Fix size of rolling-upgrade bootstrap config (#38031)
+
+Zen2 nodes will bootstrap themselves once they believe there to be no remaining
+Zen1 master-eligible nodes in the cluster, as long as minimum_master_nodes is
+satisfied.
+
+Today the bootstrap configuration comprises just the ids of the known
+master-eligible nodes, and this might be too small to be safe. For instance, if
+there are 5 master-eligible nodes (so that minimum_master_nodes is 3) then the
+bootstrap configuration could comprise just 3 nodes, of which 2 form a quorum,
+and this does not intersect other quorums that might arise, leading to a
+split-brain.
+
+This commit fixes this by expanding the bootstrap configuration so that its
+quorums satisfy minimum_master_nodes, by adding some of the IDs of the other
+master-eligible nodes in the last-published cluster state.

@@ -1,0 +1,29 @@
+In 4 files, manually include a TestCase in its own suite().
+This lets the open-source build run those tests.
+
+Details: Our internal test runner, given a TestCase with a suite() method, always runs the TestCase in addition to the suite(), even if the suite() doesn't include it.
+The external Maven test runner, by contrast, skips the TestCase itself unless the suite() includes it.
+That's led us to add the suite manually: https://github.com/google/guava/blob/fac8339c87815fb7deca0cf01d61a5146355723f/guava-tests/test/com/google/common/collect/SetsTest.java#L116
+But we missed it in a few recent cases.
+
+I noticed one of these cases when I ran the open-source GWT tests and they failed (because we're using an old Truth version externally, which I'm also fixing).
+This raised the question of why the non-GWT tests weren't failing in the same way, and the answer is that this suite() business was skipping them.
+I identified other affected tests with:
+
+$ grep -rl '^  public static Test suite[(][)]' */test/ > /tmp/files
+$ grep '^  public void test' -l $(for F in `cat /tmp/files`; do BASE=$(basename $F .java); grep "addTestSuite($BASE.class)" -L $F; done)
+
+Note that, with this solution, we run the tests *twice* internally.
+This is unfortunate but probably livable.
+An alternative that we've employed is to move the tests into a nested class, which we then don't need to add to the suite:
+https://github.com/google/guava/blob/fac8339c87815fb7deca0cf01d61a5146355723f/guava-tests/test/com/google/common/collect/ImmutableListTest.java#L127
+That way, we run the test only once internally.
+The downside is that we don't run it externally at all :(
+I should fix the external problem for the existing tests, but that's a problem for another CL (CL 157852006, pending).
+
+Another alternative is to move all our suites out of the main test files.
+This is possibly a good idea, anyway, as it's a prerequisite for running the suites under GWT and Android, which would have caught problems like []But again, one thing at a time...
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=157861023

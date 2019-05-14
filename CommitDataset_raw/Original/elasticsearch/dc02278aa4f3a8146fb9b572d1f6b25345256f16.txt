@@ -1,0 +1,21 @@
+Disable specific locales for tests in fips mode (#38938)
+
+* Disable specific locales for tests in fips mode
+
+The Bouncy Castle FIPS provider that we use for running our tests
+in fips mode has an issue with locale sensitive handling of Dates as
+described in https://github.com/bcgit/bc-java/issues/405
+
+This causes certificate validation to fail if any given test that
+includes some form of certificate validation happens to run in one
+of the locales. This manifested earlier in #33081 which was
+handled insufficiently in #33299
+
+This change ensures that the problematic 3 locales
+
+* th-TH
+* ja-JP-u-ca-japanese-x-lvariant-JP
+* th-TH-u-nu-thai-x-lvariant-TH
+
+will not be used when running our tests in a FIPS 140 JVM. It also
+reverts #33299

@@ -1,0 +1,12 @@
+Detect overridden boolean getters in ExtendedBeanInfo
+
+Prior to this commit, and due to idiosyncracies of
+java.beans.Introspector, overridden boolean getter methods were not
+detected by Spring's ExtendedBeanInfo, which relied on too-strict
+Method equality checks when selecting read and write methods.
+
+Now ExtendedBeanInfo uses Spring's ClassUtils#getMostSpecificMethod
+against the methods returned from java.beans.Introspector in order
+to ensure that subsequent equality checks are reasonable to make.
+
+Issue: SPR-8949

@@ -1,0 +1,8 @@
+Core: Combine messageRecieved methods in TransportRequestHandler (#31519)
+
+TransportRequestHandler currently contains 2 messageReceived methods,
+one which takes a Task, and one that does not. The first just delegates
+to the second. This commit changes all existing implementors of
+TransportRequestHandler to implement the version which takes Task, thus
+allowing the class to be a functional interface, and eliminating the
+need to throw exceptions when a task needs to be ensured.

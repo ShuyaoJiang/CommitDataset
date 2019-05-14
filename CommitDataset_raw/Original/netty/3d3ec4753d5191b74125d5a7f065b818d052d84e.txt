@@ -1,0 +1,13 @@
+[#2586] Use correct EventLoop to notify delayed successful registration
+
+Motivation:
+
+At the moment AbstractBoostrap.bind(...) will always use the GlobalEventExecutor to notify the returned ChannelFuture if the registration is not done yet. This should only be done if the registration fails later. If it completes successful we should just notify with the EventLoop of the Channel.
+
+Modification:
+
+Use EventLoop of the Channel if possible to use the correct Thread to notify and so guaranteer the right order of events.
+
+Result:
+
+Use the correct EventLoop for notification

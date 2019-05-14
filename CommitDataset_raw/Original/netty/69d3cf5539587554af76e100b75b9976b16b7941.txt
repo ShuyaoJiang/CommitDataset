@@ -1,0 +1,13 @@
+[#2308] Use SelectorProvider.open*() to open NIO channels and so remove condition when create new NIO channels.
+
+Motivation:
+At the moment we use SocketChannel.open(), ServerSocketChannel.open() and DatagramSocketChannel.open(...) within the constructor of our
+NIO channels. This introduces a bottleneck if you create a lot of connections as these calls delegate to SelectorProvider.provider() which
+uses synchronized internal. This change removed the bottleneck.
+
+Modifications:
+Obtain a static instance of the SelectorProvider and use SelectorProvider.openSocketChannel(), SelectorProvider.openServerSocketChannel() and
+SelectorProvider.openDatagramChannel(). This eliminates the bottleneck as SelectorProvider.provider() is not called on every channel creation.
+
+Result:
+Less conditions when create new channels.

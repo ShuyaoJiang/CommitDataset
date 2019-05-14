@@ -1,0 +1,12 @@
+Push down the implementation of ImmutableMap.createKeySet() into its implementations, because ProGuard can't figure out how to eliminate createKeySet even when it's overridden in the only ImmutableMap implementation it knows of.
+
+This makes there be one and only implementation of key sets retained by ImmutableMap itself, RegularImmutableMap.KeySet.  There is no implementation change to the other map types, we just inline the createKeySet() method to those implementations.
+
+Effects on ImmutableMapProGuard ([]
+32155 bytes => 30612 bytes
+29 classes => 27 classes
+190 methods => 180 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147408143

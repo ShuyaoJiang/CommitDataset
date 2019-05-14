@@ -1,0 +1,24 @@
+LLRC: Make warning behavior pluggable per request (#36345)
+
+This allows you to plug the behavior that the LLRC uses to handle
+warnings on a per request basis.
+
+We entertained the idea of allowing you to set the warnings behavior to
+strict mode on a per request basis but that wouldn't allow the high
+level rest client to fail when it sees an unexpected warning.
+
+We also entertained the idea of adding a list of "required warnings" to
+the `RequestOptions` but that won't work well with failures that occur
+*sometimes* like those we see in mixed clusters.
+
+Adding a list of "allowed warnings" to the `RequestOptions` would work
+for mixed clusters but it'd leave many of the assertions in our tests
+weaker than we'd like.
+
+This behavior plugging implementation allows us to make a "required
+warnings" option when we need it and an "allowed warnings" behavior when
+we need it.
+
+I don't think this behavior is going to be commonly used by used outside
+of the Elasticsearch build, but I expect they'll be a few commendably
+paranoid folks who could use this behavior.

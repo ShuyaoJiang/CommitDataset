@@ -1,0 +1,5 @@
+AsyncTwoPhaseIndexerTests race condition fixed (#37830)
+
+The unlucky timing can cause this test to fail when the indexing is triggered from `maybeTriggerAsyncJob`. As this is asynchronous, in can finish quicker then the test stepping over to next assertion
+The introduced barrier solves the problem
+closes #37695

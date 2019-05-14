@@ -1,0 +1,18 @@
+Do not use hard-coded handler names in HTTP/2
+
+Motivation:
+
+Our HTTP/2 implementation sometimes uses hard-coded handler names when
+adding/removing a handler to/from a pipeline. It's not really a good
+idea because it can easily result in name clashes. Unless there is a
+good reason, we need to use the reference to the handlers
+
+Modifications:
+
+- Allow null as a handler name for Http2Client/ServerUpgradeCodec
+  - Use null as the default upgrade handler name
+- Do not use handler name strings in some test cases and examples
+
+Result:
+
+Fixes #3815

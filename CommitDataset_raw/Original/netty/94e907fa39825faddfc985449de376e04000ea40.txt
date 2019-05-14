@@ -1,0 +1,14 @@
+Only call ReferenceCountUtil.touch(...) if ResourceLeakDetection was enabled when Channel was created.
+
+Motivation:
+
+We should only call ReferenceCountUtil.touch(...) if needed as otherwise we pay the overhead of instanceof and cast
+everytime.
+
+Modifications:
+
+Add boolean flag which indicates if touch(...) should be called.
+
+Result:
+
+Less overhead when leak detection is not enabled.

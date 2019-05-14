@@ -1,0 +1,10 @@
+Ensure cast correctly included for OpPlus compilation
+
+When the plus operator is used between strings in a SpEL
+expression and that expression is compiled, it is
+important to include a cast if computation of any of
+the operands isn't obviously leaving strings on the
+stack. Likewise if the stack contents are known to
+be strings, a cast should not be included.
+
+Issue: SPR-12426

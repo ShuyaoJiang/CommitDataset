@@ -1,0 +1,12 @@
+Revise UserSessionResolver to UserQueueSuffixResolver
+
+The resolver for /user/{username} prefixed destinations is now
+more explicitly designed to store queue suffixes rather than session
+id's, which is what we happen to use as queue suffixes.
+
+This allows something other than the sessionId to be used without
+having to change many places. It also enables applications to
+construct destinations with user-specific queue suffixes without
+making assumptions about what's used for queue suffixes. For
+example a controller may construct a map with subscription destinations
+and send that down to the client.

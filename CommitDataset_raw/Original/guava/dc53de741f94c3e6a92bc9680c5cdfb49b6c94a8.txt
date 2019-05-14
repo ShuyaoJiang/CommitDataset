@@ -1,0 +1,9 @@
+Internally, use PatternCompiler from Doubles.tryParse.
+
+Also, remove equals() and hashCode() from CommonPattern implementations. The implementations delegate to the underlying Pattern classes, which use identity equality. If we want "real" equality, we should check the equality of pattern() and flags(). Why bother now? Because our automated equals() tests expect equals(), if present, to behave in a sane way once they discover the CommonPattern.compile() factory method (which they now do, since it's now located on CommonPattern itself).
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=202132002

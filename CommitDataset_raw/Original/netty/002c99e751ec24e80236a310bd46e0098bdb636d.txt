@@ -1,0 +1,10 @@
+NIO ServerChannel shouldn't close because of Exception
+
+Motivation:
+e102a008b63d0063581ba242539f0a8d473cae00 changed a conditional where previously the NIO ServerChannel would not be closed in the event of an exception.
+
+Modifications:
+- Restore the logic prior to e102a008b63d0063581ba242539f0a8d473cae00 which does not automatically close ServerChannels for IOExceptions
+
+Result:
+NIO ServerChannel doesn't close automatically for an IOException.

@@ -1,0 +1,17 @@
+Add test for dying with dignity (#28987)
+
+I have long wanted an actual test that dying with dignity works. It is
+tricky because if dying with dignity works, it means the test JVM dies
+which is usually an abnormal condition. And anyway, how does one force a
+fatal error to be thrown. I was motivated to investigate this again by
+the fact that I missed a backport to one branch leading to an issue
+where Elasticsearch would not successfully die with dignity. And now we
+have a solution: we install a plugin that throws an out of memory error
+when it receives a request. We hack the standalone test infrastructure
+to prevent this from failing the test. To do this, we bypass the
+security manager and remove the PID file for the node; this tricks the
+test infrastructure into thinking that it does not need to stop the
+node. We also bypass seccomp so that we can fork jps to make sure that
+Elasticsearch really died. And to be extra paranoid, we parse the logs
+of the dead Elasticsearch process to make sure it died with
+dignity. Never forget.

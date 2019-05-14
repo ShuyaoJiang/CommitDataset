@@ -1,0 +1,13 @@
+Adding equalsIgnoreCase for ASCII only. This exists because there's generally no good reason to use String.equalsIgnoreCase() with non-ASCII data (you should be using proper unicode normalization).
+
+Ideally we would migrate anyone calling
+equalsIgnoreCase("<ascii only>", x)
+equalsIgnoreCase(x, "<ascii only>")
+to use this and provide an error prone check for things like:
+string.toLowerCase().equals("<lower case ascii>")
+string.toUpperCase().equals("<upper case ascii>")
+
+Also provide benchmark (4x-5x faster than String.equalsIgnoreCase()).
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=57357299

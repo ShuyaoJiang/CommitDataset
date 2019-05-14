@@ -1,0 +1,14 @@
+Shuffle SQL's integration tests some (elastic/x-pack-elasticsearch#2403)
+
+This shuffles all of SQL's QA tests into the `qa/sql` directory, moving
+some shared resources into the new `qa:sql` project. It also rigs up
+testing of the rest SQL interface in all the sql qa configurations:
+without security, with security, and against multiple nodes.
+
+I've had to make some modifications to how we handle the audit log
+because it has gotten pretty slow. If these modifications turn out to
+not be fast enough then I'll change the test to querying the log files
+and drop the audit log index entirely but the index seems to be holding
+out for now.
+
+Original commit: elastic/x-pack-elasticsearch@ff3b5a74c1d6fc08fa5186f97d52579a66860802

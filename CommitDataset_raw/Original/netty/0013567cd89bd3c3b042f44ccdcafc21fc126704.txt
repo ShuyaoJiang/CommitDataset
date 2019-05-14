@@ -1,0 +1,13 @@
+Don't try to use UnixResolverDnsServerAddressStreamProvider when on Windows.
+
+Motivation:
+
+We should not try to use UnixResolverDnsServerAddressStreamProvider when on Windows as it will log some error that will produce noise and may confuse users.
+
+Modifications:
+
+Just use DefaultDnsServerAddressStreamProvider if windows is used.
+
+Result:
+
+Less noise in the logs. This was reported in vert.x: https://github.com/eclipse/vert.x/issues/2204

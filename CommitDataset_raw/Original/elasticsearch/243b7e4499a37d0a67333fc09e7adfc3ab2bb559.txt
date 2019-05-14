@@ -1,0 +1,5 @@
+Moved job lifecycle over to persistent tasks
+
+Also replaced the DELETING status from JobState with a boolean flag on Job. The state of a job is now stored inside a persistent task in cluster state. Jobs that aren't running don't have a persistent task, so I moved that notion of being deleted to the job config itself.
+
+Original commit: elastic/x-pack@21cd19ca1c037158412f4582bf8a05d74ec773d4

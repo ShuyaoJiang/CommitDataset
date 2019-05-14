@@ -1,0 +1,24 @@
+[CCR] Make shard follow tasks more resilient for restarts (#37239)
+
+If a running shard follow task needs to be restarted and
+the remote connection seeds have changed then
+a shard follow task currently fails with a fatal error.
+
+The change creates the remote client lazily and adjusts
+the errors a shard follow task should retry.
+
+This issue was found in test failures in the recently added
+ccr rolling upgrade tests. The reason why this issue occurs
+more frequently in the rolling upgrade test is because ccr
+is setup in local mode (so remote connection seed will become stale) and
+all nodes are restarted, which forces the shard follow tasks to get
+restarted at some point during the test. Note that these tests
+cannot be enabled yet, because this change will need to be backported
+to 6.x first. (otherwise the issue still occurs on non upgraded nodes)
+
+I also changed the RestartIndexFollowingIT to setup remote cluster
+via persistent settings and to also restart the leader cluster. This
+way what happens during the ccr rolling upgrade qa tests, also happens
+in this test.
+
+Relates to #37231

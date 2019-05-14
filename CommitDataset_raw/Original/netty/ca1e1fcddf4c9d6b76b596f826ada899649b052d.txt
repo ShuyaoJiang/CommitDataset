@@ -1,0 +1,13 @@
+Only try to match SSLException message when debug logging is enabled.
+
+Motivation:
+
+We only want to log for the particular case when debug logging is enabled so we not need to try to match the message if this is not the case.
+
+Modifications:
+
+Guard with logger.isDebugEnabled()
+
+Result:
+
+Less overhead when debug logging is not enabled.

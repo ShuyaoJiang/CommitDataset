@@ -1,0 +1,10 @@
+2.x: operator test: skip variants and bugfix
+
+Note that since we know have time unit in schedulers, one must be
+careful with the time unit of the timed skip operators. The timestamps
+will be calculated via this unit and may not return the expected values. 
+
+For example, a skipLast of 1 second will not skip the value 0.5 seconds
+before completion because its timestamp is rounded down to the start of
+the second. But if one uses 1000 milliseconds, the value will be
+skipped.

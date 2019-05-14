@@ -1,0 +1,12 @@
+Proper JCache metadata caching on non cache methods
+
+Prior to this commit, the cache operation metadata cache was not
+updated for a method not using the JCache annotations. This means
+that every execution of said method was going through the process
+of identifying if it was using the cache or not.
+
+This commit adds a default placeholder identifying the absence of
+metadata; this allows to flag such method as not having any metadata
+at all.
+
+Issue: SPR-12337

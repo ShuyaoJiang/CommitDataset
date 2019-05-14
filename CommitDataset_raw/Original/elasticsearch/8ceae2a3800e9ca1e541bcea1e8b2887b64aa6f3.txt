@@ -1,0 +1,6 @@
+Build: Allow deps to be a direct jar (#28096)
+
+Currently the code which disable transitive dependencies assumes all
+deps are a "module dependency" in gradle. But a jar file dep is not.
+This commit relaxes the closure signature to allow any dependency and
+only enforce the transitive disabling for module dependencies.

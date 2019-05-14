@@ -1,0 +1,16 @@
+Ignore path parameters in request mappings
+
+Before this change the presence of path params (e.g. "/foo;q=1/bar")
+expected the request mapping to contain a URI variable in the place of
+semicolon content (e.g. either "/{foo}/bar" or "/{foo};{fooParams}").
+
+The change ensures path params are ignored in @RequestMapping patterns
+so that "/foo/bar" matches to "/foo;q=1/bar" as well as
+"/foo;q=1;p=2/bar".
+
+Along with this change, the RequestMappingHandlerMapping no longer
+defaults to having semicolon content removed from the URL, which means
+@MatrixVariable is supported by default without the need for any
+further configuration.
+
+Issue: SPR-10234

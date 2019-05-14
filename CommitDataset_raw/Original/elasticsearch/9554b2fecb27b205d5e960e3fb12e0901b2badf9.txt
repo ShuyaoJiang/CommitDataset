@@ -1,0 +1,25 @@
+When removing an AutoFollower also mark it as removed. (#37402)
+
+Currently when there are no more auto follow patterns for a remote cluster then
+the AutoFollower instance for this remote cluster will be removed. If
+a new auto follow pattern for this remote cluster gets added quickly enough
+after the last delete then there may be two AutoFollower instance running
+for this remote cluster instead of one.
+
+Each AutoFollower instance stops automatically after it sees in the
+start() method that there are no more auto follow patterns for the
+remote cluster it is tracking. However when an auto follow pattern
+gets removed and then added back quickly enough then old AutoFollower
+may never detect that at some point there were no auto follow patterns
+for the remote cluster it is monitoring. The creation and removal of
+an AutoFollower instance happens independently in the `updateAutoFollowers()`
+as part of a cluster state update.
+
+By adding the `removed` field, an AutoFollower instance will not miss the
+fact there were no auto follow patterns at some point in time. The
+`updateAutoFollowers()` method now marks an AutoFollower instance as
+removed when it sees that there are no more patterns for a remote cluster.
+The updateAutoFollowers() method can then safely start a new AutoFollower
+instance.
+
+Relates to #36761

@@ -1,0 +1,10 @@
+MimeTypeUtils uses SecureRandom
+
+The prevailing current wisdom is to use the default constructor for
+secure and let it pick the best algorithm for the OS.
+
+On Java 8 (Oracle), Linux this results in "NativePRNG" which uses
+/dev/random (potentially blocking) for the initial seed, and
+/dev/urandom (non-blocking) for subsequent calls to nextInt.
+
+Issue: SPR-16635

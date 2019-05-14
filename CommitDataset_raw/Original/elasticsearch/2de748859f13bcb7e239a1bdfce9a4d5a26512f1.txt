@@ -1,0 +1,8 @@
+Scripting: Remove "inline script enabled" on script engines (#24815)
+
+ScriptEngine implementations have an overridable method to indicate they
+are safe to use as inline scripts. Since groovy was removed fro 6.0,
+there are no longer any implementations which used the default false
+value. Furthermore, the value was not actually read anywhere. This
+commit removes the method. The ScriptEngineRegistry was also no longer
+necessary as it only was used to build a map from language to engine.

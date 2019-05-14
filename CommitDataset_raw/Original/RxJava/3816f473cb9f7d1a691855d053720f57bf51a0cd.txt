@@ -1,0 +1,27 @@
+Optimize single BlockingObservable operations.
+
+This changeset optimizes all blocking operations that just return a single
+value. The previous code used an iterator all the time, adding significant
+GC pressure with iterators and a backing LBQ.
+
+The following numbers are from the added JMH tests just as a general
+measurement. The most boost is gained from small results and less
+GC pressure.
+
+Before this change:
+r.o.BlockingObservablePerf.benchFirst          1  thrpt         5  2839391.882    17771.079    ops/s
+r.o.BlockingObservablePerf.benchFirst       1000  thrpt         5  2046716.781    22884.125    ops/s
+r.o.BlockingObservablePerf.benchFirst    1000000  thrpt         5  2067456.792    15499.650    ops/s
+r.o.BlockingObservablePerf.benchLast           1  thrpt         5  2160081.041    21230.437    ops/s
+r.o.BlockingObservablePerf.benchLast        1000  thrpt         5    83270.845      871.836    ops/s
+r.o.BlockingObservablePerf.benchLast     1000000  thrpt         5      100.190        1.001    ops/s
+r.o.BlockingObservablePerf.benchSingle         1  thrpt         5  3702921.521   154008.164    ops/s
+
+After this change:
+r.o.BlockingObservablePerf.benchFirst          1  thrpt         5  6466732.996   191239.670    ops/s
+r.o.BlockingObservablePerf.benchFirst       1000  thrpt         5  3752276.751   135138.711    ops/s
+r.o.BlockingObservablePerf.benchFirst    1000000  thrpt         5  3840942.600    59305.202    ops/s
+r.o.BlockingObservablePerf.benchLast           1  thrpt         5  4110186.134    98795.733    ops/s
+r.o.BlockingObservablePerf.benchLast        1000  thrpt         5    84528.104     1710.853    ops/s
+r.o.BlockingObservablePerf.benchLast     1000000  thrpt         5       99.460        2.091    ops/s
+r.o.BlockingObservablePerf.benchSingle         1  thrpt         5 11897793.778   321260.803    ops/s

@@ -1,0 +1,18 @@
+Remove special handling of Object[] in codec framework (a.k.a unfolding)
+
+- Fixes #1229
+- Primarily written by @normanmaurer and revised by @trustin
+
+This commit removes the notion of unfolding from the codec framework
+completely.  Unfolding was introduced in Netty 3.x to work around the
+shortcoming of the codec framework where encode() and decode() did not
+allow generating multiple messages.
+
+Such a shortcoming can be fixed by changing the signature of encode()
+and decode() instead of introducing an obscure workaround like
+unfolding.  Therefore, we changed the signature of them in 4.0.
+
+The change is simple, but backward-incompatible.  encode() and decode()
+do not return anything.  Instead, the codec framework will pass a
+MessageBuf<Object> so encode() and decode() can add the generated
+messages into the MessageBuf.

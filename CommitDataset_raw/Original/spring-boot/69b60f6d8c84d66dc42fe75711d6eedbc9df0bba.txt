@@ -1,0 +1,10 @@
+Remove HalJsonMvcEndpoint’s redirect and add links to both paths instead
+
+Previously, HalJsonMvcEndpoint used a redirect to go from path/ to path.
+When the actuator’s configured to use a custom context path this
+redirect was leading to an infinite redirect loop.
+
+This commit removes the redirect in favour of updating the controller
+advice to apply the links to requests for path and path/.
+
+Closes gh-4853

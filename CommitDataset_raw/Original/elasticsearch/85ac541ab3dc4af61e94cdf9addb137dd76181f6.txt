@@ -1,0 +1,10 @@
+Make NodeInfo#nodeVersion strongly-typed as Version (#29515)
+
+Today we have a nodeVersion property on the NodeInfo class that we use
+to carry around information about a standalone node that we will start
+during tests. This property is a String which we usually end up parsing
+to a Version anyway to do various checks on it. This can end up
+happening a lot during configuration so it would be more efficient and
+safer to have this already be strongly-typed as a Version and parsed
+from a String only once for each instance of NodeInfo. Therefore, this
+commit makes NodeInfo#nodeVersion strongly-typed as a Version.

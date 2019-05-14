@@ -1,0 +1,114 @@
+Further reduce ensureAccessible() overhead (#8895)
+
+
+Motivation:
+
+This PR fixes some non-negligible overhead discovered in the ByteBuf
+accessibility (non-zero refcount) checking. The cause turned out to be
+mostly twofold:
+- Unnecessary operations used to calculate the refcount from the "raw"
+encoded int field value
+- Call stack depths exceeding the default limit for inlining, in some
+places (CompositeByteBuf in particular)
+
+It's a follow-on from #8882 which uses the maxCapacity field for a
+simpler non-negative check. The performance gap between these two
+variants appears to be _mostly_ closed, but there's one exception which
+may warrant further analysis.
+
+Modifications:
+
+- Replace ABB.internalRefCount() with ByteBuf.isAccessible(), the
+default still checks for non-zero refCnt()
+- Just test for parity of raw refCnt instead of converting to "real",
+with fast-path for specific small values
+- Make sure isAccessible() is delegated by derived/wrapper ByteBufs
+- Use existing freed flag in CompositeByteBuf for faster isAccessible()
+- Manually inline some calls in methods like CompositeByteBuf.setLong()
+and AbstractReferenceCountedByteBuf.isAccessible() to reduce stack
+depths (to ensure default inlining limit isn't hit)
+- Add ByteBufAccessBenchmark which is an extension of
+UnsafeByteBufBenchmark (maybe latter could now be removed)
+
+Results:
+
+Before:
+
+Benchmark   (bufferType)  (checkAccessible)  (checkBounds)   Mode  Cnt
+Score          Error  Units
+readBatch         UNSAFE               true           true  thrpt   30
+84524972.863 ±   518338.811  ops/s
+readBatch   UNSAFE_SLICE               true           true  thrpt   30
+38608795.037 ±   298176.974  ops/s
+readBatch           HEAP               true           true  thrpt   30
+80003697.649 ±   974674.119  ops/s
+readBatch      COMPOSITE               true           true  thrpt   30
+18495554.788 ±   108075.023  ops/s
+setGetLong        UNSAFE               true           true  thrpt   30
+247069881.578 ± 10839162.593  ops/s
+setGetLong  UNSAFE_SLICE               true           true  thrpt   30
+196355905.206 ±  1802420.990  ops/s
+setGetLong          HEAP               true           true  thrpt   30
+245686644.713 ± 11769311.527  ops/s
+setGetLong     COMPOSITE               true           true  thrpt   30
+83170940.687 ±   657524.123  ops/s
+setLong           UNSAFE               true           true  thrpt   30
+278940253.918 ±  1807265.259  ops/s
+setLong     UNSAFE_SLICE               true           true  thrpt   30
+202556738.764 ± 11887973.563  ops/s
+setLong             HEAP               true           true  thrpt   30
+280045958.053 ±  2719583.400  ops/s
+setLong        COMPOSITE               true           true  thrpt   30
+121299806.002 ±  2155084.707  ops/s
+
+
+After:
+
+Benchmark   (bufferType)  (checkAccessible)  (checkBounds)   Mode  Cnt
+Score          Error  Units
+readBatch         UNSAFE               true           true  thrpt   30
+101641801.035 ±  3950050.059  ops/s
+readBatch   UNSAFE_SLICE               true           true  thrpt   30
+84395902.846 ±  4339579.057  ops/s
+readBatch           HEAP               true           true  thrpt   30
+100179060.207 ±  3222487.287  ops/s
+readBatch      COMPOSITE               true           true  thrpt   30
+42288494.472 ±   294919.633  ops/s
+setGetLong        UNSAFE               true           true  thrpt   30
+304530755.027 ±  6574163.899  ops/s
+setGetLong  UNSAFE_SLICE               true           true  thrpt   30
+212028547.645 ± 14277828.768  ops/s
+setGetLong          HEAP               true           true  thrpt   30
+309335422.609 ±  2272150.415  ops/s
+setGetLong     COMPOSITE               true           true  thrpt   30
+160383609.236 ±   966484.033  ops/s
+setLong           UNSAFE               true           true  thrpt   30
+298055969.747 ±  7437449.627  ops/s
+setLong     UNSAFE_SLICE               true           true  thrpt   30
+223784178.650 ±  9869750.095  ops/s
+setLong             HEAP               true           true  thrpt   30
+302543263.328 ±  8140104.706  ops/s
+setLong        COMPOSITE               true           true  thrpt   30
+157083673.285 ±  3528779.522  ops/s
+
+There's also a similar knock-on improvement to other benchmarks (e.g.
+HPACK encoding/decoding) as shown in #8882.
+
+For sanity I did a final comparison of the "fast path" tweak using one
+of the HPACK benchmarks:
+
+(rawCnt & 1) == 0:
+
+Benchmark                     (limitToAscii)  (sensitive)  (size)   Mode
+Cnt      Score     Error  Units
+HpackDecoderBenchmark.decode            true         true  MEDIUM  thrpt
+30  50914.479 ± 940.114  ops/s
+
+
+rawCnt == 2 || rawCnt == 4 || rawCnt == 6 || rawCnt == 8 ||  (rawCnt &
+1) == 0:
+
+Benchmark                     (limitToAscii)  (sensitive)  (size)   Mode
+Cnt      Score      Error  Units
+HpackDecoderBenchmark.decode            true         true  MEDIUM  thrpt
+30  60036.425 ± 1478.196  ops/s

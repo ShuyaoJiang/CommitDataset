@@ -1,0 +1,14 @@
+Peek into the content for @RequestBody(required=false)
+
+For @RequestBody(required=false), it is not sufficient to check if the
+InputStream is null. This change reads the first byte of the request
+InputStream to determine if the request body is empty or not.
+
+If the InputStream implementation supports mark(int) and reset(), then
+we use those. Otherwise we use PushbackInputStream to read and unread
+the first byte.
+
+All of this is done only if the required flag of @RequestBody is set
+to "false" (default is "true").
+
+Issue: SPR-9942

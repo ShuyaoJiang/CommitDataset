@@ -1,0 +1,14 @@
+Improve failure diagnostics for messing Bean Validation provider
+
+When the bean validation API is on the class path, but there is no
+provider available, the stack trace that results is pretty much
+useless. All the user needs to know is that the have the Bean
+Validation API on the class path and that they should also add
+an implementation, such as Hibernate Validator, if they want to
+use validation.
+
+This commit introduces a FailureAnalyser for ValidationException,
+that returns a FailureAnalysis when the ValidationException is a
+result of the situation described above.
+
+Closes gh-5332

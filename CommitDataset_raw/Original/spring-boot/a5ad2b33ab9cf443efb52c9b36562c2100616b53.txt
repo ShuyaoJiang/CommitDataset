@@ -1,0 +1,40 @@
+Enable JNDI lookups during app context refresh without changing TCCL
+
+When Tomcat is starting up and JNDI is enabled, it binds the web app
+class loader into its ContextBindings, thereby enabling JNDI lookups
+on any thread that uses the web app class loader as its thread context
+class loader. When Boot starts an application, the application context
+is refreshed on the main thread which has the app class loader as its
+TCCL. This meant that any JNDI lookups performed during refresh would
+fail.
+
+gh-2038 described this problem and a fix was made in ff99bb0. The
+fix was to set the main thread's TCCL to be Tomcat's web app class
+loader. This fixed the JNDI lookup problem, but it has become apparent
+that it has caused other problems when testing an application.
+
+The fix for gh-2038 sets the main thread's TCCL when embedded Tomcat
+starts (during application context refresh) and then restores it when
+embedded Tomcat stops (as a result of the application context being
+closed). This causes problems during testing as, when application
+context's are cached, the close is delayed. This means that the main
+thread's TCCL isn't restored, causing subsequent tests to run with the
+wrong TCCL.
+
+This commit takes a different approach to fixing gh-2038. Rather than
+changing the main thread's TCCL, it binds the app class loader into
+Tomcat's ContextBindings, thereby enabling JNDI lookups from the main
+thread. To avoid leaving a reference to the app class loader in
+Tomcat's ContextBindings, it unbinds the app class loader at the end
+of application context refresh. This narrows the scope of the fix so
+that it only applies during application context refresh which is the
+period in which JNDI lookups were problematic.
+
+Note that the original fix could have been modified to restore the
+TCCL once context refresh has completed rather than waiting for the
+context to be closed. However, my feeling is that leaving the TCCL
+unchanged and specifically addressing the JNDI problem by manipulating
+the context bindings is a more precise, and hopefully safer,
+solution.
+
+Closes gh-6053

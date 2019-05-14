@@ -1,0 +1,16 @@
+Fix backwards compatibility in WebContentInterceptor
+
+As of SPR-11792, WebContentGenerator and WebContentInterceptor offer
+new APIs and new behavior regarding HTTP caching, including the use of a
+new CacheControl class.
+
+Those changes broke part of the behavior in WebContentInterceptor. This
+class allows to override the global Cache configuration at the Generator
+level, using specific mappings. Prior to this change, those mappings
+would not properly apply the HTTP caching configuration when using
+deprecated configuration settings in WebContentGenerator.
+
+This change fixes those backwards compatibility issues for
+WebContentInterceptor users.
+
+Issue: SPR-13207

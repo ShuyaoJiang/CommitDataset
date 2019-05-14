@@ -1,0 +1,22 @@
+Add cache for CNAME mappings resolved during lookup of DNS entries. (#8314)
+
+* Add cache for CNAME mappings resolved during lookup of DNS entries.
+
+Motivation:
+
+If the CNAMEd hostname is backed by load balancing component, typically the final A or AAAA DNS records have small TTL. However, the CNAME record itself is setup with longer TTL.
+
+For example:
+* x.netty.io could be CNAMEd to y.netty.io with TTL of 5 min
+* A / AAAA records for y.netty.io has a TTL of 0.5 min
+
+In current Netty implementation, original hostname is saved in resolved cached with the TTL of final A / AAAA records. When that cache entry expires, Netty recursive resolver sends at least two queries — 1st one to be resolved as CNAME record and the 2nd one to resolve the hostname in CNAME record.
+If CNAME record was cached, only the 2nd query would be needed most of the time. 1st query would be needed less frequently.
+
+Modifications:
+
+Add a new CnameCache that will be used to cache CNAMEs and so may reduce queries.
+
+Result:
+
+Less queries needed when CNAME is used.

@@ -1,0 +1,33 @@
+Run nested classes for real this time.
+
+I had thought that CL 157867713 accomplished this, but it didn't. My CL description there says that I tried both an <exclude> approach and a %regex approach, and only %regex worked. But I just reran tests before and after that CL (with both Maven 3.5.0 and Maven 3.1.1), and the CL makes no difference in the number of tests run, and in particular it doesn't run nested tests.
+
+My theory is:
+- I inserted a fail() call into a *specific* test and looked for the failure, rather than looking at the total number of tests. That still isn't a complete explanation, of course, because that failure should have happened in both cases or in neither. So probably also...
+- I had both <exclude> and a *different* %regex value present at one point, and *that* was enough to run this particular nested test.
+- Then I removed <exclude>, I assume because I got confused about what I was testing.
+- I also removed the fail() call.
+- Finally, I changed the %regex value to avoid running AbstractPackageSanityTests and other classes that don't end in "Test." If I had still been running nested classes at this point, still had the fail() call present, and still been looking for the failure, I would have found that it was no longer running.
+
+(Update: Alternative simpler theory: The test I inserted the fail() call in was a FooTest class nested inside a BarTests class whose suite() method adds FooTest. This test would not have run originally (because "BarTests" doesn't match "**/*Test.java" and the FooTest class is nested and thus excluded). But it would have run during my initial testing of the new CL because I originally included *Tests as well as *Test. But then I removed the *Tests part because I didn't see any top-level classes of that name other than the problematic PackageSanityTests classes. At that point, I didn't retest the original failure. Unfortunately, my .bash_history cuts off right around the time of the original CL (but that's another story... :)).)
+
+As best I can tell:
+
+- The old "**/*Test.java" *does* run some nested test classes *if* I add <excludes>. Even though Maven purports to accept the name of a .java file, it appears to be internally turning it into a class name, so it can match nested classes that don't have a top-level source file of their own.
+- But it doesn't run *all* nested tests, since some of their names don't fit the "FooTest" pattern. Specifically, it runs the same set of tests as the existing %regex filter.
+
+So it seems that we don't need %regex at all. But there's a catch: Maven now tries to run various nested classes that aren't supposed to be run as tests. And the easiest way to get the correct set of classes is to use regex after all.
+
+I haven't spent a ton of time trying to find the absolute most correct set of tests, but the filters in this CL should be pretty close. The filters include everything, whether a top-level class or nested class, with a new documented exclusions.
+
+guava-tests:
+before: Tests run: 833248, Failures: 0, Errors: 0, Skipped: 0
+after: Tests run: 837060, Failures: 0, Errors: 0, Skipped: 0
+
+guava-testlib:
+before: Tests run: 118427, Failures: 0, Errors: 0, Skipped: 0
+after: Tests run: 850859, Failures: 0, Errors: 0, Skipped: 0 [mostly from running OpenJdk6*Tests (OK, those names are misnomers now, but whatever :))]
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=174501246

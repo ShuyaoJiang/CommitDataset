@@ -1,0 +1,3 @@
+Correctly update Channel.isWritable() when the write happens from outside the EventLoop in a fast fashion. Fixes [#1697]
+
+Introduce a new interface called MessageSizeEstimator. This can be specific per Channel (via ChannelConfig). The MessageSizeEstimator will be used to estimate for a message that should be written. The default implementation handles ByteBuf, ByteBufHolder and FileRegion. A user is free to plug-in his/her own implementation for different behaviour.

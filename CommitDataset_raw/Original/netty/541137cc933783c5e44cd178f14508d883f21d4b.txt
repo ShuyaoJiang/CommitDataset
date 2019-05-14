@@ -1,0 +1,11 @@
+HTTP/2 Flow Controller interface updates
+
+Motivation:
+Flow control is a required part of the HTTP/2 specification but it is currently structured more like an optional item. It must be accessed through the property map which is time consuming and does not represent its required nature. This access pattern does not give any insight into flow control outside of the codec (or flow controller implementation).
+
+Modifications:
+1. Create a read only public interface for LocalFlowState and RemoteFlowState.
+2. Add a LocalFlowState localFlowState(); and RemoteFlowState remoteFlowState(); to Http2Stream.
+
+Result:
+Flow control is not part of the Http2Stream interface. This clarifies its responsibility and logical relationship to other interfaces. The flow controller no longer must be acquired though a map lookup.

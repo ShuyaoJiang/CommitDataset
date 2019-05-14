@@ -1,0 +1,18 @@
+[Zen2] Change MetaDataStateFormat write semantics (#34709)
+
+Currently, if MetaDataStateFormat.write throws an IOExceptions if there was some problem with persisting state to disk. If an exception is thrown, loadLatestState may read either old state or new state. This is not enough for the Zen2 algorithm. In case of failure, we need to distinguish between 2 cases: storage is left in clean state or storage is left in a dirty state.
+If storage is left in the clean state, loadLatestState may read only old state. If storage is left in a dirty state, loadLatestState may read either old or new state.
+If an exception occurs when writing the manifest file to disk this distinction is important for Zen2. If storage is clean, the node can continue to be a part of the cluster and may try to accept further cluster state updates (if it fails to accept cluster state updates it will be kicked off from the cluster using different mechanism). But if storage is dirty, the node should be restarted and it will be able to start up successfully only once it successfully re-writes manifest file to disk.
+This commit changes MetaDataStateFormat.write signature, replacing IOException with WriteStateException, which “isDirty” method could be used to distinguish between 2 failure cases.
+We need to minimise the number of failures, that leave storage in a dirty state. That’s why this PR changes the algorithm that is used to store state to disk. It has the following layout:
+
+1. For the first state location, create and fsync tmp file with state content.
+2. For each extra location, copy and fsync tmp file with state content.
+2. Atomically rename tmp file in the first location.
+3. For each extra location, atomically rename tmp file.
+4. For each location, fsync state directory.
+5. Perform cleanup of old files, ignoring exceptions.
+If an exception occurs in steps 1-3, storage is clearly in the clean state. If an exception occurs in step 5, storage is clearly in dirty state. Exception in step 4 is questionable, there are 2 options:
+1. Consider it as a failure. If the first disk fails, state disappears. So this is a failure and storage is in a dirty state.
+2. Do not consider it as failure at all, ignore disk failures.
+This commit prefers 1st approach and MetaDataTestFormatTests.testFailRandomlyAndReadAnyState tests for disk failures.

@@ -1,0 +1,13 @@
+Guard against NoClassDefFoundError when trying to load Unsafe.
+
+Motivation:
+
+OSGI and other enviroments may not allow to even load Unsafe which will lead to an NoClassDefFoundError when trying to access it. We should guard against this.
+
+Modifications:
+
+Catch NoClassDefFoundError when trying to load Unsafe.
+
+Result:
+
+Be able to use netty with a strict OSGI config.

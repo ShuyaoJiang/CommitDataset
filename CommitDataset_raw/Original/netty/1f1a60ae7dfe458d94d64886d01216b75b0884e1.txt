@@ -1,0 +1,44 @@
+Use Netty's DefaultPriorityQueue instead of JDK's PriorityQueue for scheduled tasks
+
+Motivation:
+
+`AbstractScheduledEventExecutor` uses a standard `java.util.PriorityQueue` to keep track of task deadlines. `ScheduledFuture.cancel` removes tasks from this `PriorityQueue`. Unfortunately, `PriorityQueue.remove` has `O(n)` performance since it must search for the item in the entire queue before removing it. This is fast when the future is at the front of the queue (e.g., already triggered) but not when it's randomly located in the queue.
+
+Many servers will use `ScheduledFuture.cancel` on all requests, e.g., to manage a request timeout. As these cancellations will be happen in arbitrary order, when there are many scheduled futures, `PriorityQueue.remove` is a bottleneck and greatly hurts performance with many concurrent requests (>10K).
+
+Modification:
+
+Use netty's `DefaultPriorityQueue` for scheduling futures instead of the JDK. `DefaultPriorityQueue` is almost identical to the JDK version except it is able to remove futures without searching for them in the queue. This means `DefaultPriorityQueue.remove` has `O(log n)` performance.
+
+Result:
+
+Before - cancelling futures has varying performance, capped at `O(n)`
+After - cancelling futures has stable performance, capped at `O(log n)`
+
+Benchmark results
+
+After - cancelling in order and in reverse order have similar performance within `O(log n)` bounds
+```
+Benchmark                                           (num)   Mode  Cnt       Score      Error  Units
+ScheduledFutureTaskBenchmark.cancelInOrder            100  thrpt   20  137779.616 ± 7709.751  ops/s
+ScheduledFutureTaskBenchmark.cancelInOrder           1000  thrpt   20   11049.448 ±  385.832  ops/s
+ScheduledFutureTaskBenchmark.cancelInOrder          10000  thrpt   20     943.294 ±   12.391  ops/s
+ScheduledFutureTaskBenchmark.cancelInOrder         100000  thrpt   20      64.210 ±    1.824  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder     100  thrpt   20  167531.096 ± 9187.865  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder    1000  thrpt   20   33019.786 ± 4737.770  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder   10000  thrpt   20    2976.955 ±  248.555  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder  100000  thrpt   20     362.654 ±   45.716  ops/s
+```
+
+Before - cancelling in order and in reverse order have significantly different performance at higher queue size, orders of magnitude worse than the new implementation.
+```
+Benchmark                                           (num)   Mode  Cnt       Score       Error  Units
+ScheduledFutureTaskBenchmark.cancelInOrder            100  thrpt   20  139968.586 ± 12951.333  ops/s
+ScheduledFutureTaskBenchmark.cancelInOrder           1000  thrpt   20   12274.420 ±   337.800  ops/s
+ScheduledFutureTaskBenchmark.cancelInOrder          10000  thrpt   20     958.168 ±    15.350  ops/s
+ScheduledFutureTaskBenchmark.cancelInOrder         100000  thrpt   20      53.381 ±    13.981  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder     100  thrpt   20  123918.829 ±  3642.517  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder    1000  thrpt   20    5099.810 ±   206.992  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder   10000  thrpt   20      72.335 ±     0.443  ops/s
+ScheduledFutureTaskBenchmark.cancelInReverseOrder  100000  thrpt   20       0.743 ±     0.003  ops/s
+```

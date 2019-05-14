@@ -1,0 +1,17 @@
+Ensure X509KeyManager methods are called on the correct time when using server-side and support more methods of ExtendedSSLSession. (#8283)
+
+Motivation:
+
+Before when on server-side we just called the X509KeyManager methods when handshake() was called the first time which is not quite correct as we may not have received the full SSL hello / handshake and so could not extra for example the SNI hostname that was requested.
+OpenSSL exposes the SSL_CTX_set_cert_cb function which allows to set a callback which is executed at the correct moment, so we should use it. This also allows us to support more methods of ExtendedSSLSession easily.
+
+Modifications:
+
+- Make use of new methods exposed by netty-tcnative since https://github.com/netty/netty-tcnative/pull/388 to ensure we select the key material at the correct time.
+- Implement more methods of ExtendedOpenSslSession
+- Add unit tests to ensure we are able to retrieve various things on server-side in the X509KeyManager and so verify it is called at the correct time.
+- Simplify code by using new netty-tcnative methods.
+
+Result:
+
+More correct implementation for server-side usage and more complete implemented of ExtendedSSLSession.

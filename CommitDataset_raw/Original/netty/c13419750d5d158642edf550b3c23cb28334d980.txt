@@ -1,0 +1,18 @@
+Improve Bzip2BitReader/Writer
+
+Motivation:
+
+Before this changes Bzip2BitReader and Bzip2BitWriter accessed to ByteBuf byte by byte. So tests for Bzip2 compression codec takes a lot of time if we ran them with paranoid level of resource leak detection. For more information see comments to #2681 and #2689.
+
+Modifications:
+
+- Increased size of bit buffers from 8 to 64 bits.
+- Improved reading and writing operations.
+- Save link to incoming ByteBuf inside Bzip2BitReader.
+- Added methods to check possible readable bits and bytes in Bzip2BitReader.
+- Updated Bzip2 classes to use new API of Bzip2BitReader.
+- Added new constants to Bzip2Constants.
+
+Result:
+
+Increased size of bit buffers and improved performance of Bzip2 compression codec (for general work by 13% and for tests with paranoid level of resource leak detection by 55%).

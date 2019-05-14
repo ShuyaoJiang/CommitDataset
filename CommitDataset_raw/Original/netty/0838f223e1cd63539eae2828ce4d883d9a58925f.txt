@@ -1,0 +1,13 @@
+Decouple AbstractChannel and AbstractChannelHandlerContext
+
+Motivation:
+
+We do a "blind" cast to AbstractChannel in AbstractChannelHandlerContext which we should better no do. It would be better to decouble AbstractChannelHandlerContext from AbstractChannel.
+
+Modifications:
+
+Decouble AbstractChannelHandlerContext from AbstractChannel by move logic to DefaultChannelPipeline
+
+Result:
+
+Less coubling and less casting.

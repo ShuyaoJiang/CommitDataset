@@ -1,0 +1,24 @@
+HttpMethod#valueOf improvement
+
+Motivation:
+HttpMethod#valueOf shows up on profiler results in the top set of
+results. Since it is a relatively simple operation it can be improved in
+isolation.
+
+Modifications:
+- Introduce a special case map which assigns each HttpMethod to a unique
+index in an array and provides constant time lookup from a hash code
+algorithm. When the bucket is matched we can then directly do equality
+comparison instead of potentially following a linked structure when
+HashMap has hash collisions.
+
+Result:
+~10% improvement in benchmark results for HttpMethod#valueOf
+
+Benchmark                                     Mode  Cnt   Score   Error   Units
+HttpMethodMapBenchmark.newMapKnownMethods    thrpt   16  31.831 ± 0.928  ops/us
+HttpMethodMapBenchmark.newMapMixMethods      thrpt   16  25.568 ± 0.400  ops/us
+HttpMethodMapBenchmark.newMapUnknownMethods  thrpt   16  51.413 ± 1.824  ops/us
+HttpMethodMapBenchmark.oldMapKnownMethods    thrpt   16  29.226 ± 0.330  ops/us
+HttpMethodMapBenchmark.oldMapMixMethods      thrpt   16  21.073 ± 0.247  ops/us
+HttpMethodMapBenchmark.oldMapUnknownMethods  thrpt   16  49.081 ± 0.577  ops/us

@@ -1,0 +1,10 @@
+Fix resync request serialization
+
+This commit addresses a subtle bug in the serialization routine for
+resync requests. The problem here is that Translog.Operation#readType is
+not compatible with the implementations of
+Translog.Operation#writeTo. Unfortunately, this issue prevents
+primary-replica from succeeding, issues which we will address in
+follow-ups.
+
+Relates #27418

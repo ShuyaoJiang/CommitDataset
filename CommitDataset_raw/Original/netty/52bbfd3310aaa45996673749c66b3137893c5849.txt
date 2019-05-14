@@ -1,0 +1,11 @@
+epoll_wait timeout reset when called multiple times
+
+Motivation:
+epoll_wait accepts a timeout argument which will specify the maximum amount of time the epoll_wait will wait for an event to occur. If the epoll_wait method returns for any reason that is not fatal (e.g. EINTR) the original timeout value is re-used. This does not honor the timeout interface contract and can lead to unbounded time in epoll_wait.
+
+Modifications:
+- The time taken by epoll_wait should be decremented before calling epoll_wait again, and if the remaining time is exhausted we should return 0 according to the epoll_wait interface docs http://man7.org/linux/man-pages/man2/epoll_wait.2.html
+- link librt which is needed for some platforms to use clock_gettime
+
+Result:
+epoll_wait will wait for at most timeout ms according to the epoll_wait interface contract.

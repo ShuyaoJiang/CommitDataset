@@ -1,0 +1,13 @@
+[#6023] Ensure LastInboundHandler correctly handle different events / data
+
+Motivation:
+
+LastInboundHandler maintains 2 queues which may contain the same data and tries to match these up when you read elements out of it. Because of this it can happen that you remove an element only out of one queue and so double free stuff later.
+
+Modifications:
+
+Just use one "queue" to store things.
+
+Result:
+
+Not possible to only remove things from one queue and so get into trouble later when release everything that sits in the handler.

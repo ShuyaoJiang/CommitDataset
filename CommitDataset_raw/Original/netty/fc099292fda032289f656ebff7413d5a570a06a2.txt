@@ -1,0 +1,10 @@
+HTTP/2 DefaultHttp2ConnectionEncoder data frame size incorrect if error
+
+Motivation:
+If an error occurs during a write operation then DefaultHttp2ConnectionEncoder.FlowControlledData will clear the CoalescingBufferQueue which will reset the queue's readable bytes to 0. To recover from an error the DefaultHttp2RemoteFlowController will attempt to return bytes to the flow control window, but since the frame has reset its own size this will lead to invalid flow control accounting.
+
+Modifications:
+- DefaultHttp2ConnectionEncoder.FlowControlledData should not reset its size if an error occurs
+
+Result:
+No more flow controller errors due to DefaultHttp2ConnectionEncoder.FlowControlledData setting its size to 0 if an error occurs.

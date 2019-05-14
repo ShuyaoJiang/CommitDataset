@@ -1,0 +1,15 @@
+(Nio|Epoll)EventLoop.pendingTasks does not need to dispatch to the EventLoop  (#8197)
+
+Motivation:
+
+EventLoop.pendingTasks should be (reasonably) cheap to invoke so it can be used within observability. 
+
+Modifications:
+
+Remove code that dispatch access to the internal taskqueue to the EventLoop when invoked as this is not needed anymore with the current MPSC queues we are using. 
+
+See https://github.com/netty/netty/issues/8196#issuecomment-413653286.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8196

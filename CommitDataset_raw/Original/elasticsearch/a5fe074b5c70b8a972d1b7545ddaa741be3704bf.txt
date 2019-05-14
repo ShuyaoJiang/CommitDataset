@@ -1,0 +1,10 @@
+LoggingAuditTrail emit events before local address available (elastic/x-pack-elasticsearch#3061)
+
+Register LoggingAuditTrail as a ClusterStateListener.
+Avoid querying for the localNode while on the ClusterStateApplier thread,
+which tripps assertion. This can happen when logging audit events that
+originate from the system.
+
+relates elastic/x-pack-elasticsearch#3057
+
+Original commit: elastic/x-pack-elasticsearch@66bc59682dd06c123f1daec63c8dc44fa429fd05

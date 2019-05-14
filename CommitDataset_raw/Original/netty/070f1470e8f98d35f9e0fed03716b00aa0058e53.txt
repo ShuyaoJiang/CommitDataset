@@ -1,0 +1,15 @@
+[#4185] SpdyHttpEncoder fails to convert HttpResponse to SpdyFrame
+
+Motivation:
+
+When SpdyHttpEncoder attempts to create an SpdyHeadersFrame from a HttpResponse an IllegalArgumentException is thrown if the original HttpResponse contains a header that includes uppercase characters. The IllegalArgumentException is thrown due to the additional validation check introduced by #4047.
+
+Previous versions of the SPDY codec would handle this by converting the HTTP header name to lowercase before adding the header to the SpdyHeadersFrame.
+
+Modifications:
+
+Convert the header name to lowercase before adding it to SpdyHeaders
+
+Result:
+
+SpdyHttpEncoder can now convert a valid HttpResponse into a valid SpdyFrame

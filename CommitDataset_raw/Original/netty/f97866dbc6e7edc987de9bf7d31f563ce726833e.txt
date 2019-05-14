@@ -1,0 +1,13 @@
+Expose SniHandler's replaceHandler() so that users can implement custom behavior.
+
+Motivation
+
+The SniHandler is currently hiding its replaceHandler() method and everything that comes with it. The user has no easy way of getting a hold onto the SslContext for the purpose of reference counting for example. The SniHandler does have getter methods for the SslContext and hostname but they're not very practical or useful. For one the SniHandler will remove itself from the pipeline and we'd have to track a reference of it externally and as we saw in #5745 it'll possibly leave its internal "selection" object with the "EMPTY_SELECTION" value (i.e. we've just lost track of the SslContext).
+
+Modifications
+
+Expose replaceHandler() and allow the user to override it and get a hold onto the hostname, SslContext and SslHandler that will replace the SniHandler.
+
+Result
+
+It's possible to get a hold onto the SslContext, the hostname and the SslHandler that is about to replace the SniHandler. Users can add additional behavior.

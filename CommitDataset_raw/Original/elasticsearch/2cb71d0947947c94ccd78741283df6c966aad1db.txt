@@ -1,0 +1,12 @@
+Refactor IndicesOptions to not be byte-based (#30586)
+
+* Refactor IndicesOptions to not be byte-based
+
+This refactors IndicesOptions to be enum/enummap based rather than using a byte
+as a bitmap for each of the options. This is necessary because we'd like to add
+additional options, but we ran out of bits.
+
+Backwards compatibility is kept for earlier versions so the option serialization
+does not change the options.
+
+Relates sort of to #30188

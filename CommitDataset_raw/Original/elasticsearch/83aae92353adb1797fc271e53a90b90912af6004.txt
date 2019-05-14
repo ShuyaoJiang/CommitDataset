@@ -1,0 +1,15 @@
+Use bash in packaging heredocs (elastic/x-pack-elasticsearch#4145)
+
+In some places in the packaging tests we use heredocs to run some
+scripts, for example, under the root user. However, we were running
+these heredocs under sh instead of bash. This is confusing since we use
+bash everywhere and we end up with syntax in the herdocs that expects
+bash but will not necessarily be run under bash. For example, one
+circumstance where this arises is the bash syntax [[. This leads to
+packaging test failures on some systems (e.g., the debian-8 box) that
+are solely due to this sh/bash distinction. We should really be using
+bash everywhere, it is the shell that we settled on for all of our
+scripts everywhere awhile ago and then we can avoid this confusion. This
+commit replaces the usage of sh in the X-Pack packaging tests with bash.
+
+Original commit: elastic/x-pack-elasticsearch@7555bb32c83cf0bf8a0be394a041ef5212c03697

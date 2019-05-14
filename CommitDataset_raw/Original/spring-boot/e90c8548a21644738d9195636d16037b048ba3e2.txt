@@ -1,0 +1,9 @@
+Make MetricFilter auto-configuration conditional on OncePerRequestFilter
+
+In addition to requiring the Servlet API to be on the classpath,
+MetricFilter requires spring-web to also be on the classpath as it
+extends OncePerRequestFilter. This commit updates the auto-configuration
+for MetricFilter so that it will be disabled in the absence of a 
+dependency on spring-web.
+
+Fixes gh-1664

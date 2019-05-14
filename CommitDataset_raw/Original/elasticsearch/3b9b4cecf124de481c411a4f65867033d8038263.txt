@@ -1,0 +1,11 @@
+Fix SSLConfigurationReloaderTests failure tests (#39408)
+
+This change fixes the tests that expect the reload of a
+SSLConfiguration to fail. The tests relied on an incorrect assumption
+that the reloader only called reload on for an SSLConfiguration if the
+key and trust managers were successfully reloaded, but that is not the
+case. This change removes the fail call with a wrapped call to the
+original method and captures the exception and counts down a latch to
+make these tests consistently tested.
+
+Closes #39260

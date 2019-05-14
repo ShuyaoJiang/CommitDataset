@@ -1,0 +1,11 @@
+Possible leak in AbstractDiskHttpData
+
+Motivation:
+SonarQube (clinker.netty.io/sonar) reported a resource which may not have been properly closed in all situations in AbstractDiskHttpData.
+
+Modifications:
+- Ensure file channels are closed in the presence of exceptions.
+- Correct instances where local channels were created but potentially not closed.
+
+Result:
+Less leaks. Less SonarQube vulnerabilities.

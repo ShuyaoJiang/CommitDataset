@@ -1,0 +1,11 @@
+Re-enable FlushIT tests
+
+These tests failed due to in flight operations on the primary shard.
+Sadly, we don't have any clue on those ops. This commit unmutes
+these tests and logs the acquirers when checking for ongoing ops.
+
+1> [2018-05-02T23:10:32,145][INFO ][o.e.i.f.FlushIT          ] Third
+seal: Total shards: [2], failed: [true], reason: [[1] ongoing operations
+on primary], detail: []
+
+Relates #29392

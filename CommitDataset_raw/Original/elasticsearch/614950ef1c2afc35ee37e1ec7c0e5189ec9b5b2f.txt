@@ -1,0 +1,11 @@
+Handle requiring versioned java home during execution (#37599)
+
+Currently bwc builds require different java home environment variables
+depending on the version of elasticsearch being built. The java home
+version checks are run at the end of gradle configuration, when the task
+graph is ready. However, we do not know which versions are needed for
+bwc builds until execution time, when we have finished checking out the
+version of elasticsearch to be built. This commit accounts for late java
+home checks, checking immediately instead of delaying the check.
+
+closes #37586

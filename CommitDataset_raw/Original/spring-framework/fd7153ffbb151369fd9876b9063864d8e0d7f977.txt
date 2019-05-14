@@ -1,0 +1,12 @@
+Do not retain cache transaction managers
+
+Previously, cache transaction managers may be  retained outside the
+boundaries of an application context with AspectJ since an aspect is
+basically a singleton for the current class loader.
+
+This commit adds a "clearTransactionManagerCache" that is similar to the
+"clearMetadataCache" introduced in CacheAspectSupport: whenever the
+context is disposed, the cache is cleared to remove any reference to a
+transaction manager defined by that context.
+
+Issue: SPR-12518

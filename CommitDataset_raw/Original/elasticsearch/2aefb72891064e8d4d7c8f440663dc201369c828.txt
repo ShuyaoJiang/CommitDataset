@@ -1,0 +1,10 @@
+Choose JVM options ergonomically
+
+With this commit we add the possibility to define further JVM options (and
+system properties) based on the current environment. As a proof of concept, it
+chooses Netty's allocator ergonomically based on the maximum defined heap size.
+We switch to the unpooled allocator at 1GB heap size (value determined
+experimentally, see #30684 for more details). We are also explicit about the
+choice of the allocator in either case.
+
+Relates #30684

@@ -1,0 +1,8 @@
+Don't use `kill -hup` in the launch script
+
+The HUP signal was being used to stop the service and for some reason,
+sometimes it was being ignored. This commit change forces the use of the
+TERM signal (the default signal of kill).
+
+Fixes gh-4378
+Closes gh-4414

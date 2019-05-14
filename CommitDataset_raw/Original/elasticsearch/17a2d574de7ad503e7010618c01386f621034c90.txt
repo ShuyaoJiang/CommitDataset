@@ -1,0 +1,10 @@
+Obey translog durability in global checkpoint sync
+
+After write operations in some situations we fire a post-operation
+global checkpoint sync. The global checkpoint sync unconditionally
+fsyncs the translog and this can then look like an fsync
+per-request. This violates the translog durability settings on the index
+if this durability is set to async. This commit changes the global
+checkpoint sync to observe the translog durability.
+
+Relates #27641

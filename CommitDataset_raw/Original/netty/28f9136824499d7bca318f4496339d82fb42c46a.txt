@@ -1,0 +1,10 @@
+ Replace ConcurrentHashMap at allLeaks with a thread-safe set (#8467)
+
+Motivation:
+allLeaks is to store the DefaultResourceLeak. When we actually use it, the key is DefaultResourceLeak, and the value is actually a meaningless value.
+We only care about the keys of allLeaks and don't care about the values. So Set is more in line with this scenario.
+Using Set as a container is more consistent with the definition of a container than Map.
+
+Modification:
+
+Replace allLeaks with set. Create a thread-safe set using 'Collections.newSetFromMap(new ConcurrentHashMap<DefaultResourceLeak<?>, Boolean>()).'

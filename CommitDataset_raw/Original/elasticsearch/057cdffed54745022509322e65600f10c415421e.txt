@@ -1,0 +1,10 @@
+[ML] Refactor DataStreamDiagnostics to use array (#30129)
+
+This commit refactors the DataStreamDiagnostics class
+achieving the following advantages:
+
+- simpler code; by encapsulating the moving bucket histogram
+into its own class
+- better performance; by using an array to store the buckets
+instead of a map
+- explicit handling of gap buckets; in preparation of fixing #30080

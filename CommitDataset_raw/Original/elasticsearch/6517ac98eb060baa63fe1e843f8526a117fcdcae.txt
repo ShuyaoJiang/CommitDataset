@@ -1,0 +1,11 @@
+Fail if reading from closed KeyStoreWrapper (#30394)
+
+In #28255 the implementation of the elasticsearch.keystore was changed
+to no longer be built on top of a PKCS#12 keystore. A side effect of
+that change was that calling getString or getFile on a closed
+KeyStoreWrapper ceased to throw an exception, and would instead return
+a value consisting of all 0 bytes.
+
+This change restores the previous behaviour as closely as possible.
+It is possible to retrieve the _keys_ from a closed keystore, but any
+attempt to get or set the entries will throw an IllegalStateException.

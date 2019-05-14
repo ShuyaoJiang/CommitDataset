@@ -1,0 +1,10 @@
+Fix more query extraction bugs. (#29388)
+
+I found the following bugs:
+ - The 6.0 logic for conjunctions didn't work when there were only `match_all`
+   queries in MUST/FILTER clauses as they didn't propagate the `matchAllDocs`
+   flag.
+ - Some queries still had the same issue as `BooleanQuery` used to have with
+   duplicate terms (see #28353), eg. `MultiPhraseQuery`.
+
+Closes #29376

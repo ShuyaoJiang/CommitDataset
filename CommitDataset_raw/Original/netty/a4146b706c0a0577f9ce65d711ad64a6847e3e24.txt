@@ -1,0 +1,23 @@
+Do not enforce arbitrary max header list size in HpackEncoder (#7853)
+
+Motivation:
+
+When connecting to an HTTP/2 server that did not set any value for the
+SETTINGS_MAX_HEADER_LIST_SIZE in the settings frame, the netty client was
+imposing an arbitrary maximum header list size of 8kB. There should be no need
+for the client to enforce such a limit if the server has not specified any
+limit. This caused an issue for a grpc-java client that needed to send a large
+header to a server via an Envoy proxy server. The error condition is
+demonstrated here: https://github.com/JLofgren/demo-grpc-java-bug-4284
+
+Fixes grpc-java issue #4284 - https://github.com/grpc/grpc-java/issues/4284
+and netty issue #7825 - https://github.com/netty/netty/issues/7825
+
+Modifications:
+
+In HpackEncoder use MAX_HEADER_LIST_SIZE as default maxHeader list size.
+
+Result:
+
+HpackEncoder will only enforce a max header list size if the server has
+specified a limit in its settings frame.

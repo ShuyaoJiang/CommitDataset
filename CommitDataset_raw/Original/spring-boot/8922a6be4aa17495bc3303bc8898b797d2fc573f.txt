@@ -1,0 +1,13 @@
+Ignore exceptions while resolving placeholders in PropertySources
+
+When a PropertySourcesPropertyValues is used to bind Environment
+values to a bean (or the SpringApplication) it tries to resolve
+placeholders eagerly in the Environment. Any that fail might not
+actually be a problem for users (until validation is done it's
+impossible to tell even whether that value was needed for the
+ongoing binding or not).
+
+Fixed by ignoring exceptions in the PropertySourcesPropertyValues
+constructor.
+
+Fixes gh-108

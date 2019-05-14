@@ -1,0 +1,14 @@
+Adjust testGetSslCertificates to run in FIPS (#40046)
+
+As discovered in #40041, when parsing certificates from files, the
+SUN Security Provider normalizes DNs from parsed certificates by
+adding spaces between RDNs, while the BouncyCastle one (which we
+use in FIPS tests) does not.
+
+We could proceed to normalize the DNs in the same manner in this
+test by using i.e. the Unbound LDAP SDK but since the goal of this
+test is to validate that we do get to read these exact certificates
+from our trust sources and not to validate subject DNs, this commit
+changes the test to check the serial number instead
+
+Resolves: #40041

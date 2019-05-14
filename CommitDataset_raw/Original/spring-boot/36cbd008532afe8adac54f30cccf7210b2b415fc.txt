@@ -1,0 +1,8 @@
+Disable AssertJ's bare-named property accessor discovery
+
+AssertJ includes a change in 3.12 that means that, by default, it now incorrectly
+identifies some of the builder methods on CacheControl as accessor methods for its fields.
+This commit restores the behaviour of 3.11 so that a method is only considered to be a
+property accessor if a matches the Java bean naming conventions.
+
+Closes gh-16145

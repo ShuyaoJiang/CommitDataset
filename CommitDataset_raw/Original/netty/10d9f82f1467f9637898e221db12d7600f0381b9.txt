@@ -1,0 +1,10 @@
+Remove duplicate call to SSLContext.setVerify from ReferenceCountedOpenSslServerContext
+
+Motivation:
+5e649850898889a8d2f1e526db610a8fca19c1ff introduced support for the KeyManagerFactory while using OpenSSL. This same commit also introduced 2 calls to SSLContext.setVerify when 1 should be sufficient.
+
+Modifications:
+- Remove the duplicate call to SSLContext.setVerify
+
+Result:
+Less duplicate code in ReferenceCountedOpenSslServerContext.

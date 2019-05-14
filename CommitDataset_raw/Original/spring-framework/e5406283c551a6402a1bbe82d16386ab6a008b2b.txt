@@ -1,0 +1,10 @@
+Polish DefaultHandshakeHandler
+
+After this change the DefaultHandshakeHandler delegates to a
+server-specific RequestUpgradeStrategy to update the HTTP response for
+the handshake request and to begin the WebSocket interaction.
+
+The DefaultHandshakeHandler however still retains the initial
+validation of the WebSocket handshake including negotation of origin,
+sub-protocol, etc. This allows sub-classes to override various
+aspects of the negotiation independant of the WebSocket engine.

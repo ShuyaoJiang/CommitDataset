@@ -1,0 +1,30 @@
+Fix invalid memory access in AIO writes
+
+To perform writes in AioSocketChannel, we get a ByteBuffer view of the
+outbound buffer and specify it as a parameter when we call
+AsynchronousSocketChannel.write().
+
+In most cases, the write() operation is finished immediately.  However,
+sometimes, it is scheduled for later execution.  In such a case, there's
+a chance for a user's handler to append more data to the outbound
+buffer.
+
+When more data is appended to the outbound buffer, the outbound buffer
+can expand its capacity by itself.  Changing the capacity of a buffer is
+basically made of the following steps:
+
+1. Allocate a larger new internal memory region.
+2. Copy the current content of the buffer to the new memory region.
+3. Rewire the buffer so that it refers to the new region.
+4. Deallocate the old memory region.
+
+Because the old memory region is deallocated at the step 4, the write
+operation scheduled later will access the deallocated region, leading
+all sort of data corruption or even segfaults.
+
+To prevent this situation, I added suspendIntermediaryDeallocations()
+and resumeIntermediaryDeallocations() to UnsafeByteBuf.
+
+AioSocketChannel.doFlushByteBuf() now calls suspendIntermediaryDealloc()
+to defer the deallocation of the old memory regions until the completion
+handler is notified.

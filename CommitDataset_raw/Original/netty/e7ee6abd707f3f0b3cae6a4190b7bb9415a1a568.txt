@@ -1,0 +1,14 @@
+Guard against re-entrance in PendingWriteQueue.
+
+Motivation:
+
+PendingWriteQueue should guard against re-entrant writes once
+removeAndFailAll() is run.
+
+Modifications:
+
+removeAndFailAll() should repeat until the queue is finally empty.
+
+Result:
+
+assertEmpty() will always hold.

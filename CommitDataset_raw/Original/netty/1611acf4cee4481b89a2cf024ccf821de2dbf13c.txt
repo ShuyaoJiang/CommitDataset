@@ -1,0 +1,14 @@
+Fix CharSequenceValueConverter.convertToByte implementation for AsciiString (#7994)
+
+Motivation:
+
+The implementation of CharSequenceValueConverter.convertToByte did not correctly handle AsciiString if the length != 1.
+
+Modifications:
+
+- Only use fast-path for AsciiString with length of 1.
+- Add unit tests.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7990

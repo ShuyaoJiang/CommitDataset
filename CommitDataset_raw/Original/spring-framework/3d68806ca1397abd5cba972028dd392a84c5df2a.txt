@@ -1,0 +1,14 @@
+Consistent reactor-core versions
+
+Previously the IDE (STS) was resolving a different reactor-core
+version (3.0.0.BUILD-SNAPSHOT) than the build (3.0.0.RELEASE). This
+discrepancy was due to the fact that reactor-netty now brings in
+reactor-core 3.0.0.RELEASE. Gradle's version conflict resolution is to use
+the latest version. However, the optional dependency on reactor-core
+3.0.0.BUILD-SNAPSHOT was making the build path of the IDE use the SNAPSHOT.
+
+This fix leverages a resolutionStrategy to ensure a consistent version of
+reactor-core is used throughout the entire project. It also bumps up the
+reactor-core version to 3.0.0.RELEASE to be consistent with reactor-netty.
+Care is taken to only change 3.x vesion since 2.x is still used within
+the codebase.

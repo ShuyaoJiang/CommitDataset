@@ -1,0 +1,20 @@
+Close translog writer if exception on write channel (#29401)
+
+Today we close the translog write tragically if we experience any I/O
+exception on a write. These tragic closes lead to use closing the
+translog and failing the engine. Yet, there is one case that is missed
+which is when we touch the write channel during a read (checking if
+reading from the writer would put us past what has been flushed). This
+commit addresses this by closing the writer tragically if we encounter
+an I/O exception on the write channel while reading. This becomes
+interesting when we consider that this method is invoked from the engine
+through the translog as part of getting a document from the
+translog. This means we have to consider closing the translog here as
+well which will cascade up into us finally failing the engine.
+
+Note that there is no semantic change to, for example, primary/replica
+resync and recovery. These actions will take a snapshot of the translog
+which syncs the translog to disk. If an I/O exception occurs during the
+sync we already close the writer tragically and once we have synced we
+do not ever read past the position that was synced while taking the
+snapshot.

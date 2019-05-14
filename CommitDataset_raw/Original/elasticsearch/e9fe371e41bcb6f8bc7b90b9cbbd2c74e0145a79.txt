@@ -1,0 +1,14 @@
+Give the engine the whole index buffer size on init. (#31105)
+
+Currently the engine is initialized with a hardcoded 256MB of RAM. Elasticsearch
+may never use more than that for a given shard, `IndexingMemoryController` only
+has the power to flush segments to disk earlier in case multiple shards are
+actively indexing and use too much memory.
+
+While this amount of memory is enough for an index with few fields and larger
+RAM buffers are not expected to improve indexing speed, this might actually be
+little for an index that has many fields.
+
+Kudos to @bleskes for finding it out when looking into a user who was reporting
+a **much** slower indexing speed when upgrading from 2.x to 5.6 with an index
+that has about 20,000 fields.

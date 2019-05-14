@@ -1,0 +1,10 @@
+ByteBufUtil writeUtf8 and writeAscii helper methods
+
+Motivation:
+Utility methods in ByteBufUtil to writeUtf8 and writeAscii expect a buffer to already be allocated. If the user does not have a buffer allocated they have to know details of the encoding in order to know the size of the buffer to allocate.
+
+Modifications:
+- Add writeUtf8 and writeAscii which take a ByteBufAllocator and allocate a ByteBuf of the correct size for the user
+
+Result:
+ByteBufUtil methods which are easier to use if the user doesn't already have a ByteBuf.

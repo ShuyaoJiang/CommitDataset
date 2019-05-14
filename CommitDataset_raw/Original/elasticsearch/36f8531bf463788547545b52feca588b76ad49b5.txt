@@ -1,0 +1,12 @@
+Don't load global state when only restoring indices (#29239)
+
+Restoring a snapshot, or getting the status of finished
+snapshots, currently always load the global state metadata
+ file from the repository even if it not required. This
+slows down the restore process (or listing statuses process)
+ and can also be an issue if the global state cannot be
+deserialized (because it has unknown customs for example).
+
+This commit splits the Repository.getSnapshotMetadata()
+method into two distincts methods: getGlobalMetadata()
+and getIndexMetadata() that are now called only when needed.

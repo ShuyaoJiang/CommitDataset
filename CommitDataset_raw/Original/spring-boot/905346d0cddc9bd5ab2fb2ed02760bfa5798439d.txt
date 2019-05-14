@@ -1,0 +1,18 @@
+Consider @Bean methods with args to determine type created by factory
+
+Previously, BeanTypeRegistry would only look for a @Bean method
+with no arguments when trying to determine the type that will be
+created by a factory bean. This meant that the type produced by a
+factory bean declared via a @Bean that has one or more arguments would
+be unknown and any on missing bean conditions look for a bean of the
+type produced by the factory bean would match in error.
+
+This commit updates BeanTypeRegistry to, where possible, use the
+factory method metadata for the bean definition when determining the
+type that will be created. This allows it to determine the type for
+factory bean created by @Bean methods that take arguments and also
+avoids the use reflection to find the factory method. Where factory
+method metadata is not available, the existing reflection-based
+approach is used as a fallback.
+
+Closes gh-3657

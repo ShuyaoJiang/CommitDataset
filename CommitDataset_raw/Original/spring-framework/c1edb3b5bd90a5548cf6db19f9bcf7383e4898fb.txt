@@ -1,0 +1,20 @@
+Enforce limit on classes loaded by Spel compiled expression loader
+
+Until this change a single classloader was used to load
+all compiled SpEL expressions. This meant in a context where an
+expression was repeatedly flipping between compiled and interpreted
+mode (which can happen if in MIXED mode compilation and changing
+the context around the evaluation) the classloader would continually
+load a new compiled version but not orphan the old compiled version.
+This eventually uses up all the memory as the number of classes
+is ever increasing.
+
+With this change classloaders are used to load 100 compiled
+expressions. The 101st will be loaded by a new one. Orphaning the
+old classloader means if an expression is ever recompiled there
+is more likely to be no anchored references left to the older
+compiled form and it can be GC'd. In the MIXED situation above it
+should help alleviate the problem of older classes never being
+candidates for GC.
+
+Issue: SPR-15460

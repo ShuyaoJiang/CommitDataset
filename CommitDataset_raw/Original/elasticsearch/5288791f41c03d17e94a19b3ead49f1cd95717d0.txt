@@ -1,0 +1,11 @@
+[ML] Specify only concrete indices during deletion (elastic/x-pack-elasticsearch#1966)
+
+Following elastic/elasticsearch#23997 this was only working due to
+the way we were suppressing certain errors during job deletion.
+
+This PR makes the situations we want to ignore during job deletion
+clearer and adheres to the intention of elastic/elasticsearch#23997
+by only specifying concrete indices to the `indices` arguments of
+deletion calls.
+
+Original commit: elastic/x-pack-elasticsearch@2458c3db40de4f0b4e30dceed4ebec1105bc0cc9

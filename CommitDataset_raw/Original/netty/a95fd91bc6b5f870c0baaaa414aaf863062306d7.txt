@@ -1,0 +1,21 @@
+Don't check accessible in the #capacity method (#7830)
+
+Motivation:
+The `#ensureAccessible` method in `UnpooledHeapByteBuf#capacity` used
+to prevent NPE if buffer is released and `array` is `null`. In all
+other implementations of `ByteBuf` the accessible is not checked by
+`capacity` method. We can assign an empty array to `array`
+in the `deallocate` and don't worry about NPE in the `#capacity`.
+This will help reduce the number of repeated calls of the
+`#ensureAccessible` in many operations with `UnpooledHeapByteBuf`.
+
+Modifications:
+1. Remove `#ensureAccessible` call from `UnpooledHeapByteBuf#capacity`.
+Use the `EmptyArrays#EMPTY_BYTES` instead of `null` in `#deallocate`.
+
+2. Fix access checks in `AbstractUnsafeSwappedByteBuf` and
+`AbstractByteBuf#slice` that relied on `#ensureAccessible`
+in `UnpooledHeapByteBuf#capacity`. This was found by unit tests.
+
+Result:
+Less double calls of `#ensureAccessible` for `UnpooledHeapByteBuf`.

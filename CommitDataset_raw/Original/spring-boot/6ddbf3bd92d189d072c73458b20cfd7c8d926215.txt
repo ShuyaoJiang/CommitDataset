@@ -1,0 +1,15 @@
+Restore active profile logic and support `+`
+
+Restore the previous `spring.profiles.active` logic effectively
+reverting commit 37069d9. This ensures that active profiles defined in
+a higher `PropertySource` replace those lower down.
+
+In addition, add support for a `+` prefix that can be used to indicate
+that a profile should be added to the active set.
+
+For example:
+
+	# application-prod.properties
+	spring.profiles.active=+proddb,+prodmq
+
+Fixed gh-308, gh-309

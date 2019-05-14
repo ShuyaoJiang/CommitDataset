@@ -1,0 +1,5 @@
+Fix test failures n LocalTransportThreadModelTest
+
+testConcurrentMessageBufferAccess() assumes the outbound/inbound byte buffers are unbounded.  Because PooledByteBuf is bounded, the test did not pass.
+
+The fix makes an assumption that ctx.flush() or fireInboundBufferUpdated() will make the next buffer consumed immediately, which is not the case in the real world.  Under network congestion, a user will see IndexOutOfBoundsException if the user's handler implementation writes boundlessly into inbound/outbound buffers.

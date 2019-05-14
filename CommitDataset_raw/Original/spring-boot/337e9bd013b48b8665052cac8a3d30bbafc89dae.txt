@@ -1,0 +1,12 @@
+Use and wait for a latch to check that the interceptor is called
+
+Spring MVC drives the postHandle method on any interceptors after the
+response has been sent to the client. This meant that there was a
+race between the test receiving the response and asserting that the
+interceptor had been driven and Spring MVC driving the interceptor.
+
+This commit updates the interceptor to use a CountDownLatch to track
+whether or not it's been called. The test now waits for up to 30
+seconds for the latch to be decremented.
+
+Closes gh-1997

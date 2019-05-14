@@ -1,0 +1,8 @@
+Handle IndexOrDocValuesQuery in composite aggregation (#35392)
+
+The `composite` aggregation can optimize its execution when the query
+is a `match_all` or a `range` over the field that is used in the first source
+of the aggregation. However we only check for instances of `PointRangeQuery` whereas
+the range query builder creates an  `IndexOrDocValuesQuery`. This means that
+today the optimization does not apply to `range` query even if the code could handle it.
+This change fixes this issue by extracting the index query inside `IndexOrDocValuesQuery`.

@@ -1,0 +1,9 @@
+Fix bad version check writing Repository nodes (#30846)
+
+The writeTo method of VerifyRepositoryResponse incorrectly used its
+local version to determine what it was receiving, rather than the
+sender's version. This fixes a bug that ocassionally happened when a 6.4
+master node sent data to a 7.0 client, causing the number of bytes to be
+improperly read. This also unmutes the test.
+
+Closes #30807

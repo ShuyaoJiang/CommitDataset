@@ -1,0 +1,10 @@
+[Tests] Make testEngineGCDeletesSetting deterministic (#38942)
+
+`InternalEngine.resolveDocVersion()` uses `relativeTimeInMillis()` from
+`ThreadPool` so it needs, the cached time to be advanced. Add a check
+to ensure that and decrease the `thread_pool.estimated_time_interval`
+to 1msec to prevent long running times for the test.
+
+Fixes: #38874
+
+Co-authored-by: Boaz Leskes <b.leskes@gmail.com>

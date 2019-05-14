@@ -1,0 +1,12 @@
+Allow slicing a ByteSource starting at an offset that is >= the source's total size.
+
+In this case, the sliced source will be empty. Previously, the call to slice() would succeed but an exception would occur when the user attempted to read the returned source. There is precedent for this behavior: FileChannel/SeekableByteChannel allow setting the channel's position beyond the end of the file, in which case reads return EOF.
+
+This is a change to existing behavior, but I think it's probably a good change to make:
+
+- Previously, it was unspecified what happens if offset is >= source.size. Now it's specified.
+- Previously, a call to slice could succeed but return an (effectively) invalid ByteSource that would always throw.
+- The override of ByteArrayByteSource.slice is currently using this behavior, because I thought that was the behavior that the normal slice implementation was already using. I could change that, but I think this is preferable.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=102276980

@@ -1,0 +1,12 @@
+Remove potential nio selector leak (#27825)
+
+When an ESSelector is created an underlying nio selector is opened. This
+selector is closed by the event loop after close has been signalled by
+another thread.
+
+However, there is a possibility that an ESSelector is created and some
+exception in the startup process prevents it from ever being started
+(however, close will still be called). The allows the selector to leak.
+
+This commit addresses this issue by having the signalling thread close
+the selector if the event loop is not running when close is signalled.

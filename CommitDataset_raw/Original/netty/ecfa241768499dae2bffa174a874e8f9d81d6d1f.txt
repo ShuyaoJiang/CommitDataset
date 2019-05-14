@@ -1,0 +1,5 @@
+Make sure AggregatedFullHttpMessage.trailingHeaders() return non-null
+
+When handling an oversized message, HttpObjectAggregator does not wait
+until the last chunk is received to produce the failed message, making
+AggregatedFullHttpMessage.trailingHeaders() return null.

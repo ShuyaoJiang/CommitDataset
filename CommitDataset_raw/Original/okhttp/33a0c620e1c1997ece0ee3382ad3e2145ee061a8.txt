@@ -1,0 +1,17 @@
+Use bouncy castle to generate certs for TLS.
+
+Because there are no platform APIs to generate certificates,
+this needs a third party library (bouncy castle) to do the
+heavy lifting.
+
+Each target platform has its own built-in crypto library:
+ - The JVM has its own internal crypto library. It uses
+   key stores like "JCA".
+ - Android has its own internal crypto library that's
+   based on bouncy castle. It is repackaged in com.android
+   and is not used by this code.
+
+With this change, okhttp brings its own copy of bouncy castle
+for cert generation. Once the certificate is generated we're
+done with bouncy castle, and use the platform libraries for TLS.
+This approach allows us to use one codebase on either platform.

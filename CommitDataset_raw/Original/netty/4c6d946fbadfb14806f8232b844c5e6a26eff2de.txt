@@ -1,0 +1,10 @@
+KQueueSocket#setTrafficClass exceptions
+
+Motivation:
+MacOS will throw an error when attempting to set the IP_TOS socket option if IPv6 is available, and also when getting the value for IP_TOS.
+
+Modifications:
+- Socket#setTrafficClass and Socket#getTrafficClass should try to use IPv6 first, and check if the error code indicates the protocol is not supported before trying IPv4
+
+Result:
+Fixes https://github.com/netty/netty/issues/6741.

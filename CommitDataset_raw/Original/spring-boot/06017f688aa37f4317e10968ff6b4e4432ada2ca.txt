@@ -1,0 +1,12 @@
+Only auto-configure SpringSocialDialect for Thymeleaf 2
+
+Previously, SocialWebAutoConfiguration would create a
+SpringSocialDialect bean when SpringTemplateEngine was on the
+classpath. This class exists in both Thymeleaf 2 and Thymeleaf 3 but
+SpringSocialDialect is only compatible with Thymeleaf 2.
+
+This commit updates the auto-configuration to require
+SpringResourceResourceResolver to be on the classpath. This class
+exists in Thymeleaf 2 but does not exist in Thymeleaf 3.
+
+Closes gh-4858

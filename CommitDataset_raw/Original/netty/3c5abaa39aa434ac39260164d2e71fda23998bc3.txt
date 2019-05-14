@@ -1,0 +1,18 @@
+Correctly handle non handshake commands when using SniHandler
+
+Motivation:
+
+As we can only handle handshake commands to parse SNI we should try to skip alert and change cipher spec commands a few times before we fallback to use a default SslContext.
+
+Modifications:
+
+- Use default SslContext if no application data command was received
+- Use default SslContext if after 4 commands we not received a handshake command
+- Simplify code
+- Eliminate multiple volatile fields
+- Rename SslConstants to SslUtils
+- Share code between SslHandler and SniHandler by moving stuff to SslUtils
+
+Result:
+
+Correct handling of non handshake commands and cleaner code.

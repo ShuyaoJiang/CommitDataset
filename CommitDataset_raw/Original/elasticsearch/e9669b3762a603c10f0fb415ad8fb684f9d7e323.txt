@@ -1,0 +1,6 @@
+Better validation of `copy_to`. (#25983)
+
+We are currently quite lenient about the targets of `copy_to`. However in a
+number of cases we can detect illegal use of `copy_to` at mapping update time.
+For instance, it does not make sense to use object fields as targets of
+`copy_to`, or fields that would end up in a different nested document.

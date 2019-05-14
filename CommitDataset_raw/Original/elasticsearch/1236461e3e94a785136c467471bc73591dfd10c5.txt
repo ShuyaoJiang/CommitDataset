@@ -1,0 +1,6 @@
+SQL: Make sure now() always uses milliseconds precision (#36877)
+
+* This change is to account for different system clock implementations
+or different Java versions (for Java 8, milliseconds precision is used;
+for Java 9+ a system specific clock implementation is used which can
+have greater precision than what we need here).

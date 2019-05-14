@@ -1,0 +1,13 @@
+Http2MultiplexCodec.DefaultHttpStreamChannel.isOpen() / isActive() shoule be false when fireChannelActive() is called
+
+Motivation:
+
+When part of a HTTP/2 StreamChannel the Http2StreamChannel.isOpen() / isActive() should report false within a call to a ChannelInboundHandlers channelInactive() method.
+
+Modifications:
+
+Fullfill promise before call fireChannelInactive()
+
+Result:
+
+Correctly update state / promise before notify handlers. Fixes [#7638]

@@ -1,0 +1,10 @@
+HTTP/2 limit streams in all states
+
+Motivation:
+SETTINGS_MAX_CONCURRENT_STREAMS does not apply to idle streams and thus we do not apply any explicit limitations on how many idle streams can be created. This may allow a peer to consume an undesirable amount of resources.
+
+Modifications:
+- Each Endpoint should enforce a limit for streams in a any state. By default this limit will be the same as SETTINGS_MAX_CONCURRENT_STREAMS but can be overridden if necessary.
+
+Result:
+There is now a limit to how many IDLE streams can be created.

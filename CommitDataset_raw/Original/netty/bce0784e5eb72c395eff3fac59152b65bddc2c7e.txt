@@ -1,0 +1,13 @@
+Fix racy ChannelOutboundBuffer.testWriteTaskRejected test. (#8735)
+
+Motivation:
+
+testWriteTaskRejected was racy as we did not ensure we dispatched all events to the executor before shutting it down.
+
+Modifications:
+
+Add a latch to ensure we dispatched everything.
+
+Result:
+
+Fix racy test that failed sometimes before.

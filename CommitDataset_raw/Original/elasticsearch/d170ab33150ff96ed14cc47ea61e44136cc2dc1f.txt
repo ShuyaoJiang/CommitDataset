@@ -1,0 +1,13 @@
+Disable C2 from using AVX-512 on JDK 10 (#32138)
+
+The C2 compiler in JDK 10 appears to have an issue compiling to AVX-512
+instructions (on hardware that supports such). As a workaround, this
+commit adds a JVM flag on JDK 10+ to disable the use of AVX-512
+instructions until a fix is introduced to the JDK. Instead, we use a
+flag to enable AVX and AVX2 only.
+
+Note: Based on my reading of the C2 code, this flag does not appear to
+have any impact on hardware that does not support AVX2. I have tested
+this manually on an Intel Atom C2538 processor that supports neither AVX
+nor AVX2. I have also tested this manually on an Intel i5-3317U
+processor that supports AVX but not AVX2.

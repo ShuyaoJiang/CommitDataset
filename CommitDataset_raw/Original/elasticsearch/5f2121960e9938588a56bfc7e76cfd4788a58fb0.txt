@@ -1,0 +1,15 @@
+Synced-flush should not seal index of out of sync replicas (#28464)
+
+Today the correctness of synced-flush is guaranteed by ensuring that 
+there is no ongoing indexing operations on the primary. Unfortunately, a
+replica might fall out of sync with the primary even the condition is
+met. Moreover, if synced-flush mistakenly issues a sync_id for an out of
+sync replica, then that replica would not be able to recover from the 
+primary. ES prevents that peer-recovery because it detects that both
+indexes from primary and replica were sealed with the same sync_id but
+have a different content. This commit modifies the synced-flush to not
+issue sync_id for out of sync replicas. This change will report the
+divergence issue earlier to users and also prevent replicas from getting
+into the "unrecoverable" state.
+
+Relates #10032

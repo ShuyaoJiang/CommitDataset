@@ -1,0 +1,18 @@
+Fix location checks for servlet 3 resources
+
+SPR-12354 applied new checks to make sure that served static resources
+are under authorized locations.
+
+Prior to this change, serving static resources from Servlet 3 locations
+such as "/webjars/" would not work since those locations can be within
+one of the JARs on path. In that case, the checkLocation method would
+return false and disallow serving that static resource.
+
+This change fixes this issue by making sure to call the
+`ServletContextResource.getPath()` method for servlet context resources.
+
+Note that there's a known workaround for this issue, which is using a
+classpath scheme as location, such as:
+"classpath:/META-INF/resources/webjars/" instead of "/webjars".
+
+Issue: SPR-12432

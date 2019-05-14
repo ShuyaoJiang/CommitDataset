@@ -1,0 +1,26 @@
+Introduce ResolvableType Class
+
+Add a new ResolvableType Class which encapsulates java.lang.reflect.Type,
+providing access to supertypes, interfaces and generic parameters along
+with the ability to ultimately resolve to a java.lang.Class.
+
+ResolvableTypes may be obtained from fields, method parameters, method
+returns, classes or directly from a java.lang.reflect.Type. Most methods
+will themselves return ResolvableTypes, allowing easy navigation.
+
+For example:
+
+	private HashMap<Integer, List<String>> myMap;
+
+	public void example() {
+ 		ResolvableType t = ResolvableType.forField(
+ 					getClass().getDeclaredField("myMap"));
+ 		t.getSuperType(); // AbstractMap<Integer, List<String>>;
+ 		t.asMap(); // Map<Integer, List<String>>
+ 		t.getGeneric(0).resolve(); // Integer
+ 		t.getGeneric(1).resolve(); // List
+ 		t.getGeneric(1); // List<String>
+ 		t.resolveGeneric(1, 0); // String
+ 	}
+
+Issue: SPR-10973

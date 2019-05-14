@@ -1,0 +1,11 @@
+Refactor PropertySourcesDeducer
+
+Prior to the changes that fixed #12451,
+`FilteredPropertySources` and `CompositePropertySources` were required
+by the `PropertySourcesDeducer` to ensure that configuration properties binding
+could see changes to the environment even when there was a
+PropertySourcesPlaceholderConfigurer in the context. #12451 changed the way
+property sources are adapted by `SpringConfigurationPropertySources`, removing the
+need for `FilteredPropertySources` and `CompositePropertySources`.
+
+Fixes gh-13738

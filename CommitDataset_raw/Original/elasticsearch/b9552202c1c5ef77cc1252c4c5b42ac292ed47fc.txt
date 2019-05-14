@@ -1,0 +1,11 @@
+Restore date aggregation performance in UTC case (#38221)
+
+The benchmarks showed a sharp decrease in aggregation performance for
+the UTC case.
+
+This commit uses the same calculation as joda time, which requires no
+conversion into any java time object, also, the check for an fixedoffset
+has been put into the ctor to reduce the need for runtime calculations.
+The same goes for the amount of the used unit in milliseconds.
+
+Closes #37826

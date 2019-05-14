@@ -1,0 +1,22 @@
+SQL: Support larger strings in binary protocol (elastic/x-pack-elasticsearch#3130)
+
+While we're fairly sure we're going to remove the binary protocol in the
+long run, we're also fairly sure we're going to release the first
+version of SQL with the binary protocol. One big problem with it is that
+it blows up when it attempts to serialize fairly long strings. These
+long strings are actually quite common in the CLI. They are also
+possible in JDBC. I say "fairly long strings" because exactly how long
+the strings has to be is kind of funky. It is based on the number of
+bytes that it takes to encode the string, and the strings are encoded in
+a utf-8-like encoding of utf-16 encoded string documented here:
+https://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html#writeUTF(java.lang.String)
+
+Anyway, this fixes the protocol for these "fairly long strings" by
+chunking the strings and adding an extra 4 byte integer before each
+string to count the number of chunks. After that 4 byte integer the
+strings are serialized using the "normal" DataInput/DataOutput encoding,
+the funny utf-8-like encoding of the utf-16 encoded string.
+
+relates elastic/x-pack-elasticsearch#3018
+
+Original commit: elastic/x-pack-elasticsearch@11f0d59f203815e97a559266697273002b1723c8

@@ -1,0 +1,23 @@
+Add /mappings endpoint
+
+Lists AbstractUrlMappings and AbstractHandlerMethodMappings
+in a loose Map structure. E.g.
+
+{
+  "/**/favicon.ico": {
+    "bean": "faviconHandlerMapping"
+  },
+  "/**": {
+    "bean": "resourceHandlerMapping"
+  },
+  "/webjars/**": {
+    "bean": "resourceHandlerMapping"
+  },
+  "{[/error],methods=[],params=[],headers=[],consumes=[],produces=[],custom=[]}":
+     {
+       "bean": "requestMappingHandlerMapping",
+       "method": "public java.util.Map<java.lang.String, java.lang.Object> org.springframework.boot.actuate.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)"
+...
+}
+
+Fixes gh-378

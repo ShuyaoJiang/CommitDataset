@@ -1,0 +1,10 @@
+aggs: Allow aggregation sorting via nested aggregation.
+
+The nested aggregator now buffers all bucket ords per parent document and
+emits all bucket ords for a parent document's nested document once. This way
+the nested documents document DocIdSetIterator gets used once per bucket
+instead of wrapping the nested aggregator inside a multi bucket aggregator,
+which was the current solution upto now. This allows sorting by buckets
+under a nested bucket.
+
+Closes #16838

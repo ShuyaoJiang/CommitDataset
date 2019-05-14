@@ -1,0 +1,10 @@
+Refactor AnnotationUtils#findAllAnnotationAttributes
+
+Remove all convenience variants of #findAllAnnotationAttributes and
+refactor the remaining method to accept a MetadataReaderFactory
+instead of creating its own SimpleMetadataReaderFactory internally.
+This allows clients to use non-default class loaders as well as
+customize the particular MetadataReaderFactory to be used (e.g.
+'simple' vs 'caching', etc).
+
+Issue: SPR-8752

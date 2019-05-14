@@ -1,0 +1,16 @@
+Merge: Fix HttpURLConnection CloseGuard warning due to lack of close on GZIPInputStream
+
+Original AOSP/libcore commit by Brian Carlstrom:
+java.lang.Throwable: Explicit termination method 'end' not called
+  at dalvik.system.CloseGuard.open(CloseGuard.java:184)
+  at java.util.zip.Inflater.<init>(Inflater.java:82)
+  at java.util.zip.GZIPInputStream.<init>(GZIPInputStream.java:96)
+  at java.util.zip.GZIPInputStream.<init>(GZIPInputStream.java:81)
+  at libcore.net.http.HttpEngine.initContentStream(HttpEngine.java:523)
+  at libcore.net.http.HttpEngine.readResponse(HttpEngine.java:831)
+  at libcore.net.http.HttpURLConnectionImpl.getResponse(HttpURLConnectionImpl.java:274)
+  at libcore.net.http.HttpURLConnectionImpl.getResponseCode(HttpURLConnectionImpl.java:486)
+  at ...
+
+Bug: 6602529
+Change-Id: I9b49cbca561f8780d08844e566820087fdffc4d7

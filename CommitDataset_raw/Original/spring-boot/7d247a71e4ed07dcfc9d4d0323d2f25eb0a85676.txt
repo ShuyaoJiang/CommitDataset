@@ -1,0 +1,20 @@
+Resolve placeholders against the env in active/include profiles values
+
+The changes made in 919d0c61 meant that the value of
+spring.profiles.active or spring.profiles.include was only processed
+when a single property source, the property source for the config file
+being read, was available. This meant that any placeholders in those
+values would only be resolved against properties in the configuration
+file rather than against the entire environment.
+
+This commit updates the binding process so that placeholder resolution
+is not performed during binding against a single configuration file.
+Once binding has completed, the bounds values are post-processed to
+resolve and placeholders that they may contain.
+
+The two-step process described above is used in preference to binding
+against the whole environment. This avoids a problem with profiles
+that are active or included by property sources in the environment
+being processed repeatedly.
+
+Closes gh-8234

@@ -1,0 +1,17 @@
+Watcher: Refactor/Fix TransportWatcherServiceAction (elastic/x-pack-elasticsearch#4240)
+
+This commit fixes several issues with the current implementation of
+starting & stopping watcher
+
+1. The WatcherServiceResponse was always returning a message, that the
+   request was acknowledged, completely independent from the fact if it was
+   or not.
+2. A new cluster state instance was always returned, regardless if the
+   state had changed or not (which is explicitely mentioned in the
+   javadocs to check for this)
+3. The AckedClusterStateUpdateTask now returns a proper WatcherServiceResponse
+4. A failure now gets logged
+
+Relates elastic/x-pack-elasticsearch#4225 (this is just a hunch for now)
+
+Original commit: elastic/x-pack-elasticsearch@f4c1749f95a574dee3211c59250df3d206256b3c

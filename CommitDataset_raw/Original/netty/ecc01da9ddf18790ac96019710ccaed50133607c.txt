@@ -1,0 +1,13 @@
+[#3968] Disallow pass-through of non ByteBufs in SslHandler
+
+Motivation:
+
+We pass-through non ByteBuf when SslHandler.write(...) is called which can lead to have unencrypted data to be send (like for example if a FileRegion is written).
+
+Modifications:
+
+- Fail ChannelPromise with UnsupportedMessageException if a non ByteBuf is written.
+
+Result:
+
+Only allow ByteBuf to be written when using SslHandler.

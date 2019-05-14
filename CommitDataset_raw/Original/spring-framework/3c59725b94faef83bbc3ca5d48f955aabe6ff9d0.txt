@@ -1,0 +1,5 @@
+LoadTimeWeaverAware beans are consistently being created early for JPA weaving to work reliably
+
+Includes a change for factory methods that declare their return type as FactoryBean: When asked for a specific type match (e.g. LoadTimeWeaverAware), we do check early singleton instances as well (reusing the instances that we create for getObjectType checks). This is necessary in order to make @Bean method introspection as capable as XML bean definition introspection, even in case of the @Bean method using a generic FactoryBean declaration for its return type (instead of the FactoryBean impl class).
+
+Issue: SPR-9857

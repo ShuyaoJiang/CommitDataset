@@ -1,0 +1,19 @@
+SPR-8642 IMPROVE ERROR REPORTING WHEN RESOLVING MULTIPART REQUEST METHOD ARGUMENTS
+
+Separate client from server errors as much as possible in this order:
+- raise MultipartException when resolving a multipart arg and the 
+  request is not a multipart request (400)
+- raise IllegalArgumentException when the arg type is MultipartFile 
+  but the request is not of type MultipartHttpServletRequest (500)
+- raise MissingServletRequestPartException when a MultipartResolver
+  is in use but the part is not found (400)
+- detect presence of Servlet 3.0 before using standard multipart 
+  parsing to find a request part or raise 
+  IllegalArgumentException (500)
+
+Unfortunately it is not always possible to separate client from 
+server errors mainly because the Servlet 3.0 API does not 
+distinguish between the case of 0 request parts vs multipart 
+processing not being configured.
+
+

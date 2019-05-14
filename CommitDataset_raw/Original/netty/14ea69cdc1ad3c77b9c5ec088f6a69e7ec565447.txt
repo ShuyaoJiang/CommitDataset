@@ -1,0 +1,11 @@
+NullPointerException in Lz4FrameEncoder
+
+Motivation:
+Lz4FrameEncoder maintains internal state, but the life cycle of the buffer is not consistently managed. The buffer is allocated in handlerAdded but freed in close, but the buffer can still be used until handlerRemoved is called.
+
+Modifications:
+- Move the cleanup of the buffer from close to handlerRemoved
+- Explicitly throw an EncoderException from Lz4FrameEncoder if the encode operation has finished and there isn't enough space to write data
+
+Result:
+No more NPE in Lz4FrameEncoder on the buffer.

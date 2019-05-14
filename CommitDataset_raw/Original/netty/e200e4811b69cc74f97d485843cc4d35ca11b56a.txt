@@ -1,0 +1,11 @@
+SocketRstTest fails due to exception message check
+
+Motivation:
+For lack of a better way the SocketRstTest inspects the content of the exception message to check if a RST occurred. However on windows the exception message is different than on other Unix based platforms and the assertion statement fails.
+
+Modifications:
+- Hack another string check in the unit test
+
+Result:
+SocketRstTest passes on windows
+Fixes https://github.com/netty/netty/issues/5335

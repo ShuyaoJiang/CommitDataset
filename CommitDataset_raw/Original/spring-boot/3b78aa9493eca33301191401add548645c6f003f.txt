@@ -1,0 +1,13 @@
+Make Security auto-config conditional on spring-security-config
+
+SecurityAutoConfiguration, via its import of
+AuthenticationManagerConfiguration, requires spring-security-config
+to be on the classpath as AuthenticationManagerConfiguration extends
+GlobalAuthenticationConfigurerAdapter from spring-security-config.
+
+This commit makes SecurityAutoConfiguration conditional on the
+presence of GlobalAuthenticationConfigurerAdapter so that the
+auto-configuration will be disabled in its absence rather than causing
+an app to fail to start.
+
+Closes gh-2046

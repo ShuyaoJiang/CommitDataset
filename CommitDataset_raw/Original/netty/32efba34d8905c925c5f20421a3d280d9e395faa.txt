@@ -1,0 +1,24 @@
+Initial implementation of the Streaming API
+
+This pull request provides a framework for exchanging a very large
+stream between handlers, typically between a decoder and an inbound
+handler (or between a handler that writes a message and an encoder that
+encodes that message).
+
+For example, an HTTP decoder, previously, generates multiple
+micro-messages to decode an HTTP message (i.e. HttpRequest +
+HttpChunks). With the streaming API, The HTTP decoder can simply
+generate a single HTTP message whose content is a Stream. And then the
+inbound handler can consume the Stream via the buffer you created when
+you begin to read the stream. If you create a buffer whose capacity is
+bounded, you can handle a very large stream without allocating a lot of
+memory. If you just want to wait until the whole content is ready, you
+can also do that with an unbounded buffer.
+
+The streaming API also supports a limited form of communication between
+a producer (i.e. decoder) and a consumer. A producer can abort the
+stream if the stream is not valid anymore. A consumer can choose to
+reject or discard the stream, where rejection is for unrecoverable
+failure and discard is for recoverable failure.
+
+P.S. Special thanks to @jpinner for the initial input.

@@ -1,0 +1,10 @@
+SQL: Introduce IsNull node to simplify expressions (#35206)
+
+Add `IsNull` node in parser to simplify expressions so that `<value> IS NULL` is
+no longer translated internally to `NOT(<value> IS NOT NULL)`
+
+Replace `IsNotNullProcessor` with `CheckNullProcessor` to encapsulate both
+isNull and isNotNull functionality.
+
+Closes: #34876
+Fixes: #35171

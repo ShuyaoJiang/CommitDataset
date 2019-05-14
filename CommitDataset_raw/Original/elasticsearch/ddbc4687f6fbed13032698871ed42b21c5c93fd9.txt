@@ -1,0 +1,14 @@
+Introduce clean transition on primary promotion
+
+This commit introduces a clean transition from the old primary term to
+the new primary term when a replica is promoted primary. To accomplish
+this, we delay all operations before incrementing the primary term. The
+delay is guaranteed to be in place before we increment the term, and
+then all operations that are delayed are executed after the delay is
+removed which asynchronously happens on another thread. This thread does
+not progress until in-flight operations that were executing are
+completed, and after these operations drain, the delayed operations
+re-acquire permits and are executed.
+
+Relates #24925
+

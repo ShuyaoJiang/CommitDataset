@@ -1,0 +1,6 @@
+Fix racy use of ConcurrentHashMap (#36603)
+
+ConcurrentHashMap does not always behave correctly if removing elements and
+concurrently checking for its emptyiness. Work around this by protecting all
+usages with a mutex (there was only one usage unprotected by the mutex anyway)
+and then we don't even need a ConcurrentHashMap at all.

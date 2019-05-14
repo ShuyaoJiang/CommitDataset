@@ -1,0 +1,15 @@
+Fix custom config with older HttpClient
+
+Since HttpClient 4.3, custom configuration such as the connection
+timeout and the socket timeout are set in a RequestConfig object
+stored in the HttpContext.
+
+Unfortunately, older HttpClients are not supporting this
+infrastructure and new clients throw an exception when the
+deprecated API is used.
+
+This commit detects if the client is an "old" implementation and
+set the configuration through the deprecated means to restore
+full backward compatibility with these features.
+
+Issue: SPR-11442

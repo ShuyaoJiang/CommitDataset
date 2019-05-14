@@ -1,0 +1,7 @@
+percolator: Take `matchAllDocs` and `verified` of the sub result into account when analyzing a function_score query.
+
+Before the `matchAllDocs` was ignored and this could lead to percolator queries not matching when
+the inner query was a match_all query and min_score was specified.
+
+Before when `verified` was not taken into account if the function_score query wrapped an unverified query this could
+lead to matching percolator queries that shouldn't match at all.

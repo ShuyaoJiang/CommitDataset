@@ -1,0 +1,5 @@
+MasterNodeChangePredicate should use the node instance to detect master change (#25877)
+
+This predicate is used to deal with the intricacies of detecting when a master is reelected/nodes rejoins an existing master. The current implementation is based on nodeIds, which is fine if the master really change. If the nodeId is equal the code falls back to detecting an increment in the cluster state version which happens when a node is re-elected or when the node rejoins. Sadly this doesn't cover the case where the same node is elected after a full restart of all master nodes. In that case we recover the cluster state from disk but the version is reset back to 0. To fix this, the check should be done based on ephemeral IDs which are reset on restart.
+
+Fixes #25471 

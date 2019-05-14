@@ -1,0 +1,9 @@
+Minor refactoring of suspend/resumeReceiving
+
+suspend/resumeReceiving in the AbstractListenerWebSocketSession are
+now abstract methods. In Tomcat/Jetty these methods are no-op
+implementations that are then coupled with a buffering strategy via
+Flux#onBackpressureBuffer. In Undertow they rely on flow control for
+receiving WebSocket messages.
+
+Issue: SPR-14527

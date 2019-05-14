@@ -1,0 +1,13 @@
+Respect ChannelConfig.getWriteSpinCount() when using epoll transport
+
+Motivation:
+
+The writeSpinCount was ignored in the epoll transport and it just kept on trying writing. This could cause unnessary cpu spinning if a slow remote peer was reading the data very very slow.
+
+Modification:
+
+- Correctly take writeSpinCount into account when writing.
+
+Result:
+
+Less cpu spinning when writing to a slow remote peer.

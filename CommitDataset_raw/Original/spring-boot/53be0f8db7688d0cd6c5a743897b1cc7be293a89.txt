@@ -1,0 +1,13 @@
+Fix Gradle plugin logic for removing provided artifacts
+
+The new ResolvedArtifact-based minus implementation was checking the
+wrong Set when deciding whether or not a ResolvedArtifact should
+be included in the result. This was leading to provided dependencies,
+that should have only been packaging in WEB-INF/lib-provided also
+being packaged in WEB-INF/lib.
+
+The WarPackaging tests have been updated. In addition to checking that
+WEB-INF/lib-provided does not contain anything that’s unexpected, they
+also verify the contents of WEB-INF/lib
+
+Fixes #1187

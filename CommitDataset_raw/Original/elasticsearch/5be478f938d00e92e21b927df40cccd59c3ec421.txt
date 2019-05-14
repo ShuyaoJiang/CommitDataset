@@ -1,0 +1,5 @@
+Remove uncommitted ops assertion in shouldFlush
+
+This assertion does not hold if engine is flushed between the invocation
+of translog.uncommittedSizeInBytes and translog.uncommittedOperations.
+These two values can be calculated from different commits.

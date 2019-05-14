@@ -1,0 +1,15 @@
+Correct filling an `origin` header for WS client
+
+Motivation:
+An `origin`/`sec-websocket-origin` header value in websocket client is filling incorrect in some cases:
+- Hostname is not converting to lower-case as prescribed by RFC 6354 (see [1]).
+- Selecting a `http` scheme when source URI has `wss`/`https` scheme and non-standard port.
+
+Modifications:
+- Convert uri-host to lower-case.
+- Use a `https` scheme if source URI scheme is `wss`/`https`, or if source scheme is null and port == 443.
+
+Result:
+Correct filling an `origin` header for WS client.
+
+[1] https://tools.ietf.org/html/rfc6454#section-4

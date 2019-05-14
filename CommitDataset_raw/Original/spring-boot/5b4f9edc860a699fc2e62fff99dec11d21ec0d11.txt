@@ -1,0 +1,9 @@
+Restore original TCCL in PropertiesLauncherTests
+
+Calling launch of PropertiesLauncherTests sets the thread context
+class loader to an instance of LaunchedURLClassLoader. To avoid this
+class loader being used beyond the scope of the test and launcher
+that created it, this commit updates PropertiesLauncherTests to
+capture the TCCL before each test and restore it after each test.
+
+Closes gh-9378

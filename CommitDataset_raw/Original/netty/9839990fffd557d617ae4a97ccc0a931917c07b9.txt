@@ -1,0 +1,15 @@
+Fix a bug in NetUtil.createByteArrayFromIpAddressString()
+
+Motivation:
+
+An IPv6 string can have a zone index which is followed by the '%' sign.
+When a user passes an IPv6 string with a zone index,
+NetUtil.createByteArrayFromIpAddressString() returns an incorrect value.
+
+Modification:
+
+- Strip the zone index before conversion
+
+Result:
+
+An IPv6 string with a zone index is decoded correctly.

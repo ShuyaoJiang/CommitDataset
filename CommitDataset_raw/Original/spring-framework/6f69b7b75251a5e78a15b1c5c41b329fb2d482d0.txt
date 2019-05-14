@@ -1,0 +1,26 @@
+Allow class-relative resource loading in GenericXmlApplicationContext (SPR-7530)
+
+Before:
+
+    - new GenericXmlApplicationContext("com/acme/path/to/resource.xml");
+
+    - GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+      ctx.load("com/acme/path/to/resource.xml");
+      ctx.refresh();
+
+After:
+
+    - The above remain supported, as well as new class-relative variants
+
+    - import com.acme.path.to.Foo;
+      new GenericXmlApplicationContext(Foo.class, "resource.xml");
+
+    - import com.acme.path.to.Foo;
+      GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+      ctx.load(Foo.class, "resource.xml");
+      ctx.refresh();
+
+These changes are generally aligned with signatures long available in
+ClassPathXmlApplicationContext. As GenericXmlApplicationContext is
+intended to be a more flexible successor to CPXAC (and FSXAC), it's
+important that all the same conveniences are available.

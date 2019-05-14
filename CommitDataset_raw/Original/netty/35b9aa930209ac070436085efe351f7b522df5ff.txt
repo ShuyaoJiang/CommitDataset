@@ -1,0 +1,15 @@
+Replace LinkedHashSet by ArrayList to avoid iterators.
+
+Motivation:
+
+In a simple load test that creates and closes several 10k streams per second
+I have seen Iterator objects using roughly 1.6% of the total committed heap.
+
+Modifications:
+
+Use an ArrayList instead of a LinkedHashSet to store the connection listeners.
+That way we can iterate over the list without creating an iterator every time.
+
+Result:
+
+Zero Iterator allocations due to notifying connection listeners.

@@ -1,0 +1,54 @@
+Support implicit attribute aliases with @AliasFor
+
+Spring Framework 4.2 introduced support for aliases between annotation
+attributes that fall into the following two categories.
+
+1) Alias pairs: two attributes in the same annotation that use
+   @AliasFor to declare that they are explicit aliases for each other.
+2) Meta-annotation attribute overrides: an attribute in one annotation
+   uses @AliasFor to declare that it is an explicit override of an
+   attribute in a meta-annotation.
+
+However, the existing functionality fails to support the case where two
+attributes in the same annotation both use @AliasFor to declare that
+they are both explicit overrides of the same attribute in the same
+meta-annotation. In such scenarios, one would intuitively assume that
+two such attributes would be treated as "implicit" aliases for each
+other, analogous to the existing support for explicit alias pairs.
+Furthermore, an annotation may potentially declare multiple aliases
+that are effectively a set of implicit aliases for each other.
+
+This commit introduces support for implicit aliases configured via
+@AliasFor through an extensive overhaul of the support for alias
+lookups, validation, etc. Specifically, this commit includes the
+following.
+
+- Introduced isAnnotationMetaPresent() in AnnotationUtils.
+
+- Introduced private AliasDescriptor class in AnnotationUtils in order
+  to encapsulate the parsing, validation, and comparison of both
+  explicit and implicit aliases configured via @AliasFor.
+
+- Switched from single values for alias names to lists of alias names.
+
+- Renamed getAliasedAttributeName() to getAliasedAttributeNames() in
+  AnnotationUtils.
+
+- Converted alias map to contain lists of aliases in AnnotationUtils.
+
+- Refactored the following to support multiple implicit aliases:
+  getRequiredAttributeWithAlias() in AnnotationAttributes,
+  AbstractAliasAwareAnnotationAttributeExtractor,
+  MapAnnotationAttributeExtractor, MergedAnnotationAttributesProcessor
+  in AnnotatedElementUtils, and postProcessAnnotationAttributes() in
+  AnnotationUtils.
+
+- Introduced numerous tests for implicit alias support, including
+  AbstractAliasAwareAnnotationAttributeExtractorTestCase,
+  DefaultAnnotationAttributeExtractorTests, and
+  MapAnnotationAttributeExtractorTests.
+
+- Updated Javadoc in @AliasFor regarding implicit aliases and in
+  AnnotationUtils regarding "meta-present".
+
+Issue: SPR-13345

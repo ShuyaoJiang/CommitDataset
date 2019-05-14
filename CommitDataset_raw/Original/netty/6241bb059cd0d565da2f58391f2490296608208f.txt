@@ -1,0 +1,13 @@
+[#4244] Convert urlencoded uri to http2 path correctly
+
+Motivation:
+
+HttpConversionUtil.toHttp2Headers does not convert urlencoded uri to http2 path properly.
+
+Modifications:
+
+Use getRawPath(), getRawQuery(), getRawFragment() in java.net.URI when converts to http2 path
+
+Result:
+
+HttpConversionUtil.toHttp2Headers does not urldecode uri unproperly.

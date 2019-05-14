@@ -1,0 +1,6 @@
+Make randomNonNegativeLong() draw from a uniform distribution (#27856)
+
+Currently randomNonNegativeLong() returns 0 half as often as any positive long,
+but random number generators are typically expected to return
+uniformly-distributed values unless otherwise specified. This fixes this issue
+by mapping Long.MIN_VALUE directly onto 0 rather than resampling.

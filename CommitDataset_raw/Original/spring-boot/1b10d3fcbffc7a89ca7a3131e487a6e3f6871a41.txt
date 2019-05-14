@@ -1,0 +1,16 @@
+Fix missing metadata for nested POJO
+
+This commit fixes missing descriptions and default values when
+applicable for `management.server.ssl`, `server.compression`,
+`server.http2`, `server.servlet.jsp`, `server.servlet.session` and
+`server.ssl`.
+
+Those nested namespace are managed by a POJO that is declared outside
+of the module of the target @ConfigurationProperties type using it. As
+a result, the annotation processor has no access to the source model and
+can't extract the description and the default value, if any.
+
+This commit migrates the misleading field-level Javadoc to manual meta
+data for the time being.
+
+Closes gh-14669

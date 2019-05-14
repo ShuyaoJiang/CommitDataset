@@ -1,0 +1,13 @@
+Ensure buffer is not released when call array() / memoryAddress()
+
+Motivation:
+
+Before we missed to check if a buffer was released before we return the backing byte array or memoryaddress. This could lead to JVM crashes when someone tried various bulk operations on the Unsafe*ByteBuf implementations.
+
+Modifications:
+
+Always check if the buffer is released before all to return the byte array and memoryaddress.
+
+Result:
+
+No more JVM crashes because of released buffers when doing bulk operations on Unsafe*ByteBuf implementations.

@@ -1,0 +1,10 @@
+Improve explanation in rescore (#30629)
+
+Currently in a rescore request if window_size is smaller than
+the top N documents returned (N=size), explanation of scores could be incorrect
+for documents that were a part of topN and not part of rescoring.
+This PR corrects this, but saving in RescoreContext docIDs of documents
+for which rescoring was applied, and adding rescoring explanation
+only for these docIDs.
+
+Closes #28725

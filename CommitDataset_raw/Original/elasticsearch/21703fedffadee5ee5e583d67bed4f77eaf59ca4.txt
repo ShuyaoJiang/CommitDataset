@@ -1,0 +1,30 @@
+Support concurrent refresh of refresh tokens (#38382)
+
+This change adds supports for the concurrent refresh of access
+tokens as described in #36872
+In short it allows subsequent client requests to refresh the same token that
+come within a predefined window of 60 seconds to be handled as duplicates
+of the original one and thus receive the same response with the same newly
+issued access token and refresh token.
+In order to support that, two new fields are added in the token document. One
+contains the instant (in epoqueMillis) when a given refresh token is refreshed
+and one that contains a pointer to the token document that stores the new
+refresh token and access token that was created by the original refresh.
+A side effect of this change, that was however also a intended enhancement
+for the token service, is that we needed to stop encrypting the string
+representation of the UserToken while serializing. ( It was necessary as we
+correctly used a new IV for every time we encrypted a token in serialization, so
+subsequent serializations of the same exact UserToken would produce
+different access token strings)
+
+This change also handles the serialization/deserialization BWC logic:
+
+- In mixed clusters we keep creating tokens in the old format and
+consume only old format tokens
+- In upgraded clusters, we start creating tokens in the new format but
+still remain able to consume old format tokens (that could have been
+created during the rolling upgrade and are still valid)
+
+Resolves #36872
+
+Co-authored-by: Jay Modi jaymode@users.noreply.github.com

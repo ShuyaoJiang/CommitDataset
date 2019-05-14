@@ -1,0 +1,11 @@
+Ensure Parent ConfigurationClass loaded on overrides
+
+Previously ConfigurationClassParser could override a nested
+@Configuration without consideration of @Bean's defined in parent
+classes.
+
+This commit ensures that if the original ConfigurationClass contains
+additional bean definitions it is processed again.
+
+Issue: SPR-10546
+(cherry picked from commit 940011e)

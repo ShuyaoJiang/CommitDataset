@@ -1,0 +1,13 @@
+Allow to construct UnpooledByteBufAllocator that explictly always use sun.misc.Cleaner
+
+Motivation:
+
+When the user want to have the direct memory explicitly managed by the GC (just as java.nio does) it is useful to be able to construct an UnpooledByteBufAllocator that allows this without the chances to see any memory leak.
+
+Modifications:
+
+Allow to explicitly disable the usage of reflection to construct direct ByteBufs and so be sure these will be collected by GC.
+
+Result:
+
+More flexible way to use the UnpooledByteBufAllocator.

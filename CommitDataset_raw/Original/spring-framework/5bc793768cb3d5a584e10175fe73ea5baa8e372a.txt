@@ -1,0 +1,18 @@
+Introduce Freemarker/Velocity/TilesWebMvcConfigurer
+
+This change improves the support for auto-registration of FreeMarker,
+Velocity, and Tiles configuration.
+
+The configuration is now conditional not only based on the classpath
+but also based on whether a FreeMarkerConfigurer for example is already
+present in the configuration.
+
+This change also introduces FreeMarker~, Velocity~, and
+TilesWebMvcConfigurer interfaces for customizing each view technology.
+
+The WebMvcConfigurer can still be used to configure all view resolvers
+centrally (including FreeMarker, Velocity, and Tiles) without some
+default conifguration, i.e. without the need to use the new
+~WebMvcConfigurer interfaces until customizations are required.
+
+Issue: SPR-7093

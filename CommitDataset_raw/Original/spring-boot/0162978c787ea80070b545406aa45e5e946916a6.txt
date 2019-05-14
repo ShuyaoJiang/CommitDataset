@@ -1,0 +1,10 @@
+Support server.error.whitelabel.enabled in WebFlux
+
+This commit disables the default HTML view in the WebFlux error handling
+support when `server.error.whitelabel.enabled=false`.
+In this case, the original exception will be forwarded down the stream
+and handled by the default `WebExceptionHandler` provided by Spring
+WebFlux (likely to respond a blank page and an error HTTP response
+status).
+
+Closes gh-12520

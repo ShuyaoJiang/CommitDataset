@@ -1,0 +1,8 @@
+No longer unidle shard during recovery
+
+Previously we would unidle a primary shard during recovery in case the
+recovery target would miss a background global checkpoint sync. However,
+the background global checkpoint syncs are no longer tied to the primary
+shard falling idle and so this unidling is no longer needed.
+
+Relates #27757

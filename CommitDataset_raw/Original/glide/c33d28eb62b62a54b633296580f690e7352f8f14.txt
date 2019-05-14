@@ -1,0 +1,12 @@
+Eliminate some duplicate code in EngineJob and simplify removing Callbacks.
+
+Ignored callbacks used to be necessary because we needed to avoid
+ConcurrentModificationExceptions while iterating over the list that we
+were modifying. Now we're iterating over a copy of the callbacks list,
+so we don't need to worry about concurrent modifications. As a result we
+can just directly remove the callback from the callbacks list and not
+keep any separate set of ignored callbacks.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=226087181

@@ -1,0 +1,9 @@
+Adjust CombinedDeletionPolicy for multiple commits (#27456)
+
+Today, we keep only the last index commit and use only it to calculate
+the minimum required translog generation. This may no longer be correct
+as we introduced a new deletion policy which keeps multiple index
+commits. This change adjusts the CombinedDeletionPolicy so that it can
+work correctly with a new index deletion policy.
+
+Relates to #10708, #27367

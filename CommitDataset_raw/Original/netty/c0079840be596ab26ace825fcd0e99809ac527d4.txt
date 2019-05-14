@@ -1,0 +1,13 @@
+Improve DnsNameResolverTest.testResolveA()
+
+Motivation:
+
+DnsNameResolver.testResolveA() tests if the cache works as well as the usual DNS protocol test.  To ensure the result from the cache is identical to the result without cache, it compares the two Maps which contain the result of cached/uncached resolution.  The comparison of two Maps yields an expected behavior, but the output of the comparison on failure is often unreadable due to its long length.
+
+Modifications:
+
+Compare entry-by-entry for more comprehensible test failure output
+
+Result:
+
+When failure occurs, it's easier to see which domain was the cause of the problem.

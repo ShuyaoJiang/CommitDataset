@@ -1,0 +1,18 @@
+[TEST] Correctly verify that aliases were deleted in MlJobIT
+
+This fixes `testDeleteJobAfterMissingAliases` to not fail randomly.
+The reason the test was failing is that at some point some aliases
+are deleted and the cat-aliases API is called to verify they were
+indeed deleted. This was checked by asserting an
+index_not_found_exception was thrown by the cat-aliases request.
+This was some times working as there were no other aliases. However,
+that depends on whether other x-pack features had time to create their
+infrastructure. For example, security creates an alias. When other
+aliases had the time to be created, the cat-aliases request does not
+fail and the test fails.
+
+This commit simply changes the verification that the read/write
+aliases were deleted by replacing the cat-aliases request with
+two single get-alias requests.
+
+Original commit: elastic/x-pack-elasticsearch@fe2c7b0cb4efbd09a9fa8df556ce9d7017f4a176

@@ -1,0 +1,22 @@
+Add SslHandler.renegotiate()
+
+Related: #3125
+
+Motivation:
+
+We did not expose a way to initiate TLS renegotiation and to get
+notified when the renegotiation is done.
+
+Modifications:
+
+- Add SslHandler.renegotiate() so that a user can initiate TLS
+  renegotiation and get the future that's notified on completion
+- Make SslHandler.handshakeFuture() return the future for the most
+  recent handshake so that a user can get the future of the last
+  renegotiation
+- Add the test for renegotiation to SocketSslEchoTest
+
+Result:
+
+Both client-initiated and server-initiated renegotiations are now
+supported properly.

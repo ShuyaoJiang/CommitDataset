@@ -1,0 +1,16 @@
+Add new setting to disable persistent tasks allocations (#29137)
+
+This commit adds a new setting `cluster.persistent_tasks.allocation.enable`
+that can be used to enable or disable the allocation of persistent tasks.
+The setting accepts the values `all` (default) or `none`. When set to
+none, the persistent tasks that are created (or that must be reassigned)
+won't be assigned to a node but will reside in the cluster state with
+a no "executor node" and a reason describing why it is not assigned:
+
+```
+"assignment" : {
+  "executor_node" : null,
+  "explanation" : "persistent task [foo/bar] cannot be assigned [no
+  persistent task assignments are allowed due to cluster settings]"
+}
+```

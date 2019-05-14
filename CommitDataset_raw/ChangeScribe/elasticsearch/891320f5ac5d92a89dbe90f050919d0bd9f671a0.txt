@@ -1,0 +1,126 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (log4j2.properties, custom-log4j2.properties).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.common.logging:  
+
+1.1. Add a class for eS json layout. It allows to:
+
+	Instantiate eS json layout  with charset;
+	Get pattern;
+	Create layout;
+	Convert eS json layout to serializable;
+	Get content format;
+	Encode log event;
+	Convert eS json layout to string
+
+1.2. Add a class for json log line. It allows to:
+
+	Convert json log line to string;
+	Get type;
+	Timestamp json log line;
+	Get level;
+	Get component;
+	Get cluster name;
+	Node name;
+	Get cluster uuid;
+	Node id;
+	Get message;
+	Get stacktrace;
+	Set type;
+	Set timestamp;
+	Set level;
+	Set component;
+	Set cluster name;
+	Set node name;
+	Set cluster uuid;
+	Set node id;
+	Set message;
+	Set stacktrace;
+	Create parser
+
+1.3. Add a class for json logger tests. It allows to:
+
+	Handle init node name;
+	Set json logger tests;
+	Tear json logger tests;
+	Handle test json layout;
+	Handle test prefix logger in json;
+	Handle test json in message;
+	Handle test stacktrace;
+	Handle test json in stacktrace message is splitted;
+	Collect lines;
+	Get cluster logs path;
+	Handle setup logging;
+	Log line;
+	Feature value  of actual json log line;
+	Stacktrace json logger tests with;
+
+1.4. Add a class for json logs integ test case. It allows to:
+
+	Node name matcher;
+	Handle open reader;
+	Handle test elements present on all lines of log;
+	Find first line;
+	Handle test node id and cluster id consistent once available;
+	Get log file
+
+1.5. Add a class for json throwable pattern converter. It allows to:
+
+	Instantiate json throwable pattern converter  with configuration;
+	Handle new instance;
+	Handle format;
+	Get format stacktrace;
+	Get format json;
+	Wrap json throwable pattern converter as json;
+	Check if json throwable pattern converter handles throwable
+
+1.6. Add a class for json throwable pattern converter tests. It allows to:
+
+	Handle test no stacktrace;
+	Handle test stacktrace with json;
+	Get format
+
+1.7. Add a class for node and cluster id converter. It allows to:
+
+	Handle new instance;
+	Instantiate node and cluster id converter;
+	Set node id and cluster id;
+	Handle format;
+	Get format ids
+
+1.8. Add a class for node and cluster id state listener. It allows to:
+
+	Instantiate node and cluster id state listener;
+	Get and set node id and cluster id;
+	Check if node and cluster id state listener is node and cluster id present;
+	Get cluster UUID;
+	Get node id;
+	Process node and cluster id state listener node and cluster id state listener on new cluster state;
+	Process node and cluster id state listener node and cluster id state listener on cluster service close;
+	Process node and cluster id state listener node and cluster id state listener on timeout
+
+2. Changes to package org.elasticsearch.qa.custom_logging:  
+
+2.1. Add a class for custom logging config IT. It allows to:
+
+	Handle test successful startup with custom config;
+	Read all lines;
+	Get log file
+
+3. Changes to package org.elasticsearch.qa.die_with_dignity:  
+
+3. Changes to package org.elasticsearch.test.rest:  
+
+3.1. Add a class for json logs format and parse IT. It allows to:
+
+	Node name matcher;
+	Handle open reader
+
+4. Changes to package org.elasticsearch.unconfigured_node_name:  
+
+4.1. Rename type NodeNameInLogsIT with JsonLogsFormatAndParseIT
+
+5. Changes to package org.elasticsearch.xpack.ccr:  
+

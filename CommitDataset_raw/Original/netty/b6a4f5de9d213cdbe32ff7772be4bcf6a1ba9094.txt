@@ -1,0 +1,12 @@
+Refactor of HttpUtil and HttpHeaderUtil
+
+Motivation:
+There currently exists http.HttpUtil, http2.HttpUtil, and http.HttpHeaderUtil. Having 2 HttpUtil methods can be confusing and the utilty methods in the http package could be consolidated.
+
+Modifications:
+- Rename http2.HttpUtil to http2.HttpConversionUtil
+- Move http.HttpHeaderUtil methods into http.HttpUtil
+
+Result:
+Consolidated utilities whose names don't overlap.
+Fixes https://github.com/netty/netty/issues/4120

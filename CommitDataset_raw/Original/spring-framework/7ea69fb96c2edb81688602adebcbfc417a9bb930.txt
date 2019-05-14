@@ -1,0 +1,17 @@
+Improve ResolvableType.hashCode() for better performance
+
+Prior to this commit, when there was a lot of entries in the
+ResolvableType.cache HashMap, getting a simple value could
+take a lot of time due to a lot of calls to ResolvableType.equals().
+ResolvableType.equals() used this.type, getSource(),
+this.variableResolver.getSource() and this.componentType, but
+ResolvableType.hashCode() used only this.type.
+
+With this commit, ResolvableType.hashCode() now uses the same
+fields than ResolvableType.equals().
+
+Performance on the spring-resolvabletype-benchmark project:
+ - 8000 us before this commit
+ - 120 us with this commit
+
+Issue: SPR-12122

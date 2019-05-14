@@ -1,0 +1,11 @@
+Do not consider all @Components as configuration
+
+Update ConfigurationClassUtils to only consider beans with @Bean
+methods as 'lite' configuration candidates.
+
+Prior to this commit all @Component beans were considered 'lite'
+configuration candidates which could result in a large number of
+ConfigurationClass instance being created that would ultimately be
+ignored.
+
+Issue: SPR-10609

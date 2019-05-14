@@ -1,0 +1,12 @@
+Test: Only sniff host metadata for node_selectors (#32750)
+
+Our rest testing framework has support for sniffing the host metadata on
+startup and, before this change, it'd sniff that metadata before running
+the first test. This prevents running these tests against
+elasticsearch installations that won't support sniffing like Elastic
+Cloud. This change allows tests to only sniff for metadata when they
+encounter a test with a `node_selector`. These selectors are the things
+that need the metadata anyway and they are super rare. Tests that use
+these won't be able to run against installations that don't support
+sniffing but we can just skip them. In the case of Elastic Cloud, these
+tests were never going to work against Elastic Cloud anyway.

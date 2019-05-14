@@ -1,0 +1,12 @@
+Fix use of deprecated Mongo API
+
+We now use com.mongodb.MongoClientSettings to configure the reactive
+MongoDB driver. This is a breaking change as
+MongoClientSettingsBuilderCustomizer and user-provided
+MongoClientSettings beans referenced the package the settings type
+from com.mongodb.async.client.
+
+MongoClient.getSettings() is deprecated and still in use within tests
+until a replacement is available.
+
+See gh-14318

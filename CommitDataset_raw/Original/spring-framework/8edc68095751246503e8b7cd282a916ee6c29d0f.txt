@@ -1,0 +1,11 @@
+Scale back static factory methods in ClientRequest
+
+Following on the introduction of WebClientOperations in the last commit
+this commit removes the HTTP method specific factory methods and also
+scales back the builder options in ClientRequest.
+
+ClientRequest is now expected to be used mainly from an
+ExchangeFilterFunction which may modify the ClientRequest using the
+from(ClientRequest) entry point rather creating from scratch.
+
+Issue: SPR-15124

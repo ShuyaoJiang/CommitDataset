@@ -1,0 +1,8 @@
+More efficient handling of incomplete writes.
+
+The problem with the old way was that we always set the OP_WRITE when the buffer could not be written
+until the write-spin-count was reached. This means that in some cases the channel was still be writable
+but we just was not able to write out the data quick enough. For this cases we should better break out the
+write loop and schedule a write to be picked up later in the EventLoop, when other tasks was executed.
+The OP_WRITE will only be set if a write actual returned 0 which means there is no more room for writing data
+and this we need to wait for the os to notify us.

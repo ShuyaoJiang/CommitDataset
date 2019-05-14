@@ -1,0 +1,18 @@
+Allow copying source settings on resize operation (#30255)
+
+Today when an index is created from shrinking or splitting an existing
+index, the target index inherits almost none of the source index
+settings. This is surprising and a hassle for operators managing such
+indices. Given this is the default behavior, we can not simply change
+it. Instead, we start by introducing the ability to copy settings. This
+flag can be set on the REST API or on the transport layer and it has the
+behavior that it copies all settings from the source except non-copyable
+settings (a property of a setting introduced in this
+change). Additionally, settings on the request will always override.
+
+This change is the first step in our adventure:
+ - this flag is added here in 7.0.0 and immediately deprecated
+ - this flag will be backported to 6.4.0 and remain deprecated
+ - then, we will remove the ability to set this flag to false in 7.0.0
+ - finally, in 8.0.0 we will remove this flag and the only behavior will
+   be for settings to be copied

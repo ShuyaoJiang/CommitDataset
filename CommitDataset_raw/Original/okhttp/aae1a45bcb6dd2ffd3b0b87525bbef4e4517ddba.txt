@@ -1,0 +1,9 @@
+Recover more gracefully when an editor is detached.
+
+We had a bug where we could have two editors for the same entry. This
+would occur when the cache was cleared, or if the entry was otherwise
+evicted while the edit was in progress.
+
+Previously the two editors would corrupt each other, and potentially
+the cache's size. With this change the detached editor is limited and
+harmless.

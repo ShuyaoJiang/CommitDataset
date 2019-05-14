@@ -1,0 +1,54 @@
+Add ability to associate an ID with tasks  (#27764)
+
+Adds support for capturing the X-Opaque-Id header from a REST request and storing it's value in the tasks that this request started. It works for all user-initiated tasks (not only search).
+
+Closes #23250
+
+Usage:
+```
+$ curl -H "X-Opaque-Id: imotov" -H "foo:bar" "localhost:9200/_tasks?pretty&group_by=parents"
+{
+  "tasks" : {
+    "7qrTVbiDQKiZfubUP7DPkg:6998" : {
+      "node" : "7qrTVbiDQKiZfubUP7DPkg",
+      "id" : 6998,
+      "type" : "transport",
+      "action" : "cluster:monitor/tasks/lists",
+      "start_time_in_millis" : 1513029940042,
+      "running_time_in_nanos" : 266794,
+      "cancellable" : false,
+      "headers" : {
+        "X-Opaque-Id" : "imotov"
+      },
+      "children" : [
+        {
+          "node" : "V-PuCjPhRp2ryuEsNw6V1g",
+          "id" : 6088,
+          "type" : "netty",
+          "action" : "cluster:monitor/tasks/lists[n]",
+          "start_time_in_millis" : 1513029940043,
+          "running_time_in_nanos" : 67785,
+          "cancellable" : false,
+          "parent_task_id" : "7qrTVbiDQKiZfubUP7DPkg:6998",
+          "headers" : {
+            "X-Opaque-Id" : "imotov"
+          }
+        },
+        {
+          "node" : "7qrTVbiDQKiZfubUP7DPkg",
+          "id" : 6999,
+          "type" : "direct",
+          "action" : "cluster:monitor/tasks/lists[n]",
+          "start_time_in_millis" : 1513029940043,
+          "running_time_in_nanos" : 98754,
+          "cancellable" : false,
+          "parent_task_id" : "7qrTVbiDQKiZfubUP7DPkg:6998",
+          "headers" : {
+            "X-Opaque-Id" : "imotov"
+          }
+        }
+      ]
+    }
+  }
+}
+```

@@ -1,0 +1,13 @@
+[Rollup] Validate field mapping before creating Rollup Job (elastic/x-pack-elasticsearch#4274)
+
+This PR adds logic to ensure that the fields (and field types) configured
+in the Rollup Job are present in the index/indices specified by the job's
+index pattern.  If a field is missing, or is not aggregatable, it
+will throw an exception before the job is created.
+
+This is important for user-friendliness, because otherwise the user
+only discovers an issue with mapping when the job is started and
+fails to rollup correctly (and only really noticeable by looking at logs,
+since it's a runtime failure).
+
+Original commit: elastic/x-pack-elasticsearch@686cd03072fedaf440f9fed2c9b1eee3ead3e590

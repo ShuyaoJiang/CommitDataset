@@ -1,0 +1,13 @@
+[#5648] Detect if netty-tcnative is in classpath or just tcnative
+
+Motivation:
+
+If netty is used in a tomcat container tomcat itself may ship tcnative. Because of this we will try to use OpenSsl in netty and fail because it is different to netty-tcnative.
+
+Modifications:
+
+Ensure if we find tcnative it is really netty-tcnative before using it.
+
+Result:
+
+No more problems when using netty in a tomcat container that also has tcnative installed.

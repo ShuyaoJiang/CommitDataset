@@ -1,0 +1,15 @@
+Avoid IdleStateHandler triggering unexpected idle events when flushing large entries to slow clients (#9020)
+
+Motivation:
+
+IdleStateHandler may trigger unexpected idle events when flushing large entries to slow clients.
+
+Modification:
+
+In netty design, we check the identity hash code and total pending write bytes of the current flush entry to determine whether there is a change in output. But if a large entry has been flushing slowly (for some reason, the network speed is slow, or the client processing speed is too slow to cause the TCP sliding window to be zero), the total pending write bytes size and identity hash code would remain unchanged.
+
+Avoid this issue by adding checks for the current entry flush progress.
+
+Result:
+
+Fixes #8912 .

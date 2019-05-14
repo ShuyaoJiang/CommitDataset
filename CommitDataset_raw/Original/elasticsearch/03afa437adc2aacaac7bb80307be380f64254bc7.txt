@@ -1,0 +1,8 @@
+Avoid polluting download stats on builds (#38660)
+
+Recently we changed where we source released artifacts for usage in
+backwards compatibility tests. We now source these from
+artifacts.elastic.co. To avoid polluting the download stats from builds,
+we want to add the X-Elastic-No-KPI header to requests from
+artifacts.elastic.co. To do this, we hack the Ivy feature of custom HTTP
+header credentials and specify our desired headers.

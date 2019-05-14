@@ -1,0 +1,13 @@
+Fix spring.profiles.default with profile enabled by configuration file
+
+Previously, if the user configured a custom default profile and then
+enabled another profile using a configuration file, the custom default
+profile would be activated when it should not have been.
+
+This commit updates ConfigFileApplicationListener so that when a
+profile is activated via a configuration file, any profiles
+that are queued purely because they are a default profile are removed
+from the queue. This ensures that a default profile is not active
+when another profile is activated via a configuration file.
+
+Closes gh-5998

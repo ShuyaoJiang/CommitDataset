@@ -1,0 +1,11 @@
+Cross Cluster Search: do not use dedicated masters as gateways (#30926)
+
+When we are connecting to a remote cluster we should never select
+dedicated master nodes as gateway nodes, or we will end up loading them
+with requests that should rather go to other type of nodes e.g. data
+nodes or coord_only nodes.
+
+This commit adds the selection based on the node role, to the existing
+selection based on version and potential node attributes.
+
+Closes #30687

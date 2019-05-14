@@ -1,0 +1,20 @@
+Add start/stop goals to maven plugin
+
+SpringApplicationLifecycle provides basic lifecycle operations on the
+current Spring Boot application (that is checking if the application has
+fully started and gracefully terminate the app). It can be registered as
+an MBean of the platform MBean server if a specific property is set.
+
+The Maven plugin uses that MBean to check that the application is ready
+before ending the "start" phase. It uses it to trigger a proper shutdown
+of the application during the "stop" phase.
+
+If the process has to be forked, the platform MBean server is exposed on
+a configurable port so that the maven plugin can connect to it.
+
+Such change permits the maven plugin to integrate a classical integration
+test scenario where the "start" goal is invoked during the
+pre-integration phase and the "stop" goal during the post-integration
+phase.
+
+Closes gh-2525

@@ -1,0 +1,11 @@
+Invert the check for ServletInputStream.isReady()
+
+When checking whether there is still request body the first method
+that should be checked is ServletInputStream.isReady() and then
+ServletInputStream.isFinished(). ServletInputStream.isReady() is the active
+method whereas the ServletInputStream.isFinished() is not.
+It is important to call ServletInputStream.isReady() because if it returns
+false it will schedule a dispatch and if the request body is already read it will
+send onAllDataRead event.
+
+Issue: SPR-16521

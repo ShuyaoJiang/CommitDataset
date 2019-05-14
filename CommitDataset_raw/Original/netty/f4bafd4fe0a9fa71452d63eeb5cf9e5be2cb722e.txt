@@ -1,0 +1,14 @@
+Correctly check if cipher is supported for each SslProvider before trying to run test and fix buffer leaks in test. (#8247)
+
+Motivation:
+
+5aaa16b24cee9d7455ea1cbb4cb9f2e43eb931b7 introduced a testcase for specific ciphersuites and checked if these are supported by our native implementation before running it. Unfortunally this is not good enough as even on the JDK it may not be supported on various JDK versions (like Java7). Beside this the test leaked buffers.
+
+Modifications:
+
+- Correctly check if ciphersuite is supported on each SslProvider before trying to run test.
+- Fix buffer leaks.
+
+Result:
+
+Testsuite pass again on Java7 and others when -Pleak is used.

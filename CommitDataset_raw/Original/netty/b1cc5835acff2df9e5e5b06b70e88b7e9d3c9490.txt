@@ -1,0 +1,13 @@
+Not directly call getsockopt but use exported helper function
+
+Motivation:
+
+To better isolate OS system calls we should not call getsockopt directly but use our netty_unix_socket_getOption0 function. See is a followup of f115bf5.
+
+Modifications:
+
+Export netty_unix_socket_getOption0 by declaring it in the header file and use it
+
+Result:
+
+Better isolation of system calls.

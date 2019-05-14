@@ -1,0 +1,17 @@
+Allow HTTP decoding post CONNECT in `HttpClientCode`
+
+__Motivation__
+
+`HttpClientCodec` skips HTTP decoding on the connection after a successful HTTP CONNECT response is received.
+ This behavior follows the spec for a client but pragmatically, if one creates a client to use a proxy transparently, the codec becomes useless after HTTP CONNECT.
+ Ideally, one should be able to configure whether HTTP CONNECT should result in pass-through or not. This will enable client writers to continue using HTTP decoding even after HTTP CONNECT.
+
+ __Modification__
+
+ Added overloaded constructors to accept `parseHttpPostConnect`. If this parameter is `true` then the codec continues decoding even after a successful HTTP CONNECT.
+
+ Also fixed a bug in the codec that was incrementing request count post HTTP CONNECT but not decrementing it on response. Now, the request count is only incremented if the codec is not `done`.
+
+ __Result__
+
+ Easier usage by HTTP client writers who wants to connect to a proxy but still decode HTTP for their users for subsequent requests.

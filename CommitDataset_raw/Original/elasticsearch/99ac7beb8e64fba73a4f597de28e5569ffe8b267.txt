@@ -1,0 +1,5 @@
+Teach the build about betas and rcs (#26066)
+
+The build was ignoring suffixes like "beta1" and "rc1" on the version numbers which was causing the backwards compatibility packaging tests to fail because they expected to be upgrading from 6.0.0 even though they were actually upgrading from 6.0.0-beta1. This adds the suffixes to the information that the build scrapes from Version.java. It then uses those suffixes when it resolves artifacts build from the bwc branch and for testing.
+
+Closes #26017

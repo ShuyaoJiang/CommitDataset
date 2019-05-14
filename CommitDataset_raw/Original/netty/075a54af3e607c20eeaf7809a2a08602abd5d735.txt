@@ -1,0 +1,13 @@
+Native EPOLL Library Allows Shading
+
+Motivation:
+If Netty's class files are renamed and the type references are updated (shaded) the native libraries will not function. The native epoll module uses implicit JNI bindings which requires the fully qualified java type names to match the method signatures of the native methods. This means EPOLL cannot be used with a shaded Netty.
+
+Modifications:
+- Make the JNI method registration dynamic
+- support a system property io.netty.packagePrefix which must be prepended to the name of the native library (to ensure the correct library is loaded) and all class names (to allow classes to be correctly referenced)
+- remove system property io.netty.native.epoll.nettyPackagePrefix which was recently added and the code to support it was incomplete
+
+Result:
+transport-native-epoll can be used when Netty has been shaded.
+Fixes https://github.com/netty/netty/issues/4800

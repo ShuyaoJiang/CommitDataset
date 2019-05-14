@@ -1,0 +1,15 @@
+Add support for @ResponseStatus in DefaultErrorAttributes
+
+This commit adds support for @ResponseStatus in DefaultErrorAttributes
+mimicking the semantics of @ResponseStatus in SpringMVC.
+
+Throwables annotated with @ResponseStatus handled by
+DefaultErrorAttributes will result in the following error attributes:
+* 'status' set as the return value of the HttpStatus#value()
+  defined as @ResponseStatus#value()
+* 'error' set to the default reason phrase of the HttpStatus
+  defined as @ResponseStatus#value()
+* 'message' defined as the value of @ResponseStatus#reason(),
+  or the default HttpStatus's reason phrase if left unspecified
+
+See gh-14744

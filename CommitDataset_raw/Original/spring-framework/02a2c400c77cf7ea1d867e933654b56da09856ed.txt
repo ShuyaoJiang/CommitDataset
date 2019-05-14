@@ -1,0 +1,13 @@
+Move URL transform methods from ServerHttpResponse to ServerWebExchange
+
+This commit moves `encodeUrl` and `registerUrlEncoder` from
+ServerHttpResponse to ServerWebExchange.
+
+It also renames `encodeUrl` to `transformUrl` and `registerUrlEncoder`
+to `addUrlTransformer` to make it clearer that these methods do not
+perform actual URL encodings (i.e. they do not replaceinvalid
+characters).
+The `add` prefix (instead of `register`) makes it clearer that each
+function is added in addition to the previous one.
+
+Issue: SPR-15924

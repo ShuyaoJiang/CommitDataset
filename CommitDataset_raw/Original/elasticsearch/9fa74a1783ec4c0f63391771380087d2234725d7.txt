@@ -1,0 +1,15 @@
+Fix testRunStateChangePolicyWithAsyncActionNextStep race condition (#40707)
+
+Previously we only set the latch countdown with `nextStep.setLatch` after the
+cluster state change has already been counted down. However, it's possible
+execution could have already started, causing the latch to be missed when the
+`MockAsyncActionStep` is being executed.
+
+This moves the latch setting to be before the call to
+`runPolicyAfterStateChange`, which means it is always available when the
+`MockAsyncActionStep` is executed.
+
+I was able to reproduce the failure every 30-40 runs before this change. With
+this change, running 2000+ times the test passes.
+
+Resolves #40018

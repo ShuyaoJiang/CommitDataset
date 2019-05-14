@@ -1,0 +1,11 @@
+Do not use lambda for task action as it breaks up-to-date checks
+
+Due to gradle/gradle#5510, using a lambda for a task action breaks
+up-to-date checks in certain circumstances.
+
+This commit updates JavaPluginAction to use an inner-class in place
+of a lambda for the action that it adds to JavaCompile tasks. A test
+has not been added as it does not appear to be possible to reproduce
+it with a TestKit-based test.
+
+Closes gh-14054

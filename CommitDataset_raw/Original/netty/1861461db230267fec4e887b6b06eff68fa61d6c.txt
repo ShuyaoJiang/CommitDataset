@@ -1,0 +1,12 @@
+[#4635] Stop decoding if decoder was removed in ReplayingDecoder
+
+We need to check if this handler was removed before continuing with decoding.
+If it was removed, it is not safe to continue to operate on the buffer. This was already fixed for ByteToMessageDecoder in 4cdbe3928424b5b38695967c0cc1062dccf1a83c  but missed for ReplayingDecoder.
+
+Modifications:
+
+Check if decoder was removed after fire messages through the pipeline.
+
+Result:
+
+No illegal buffer access when decoder was removed.

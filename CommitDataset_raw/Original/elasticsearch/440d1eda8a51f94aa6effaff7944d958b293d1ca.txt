@@ -1,0 +1,7 @@
+Fix failures in BulkProcessorIT#testGlobalParametersAndBulkProcessor. (#38129)
+
+This PR fixes a couple test issues:
+* It narrows an assertWarnings call that was too broad, and wasn't always
+  applicable with certain random sequences.
+* Previously, we could send a typeless bulk request containing '_type: 'null'.
+  Now we omit the _type key altogether for typeless requests.

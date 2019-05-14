@@ -1,0 +1,27 @@
+SQL: Fix issue with field names containing "." (#37364)
+
+Adjust FieldExtractor to handle fields which contain `.` in their
+name, regardless where they fall in, in the document hierarchy. E.g.:
+
+```
+{
+  "a.b": "Elastic Search"
+}
+
+{
+  "a": {
+    "b.c": "Elastic Search"
+  }
+}
+
+{
+  "a.b": {
+    "c": {
+      "d.e" : "Elastic Search"
+    }
+  }
+}
+```
+
+Fixes: #37128
+

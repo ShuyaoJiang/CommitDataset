@@ -1,0 +1,16 @@
+Turn (Jackson|Gson)AutoConfiguration into true auto-configuration
+
+Previously JacksonAutoConfiguration and GsonAutoConfiguration were
+not actually auto-configuration classes. They were only processed
+due to being imported by HttpMessageConvertersAutoConfiguration.
+In addition to being misleadingly named, this meant that they could
+not be included or excluded individually and were also tightly coupled
+to HTTP message conversion.
+
+This commit updates spring.factories to make both
+JacksonAutoConfiguration and GsonAutoConfiguration actual
+auto-configuration classes. As a result, they can now be enabled or
+disabled individually and are no longer coupled to HTTP message
+conversion.
+
+Closes gh-1562

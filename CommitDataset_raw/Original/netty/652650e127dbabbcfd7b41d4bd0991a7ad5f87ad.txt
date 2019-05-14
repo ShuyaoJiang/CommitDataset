@@ -1,0 +1,13 @@
+Fix leak in SniClientJava8TestUtil (#8326)
+
+Motivation:
+
+4d1458604ab3d378192c6240dd12ea85d1223838 did fix some leaks in SniClientTest but missed the ones in SniClientJava8TestUtil.
+
+Modifications:
+
+Correctly release SslContext.
+
+Result:
+
+No more leaks in SNI tests.

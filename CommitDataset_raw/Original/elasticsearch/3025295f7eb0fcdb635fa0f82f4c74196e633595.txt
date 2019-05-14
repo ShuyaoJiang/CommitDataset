@@ -1,0 +1,10 @@
+Decouple Text and Geopoint from XContentBuilder (#29119)
+
+This removes the `Text` and `Geopoint` special handling from `XContentBuilder`.
+Instead, these classes now implement `ToXContentFragment` and render themselves
+accordingly.
+
+This allows us to further decouple XContentBuilder from Elasticsearch-specific
+classes so it can be factored into a standalone lib at a later time.
+
+Relates to #28504

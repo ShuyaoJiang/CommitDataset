@@ -1,0 +1,21 @@
+Add CORS support to the actuator’s endpoints
+
+This commit adds CORS support to the Actuator’s MVC endpoints. CORS
+support is disabled by default and is only enabled once the
+endpoints.cors.allowed-origins property has been set.
+
+The new properties to control the endpoints’ CORS configuration are:
+
+endpoints.cors.allow-credentials
+endpoints.cors.allowed-origins
+endpoints.cors.allowed-methods
+endpoints.cors.allowed-headers
+endpoints.cors.exposed-headers
+
+The changes to enable Jolokia-specific CORS support (57a51ed) have been
+reverted as part of this commit. This provides a consistent approach
+to CORS configuration across all endpoints, rather than Jolokia using
+its own configuration.
+
+See gh-1987
+Closes gh-2936

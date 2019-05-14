@@ -1,0 +1,14 @@
+Clarify property expansion
+
+So far we have wrongly advertized that the `spring-boot-starter-parent`
+filters application configuration in such a way that standard Spring
+placeholders are not processed.
+
+In order to achieve such feature, the `useDefaultDelimiters` property
+must be set to `false` as otherwise default delimiters are appended to
+the list of custom delimiters.
+
+This property is not enabled so that only keys surrounded by `@` are
+filtered by the build.
+
+Closes gh-3092

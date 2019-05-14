@@ -1,0 +1,13 @@
+Lazily check for root, avoids unnecessary errors & resources
+
+Motivation:
+
+io.netty.util.internal.PlatformDependent.isRoot() depends on the IS_ROOT field which is filled in during class initialization. This spawns processes and consumes resources, which are not generally necessary to the complete functioning of that class.
+
+Modifications:
+
+This switches the class to use lazy initialization this field inside of the isRoot() method using double-checked locking (http://en.wikipedia.org/wiki/Double-checked_locking).
+
+Result:
+
+The first call to isRoot() will be slightly slower, at a tradeoff that class loading is faster, uses fewer resources and platform errors are avoided unless necessary.

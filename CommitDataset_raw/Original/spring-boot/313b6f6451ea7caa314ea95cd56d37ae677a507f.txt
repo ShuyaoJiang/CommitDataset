@@ -1,0 +1,26 @@
+Simplify exception handling and reporting in the launcher
+
+Following changes to LaunchedURLClassLoader made in 87fe0b2a, it is
+no longer necessary for the launcher to load MainMethodRunner via
+reflection as both the app class loader that the launcher URL class
+loader share the same MainMethodRunner class.
+
+This commit takes advantage of this by updating Launcher to instantiate
+MainMethodRunner directly rather than via reflection, removing one
+source of possible exceptions in the launcher.
+
+As the MainMethodRunner is now loaded directly and its class is shared
+between the two class loaders, there’s no longer a need for it to
+implement Runnable. This allows it to throw Exception from its run
+method, rather than having to wrap any Exception in a RuntimeException.
+
+Lastly, rather than catching any exception thrown from the launch,
+Launcher and its subclasses have been updated to allow this exception
+to be thrown from the main method. This allows the Exception to reach
+the JVM, to be processed by our registered uncaught exception handler,
+and to trigger the JVM’s standard processing for exiting due to a
+failure. This removes the need for the Launcher itself to call
+System.exit(1) and ensures that the exception is only output to the
+console if it hasn’t been registered as a logged exception.
+
+Closes gh-5358

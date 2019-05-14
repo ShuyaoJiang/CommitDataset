@@ -1,0 +1,10 @@
+Handle already closed while filling gaps
+
+We can hit an already closed exception when filling the gaps after
+blocking operations when updating the primary term on a promoted replica
+shard. We should catch this and suppress it as it is an expected outcome
+instead of letting it bubble up which leads to trying to fail the shard
+which throws yet another already closed exception.
+
+Relates #25021
+

@@ -1,0 +1,15 @@
+Call type aware canWrite() when using a GenericHttpMessageConverter
+
+This commit introduces the following changes:
+ - In AbstractMessageConverterMethodProcessor, the type aware variant of
+   canWrite() is now called when the converter implements
+   GenericHttpMessageConverter.
+ - The Javadoc has been updated in GenericHttpMessageConverter to make it clear
+   that the type aware canRead() and canWrite() methods should perform the same
+   checks than non type aware ones.
+  - AbstractGenericHttpMessageConverter now implements default type aware
+    canRead() and canWrite() methods than just call the non type aware variants.
+    Due to this, if subclasses just override the non type aware variants,
+    they still have the right behavior.
+
+Issue: SPR-13161

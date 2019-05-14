@@ -1,0 +1,12 @@
+SQL: Fix issue with complex HAVING and GROUP BY ordinal (#36594)
+
+When trying to analyse a HAVING condition, we crate a temp Aggregate
+Plan which wasn't created correctly (missing the expressions from the
+SELECT clause) and as a result the ordinal (1, 2, etc) in the GROUP BY
+couldn't be resolved correctly.
+
+Also after successfully analysing the HAVING condition, still the
+original plan was returned.
+
+Fixes: #36059
+

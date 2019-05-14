@@ -1,0 +1,13 @@
+Use delCount of SegmentInfos to calculate numDocs (#36323)
+
+Today, we iterate the bitset of hardLiveDocs to calculate the number of
+live docs. This calculation might be expensive if we enable soft-deletes
+(by default) for old indices whose soft-deletes was disabled previously
+and had hard-deletes.
+
+Once soft-deletes is enabled, we no longer hard-update or hard-delete
+documents directly. We have hard-deletes in two scenarios: (1) from old
+segments where soft-deletes was disabled, (2) when IndexWriter hits
+non-aborted exceptions. These two cases, IW flushes SegmentInfos before
+exposing the hard-deletes; thus we can use the hard-delete count of
+SegmentInfos.

@@ -1,0 +1,12 @@
+Clean up misuses of Truth where proposition values are passed into ASSERT.that() instead of the object under test.  This leads to patterns like:
+
+ASSERT.that(myMap.values().isEmpty());
+
+The above will do exactly nothing, because Truth is a fluent API and expects a value and returns an object with custom proposition methods on it, i.e.
+
+ASSERT.that(myMap.values()).isEmpty(); is the appropriate fix.
+
+This is in preparation for an upgrade to Truth which includes @CheckReturnValue on methods like .that() in order to let error-prone flag these as a compile-error.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=63974750

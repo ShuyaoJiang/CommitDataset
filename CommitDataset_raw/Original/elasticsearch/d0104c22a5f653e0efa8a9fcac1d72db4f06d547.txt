@@ -1,0 +1,12 @@
+Reduce the default number of cached queries. (#26949)
+
+Memory usage of queries can't be properly accounted, which can be an issue when
+large queries are cached since the actual memory usage will be much higher than
+what the cache thinks. This problem is very hard if not impossible to fix so as
+a workaround I would like to decrease the maximum number of cached queries so
+that this problem is less likely to cause trouble in practice.
+
+For the record, this problem is more likely to occur in envirenments that have
+small shards or don't give much memory to the JVM.
+
+Closes #26938

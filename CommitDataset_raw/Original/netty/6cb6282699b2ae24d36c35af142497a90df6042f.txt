@@ -1,0 +1,10 @@
+Lazy Initialization of epoll splice queue
+
+Motivation:
+AbstractEpollStreamChannel has a queue which collects splice events. Splice is assumed not to be the most common use case of this class and thus the splice queue could be initialized in a lazy fashion to save memory. This becomes more significant when the number of connections grows.
+
+Modifications:
+- AbstractEpollStreamChannel.spliceQueue will be initialized in a lazy fashion
+
+Result:
+Less memory consumption for most use cases

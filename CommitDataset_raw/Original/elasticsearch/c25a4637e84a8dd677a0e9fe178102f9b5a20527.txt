@@ -1,0 +1,8 @@
+Ensure total nanosecond time for tasks is at least 1 nanosecond
+
+In rare cases the total nanoseconds for an entire window of operations can be 0
+nanoseconds, causing the assertion in
+QueueResizingEsThreadPoolExecutor.calculateLambda to trip. This ensures that we
+calculate the lambda value with at least 1 nanosecond.
+
+Resolves #27607

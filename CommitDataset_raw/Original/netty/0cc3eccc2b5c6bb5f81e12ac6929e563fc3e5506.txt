@@ -1,0 +1,13 @@
+Close ObjectInputStream in ObjectDecoder.decode(...)
+
+Motivation:
+
+We create a new CompactObjectInputStream with ByteBufInputStream in ObjectDecoder.decode(...) method and don't close this InputStreams before return statement.
+
+Modifications:
+
+Save link to the ObjectInputStream and close it before return statement.
+
+Result:
+
+Close InputStreams and clean up unused resources. It will be better for GC.

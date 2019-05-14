@@ -1,0 +1,11 @@
+Support for random ports in @IntegrationTest
+
+User can now set up default properties in the Environment using
+@IntegrationTest("foo:bar", "x:y") etc. Using "server.port:0" you
+can get Tomcat or Jetty to spin up on a random port. We also add
+a test listener that populates "local.server.port" with the actual
+port the server started on so you can @Value("${local.server.port}")
+inject it into the test case.
+
+See gh-607 (this should make the extension of that PR to samples
+much easier)

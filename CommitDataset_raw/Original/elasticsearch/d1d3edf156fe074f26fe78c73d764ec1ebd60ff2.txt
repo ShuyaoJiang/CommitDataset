@@ -1,0 +1,12 @@
+TEST: Use different translog dir for a new engine
+
+In #testPruneOnlyDeletesAtMostLocalCheckpoint, we create a new engine
+but mistakenly use the same translog directory of  the existing engine.
+This prevents translog files from cleaning up when closing the engines.
+
+ERROR   0.12s J2 | InternalEngineTests.testPruneOnlyDeletesAtMostLocalCheckpoint <<< FAILURES!
+   > Throwable #1: java.io.IOException: could not remove the following files (in the order of attempts):
+   >    translog-primary-060/translog-2.tlog:  java.io.IOException: access denied:
+
+This commit makes sure to use a separate directory for each engine in
+this tes.

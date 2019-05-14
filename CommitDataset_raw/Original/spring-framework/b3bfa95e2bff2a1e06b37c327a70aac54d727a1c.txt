@@ -1,0 +1,11 @@
+Fix ResourceUrlEncodingFilter with context mapping
+
+Prior to this change, the ResourceUrlEncodingFilter would work well when
+the application is mapped to "/". But when mapped to a non-empty servlet
+context, this filter would not properly encode URLs and apply
+ResourceResolver URL resolution for resources.
+
+This commit makes sure that the lookup path is properly resolved in the
+request URI, taking into account the servlet context.
+
+Issue: SPR-12459

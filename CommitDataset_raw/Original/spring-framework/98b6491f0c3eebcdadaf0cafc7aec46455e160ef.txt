@@ -1,0 +1,14 @@
+Send error signal also for empty server responses
+
+Prior to that commit, the `ResponseSpec` `WebClient` would process error
+responses (4xx, 5xx HTTP status) and transform those into error signals
+with a `WebClientResponseException`. But this would only work if the
+HTTP response would have a non-empty response body.
+
+An empty error response would not send an error signal and only
+translate in an `onComplete` signal.
+
+This commit fixes this behavior and makes sure that this error signal is
+sent in all cases.
+
+Issue: SPR-15946

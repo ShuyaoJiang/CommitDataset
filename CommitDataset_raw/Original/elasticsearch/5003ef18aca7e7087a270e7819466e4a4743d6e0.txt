@@ -1,0 +1,18 @@
+Scripts: Fix security for deprecation warning (#28485)
+
+If you call `getDates()` on a long or date type field add a deprecation
+warning to the response and log something to the deprecation logger.
+This *mostly* worked just fine but if the deprecation logger happens to
+roll then the roll will be performed with the script's permissions
+rather than the permissions of the server. And scripts don't have
+permissions to, say, open files. So the rolling failed. This fixes that
+by wrapping the call the deprecation logger in `doPriviledged`.
+
+This is a strange `doPrivileged` call because it doens't check
+Elasticsearch's `SpecialPermission`. `SpecialPermission` is a permission
+that no-script code has and that scripts never have. Usually all
+`doPrivileged` calls check `SpecialPermission` to make sure that they
+are not accidentally acting on behalf of a script. But in this case we
+are *intentionally* acting on behalf of a script.
+
+Closes #28408

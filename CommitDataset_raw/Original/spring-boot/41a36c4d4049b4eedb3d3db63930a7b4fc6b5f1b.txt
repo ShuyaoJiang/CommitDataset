@@ -1,0 +1,8 @@
+Prevent CastCastException when stripping root URI
+
+Update RootUriRequestExpectationManager to only wrap requests when
+they cannot be cast to MockClientHttpRequest. This prevents later
+ClassCastExceptions from being thrown with @RestClientTests that
+define expected body content.
+
+Fixes gh-6845

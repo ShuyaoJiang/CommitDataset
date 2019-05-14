@@ -1,0 +1,13 @@
+[#6015] Fix racy PooledByteBufAllocatorTests
+
+Motivation:
+
+We had a few tests PooledByteBufAllocatorTests which used parkNanos(...) to give a resource enough time to get destroyed. This is race and may not be good enough.
+
+Modifications:
+
+Ensure the ThreadCache is really destroyed.
+
+Result:
+
+No more racy tests that depend on ThreadCaches.

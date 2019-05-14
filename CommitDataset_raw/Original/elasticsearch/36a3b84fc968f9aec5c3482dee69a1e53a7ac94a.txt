@@ -1,0 +1,52 @@
+Update the default for include_type_name to false. (#37285)
+
+* Default include_type_name to false for get and put mappings.
+
+* Default include_type_name to false for get field mappings.
+
+* Add a constant for the default include_type_name value.
+
+* Default include_type_name to false for get and put index templates.
+
+* Default include_type_name to false for create index.
+
+* Update create index calls in REST documentation to use include_type_name=true.
+
+* Some minor clean-ups around the get index API.
+
+* In REST tests, use include_type_name=true by default for index creation.
+
+* Make sure to use 'expression == false'.
+
+* Clarify the different IndexTemplateMetaData toXContent methods.
+
+* Fix FullClusterRestartIT#testSnapshotRestore.
+
+* Fix the ml_anomalies_default_mappings test.
+
+* Fix GetFieldMappingsResponseTests and GetIndexTemplateResponseTests.
+
+We make sure to specify include_type_name=true during xContent parsing,
+so we continue to test the legacy typed responses. XContent generation
+for the typeless responses is currently only covered by REST tests,
+but we will be adding unit test coverage for these as we implement
+each typeless API in the Java HLRC.
+
+This commit also refactors GetMappingsResponse to follow the same appraoch
+as the other mappings-related responses, where we read include_type_name
+out of the xContent params, instead of creating a second toXContent method.
+This gives better consistency in the response parsing code.
+
+* Fix more REST tests.
+
+* Improve some wording in the create index documentation.
+
+* Add a note about types removal in the create index docs.
+
+* Fix SmokeTestMonitoringWithSecurityIT#testHTTPExporterWithSSL.
+
+* Make sure to mention include_type_name in the REST docs for affected APIs.
+
+* Make sure to use 'expression == false' in FullClusterRestartIT.
+
+* Mention include_type_name in the REST templates docs.

@@ -1,0 +1,10 @@
+Reactive HttpMessageConverter
+
+This commit introduces a reactive version of the HttpMessageConverter.
+During the implementation of zero-copy support, it became apparent that
+it was ueful to have a common abstraction between client and server that
+operated on HttpMessages rather than DataBuffers.
+
+Two HttpMessageConverter implementations are provided:
+ - The CodecHttpMessageConverter, based on Encoder/Decoder.
+ - The ResourceHttpMessageConverter, using zero-copy if available.

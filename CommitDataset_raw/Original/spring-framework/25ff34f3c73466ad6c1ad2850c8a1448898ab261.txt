@@ -1,0 +1,11 @@
+JettyRequestUpgradeStrategy implements Lifecycle
+
+After this change JettyRequestUpgradeStrategy implements Lifecyle,
+which is used to init and cleanup the Jetty WebSocketServerFactory.
+
+Since a RequestUpgradeStrategy is typically created reflectively
+within DefaultHandshakeHandler, the Lifecycle events are propagated
+from the top, i.e. the Spring MVC HandlerMapping through the
+WebSocket/SockJsHttpRequestHandler.
+
+Issue: SPR-13140

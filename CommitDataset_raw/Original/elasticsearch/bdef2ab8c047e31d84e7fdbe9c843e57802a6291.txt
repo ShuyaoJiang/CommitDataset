@@ -1,0 +1,12 @@
+ Use m_m_nodes from Zen1 master for Zen2 bootstrap (#37701)
+
+Today we support a smooth rolling upgrade from Zen1 to Zen2 by automatically
+bootstrapping the cluster once all the Zen1 nodes have left, as long as the
+`minimum_master_nodes` count is satisfied. However this means that Zen2 nodes
+also require the `minimum_master_nodes` setting for this one specific and
+transient situation.
+
+Since nodes only perform this automatic bootstrapping if they previously
+belonged to a Zen1 cluster, they can keep track of the `minimum_master_nodes`
+setting from the previous master instead of requiring it to be set on the Zen2
+node.

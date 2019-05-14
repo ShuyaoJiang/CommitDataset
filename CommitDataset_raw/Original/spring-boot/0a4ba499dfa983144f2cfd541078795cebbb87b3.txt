@@ -1,0 +1,12 @@
+Add Actuator health checks for Elasticsearch REST clients
+
+This commit adds `ElasticsearchRestHealthIndicator`, a new
+`HealthIndicator` for Elasticsearch, using the Elasticsearch "low level
+rest client" provided by the
+`"org.elasticsearch.client:elasticsearch-rest-client"` dependency.
+
+Note that Spring Boot will auto-configure both low and high level REST
+clients, but since the high level one is using the former, a single
+health indicator will cover both cases.
+
+See gh-15211

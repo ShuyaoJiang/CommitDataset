@@ -1,0 +1,11 @@
+Introduce Handshake as a value object.
+
+I needed a non-terrible way to provide the HTTPS handshake
+information to the async API. Previously we were passing the
+live socket around, which was leaky and gross.
+
+This creates a new value object that captures the relevant
+bits of the handshake. We can use it in the response, the
+connection, and also in the cache. It's plausible that in
+the future we can use it to allow the application to block
+requests if the handshake is insufficient.

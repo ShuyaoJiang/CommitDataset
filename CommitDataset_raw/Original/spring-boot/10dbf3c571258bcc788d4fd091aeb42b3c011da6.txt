@@ -1,0 +1,12 @@
+Use `@Validated` as trigger for JSR-330 validation
+
+Update `ConfigurationPropertiesBindingPostProcessor` so that
+`@Validated` is expected to be used to trigger JSR-330 validation.
+
+Any existing configuration classes that use JSR-330 annotations but
+don't have `@Validated` will currently still be validated, but will
+now log a warning. This should give users a chance to add the requested
+annotations before the next Spring Boot release where we will use them
+as the exclusive signal that validation is required.
+
+Closes gh-7579

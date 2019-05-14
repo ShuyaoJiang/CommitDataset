@@ -1,0 +1,13 @@
+Null out references to tmpNioBuf and chunk to allow quicker collecting
+
+Motivation:
+
+In PooledByteBuf we missed to null out the chunk and tmpNioBuf fields before recycle it to the Recycler. This could lead to keep objects longer alive then necessary which may hold a lot of memory.
+
+Modifications:
+
+Null out tmpNioBuf and chunk before recycle.
+
+Result:
+
+Possible to earlier GC objects.

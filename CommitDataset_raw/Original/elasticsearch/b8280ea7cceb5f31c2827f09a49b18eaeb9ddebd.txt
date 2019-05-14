@@ -1,0 +1,10 @@
+median absolute deviation agg (#34482)
+
+This commit adds a new single value metric aggregation that calculates
+the statistic called median absolute deviation, which is a measure of
+variability that works on more types of data than standard deviation
+
+Our calculation of MAD is approximated using t-digests. In the collect
+phase, we collect each value visited into a t-digest. In the reduce
+phase, we merge all value t-digests, then create a t-digest of
+deviations using the first t-digest's median and centroids

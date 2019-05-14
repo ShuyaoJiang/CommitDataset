@@ -1,0 +1,7 @@
+Fix flaky DuplexTest.duplexWithRedirect
+
+The test is flaky because the server sometimes acts on the 301 response and resets the stream before the action added by MockDuplexResponseBody.sendResponse() is executed. This action then fails because it tries to write to a reset stream. mockDuplexResponseBody.awaitSuccess() then throws and fails the test.
+
+The change enforces the de-facto sequence on most runs, where the 301 response is handled only after the Duplex response is sent.
+
+Fixes https://github.com/square/okhttp/issues/4743

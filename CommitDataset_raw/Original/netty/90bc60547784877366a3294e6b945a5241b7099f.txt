@@ -1,0 +1,13 @@
+Initialization of PlatformDependent0 fails on Java 9
+
+Motivation:
+
+Initialization of PlatformDependent0 fails on Java 9 in static initializer when calling setAccessible(true).
+
+Modifications:
+
+Add RefelectionUtil which can be used to safely try if setAccessible(true) can be used or not and if not fail back to non reflection.
+
+Result:
+
+Fixed [#6345]

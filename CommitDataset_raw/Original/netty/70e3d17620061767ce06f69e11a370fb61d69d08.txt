@@ -1,0 +1,17 @@
+fixing small leak on exception on the transport-epoll-native allocation
+
+Motivation:
+
+the JNI function ThrowNew won't release any allocated memory.
+The method exceptionMessage is allocating a new string concatenating 2 constant strings
+What is creating a small leak in case of these exceptions are happening.
+
+Modifications:
+
+Added new methods that will use exceptionMessage and free resources accordingly.
+I am also removing the inline definition on these methods as they could be reused by
+other added modules (e.g. libaio which should be coming soon)
+
+Result:
+
+No more leaks in case of failures.

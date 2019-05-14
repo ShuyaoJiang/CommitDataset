@@ -1,0 +1,19 @@
+Fix dynamic mapping update generation. (#27467)
+
+When a field is not mapped, Elasticsearch tries to generate a mapping update
+from the parsed document. Some documents can introduce corner-cases, for
+instance in the event of a multi-valued field whose values would be mapped to
+different field types if they were supplied on their own, see for instance:
+
+```
+PUT index/doc/1
+{
+  "foo": ["2017-11-10T02:00:01.247Z","bar"]
+}
+```
+
+In that case, dynamic mappings want to map the first value as a `date` field
+and the second one as a `text` field. This currently throws an exception,
+which is expected, but the wrong one since it throws a `class_cast_exception`
+(which triggers a HTTP 5xx code) when it should throw an
+`illegal_argument_exception` (HTTP 4xx).

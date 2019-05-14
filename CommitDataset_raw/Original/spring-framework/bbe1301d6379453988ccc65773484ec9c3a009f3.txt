@@ -1,0 +1,8 @@
+Remove -XX:MaxHeapSize=256m from default GRADLE_OPTS
+
+This setting was causing failures in the CI build, and was not present
+prior to the recent updates to gradle wrapper generation.
+
+This commit also simplifies the gradle wrapper customizations by placing
+the logic in a doLast block within the original 'wrapper' task, as
+to creating a second wrapper task and extending from the first.

@@ -1,0 +1,12 @@
+Use ILM for Watcher history deletion (#37443)
+
+* Use ILM for Watcher history deletion
+
+This commit adds an index lifecycle policy for the `.watch-history-*` indices.
+This policy is automatically used for all new watch history indices.
+
+This does not yet remove the automatic cleanup that the monitoring plugin does
+for the .watch-history indices, and it does not touch the
+`xpack.watcher.history.cleaner_service.enabled` setting.
+
+Relates to #32041

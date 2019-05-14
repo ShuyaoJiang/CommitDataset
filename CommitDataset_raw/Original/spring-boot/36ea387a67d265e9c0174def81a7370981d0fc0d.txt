@@ -1,0 +1,27 @@
+Close RandomAccessDataFile when direct JarFile is closed
+
+Previously, the underlying RandomAccessDataFile was not closed when
+the JarFile that was using it was closed. This causes a problem on
+Windows as the open file handle prevents the file from being deleted.
+
+This commit updates JarFile to close the underlying
+RandomAccessDataFile when it is closed and has a JarFileType of
+DIRECT.
+
+Previously, when accessing the manifest of a jar file that maps to a
+nested directory (BOOT-INF/classes) a new JarFile was created from the
+root jar file, the manifest was retrieved, and the new JarFile was
+closed. This could lead to the underlying RandomAccessDataFile being
+closed while it was still in use.
+
+This commit improves JarFile to retrieve the manifest from the
+existing outer JarFile, thereby avoiding the need to create and close
+a new JarFile.
+
+Unfortunately, PropertiesLauncher creates a number of scenarios where
+a JarFile with a type of direct is closed while it’s still being used.
+To accommodate this behaviour, RandomAccessDataFile has been updated
+so that it can re-open the underlying RandomAccessFile if it is used
+after it has been closed.
+
+Closes gh-12296

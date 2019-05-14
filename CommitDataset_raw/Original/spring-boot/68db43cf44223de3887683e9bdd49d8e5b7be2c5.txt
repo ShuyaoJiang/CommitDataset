@@ -1,0 +1,23 @@
+Support error conventions in Spring WebFlux
+
+This commit adds support for Spring Boot error conventions with WebFlux.
+The Spring MVC support for that is based on an `Controller` that's
+mapped on a specific `"/error"` path and configured as an error page in
+the Servlet container. With WebFlux, this support leverages a
+`WebExceptionHandler`, which catches exceptions flowing through the
+reactive pipeline and handles them.
+
+The `DefaultErrorWebExceptionHandler` supports the following:
+* return a JSON error response to machine clients
+* return error HTML views (templates, static or default HTML view)
+
+One can customize the error information by contributing an
+`ErrorAttributes` bean to the application context.
+
+Spring Boot provides an `ErrorWebExceptionHandler` marker interface and a
+base implementation that provides high level constructs to handle
+errors, based on the Spring WebFlux functional flavor.
+The error handling logic can be completely changed by providing a custom
+`RouterFunction` there.
+
+Fixes gh-8625

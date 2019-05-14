@@ -1,0 +1,18 @@
+SecuritySettingsSource license.self_generated: trial (#38233)
+
+Authn is enabled only if `license_type` is non `basic`, but `basic` is
+what the `LicenseService` generates implicitly. This commit explicitly sets
+license type to `trial`, which allows for authn, in the `SecuritySettingsSource`
+which is the settings configuration parameter for `InternalTestCluster`s.
+
+The real problem, that had created tests failures like #31028 and #32685, is
+that the check `licenseState.isAuthAllowed()` can change sporadically. If it were
+to return `true` or `false` during the whole test there would be no problem.
+The problem manifests when it turns from `true` to `false` right before `Realms.asList()`.
+There are other license checks before this one (request filter, token service, etc)
+that would not cause a problem if they would suddenly see the check as `false`.
+But switching to `false` before `Realms.asList()` makes it appear that no installed
+realms could have handled the authn token which is an authentication error, as can
+be seen in the failing tests.
+
+Closes #31028 #32685

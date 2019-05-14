@@ -1,0 +1,11 @@
+Support target type in JsonPath assertions for MockMvc results
+
+This commit picks up where SPR-14498 left off by adding support for an
+explicit target type when using JsonPath to perform an assertion against
+the response content using a Hamcrest Matcher.
+
+Specifically, there is a new overloaded value(Matcher<T>, Class<T>)
+method in JsonPathResultMatchers for use with Hamcrest matchers where
+the target type (i.e., Class<T>) can be specified.
+
+Issue: SPR-16587

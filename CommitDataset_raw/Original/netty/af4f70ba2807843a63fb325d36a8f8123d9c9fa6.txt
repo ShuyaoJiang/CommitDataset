@@ -1,0 +1,21 @@
+More efficiently allocate header buffer.
+
+Motivation
+----------
+Currently, only the fixed 24 bytes are allocated for the header and
+then all the params as well as the optional extras and key are written
+into the header section.
+
+It is very likely that the buffer needs to expand at least two times
+if either the extras and/or the key take up more space.
+
+Modifications
+-------------
+Since at the point of allocation we know the key and extras length,
+the buffer can be preallocated with the exact size, avoiding unnecessary
+resizing and even allocating too much (since it uses power of two
+internally).
+
+Result
+------
+Less buffer resizing needed when encoding a memcache operation.

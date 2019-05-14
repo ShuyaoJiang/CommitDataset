@@ -1,0 +1,16 @@
+make the http2 codec void promise ready.
+
+Motivation:
+
+Void promises need special treatment, as they don't behave like normal promises. One
+cannot add a listener to a void promise for example.
+
+Modifications:
+
+Inspected the code for addListener() calls, and added extra logic for void promises
+where necessary. Essentially, when writing a frame with a void promise, any errors
+are reported via the channel pipeline's exceptionCaught event.
+
+Result:
+
+The HTTP/2 codec has better support for void promises.

@@ -1,0 +1,17 @@
+Polish Undertow access logs contribution
+
+ - Apply project’s code formatting and conventions
+ - Don’t use the IO and worker thread configuration when creating the
+   worker for the AccessLogReceiver. The IO and worker thread
+   configuration is for HTTP request processing and a worker in its
+   default configuration should be sufficient for the access log
+   receiver.
+ - Don’t use a temporary directory as the default for the access log
+   directory. A temporary directory makes (some) sense for Tomcat as it
+   requires a directory for its basedir. Undertow has no such
+   requirement and using a temporary directory makes it hard to locate
+   the logs. The default has been updated to a directory named logs,
+   created in the current working directory.
+ - Document the new properties in the application properties appendix
+
+Closes gh-3014

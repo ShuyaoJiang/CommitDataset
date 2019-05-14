@@ -1,0 +1,11 @@
+Fix tests
+
+Some assumptions were being made in tests, e.g. about
+there being an AuthenticationManager @Bean, which were
+false with the new Security 3.2.1 updates from Rob.
+
+Also parent-child contexts with the actuator were
+problematic because they didn't exclude the web configuration
+for the management security in the parent context.
+
+Fixes gh-244

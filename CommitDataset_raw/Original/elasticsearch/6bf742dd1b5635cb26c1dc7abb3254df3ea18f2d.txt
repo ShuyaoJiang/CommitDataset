@@ -1,0 +1,13 @@
+Fix EsAbortPolicy to conform to API (#29075)
+
+The rejected execution handler API says that rejectedExecution(Runnable,
+ThreadPoolExecutor) throws a RejectedExecutionException if the task must
+be rejected due to capacity on the executor. We do throw something that
+smells like a RejectedExecutionException (it is named
+EsRejectedExecutionException) yet we violate the API because
+EsRejectedExecutionException is not a RejectedExecutionException. This
+has caused problems before where we try to catch RejectedExecution when
+invoking rejectedExecution but this causes EsRejectedExecutionException
+to go uncaught. This commit addresses this by modifying
+EsRejectedExecutionException to extend
+RejectedExecutionException.

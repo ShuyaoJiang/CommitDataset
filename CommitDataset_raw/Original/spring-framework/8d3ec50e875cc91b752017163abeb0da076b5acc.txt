@@ -1,0 +1,11 @@
+Support proxied objects in ReflectionTestUtils
+
+This commit adds support for unwrapping proxies in the setField() and
+getField() methods in ReflectionTestUtils.
+
+Instead of always accessing fields directly on the supplied
+targetObject (which may be a proxy), AopTestUtils is now used to obtain
+the potential ultimateTargetObject which is then used for accessing
+fields.
+
+Issue: SPR-14050

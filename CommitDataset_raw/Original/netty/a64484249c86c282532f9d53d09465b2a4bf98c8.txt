@@ -1,0 +1,26 @@
+Access autoRead via an AtomicIntegerFieldUpdater.
+
+Motiviation:
+
+Before this change, autoRead was a volatile boolean accessed directly.  Any thread that invoked the DefaultChannelConfig#setAutoRead(boolean) method would read the current value of autoRead, and then set a new value.  If the old value did not match the new value, some action would be immediately taken as part of the same method call.
+
+As volatile only provides happens-before consistency, there was no guarantee that the calling thread was actually the thread mutating the state of the autoRead variable (such that it should be the one to invoke the follow-up actions).  For example, with 3 threads:
+ * Thread 1: get = false
+ * Thread 1: set = true
+ * Thread 1: invokes read()
+ * Thread 2: get = true
+ * Thread 3: get = true
+ * Thread 2: set = false
+ * Thread 2: invokes autoReadCleared()
+ * Event Loop receives notification from the Selector that data is available, but as autoRead has been cleared, cancels the operation and removes read interest
+ * Thread 3: set = true
+
+This results in a livelock - autoRead is set true, but no reads will happen even if data is available (as readyOps).  The only way around this livelock currently is to set autoRead to false, and then back to true.
+
+Modifications:
+
+Write access to the autoRead variable is now made using the getAndSet() method of an AtomicIntegerFieldUpdater, AUTOREAD_UPDATER.  This also changed the type of the underlying autoRead variable to be an integer, as no AtomicBooleanFieldUpdater class exists.  Boolean logic is retained by assuming that 1 is true and 0 is false.
+
+Result:
+
+There is no longer a race condition between retrieving the old value of the autoRead variable and setting a new value.

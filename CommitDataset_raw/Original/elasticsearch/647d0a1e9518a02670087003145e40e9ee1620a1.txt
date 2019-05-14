@@ -1,0 +1,10 @@
+Do not swallow fail to convert exceptions (#29043)
+
+When converting the source for an indexing request to JSON, the
+conversion can throw an I/O exception which we swallow and proceed with
+logging to the slow log. The cause of the I/O exception is lost. This
+commit changes this behavior and chooses to drop the entry from the slow
+logs and instead lets an exception percolate up to the indexing
+operation listener loop. Here, the exception will be caught and logged
+at the warn level.
+

@@ -1,0 +1,10 @@
+DefaultHttp2ConnectionDecoder write ping buffer
+
+Motivation:
+DefaultHttp2ConnectionDecoder writes a ACK when receiving a ping frame and sends the same data buffer it received. The data buffer is also passed to the listener, but the indexes are shared between the send and the listener. We should ensure the indexes are independent for these two operations.
+
+Modifications:
+- Call slice on the buffer that is being sent
+
+Result:
+Listener now has access to a buffer that will not appear to be already consumed.

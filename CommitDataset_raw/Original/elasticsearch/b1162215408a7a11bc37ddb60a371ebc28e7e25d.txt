@@ -1,0 +1,8 @@
+Ensure shard is refreshed once it's inactive (#27559)
+
+Once a shard goes inactive we want the shard to be refreshed if
+the refresh interval is default since we might hold on to unnecessary
+segments and in the inactive case we stopped indexing and can release
+old segments.
+
+Relates to #27500

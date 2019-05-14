@@ -1,0 +1,13 @@
+Assert job is not null in FullClusterRestartIT (#38218)
+
+`waitForRollUpJob` is an assertBusy that waits for the rollup job
+to appear in the tasks list, and waits for it to be a certain state.
+
+However, there was a null check around the state assertion, which meant
+if the job _was_ null, the assertion would be skipped, and the
+assertBusy would pass withouot an exception.  This could then lead to
+downstream assertions to fail because the job was not actually ready,
+or in the wrong state.
+
+This changes the test to assert the job is not null, so the assertBusy
+operates as intended.

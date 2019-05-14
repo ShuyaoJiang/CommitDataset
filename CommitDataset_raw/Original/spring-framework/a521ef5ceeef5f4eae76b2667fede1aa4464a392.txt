@@ -1,0 +1,19 @@
+Verify ServletCtxAware beans are processed in WAC tests
+
+SPR-11145 claims that ServletContextAware beans declared in an
+ApplicationContext loaded for an integration test by the TestContext
+framework (TCF) do not have their setServletContext() methods invoked
+if the tests are executed manually using JUnit 4.11.
+
+This commit verifies that such ServletContextAware beans are processed
+properly regardless of how the test was launched. Specifically:
+
+ - A ServletContextAwareBean has been introduced.
+
+ - BasicAnnotationConfigWacTests has been retrofitted with a
+   ServletContextAwareBean in its context.
+
+ - ServletContextAwareBeanWacTests has been introduced to execute
+   BasicAnnotationConfigWacTests manually via JUnitCore.
+
+Issue: SPR-11145

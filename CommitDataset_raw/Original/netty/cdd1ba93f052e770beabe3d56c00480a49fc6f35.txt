@@ -1,0 +1,9 @@
+Second round of new channel handler API design
+
+- Rename ChannelReader to ChannelInboundHandler
+- Rename ChannelWriter to ChannelOutboundHandler
+- Introduce ChannelBufferHolder instead of adding the common super type
+  of message buffers and byte buffers
+  - This is more type-safe and natural.
+- Remove the notification methods for buffer closure (might add back
+  later when revisiting half-closed connection support)

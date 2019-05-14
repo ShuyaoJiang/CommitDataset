@@ -1,0 +1,13 @@
+[#5860] Ensure removal of SslHandler not produce IllegalReferenceCountException
+
+Motivation:
+
+If the user removes the SslHandler while still in the processing loop we will produce an IllegalReferenceCountException. We should stop looping when the handlerwas removed.
+
+Modifications:
+
+Ensure we stop looping when the handler is removed.
+
+Result:
+
+No more IllegalReferenceCountException.

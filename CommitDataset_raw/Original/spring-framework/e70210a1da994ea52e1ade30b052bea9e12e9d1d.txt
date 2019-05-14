@@ -1,0 +1,9 @@
+Introduce ForwardedHeaderFilter for WebFlux
+
+This commit introduces a ForwardedHeaderFilter for WebFlux, similar to
+the existing Servlet version. As part of this the
+DefaultServerHttpRequestBuilder had to be changed to no longer use
+delegation, but instead use a deep copy at the point of mutate().
+Otherwise, headers could not be removed.
+
+Issue: SPR-15954

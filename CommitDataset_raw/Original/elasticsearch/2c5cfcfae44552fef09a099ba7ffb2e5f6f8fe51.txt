@@ -1,0 +1,17 @@
+SQL: Proper errors on set qualifiers (elastic/x-pack-elasticsearch#3377)
+
+`SELECT DISTINCT foo FROM bar` is not yet implemented and was returning
+an "unplanned item" error which isn't useful to users so I replaced it
+with `SELECT DISTINCT is not yet supported`.
+
+`SELECT foo, COUNT(*) FROM bar GROUP BY ALL foo` is not supported.
+Specifically the `ALL` part. It is fairly esoteric so see [1] for what
+it does. Regardless of what it does it is not widely supported and even
+Microsoft's SQL Server has deprecated it so we should never support it.
+Probably.
+
+[1]: https://technet.microsoft.com/en-us/library/ms175028(v=sql.90).aspx
+
+Related to elastic/x-pack-elasticsearch#3176
+
+Original commit: elastic/x-pack-elasticsearch@56e5ca3009574dba4b6dd80ecd2cca7e43f4d128

@@ -1,0 +1,14 @@
+All Translog inner closes should happen after tragedy exception is set (#32674)
+
+All Translog inner closes should happen after tragedy exception is set (#32674)
+
+We faced with the nasty race condition. See #32526
+InternalEngine.failOnTragic method has thrown AssertionError.
+If you carefully look at if branches in this method, you will spot that its only possible, if either Lucene IndexWriterhas closed from inside or Translog, has closed from inside, but tragedy exception is not set.
+For now, let us concentrate on the Translog class.
+We found out that there are two methods in Translog - namely rollGeneration and trimOperations that are closing Translog in case of Exception without tragedy exception being set.
+This commit fixes these 2 methods. To fix it, we pull tragedyException from TranslogWriter up-to Translog class, because in these 2 methods IndexWriter could be innocent, but still Translog needs to be closed. Also, tragedyException is wrapped with TragicExceptionHolder to reuse CAS/addSuppresed functionality in Translog and TranslogWriter.
+Also to protect us in the future and make sure close method is never called from inside Translog special assertion examining stack trace is added. Since we're still targeting Java 8 for runtime - no StackWalker API is used in the implementation.
+In the stack-trace checking method, we're considering inner caller not only Translog methods but Translog child classes methods as well. It does mean that Translog is meant for extending it, but it's needed to be able to test this method.
+
+Closes #32526

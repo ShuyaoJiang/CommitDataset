@@ -1,0 +1,9 @@
+Fix daemonization command status test
+
+In bin/elasticsearch, we grep the command line looking for various flags
+that indicate the process should be daemonized. To do this, we simply
+test command status from the grep. Sadly, this is utterly broken
+(unreleased) as instead we are testing the output of the command, not
+the command status. This commit fixes this issue.
+
+Relates #26196

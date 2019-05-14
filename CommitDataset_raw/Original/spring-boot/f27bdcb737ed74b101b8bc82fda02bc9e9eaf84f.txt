@@ -1,0 +1,11 @@
+Prevent APT crashes on older Java versions
+
+Update TypeUtils to guard against the use of older Java versions.
+Both `Collection` and `Map` type lookups now fallback to generic free
+versions of the classes.
+
+Prior to this commit using `xmlbeans-maven-plugin` in combination with
+Spring Boot's annotation processor could result in
+`IllegalArgumentException: Incorrect number of type arguments`.
+
+Fixes gh-6122

@@ -1,0 +1,13 @@
+Fix handling of fractional byte size value settings (#37172)
+
+This commit addresses an issue when setting a byte size value setting
+using a value that has a fractional component when converted to its
+string representation. For example, trying to set a byte size value
+setting to a value of 1536 bytes is problematic because internally this
+is converted to the string "1.5k". When we go to get this setting, we
+try to parse "1.5k" back to a byte size value, which does not support
+fractional values. The problem is that internally we are relying on a
+method which loses the unit when doing the string conversion. Instead,
+we are going to use a method that does not lose the unit and therefore
+we can roundtrip from the byte size value to the string and back to the
+byte size value.

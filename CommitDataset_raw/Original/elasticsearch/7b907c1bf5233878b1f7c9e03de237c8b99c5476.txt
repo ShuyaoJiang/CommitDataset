@@ -1,0 +1,22 @@
+_cat/indices with Security, hide names when wildcard (#38824)
+
+This changes the output of the `_cat/indices` API with `Security` enabled.
+
+It is possible to only display the index name (and possibly the index
+health, depending on the request options) but not its stats (doc count, merges,
+size, etc). This is the case for closed indices which have index metadata in the
+cluster state but no associated shards, hence no shard stats.
+However, when `Security` is enabled, and the request contains wildcards,
+**open** indices without stats are a common occurrence. This is because the
+index names in the response table are picked up directly from the cluster state
+which is not filtered by `Security`'s _indexNameExpressionResolver_, unlike the
+stats data which is populated by the indices stats API which does go through the
+index name resolver.
+This is a bug, because it is circumventing `Security`'s function to hide
+unauthorized indices.
+
+This has been fixed by displaying the index names as they are resolved by the indices
+stats API. The outputs of these two APIs is now very similar: same index names,
+similar data but different format.
+
+Closes #37190

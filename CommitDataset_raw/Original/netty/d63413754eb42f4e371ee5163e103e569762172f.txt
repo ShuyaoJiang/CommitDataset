@@ -1,0 +1,20 @@
+Make TestUtils.getFreePort() check both TCP and UDP
+
+Motivation:
+
+We see occational failures in the datagram tests saying 'address already
+in use' when we attempt to bind on a port returned by
+TestUtils.getFreePort().
+
+It turns out that TestUtils.getFreePort() only checks if TCP port is
+available.
+
+Modifications:
+
+Also check if UDP port is available, so that the datagram tests do not
+fail because of the 'address already in use' error during a bind
+attempt.
+
+Result:
+
+Less chance of datagram test failures

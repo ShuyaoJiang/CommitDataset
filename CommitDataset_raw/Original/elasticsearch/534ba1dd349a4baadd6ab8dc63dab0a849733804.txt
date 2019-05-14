@@ -1,0 +1,15 @@
+Remove LicenseServiceClusterNotRecoveredTests (#37528)
+
+While tests migration from Zen1 to Zen2, we've encountered this test.
+This test is organized as follows:
+
+Starts the first cluster node.
+Starts the second cluster node.
+Checks that license is active.
+Interesting fact that adding assertLicenseActive(true) between 1
+and 2 also makes the test pass.
+assertLicenseActive retrieves XPackLicenseState from the nodes
+and checks that active flag is set. It's set to true even before
+the cluster is initialized.
+
+So this test does not make sense.

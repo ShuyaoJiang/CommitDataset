@@ -1,0 +1,16 @@
+PlatformDependent.maxDirectMemory() must respect io.netty.maxDirectMemory (#8452)
+
+Motivation:
+
+In netty we use our own max direct memory limit that can be adjusted by io.netty.maxDirectMemory but we do not take this in acount when maxDirectMemory() is used. That will lead to non optimal configuration of PooledByteBufAllocator in some cases.
+
+This came up on stackoverflow:
+https://stackoverflow.com/questions/53097133/why-is-default-num-direct-arena-derived-from-platformdependent-maxdirectmemory
+
+Modifications:
+
+Correctly respect io.netty.maxDirectMemory and so configure PooledByteBufAllocator correctly by default.
+
+Result:
+
+Correct value for max direct memory.

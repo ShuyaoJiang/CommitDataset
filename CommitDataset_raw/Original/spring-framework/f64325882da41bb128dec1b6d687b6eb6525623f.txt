@@ -1,0 +1,26 @@
+Add SpEL support for increment/decrement operators
+
+With this commit the Spring Expression Language now supports
+increment (++) and decrement (--) operators. These can be
+used as either prefix or postfix operators. For example:
+'somearray[index++]' and 'somearray[--index]' are valid.
+
+In order to support this there are serious changes to the
+evaluation process for expressions. The concept of a
+value reference for an expression component has been introduced.
+Value references can be passed around and at any time the actual
+value can be retrieved (via a get) or set (where applicable). This
+was needed to avoid double evaluation of expression components.
+For example, in evaluating the expression 'somearray[index++]--'
+without a value reference SpEL would need to evaluate the
+'somearray[index++]' component twice, once to get the value and
+then again to determine where to put the new value. If that
+component is evaluated twice, index would be double incremented.
+A value reference for 'somearray[index++]' avoids this problem.
+
+Many new tests have been introduced into the EvaluationTests
+to ensure not only that ++ and -- work but also that the
+introduction of value references across the all of SpEL has
+not caused regressions.
+
+Issue: SPR-9751

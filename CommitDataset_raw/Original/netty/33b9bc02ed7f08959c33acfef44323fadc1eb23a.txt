@@ -1,0 +1,5 @@
+Fix potential buffer leak in AbstractBinaryMemcacheDecoder
+
+If a connection is closed unexpectedly while
+AbstractBinaryMemcacheDecoder decodes a message, the half-constructed
+message's content might not be released.

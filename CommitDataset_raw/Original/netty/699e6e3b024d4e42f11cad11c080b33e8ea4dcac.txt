@@ -1,0 +1,14 @@
+Fix memory leak in OpenSslEngine
+
+Motivation:
+
+When a remote peer did open a connection and only do the handshake without sending any data and then directly close the connection we did not call shutdown() in the OpenSslEngine. This leads to a native memory leak. Beside this it also was not fireed when a OpenSslEngine was created but never used.
+
+Modifications:
+
+- Make sure shutdown() is called in all cases when closeInbound() is called
+- Call shutdown() also in the finalize() method to ensure we release native memory when the OpenSslEngine is GC'ed
+
+Result:
+
+No more memory leak when using OpenSslEngine

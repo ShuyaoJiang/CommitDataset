@@ -1,0 +1,11 @@
+Fix BytesReferenceStreamInput#skip with offset (#25634)
+
+There is a bug when a call to `BytesReferenceStreamInput` skip is made
+on a `BytesReference` that has an initial offset. The offset for the
+current slice is added to the current index and then subtracted from the
+length. This introduces the possibility of a negative number of bytes to
+skip. This happens inside a loop, which leads to an infinte loop.
+
+This commit correctly subtracts the current slice index from the
+slice.length. Additionally, the `BytesArrayTests` are modified to test
+instances that include an offset.

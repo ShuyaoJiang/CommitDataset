@@ -1,0 +1,25 @@
+Make UnpooledHeapByteBuf array methods protected (#8015)
+
+Motivation:
+
+Currently there is not a clear way to provide a byte array to a netty
+ByteBuf and be informed when it is released. This is a would be a
+valuable addition for projects that integrate with netty but also pool
+their own byte arrays.
+
+Modification:
+
+Modified the UnpooledHeapByteBuf class so that the freeArray method is
+protected visibility instead of default. This will allow a user to
+subclass the UnpooledHeapByteBuf, provide a byte array, and override
+freeArray to return the byte array to a pool when it is called.
+Additionally this makes this implementation equivalent to
+UnpooledDirectByteBuf (freeDirect is protected).
+
+Additionally allocateArray is also made protect to provide another override
+option for subclasses.
+
+Result:
+
+Users can override UnpooledHeapByteBuf#freeArray and
+UnpooledHeapByteBuf#allocateArray.

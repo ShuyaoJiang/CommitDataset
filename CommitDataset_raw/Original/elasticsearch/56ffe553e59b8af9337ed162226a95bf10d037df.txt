@@ -1,0 +1,12 @@
+Modify pipelining handlers to require full requests (#31280)
+
+Currently the http pipelining handlers seem to support chunked http
+content. However, this does not make sense. There is a content
+aggregator in the pipeline before the pipelining handler. This means the
+pipelining handler should only see full http messages. Additionally, the
+request handler immediately after the pipelining handler only supports
+full messages.
+
+This commit modifies both nio and netty4 pipelining handlers to assert
+that an inbound message is a full http message. Additionally it removes
+the tests for chunked content.

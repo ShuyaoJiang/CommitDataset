@@ -1,0 +1,12 @@
+[bs-134] CLI app cannot resolve snapshot jars
+
+Moved the Grab.addResolver() call to before any other compiler
+customizations.
+
+That got it working locally (removed ~/.m2 and ~/.groovy/grapes)
+but still not working on cloudfoundry for some reason.  We need
+more help from buildpacks there (to get a cache going for the
+grapes), but there seems to be more than just that stopping it
+(maybe just timeouts?).
+
+[#50351963]

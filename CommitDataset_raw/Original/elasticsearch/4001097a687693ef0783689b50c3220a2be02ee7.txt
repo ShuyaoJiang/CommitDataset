@@ -1,0 +1,11 @@
+[test] packaging: use shell when running commands (#30852)
+
+When subprocesses are started with ProcessBuilder, they're forked by the
+java process directly rather than from a shell, which can be surprising
+for our use case here in the packaging tests which is similar to
+scripting.
+
+This commit changes the tests to run their subprocess commands in a
+shell, using the bash -c <script> syntax for commands on linux and using
+the powershell.exe -Command <script> syntax for commands on windows.
+This syntax on windows is essentially what the tests were already doing.

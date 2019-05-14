@@ -1,0 +1,11 @@
+Encode resources after delivering them to callers.
+
+Encoding after delivery decreases load times,
+sometimes dramatically, when a limited number of
+requests are active at once. Once all of Glide's
+source threads are busy, this change provides only
+a limited benefit because new requests still have
+to wait for encodes from previous requests to
+finish. However, when only a few large images are
+requested, particularly with slow encode formats
+link PNG, images will appear substantially faster.

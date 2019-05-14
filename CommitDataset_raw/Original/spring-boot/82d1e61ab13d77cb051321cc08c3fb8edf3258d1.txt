@@ -1,0 +1,15 @@
+Prevent attempt to export MBean for DataSource retreived from JNDI
+
+Tomcat 8's default DataSource implemention is an MBean. Previously,
+when such a DataSource was consumed from JNDI and an MBeanExporter had
+been auto-configured an attempt would be made to export this MBean to
+the MBean server. This would fail due to Tomcat having already
+registered the MBean.
+
+This commit updates JndiDataSourceAutoConfiguration to instruct the
+MBeanExporter (if there is one) not to export a DataSource MBean
+that's been retrieved from JNDI. The assumption is that any MBean in
+JNDI will have already been registered with the MBean server by the
+same infrastructure that registered it with JNDI.
+
+Fixes gh-2397

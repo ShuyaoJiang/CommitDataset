@@ -1,0 +1,58 @@
+Introduce annotation to execute SQL scripts in the TCF
+
+Prior to this commit, it was possible to execute SQL scripts
+programmatically via ResourceDatabasePopulator, JdbcTestUtils, and
+ScriptUtils. Furthermore, it was also possible to execute SQL scripts
+declaratively via the <jdbc> XML namespace. However, it was not
+possible to execute SQL scripts declaratively on a per test class or
+per test method basis.
+
+This commit makes it possible to declaratively configure SQL scripts
+for execution in integration tests via annotations that can be declared
+at the class or method level. Details follow.
+
+ - Introduced a repeatable @DatabaseInitializer annotation that can be
+   used to configure SQL scripts at the class or method level with
+   method-level overrides. @DatabaseInitializers serves as a container
+   for @DatabaseInitializer.
+
+ - Introduced a new DatabaseInitializerTestExecutionListener that is
+   responsible for parsing @DatabaseInitializer and
+   @DatabaseInitializers and executing SQL scripts.
+
+ - DatabaseInitializerTestExecutionListener is registered by default in
+   abstract base test classes as well as in TestContextBootstrapper
+   implementations.
+
+ - @DatabaseInitializer and @DatabaseInitializers may be used as
+   meta-annotations; however, attribute overrides are not currently
+   supported for repeatable annotations used as meta-annotations. This
+   is a known limitation of Spring's AnnotationUtils.
+
+ - The semantics for locating SQL script resources is consistent with
+   @ContextConfiguration's semantics for locating XML configuration
+   files. In addition, a default SQL script can be detected based
+   either on the name of the annotated class or on the name of the
+   annotated test method.
+
+ - @DatabaseInitializer allows for specifying which DataSource and
+   PlatformTransactionManager to use from the test's
+   ApplicationContext, including default conventions consistent with
+   TransactionalTestExecutionListener and @TransactionConfiguration.
+
+ - @DatabaseInitializer supports all of the script configuration options
+   currently supported by ResourceDatabasePopulator.
+
+ - @DatabaseInitializer and DatabaseInitializerTestExecutionListener
+   support execution phases for scripts that dictate when SQL scripts
+   are executed (i.e., before or after a test method).
+
+ - SQL scripts can be executed within the current test's transaction if
+   present, outside of the current test's transaction if present, or
+   always in a new transaction, depending on the value of the boolean
+   requireNewTransaction flag in @DatabaseInitializer.
+
+ - DatabaseInitializerTestExecutionListener delegates to
+   ResourceDatabasePopulator#execute to actually execute the scripts.
+
+Issue: SPR-7655

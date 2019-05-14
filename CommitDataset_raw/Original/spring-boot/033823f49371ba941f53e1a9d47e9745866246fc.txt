@@ -1,0 +1,13 @@
+Disable SecurityFilterAutoConfiguration when spring-security-web is missing
+
+Previously, SecurityFilterAutoConfiguration would be created even if
+spring-security-web was not on the classpath. This didn't cause a
+failure as all of its beans were disabled. It was, however, wasteful,
+as the configuration class was processed and a bean created for it
+unnecessarily.
+
+This commit makes the whole class conditional on the presence of
+spring-security-web so that it will be skipped entirely when the
+dependency is not available.
+
+Closes gh-4160

@@ -1,0 +1,9 @@
+Guard accessDeclaredMembers for Tika on JDK 10
+
+Tika parsers need accessDeclaredMembers because ZipFile needs
+accessDeclaredMembers on JDK 10. This commit guards adding this
+permission to parsers so that the permission is only granted on JDK
+10. Additionally, we add an assertion that forces us to check if the
+permission is still needed in JDK 11.
+
+Relates #28603

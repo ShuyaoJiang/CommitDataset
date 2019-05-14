@@ -1,0 +1,8 @@
+Fix coerce validation_method in GeoBoundingBoxQueryBuilder (#31747)
+
+The Rectangle constructor validates bounds before coerce has a chance
+to normalize coordinates so it cannot be used as intermittent storage.
+This commit removes the Rectangle as an intermittent storage for the
+bounding box coordinates.
+
+Fixes #31718

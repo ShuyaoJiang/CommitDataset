@@ -1,0 +1,12 @@
+Fix  HttpUrlConnection DELETE without body
+
+The following commit allowed HTTP DELETE with body:
+https://github.com/spring-projects/spring-framework/commit/584b831bb9390a49c791d180d023e3a585203215
+
+However it broke buffered requests even without a body since JDK 1.6
+and 1.7 do not support calls to getOutputStream with HTTP DELETE.
+
+This commit set the doOutput flag back to false if the actual buffered
+body is 0 length.
+
+Issue: SPR-12361

@@ -1,0 +1,37 @@
+Allow multiple @Filter 'value' args for concision
+
+Prior to this change, to specify two or more annotation include/exclude
+filters, one would declare @ComponentScan as follows:
+
+    @ComponentScan(basePackages="example.scannable",
+       useDefaultFilters=false,
+       includeFilters={
+           @Filter(MyStereotype.class),
+           @Filter(MyComponent.class)
+       })
+
+This was because @Filter's 'value' attribute accepted exactly one
+argument.
+
+Now, any given @Filter may accept one or more value arguments, allowing
+for more concise @ComponentScan declarations:
+
+    @ComponentScan(basePackages="example.scannable",
+       useDefaultFilters=false,
+       includeFilters=@Filter({MyStereotype.class, MyComponent.class}))
+
+Supplying multiple arguments in this way assumes that they are the same
+type of filter, e.g. ANNOTATION, ASSIGNABLE_TYPE, or CUSTOM. To declare
+multiple *different* types of filters, multiple @Filter annotations are
+still required, e.g.:
+
+    @ComponentScan(
+        includeFilters={
+            @Filter(type=ANNOTATION, value=MyStereotype.class),
+            @Filter(type=ASSIGNABLE_TYPE, value={Foo.class, Bar.class})
+        })
+
+Note that specifying zero arguments, e.g. @Filter({}) is nonsensical; it
+will have no effect on component scanning, but does not raise an error.
+
+Issue: SPR-8881

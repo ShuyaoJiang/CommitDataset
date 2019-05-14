@@ -1,0 +1,22 @@
+Ensure that JarFileArchive unpacks entries to unique location
+
+Previously, JarFileArchive would always unpack any entries marked for
+unpacking to ${java.io.tmpdir}/spring-boot-libs. This could cause
+problems if multiple Spring Boot applications were running on the same
+host:
+
+- If the apps are run as different users the first application would
+  create the spring-boot-libs directory and the second and subsequent
+  applications may not have write permissions to that directory
+- Multiple apps may overwrite each others unpacked libs. At best this
+  will mean one copy of a jar is overwritten with another identical
+  copy. At worst the jars may have different contents so that some of
+  the contents of the original jar disappear unexpectedly.
+
+This commit updates JarFileArchive to use an application-specific
+location when unpacking libs. A directory beneath ${java.io.tmpdir} is
+still used but it's now named <jar-file-name>-spring-boot-libs-<uuid>.
+A loop, limited to 1000 attempts, is used to avoid problems caused by
+the uuid clashing.
+
+Closes gh-4124

@@ -1,0 +1,7 @@
+JPA 2.1 support, in particular for SynchronizationType.UNSYNCHRONIZED
+
+In the course of this effort, our joinTransaction() support has been overhauled to work for shared EntityManagers as well, since an unsynchronized shared EntityManager will nevertheless be scoped for the current transaction but not automatically join it (as per the JPA 2.1 spec). In the JTA case, we'll simply create an unsynchronized target EntityManager and will upgrade it to a synchronized one (later in the same transaction, if necessary) through an implicit joinTransaction() call. In the JpaTransactionManager case, we'll unbind the primary target EntityManager and will expose an unsynchronized EntityManager instead, upgrading it the same way as with JTA, with the primary EntityManager in that case just serving as a vehicle for transaction begin/commit/rollback calls.
+
+For extended EntityManagers, we've just added further combinations to the existing variants: application-managed EntityManagers which may nevertheless auto-join transactions (EntityManagerFactory.createEntityManager with SynchronizationType.SYNCHRONIZED), and container-managed EntityManagers which might opt for not auto-joining transactions (@PersistenceContext with synchronizationType=UNSYNCHRONIZED).
+
+Issue: SPR-8194

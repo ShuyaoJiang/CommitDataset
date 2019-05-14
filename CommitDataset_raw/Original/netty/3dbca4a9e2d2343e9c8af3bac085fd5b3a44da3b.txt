@@ -1,0 +1,22 @@
+Fire channelRead() event immediately in OIO message channels
+
+Related: #3189
+
+Motivation:
+
+OIO transport implementations block for at most 1 second to wait for
+additional messages (or accepted connections).
+
+However, because AbstractOioMessageChannel defers the channelRead()
+events for the messages read so far until there's nothing to read up to
+maxMessagesPerRead, any read operation will be followed by a 1-second
+delay.
+
+Modifications:
+
+Fire channelRead() events as soon as doRead() returns so that there is
+no 1 second delay between the actual read and the channelRead() event.
+
+Result:
+
+No more weird 1-second delay

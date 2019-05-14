@@ -1,0 +1,12 @@
+Defer ExchangeFilterFunction to subscription time
+
+Prior to this commit, the `ExchangeFilterFunction` instances configured
+on a `WebClient` instance would be executed as soon as the `exchange`
+method would be called. This behavior is not consistent with the server
+side and can confuse filter developers as they'd need to manually
+`Mono.defer()` their implementations if they want to record metrics.
+
+This commit defers all `ExchangeFilterFunction` processing at
+subscription time.
+
+Fixes gh-22375

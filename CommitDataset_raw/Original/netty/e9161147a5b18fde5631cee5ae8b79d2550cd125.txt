@@ -1,0 +1,17 @@
+Work around an Android SSLEngine issue
+
+Motivation:
+
+Some Android SSLEngine implementations skip FINISHED handshake status
+and go straightly into NOT_HANDSHAKING.  This behavior blocks SslHandler
+from notifying its handshakeFuture, because we do the notification when
+SSLEngine enters the FINISHED state.
+
+Modification:
+
+When the current handshake state is NOT_HANDSHAKING and the
+handshakeFuture is not fulfilled yet, treat NOT_HANDSHAKING as FINISHED.
+
+Result:
+
+Better Android compatibility - fixes #1823

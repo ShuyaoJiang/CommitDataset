@@ -1,0 +1,5 @@
+Fix snapshot getting stuck in INIT state (#27214)
+
+If the master disconnects from the cluster after initiating snapshot, but just before the snapshot switches from INIT to STARTED state, the snapshot can get indefinitely stuck in the INIT state. This error is specific to v5.x+ and was triggered by keeping the master node that stepped down in the node list, the cleanup logic in snapshot/restore assumed that if master steps down it is always removed from the the node list. This commit changes the logic to trigger cleanup even if no nodes left the cluster.
+
+Closes #27180

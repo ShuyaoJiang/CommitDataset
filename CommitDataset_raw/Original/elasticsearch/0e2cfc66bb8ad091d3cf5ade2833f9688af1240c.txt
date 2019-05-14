@@ -1,0 +1,27 @@
+[Test] Use a common testing class for all XContent filtering tests (#25491)
+
+We have two ways to filter XContent:
+
+- The first method is to parse the XContent as a map and use
+XContentMapValues.filter(). This method filters the content of the map
+using an automaton. It is used for source filtering, both at search and
+indexing time. It performs well but can generate a lot of objects and
+garbage collections when large XContent are filtered. It also returns
+empty objects (see f2710c16ebd918f646be9d0ab64b4871c25be4c2) when all
+the sub fields have been filtered out and handle dots in field names as
+if they were sub fields.
+
+- The second method is to parse the XContent and copy the XContentParser
+ structure to a XContentBuilder initialized with includes/excludes
+ filters. This method uses the Jackson streaming filter feature. It is
+ used by the Response Filtering ('filter_path') feature. It does not
+ generate a lot of objects, and does not return empty objects and also
+ does not handle dots in field names explicitely.
+
+ Both methods have similar goals but different tests. This commit changes
+ the current XContentBuilder test class so that it becomes a more generic
+ testing class and we can now ensure that filtering methods generate the
+ same results.
+
+ It also removes some tests from the XContentMapValuesTests class that
+ should be in XContentParserTests.

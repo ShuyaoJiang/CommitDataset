@@ -1,0 +1,14 @@
+Add ApplicationConversionService and fix binder
+
+Create a new `ApplicationConversionService` similar in design to the
+DefaultFormattingConversionService from Spring Framework. The new
+conversion service provides a central place for custom conversion logic
+supported by Spring Boot.
+
+Also replace the `BindingConversionService` with an internal
+`BindConverter` class that now invokes the `SimpleTypeConverter`
+directly. Binding for `@ConfigurationProperties` has been updated so
+that any custom property editors registered with the BeanFactory can
+be used.
+
+Fixes gh-12095

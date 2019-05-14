@@ -1,0 +1,23 @@
+Add script filter to intervals (#36776)
+
+This commit adds the ability to filter out intervals based on their start and end position, and internal
+gaps:
+```
+POST _search
+{
+  "query": {
+    "intervals" : {
+      "my_text" : {
+        "match" : {
+          "query" : "hot porridge",
+          "filter" : {
+            "script" : {
+              "source" : "interval.start > 10 && interval.end < 20 && interval.gaps == 0"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```

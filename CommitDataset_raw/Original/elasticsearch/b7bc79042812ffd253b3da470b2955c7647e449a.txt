@@ -1,0 +1,9 @@
+Use a non default port range in MockTransportService
+
+We already use a per JVM port range in MockTransportService. Yet,
+it's possible that if we are executing in the JVM with ordinal 0 that
+other clusters reuse ports from the mock transport service and some tests
+try to simulate disconnects etc. By using a non-defautl port range (starting at 10300)
+we prevent internal test clusters from reusing any of the mock impls ports
+
+Relates to #25301

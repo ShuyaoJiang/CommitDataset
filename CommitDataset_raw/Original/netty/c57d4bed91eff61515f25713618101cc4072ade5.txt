@@ -1,0 +1,19 @@
+Add HttpServerKeepAliveHandler
+
+Motivation:
+
+As discussed in #5738, developers need to concern themselves with setting
+connection: keep-alive on the response as well as whether to close a
+connection or not after writing a response.  This leads to special keep-alive
+handling logic in many different places.  The purpose of the HttpServerKeepAliveHandler
+is to allow developers to add this handler to their pipeline and therefore
+free themselves of having to worry about the details of how Keep-Alive works.
+
+Modifications:
+
+Added HttpServerKeepAliveHandler to the io.netty.handler.codec.http package.
+
+Result:
+
+Developers can start using HttpServerKeepAliveHandler in their pipeline instead
+of worrying about when to close a connection for keep-alive.

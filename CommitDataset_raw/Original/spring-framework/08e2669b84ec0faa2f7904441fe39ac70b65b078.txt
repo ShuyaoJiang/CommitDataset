@@ -1,0 +1,19 @@
+Fix infinite recursion bug in nested @Configuration
+
+Prior to this commit, an infinite recursion would occur if a
+@Configuration class were nested within its superclass, e.g.
+
+  abstract class Parent {
+      @Configuration
+      static class Child extends Parent { ... }
+  }
+
+This is because the processing of the nested class automatically
+checks the superclass hierarchy for certain reasons, and each
+superclass is in turn checked for nested @Configuration classes.
+
+The ConfigurationClassParser implementation now prevents this by
+keeping track of known superclasses, i.e. once a superclass has been
+processed, it is never again checked for nested classes, etc.
+
+Issue: SPR-8955

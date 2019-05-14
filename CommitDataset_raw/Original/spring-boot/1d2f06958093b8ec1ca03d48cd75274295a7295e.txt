@@ -1,0 +1,14 @@
+Allow HttpTrace instances to be created
+
+Previously, the API required to create HttpTrace instances was
+package-private. This made it difficult to implement an
+HttpTraceRepository that persists the HttpTrace instances
+rather than holding them in memory as it inhibited recreation of the
+instances when they read from the persistent store.
+
+This commit adds public constructors to HttpTrace and related classes
+to enable recreation of an HttpTrace. The package-private methods for
+mutating properties have not been made public to ensure that the
+public API remains immutable.
+
+Closes gh-14726

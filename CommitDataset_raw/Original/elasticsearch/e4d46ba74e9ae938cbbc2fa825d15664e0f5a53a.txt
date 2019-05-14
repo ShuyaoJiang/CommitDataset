@@ -1,0 +1,9 @@
+Fix IndexSearcherWrapper visibility (#39071)
+
+* Fix IndexSearcherWrapper visibility
+
+This change adds a wrapper for IndexSearcher that makes IndexSearcher#search(List, Weight, Collector) visible by
+sub-classes. The wrapper is used by the ContextIndexSearcher to call this protected method on a searcher created by a plugin.
+This ensures that an override of the protected method in an IndexSearcherWrapper plugin is called when a search is executed.
+
+Closes #30758

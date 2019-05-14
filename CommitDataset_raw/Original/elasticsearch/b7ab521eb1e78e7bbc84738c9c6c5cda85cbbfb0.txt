@@ -1,0 +1,14 @@
+Throw AssertionError when no master (#38432)
+
+Today we throw a fatal `RuntimeException` if an exception occurs in
+`getMasterName()`, and this includes the case where there is currently no
+master. However, sometimes we call this method inside an `assertBusy()` in
+order to allow for a cluster that is in the process of stabilising and electing
+a master. The trouble is that `assertBusy()` only retries on an
+`AssertionError` and not on a general `RuntimeException`, so the lack of a
+master is immediately fatal.
+
+This commit fixes the issue by asserting there is a master, triggering a retry
+if there is not.
+
+Fixes #38331

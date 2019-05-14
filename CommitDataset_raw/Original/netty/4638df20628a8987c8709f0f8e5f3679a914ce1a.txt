@@ -1,0 +1,13 @@
+[#5566] Ensure using a ChannelInitializer via ServerBootstrap.handler(...) produce correct ordering.
+
+Motivation:
+
+When a ChannelInitializer is used via ServerBootstrap.handler(...) the users handlers may be added after the internal ServerBootstrapAcceptor. This should not happen.
+
+Modifications:
+
+Delay the adding of the ServerBootstrapAcceptor until the initChannel(....) method returns.
+
+Result:
+
+Correct order of handlers in the ServerChannels ChannelPipeline.

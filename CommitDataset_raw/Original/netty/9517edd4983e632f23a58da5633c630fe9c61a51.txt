@@ -1,0 +1,10 @@
+HTTP/2 RST_STREAM in IDLE
+
+Motivation:
+The spec requires that a RST_STREAM received on an IDLE stream results in a connection error. This is not happening.
+
+Modifications:
+Check for this condition when a RST_STREAM is received in DefaultHttp2ConnectionDecoder.
+
+Result:
+More spec compliant.  Fixes https://github.com/netty/netty/issues/3573.

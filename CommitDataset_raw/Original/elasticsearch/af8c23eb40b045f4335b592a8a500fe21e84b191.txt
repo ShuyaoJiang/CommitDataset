@@ -1,0 +1,44 @@
+Java version reproduction  (#32715)
+
+Enhance reproduction line with info about jdks
+
+Provide the ability to control compiler and hava versions just by
+passing a property. The actual java home comes from the
+`JAVA<major>_HOME` env vars that we allready require.
+This works better with the Gradle daemon as well.
+
+Output is also changed a bit.
+
+for `-Druntime.java=8 -Dcompiler.java=9`:
+```
+=======================================
+Elasticsearch Build Hamster says Hello!
+  Gradle Version        : 4.9
+  OS Info               : Linux 4.17.8-1-ARCH (amd64)
+  Compiler JDK Version  : 11 (Oracle Corporation 11-ea [OpenJDK 64-Bit Server VM 11-ea+22])
+  Runtime JDK Version   : 11 (Oracle Corporation 11-ea [OpenJDK 64-Bit Server VM 11-ea+22])
+  Gradle JDK Version    : 10 (Oracle Corporation 10.0.1 [OpenJDK 64-Bit Server VM 10.0.1+10])
+  Compiler java.home    : /home/alpar/opt/jdk-11-ea22/
+  Runtime java.home     : /home/alpar/opt/jdk-11-ea22/
+  Gradle java.home      : /usr/lib/jvm/java-10-openjdk
+  Random Testing Seed   : EA858533191E8DFB
+=======================================
+```
+
+Without configuration:
+```
+=======================================
+Elasticsearch Build Hamster says Hello!
+=======================================
+  Gradle Version        : 4.9
+  OS Info               : Linux 4.17.8-1-ARCH (amd64)
+  JDK Version           : 10 (Oracle Corporation 10.0.1 [OpenJDK 64-Bit Server VM 10.0.1+10])
+  JAVA_HOME             : /usr/lib/jvm/java-10-openjdk
+  Random Testing Seed   : 4BD5B2A839C8FCA1
+=======================================
+```
+
+Here's how a reproduction line will look like (test made to fail):
+```
+./gradlew :modules:lang-painless:test -Dtests.seed=2DA2379065A4EEAB -Dtests.class=org.elasticsearch.painless.AdditionTests -Dtests.method="testInt" -Dtests.security.manager=true -Dtests.locale=es-PE -Dtests.timezone=WET -Dcompiler.java=10 -Druntime.java=10
+```

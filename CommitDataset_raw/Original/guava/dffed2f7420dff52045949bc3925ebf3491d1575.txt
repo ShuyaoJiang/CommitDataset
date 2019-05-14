@@ -1,0 +1,20 @@
+Prevent fail() from being ignored by the surrounding catch() block by throwing new Error().
+
+Tests of a testing API often look like this:
+
+try {
+  runATestThatShouldFail();
+  fail();
+} catch (AssertionError expected) {
+}
+
+However, the catch() block can catch not only the expected failure from runATestThatShouldFail() but also the "test did not fail when it should have" failure from fail().
+
+This an automated fix using Error Prone ([]
+
+We intend to make this a compilation error in []'s Java compiler,
+so it is necessary to fix existing occurrences first to avoid breaking
+builds.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=116458330

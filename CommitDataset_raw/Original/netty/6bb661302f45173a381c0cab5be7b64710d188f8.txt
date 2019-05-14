@@ -1,0 +1,10 @@
+OpenSsl tests incomplete check for supporting key manager
+
+Motivaiton:
+It is possible that if the OpenSSL library supports the interfaces required to use the KeyManagerFactory, but we fail to get the io.netty.handler.ssl.openssl.useKeyManagerFactory system property (or this property is set to false) that SSLEngineTest based unit tests which use a KeyManagerFactory will fail.
+
+Modifications:
+- We should check if the OpenSSL library supports the KeyManagerFactory interfaces and if the system property allows them to be used in OpenSslEngineTests
+
+Result:
+Unit tests which use OpenSSL and KeyManagerFactory will be skipped instead of failing.

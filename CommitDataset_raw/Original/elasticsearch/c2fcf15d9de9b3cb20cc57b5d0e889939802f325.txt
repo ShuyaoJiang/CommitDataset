@@ -1,0 +1,11 @@
+Fix the ability to remove old plugin
+
+We now read the plugin descriptor when removing an old plugin. This is
+to check if we are removing a plugin that is extended by another
+plugin. However, when reading the descriptor we enforce that it is of
+the same version that we are. This is not the case when a user has
+upgraded Elasticsearch and is now trying to remove an old plugin. This
+commit fixes this by skipping the version enforcement when reading the
+plugin descriptor only when removing a plugin.
+
+Relates #28540

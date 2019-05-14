@@ -1,0 +1,5 @@
+ShardSearchFailure#readFrom to set index and shardId (#33161)
+
+As part of recent changes made to `ShardOperationFailedException` we introduced `index` and `shardId` members to the base class, but the subclasses are entirely responsible for the serialization of such fields. In the case of `ShardSearchFailure`, we have an additional `SearchShardTarget` instance member which also holds the index and the shardId, hence they get serialized as part of `SearchShardTarget` itself. When de-serializing a `ShardSearchFailure` though, we need to remember to also set the parent class `index` and `shardId` fields otherwise they get lost
+
+Relates to #32640

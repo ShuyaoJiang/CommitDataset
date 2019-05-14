@@ -1,0 +1,16 @@
+Seperate tests for GoogleInternal methods into their own class
+
+Some of the tests in javatests/com/google/common are run not
+just against the java/com/google/common code but also against
+Guava. This is fine as long as the tests do not test any
+code marked as @GoogleInternal because they break as the
+code to test does not exist in Guava.
+
+This change breaks up test classes that break when run against
+Guava into separate classes, one for running against internal
+and Guava and one just to run against internal.
+
+This is part of the work to upgrade guava_jdk5 to v17.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=85501856

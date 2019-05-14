@@ -1,0 +1,11 @@
+Http2Connection stream id generation to support queueing
+
+Motivation:
+StreamBufferingEncoder provides queueing so that MAX_CONCURRENT_STREAMS is not violated. However the stream id generation provided by Http2Connection.nextStreamId() only returns the next stream id that is expected on the connection and does not account for queueing. The codec should provide a way to generate the next stream id for a given endpoint that functions with or without queueing.
+
+Modifications:
+- Change Http2Connection.nextStreamId to Http2Connection.incrementAndGetNextStreamId
+
+Result:
+Http2Connection can generate the next stream id in queued and non-queued scenarios.
+Fixes https://github.com/netty/netty/issues/4704

@@ -1,0 +1,10 @@
+CipherSuiteConverter NPE
+
+Motivation:
+CipherSuiteConverter may throw a NPE if a cipher suite from OpenSSL does not match the precomputed regular expression for OpenSSL ciphers. This method shouldn't throw and instead just return null.
+
+Modifications:
+- if cacheFromOpenSsl(..) fails the conversion toJava should return null
+
+Result:
+Fixes https://github.com/netty/netty/issues/6336.

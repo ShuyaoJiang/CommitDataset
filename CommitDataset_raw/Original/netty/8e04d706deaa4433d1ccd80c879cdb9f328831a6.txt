@@ -1,0 +1,16 @@
+Have FlowState.cancel take a Throwable and code cleanup.
+
+Motivation:
+
+- In FlowState.write(...) we are currently swalloing an exception.
+- In my previous commit I introduced a compiler warning by not making
+  a local variabe final.
+
+Modifications:
+
+- Have FlowState.cancel() take a Throwable.
+- Make the variable final.
+
+Result:
+
+No more swallowed exceptions and warnings.

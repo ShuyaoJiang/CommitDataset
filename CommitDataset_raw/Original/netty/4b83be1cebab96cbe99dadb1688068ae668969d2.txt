@@ -1,0 +1,16 @@
+We should fail fast if the given PrivateKey or X509Certificate chain is not supported by the used SslProvider. (#9009)
+
+Motivation:
+
+Some SslProvider do support different types of keys and chains. We should fail fast if we can not support the type.
+
+Related to https://github.com/netty/netty-tcnative/issues/455.
+
+Modifications:
+
+- Try to parse key / chain first and if if this fails throw and SslException
+- Add tests.
+
+Result:
+
+Fail fast.

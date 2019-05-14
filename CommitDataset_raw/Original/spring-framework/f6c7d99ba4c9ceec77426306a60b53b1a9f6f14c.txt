@@ -1,0 +1,17 @@
+Improvements for registering custom SQL exception translators in app contexts.
+
+Adding a static CustomSQLExceptionTranslatorRegistry and a CustomSQLExceptionTranslatorRegistrar that can be used to register custom SQLExceptionTranslator implementations for specific databases from any application context.
+
+This can be used in application contexts like this:
+
+  <bean class="org.springframework.jdbc.support.CustomSQLExceptionTranslatorRegistrar">
+    <property name="sqlExceptionTranslators">
+      <map>
+        <entry key="H2">
+          <bean class="com.yourcompany.data.CustomSqlExceptionTranslator"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+Issue: SPR-7675

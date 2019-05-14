@@ -1,0 +1,11 @@
+Support user destinations without leading slash
+
+Before this commit the DefaultUserDestinationResolver did not support
+well broker destinations that use dot as separator with a built in
+assumptions that the destinations it resolves must start with slash.
+
+This change adds PathMatcher property that is used to determine if
+an alternative path separator is in use and if so the leading slash is
+left out.
+
+Issue: SPR-14044

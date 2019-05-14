@@ -1,0 +1,12 @@
+[#2589] LocalServerChannel.doClose() throws NPE when localAddress == null
+
+Motivation:
+
+LocalServerChannel.doClose() calls LocalChannelRegistry.unregister(localAddress); without check if localAddress is null and so produce a NPE when pass null the used ConcurrentHashMapV8
+
+Modification:
+Check for localAddress != null before try to remove it from Map. Also added a unit test which showed the stacktrace of the error.
+
+Result:
+
+No more NPE during doClose().

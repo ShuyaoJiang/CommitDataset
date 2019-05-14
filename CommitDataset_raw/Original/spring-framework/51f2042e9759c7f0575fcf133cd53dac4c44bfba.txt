@@ -1,0 +1,15 @@
+Refactor WebTestClient assertions
+
+Rather than returning ExchangeActions that contains ExchangeInfo and
+applies a chain of assertions, the exchange operation in WebTestClient
+now has an extra step to decode the response.
+
+The outcome of that is ExchangeResult<T>, parameterized with the
+decoded body type, and containing the request and response details,
+also providing access to built-inassertions via an assertThat()
+instance method.
+
+This approach lends itself better to decoding and asserting response
+body types with generecis. It is also more friendly to using any
+assertion library such as AssertJ since you get the result first
+and then deal with assertions.

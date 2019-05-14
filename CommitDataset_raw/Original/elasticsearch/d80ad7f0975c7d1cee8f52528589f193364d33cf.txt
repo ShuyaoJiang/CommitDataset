@@ -1,0 +1,8 @@
+Check channel i open before setting SO_LINGER (#26857)
+
+This commit fixes a #26855. Right now we set SO_LINGER to 0 if we are
+stopping the transport. This can throw a ChannelClosedException if the
+raw channel is already closed. We have a number of scenarios where it is
+possible this could be called with a channel that is already closed.
+This commit fixes the issue be checking that the channel is not closed
+before attempting to set the socket option.

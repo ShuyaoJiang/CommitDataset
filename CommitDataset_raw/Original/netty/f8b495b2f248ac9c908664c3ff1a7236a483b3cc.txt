@@ -1,0 +1,16 @@
+Correctly support SO_TIMEOUT for OioDatagramChannel
+
+Motivation:
+
+We need to support SO_TIMEOUT for the OioDatagramChannel but we miss this atm as we not have special handling for it in the DatagramChannelConfig impl that we use. Because of this the following log lines showed up when running the testsuite:
+
+20:31:26.299 [main] WARN  io.netty.bootstrap.Bootstrap - Unknown channel option 'SO_TIMEOUT' for channel '[id: 0x7cb9183c]'
+
+Modifications:
+
+- Add OioDatagramChannelConfig and impl
+- Correctly set SO_TIMEOUT in testsuite
+
+Result:
+
+Support SO_TIMEOUT for OioDatagramChannel and so faster execution of datagram related tests in the testsuite

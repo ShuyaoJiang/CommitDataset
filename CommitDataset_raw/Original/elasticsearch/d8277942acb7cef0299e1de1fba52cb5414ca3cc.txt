@@ -1,0 +1,8 @@
+Fix list X-Pack extension command tests
+
+This commit fixes the list X-Pack extension command tests which were
+broken because of a guard added that es.path.conf is set. We do not want
+to set this system property in tests so instead we override createEnv
+where the problematic guard exists.
+
+Original commit: elastic/x-pack-elasticsearch@b1bc4ddcb8cf4f32eb4311ee12b49fc83f9febae

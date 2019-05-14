@@ -1,0 +1,9 @@
+Whitelisting / from Circuit Breaker Exception (#32325) (#32666)
+
+When Circuit Breaker has tripped, certain diagnostic requests like
+"_cluster/health" succeed where as request to / fails with
+503 Service Unavailable. This behavior is observed because of this
+commit f32b700 where certain API paths are whitelisted from
+Circuit Breaking exception, but / is not whitelisted.
+Added / to circuit breaker whitelist so that it can be used for
+diagnostic purposes

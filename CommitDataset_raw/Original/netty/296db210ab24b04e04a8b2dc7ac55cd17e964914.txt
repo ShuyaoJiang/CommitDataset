@@ -1,0 +1,20 @@
+Generate the default JAR to make oss.sonatype.org happy
+
+Motivation:
+
+oss.sonatype.org refuses to promote an artifact if it doesn't have the
+default JAR (the JAR without classifier.)
+
+Modifications:
+
+- Generate both the default JAR and the native JAR to make
+  oss.sonatype.org happy
+- Rename the profile 'release' to 'restricted-release' which reflects
+  what it really does better
+- Remove the redundant <quickbuild>true</quickbuild> in all/pom.xml
+  We specify the profile 'full' that triggers that property already
+  in maven-release-plugin configuration.
+
+Result:
+
+oss.sonatype.org is happy.  Simpler pom.xml

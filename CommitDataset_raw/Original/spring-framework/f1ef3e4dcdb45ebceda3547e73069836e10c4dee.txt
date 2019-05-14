@@ -1,0 +1,18 @@
+Fix APC registration for @EnableTransactionManagement
+
+Prior to this change, @EnableTransactionManagement (via the
+ProxyTransactionManagementConfiguration class) did not properly
+register its auto-proxy creator through the usual AopConfigUtils
+methods.  It was trying to register the APC as a normal @Bean method,
+but this causes issues (SPR-8494) with the logic in
+AopConfigUtils#registerOrEscalateApcAsRequired, which expects the APC
+bean definition to have a beanClassName property.  When the APC is
+registered via a @Bean definition, it is actually a
+factoryBean/factoryMethod situation with no directly resolvable
+beanClass/beanClassName.
+
+Rather than trying to rework how AopConfigUtils works, a @PostConstruct
+method has been added to ProxyTransactionManagementConfiguration to call
+the usual AopConfigUtils registration methods.
+
+Issue: SPR-8411, SPR-8494

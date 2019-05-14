@@ -1,0 +1,17 @@
+Fail HTTP/2 connections if the pong is not received. (#3878)
+
+This removes the Ping abstraction from our http2 package. This was written as
+if it were a public API, but never exposed to any callers but tests. Removing
+it makes it easier to lock down how pings are used.
+
+This also removes the NullServer class, replacing it with a new SocketPolicy
+on MockWebServer. The new SocketPolicy, STALL_SOCKET_AT_START, allows us to
+do TLS and negotiate an HTTP/2 connection without actually building a proper
+Http2Connection and without responding to pings.
+
+The behavior in HTTP/2 connections is modeled after our behavior in web sockets.
+We count outgoing pings, incoming pongs, and confirm that the pongs are keeping
+up. If later we make this policy more sophisticated we can track the changes
+in both places.
+
+Closes: https://github.com/square/okhttp/issues/3261

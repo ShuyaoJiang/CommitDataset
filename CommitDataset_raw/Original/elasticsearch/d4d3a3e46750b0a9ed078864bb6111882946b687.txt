@@ -1,0 +1,16 @@
+Remove license state listeners on closables (#36308)
+
+We have a few places where we register license state listeners on
+transient components (i.e., resources that can be open and closed during
+the lifecycle of the server). In one case (the opt-out query cache) we
+were never removing the registered listener, effectively a terrible
+memory leak. In another case, we were not un-registered the listener
+that we registered, since we were not referencing the same instance of
+Runnable. This commit does two things:
+  - introduces a marker interface LicenseStateListener so that it is
+    easier to identify these listeners in the codebase and avoid classes
+    that need to register a license state listener from having to
+    implement Runnable which carries a different semantic meaning than
+    we want here
+  - fixes the two places where we are currently leaking license state
+    listeners

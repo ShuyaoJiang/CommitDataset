@@ -1,0 +1,12 @@
+Make CommandLinePropertySource enumerable
+
+JOpt 4.4 has enumerable options, so this change can be made
+if we upgrade. The only awkward thing is that JOpt allows
+aliases for options, so we have to pick one to avoid double
+counting. This implementation picks the last one in the list
+which is the alphebtically last of the long options, if there
+are any (e.g. "o1", "option1" returns "option1"). Most of the
+time there will only be one or two aliases for each option so
+it won't matter.
+
+Issue: SPR-10579

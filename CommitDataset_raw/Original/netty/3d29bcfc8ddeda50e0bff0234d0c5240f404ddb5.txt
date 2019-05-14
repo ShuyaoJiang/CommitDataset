@@ -1,0 +1,16 @@
+Allow to create Unsafe ByteBuf implementations that not use a Cleaner to clean the native memory.
+
+Motivation:
+
+Using the Cleaner to release the native memory has a few drawbacks:
+
+- Cleaner.clean() uses static synchronized internally which means it can be a performance bottleneck
+- It put more load on the GC
+
+Modifications:
+
+Add new buffer implementations that can be enabled with a system flag as optimizations. In this case no Cleaner is used at all and the user must ensure everything is always released.
+
+Result:
+
+Less performance impact by direct buffers when need to be allocated and released.

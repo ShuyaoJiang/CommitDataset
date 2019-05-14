@@ -1,0 +1,12 @@
+Set PID system property before *_LOG_PATTERN system properties
+
+Previously, the PID system property was set after the
+CONSOLE_LOG_PATTERN and FILE_LOG_PATTERN system properties. This meant
+that the values of the pattern system properties could not reference
+the PID system property, i.e. ${PID} would not resolve.
+
+This commit sets the PID system property before the *_LOG_PATTERN
+system properties, thereby allowing the latter to reference the
+former.
+
+Closes gh-10594

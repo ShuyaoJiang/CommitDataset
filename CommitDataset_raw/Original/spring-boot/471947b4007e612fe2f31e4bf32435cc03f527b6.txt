@@ -1,0 +1,17 @@
+Be more defensive when instantiating custom ServerProperties
+
+If the user provides their own ServerProperties bean we want to peek
+at it to see if they set the port (and only that) when we are deciding
+if the actuator context needs to be created. This happens very early
+(in a @Condition) so we need to be very defensive. There are already
+quite a few checks in place to prevent a ServerProperties bean from
+being instantiated unless we really need it, and yet, when it is
+we can do more.
+
+This change creates the bean (and the ManagementProperties) in a
+throwaway BeanFactory using the same BeanDefinition as the main
+context. This ensures that when the main context bean is created
+it will be in the "natural" order and binding to the Environment
+can take place as normal.
+
+Fixes gh-4631

@@ -1,0 +1,14 @@
+Add tests to verify starter dependencies when used with Gradle
+
+We've had problems with the starters when used with Gradle. They have
+been pulling in commons-logging (#987) and the wrong version of Spring
+(#1028) due to Gradle's different exclusion and dependency resolution
+semantics.
+
+This commit adds some integration tests that use Gradle's tooling API
+to take each starter in turn and build a Gradle project that depends
+upon it. The build looks at the transitive dependencies and checks
+that neither commons-logging nor any Spring modules with the wrong
+version are present.
+
+Closes #1036

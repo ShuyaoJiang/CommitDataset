@@ -1,0 +1,15 @@
+Ensure ReferenceCountedOpenSslEngine not swallow the close_notify
+
+Motivation:
+
+We need to ensure we not swallow the close_notify that should be send back to the remote peer. See [#6167]
+
+Modifications:
+
+- Only call shutdown() in closeInbound() if there is nothing pending that should be send back to the remote peer.
+- Return the correct HandshakeStatus when the close_notify was received.
+- Only shutdown() when close_notify was received after closeOutbound() was called.
+
+Result:
+
+close_notify is correctly send back to the remote peer and handled when received.

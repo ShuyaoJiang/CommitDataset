@@ -1,0 +1,6 @@
+Fix meta plugin installation that contains plugins with dependencies
+
+When installing a meta plugin we check the dependency of each sub plugin during the installation.
+Though if the extended plugin is part of the meta plugin the installation fails because we only check for plugins that are
+already installed. This change is a workaround that extracts all plugins (even those that are not fully installed yet) when the dependency check
+is made during the installation. Note that this is how the plugin installation worked before https://github.com/elastic/elasticsearch/pull/28581.

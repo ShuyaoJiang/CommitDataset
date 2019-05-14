@@ -1,0 +1,9 @@
+Optimize Bulk Message Parsing and Message Length Parsing (#39634)
+
+* Optimize Bulk Message Parsing and Message Length Parsing
+
+* findNextMarker took almost 1ms per invocation during the PMC rally track
+  * Fixed to be about an order of magnitude faster by using Netty's bulk `ByteBuf` search
+* It is unnecessary to instantiate an object (the input stream wrapper) and throw it away, just to read the `int` length from the message bytes
+  * Fixed by adding bulk `int` read to BytesReference
+

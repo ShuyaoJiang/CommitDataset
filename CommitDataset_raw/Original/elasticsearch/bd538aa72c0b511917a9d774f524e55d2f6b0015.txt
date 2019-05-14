@@ -1,0 +1,14 @@
+Ignore JVM options before checking Java version
+
+Today we strip some ignored JVM options before starting the main Java
+process (e.g., we unset JAVA_TOOL_OPTIONS, and we ignore
+JAVA_OPTS). However, there is another Java process that we start before
+starting the main process: the Java version checker. We are currently
+starting this before ignoring the undesired JVM options so the Java
+version checker will pick up JAVA_TOOL_OPTIONS and it will silently
+ignore JAVA_OPTS. Instead, we should ignore JAVA_TOOL_OPTIONS here too,
+and not silently ignore JAVA_OPTS but instead warn before doing so (as
+we already do for the main Java process). This commit rearranges the
+execution of these steps so that we do the right thing here.
+
+Relates #25969

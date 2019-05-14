@@ -1,0 +1,10 @@
+Add implicit this for class binding in Painless (#40285)
+
+This change allows class bindings to add as their first argument, the base script 
+class. The this reference to the base script class will be implicitly passed into a 
+class binding as the first constructor argument upon initialization when 
+specified as the first argument in whitelist entry for the class binding. This 
+allows a class binding access to additional information added to the base script 
+class such as more information about the current document or current shard. 
+One extra requirement for this to work is the appropriate script base class 
+must be whitelisted (should be empty).

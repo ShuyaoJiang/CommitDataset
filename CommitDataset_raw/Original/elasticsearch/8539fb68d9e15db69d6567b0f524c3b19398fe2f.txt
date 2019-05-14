@@ -1,0 +1,10 @@
+Test: Revert pinning MockWebServer to TLSv1.2 (#34148)
+
+Revert "[TESTS] Pin MockWebServer to TLS1.2 (#33127)" (commit
+214652d4af8188d4ba872626eeea3bcdff7096f0) and "Pin TLS1.2 in
+SSLConfigurationReloaderTests" (commit
+d9f5e4fd2e06c9b69f3b4744e49e747e1ff708b4), which pinned the
+MockWebServer used in the SSLConfigurationReloaderTests to TLSv1.2 in
+order to prevent failures with JDK 11 related to ssl session
+invalidation. We no longer need this pinning as the problematic code
+was fixed in #34130.

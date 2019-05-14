@@ -1,0 +1,6 @@
+Always return the after_key in composite aggregation response (#28358)
+
+This change adds the `after_key` of a composite aggregation directly in the response.
+It is redundant when all buckets are not filtered/removed by a pipeline aggregation since in this case the `after_key` is always the last bucket
+in the response. Though when using a pipeline aggregation to filter composite buckets, the `after_key` can be lost if the last bucket is filtered.
+This commit fixes this situation by always returning the `after_key` in a dedicated section.

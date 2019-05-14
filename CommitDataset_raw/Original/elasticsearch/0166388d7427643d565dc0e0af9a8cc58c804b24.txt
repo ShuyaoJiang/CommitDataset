@@ -1,0 +1,11 @@
+Use single netty event loop group for transports (#35181)
+
+Currently we create a new netty event loop group for client connections
+and all server profiles. Each new group creates new threads for io
+processing. This means 2 * num of processors new threads for each group.
+A single group should be able to handle all io processing (for the
+transports). This also brings the netty module inline with what we do
+for nio.
+
+Additionally, this PR renames the worker threads to be the same for
+netty and nio.

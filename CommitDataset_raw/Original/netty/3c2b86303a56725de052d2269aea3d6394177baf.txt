@@ -1,0 +1,14 @@
+Release message when validation of passed in ChannelPromise fails when calling write(...) / writeAndFlush(...) (#8769)
+
+Motivation:
+
+We need to release the message when we throw an IllegalArgumentException because of a validation failure of the promise to eliminate the risk of a memory leak.
+
+Modifications:
+
+- Consistently release the message before rethrow
+- Add testcase.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8765.

@@ -1,0 +1,13 @@
+Fix race condition in the NonStickyEventExecutorGroup (#8232)
+
+Motivation:
+
+There was a race condition between the task submitter and task executor threads such that the last Runnable submitted may not get executed. 
+
+Modifications:
+
+The bug was fixed by checking the task queue and state in the task executor thread after it saw the task queue was empty.
+
+Result:
+
+Fixes #8230

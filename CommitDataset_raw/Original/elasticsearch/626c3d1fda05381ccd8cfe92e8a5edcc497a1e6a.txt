@@ -1,0 +1,12 @@
+Primary send safe commit in file-based recovery (#28038)
+
+Today a primary shard transfers the most recent commit point to a 
+replica shard in a file-based recovery. However, the most recent commit
+may not be a "safe" commit; this causes a replica shard not having a
+safe commit point until it can retain a safe commit by itself.
+
+This commits collapses the snapshot deletion policy into the combined 
+deletion policy and modifies the peer recovery source to send a safe
+commit.
+
+Relates #10708

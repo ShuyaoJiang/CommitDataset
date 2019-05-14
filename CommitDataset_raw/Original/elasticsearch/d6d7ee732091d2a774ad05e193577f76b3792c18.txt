@@ -1,0 +1,6 @@
+Remove FastCharArrayReader and FastCharArrayWriter (#28951)
+
+These classes are used only in two places, and can be replaced by the
+`CharArrayReader` and `CharArrayWriter`. The JDK can also perform lock biasing
+and elision as well as escape analysis to optimize away non-contended locks,
+rendering their lock-free implementations unnecessary.

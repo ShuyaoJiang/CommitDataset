@@ -1,0 +1,22 @@
+Fix the incorrect usage/value of 'Connection: upgrade'
+
+Motivation:
+
+HttpClientUpgradeHandler uses HttpHeaderNames.UPGRADE as the value of
+the 'Connection' header, which is incorrect. It should use
+HttpHeaderValues.UPGRADE instead (note Names vs Values.)
+
+Also, HttpHeaderValues.UPGRADE should be 'upgrade' rather than
+'Upgrade', as defined in:
+
+- https://tools.ietf.org/html/rfc7230#section-6.7
+
+Modifications:
+
+- Use HttpHeaderValues.UPGRADE for a 'Connection' header
+- Lowercase the value of HttpHeaderValues.UPGRADE
+
+Result:
+
+- Fixes #4508
+- Correct behavior

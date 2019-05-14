@@ -1,0 +1,11 @@
+Do not copy in Immutable{List,Set,SortedSet} construction.
+
+We're still avoiding the potential for a memory leak with the forceCopy part, but we want to avoid the garbage created by slicing the array down to exactly the right size.
+
+We don't ever copy in ImmutableList, since we can only be too big by a factor of 3/2.  In Immutable{Set,SortedSet}, we copy if, after deduplication, the number of unique elements is < array.length / 2.  (And we rebuild the hash table in IS if it's more than twice as big as it should be).
+
+The memory cost here isn't big, but Android especially doesn't like garbage objects, and garbage isn't super fun on server side either.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=150805495

@@ -1,0 +1,10 @@
+[#2361] Native.epollCreate(...) fails on systems using a kernel < 2.6.27 / glibc < 2.9
+
+Motivation:
+Native.epollCreate(...) fails on systems using a kernel < 2.6.27 / glibc < 2.9 because it uses epoll_create1(...) without checking if it is present
+
+Modifications:
+Check if epoll_create1(...) exists abd if not fall back to use epoll_create(...)
+
+Result:
+Works even on systems with kernel < 2.6.27 / glibc < 2.9

@@ -1,0 +1,13 @@
+Remove synchronization overhead on generateName.
+
+Motivation:
+
+Changing the chache of generated names to use a cache per thread. This will remove the bottleneck when many eventloops are used and names need to generate.
+
+Modifications:
+
+Use a FastThreadLocal to store the cached names.
+
+Result:
+
+Less locking between threads.

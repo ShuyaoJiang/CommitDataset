@@ -1,0 +1,13 @@
+Initialize FailureAnalyzer earlier
+
+This commit changes `FailureAnalyzers` so that the loaded
+`FailureAnalyzer` instances are initialized before the context eventually
+fails.
+
+Before this commit, the `BeanFactoryAware` callback was processed at a
+time where the context has already shutdown. Some implementations need
+to access components that are no longer available.
+
+Instead, we now initialize them before the context is refreshed.
+
+Closes gh-6748

@@ -1,0 +1,18 @@
+Switch to suspended mode before demand
+
+After this commit, Tomcat and Undertow WebSocketSession imlpementations
+start out in suspended mode and wait for demand.
+
+The JettyWebSocketSession is capable of suspending but it doesn't seem
+to work if invoked before any messages are received. That may become an
+issue if there is a case where no demand appears long enough for more
+messages to accumulate than we can hold.
+
+UnderowServerHttpRequest would ideally also start in suspended mode but
+that also doesn't work. It is not an issue in this case since we can
+ignore the read notifications.
+
+Servlet API requires a proactive check before it calls you back so
+there is no need to suspend.
+
+Issue: SPR-16207

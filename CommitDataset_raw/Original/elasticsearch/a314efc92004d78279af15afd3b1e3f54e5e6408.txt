@@ -1,0 +1,17 @@
+Add high level rest client support for SetIndexLifecyclePolicy (#32443)
+
+This adds HLRC support for the ILM operation of setting an index's lifecycle
+policy.
+
+It also includes extracting and renaming a number of classes (like the request
+and response objects) as well as the addition of a new `IndexLifecycleClient`
+for the HLRC. This is a prerequisite to making the `index.lifecycle.name`
+setting internal only, because we require a dedicated REST endpoint to change
+the policy, and our tests currently set this setting with the REST client
+multiple places. A subsequent PR will change the setting to be internal and move
+those uses over to this new API.
+
+This misses some links to the documentation because I don't think ILM has any
+documentation available yet.
+
+Relates to #29827 and #29823

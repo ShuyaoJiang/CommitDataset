@@ -1,0 +1,15 @@
+Work around Groovy compiler bug that can name classes incorrectly
+
+If a source URL is added to a CompilationUnit and that source URL does
+not contain any slashes, the resulting ClassNode in the AST will be
+incorrectly named. For example, a URL of 'file:foo.groovy' will produce
+a ClassNode named 'file:foo'. The expected name is 'foo'.
+
+This commit works around this problem by adding any URL sources with a
+file protocol to the compilation unit as File instances. Any URL sources
+that do not have a file protocol continue to be added as URL instances.
+Such URLs are still prone to this bug should we be dealing with one
+that contains no slashes. A fix for the underlying Groovy bug will
+address this possibility.
+
+Fixes #594

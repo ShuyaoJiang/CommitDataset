@@ -1,0 +1,15 @@
+Refine encoding/decoding exception handling
+
+Starting with removing a package cycle on the use of
+ResponseStatusException in the codec package, this commit generally
+refines codec exception handling.
+
+The new [Encoding|Decoding]Exception mirror the existing
+HttpMessageNot[Readable|Writable]Exception and are used similarly
+especially to differentiate betwen 400 and 500 errors when parsing
+server request body content.
+
+The commit also aligns some of the exception handling of JSON and XML
+on the WebFlux side with that on the Spring MVC side.
+
+Issue: SPR-15516

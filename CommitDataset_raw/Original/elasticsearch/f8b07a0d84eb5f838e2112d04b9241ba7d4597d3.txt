@@ -1,0 +1,18 @@
+Fix a mappings update test (#33146)
+
+This commit fixes a mappings update test. The test is broken in the
+sense that it passes, but for the wrong reason. The test here is testing
+that if we make a mapping update but do not commit that mapping update
+then the mapper service still maintains the previous document
+mapper. This was not the case long, long ago when a mapping update would
+update the in-memory state before the cluster state update was
+committed. This test was passing, but it was passing because the mapping
+update was never even updated. It was never even updated because it was
+encountering a null pointer exception. Of course the in-memory state is
+not going to be updated in that case, we are simply going to end up with
+a failed cluster state update. Fixing that leads to another issue which
+is that the mapping source does not even parse so again we would, of
+course, end up with the in-memory state not being modified. We fix these
+issues, assert that the result cluster state task completed
+successfully, and finally that the in-memory state was not updated since
+we never committed the resulting cluster state.

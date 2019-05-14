@@ -1,0 +1,7 @@
+Fixed SpdySessionHandlerTest / Fixed NPE in EmbeddedChannel
+
+- Some tests like SpdySessionHandlerTest accesses outbound buffer
+  even before the outbound buffer is initialized by
+  AbstractEmbeddedChannel's subclasses, leading to NPE at <init>.
+  To fix this problem, subclasses now pass the outbound buffer as
+  a constructor parameter to AbstractEmbeddedChannel.

@@ -1,0 +1,23 @@
+Configure existing Jersey servlet registration created by the SCI
+
+When a Jersey app is deployed to a standalone container, Jersey’s
+ServletContainerInitializer will run and register a servlet for a class
+annotated with @ApplicationPath. If Jersey’s ServletContainerInitializer
+runs before Spring’s, this servlet will take precedence over the
+servlet registered by JerseyAutoConfiguration and will therefore not be
+configured with any init parameters specified using spring.jersey.init
+
+For the case where Jersey’s SCI runs first, this commit updates
+JerseyAutoConfiguration to examine the servlet context for an existing
+registration of Jersey’s servlet (Jersey names the registration using
+the fully-qualified name of the ResourceConfig subclass). If a
+registration is found its init parameters are configured using the
+configuration provided by spring.jersey.init.
+
+For the case where Spring’s SCI runs first, this commit updates
+JerseyAutoConfiguration so that it names its registration using the
+fully-qualified name of the ResourceConfig sub-class. This allows
+Jersey’s SCI to find the existing registration rather than attempting
+to configure its own.
+
+Closes gh-2471

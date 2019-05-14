@@ -1,0 +1,11 @@
+Only fetch mapping updates when necessary (#33182)
+
+Today we fetch the mapping from the leader and apply it as a mapping
+update whenever the index metadata version on the leader changes. Yet,
+the index metadata can change for many reasons other than a mapping
+update (e.g., settings updates, adding an alias, or a replica being
+promoted to a primary among many other reasons). This commit builds on
+the addition of a mapping version to the index metadata to only fetch
+mapping updates when the mapping version increases. This reduces the
+number of these fetches and application of mappings on the follower to
+the bare minimum.

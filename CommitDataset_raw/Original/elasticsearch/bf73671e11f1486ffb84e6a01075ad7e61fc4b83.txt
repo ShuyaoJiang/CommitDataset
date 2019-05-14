@@ -1,0 +1,9 @@
+Fix the clock resolution to millis in ScheduledEventTests (#38506)
+
+The clock resolution changed from jdk8 to jdk10, hence the
+test is passing in jdk8 but failing in jdk10.  Scheduled
+events are serialised and deserialised with millisecond
+precision, making test fail in jdk 10 and higher.
+
+Fixes a problem introduced by #38415 and the fix is
+identical to the one that was made in #38405.

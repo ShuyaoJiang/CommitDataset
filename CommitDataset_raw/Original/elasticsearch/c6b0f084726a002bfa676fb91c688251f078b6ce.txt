@@ -1,0 +1,14 @@
+Add safety phase to CoordinatorTests (#34241)
+
+Today's CoordinatorTests have a limited amount of randomisation in how things
+are scheduled. However, to be fully confident in Zen2's liveness we require the
+system to stabilise after any permitted sequence of events. We can achieve
+this by running the system in a much more random fashion for a while, with much
+larger variation in when things are scheduled (simulating GC pressure and
+network disruption) and then continuing to assert that the system stabilises as
+we expect. When running randomly, we do not expect to make significant progress
+and merely verify that no safety property is violated.
+
+This change introduces the runRandomly() test method which implements this
+idea. It also fixes a handful of liveness bugs that this first version of
+runRandomly() exposed.

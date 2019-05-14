@@ -1,0 +1,6 @@
+Add a third AtomicHelper strategy to abstract future
+
+This should only be used when getDeclaredField(String) fails (used by AtomicReferenceFieldUpdater).  afaik classes are always allowed to reflect on their own private fields so this should never happen.  But some Samsung 5.0.x android devices have bugs in the reflection APIs that can cause this to happen.  As yet reproducing such failures has proven elusive, it is thought that this failure mode may depend on address layout randomization or possibly a flaky bug in the ART compiler.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=107939645

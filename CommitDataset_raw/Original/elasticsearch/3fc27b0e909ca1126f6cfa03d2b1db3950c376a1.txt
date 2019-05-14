@@ -1,0 +1,38 @@
+Document how to import Lucene Snapshot libs when elasticsearch clients (#26113)
+
+When using the High Level Rest Client 6.0.0-beta1, we are missing some transitive dependencies for Lucene as Lucene 7 has not been released yet. See the following `pom.xml`:
+
+```xml
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>6.0.0-beta1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>6.0.0-beta1</version>
+        </dependency>
+```
+
+It gives:
+
+```
+[ERROR] Failed to execute goal on project fscrawler: Could not resolve dependencies for project fr.pilato.elasticsearch.crawler:fscrawler:jar:2.4-SNAPSHOT: The following artifacts could not be resolved: org.apache.lucene:lucene-analyzers-common:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-backward-codecs:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-grouping:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-highlighter:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-join:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-memory:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-misc:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-queries:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-queryparser:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-sandbox:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-spatial:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-spatial-extras:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-spatial3d:jar:7.0.0-snapshot-00142c9, org.apache.lucene:lucene-suggest:jar:7.0.0-snapshot-00142c9: Failure to find org.apache.lucene:lucene-analyzers-common:jar:7.0.0-snapshot-00142c9 in https://artifacts.elastic.co/maven/ was cached in the local repository, resolution will not be reattempted until the update interval of elastic-download-service has elapsed or updates are forced -
+```
+
+We need to add some temporary documentation on how to add the missing repository to a gradle or maven project:
+
+```xml
+        <repository>
+            <id>elastic-lucene-snapshots</id>
+            <name>Elastic Lucene Snapshots</name>
+            <url>http://s3.amazonaws.com/download.elasticsearch.org/lucenesnapshots/00142c9</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+```
+
+This also applies to the transport client.
+
+Closes #26106.

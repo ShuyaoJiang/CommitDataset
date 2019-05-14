@@ -1,0 +1,7 @@
+Revise use of FilterChain in MockMvc
+
+MockFilterChain should not be re-used across requests. This is not an
+issue unless tests are executed concurrently. This change ensures the
+MockFilterChain is re-created for each request in MockMvc.
+
+Issue: SPR-10838

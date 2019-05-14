@@ -1,0 +1,11 @@
+Remove incorrect javadoc regarding "passing the smaller Set first" from Sets.union().
+
+In Sets.intersection() this comment makes sense, since it iterates through set1 as the "main set", and does a contains check against set2 for every element in set1. So iterating through intersection() is O(|set1|) for HashSets, or O(|set1| * log|set2|) for TreeSets. For the union() case though, I don't believe this comment is correct. Iterating through the union involves:
+
+-Iterate through set1. No contains checks are performed. This is simply O(|set1|) (assuming the Set has normal iteration performance)
+-Iterate through set2. For every element, a contains check against set1 is performed. Thus we have O(|set2| * C1), where C1 is the cost of a contains() call to set1.
+
+So if set1 is a HashSet we have O(|set1|) + O(|set2|). Order makes no difference. If set1 is a TreeSet we have O(|set1|) + O(|set2| * log|set1|). This is actually *worse* when set1 is the smaller of the two sets.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=113561878

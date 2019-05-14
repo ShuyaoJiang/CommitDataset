@@ -1,0 +1,12 @@
+Make MetricRegistryMetricReader thread-safe
+
+MetricRegistryMetricReader’s fields where neither final, nor volatile
+but could be accessed on multiple threads. This lead to visibility
+problems where the value of a field would unexpectedly be null, causing
+an NPE.
+
+This commit updates all of the fields to declare them as final, thereby
+ensuring that their values are guaranteed to be visible across different
+threads.
+
+Fixes gh-2590

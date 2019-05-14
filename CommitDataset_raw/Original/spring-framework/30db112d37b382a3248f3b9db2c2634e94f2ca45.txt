@@ -1,0 +1,8 @@
+Close InputStream in ResourceHttpMessageConverter
+
+Spring 3.2.2 introduced a change to avoid closing the response stream
+in HttpMessageConverters (SPR-10095). However, the InputStream of
+resources being written, for example as part of a multi-part request
+should be closed. This change ensures that.
+
+Issue: SPR-10460

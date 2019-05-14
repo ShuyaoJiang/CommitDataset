@@ -1,0 +1,16 @@
+Deleting redundant needsFlush boolean
+
+Motivation:
+
+In ChunkedWriteHandler, there is a redundant variable that servers
+no purpose. It implies that under some conditions you might not want
+to flush.
+
+Modifications:
+
+Removed the variable and the if condition that read it. The boolean
+was always true so just removing the if statement was fine.
+
+Result:
+
+Slightly less misleading code.

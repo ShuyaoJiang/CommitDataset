@@ -1,0 +1,13 @@
+Switch to hardcoding Smile as the state format (#28610)
+
+This commit changes the state format that was previously passed in to
+`MetaDataStateFormat` to always use Smile. This doesn't actually change the
+format, since we have used Smile for writing the format since at least 5.0. This
+removes the automatic detection of the state format when reading state, since
+any state that could be processed in 6.x and 7.x would already have been written
+in Smile format.
+
+This is work towards removing the deprecated methods in the XContent code where
+we do automatic content-type detection.
+
+Relates to #28504

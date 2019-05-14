@@ -1,0 +1,9 @@
+fix `GET _ilm` response with uninitialized ILM metadata (#34881)
+
+ILM would return a resource-not-found exception when requesting policies
+while the IndexLifecycleMetaData is not initialized. The behavior here
+should not be as extreme since it is not the user's fault.
+
+This commit changes the behavior so that it succeeds and returns no policies
+when no policy names are explicitely specified, otherwise keep the same behavior
+of throwing an exception

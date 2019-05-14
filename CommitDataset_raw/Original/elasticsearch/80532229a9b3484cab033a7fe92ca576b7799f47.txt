@@ -1,0 +1,6 @@
+Move indices field from RankEvalSpec to RankEvalRequest (#28341)
+
+Currently we store the indices specified in the request URL together with all
+the other ranking evaluation specification in RankEvalSpec. This is not ideal
+since e.g. the indices are not rendered to xContent and so cannot be parsed
+back. Instead we should keep them in RankEvalRequest.

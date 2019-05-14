@@ -1,0 +1,14 @@
+[#4635] Stop decoding if decoder was removed
+
+Motivation:
+
+We need to check if this handler was removed before continuing with decoding.
+If it was removed, it is not safe to continue to operate on the buffer.
+
+Modifications:
+
+Check if decoder was removed after fire messages through the pipeline.
+
+Result:
+
+No illegal buffer access when decoder was removed.

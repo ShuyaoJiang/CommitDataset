@@ -1,0 +1,16 @@
+Fix race in PoolArena.allocate. Fixes #4829
+
+Motivation:
+
+The statistic counters PoolArena.(allocationsTiny|allocationsSmall) are
+not protected by a per arena lock, but by a per size class lock. Thus,
+two concurrent allocations of different size (class) could lead to a
+race and ultimately to wrong statistics.
+
+Modifications:
+
+Use a thread-safe LongCounter instead of a plain long data type.
+
+Result:
+
+Fewer data races.

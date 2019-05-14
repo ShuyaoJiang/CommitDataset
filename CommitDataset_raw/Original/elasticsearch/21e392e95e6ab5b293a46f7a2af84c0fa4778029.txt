@@ -1,0 +1,5 @@
+Removes typed calls from YAML REST tests (#37611)
+
+This PR attempts to remove all typed calls from our YAML REST tests. The PR adds include_type_name: false to create index requests that use a mapping and also to put mapping requests. It also removes _type from index requests where they haven't already been removed. The PR ignores tests named *_with_types.yml since this are specifically testing typed API behaviour.
+
+The change also includes changing the test harness to add the type _doc to index, update, get and bulk requests that do not specify the document type when the test is running against a mixed 7.x/6.x cluster.

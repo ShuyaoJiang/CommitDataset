@@ -1,0 +1,8 @@
+Use deterministic DataSource config import order
+
+Update DataSourceAutoConfiguration so that pooled datasource
+configurations are only loaded via an @Import. If left as nested
+classes, the load order is JVM specific and can result in the wrong
+configuration being loaded.
+
+Closes gh-2183

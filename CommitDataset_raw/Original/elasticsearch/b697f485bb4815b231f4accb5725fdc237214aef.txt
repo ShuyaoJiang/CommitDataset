@@ -1,0 +1,13 @@
+Introduce `TransportLogger` for common logging (#32725)
+
+Historically we have had a ESLoggingHandler in the netty module that
+logs low-level connection operations. This class just extends the netty
+logging handler with some (broken) message deserialization. This commit
+fixes this message serialization and moves the class to server.
+
+This new logger logs inbound and outbound messages. Eventually, we
+should move other event logging to this class (connect, close, flush).
+That way we will have consistent logging regards of which transport is
+loaded.
+
+Resolves #27306 on master. Older branches will need a different fix.

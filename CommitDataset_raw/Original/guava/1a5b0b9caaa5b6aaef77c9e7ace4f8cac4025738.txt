@@ -1,0 +1,8 @@
+Fix a signaling bug in newDirectExecutorService()  Also switch to implicit
+monitors to take advantage of biased locking.
+
+If thread A calls awaitTermination while there are no running tasks, then
+Thread B calls shutdown(). Thread A will never be woken up.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=87280837

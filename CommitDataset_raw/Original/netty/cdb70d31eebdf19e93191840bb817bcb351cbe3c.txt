@@ -1,0 +1,13 @@
+[#4017] Implement proper resource leak detection for CompositeByteBuf
+
+Motivation:
+
+CompositeByteBuf only implemented simple resource leak detection and how it was implemented was completly different to the way it was for ByteBuf. The other problem was that slice(), duplicate() and others would not return a resource leak enabled buffer.
+
+Modifications:
+
+- Proper implementation for all level of resource leak detection for CompositeByteBuf
+
+Result:
+
+Proper resource leak detection for CompositeByteBuf.

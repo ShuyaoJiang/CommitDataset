@@ -1,0 +1,15 @@
+Use value types for class and type in DNS entries to make them immune to parameter order bugs
+
+Motivation:
+
+DNS class and type were represented as integers rather than an enum or a
+similar dedicated value type.  This can be a potential source of a
+parameter order bug which might be difficult to track down.
+
+Modifications:
+
+Add DnsClass and DnsType to replace integer parameters
+
+Result:
+
+Type safety and less error-proneness

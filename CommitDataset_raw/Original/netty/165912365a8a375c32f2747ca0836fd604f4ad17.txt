@@ -1,0 +1,31 @@
+Clenaup: simplify EpollEventLoop.closeAll() (#8719)
+
+Motivation:
+
+Avoid unnecessary iteration and `ArrayList` allocation.
+
+Modification:
+
+```
+for (AbstractEpollChannel channel: channels.values()) {
+     array.add(channel);
+}
+```
+replaced with 
+
+`array.addAll(channels.values())`
+
+and
+
+```
+Collection<AbstractEpollChannel> array = new ArrayList<AbstractEpollChannel>(channels.size());
+array.addAll(channels.values())
+```
+
+replaced with:
+
+`AbstractEpollChannel[] localChannels = channels.values().toArray(new AbstractEpollChannel[0]);`
+
+Result:
+
+Simpler code in `EpollEventLoop.closeAll();`

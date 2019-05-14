@@ -1,0 +1,11 @@
+NioEventLoop#rebuildSelector0 throws ClassCastException
+
+Motivation:
+Commit 795f318 simplified some code related to the special case Set for the selected keys and introduced a Selector wrapper to make sure this set was properly reset. However the JDK makes assumptions about the type of Selector and this type is not extensible. This means whenever we call into the JDK we must provide the unwrapped version of the Selector or we get a ClassCastException. We missed a case of unwrapping in NioEventLoop#rebuildSelector0.
+
+Modificaitons:
+- NioEventLoop#openSelector should return a tuple so we can atomically set the wrapped and unwrapped Selector
+- NioEventLoop#rebuildSelector0 should use the unwrapped version of the selector
+
+Result:
+Fixes https://github.com/netty/netty/issues/6607.

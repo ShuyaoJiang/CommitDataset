@@ -1,0 +1,19 @@
+Make TearDownStack thread-safe
+
+I encountered an issue with some code that starts several servers in
+the background (in parallel), adding a TearDown to stop each one after
+the test is finished. Fixing that issue in the calling code itself
+boils down to basically one of two choices: a. synchronzing my access
+to the tear down stack; or b. restructuring the code so the teardown
+happens on the main thread. Solution "a" is incomplete, as I can't
+protect the access to the stack from code at large (only my code), and
+solution "b" leads to a less-readable, more convuluted code, that
+delays the registering of the teardown to much after it would
+naturally go (and lead to incomplete tear downs, if the test were to
+stop before the moment where the tear down is registered).
+
+Making TearDownStack thread-safe seems like a much better option.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=145446978

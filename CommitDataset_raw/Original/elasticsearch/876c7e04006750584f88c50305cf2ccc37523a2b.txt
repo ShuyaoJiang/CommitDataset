@@ -1,0 +1,7 @@
+Fix random score generation when no seed is provided. (#25908)
+
+It fixes random score generation to ensure that you will not always get the
+same scores on a read-only index by integrating the seed into the score
+computation when using doc ids. It also removes `ctx.docBase` from the formula
+since it might change over time if deletes are compacted while scores are
+supposed to be cacheable per segment.

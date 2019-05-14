@@ -1,0 +1,8 @@
+Fix use of spaces on Windows if JAVA_HOME not set
+
+When JAVA_HOME is not set we try to detect the location of Java. If its
+location contains a space, due to a lack of quoting we will be
+unsuccessful in invoking Java. This commit adds the necessary quoting to
+handle this case.
+
+Relates #23822

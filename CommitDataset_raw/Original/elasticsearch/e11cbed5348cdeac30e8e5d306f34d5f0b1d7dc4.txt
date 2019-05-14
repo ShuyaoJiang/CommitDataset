@@ -1,0 +1,10 @@
+Adding a refresh listener to a recovering shard should be a noop (#26055)
+
+When `refresh=wait_for` is set on an indexing request, we register a listener on the shards that are call during the next refresh. During the recover translog phase, when the engine is open, we have a window of time when indexing operations succeed and they can add their listeners. Those listeners will only be called when the recovery finishes as we do not refresh during recoveries (unless the indexing buffer is full). Next to being a bad user experience, it can also cause deadlocks with an ongoing peer recovery that may wait for those operations to mark the replica in sync (details below).
+
+To fix this, this PR changes refresh listeners to be a noop when the shard is not yet serving reads (implicitly covering the recovery period). It doesn't matter anyway. 
+
+Deadlock with recovery:
+
+When finalizing a peer recovery we mark the peer as "in sync". To do so we wait until the peer's local checkpoint is at least as high as the global checkpoint. If an operation with `refresh=wait_for` is added as a listener on that peer during recovery, it is not completed from the perspective of the primary. The primary than may wait for it to complete before advancing the local checkpoint for that peer. Since that peer is not considered in sync, the global checkpoint on the primary can be higher, causing a deadlock. Operation waits for recovery to finish and a refresh to happen. Recovery waits on the operation.
+

@@ -1,0 +1,13 @@
+HTTP/2 enforce HTTP message flow
+
+Motivation:
+codec-http2 currently does not strictly enforce the HTTP/1.x semantics with respect to the number of headers defined in RFC 7540 Section 8.1 [1]. We currently don't validate the number of headers nor do we validate that the trailing headers should indicate EOS.
+
+[1] https://tools.ietf.org/html/rfc7540#section-8.1
+
+Modifications:
+- DefaultHttp2ConnectionDecoder should only allow decoding of a single headers and a single trailers
+- DefaultHttp2ConnectionEncoder should only allow encoding of a single headers and optionally a single trailers
+
+Result:
+Constraints of RFC 7540 restricting the number of headers/trailers is enforced.

@@ -1,0 +1,11 @@
+Only add Tomcat connectors in start() method
+
+Update TomcatEmbeddedServletContainer so that Connectors are removed
+during initialization and re-added when the start() method is called.
+
+This prevent protocol handlers from being bound then immediately
+unbound. It also ensure that any additional connectors that may have
+been added don't accidentally start to accept traffic (which could cause
+potential deadlock issues).
+
+Fixes gh-1212

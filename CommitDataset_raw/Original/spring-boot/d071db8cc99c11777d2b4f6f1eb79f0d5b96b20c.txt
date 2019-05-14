@@ -1,0 +1,18 @@
+Align launch.script with the init script spec
+
+The init script spec [1] describes a number of requirements with which
+our launch.script did not comply. This commit makes the following
+corrections:
+
+ - Add support for force-reload which should be implemented by all
+   init scripts
+ - Don't fail restart if the service is already stopped or not running
+ - Consider stop to be successful if the service is already stopped
+ - Exit with 1 if stop fails (indicating a generic or unspecified error)
+   rather than 3 (unimplemented feature)
+ - Report a status of 1 if app is not running but the pid file exists
+ - Report a status of 3 if the app is not running (no pid file)
+
+Closes gh-4231
+
+[1] http://refspecs.linuxbase.org/LSB_3.1.0/LSB-Core-generic/LSB-Core-generic/iniscrptact.html

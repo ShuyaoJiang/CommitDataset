@@ -1,0 +1,12 @@
+Support single-value reactive types in @MessageMapping
+
+This commit adds support for single-value reactive types in
+@MessageMapping by converting them using ReactiveAdapterRegistry
+and MonoToListenableFutureAdapter.
+
+MonoToListenableFutureAdapter previously package private and used only
+in org.springframework.messaging.tcp.reactor has been moved to
+org.springframework.messaging.support and made public in order to be
+used by ReactiveReturnValueHandler as well.
+
+Issue: SPR-16634

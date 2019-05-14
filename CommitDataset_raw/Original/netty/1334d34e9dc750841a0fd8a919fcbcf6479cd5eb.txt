@@ -1,0 +1,16 @@
+Fix limit computation of NIO ByteBuffers obtained via ReadOnlyByteBufferBuf.nioBuffer
+
+Motivation:
+
+When starting with a read-only NIO buffer, wrapping it in a ByteBuf,
+and then later retrieving a re-wrapped NIO buffer the limit was getting
+too short.
+
+Modifications:
+
+Changed ReadOnlyByteBufferBuf.nioBuffer(int,int) to compute the
+limit in the same manner as the internalNioBuffer method.
+
+Result:
+
+Round-trip conversion from NIO to ByteBuf to NIO will work reliably.

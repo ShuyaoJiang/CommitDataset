@@ -1,0 +1,29 @@
+Fix compiler warnings in netty Epoll and unix common
+
+Motivation:
+Google requires stricter compilation by adding -Werror and enabling many other warnings.
+
+Modification:
+
+* fix warning caused by -Wmissing-braces
+
+* Use the address of `sendmmsg` rather than the function itself when
+checking for presence.  This resovles the warning caused by
+`-Wpointer-bool-conversion`.
+
+More detail:
+When compiling on Linux, `sendmmsg` is always present, so the
+function is always nonnull.  When compiling elsewhere, the
+function is defined as `__attribute__((weak))` which means it
+may be absent at link time.  This is controlled by
+`IO_NETTY_SENDMMSG_NOT_FOUND`, which is off by default.
+
+The reason for the error is due to the risk of accidentally not
+calling the function.  By adding `&` before the function, there
+is no ambiguity.  (the result of the fn call cannot have its
+address taken.)
+
+* use != to check for sendmmsg
+
+Result:
+Easier compilation.

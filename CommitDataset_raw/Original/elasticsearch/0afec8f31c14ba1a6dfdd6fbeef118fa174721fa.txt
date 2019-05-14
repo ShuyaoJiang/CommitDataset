@@ -1,0 +1,87 @@
+Remove deprecation warnings to prepare for Gradle 5 (sourceSets.main.output.classesDirs) (#30389)
+
+* Remove deprecation warnings to prepare for Gradle 5
+
+Gradle replaced `project.sourceSets.main.output.classesDir` of type
+`File` with `project.sourceSets.main.output.classesDirs` of type
+`FileCollection`
+(see [SourceSetOutput](https://github.com/gradle/gradle/blob/master/subprojects/plugins/src/main/java/org/gradle/api/tasks/SourceSetOutput.java))
+Build output is now stored on a per language folder.
+
+There are a few places where we use that, here's these and how it's
+fixed:
+
+- Randomized Test execution
+    - look in all test folders ( pass the multi dir configuration to the
+    ant runner )
+    - DRY the task configuration by introducing `basedOn` for
+      `RandomizedTestingTask` DSL
+- Extend the naming convention test to support passing in multiple
+  directories
+- Fix the standalon test plugin, the dires were not passed trough,
+  checked with a debuger and the statement had no affect due to a
+  missing `=`.
+
+Closes #30354
+
+* Only check Java tests, PR feedback
+
+- Name checker was ran for Groovy tests that don't adhere to the same
+  convections causing the check to fail
+- implement PR feedback
+
+* Replace `add` with `addAll`
+
+This worked because the list is passed to `project.files` that does the
+right thing.
+
+* Revert "Only check Java tests, PR feedback"
+
+This reverts commit 9bd9389875d8b88aadb50df57a45cd0d2b073241.
+
+* Remove `basedOn` helper
+
+* Bring some changes back
+
+Previus revert accidentally reverted too much
+
+* Fix negation
+
+* add back public
+
+* revert name check changes
+
+* Revert "revert name check changes"
+
+This reverts commit a2800c0b363168339ea65e2a79ec8256e5883e6d.
+
+* Pass all dirs to name check
+
+Only run on Java for build-tools, this is safe because it's a self test.
+It needs more work before we could pass in the Groovy classes as well as
+these inherit from `GroovyTestCase`
+
+* remove self tests from name check
+
+The self complicates the task setup and disable real checks on
+build-tools.
+With this change there are no more self tests, and the build-tools tests
+adhere to the conventions.
+The self test will be replaced by gradle test kit, thus the addition of
+the Gradle plugin builder plugin.
+
+* First test to run a Gradle build
+
+* Add tests that replace the name check self test
+
+* Clean up integ test base class
+
+* Always run tests
+
+* Align with test naming conventions
+
+* Make integ. test case inherit from unit test case
+
+The check requires this
+
+* Remove `import static org.junit.Assert.*`

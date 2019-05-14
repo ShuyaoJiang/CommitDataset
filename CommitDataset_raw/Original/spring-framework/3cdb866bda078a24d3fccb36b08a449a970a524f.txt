@@ -1,0 +1,34 @@
+Relax ConfigurableWebEnvironment signatures
+
+ConfigurableWebEnvironment was introduced in 3.2.0.M1 with SPR-9439 in
+order to break a cyclic dependency. At the same time, certain signatures
+such as AbstractRefreshableWebApplicationContext#getEnviroment and
+GenericWebApplicationContext#getEnvironment were updated to take
+advantage of covariant return types and return this newer, more narrow
+type and providing cast-free calls to ConfigurableWebEnvironment methods
+where necessary. Similar changes were made to HttpServletBean in
+3.2.0.M2 with SPR-9763.
+
+Narrowing #getEnvironment signatures in this fashion required enforcing
+at the #setEnvironment level that any Environment instance provided
+(explicitly or via the EnvironmentAware callback) must be an instance of
+ConfigurableWebEnvironment. This is a reasonable assertion in typical
+web application scenarios, but as SPR-10138 demonstrates, there are
+valid use cases in which one may want or need to inject a non-web
+ConfigurableEnvironment variant, e.g. during automated unit/integration
+testing.
+
+On review, it was never strictly necessary to narrow #getEnvironment
+signatures, although doing so did provided convenience and type safety.
+In order to maintain as flexible and backward-compatible an arrangement
+as possible, this commit relaxes these #getEnvironment signatures back
+to their original, pre-3.2 state. Namely, they now return
+ConfigurableEnvironment as opposed to ConfigurableWebEnvironment, and in
+accordance, all instanceof assertions have been removed or relaxed to
+ensure that injected Environment instances are of type
+ConfigurableEnvironment.
+
+These changes have been verified against David Winterfeldt's Spring by
+Example spring-rest-services project, as described at SPR-10138.
+
+Issue: SPR-10138, SPR-9763, SPR-9439

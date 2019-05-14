@@ -1,0 +1,13 @@
+Stop configuring the Logback console appender to use UTF-8
+
+Previously, the default Logback configuration set the console
+appenders charset to UTF-8. This was inconsistent with the Logback
+file appender and Log4j2's console and file appenders, all of which
+used the platform's default.
+
+This commit removes the configuration of the Logback console
+appender's charset. This means that it will use the platform's
+default charset, aligning it with the Logback file appender and
+both Log4j2 appenders.
+
+Closes gh-11611

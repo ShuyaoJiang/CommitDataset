@@ -1,0 +1,15 @@
+Turn off real-mem breaker in REST tests
+
+With this commit we disable the real-memory circuit breaker in REST
+tests as this breaker is based on real memory usage over which we have
+no (full) control in tests and the REST client is not yet ready to retry
+on circuit breaker exceptions.
+
+This is only meant as a temporary measure to avoid spurious test
+failures while we ensure that the REST client can handle those
+situations appropriately.
+
+Closes #32050
+Relates #31767
+Relates #31986 
+Relates #32074

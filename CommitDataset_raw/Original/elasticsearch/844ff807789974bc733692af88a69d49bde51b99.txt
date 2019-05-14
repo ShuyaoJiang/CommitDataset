@@ -1,0 +1,8 @@
+Harden FrozenEngineTests#testCircuitBreakerAccounting
+
+This test tries to compare the CB stats from an InternalEngine
+and a FrozenEngine but is subject to segement merges that might finish
+and get committed after we read the breaker stats. This can cause
+occational test failures.
+
+Closes #36207

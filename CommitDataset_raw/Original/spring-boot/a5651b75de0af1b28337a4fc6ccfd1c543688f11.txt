@@ -1,0 +1,22 @@
+Create ConfigurationPropertySource abstraction
+
+Add a new abstraction that represents a source for configuration
+properties. The new source is similar to the `Environment` abstraction
+provided by Spring Framework but follows a stricter set of rules.
+
+The `ConfigurationPropertySource` provides a uniform view onto a source
+and will help to move responsibility for accessing properties in a
+"relaxed" way away from the caller.
+
+The `ConfigurationPropertyName` class enforces strict naming rules
+that callers must follow when accessing properties. Configuration
+names are lowercase, dot separated and may contain dashes. In
+addition "indexed" name elements may be defined by using square
+brackets.
+
+Mapping is provided to existing Spring PropertySources implemented with
+the relaxed rules that users are used to. For example the configuration
+property `server.local-host` can still be written in a property files
+as `server.localHost` or in an environment variable as SERVER_LOCALHOST.
+
+Closes gh-4910

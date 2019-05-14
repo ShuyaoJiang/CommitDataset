@@ -1,0 +1,19 @@
+Allow plugins to build pre-configured token filters (#24223)
+
+This changes the way we register pre-configured token filters so that
+plugins can declare them and starts to move all of the pre-configured
+token filters out of core. It doesn't finish the job because doing
+so would make the change unreviewably large. So this PR includes
+a shim that keeps the "old" way of registering pre-configured token
+filters around.
+
+The Lowercase token filter is special because there is a "special"
+interaction between it and the lowercase tokenizer. I'm not sure
+exactly what to do about it so for now I'm leaving it alone with
+the intent of figuring out what to do with it in a followup.
+
+This also renames these pre-configured token filters from
+"pre-built" to "pre-configured" because that seemed like a more
+descriptive name.
+
+This is a part of #23658 

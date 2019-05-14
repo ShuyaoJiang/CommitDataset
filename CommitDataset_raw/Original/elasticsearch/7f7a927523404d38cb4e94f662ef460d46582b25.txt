@@ -1,0 +1,8 @@
+Avoid creating a green index in RetentionLeaseIT (#39347)
+
+In #39224 we made shard history retention lease syncing ignore the
+`index.write.wait_for_active_shards` setting on the index, and added a test
+that showed that it was ignored. However the test as merged actually creates a
+green index, so the `wait_for_active_shards` setting has no effect. This change
+adjusts the test to create a yellow index to verify that
+`wait_for_active_shards` really is ignored.

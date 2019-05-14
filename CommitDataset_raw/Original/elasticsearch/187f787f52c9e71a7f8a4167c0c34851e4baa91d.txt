@@ -1,0 +1,7 @@
+[Zen2] Introduce LeaderChecker (#33024)
+
+It is important that follower nodes periodically check that their leader is
+still healthy and that they remain part of its cluster. If these checks fail
+repeatedly then followers should attempt to find and join a new leader,
+possibly electing one in the process. The LeaderChecker, introduced in this
+commit, performs these periodic checks and deals with retries.

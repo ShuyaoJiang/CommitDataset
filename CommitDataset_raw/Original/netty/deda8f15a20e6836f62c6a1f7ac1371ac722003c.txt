@@ -1,0 +1,15 @@
+Moved bit-level read operations from Bzip2Decoder to the new Bzip2BitReader
+
+Motivation:
+
+Collect all bit-level read operations in one class is better. And now it's easy to use not only in Bzip2Decoder. For example, in Bzip2HuffmanStageDecoder.
+
+Modifications:
+
+Created a new class - Bzip2BitReader which provides bit-level reads.
+Removed bit-level read operations from Bzip2Decoder.
+Improved javadoc.
+
+Result:
+
+Bzip2BitReader allows the reading of single bit booleans, bit strings of arbitrary length (up to 24 bits), and bit aligned 32-bit integers.

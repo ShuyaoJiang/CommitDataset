@@ -1,0 +1,11 @@
+Ensure that HATEOAS sample does not try to produce XML
+
+The HATEOAS sample does not support XML responses. Previously, the
+controller doesn't constrain the media types that it could produce.
+This would result in a failure when handling a request that prefers
+XML responses.
+
+This commit updates the produces clauses in the controller so that
+the sample will only attempt to produce JSON.
+
+Closes gh-4343

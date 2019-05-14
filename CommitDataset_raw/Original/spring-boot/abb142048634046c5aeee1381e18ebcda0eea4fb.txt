@@ -1,0 +1,6 @@
+Fixes #55: stop() connector to unbind socket
+
+The `Tomcat.start()` has to happen to initialize the `ServletContext`
+but we can immediately stop the connector and then restart it when
+the context is finished refreshing. Seems to make curl fail quickly
+if an app is slow to start.

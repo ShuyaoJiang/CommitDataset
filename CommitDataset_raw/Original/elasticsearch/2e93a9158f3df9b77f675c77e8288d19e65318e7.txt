@@ -1,0 +1,15 @@
+Align thread pool info to thread pool configuration (#29123)
+
+Today we report thread pool info using a common object. This means that
+we use a shared set of terminology that is not consistent with the
+terminology used to the configure thread pools. This holds in particular
+for the minimum and maximum number of threads in the thread pool where
+we use the following terminology:
+ thread pool info | fixed | scaling
+ min                core    size
+ max                max     size
+
+This commit changes the display of thread pool info to be dependent on
+the type of the thread pool so that we can align the terminology in the
+output of thread pool info with the terminology used to configure a
+thread pool.

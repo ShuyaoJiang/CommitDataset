@@ -1,0 +1,10 @@
+TEST: Clone replicas list when compute replication targets (#34728)
+
+In #34407, we supposed to clone the list of replicas of ReplicationGroup
+when computing replication targets, but somehow we missed it. If we
+don't clone the list, a WriteReplicationAction may use an old
+ReplicationTargets which consists replicas which are removed from the
+current list of replicas
+
+Relates #34407
+Closes #33457

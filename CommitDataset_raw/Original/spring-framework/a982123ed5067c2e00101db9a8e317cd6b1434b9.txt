@@ -1,0 +1,15 @@
+Decouple ExchangeResult from WiretapRequest/Response
+
+This commit decouples ExchangeResult from knowledge about
+WiretapClientHttpRequest/Response both of which are now private to
+WiretapConnector.
+
+ExchangeResult takes ClientHttpRequest/Response instead along with
+promises for the serialized request and response content in the form
+of MonoProcessor<byte[]>.
+
+This sets up the possibility for an ExchangeResult to be created
+outside and independent of WebTestClient, should we decide to make its
+constructor public.
+
+Issue: SPR-16101

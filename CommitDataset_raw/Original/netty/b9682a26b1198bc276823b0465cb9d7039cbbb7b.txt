@@ -1,0 +1,11 @@
+EPOLL dladdr unexpected return value
+
+Motivation:
+netty_epoll_native.c uses dladdr in attempt to get the name of the library that the code is running in. However the address passed to this funciton (JNI_OnLoad) may not be unique in the context of the application which loaded it. For example if another JNI library is loaded this address may first resolve to the other JNI library and cause the path name parsing to fail, which will cause the library to fail.
+
+Modifications:
+- Pass an addresses which is local to the current library to dladdr
+
+Result:
+EPOLL JNI library can be loaded in an environment where multiple JNI libraries are loaded.
+Fixes https://github.com/netty/netty/issues/4840

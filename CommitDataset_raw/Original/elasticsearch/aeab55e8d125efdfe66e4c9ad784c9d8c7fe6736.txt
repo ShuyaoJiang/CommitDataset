@@ -1,0 +1,9 @@
+Reduce flaxiness of ccr recovery timeouts test (#38035)
+
+This fixes #38027. Currently we assert that all shards have failed.
+However, it is possible that some shards do not have segement files
+created yet. The action that we block is fetching these segement files
+so it is possible that some shards successfully recover.
+
+This commit changes the assertion to ensure that at least some of the
+shards have failed.

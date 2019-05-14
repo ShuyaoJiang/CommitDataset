@@ -1,0 +1,6 @@
+Propagate Errors in executors to uncaught exception handler (#36137)
+
+This is a continuation of #28667 and has as goal to convert all executors to propagate errors to the
+uncaught exception handler. Notable missing ones were the direct executor and the scheduler. This
+commit also makes it the property of the executor, not the runnable, to ensure this property. A big
+part of this commit also consists of vastly improving the test coverage in this area.

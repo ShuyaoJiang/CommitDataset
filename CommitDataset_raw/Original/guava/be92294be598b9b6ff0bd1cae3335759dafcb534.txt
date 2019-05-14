@@ -1,0 +1,25 @@
+Lazily allocate CompactHash backing arrays on first write
+
+Empty maps/sets are extremely common. Lazily allocating the backing arrays can
+save hundreds of KB of heap and reduce load on the garbage collector.
+
+While here:
+- Use serialized size to pre-size the arrays
+- Respect ordering during serialization (without using an iterator)
+- Consistently mark unused links as UNSET
+
+Memory savings before first write (bytes):
+- CompactHashMap.create(): 184 -> 64
+- CompactLinkedHashMap.create(): 240 -> 80
+- CompactHashSet.create(): 136 -> 40
+- CompactLinkedHashSet.create(): 200 -> 56
+- CompactHashMap.createWithExpectedSize(0): 136 -> 64
+- CompactLinkedHashMap.createWithExpectedSize(0): 168 -> 80
+- CompactHashSet.createWithExpectedSize(0): 96 -> 40
+- CompactLinkedHashSet.createWithExpectedSize(0): 144 -> 56
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=237817874

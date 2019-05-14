@@ -1,0 +1,18 @@
+Consolidate websocket/messaging code
+
+Before this change spring-messaging contained a few WebSocket-related
+classes including WebSocket sub-protocol support for STOMP as well
+as @EnableWebSocketMessageBroker and related configuration classes.
+
+After this change those classes are located in the spring-websocket
+module under org.springframework.web.socket.messaging.
+
+This means the following classes in application configuration must
+have their packages updated:
+
+org.springframework.web.socket.messaging.config.EnableWebSocketMessageBroker
+org.springframework.web.socket.messaging.config.StompEndpointRegistry
+org.springframework.web.socket.messaging.config.WebSocketMessageBrokerConfigurer
+
+MessageBrokerConfigurer has been renamed to MessageBrokerRegistry and
+is also located in the above package.

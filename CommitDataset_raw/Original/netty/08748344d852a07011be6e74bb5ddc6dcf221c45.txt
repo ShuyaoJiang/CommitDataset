@@ -1,0 +1,20 @@
+Fix NPEs in HttpPostRequestEncoder#nextChunk
+
+Motivation:
+
+HttpPostRequestEncoder maintains an internal buffer that holds the
+current encoded data. There are use cases when this internal buffer
+becomes null, the next chunk processing implementation should take
+this into consideration.
+
+Modifications:
+
+- When preparing the last chunk if currentBuffer is null, mark
+isLastChunkSent as true and send LastHttpContent.EMPTY_LAST_CONTENT
+- When calculating the remaining size take into consideration that the
+currentBuffer might be null
+- Tests are based on those provided in the issue by @nebhale and @bfiorini
+
+Result:
+
+Fixes #5478

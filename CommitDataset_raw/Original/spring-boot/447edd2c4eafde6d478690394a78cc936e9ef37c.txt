@@ -1,0 +1,7 @@
+Allow gzip compression without `Content-Length`
+
+Ensure that gzip compression is applied when the `Content-Length` header
+is not specified. Prior to this commit Tomcat and Jetty would compress a
+response that didn't contain the header, but Undertow would not.
+
+Fixes gh-4769

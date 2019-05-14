@@ -1,0 +1,15 @@
+Simplify access to response body in WebClient
+
+This commit makes a change to WebClient in oder to facilitate getting
+the response body as a `Mono<Object>` or `Flux<Object>` without having
+to deal with `ClientResponse`.
+
+Specifically, this commit:
+
+ - Adds `RequestHeaderSpec.retrieve` methods, next to `exchange`, that
+ return the response body (and not a `ClientResponse`). Two convenience
+ methods return the response body as `Mono` or `Flux`.
+ - Adds ClientResponse.toRequestEntity to convert the ClientResponse
+ into a RequestEntity.
+
+Issue: SPR-15294

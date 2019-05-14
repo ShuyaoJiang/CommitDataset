@@ -1,0 +1,10 @@
+HttpResponseStatus reasonPhrase equals usage
+
+Motivation:
+HttpResponseStatus.reasonPhrase returns an AsciiString, but was compared using equals to a String. Other usages of the reasonPhrase also use the toString() method when not necessary.
+
+Modifications:
+- Use the contentEquals method
+
+Result:
+Correct comparison, and no toString() when not needed.

@@ -1,0 +1,7 @@
+Painless: Use LocalMethod Map For Lookup at Runtime (#32599)
+
+This modifies Def to use a Map<String, LocalMethod> to look up user-defined methods at runtime 
+instead of writing constant methodhandles to do the reverse lookup. This creates a consistency 
+between how LocalMethods are looked up at compile-time and run-time. This consistency will allow 
+this code to be more maintainable moving forward. This will also allow FunctionReference to be 
+cleaned up in a follow up PR.

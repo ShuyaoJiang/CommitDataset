@@ -1,0 +1,14 @@
+Ensure embedded containers actually stop if there is an error on startup
+
+Both embedded containers need to be checked after starting to ensure that they
+are actually running. With Jetty it's just a question of catching an exception
+but with Tomcat it's harder (the current solution involves duplicating some
+code from initialize() into start() essentially checking the lifecycle state).
+
+Also adjusted the log levels to prevent noise at WARN level by default when
+this happens (since the exception is logged and rethrown anyway).
+
+There is still the issue of whether to fail the build in Maven or Gradle
+(separate issue really).
+
+Fixes gh-1232

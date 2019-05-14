@@ -1,0 +1,33 @@
+DataSource metrics
+
+This commit adds an abstraction that provides a standard manner to
+retrieve various metadata that are shared by most data sources.
+
+DataSourceMetadata is implemented by the three data source
+implementations that boot supports out-of-the-box: Tomcat, Hikari and
+Commons dbcp.
+
+This abstraction is used to provide two additional metrics per data
+source defined in the application: the number of allocated
+connection(s) (.active) and the current usage of the connection pool
+(.usage).
+
+All such metrics share the 'datasource.' prefix. The prefix is further
+qualified for each data source:
+
+* If the data source is the primary data source (that is either the
+  only available data source or the one flagged @Primary amongst the
+  existing ones), the prefix is "datasource.primary"
+* If the data source bean name ends with "dataSource", the prefix is
+  the name of the bean without it (i.e. batchDataSource becomes batch)
+* In all other cases, the name of the bean is used
+
+It is possible to override part or all of those defaults by
+registering a bean with a customized version of
+DataSourcePublicMetrics.
+
+Additional DataSourceMetadata implementations for other data source
+types can be added very easily, check
+DataourceMetadataProvidersConfiguration for more details.
+
+Fixes gh-1013

@@ -1,0 +1,14 @@
+Improved DefaultChannelPipeline#destroy() to avoid spinning continuously in case of custom executors.
+
+Motivation:
+
+The previous DefaultChannelPipeline#destroy() implementation, introduced in #3156, is suboptimal as it can cause the for loop to continuously spin if the executor used by a given handler is unable to "recognize" the event loop.
+It could be objected that it's the custom executor responsibility to properly implement the inEventLoop() method, but some implementetaions might not be able to do that for performance reasons, and even so, it's always better to be safe against API misuse, in particular when it is not possible to fail fast and the alternative is rather some sutle behaviour.
+
+Modifications:
+
+The patch simply avoids the recursive spin by explicitly passing the "in event loop" condition as a boolean parameter, preserving the same guarantees offered by #3156. A unit test has also been added.
+
+Result:
+
+All channel events are correctly called and no high CPU usage is seen anymore.

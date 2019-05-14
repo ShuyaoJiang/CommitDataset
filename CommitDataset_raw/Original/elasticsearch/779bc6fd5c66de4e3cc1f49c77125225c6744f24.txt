@@ -1,0 +1,7 @@
+Simplify Engine.Searcher creation (#28728)
+
+Today we have several levels of indirection to acquire an Engine.Searcher.
+We first acquire a the reference manager for the scope then acquire an
+IndexSearcher and then create a searcher for the engine based on that.
+This change simplifies the creation into a single method call instead of
+3 different ones.

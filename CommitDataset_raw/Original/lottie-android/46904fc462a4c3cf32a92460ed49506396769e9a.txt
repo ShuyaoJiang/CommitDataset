@@ -1,0 +1,7 @@
+Extract factories for Animatable classes (#152)
+
+In this pass I've converted BaseAnimatableValue and its subclasses.
+Created a AnimatableValueParser with the common logic to all subclasses.
+This change caused a "chicken and egg" problem where the AnimatableValueParser calls into Keyframe.Factory.parseKeyframes, which needs the respective instance of BaseAnimatableValue. This caused a circular dependency issue. I've resolved by moving AnimatableValue#valueFromObject() into a separate interface called AnimatableValue.Factory which contains only that method.
+I think almost all the relevant classes have been refactored by now.
+Part of #3

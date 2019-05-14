@@ -1,0 +1,7 @@
+Increase time to wait for green in rolling upgrade tests (#26781)
+
+This commit increases the amount of time to wait for green to accound for unassigned shards that
+have been delayed. The default delay is 60s, so we need to wait longer than that. Previously, the
+wait would timeout at 30s due to the rest client and the default for the cluster health api.
+
+Closes #26742

@@ -1,0 +1,19 @@
+Create retention leases file during recovery (#39359)
+
+Today we load the shard history retention leases from disk whenever opening the
+engine, and treat a missing file as an empty set of leases. However in some
+cases this is inappropriate: we might be restoring from a snapshot (if the
+target index already exists then there may be leases on disk) or
+force-allocating a stale primary, and in neither case does it make sense to
+restore the retention leases from disk.
+
+With this change we write an empty retention leases file during recovery,
+except for the following cases:
+
+- During peer recovery the on-disk leases may be accurate and could be needed
+  if the recovery target is made into a primary.
+
+- During recovery from an existing store, as long as we are not
+  force-allocating a stale primary.
+
+Relates #37165

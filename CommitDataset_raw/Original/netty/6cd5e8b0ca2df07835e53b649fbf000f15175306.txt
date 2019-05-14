@@ -1,0 +1,10 @@
+Reduce the default number of objects retained by the Recycler per thread
+
+Motivation:
+The Recycler currently retains 32k objects per thread by default. The Recycler is used in more than just one place and may result in large amounts of memory bloat if spikes of traffic are observed.
+
+Modifications:
+- Reduce the Recyclers default capacity from 32k to 4k.
+
+Result:
+- Lower default capacity of the Recycler and less memory retained.

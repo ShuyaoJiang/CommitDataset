@@ -1,0 +1,28 @@
+Build: Shadow x-pack:protocol into x-pack:plugin:core (#32240)
+
+This bundles the x-pack:protocol project into the x-pack:plugin:core
+project because we'd like folks to consider it an implementation detail
+of our build rather than a separate artifact to be managed and depended
+on. It is now bundled into both x-pack:plugin:core and
+client:rest-high-level. To make this work I had to fix a few things.
+
+Firstly, I had to make PluginBuildPlugin work with the shadow plugin.
+In that case we have to bundle only the `shadow` dependencies and the
+shadow jar.
+
+Secondly, every reference to x-pack:plugin:core has to use the `shadow`
+configuration. Without that the reference is missing all of the
+un-shadowed dependencies. I tried to make it so that applying the shadow
+plugin automatically redefines the `default` configuration to mirror the
+`shadow` configuration which would allow us to use bare project references
+to the x-pack:plugin:core project but I couldn't make it work. It'd *look*
+like it works but then fail for transitive dependencies anyway. I think
+it is still a good thing to do but I don't have the willpower to do it
+now.
+
+Finally, I had to fix an issue where Eclipse and IntelliJ didn't properly
+reference shadowed transitive dependencies. Neither IDE supports shadowing
+natively so they have to reference the shadowed projects. We fix this by
+detecting `shadow` dependencies when in "Intellij mode" or "Eclipse mode"
+and adding `runtime` dependencies to the same target. This convinces
+IntelliJ and Eclipse to play nice.

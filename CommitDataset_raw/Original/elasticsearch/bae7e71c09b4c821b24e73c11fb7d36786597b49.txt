@@ -1,0 +1,16 @@
+Add pre-upgrade check to test cluster routing allocation is enabled (#39340)
+
+When following the steps mentioned in upgrade guide
+https://www.elastic.co/guide/en/elastic-stack/6.6/upgrading-elastic-stack.html
+if we disable the cluster shard allocation but fail to enable it after
+upgrading the nodes and plugins, the next step of upgrading internal
+indices fails. As we did not check the bulk request response for reindexing,
+we delete the old index assuming it has been created. This is fatal
+as we cannot recover from this state.
+
+This commit adds a pre-upgrade check to test the cluster shard
+allocation setting and fail upgrade if it is disabled. In case there
+are search or bulk failures then we remove the read-only block and
+fail the upgrade index request.
+
+Closes #39339

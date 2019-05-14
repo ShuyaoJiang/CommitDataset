@@ -1,0 +1,13 @@
+ccr: Added maximum translog limit that a single shard changes response can return.
+
+This limit is based on the number of estimate bytes in each translog
+operation that fall between the minimum and maximum request sequence number.
+
+If this limit is met then the shard follow task executor will make sure
+that a subsequent shard changes request will be performed to fetch the
+remaining translog operations.
+
+This limit is needed in order to protect against returning too many
+translog operations in a single shard changes response.
+
+Relates to #2436

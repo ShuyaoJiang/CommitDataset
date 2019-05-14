@@ -1,0 +1,6 @@
+Always use DisjunctionMaxQuery to build cross fields disjunction (#25115)
+
+This commit modifies query_string, simple_query_string and multi_match queries to always use a DisjunctionMaxQuery when a disjunction over multiple fields is built. The tiebreaker is set to 1 in order to behave like the boolean query in terms of scoring.
+The removal of the coord factor in Lucene 7 made this change mandatory to correctly handle minimum_should_match.
+
+Closes #23966

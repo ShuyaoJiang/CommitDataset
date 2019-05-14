@@ -1,0 +1,21 @@
+TEST: Capture replication targets when replication group ready (#34407)
+
+Today, WriteReplicationAction uses a set of replication targets directly
+from the primary shard of ReplicationGroup. It should be fine except
+when we add/remove or promote a shard while a write action is executing.
+We have encountered these two issues:
+
+1. Replicas are not found in the replication targets. This happens
+because we remove replicas but the WriteReplicationAction still uses the
+old replication targets which include the removed replicas.
+
+2. Access ReplicationGroup from a primary shard which hasn't activated
+the primary-mode yet. This is because we won't activate the primary-mode
+for a promoting shard after bumping the primary term which is executed
+asynchronously.
+
+This commit captures the replication targets when the replication group
+is ready and continue using those targets until we re-compute the new
+targets after the group is changed.
+
+Closes #33457

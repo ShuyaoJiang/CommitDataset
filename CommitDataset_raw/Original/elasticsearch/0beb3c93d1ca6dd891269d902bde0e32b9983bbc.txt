@@ -1,0 +1,29 @@
+Clean up duplicate follow config parameter code (#37688)
+
+Introduced FollowParameters class that put follow, resume follow,
+put auto follow pattern requests and follow info response classes reuse.
+
+The FollowParameters class had the fields, getters etc. for the common parameters
+that all these APIs have.  Also binary and xcontent serialization /
+parsing is handled by this class.
+
+The follow, resume follow, put auto follow pattern request classes originally
+used optional non primitive fields, so FollowParameters has that too and the follow info api can handle that now too.
+
+Also the followerIndex field can in production only be specified via
+the url path. If it is also specified via the request body then
+it must have the same value as is specified in the url path. This
+option only existed to xcontent testing. However the AbstractSerializingTestCase
+base class now also supports createXContextTestInstance() to provide
+a different test instance when testing xcontent, so allowing followerIndex
+to be specified via the request body is no longer needed.
+
+By moving the followerIndex field from Body to ResumeFollowAction.Request
+class and not allowing the followerIndex field to be specified via
+the request body the Body class is redundant and can be removed. The
+ResumeFollowAction.Request class can then directly use the
+FollowParameters class.
+
+For consistency I also removed the ability to specified followerIndex
+in the put follow api and the name in put auto follow pattern api via
+the request body.

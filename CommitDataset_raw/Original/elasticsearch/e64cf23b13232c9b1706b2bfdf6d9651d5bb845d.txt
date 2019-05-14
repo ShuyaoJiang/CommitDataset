@@ -1,0 +1,9 @@
+Watcher: Start watcher on master node only with mixed versions (elastic/x-pack-elasticsearch#1983)
+
+When there are data or master nodes in the cluster, that are older
+than ES 6.0 alpha3, then watcher will only start on the master node.
+
+Changed all transport actions to be master node actions, as there is
+already a method to decide to run locally, which we can piggyback on.
+
+Original commit: elastic/x-pack-elasticsearch@65cecb6d69d13276be7b2b640d51e26401f96c2d

@@ -1,0 +1,23 @@
+Support Protobuf serialization in WebFlux
+
+This commit introduces Protobuf support in WebFlux via dedicated
+codecs.
+
+Flux<Message> are serialized/deserialized using delimited Protobuf
+messages with the size of each message specified before the message
+itself. In that case, a "delimited=true" parameter is added to the
+content type.
+
+Mono<Message> are expected to use regular Protobuf message
+format (without the size prepended before the message).
+
+Related HttpMessageReader/Writer are automatically registered when the
+"com.google.protobuf:protobuf-java" library is detected in the classpath,
+and can be customized easily if needed via CodecConfigurer, for example
+to specify protocol extensions via the ExtensionRegistry based
+constructors.
+
+Both "application/x-protobuf" and "application/octet-stream" mime types
+are supported.
+
+Issue: SPR-15776

@@ -1,0 +1,11 @@
+Improve NoSuchBeanDefinitionFailureAnalyzer to handle null beans
+
+Previously, if a user defines a `@Bean` with a method that returns
+`null`, injection by type will ignore that definition but the report
+doesn't mention that candidate.
+
+This commit improves the failure analyzer to look for user-defined beans
+as well, detecting beans that are `null` matching the requested type
+and including them in the report.
+
+Closes gh-13531

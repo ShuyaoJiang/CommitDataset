@@ -1,0 +1,23 @@
+When null origin is supported then credentials header must not be set.
+
+Motivation:
+Currently CORS can be configured to support a 'null' origin, which can
+be set by a browser if a resources is loaded from the local file system.
+When this is done 'Access-Control-Allow-Origin' will be set to "*" (any
+origin). There is also a configuration option to allow credentials being
+sent from the client (cookies, basic HTTP Authentication, client side
+SSL). This is indicated by the response header
+'Access-Control-Allow-Credentials' being set to true. When this is set
+to true, the "*" origin is not valid as the value of
+'Access-Control-Allow-Origin' and a browser will reject the request:
+http://www.w3.org/TR/cors/#resource-requests
+
+Modifications:
+Updated CorsHandler's setAllowCredentials to check the origin and if it
+is "*" then it will not add the 'Access-Control-Allow-Credentials'
+header.
+
+Result:
+Is is possible to have a client send a 'null' origin, and at the same
+time have configured the CORS to support that and to allow credentials
+in that combination.

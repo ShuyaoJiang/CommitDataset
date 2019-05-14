@@ -1,0 +1,17 @@
+Support javaagent instrumentation with loader
+
+Update spring-boot-loader to allow `-javaagent` instrumentation when
+running from executable jars.
+
+Prior to this commit the `Launcher` skipped the application classloader
+and instead used the system classloader as a parent. This was to ensure
+that locally packaged classes were always loaded by the classloader
+that had access to nested jars.  Unfortunately when using the
+`-javaagent` option, it is the application classloader that is modified.
+
+The `Launcher` class now uses the application classloader as parent
+and `LaunchedURLClassLoader` has been updated to always search local
+URLs before delegating to the parent. This is very similar to the way
+that most application servers handle the loading of war files.
+
+Issue: #56232870

@@ -1,0 +1,28 @@
+Add client-side exception hierarchy
+
+The `WebClient` has a new exception hierarchy:
+
+* `WebClientException` is the root of all exceptions thrown by the
+`WebClient`
+* `WebClientResponseException` are all exceptions associated with
+specific HTTP response status codes
+* `WebClientErrorException` and `WebServerErrorException` are
+respectively for 4xx and 5xx HTTP status codes
+
+`ResponseExtractor` implementations are adapted to optionally throw
+exceptions if it's impossible to extract the relevant parts of the
+response (e.g. extracting the response body if the response is a 404).
+
+This commit also introduces `ResponseErrorHandler`s that take care of
+the whole exception mapping infrastructure. Since
+`WebClientResponseException`s provide the status, headers and response
+body, we also need a dedicated mechanism to extract information from the
+response body at that level.
+
+The `BodyExtractors` are responsible for extracting that information
+from the exception, given they are provided with all the information
+they need; in that case, message decoders are required.
+
+To convey all this new information downstream, the `WebClient` now wraps
+the message converters and response error handler instances into a
+dedicated `WebClientConfig` object.

@@ -1,0 +1,8 @@
+Revert "Reinstate testing of Jetty JSP sample on Java 9"
+
+This reverts commit bbca612a57ec89c9c86ae7d29b3ea7952eb4963d.
+StandardJarScanner, which contains the faulty assumption about
+URLClassLoader is part of Jasper. Jetty, like Tomcat, uses Jasper for
+JSPs so it's also affected.
+
+See gh-10456

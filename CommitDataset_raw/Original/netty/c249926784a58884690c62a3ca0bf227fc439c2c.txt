@@ -1,0 +1,13 @@
+[#3127] Allow to write with VoidPromise to Channels in ChannelGroup
+
+Motivation:
+
+Users sometimes want to use Channel.voidPromise() when write to a Channel to reduce GC-pressure. This should be also possible when write via a ChannelGroup.
+
+Modifications:
+
+Add new write(...) and writeAndFlush(...) overloads which allow to signale that a VoidPromise should be used to write to the Channel
+
+Result:
+
+Users can write with VoidPromise when using ChannelGroup

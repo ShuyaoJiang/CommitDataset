@@ -1,0 +1,14 @@
+Fix MockHttpServletResponse HTTP status update
+
+Prior to this commit, one could call the setStatus method on
+this Mock object and update the response's status,
+even though the sendError method had already been called.
+
+According to the HttpServletResponse Javadoc, sendError() methods
+commit the response; so the response can't be written after that.
+
+This commit fixes MockHttpServletResponse's behavior; setStatus
+methods do not update the status once the response has been
+committed.
+
+Issue: SPR-10414

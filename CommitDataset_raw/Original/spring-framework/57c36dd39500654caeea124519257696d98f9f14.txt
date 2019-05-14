@@ -1,0 +1,14 @@
+Add interceptors for async processing
+
+This change introduces two new interceptors with callback methods
+for concurrent request handling. These interfaces are
+CallableProcessingInterceptor and DeferredResultProcessingInterceptor.
+
+Unlike a HandlerInterceptor, and its AsyncHandlerInterceptor sub-type,
+which intercepts the invocation of a handler in he main request
+processing thread, the two new interfaces are aimed at intercepting the
+asynchronous execution of a Callable or a DeferredResult.
+
+This allows for the registration of thread initialization logic in the
+case of Callable executed with an AsyncTaskExecutor, or for centralized
+tracking of the completion and/or expiration of a DeferredResult.

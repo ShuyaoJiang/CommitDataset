@@ -1,0 +1,15 @@
+Change ordering of DataSourceInitializer a bit
+
+It needs to run as soon as the DataSource is available really otherwise
+anything else that depends on the DataSource (like Security JDBC
+initializers) might fail when it tries to use it.
+
+One change from 1.1.1 is that if you have a schema.sql you had better
+make sure your data.sql talks to the same tables. In 1.1.1 you could
+sometimes get away with letting Hibernate initialize the tables for
+your data.sql and *also* have a schema.sql. This was fragile and doomed
+to fail eventually if the DataSourceInitializer somehow got
+initialized earlier (e.g. through a @DependsOn), so in the spririt
+of honesty being the best policy we explicitly disallow it now.
+
+Fixes gh-1115

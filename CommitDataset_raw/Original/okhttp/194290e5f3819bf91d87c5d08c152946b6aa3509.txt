@@ -1,0 +1,11 @@
+Improve SPDY+HTTP integration.
+
+Writing tests shook out a few bugs:
+ - Pooling wasn't working well. We were trying to connect
+   after already having been connected.
+ - We weren't writing response bodies to the cache.
+ - We weren't capturing the request time for the cache.
+ - MockSpdyServer wasn't trimming headers.
+
+New files in this change aren't new, they're just inner classes promoted
+to top-level classes for better sharing.

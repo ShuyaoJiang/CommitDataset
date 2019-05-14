@@ -1,0 +1,15 @@
+Derive StringBuilder's size from number of elements
+
+Previously, when ConfigurationPropertyName was building the String
+returned from toString() it would use a StringBuilder with the
+default initial capacity of 16. For properties with several
+elements this was likely to be too small resulting in the builder's
+buffer being resized.
+
+This commit sizes the StringBuilder as a multiple of the number of
+elements in the name, attempting to strike a balance between
+allocating a StringBuilder with an initial capacity that's too
+large and wastes memory and an initial capacity that's too small
+and requires resizing.
+
+See gh-15760

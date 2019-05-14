@@ -1,0 +1,18 @@
+Make Joda DateTime serialization format configurable
+
+We allow the serialization format of dates to be configured using
+spring.jackson.date-format. However, this property only applies to
+java.util.Date instances and has no effect on a Joda DateTime.
+
+This commit updates our auto-configuration for Jackson to allow
+the format string that is used to  serialize a Joda DateTime to be
+configured. A new property, spring.jackson.joda-date-time-format has
+been introduced. When configured, it is used to configure the
+serialization format for a Joda DateTime. When it is not configured,
+we fall back to using spring.jackson.date-format. If this fails,
+either because the format string is incompatible (unlikely) or because
+the user's configured the fully-qualified name of a DateFormat class,
+a warning is logged encouraging the use of
+spring.jackson.joda-date-time-format.
+
+Fixes gh-2225

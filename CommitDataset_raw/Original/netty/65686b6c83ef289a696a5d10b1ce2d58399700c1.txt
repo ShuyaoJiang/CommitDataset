@@ -1,0 +1,14 @@
+Reduce memory copies in spdy compression implementation.
+
+Motivation:
+
+Currently we do more memory copies then needed.
+
+Modification:
+
+- Directly use heap buffers to reduce memory copy
+- Correctly release buffers to fix buffer leak
+
+Result:
+
+Less memory copies and no leaks

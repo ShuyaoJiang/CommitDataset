@@ -1,0 +1,13 @@
+Fix flaky URLConnectionTest.serverShutdownOutput test
+
+There are usually 2 requests sent to '/b' during the test:
+#1 on the busted connection, attempting reuse
+#2 on a new connection
+
+On successful runs, the server recorded #1 and then #2 and added them to the queue in that order.
+
+On failed runs, the server started reading request #1 before #2, but there was a context switch, and it finished reading #2 before #1, recording them in that order. Since #1 was the last to be recorded, the test incorrectly used it to assert that the sequence number was 0. Since #1 was the second to be received on the busted connection, it had a sequence number of 1 so the test failed.
+
+The fix removes the assumption that #2 is the last to be recorded.
+
+Fixes https://github.com/square/okhttp/issues/4140.

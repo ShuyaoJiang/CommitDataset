@@ -1,0 +1,13 @@
+Enhance error for out of bounds byte size settings (#29338)
+
+Today when you input a byte size setting that is out of bounds for the
+setting, you get an error message that indicates the maximum value of
+the setting. The problem is that because we use ByteSize#toString, we
+end up with a representation of the value that does not really tell you
+what the bound is. For example, if the bound is 2^31 - 1 bytes, the
+output would be 1.9gb which does not really tell you want the limit as
+there are many byte size values that we format to the same 1.9gb with
+ByteSize#toString. We have a method ByteSize#getStringRep that uses the
+input units to the value as the output units for the string
+representation, so we end up with no loss if we use this to report the
+bound. This commit does this.

@@ -1,0 +1,20 @@
+Unify nio read / write channel contexts (#28160)
+
+This commit is related to #27260. Right now we have separate read and
+write contexts for implementing specific protocol logic. However, some
+protocols require a closer relationship between read and write
+operations than is allowed by our current model. An example is HTTP
+which might require a write if some problem with request parsing was
+encountered.
+
+Additionally, some protocols require close messages to be sent when a
+channel is shutdown. This is also problematic in our current model,
+where we assume that channels should simply be queued for close and
+forgotten.
+
+This commit transitions to a single ChannelContext which implements
+all read, write, and close logic for protocols. It is the job of the
+context to tell the selector when to close the channel. A channel can
+still be manually queued for close with a selector. This is how server
+channels are closed for now. And this route allows timeout mechanisms on
+normal channel closes to be implemented.

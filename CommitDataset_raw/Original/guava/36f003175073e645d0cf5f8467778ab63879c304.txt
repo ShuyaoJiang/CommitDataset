@@ -1,0 +1,29 @@
+Partial rollback of changelist 151480429.
+
+*** Reason for rollback ***
+
+I've fixed our GWT test generator (CL 154831023), so it no longer chokes on these tests.
+
+*** Original change description ***
+
+Partial rollback of changelist 150805495.
+
+Specifically, I'm rolling back only the server/java8 changes.
+
+*** Reason for rollback ***
+
+Need to investigate Bazel heap regression.
+
+*** Original change description ***
+
+Do not copy in Immutable{List,Set,SortedSet} construction.
+
+We're still avoiding the potential for a memory leak with the forceCopy part, but we want to avoid the garbage created by slicing the array down to exactly the right size.
+
+We don't ever copy in ImmutableList, since we can o...
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=154857178

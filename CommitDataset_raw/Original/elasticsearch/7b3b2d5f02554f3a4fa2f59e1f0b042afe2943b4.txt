@@ -1,0 +1,10 @@
+Localhost check: check if addr bound to interface (elastic/x-pack-elasticsearch#1901)
+
+This is related to elastic/x-pack-elasticsearch#1217 and elastic/x-pack-elasticsearch#1896. Right now we are checking if an
+incoming address is the loopback address or a special local addres. It
+appears that we also need to check if that address is bound to a
+network interface to be thorough in our localhost check.
+
+This change mimicks how we check if localhost in `PatternRule`.
+
+Original commit: elastic/x-pack-elasticsearch@a8947d6174cdca8312c1638bb07b375c4b652aa5

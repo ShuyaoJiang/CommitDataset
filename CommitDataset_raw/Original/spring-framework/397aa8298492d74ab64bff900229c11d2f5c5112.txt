@@ -1,0 +1,11 @@
+Fix expression cache
+
+Prior to this commit, only the java.lang.reflect.Method was used to
+identify an annotated method. As a result, if different annotations
+were placed on different methods (method overriding, interface
+implementation) only the first one (cached) was used.
+
+LazyParamAwareEvaluationContext was affected by the exact
+same problem and has been also fixed.
+
+Issue: SPR-11692

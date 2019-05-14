@@ -1,0 +1,5 @@
+Split SubscribeOn into SubscribeOn/UnsubscribeOn
+
+Working with @headinthebox based on discussions at https://github.com/Netflix/RxJava/pull/869 and https://github.com/Netflix/RxJava/pull/880#issuecomment-35163539 we determined that there are times when `unsubscribeOn` behavior is needed.
+
+The `subscribeOn` operator can not mix `subscribe` and `unsubscribe` scheduling behavior without breaking the `lift`/`Subscriber` behavior that allows unsubscribing synchronous sources. The newly added `unsubscribeOn` operator will not work with synchronous unsubscribes, but it will work for the targeted use cases such as UI event handlers.

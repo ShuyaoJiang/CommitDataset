@@ -1,0 +1,16 @@
+Support `error.include-stacktrace` configuration
+
+Add `error.include-stacktrace` configuration option to determine when
+stack trace attributes should be added. Options are `never`, `always`
+or `on-trace-param`.
+
+Prior to this commit stacktrace attributes were never includes in HTML
+responses, and only included in JSON responses when a `trace` request
+parameter was set to `true`. This has now been changed so that,
+by default, stacktrace attributes are never included.
+
+The BasicErrorController includes a protected method that can be
+overridden if includes should be different depending on the `produces`
+mapping.
+
+Closes gh-2371

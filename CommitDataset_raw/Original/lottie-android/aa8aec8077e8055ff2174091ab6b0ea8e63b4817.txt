@@ -1,0 +1,7 @@
+Refactoried the way progress is handled in LottieDrawable and LottieValueAnimator
+
+Previously, progress was held in both the drawable and animator. This made things
+really confusing when min and max progresses were set both because they are in both
+places and because of the difference between animated fraction and animated value.
+This refactors progress to be wholly owned by the animator.
+Fixes #448

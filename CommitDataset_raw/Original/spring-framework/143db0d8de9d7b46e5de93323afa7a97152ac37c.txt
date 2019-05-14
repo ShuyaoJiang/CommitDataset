@@ -1,0 +1,23 @@
+Introduce SystemEnvironmentPropertySource
+
+Properties such as 'spring.profiles.active' cannot be specified at the
+command line under Bash and other shells due to variable naming
+constraints. This change allows for exchanging underscores for periods
+as well as capitalizing property names for more idiomatic naming when
+dealing with environment variables.
+
+For example, Spring will respect equally either of the following:
+
+    spring.profiles.active=p1 java -classpath ... MyApp
+
+    SPRING_PROFILES_ACTIVE=p1 java -classpath ... MyApp
+
+The former is not possible under Bash, while the latter is. No code or
+configuration changes are required; SystemEnvironmentPropertySource
+adapts for these varations automatically.
+
+SystemEnvironmentPropertySource is added by default as
+"systemEnvironment" to StandardEnvironment and all subtypes, taking the
+place of the plain MapPropertySource that was in use before this change.
+
+Issue: SPR-8869

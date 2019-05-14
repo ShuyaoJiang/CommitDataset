@@ -1,0 +1,13 @@
+Analyse the environment for properties that are no longer supported
+
+This commit adds a new `spring-boot-configuration-analyzer` module that
+can be added to any app to analyze its environment on startup.
+
+Each configuration key that has a matching replacement is temporarily
+transitioned to the new name with a `WARN` report that lists all of
+them.
+
+If the project defines configuration keys that don't have a replacement,
+an `ERROR` report lists them with more information if it is available.
+
+Closes gh-11301

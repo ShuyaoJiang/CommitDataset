@@ -1,0 +1,22 @@
+Auto-generate the handler name when null is specified as a name
+
+Motivation:
+
+There's no way to generate the name of a handler being newly added
+automatically and reliably.
+
+For example, let's say you have a routine that adds a set of handlers to
+a pipeline using addBefore() or addAfter().  Because addBefore() and
+addAfter() always require non-conflicting non-null handler name, making
+the multiple invocation of the routine on the same pipeline is
+non-trivial.
+
+Modifications:
+
+- If a user specifies null as the name of the new handler,
+  DefaultChannelPipeline generates one.
+- Update the documentation of ChannelPipeline to match the new behavior
+
+Result:
+
+A user doesn't need to worry about name conflicts anymore.

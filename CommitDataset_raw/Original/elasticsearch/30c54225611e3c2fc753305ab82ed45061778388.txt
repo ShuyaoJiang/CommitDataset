@@ -1,0 +1,10 @@
+Move XContent generation to HasPrivilegesResponse (#35616)
+
+The RestHasPrivilegesAction previously handled its own XContent
+generation. This change moves that into HasPrivilegesResponse and
+makes the response implement ToXContent.
+
+This allows HasPrivilegesResponseTests to be used to test
+compatibility between HLRC and X-Pack internals.
+
+A serialization bug (cluster privs) was also fixed here.

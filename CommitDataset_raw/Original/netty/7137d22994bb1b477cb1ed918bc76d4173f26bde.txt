@@ -1,0 +1,13 @@
+Ensure the correct wrapped buffer is released in AbstractPooledDerivedByteBuf.deallocate()
+
+Motivation:
+
+We need to first store a reference to the wrapped buffer before recycle the AbstractPooledDerivedByteBuf instance. This is needed as otherwise it is possible that the same AbstractPooledDerivedByteBuf is again obtained and init(...) is called before we actually have a chance to call release(). This leads to call release() on the wrong buffer.
+
+Modifications:
+
+Store a reference to the wrapped buffer before call recycle and call release on the previous stored reference.
+
+Result:
+
+Always release the correct wrapped buffer when deallocate the AbstractPooledDerivedByteBuf.

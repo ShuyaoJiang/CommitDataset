@@ -1,0 +1,9 @@
+Watcher: Remove extraneous auth classes (#32300)
+
+The auth.basic package was an example of a single implementation
+interface that leaked into many different classes. In order to clean
+this up, the HttpAuth interface, factories, and Registries all were
+removed and the single implementation, BasicAuth, was substituted in all
+cases. This removes some dependenies between Auth and the Templates,
+which can now use static methods on BasicAuth. BasicAuth was also moved
+into the http package and all of the other classes were removed.

@@ -1,0 +1,18 @@
+Continue registering pipelines after one pipeline parse failure. (#28752)
+
+Ingest has been failing to apply existing pipelines from cluster-state
+into the in-memory representation that are no longer valid. One example of
+this is a pipeline with a script processor. If a cluster starts up with scripting
+disabled, these pipelines will not be loaded. Even though GETing a pipeline worked,
+indexing operations claimed that this pipeline did not exist. This is because one
+gets information from cluster-state and the other is from an in-memory data-structure.
+
+Now, two things happen
+1. suppress the exceptions until after other successful pipelines are loaded
+2. replace failed pipelines with a placeholder pipeline
+
+If the pipeline execution service encounters the stubbed pipeline, it is known that
+something went wrong at the time of pipeline creation and an exception was thrown to
+the user at some point at start-up.
+
+closes #28269.

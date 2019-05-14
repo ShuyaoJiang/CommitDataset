@@ -1,0 +1,13 @@
+Fix buffer leak introduced by 693633eeff106febf4403208f9eed2117931f45a
+
+Motivation:
+
+As we not used Unpooled anymore for allocate buffers in Base64.* methods we need to ensure we realease all the buffers.
+
+Modifications:
+
+Correctly release buffers
+
+Result:
+
+No more buffer leaks

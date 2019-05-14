@@ -1,0 +1,9 @@
+Ignore Batch tests that use JDBC as they don’t work with Spring 4.2
+
+Spring Framework’s ParamterizedRowMapper has been deprecated since
+3.1 and has been removed in 4.2. Spring Batch currently relies on
+ParameterizedRowMapper, making it incompatible with 4.2. To allow us to
+build successfully against 4.2, this commit ignores Spring Boot’s tests
+that use Spring Batch’s JDBC support.
+
+See gh-2575

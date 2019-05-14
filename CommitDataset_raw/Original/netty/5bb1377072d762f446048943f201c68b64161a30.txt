@@ -1,0 +1,13 @@
+[#3443] Fix IllegalStateException which could be triggered when the channel goes inactive during the eventloop processing
+
+Motivation:
+
+This is a regression that was introduced as part of 6b941e9bdbc1b1a9090c280bc6c44903ff7c7b67. The regression could produce an "infinity" triggering of IllegalStateException if a channel goes inactive while process the events for it.
+
+Modifications:
+
+Correctly check if the channel is still active before trigger the callbacks.
+
+Result:
+
+No more IllegalStateException

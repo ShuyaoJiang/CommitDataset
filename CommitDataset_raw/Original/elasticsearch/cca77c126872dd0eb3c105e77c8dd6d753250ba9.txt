@@ -1,0 +1,16 @@
+Store Pending Deletions Fix (#40345)
+
+FilterDirectory.getPendingDeletions does not delegate, fixed
+temporarily by overriding in StoreDirectory.
+
+This in turn caused duplicate file name use after a trimUnsafeCommits
+had been done, since a new IndexWriter would not consider the pending
+deletes in IndexFileDeleter. This should only happen on windows (AFAIK).
+
+Reenabled doing index updates for all tests using
+IndexShardTests.indexOnReplicaWithGaps (which could fail due to above
+when using mocked WindowsFS).
+
+Added getPendingDeletions delegation to all elasticsearch
+FilterDirectory subclasses that were not trivial test-only overrides to
+minimize the risk of hitting this issue in another case.

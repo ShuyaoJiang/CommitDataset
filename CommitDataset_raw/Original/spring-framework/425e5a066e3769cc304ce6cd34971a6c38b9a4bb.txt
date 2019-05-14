@@ -1,0 +1,13 @@
+Add RestTemplate constructor with custom converters
+
+Prior to this commit, RestTemplate's constructors were all initializing
+default HTTPMessageConverters. Its API provides a way to replace
+those converters with custom ones, but default converters are already
+defined and initialized at that point, which can be an issue in some
+cases (performance, classpath...).
+
+This commits adds a new constructor for RestTemplate with a list
+of message converters as argument. With this new constructor,
+default message converters are never initialized.
+
+Issue: SPR-11351

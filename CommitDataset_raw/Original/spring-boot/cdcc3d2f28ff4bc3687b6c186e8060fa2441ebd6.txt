@@ -1,0 +1,22 @@
+Ensure getResources("") includes nested root URLs
+
+Previously, if Boot's JarURLConnection pointed to the root of a nested
+entry, e.g. /BOOT-INF/classes, a call to getInputStream() would throw
+an IOException. This behavior is reasonable for a URL that points
+to the root of a normal jar as the jar itself is on the class path
+anyway. However, for a nested jar it meant that a call to
+ClassLoader.getResources("") would not include URLs for any nested
+jars and directories (/BOOT-INF/classes and jars in /BOOT-INF/lib).
+This is due to some logic in URLClassPath.Loader.findResource that
+verifies a URL by opening a connection and calling getInputStream().
+
+The result of missing URLs for the root of nested jars and directories
+is that classpath scanning that scans from the root (not a good idea
+for performance reasons, but something that we should support) would
+not find entries in /BOOT-INF/classes or in jars in /BOOT-INF/lib.
+
+This commit updates our JarURLConnection so that it no longer throws
+an IOException when asked for an InputStream for the root of a nested
+entry (directory or jar).
+
+Fixes gh-7003

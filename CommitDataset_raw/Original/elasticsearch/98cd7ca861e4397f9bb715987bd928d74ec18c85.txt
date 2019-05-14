@@ -1,0 +1,14 @@
+SQL: Fix queries with filter resulting in NO_MATCH (#34812)
+
+Previously, `Mapper` was returning an incorrect plan which resulted in an
+```
+SQLFeatureNotSupportedException: Found 1 problem(s)
+line 1:8: Unexecutable item
+```
+
+Queries with a `WHERE` and/or `HAVING` clause which results in NO_MATCH
+are now handled correctly and return 0 rows.
+
+Fixes: #34613
+
+Co-authored-by: Costin Leau <costin.leau@gmail.com>

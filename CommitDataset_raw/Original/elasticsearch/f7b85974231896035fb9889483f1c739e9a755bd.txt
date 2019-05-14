@@ -1,0 +1,13 @@
+CCS: Disable minimizing round-trips when dfs is requested (#40044)
+
+When using DFS_QUERY_THEN_FETCH search type, the dfs phase is run and
+its results are used in the query phase to make scoring accurate.
+When using CCS, depending on whether the DFS phase runs in the CCS
+coordinating node (like if all shards were local) or in each remote
+cluster (when minimizing round-trips), scoring will differ.
+
+This commit disables minimizing round-trips whenever DFS is requested,
+as it is not currently  possible to ensure that scoring is accurate in
+that case.
+
+Relates to #32125

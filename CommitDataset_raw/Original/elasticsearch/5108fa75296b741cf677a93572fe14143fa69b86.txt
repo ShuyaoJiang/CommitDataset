@@ -1,0 +1,24 @@
+Remove unneeded weak reference from prefix logger
+
+We have a custom logger implementation known as a prefix logger that is
+used to write every message by the logger with a given prefix. This is
+useful for node-level, index-level, and shard-level messages where we
+want to log the node name, index name, and shard ID, respectively, if
+possible. The mechanism that we employ is that of a marker. Log4j has a
+built-in facility for managing these markers, but its effectively a
+memory leak because these markers are held in a map and can never be
+released. This is problematic for us since indices and shards do not
+necessarily have infinite life spans and so on a node where there are
+many indices being creted and destroyed, this infinite lifespan can be a
+problem indeed. To solve this, we use our own cache of markers. This is
+necessary to prevent too many instances of the marker for the same
+prefix from being created (just think of all the shard-level components
+that exist in the system), and to workaround the effective leak in
+Log4j. These markers are stored as weak references in a weak hash
+map. It is these weak references that are unneeded. When a key is
+removed from a weak hash map, the corresponding entry is placed on a
+reference queue that is eventually cleared. This commit simplifies
+prefix logger by removing this unnecessary weak reference wrapper.
+
+Relates #22460
+

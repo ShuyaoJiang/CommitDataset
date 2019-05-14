@@ -1,0 +1,12 @@
+Require acknowledgement to start_trial license (#30135)
+
+This is related to #30134. It modifies the start_trial action to require
+an acknowledgement parameter in the rest request to actually start the
+trial license. There are backwards compatibility issues as prior ES
+versions did not support this parameter. To handle this, it is assumed
+that a request coming from a node prior to 6.3 is acknowledged. And
+attempts to write a non-acknowledged request to a prior to 6.3 node will
+throw an exception.
+
+Additionally this PR adds messages about the trial license the user is
+generating.

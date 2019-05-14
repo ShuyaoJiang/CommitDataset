@@ -1,0 +1,13 @@
+[#3967] Guard against NPE in PendingWriteQueue
+
+Motivation:
+
+If the Channel is already closed when the PendingWriteQueue is created it will generate a NPE when add or remove is called later.
+
+Modifications:
+
+Add null checks to guard against NPE.
+
+Result:
+
+No more NPE possible.

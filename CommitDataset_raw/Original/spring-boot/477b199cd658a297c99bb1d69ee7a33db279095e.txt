@@ -1,0 +1,8 @@
+Add ApplicationEventPublisher explicitly to security publisher
+
+For some reason the exception mappings are only created with the
+publisher is initialized in the constructor of DefaultAuthenticationEventPublisher.
+Changed SpringBootWebSecurityConfiguration to do that rather then
+relying on the ApplicationEventPublisherAware behaviour to inject it.
+
+Fixes gh-719

@@ -1,0 +1,29 @@
+HTTP/2 child channel read cycle doesn't respect RecvByteBufAllocator and (#8147)
+
+Motivation:
+Http2MultiplexCodec queues data internally if data is delivered from the
+parent channel but the child channel did not request data. If the parent
+channel notifies of a stream closure it is possible data in the queue
+will be discarded before closing the channel.
+Http2MultiplexCodec interacts with RecvByteBufAllocator to control the
+child channel's demand for read. However it currently only ever reads a
+maximum of one time per loop. This can thrash the read loop and bloat
+the call stack if auto read is on, because channelReadComplete will
+re-enter the read loop synchronously, and also neglect to deliver data
+during the parent's read loop (if it is active). This also meant the
+readPendingQueue was not utilized as originally intended (to extend the
+child channel's read loop during the parent channel's read loop if
+demand for data still existed).
+
+Modifications:
+- Modify the child channel's read loop to respect the
+RecvByteBufAllocator, and append to the parents readPendingQueue if
+appropriate.
+- Stream closure notification behaves like EPOLL and KQUEUE transports
+and reads all queued data, because the data is already queued in memory
+and it is known there will be no more data. This will also replenish the
+connection flow control window which may otherwise be constrained by a
+closed stream.
+
+Result:
+More correct read loop and less risk of dropping data.

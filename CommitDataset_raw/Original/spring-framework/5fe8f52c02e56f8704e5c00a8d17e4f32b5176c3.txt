@@ -1,0 +1,14 @@
+Add support for @Priority
+
+This commit adds support for @Priority to filter multiple candidates
+for autowiring. When multiple candidates are available for a given
+bean, the bean annotated with @Primary is used. If none exists, the
+one with the higher value for the @Priority annotation is used. If
+two beans have the same priority a NoUniqueBeanDefinitionException
+is thrown, just as if two beans are annotated with @Primary.
+
+The underlying code for #getBean and #resolveDependency has been
+merged as this feature is available for both dependency injection
+and bean lookup by type.
+
+Issue: SPR-10548

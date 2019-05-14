@@ -1,0 +1,10 @@
+Stop relying on Artemis's on-demand queue creation in CLI JMS test
+
+Artemis's on-demand queue cretaion appears to be rather flakey,
+sometimes failing with a NullPointerException.
+
+This commit ensures that the queue used by the sample is created
+during start up rather than on demand. This will hopefully make the
+test that runs the sample more robust.
+
+Closes gh-7346

@@ -1,0 +1,18 @@
+SQL: Mimick Elasticsearch defaults for sql action (elastic/x-pack-elasticsearch#4398)
+
+The SQL action supports several text outputs and used to default to an
+output that looked like the SQL CLI. It is a lovely output format but
+this changes output selection behavior to mimick Elasticsearch's
+standard behavior: it'll now default to the same format as the request.
+
+That means that if you want the pretty text format then you need to ask
+for it. The way to do that is:
+
+```
+POST /_xpack/sql?format=text/plain
+{
+    "query": "SELECT * FROM library ORDER BY page_count DESC LIMIT 5"
+}
+```
+
+Original commit: elastic/x-pack-elasticsearch@4a15a23b18ee5613894e935a3ac054bdda029535

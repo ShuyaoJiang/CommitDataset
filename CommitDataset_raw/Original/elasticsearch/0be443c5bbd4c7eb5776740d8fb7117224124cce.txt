@@ -1,0 +1,21 @@
+REST Client: Add Request object flavored methods (#29623)
+
+Adds two new methods to `RestClient` that take a `Request` object. These
+methods will allows us to add more per-request customizable options
+without creating more and more and more overloads of the `performRequest`
+and `performRequestAsync` methods. These new methods look like:
+
+```
+Response performRequest(Request request)
+```
+
+and
+
+```
+void performRequestAsync(Request request, ResponseListener responseListener)
+```
+
+This change doesn't add any actual features but enables adding things like
+per request timeouts and per request node selectors. This change *does*
+rework the `HighLevelRestClient` and its tests to use these new `Request`
+objects and it does update the docs.

@@ -1,0 +1,19 @@
+Remove duplicate separators when combining paths
+
+Prior to this commit, AntPathMatcher would not correctly combine a path
+that ends with a separator with a path that starts with a separator.
+For example, `/foo/` + `/bar` combined into `/foo//bar`.
+
+Specifically, this commit:
+
+ - Removes the duplicated separator in combined paths
+
+ - Improves RequestMappingInfo's toString() representation
+
+ - Fixes Javadoc formatting in AntPathMatcher
+
+ - Polishes AntPathMatcherTests
+
+ - Polishes Javadoc in AbstractRequestCondition
+
+Issue: SPR-12975

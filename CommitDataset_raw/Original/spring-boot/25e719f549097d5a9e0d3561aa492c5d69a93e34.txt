@@ -1,0 +1,24 @@
+Fix handling of security.headers.* to allow headers to be disabled
+
+Spring Security 4’s default configuration will, irrespective of any
+other header writers that are added, enable writers for the following
+headers:
+
+ - X-Content-Type
+ - X-XSS-Protection
+ - Cache-Control
+ - X-Frame-Options
+
+Previously, SecurityProperties.headers used false as the default for the
+properties that enable or disable these headers but the configuration is
+only applied when the properties are true. This left us with the right
+default behaviour (the headers are enabled) but meant that the
+properties could not be used to switch off the headers.
+
+This commit changes the defaults for the four properties to true and
+updates SpringBootWebSecurityConfiguration to only apply the
+configuration when the properties are false. This leaves us with the
+desired defaults while allowing users to disable one or more of the
+properties by setting the relevant property to false.
+
+Closes gh-3517

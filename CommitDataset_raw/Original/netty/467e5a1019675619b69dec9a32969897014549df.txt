@@ -1,0 +1,10 @@
+DefaultHttp2FrameReader stops reading if stream error
+
+Motivation:
+DefaultHttp2FrameReader will stop reading data if any exception is thrown. However some exceptions are recoverable and we will lose data if we don't continue reading. For example some stream errors are recoverable.
+
+Modifications:
+- DefaultHttp2FrameReader should attempt to continue reading if a stream error is encountered.
+
+Result:
+Fixes https://github.com/netty/netty/issues/5186

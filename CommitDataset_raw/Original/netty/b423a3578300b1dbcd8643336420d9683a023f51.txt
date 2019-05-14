@@ -1,0 +1,15 @@
+Correctly handle multiple calls to DefaultHttp2StreamChannel.Unsafe.close(...)
+
+Motivation:
+
+Calling DefaultHttp2StreamChannel.Unsafe.close(...) multiple times should not fail.
+
+Modification:
+
+- Correctly handle multiple calls to DefaultHttp2StreamChannel.Unsafe.close(...)
+- Complete closePromise and promise that is given to close(...) in the correct order.
+- Add unit test
+
+Result:
+
+Fixes [#7628] and [#7641]

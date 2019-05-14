@@ -1,0 +1,10 @@
+Test framework fall cleaning (#33423)
+
+Wraps all lines in our test framework at 140 characters because that is
+our standard line length and removes all of the checkstyle suppressions
+for the test framework.
+
+Drops most of `ModuleTestCase` because it isn't used and we're moving
+away from using guice in the way that it wants to test anyway. Also
+switches a few classes that extend it but don't use it to extend
+`ESTestCase` instead.

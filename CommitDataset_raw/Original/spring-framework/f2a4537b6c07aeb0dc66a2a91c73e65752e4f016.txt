@@ -1,0 +1,10 @@
+Test against CGLIB memory leak for method injection
+
+This commit introduces a test in XmlBeanFactoryTests that verifies that
+CGLIB generated subclasses for method injected beans are reused across
+bean factories for identical bean definitions. In other words, by
+verifying that the same CGLIB generated class is reused for identical
+bean definitions, we can be certain that Spring is no longer generating
+identical, duplicate classes that consume memory in the VM.
+
+Issue: SPR-10785, SPR-11420

@@ -1,0 +1,15 @@
+Fine tune STOMP and WebSocket related logging
+
+Optimize logging with tracking the opening and closing of WebSocket
+sessions and STOMP broker connections in mind.
+
+While the volume of messages makes it impractical to log every message
+at anything higher than TRACE, the opening and closing of connections
+is more manageable and can be logged at INFO. This makes it possible to
+drop to INFO in production and get useful information without getting
+too much in a short period of time.
+
+The logging is also optimized to avoid providing the same information
+from multiple places since messages pass through multiple layers.
+
+Issue: SPR-11884

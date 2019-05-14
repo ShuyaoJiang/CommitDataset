@@ -1,0 +1,12 @@
+HttpResponseStatus object allocation reduction
+
+Motivation:
+Usages of HttpResponseStatus may result in more object allocation then necessary due to not looking for cached objects and the AsciiString parsing method not being used due to CharSequence method being used instead.
+
+Modifications:
+- HttpResponseDecoder should attempt to get the HttpResponseStatus from cache instead of allocating a new object
+- HttpResponseStatus#parseLine(CharSequence) should check if the type is AsciiString and redirect to the AsciiString parsing method which may not require an additional toString call
+- HttpResponseStatus#parseLine(AsciiString) can be optimized and doesn't require and may not require object allocation
+
+Result:
+Less allocations when dealing with HttpResponseStatus.

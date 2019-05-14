@@ -1,0 +1,10 @@
+Jackson2JsonTokenizer unwraps top level array only
+
+When the input stream is a JSON array the tokenizer skips over the
+start and end array tokens in order to decode into an array of
+top-level objects. However in this mode it also skips over nested
+start and end array tokens which prevents proper parsing of JSR-310
+dates (represented with an array syntax) as well as any fields that
+are collections.
+
+Issue: SPR-15803

@@ -1,0 +1,7 @@
+Change BroadcastResponse from ToXContentFragment to ToXContentObject (#28878)
+
+While working on #27799, we find that it might make sense to change BroadcastResponse from ToXContentFragment to ToXContentObject, seeing that it's rather a complete XContent object and also the other Responses are normally ToXContentObject.
+
+By doing this, we can also move the XContent build logic of BroadcastResponse's subclasses, from Rest Layer to the concrete classes themselves.
+
+Relates to #3889

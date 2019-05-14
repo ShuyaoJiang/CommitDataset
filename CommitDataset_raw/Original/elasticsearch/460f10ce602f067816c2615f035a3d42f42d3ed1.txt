@@ -1,0 +1,10 @@
+Close Index API should force a flush if a sync is needed (#37961)
+
+This commit changes the TransportVerifyShardBeforeCloseAction so that it issues a 
+forced flush, forcing the translog and the Lucene commit to contain the same max seq 
+number and global checkpoint in the case the Translog contains operations that were 
+not written in the IndexWriter (like a Delete that touches a non existing doc). This way 
+the assertion added in #37426 won't trip.
+
+Related to #33888 
+

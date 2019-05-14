@@ -1,0 +1,14 @@
+Adjust SSL related tests to be more correct and so pass in the next EA release of java11. (#8162)
+
+Motivation:
+
+In some of our tests we not correctly init the SSLEngine before trying to perform a handshake which can cause an IllegalStateException. While this not happened in previous java releases it does now on Java11 (which is "ok" as its even mentioned in the api docs). Beside this how we selected the ciphersuite to test renegotation was not 100 % safe.
+
+Modifications:
+
+- Correctly init SSLEngine before using it
+- Correctly select ciphersuite before testing for renegotation.
+
+Result:
+
+More correct tests and also pass on next java11 EA release.

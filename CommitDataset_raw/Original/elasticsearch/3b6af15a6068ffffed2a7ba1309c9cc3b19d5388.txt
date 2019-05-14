@@ -1,0 +1,17 @@
+XContent: Factor deprecation handling into callback (#28449)
+
+Factors the way in which XContent parsing handles deprecated fields
+into a callback that is set at parser construction time. The goals here
+are:
+1. Remove Log4J as a dependency of XContent so that XContent can be used
+by clients without forcing log4j and our particular deprecation handling
+scheme.
+2. Simplify handling of deprecated fields in tests. Now tests can listen
+directly for the deprecation callback rather than digging through a
+ThreadLocal.
+
+More accurately, this change begins this work. It deprecates a number of
+methods, pointing folks to the new versions of those methods that take
+`DeprecationHandler`. The plan is to slowly drop these deprecated
+methods. Once they are entirely removed we can remove Log4j as
+dependency of XContent.

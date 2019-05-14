@@ -1,0 +1,9 @@
+Automatically enable AES 256 bit TLS ciphers when available (elastic/x-pack-elasticsearch#2137)
+
+This commit adds detection of support for AES 256 bit ciphers and enables their use when the JVM
+supports them. For OpenJDK, this is often the case without any changes but for the Oracle JVM, the
+unlimited policy file needs to be installed. In order to simplify the work a user would need to do
+we can detect this support and automatically enable the AES 256 bit versions of the ciphers we
+already enable.
+
+Original commit: elastic/x-pack-elasticsearch@5f23b18a1e164372a54ad9975446061731476efe

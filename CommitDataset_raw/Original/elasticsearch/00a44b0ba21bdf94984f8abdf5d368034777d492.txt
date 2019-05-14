@@ -1,0 +1,6 @@
+Fix Race in AsyncTwoPhaseIndexerTests.testStateMachine (#40947)
+
+* The step is incremented by the listner in `org.elasticsearch.xpack.core.indexing.AsyncTwoPhaseIndexerTests.MockIndexer#onFinish` after isFinished is set to true, but the test only waited for `isFinished`,
+fixed by calling `isFinished` last
+* Also made `step` volatile since we are reading it from different thread from the one incrementing it
+* Closes #40946

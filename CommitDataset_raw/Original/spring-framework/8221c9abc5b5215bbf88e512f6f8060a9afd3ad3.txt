@@ -1,0 +1,20 @@
+Support for nested path using field access
+
+This commit adds a nested path support for DirectFieldAccessor that is
+similar to what BeanWrapper provides. It is now possible to use
+expressions such as "person.address.city.name" to access the name of
+the city that a given person lives in using fields to traverse the
+graph.
+
+DirectFieldAccessor also now supports an auto-grow option to create
+a default instance for a "null" intermediate path. This option is
+false by default and leads to a NullValueInNestedPathException in such
+a case.
+
+This commit also harmonizes part of the tests suite so that core tests
+are shared between BeanWrapperImpl and DirectFieldAccessor.
+
+Note that map and list access is not implemented as part of this
+commit.
+
+Issue: SPR-9705

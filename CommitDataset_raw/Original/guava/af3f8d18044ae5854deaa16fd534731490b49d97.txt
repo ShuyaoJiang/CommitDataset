@@ -1,0 +1,10 @@
+This CL fixes null annotations in com.google.common.primitives
+
+The annotations on the tryParse() methods are inconsistent. Many of them don't have @Nullable annotations. This is problematic, because: a) the method can return null; and b) the package itself is annotated with @ParametersAreNonnullByDefault. This causes Eclipse to display dead code warnings when checking the return value from these methods.
+
+I've included the @CheckForNull annotation, since I saw you guys using it already. Technically, this isn't required and @Nullable by itself should be fine. But it doesn't hurt to have both. Also Eclipse doesn't understand @CheckForNull.
+
+I also threw in a few @Nullable on equals() methods that were missing.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=77896210

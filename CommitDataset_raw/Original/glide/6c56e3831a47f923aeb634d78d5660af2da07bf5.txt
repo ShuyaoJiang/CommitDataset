@@ -1,0 +1,11 @@
+Avoid setting the Glide singleton when it's half initialized
+
+If we set the singleton before calling registerComponents, other threads
+that call get() while registerComponents is being called may receive a
+half initialized Glide object. Half initialized Glide objects may be
+missing critical components and using them in other threads may break
+lots of things.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=161232290

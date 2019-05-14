@@ -1,0 +1,13 @@
+Suppress tests under Android.
+- I've suppressed nearly everything that might be calling Type.equals(). At some point, we can try to figure out whether we can interoperate with Android's Type.equals() just as we do with JDK7's. Or we can at least be more surgical in our suppressions; this CL sprays them everywhere.
+- I've suppressed a bunch of URLClassLoader-using tests. I'm not sure that custom URLClassLoaders make a lot of sense on Android.
+- I've suppressed some suite() methods, as I haven't managed to get the test-suite builders working under Android.
+- ForwardingObjectTesterTest may show limitations of ForwardingObjectTester under Android, or it may a sign that we just need to call setAccessible or something. But since ForwardingObjectTester is just a package-private testing utility, I haven't dug into it.
+- I've commented a test in RateLimiterTest that may fail for similar reasons in newer versions of Android.
+
+A general point about c.g.c.reflect: Reflection is slow on Android, so it's unlikely that users will be making significant use of this package. For this reason, I don't see further work on Android testing of the package as a priority.
+
+(Note that we don't actually run these tests on Android at HEAD. This will be changing soon.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=100300236

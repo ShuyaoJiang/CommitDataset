@@ -1,0 +1,12 @@
+SQL: Fix issue with always false filter involving functions (#36830)
+
+When a filter is evaluated to false then it becomes a LocalRelation
+with an EmptyExecutable. The LocalRelation in turn, becomes a
+LocalExec and the the SkipQueryIfFoldingProjection was wrongly
+converting it to a SingletonExecutable. Moreover made a change, so
+that the queries without FROM clause, which are supposed to return a
+single row, to become a LocalRelation with a SingletonExecutable
+instead of EmptyExecutable to avoid mixing up with the ones operating
+on a table but with a filter that evaluates to false.
+
+Fixes: #35980 

@@ -1,0 +1,5 @@
+Fix AdaptiveSelectionStats serialization bug (#28718)
+
+The AdaptiveSelectionStats object serializes the clientOutgoingConnections map that's concurrently updated in SearchTransportService. Serializing the map consists of first writing the size of the map and then serializing the entries. If the number of entries changes while the map is being serialized, the size and number of entries go out of sync. The deserialization routine expects those to be in sync though.
+
+Closes #28713

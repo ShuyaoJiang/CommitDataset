@@ -1,0 +1,15 @@
+Trim optional white space in CombinedHttpHeaders values
+
+Motivation:
+
+The updated HTTP/1.x RFC allows for header values to be CSV and separated by OWS [1]. CombinedHttpHeaders should remove this OWS on insertion.
+
+[1] https://tools.ietf.org/html/rfc7230#section-7
+
+Modification:
+
+CombinedHttpHeaders doesn't account for the OWS and returns it back to the user as part of the value.
+
+Result:
+
+Fixes #6452

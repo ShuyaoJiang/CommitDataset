@@ -1,0 +1,22 @@
+Do now swallow an exception triggered by late listener notification
+
+Related: #3449
+
+Motivation:
+
+When a user shut down an EventExecutor/Loop prematurely, a Promise will
+fail to execute its listeners. When it happens, DefaultPromise will log
+a message at ERROR level, but there's no way to get notified about it
+programmatically.
+
+Modifications:
+
+Do not catch and log the RejectedExecutionException unconditionally,
+but only catch and log for non-late listener notifications, so that a
+user gets notified on submission failure at least when the listener is
+late.
+
+Result:
+
+Remedies #3449 to some extent, although we will need fundamental fix for
+that, such as #3566

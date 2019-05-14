@@ -1,0 +1,12 @@
+Maintain order of operations semantics on follower
+
+A following engine even for a primary shard needs to maintain order of
+operations semantics as if it were behaving like a replica. That is,
+rather than assuming that the order of operations presented to the
+engine is the de facto order of operations as is the case for a leader
+engine for a primary shard, a following engine must behave like all
+replicas behave which is that they resolve order of operations based on
+sequence numbers. This commit causes this to be the case for following
+engines.
+
+Relates #2931

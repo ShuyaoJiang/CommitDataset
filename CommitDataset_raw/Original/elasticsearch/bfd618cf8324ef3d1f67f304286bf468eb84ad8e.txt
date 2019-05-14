@@ -1,0 +1,10 @@
+Universal cluster bootstrap method for tests with autoMinMasterNodes=false (#38038)
+
+Currently, there are a few tests that use autoMinMasterNodes=false and
+hence override addExtraClusterBootstrapSettings, mostly this is 10-30
+lines of codes that are copy-pasted from class to class.
+
+This PR introduces `InternalTestCluster.setBootstrapMasterNodeIndex`
+which is suitable for all classes and copy-paste could be removed.
+
+Removing code is always a good thing!

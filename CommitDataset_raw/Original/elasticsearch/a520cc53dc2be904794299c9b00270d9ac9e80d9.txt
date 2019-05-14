@@ -1,0 +1,8 @@
+Always fail engine if delete operation fails (#40117)
+
+Unlike index operations which can fail at the document level to
+analyzing errors, delete operations should never fail at the document
+level whether soft-deletes is enabled or not. With this change, we will
+always fail the engine if we fail to apply a delete operation to Lucene.
+
+Closes #33256

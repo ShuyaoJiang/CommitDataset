@@ -1,0 +1,10 @@
+Watcher: Fix TransformInput toXContent serialization (elastic/x-pack-elasticsearch#4061)
+
+The toXContent serialization of the transform input was broken, which
+could lead to the bad case that a watch could be stored with an invalid
+toXContent serialization, that could not be read again, when the watch
+should either be executed or even just returned by the Get watch API.
+
+relates elastic/x-pack-elasticsearch#4049
+
+Original commit: elastic/x-pack-elasticsearch@f06ad768b8ac3ef1493f8e9df048dcf9c2c15548

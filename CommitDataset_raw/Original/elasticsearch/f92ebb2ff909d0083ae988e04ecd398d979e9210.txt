@@ -1,0 +1,7 @@
+Suppress lease background sync failures if stopping (#40902)
+
+If the transport service is stopped, likely because we are shutting
+down, and a retention lease background sync fires the logs will display
+a warn message and stacktrace. Yet, this situaton is harmless and can
+happen as a normal course of business when shutting down. This commit
+suppresses the log messages in this case.

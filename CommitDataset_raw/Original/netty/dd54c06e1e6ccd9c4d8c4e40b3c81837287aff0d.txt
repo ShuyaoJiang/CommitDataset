@@ -1,0 +1,13 @@
+Close connection for CorruptedFrameException (#8705)
+
+Motivation:
+
+The CorruptedFrameException from the finish() method of the Utf8Validator gets propagated to other handlers while the connection is still open.
+
+Modification:
+
+Override exceptionCaught method of the Utf8FrameValidator and close the connection if it is a CorruptedFrameException.
+
+Result:
+
+The CorruptedFrameException gets propagated to other handlers only after properly closing the connection.

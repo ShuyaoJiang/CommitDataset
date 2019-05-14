@@ -1,0 +1,9 @@
+Use null in MockServletContext for unknown mime types
+
+MockServletContext.getMimeTypes now returns null if the Java Activation
+Framework returns "application/octet-stream", which is the default
+media type it returns if the mime type is unknown. This enforces the
+contract for ServletContext.getMimeTypes (return null for uknown mime
+types) but does mean "application/octet-stream" cannot be returned.
+
+Issue: SPR-10334

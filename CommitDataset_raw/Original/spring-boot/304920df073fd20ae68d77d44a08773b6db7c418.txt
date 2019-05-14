@@ -1,0 +1,13 @@
+Make Thymeleaf @ConditionalOnWebApplication
+
+If user creates a Thymeleaf app with a parent-child context then the
+child should contain all the web-specific pieces (and they are likely
+to fail fast if they need to be ServletContextAware, or slower if they
+try to locate a WebApplicationContext at runtime). This can't happen
+if the view resolver is being added to the parent.
+
+Freemarker and Velocity already have similar tests because it is assumed
+that they should be usable outside a web app, so this change just does the
+same for Thymeleaf.
+
+Fixes gh-1611

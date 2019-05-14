@@ -1,0 +1,16 @@
+Avoid possible livelock when stopping FileSystemWatcher in parallel
+
+Previously, if the file watcher thread tried to stop the
+FileSystemWatcher when another thread was already stopping it a
+livelock could occur. The livelock occurred because the file watcher
+thread would attempt to lock a monitor that was being held by a thread
+that had joined the file watcher thread and was waiting for it to die.
+
+This commit avoid the livelock by narrowing the synchronization that's
+used when stopping the FileSystemWatcher. The monitor is used to
+obtain a reference to the file watcher thread in a thread-safe manner,
+but it is released prior to joining the file watcher thread and
+waiting for it to die. This will allow a parallel attempt by the
+file watcher thread to stop itself to succeed.
+
+Closes gh-10496

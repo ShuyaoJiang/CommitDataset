@@ -1,0 +1,16 @@
+Support n meta-annotation levels on methods in AnnotationUtils
+
+Prior to this commit, the search algorithm used by the
+findAnnotation(Method, Class) method in AnnotationUtils only found
+direct annotations or direct meta-annotations (i.e., one level of
+meta-annotations).
+
+This commit reworks the search algorithm so that it supports arbitrary
+levels of meta-annotations on methods. To make this possible, a new
+findAnnotation(AnnotatedElement, Class) method has been introduced in
+AnnotationUtils.
+
+This fix also allows for the @Ignore'd tests in
+TransactionalEventListenerTests to be re-enabled.
+
+Issue: SPR-12941

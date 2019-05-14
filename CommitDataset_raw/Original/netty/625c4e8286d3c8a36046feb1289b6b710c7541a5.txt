@@ -1,0 +1,15 @@
+Tighten up contract of PromiseCombiner and so make it more safe to use (#8886)
+
+Motivation:
+
+PromiseCombiner is not thread-safe and even assumes all added Futures are using the same EventExecutor. This is kind of fragile as we do not enforce this. We need to enforce this contract to ensure it's safe to use and easy to spot concurrency problems.
+
+Modifications:
+
+- Add new contructor to PromiseCombiner that takes an EventExecutor and deprecate the old non-arg constructor.
+- Check if methods are called from within the EventExecutor thread and if not fail
+- Correctly dispatch on the right EventExecutor if the Future uses a different EventExecutor to eliminate concurrency issues.
+
+Result:
+
+More safe use of PromiseCombiner + enforce correct usage / contract.

@@ -1,0 +1,26 @@
+DnsNameResolver search domains support
+
+Motivation:
+
+The current DnsNameResolver does not support search domains resolution. Search domains resolution is supported out of the box by the java.net resolver, making the DnsNameResolver not able to be a drop in replacement for io.netty.resolver.DefaultNameResolver.
+
+Modifications:
+
+The DnsNameResolverContext resolution has been modified to resolve a list of search path first when it is configured so. The resolve method now uses the following algorithm:
+
+if (hostname is absolute (start with dot) || no search domains) {
+ searchAsIs
+} else {
+  if (numDots(name) >= ndots) {
+    searchAsIs
+  }
+  if (searchAsIs wasn't performed or failed) {
+    searchWithSearchDomainsSequenciallyUntilOneSucceeds
+  }
+}
+
+The DnsNameResolverBuilder provides configuration for the search domains and the ndots value. The default search domains value is configured with the OS search domains using the same native configuration the java.net resolver uses.
+
+Result:
+
+The DnsNameResolver performs search domains resolution when they are present.

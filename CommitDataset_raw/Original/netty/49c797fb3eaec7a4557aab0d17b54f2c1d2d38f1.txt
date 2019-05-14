@@ -1,0 +1,6 @@
+ReplayingDecoder: keep explicit track of cleanup state.
+
+This fixes a bug introduced by 1f3d35bd whereby cleanup() won't get
+run if the cumulation buffer was emptied.  This is important for
+codecs like HTTP: In particular, empty 200 OK responses without a
+Content-Length header would fail to decode.

@@ -1,0 +1,30 @@
+Enforce the release is performed only from RHEL 6.5 or equivalent
+
+Motivation:
+
+Netty must be released from RHEL 6.5 x86_64 or compatible so that:
+
+1) we ship x86_64 version of epoll transport officially, and
+2) we ensure the ABI compatibility with older GLIBC versions.
+   The shared library built on a distribution with newer GLIBC will not
+   run on older distributions.
+
+Modifications:
+
+- When 'release' profile is active, perform an additional check using
+  maven-enforcer-plugin so that 'mvn release:*' fails when running on
+  non-RHEL6.5.  This rule is active only when releasing, so a user
+  should not be affected.
+- Simplify maven-release-plugin configuration by removing redundant
+  profiles such as 'linux'.  'linux' is automatically activated when
+  releasing because we now enforce the release occurs on linux-x86_64.
+- Remove the no-osgi profile, which is unused
+- Remove the reference to 'sonatype-oss-release' profile in all/pom.xml,
+  because we always specify 'release' profile when releasing
+- Rename the profile 'linux-native' to 'linux' for brevity
+- Upgrade oss-parent and maven-enforcer-plugin
+
+Result:
+
+No one can make a mistake to release Netty on an environment that can
+produce incompatible or missing native library.

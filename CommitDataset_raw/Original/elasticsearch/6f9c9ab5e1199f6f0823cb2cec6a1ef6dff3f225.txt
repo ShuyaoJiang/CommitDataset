@@ -1,0 +1,19 @@
+[ingest] geo-ip performance improvements (#33029)
+
+Re-implement the cache to avoid jackson JSON de-serialization for
+every IP lookup. The built in maxmind cache caches JsonNode objects.
+This requires de-serialization for every lookup, even if the object
+is found in cache. Profiling shows that is very expensive (CPU).
+
+The cache will now consist of the fully de-serialized objects.
+Profiling shows that the new footprint for the CityDB is ~6KB per cache
+entry. This may result in ~6MB increase with the 1000 entry default.
+The  performance has been measured up to 40% faster on a modern 4 core/8 thread
+CPU for an ingest (minimal indexing) workflow.
+
+Further, the since prior implementation cached the JsonNode objects,
+and there is not a 1:1 relationship between an IP lookup / JsonNode
+object, the default cache size was most likely too small to be very
+effective. While this change does not change the 1000 default cache
+size, it will now cache more since there is now a 1:1 relationship between
+an IP lookup and value in the cache.

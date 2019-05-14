@@ -1,0 +1,10 @@
+Remove animal sniffer from low-level REST client (#29646)
+
+The low-level REST client targets JDK 7. To avoid compiling against JDK
+functionality not available in JDK 7, we use animal sniffer. However,
+when we switched to using the JDK 9 and now the JDK 10 compiler which
+has built-in support for targeting previous JDKs, we no longer need to
+use animal sniffer. This is because the JDK is now packaged with the
+signatures needed to ensure that when we target JDK 7 at compile-time it
+is detected that we are only using JDK 7 functionality. This commit
+removes the use of animal sniffer from the low-level REST client build.

@@ -1,0 +1,17 @@
+[ML] Reject headers supplied directly in the put datafeed body (elastic/x-pack-elasticsearch#3853)
+
+Since elastic/x-pack-elasticsearch#3254 security headers have been stored in datafeed cluster state
+to allow the datafeed to run searches using the credentials of the user
+who created/updated it.  As a result the parser was changed to read the
+"headers" field so that cluster state could be reloaded.  However, this
+meant that datafeed configs could be submitted with a "headers" field.
+No security loophole arose from this, as subsequent code overwrites the
+contents of any supplied headers.  But it could be confusing that an
+erroneously supplied field did not cause a parse failure as it usually
+would.
+
+This change makes the config parser for datafeeds reject a "headers"
+field.  Now only the metadata parser used for reloading cluster state
+will read a "headers" field.
+
+Original commit: elastic/x-pack-elasticsearch@afa503275fe6cfc2feee5f2f382ae41b9b0ef0ba

@@ -1,0 +1,13 @@
+Ensure WeakOrderQueue can be collected fast enough
+
+Motivation:
+
+Commit afafadd3d7caf1e4b346da049baab0afeae0a4bc introduced a change which stored the Stack in the WeakOrderQueue as field. This unfortunally had the effect that it was not removed from the WeakHashMap anymore as the Stack also is used as key.
+
+Modifications:
+
+Do not store a reference to the Stack in WeakOrderQueue.
+
+Result:
+
+WeakOrderQueue can be collected correctly again.

@@ -1,0 +1,11 @@
+Address failing CCR retention lease test
+
+This test fails rarely but it is flaky in its current form. The problem
+here is that we lack a guarantee on the retention leases having been
+synced to all shard copies. We need to sleep long enough to ensure that
+that occurs, and then we can sample the retention leases, possibly sleep
+again (we usually will not have too since the first sleep will have been
+long enough to allow a sync and a renewal to happen, if one was going to
+happen), and the sample the retention leases for comparison.
+
+Closes #39331

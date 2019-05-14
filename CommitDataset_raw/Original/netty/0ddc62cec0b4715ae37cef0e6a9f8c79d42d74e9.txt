@@ -1,0 +1,14 @@
+Add support for TLSv1.3 (#8293)
+
+Motivation:
+
+TLSv1.3 support is included in java11 and is also supported by OpenSSL 1.1.1, so we should support when possible.
+
+Modifications:
+- Add support for TLSv1.3 using either the JDK implementation or the native implementation provided by netty-tcnative when compiled against openssl 1.1.1
+- Adjust unit tests for semantics provided by TLSv1.3
+- Correctly handle custom Provider implementations that not support TLSv1.3
+
+Result:
+
+Be able to use TLSv1.3 with netty.

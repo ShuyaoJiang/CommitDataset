@@ -1,0 +1,8 @@
+Make PathPatternParser multi-threaded
+
+With this change the original PathPatternParser is renamed
+InternalPathPatternParser and a new PathPatternParser class is added.
+This new PathPatternParser class is a very simple thread-safe wrapper for
+the InternalPathPatternParser. It achieves this by creating a new
+InternalPathPatternParser for each new parse request.  This follows the
+model used for SpEL parsing.

@@ -1,0 +1,14 @@
+Allow using a charset other than UTF-8 for creating urlencoded form bodies. (#3518)
+
+* Allow using an encoding other than UTF-8 for creating urlencoded request form bodies.
+
+This is useful when accessing a web server you don't control which receives form data
+encoded in a charset other than UTF-8 (e.g. ISO-8859-1).
+
+To use this you pass an encoding to FormBody.Builder constructor. The constructor is used so
+it's clear you shouldn't switch encodings in the middle of building a form body.
+
+The result is undefined is a character cannot be encoded in the specified charset (as the
+result of Java's String.getBytes(charset) is also undefined in that case.
+
+* Update HttpUrl.java

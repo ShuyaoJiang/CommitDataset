@@ -1,0 +1,9 @@
+Stop depending on an ImmutableSortedSet quirk in getTypes():
+ImmutableSortedSet.copyOf() currently assumes, for a Set input, that there is no need to deduplicate inputs.
+This is true if the given Comparator if consistent with equals (really, consistent with the original Set's definition of equality).
+However, if it's not, we can get a set with "duplicates" according to the Comparator.
+getTypes() depends on this behavior because it sorts by type-hierarchy depth, which is no reason to treat objects as "equal."
+An upcoming CL will change ImmutableSortedSet.copyOf() to remove this behavior.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=30617067

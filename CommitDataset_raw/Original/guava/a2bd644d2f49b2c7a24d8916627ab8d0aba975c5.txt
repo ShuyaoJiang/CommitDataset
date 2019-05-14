@@ -1,0 +1,9 @@
+Handle overflow and negative timeouts:
+http://code.google.com/p/guava-libraries/issues/detail?id=1622
+
+Some discussion of each:
+- Overflow is of course impossible to prevent entirely with fixed-size number types, but we're less likely to see overflow with the new "available - timeout" than with the old "now + timeout': The latter can overflow almost immediately if given MAX_VALUE timeout. (Compare the advice at <http://docs.oracle.com/javase/7/docs/api/java/lang/System.html#nanoTime%28%29>.)
+- Negative timeouts are supported by java.util.concurrent APIs. For similar behavior in RateLimiter, we need to be sure that a request to "wait up to -1 seconds" is treated identically to "wait up to 0 seconds" -- specifically, that it works right if the permit has become available within the last second. (Another potential problem, albeit one much less likely, is overflow when subtracting an input of MIN_VALUE.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=65540333

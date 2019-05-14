@@ -1,0 +1,12 @@
+Only associate JTA transaction manager to JMS factory
+
+The JMS MessageListenerContainer supports the PlatformTransactionManager
+abstraction with either a `JmsTransactionManager` for local transactions
+or `JtaTransactionManager` for distributed transactions. The former is
+kind of deprecated (`setTransacted` should be used instead). In any case,
+any other `PlatformTransactionManager` implementation is not supported.
+
+Update JmsAnnotationDrivenConfiguration to only associated a JTA
+transaction manager, if any.
+
+Closes gh-3150

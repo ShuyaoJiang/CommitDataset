@@ -1,0 +1,29 @@
+Disallow setting logger factory twice
+
+Motivation:
+
+InternalLoggerFactory either sets a default logger factory
+implementation based on the logging implementations on the classpath, or
+applications can set a logger factory explicitly. If applications wait
+too long to set the logger factory, Netty will have already set a logger
+factory leading to some objects using one logging implementation and
+other objets using another logging implementation. This can happen too
+if the application tries to set the logger factory twice, which is
+likely a bug in the application. Yet, the Javadocs for
+InternalLoggerFactory warn against this saying that
+InternalLoggerFactory#setLoggerFactory "should be called as early as
+possible and shouldn't be called more than once". Instead, Netty should
+guard against this.
+
+Modications:
+
+We replace the logger factory field with an atomic reference on which we
+can do CAS operations to safely guard against it being set twice. We
+also add an internal holder class that captures the static interface of
+InternalLoggerFactory that can aid in testing.
+
+Result:
+
+The logging factory can not be set twice, and applications that want to
+set the logging factory must do it before any Netty classes are
+initialized (or the default logger factory will be set).

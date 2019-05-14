@@ -1,0 +1,13 @@
+SctpMessageCompletionHandler may leak ByteBuf for fragmented messages. (#7832)
+
+Motivation:
+
+SctpMessageCompletionHandler stores fragments in a Map but not release the stored ByteBuf when the handler is removed.
+
+Modifications:
+
+Release all buffers that are still in the Map when handlerRemoved(...) is called.
+
+Result:
+
+No more leaks for fragemented messages.

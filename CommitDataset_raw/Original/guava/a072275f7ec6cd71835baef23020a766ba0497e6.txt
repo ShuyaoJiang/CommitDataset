@@ -1,0 +1,12 @@
+Simplify ImmutableCollection implementation and related code.  Specifically:
+
+* Redirect ImmutableCollection default serialization to ImmutableList, which it was basically emulating before
+* Factor out "handwritten ArrayList" logic from Immutable{List,Set}.Builder
+* Be more organized in ImmutableList creation pathways about where and when null validation is done
+* Use default List iterator implementation in ImmutableList.ReverseImmutableList
+* Use default List implementations for RegularImmutableList.{equals, toString}
+* Push down ArrayImmutableSet logic to its one and only subclass, RegularImmutableSet
+* Optimize ImmutableSortedSet creation paths, e.g. to avoid creating any garbage in duplicate-free common case
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=41188291

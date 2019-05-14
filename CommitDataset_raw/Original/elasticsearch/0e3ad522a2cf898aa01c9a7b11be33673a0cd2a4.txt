@@ -1,0 +1,9 @@
+Rewrite search requests on the coordinating nodes (#25814)
+
+This change rewrites search requests on the coordinating node before
+we send requests to the individual shards. This will reduce the rewrite load
+and object creation for each rewrite on the executing nodes and will fetch
+resources only once instead of N times once per shard for queries like `terms`
+query with index lookups. (among percolator and geo-shape)
+
+Relates to #25791

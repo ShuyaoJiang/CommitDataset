@@ -1,0 +1,10 @@
+HTTP/2 Sending a GO_AWAY with an error code should close conneciton
+
+Motivation:
+The specification requires that sending a GO_AWAY frame with an error code results in closing the TCP connection https://tools.ietf.org/html/draft-ietf-httpbis-http2-17#section-5.4.1.
+
+Modifications:
+- Close the connection after succesfully sending a GO_AWAY.
+
+Result:
+Fixes https://github.com/netty/netty/issues/3653

@@ -1,0 +1,8 @@
+Fix request factory used with TestRestTemplate withBasicAuth
+
+This commit updates the behavior of withBasicAuth on TestRestTemplate
+by trying to use the same request factory type as the underlying restTemplate.
+If creation of a new instance of the configured request factory class fails,
+it falls back to the `ClientHttpRequestFactorySupplier`.
+
+See gh-15982

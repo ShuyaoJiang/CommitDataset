@@ -1,0 +1,11 @@
+Fix absolute paths when transforming resources
+
+Prior to this commit, `ResourceTransformerSupport.toAbsolutePath`
+would call `StringUtils.applyRelativePath` in all cases. But this
+implementation is prepending the given path even if the relative path
+starts with `"/"`.
+
+This commit skips the entire operation if the given path is absolute,
+i.e. it starts with `"/"`.
+
+Issue: SPR-17432

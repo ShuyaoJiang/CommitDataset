@@ -1,0 +1,36 @@
+Adding ability omit the implicit #flush() call in EmbeddedChannel#writeOutbound() and
+the implicit #fireChannelReadComplete() in EmbeddedChannel#writeInbound().
+
+Motivation
+
+We use EmbeddedChannels to implement a ProxyChannel of some sorts that shovels
+messages between a source and a destination Channel. The latter are real network
+channels (such as Epoll) and they may or may not be managed in a ChannelPool. We
+could fuse both ends directly together but the EmbeddedChannel provides a nice
+disposable section of a ChannelPipeline that can be used to instrument the messages
+that are passing through the proxy portion.
+
+The ideal flow looks abount like this:
+
+source#channelRead() -> proxy#writeOutbound() -> destination#write()
+source#channelReadComplete() -> proxy#flushOutbound() -> destination#flush()
+
+destination#channelRead() -> proxy#writeInbound() -> source#write()
+destination#channelReadComplete() -> proxy#flushInbound() -> source#flush()
+
+The problem is that #writeOutbound() and #writeInbound() emit surplus #flush()
+and #fireChannelReadComplete() events which in turn yield to surplus #flush()
+calls on both ends of the pipeline.
+
+Modifications
+
+Introduce a new set of write methods that reain the same sematics as the #write()
+method and #flushOutbound() and #flushInbound().
+
+Result
+
+It's possible to implement the above ideal flow.
+
+Fix for EmbeddedChannel#ensureOpen() and Unit Tests for it
+
+Some PR stuff.

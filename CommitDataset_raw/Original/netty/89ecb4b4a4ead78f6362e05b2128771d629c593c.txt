@@ -1,0 +1,12 @@
+AutoClose behavior may infinite loop
+
+Motivation:
+If AutoClose is false and there is a IoException then AbstractChannel will not close the channel but instead just fail flushed element in the ChannelOutboundBuffer. AbstractChannel also notifies of writability changes, which may lead to an infinite loop if the peer has closed its read side of the socket because we will keep accepting more data but continuously fail because the peer isn't accepting writes.
+
+Modifications:
+- If the transport throws on a write we should acknowledge that the output side of the channel has been shutdown and cleanup. If the channel can't accept more data because it is full, and still healthy it is not expected to throw. However if the channel is not healthy it will throw and is not expected to accept any more writes. In this case we should shutdown the output for Channels that support this feature and otherwise just close.
+- Connection-less protocols like UDP can remain the same because the channel may disconnected temporarily.
+- Make sure AbstractUnsafe#shutdownOutput is called because the shutdown on the socket may throw an exception.
+
+Result:
+More correct handling of write failure when AutoClose is false.

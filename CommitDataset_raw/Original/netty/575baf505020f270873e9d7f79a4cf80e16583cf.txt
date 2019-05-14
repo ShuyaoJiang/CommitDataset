@@ -1,0 +1,13 @@
+Use more aggressive expanding strategy in HpackHuffmanDecoder
+
+Motivation:
+
+Before we always expanded the buffer by the initialCapacity which by default is 32 bytes. This may lead to many expansions of the buffer until we finally reached the point that the buffer can fin everything.
+
+Modifications:
+
+Double the buffer size until the threshold of >= 1024 is hit. After this will grow it by the initialCapacity
+
+Result:
+
+Less expansion of the buffer (and so allocations / copies) when the intialCapacity is not big enough. Fixes [#6864].

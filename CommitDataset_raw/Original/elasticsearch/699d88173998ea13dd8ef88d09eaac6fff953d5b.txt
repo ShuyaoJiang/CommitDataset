@@ -1,0 +1,6 @@
+Migrate IndicesExistsIT to Zen2 (#37526)
+
+This test was actually passing, for the wrong reason: it asserts a
+`MasterNotDiscoveredException` is thrown, expecting this to be due to a failure
+to perform state recovery, but in fact it's thrown because the node is not
+correctly bootstrapped.

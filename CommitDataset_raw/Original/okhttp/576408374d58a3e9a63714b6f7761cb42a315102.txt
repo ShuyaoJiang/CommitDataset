@@ -1,0 +1,13 @@
+Begin to fold together parts of RealCall and HttpEngine.
+
+Previously we had an awkward, arbitrary separation because RealCall contained
+the stuff that wasn't in HttpURLConnection, and HttpEngine contained everything
+that was shared.
+
+It was also awkward because HttpEngine could be interrupted in various parts
+of the HttpURLConnection flow: after connecting, while transmitting the request
+body, etc. With this change we no longer need to handle API calls while we're
+in these intermediate states, which means we can reduce the scope of certain
+things from fields to local variables.
+
+There's still a way to go here but this is more easy wins.

@@ -1,0 +1,13 @@
+SQL: Fix wrong appliance of StackOverflow limit for IN (#36724)
+
+Fix grammar so that each element inside the list of values for IN
+is a valueExpression and not a more generic expression. Introduce a
+mapping for context names as some rules in the grammar are exited with
+a different rule from the one they entered.This helps so that the decrement
+of depth counts in the Parser's CircuitBreakerListener works correctly.
+
+For the list of values for IN, don't count the
+PrimaryExpressionContext as this is not visited on exitRule() due to
+the peculiarity in our gramamr with the predicate and predicated.
+
+Fixes: #36592

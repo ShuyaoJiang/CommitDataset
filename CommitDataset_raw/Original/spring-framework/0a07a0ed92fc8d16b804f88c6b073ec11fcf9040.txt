@@ -1,0 +1,15 @@
+Move integration tests => src/test
+
+This commit eliminates the 'integration-tests' subproject in favor of
+managing these sources under the root project's own 'src' directory.
+
+This helps to avoid special-case handling for integration-tests in the
+Gradle build, e.g. avoiding publication of jars to Artifactory /
+Maven Central.
+
+It is also semantically more correct. This is not a Spring Framework
+subproject so much as it is a collection of integration tests that
+span functionality across many subprojects. In this way, it makes
+sense to place them directly under the root project.
+
+Issue: SPR-8116

@@ -1,0 +1,14 @@
+Skip shard refreshes if shard is `search idle` (#27500)
+
+Today we refresh automatically in the background by default very second.
+This default behavior has a significant impact on indexing performance
+if the refreshes are not needed.
+This change introduces a notion of a shard being `search idle` which a
+shard transitions to after (default) `30s` without any access to an
+external searcher. Once a shard is search idle all scheduled refreshes
+will be skipped unless there are any refresh listeners registered.
+If a search happens on a `serach idle` shard the search request _park_
+on a refresh listener and will be executed once the next scheduled refresh
+occurs. This will also turn the shard into the `non-idle` state immediately.
+
+This behavior is only applied if there is no explicit refresh interval set.

@@ -1,0 +1,13 @@
+TEST: Tightens file-based condition in peer-recovery
+
+As a replica always keeps a safe commit and starts peer-recovery with
+that commit; file-based recovery  only happens if new operations are
+added to the primary and the required translog is not fully retained. In
+the test, we tried to produce this condition by flushing a new commit in
+order to trim all translog. However, if the new global checkpoint is not
+persisted yet, we will keep two commits and not trim translog. This
+commit tightens the file-based condition in the test by waiting for the
+global checkpoint persisted properly on the new primary before flushing.
+
+Close #28209
+Relates #28181

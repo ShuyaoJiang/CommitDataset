@@ -1,0 +1,102 @@
+MOE automated commit.
+
+-------------
+Include the debug aar in release artifacts for Android projects.
+
+We removed the release variant a while ago to speed up the build, which
+has the side affect of removing the release aar from artifacts. Since
+we expect the debug and release variants to be identical (hence why
+we disabled the release variant), it should be safe to just use the
+debug aar instead. We will have to specify it explicitly since android’s
+rules unsurprisingly only add the release variant by default.
+
+-------------
+Bump version to 4.6.0
+
+-------------
+Update readme to 4.6.0
+
+Also removes the old v4 dependency from maven deps, I don’t think it’s
+necessary.
+
+-------------
+Change update_javadocs to use debugJavadocJar instead of release.
+
+We’ve disabled the release variant.
+
+-------------
+Bump version to 4.7.0-SNAPSHOT
+
+-------------
+Add POM dependencies explicitly.
+
+Fixes #2863.
+
+-------------
+Bump version to 4.6.1
+
+-------------
+Update readme to 4.6.1
+
+-------------
+Fix param mistake (#2873)
+
+-------------
+Update SimpleTarget javadoc to match v4 API.
+
+-------------
+Add javadoc for RequestOptions.apply/RequestBuilder.apply.
+
+Related to #2858.
+
+-------------
+Add support for Uri data uris.
+
+Previously we only supported data uris if they were provided as Strings.
+
+Fixes #556.
+
+-------------
+Make GlideBuilder.build package private.
+
+It shouldn’t have been made visible and can’t
+safely be used directly outside of the library.
+
+Fixes #2885
+
+-------------
+Handle notifications in MultiFetcher after cancellation.
+
+We can’t guarantee that every fetcher implementation will strictly avoid
+notifying after they’ve been cancelled.
+
+This also improves the behavior in VolleyStreamFetcher so that it attempts to avoid notifying after cancel, although it still doesn’t make
+any strict guarantee.
+
+Fixes #2879
+
+-------------
+Re-enable -Werror for java compilation.
+
+Related to #2886.
+
+-------------
+Fix a deprecation warning in DataUriTest.
+
+-------------
+gradle 4.5.1
+
+-------------
+deprecate fragments
+
+-------------
+add @deprecated to javadoc and suppress deprecations in code
+
+-------------
+Created by MOE: https://github.com/google/moe
+
+MOE_MIGRATED_REVID=99229725401d5777e059da7b6331134bf73fbcdf
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=185535564

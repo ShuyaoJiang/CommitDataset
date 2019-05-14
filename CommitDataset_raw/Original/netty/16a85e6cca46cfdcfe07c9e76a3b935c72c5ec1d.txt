@@ -1,0 +1,10 @@
+[#2307] Remove synchronized bottleneck in SingleThreadEventExecutor.execute(...)
+
+Motivation:
+Remove the synchronization bottleneck in startThread() which is called by each execute(..) call from outside the EventLoop.
+
+Modifications:
+Replace the synchronized block with the use of AtomicInteger and compareAndSet loops.
+
+Result:
+Less conditions during SingleThreadEventExecutor.execute(...)

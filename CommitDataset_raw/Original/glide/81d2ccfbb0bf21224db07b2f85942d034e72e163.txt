@@ -1,0 +1,9 @@
+Handle cache dirs being null + build version check
+
+Apparently either get cache dir method can return
+null in some circumstances. If one does, try the
+other, if both do, return null. The image manager
+will just not use a disk cache if the cache
+dir is null. Environment.
+isExternalStorageRemovable is api 9+ and we 
+support 8, so add a check before using it.

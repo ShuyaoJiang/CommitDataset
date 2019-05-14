@@ -1,0 +1,13 @@
+Flush task should not flush messages that were written since last flush attempt.
+
+Motivation:
+
+The flush task is currently using flush() which will have the affect of have the flush traverse the whole ChannelPipeline and also flush messages that were written since we gave up flushing. This is not really correct as we should only continue to flush messages that were flushed at the point in time when the flush task was submitted for execution if the user not explicit call flush() by him/herself.
+
+Modification:
+
+Call *Unsafe.flush0() via the flush task which will only continue flushing messages that were marked as flushed before.
+
+Result:
+
+More correct behaviour when the flush task is used.

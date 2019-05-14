@@ -1,0 +1,23 @@
+Verify signatures on official plugins (#30800)
+
+We sign our official plugins yet this is not well-advertised and not at
+all consumed during plugin installation. For plugins that are installed
+over the intertubes, verifying that the downloaded artifact is signed by
+our signing key would establish both integrity and validity of the
+downloaded artifact. The chain of trust here is simple: our installable
+artifacts (archive and package distributions) so that if a user trusts
+our packages via their signatures, and our plugin installer (which would
+be executing trusted code) verifies the downloaded plugin, then the user
+can trust the downloaded plugin too. This commit adds verification of
+official plugins downloaded during installation. We do not add
+verification for offline plugin installs; a user can download our
+signatures and verify the artifacts themselves.
+
+This commit also needs to solve a few interesting challenges. One of
+these is that we want the bouncy castle JARs on the classpath only for
+the plugin installer, but not for the runtime
+Elasticsearch. Additionally, we want these JARs to not be present for
+the JAR hell checks. To address this, we shift these JARs into a
+sub-directory of lib (lib/tools/plugin-cli) that is only loaded for the
+plugin installer, and in the plugin installer we filter any JARs in this
+directory from the JAR hell check.

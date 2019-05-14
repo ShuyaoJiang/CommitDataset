@@ -1,0 +1,14 @@
+Fix length calculation in AsciiString.indexOf(...) and so eliminate ArrayIndexOutOfBoundsException. (#8116)
+
+Motivation:
+
+We incorrectly calculated the length that was used for our for loop in AsciiString.indexOf(...). This lead to a possible ArrayIndexOutOfBoundsException.
+
+Modifications:
+
+- Not include the start in the length calculation
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8112.

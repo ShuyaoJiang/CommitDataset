@@ -1,0 +1,18 @@
+[ML] Add random offset to the maintenance task execution time (elastic/x-pack-elasticsearch#2483)
+
+Currently the maintenance task is executed at 30 minutes past
+midnight of each day. In the scenario where multiple clusters
+are running on the same hardware infrastructure they all will
+be running at the same time, competing for resources.
+
+This commit changes this by adding a random offset to the
+execution time which ranges from 0 to 119 minutes. The
+minute granularity means that different offsets give at
+least 1 minute for the maintenance task to end. Moreover,
+the 2 hour window gives enough slots for different offsets
+to occur and remains within what most people would think
+as "middle of the night".
+
+relates elastic/x-pack-elasticsearch#2273
+
+Original commit: elastic/x-pack-elasticsearch@b538923aca6f119ac4f8b1b9602eea02ef4c3aa3

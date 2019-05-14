@@ -1,0 +1,5 @@
+Add check when trying to reroute a shard to a non-data discovery node (#28886)
+
+While trying to reroute a shard to or from a non-data node (a node with ``node.data=false``), I encountered a null pointer exception. Though an exception is to be expected, the NPE was occurring because ``allocation.routingNodes()`` would not contain any non-data nodes, so when you attempt to do ``allocation.routingNodes.node(non-data-node)`` it would not find it, and thus error. This occurred regardless of whether I was rerouting to or from a non-data node.
+
+This PR adds a check (as well as a test for these use cases) to return a legible, useful exception if the discovery node you are rerouting to or from is not a data node.

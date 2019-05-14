@@ -1,0 +1,10 @@
+Modify the way MockWebServer selects a host IP to bind to
+
+On Android getByName(null) returns the first of
+[IPv6 loopback, IPv4 loopback], binding the server to ::1.
+The IPv6 loopback address returns "localhost". "localhost"
+does not resolve to the IPv6 address.
+
+Instead: explicitly select "localhost" ensuring
+MockWebServer binds to an IP that can be looked up by name
+and should also be a loopback address.

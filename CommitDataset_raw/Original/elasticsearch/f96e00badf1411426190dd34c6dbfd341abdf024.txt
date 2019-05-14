@@ -1,0 +1,10 @@
+Add primary term to translog header (#29227)
+
+This change adds the current primary term to the header of the current
+translog file. Having a term in a translog header is a prerequisite step
+that allows us to trim translog operations given the max valid seq# for
+that term.
+
+This commit also updates tests to conform the primary term invariant 
+which guarantees that all translog operations in a translog file have
+its terms at most the term stored in the translog header.

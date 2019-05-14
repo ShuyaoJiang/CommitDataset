@@ -1,0 +1,6 @@
+Zen2: Turn to follower on follower check when no state accepted yet from new leader (#37003)
+
+Improves on #36449 which did not cover the situation where a node had bumped its term during
+the election, and not when receiving the first follower check. This was uncovered while refactoring
+NodeJoinTests so that they don't need to access to an internal field of Coordinator anymore (which
+can now be made private).

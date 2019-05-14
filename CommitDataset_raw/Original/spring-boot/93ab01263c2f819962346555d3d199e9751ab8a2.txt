@@ -1,0 +1,16 @@
+Change the ownership of the pid folder when using a sub-folder
+
+This is an alternative to the fix made in 3b52909 which removed the
+chown call entirely.
+
+Prior to 3b52909, the ownership of $PID_FOLDER was always changed even
+when its value was /var/run. This was problematic as it could prevent
+other services from creating their pid folder or file.
+
+When a sub-folder is used, changing its ownership so that it’s owned by
+the user that will run the app is desirable as it limits access to the
+folder. Rather than removing the chown call entirely, this commit
+ensures that it only happens when a sub-folder is being used to hold the
+pid file.
+
+Closes gh-6532

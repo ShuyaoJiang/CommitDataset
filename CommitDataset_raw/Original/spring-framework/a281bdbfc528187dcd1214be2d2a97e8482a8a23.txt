@@ -1,0 +1,77 @@
+Introduce context bootstrap strategy in the TCF
+
+Work done in conjunction with SPR-5243 and SPR-4588 introduced physical
+package cycles in the spring-test module. The work performed in
+conjunction with SPR-9924 uses reflection to resolve these physical
+package cycles; however, prior to this commit the logical package
+cycles still remain.
+
+Furthermore, over time it has become apparent that the Spring
+TestContext Framework (TCF) could better serve application developers
+and especially third-party framework developers by providing a more
+flexible mechanism for "bootstrapping" the TCF. For example, prior to
+this commit, default TestExecutionListeners could only be registered by
+subclassing TestContextManager (and SpringJUnit4ClassRunner if using
+JUnit). Similarly, the default ContextLoader could only be set by
+subclassing SpringJUnit4ClassRunner for JUnit and by copying and
+modifying AbstractTestNGSpringContextTests for TestNG.
+
+This commit addresses the aforementioned issues by introducing a
+bootstrap strategy in the TestContext framework that is responsible for
+determining default TestExecutionListeners and the default
+ContextLoader in an extensible fashion. The new TestContextBootstrapper
+SPI also provides a mechanism for supporting various types of
+MergedContextConfiguration depending on the feature set of the context
+loaders supported by the strategy.
+
+The following provides an overview of the most significant changes in
+this commit.
+
+ - Introduced TestContextBootstrapper strategy SPI, BootstrapContext,
+   and @BootstrapWith.
+
+ - Introduced AbstractTestContextBootstrapper,
+   DefaultTestContextBootstrapper, and WebTestContextBootstrapper
+   implementations of the TestContextBootstrapper SPI and extracted
+   related reflection code from ContextLoaderUtils & TestContextManager.
+
+ - Introduced BootstrapUtils for retrieving the TestContextBootstrapper
+   from @BootstrapWith, falling back to a default if @BootstrapWith is
+   not present.
+
+ - @WebAppConfiguration is now annotated with
+   @BootstrapWith(WebTestContextBootstrapper.class).
+
+ - CacheAwareContextLoaderDelegate is now an interface with a new
+   DefaultCacheAwareContextLoaderDelegate implementation class.
+
+ - Introduced closeContext(MergedContextConfiguration, HierarchyMode) in
+   CacheAwareContextLoaderDelegate.
+
+ - DefaultTestContext now uses CacheAwareContextLoaderDelegate instead
+   of interacting directly with the ContextCache.
+
+ - DefaultTestContext now delegates to a TestContextBootstrapper for
+   building the MergedContextConfiguration.
+
+ - TestContextManager now delegates to TestContextBootstrapper for
+   retrieving TestExecutionListeners.
+
+ - Deleted TestContextManager(Class, String) constructor and
+   SpringJUnit4ClassRunner.getDefaultContextLoaderClassName(Class)
+   method since default ContextLoader support is now implemented by
+   TestContextBootstrappers.
+
+ - Extracted ActiveProfilesUtils from ContextLoaderUtils.
+
+ - Extracted ApplicationContextInitializerUtils from ContextLoaderUtils.
+
+ - MetaAnnotationUtils is now a public utility class in the test.util
+   package.
+
+ - Removed restriction in @ActiveProfiles that a custom resolver cannot
+   be used with the 'value' or 'profiles' attributes.
+
+ - Introduced DefaultActiveProfilesResolver.
+
+Issue: SPR-9955

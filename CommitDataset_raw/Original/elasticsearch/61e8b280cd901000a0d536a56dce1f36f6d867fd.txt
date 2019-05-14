@@ -1,0 +1,6 @@
+Remove timeout task after completing cluster state publication (#40411)
+
+Each cluster state publication schedules a cancellation task with the provided publication timeout
+(30s by default). This scheduled cancellation keeps a reference to the publication, and therefore the
+full cluster state that was published. In case of frequently updating a large cluster state, this results
+in a large number of cancellation tasks keeping references to all previously published cluster states.

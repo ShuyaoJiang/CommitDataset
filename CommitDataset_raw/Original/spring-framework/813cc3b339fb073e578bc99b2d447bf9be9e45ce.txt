@@ -1,0 +1,12 @@
+Fix compilation of SpEL Indexer nodes involving map references
+
+There is special handling for SpEL expressions involving a map
+and an unquoted string literal key (e.g. mymap[key1]). SpEL does
+not require key1 to be quoted. This special handling which is done
+in Indexer getValueRef() was not being also done in the Indexer
+generateCode() method that compiles the expression. Also fixed
+a problem where the key was not being compiled in a new
+sub scope. Without the new scope the key expression was failing
+to reload the relevant context object when it needed it.
+
+Issue: SPR-12045

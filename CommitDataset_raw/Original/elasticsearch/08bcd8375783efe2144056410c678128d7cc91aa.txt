@@ -1,0 +1,30 @@
+[ML] Reduce persistent tasks periodic reassignment interval in ... (#36845)
+
+... MlDistributedFailureIT.testLoseDedicatedMasterNode.
+
+An intermittent failure has been observed in
+`MlDistributedFailureIT. testLoseDedicatedMasterNode`.
+The test launches a cluster comprised by a dedicated master node
+and a data and ML node. It creates a job and datafeed and starts them.
+It then shuts down and restarts the master node. Finally, the test asserts
+that the two tasks have been reassigned within 10s.
+
+The intermittent failure is due to the assertions that the tasks have been
+reassigned failing. Investigating the failure revealed that the `assertBusy`
+that performs that assertion times out. Furthermore, it appears that the
+job task is not reassigned because the memory tracking info is stale.
+
+Memory tracking info is refreshed asynchronously when a job is attempted
+to be reassigned. Tasks are attempted to be reassigned either due to a relevant
+cluster state change or periodically. The periodic interval is controlled by a cluster
+setting called `cluster.persistent_tasks.allocation.recheck_interval` and defaults to 30s.
+
+What seems to be happening in this test is that if all cluster state changes after the
+master node is restarted come through before the async memory info refresh completes,
+then the job might take up to 30s until it is attempted to reassigned. Thus the `assertBusy`
+times out.
+
+This commit changes the test to reduce the periodic check that reassigns persistent
+tasks to `200ms`. If the above theory is correct, this should eradicate those failures.
+
+Closes #36760

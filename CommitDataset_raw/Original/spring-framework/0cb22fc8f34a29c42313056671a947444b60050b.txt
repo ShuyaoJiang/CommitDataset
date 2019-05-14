@@ -1,0 +1,15 @@
+Use SoftReferences for context caching in the TCF
+
+Prior to this commit, the ContextCache in the Spring TestContext
+Framework (TCF) cached ApplicationContexts in a ConcurrentHashMap using
+strong references. This practice can occasionally lead to
+OutOfMemoryErrors when running a large number of tests in a test suite
+with varying context configuration since the context cache becomes
+overpopulated over time.
+
+This commit addresses this issue by using Spring's
+ConcurrentReferenceHashMap which uses SoftReferences for both the keys
+(i.e., MergedContextConfiguration instances) and values (i.e.,
+ApplicationContexts) stored in the map that backs the ContextCache.
+
+Issue: SPR-7687

@@ -1,0 +1,14 @@
+Make configuration properties binding always uses current environment
+
+Previously, configuration properties binding would only see changes to
+the environment if there was no PropertySourcesPlaceholderConfigurer
+in the context. This happened because
+PropertySourcesPlaceholderConfigurer wrapped the Environment in a
+PropertySource, effectively hiding it from the change tracking
+performed by SpringConfigurationPropertySources.
+
+This commit updates ConfigurationPropertiesBindingPostProcessor so
+that it ignores the environment property source contained by
+PropertySourcesPlaceholderConfigurer and uses a composite of
+the PropertySourcesPlaceholderConfigurer's other property sources and
+the Environment's PropertySources instead.

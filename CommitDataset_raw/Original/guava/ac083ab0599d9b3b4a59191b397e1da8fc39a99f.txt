@@ -1,0 +1,8 @@
+Removes @WeakOuter from AggregateFuture.RunningState and subclasses. The weak
+outer reference causes a dangling pointer if the RunningState outlives its
+Future. Furthermore, the @WeakOuter wasn't necessary to maintain leak-free
+behavior because AggregateFuture nulls it's runningState reference in
+afterDone().
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=115226151

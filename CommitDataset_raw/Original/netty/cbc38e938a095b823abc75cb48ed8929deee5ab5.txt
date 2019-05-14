@@ -1,0 +1,11 @@
+UNSAFE.throwException null arg crashes JVM
+
+Motivation:
+It has been observed that passing a null argument to Unsafe.throwException can crash the JVM.
+
+Modifications:
+- PlatformUnsafe0.throwException should honor http://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-14.18 and throw a NPE
+
+Result:
+No risk of JVM crashing for null argument.
+Fixes https://github.com/netty/netty/issues/4131

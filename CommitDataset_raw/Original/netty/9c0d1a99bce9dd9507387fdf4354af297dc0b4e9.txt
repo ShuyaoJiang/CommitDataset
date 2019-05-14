@@ -1,0 +1,13 @@
+Ensure attributes and contained object can be collected as fast as possible.
+
+Motivation:
+
+Due an implementation flaw in DefaultAttributeMap it was possible that an attribute and its stored value/key could not be collected until the DefaultAttributeMap could be collected. This can lead to unexpected memory usage and strong reachability of objects that should be collected.
+
+Modifications:
+
+Use an special empty DefaultAttribute as head of the each bucket which will not store any key / value. With this change everything can be collected as expected as we not use any DefaultAttribute created by the user as head of a bucket.
+
+Result:
+
+DefaultAttributeMap does not store user data and thus the lifetime of this user data is not tied to the lifetime of the DefaultAttributeMap.

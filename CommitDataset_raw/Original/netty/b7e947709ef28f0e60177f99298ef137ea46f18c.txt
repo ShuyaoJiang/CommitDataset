@@ -1,0 +1,13 @@
+[#4357] Fix possible assert error in GlobalEventExecutor
+
+Motivation:
+
+We started the thread before store it in a field which could lead to an assert error when the thread is executed before we actually store it.
+
+Modifications:
+
+Store thread before start it.
+
+Result:
+
+No more assert error possible.

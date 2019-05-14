@@ -1,0 +1,14 @@
+Refine 'No log4j2 configuration file found' hiding
+
+Refine commit 1e9e1b04d0 since it unfortunately had the side-effect of
+disabling logging when a valid `log4j2.xml` file was found.
+
+The updated code uses a similar technique but instead of accepting
+'*' as a file type it now looks for `.springboot` (which it finds
+because we ship a `log4j2.springboot` file in out JAR.
+
+Rather than exiting Log4J2's `ConfigurationFactory.Factory`
+`getConfiguration` method early, our `SpringBootConfigurationFactory`
+is now only triggered on the last call to `getConfiguration`.
+
+Closes gh-4809

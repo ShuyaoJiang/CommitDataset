@@ -1,0 +1,14 @@
+Add backslash escape support to containsSqlScriptDelimiters
+
+Prior to this commit, ScriptUtils supported MySQL-style escapes ('\\')
+when splitting a script into statements; however, MySQL-style escapes
+were not supported when determining if a given script contained a
+specified statement delimiter. This caused executeSqlScript() to
+erroneously fallback to a newline as the statement separator in such
+cases.
+
+This commit fixes this issue by implementing the same check for
+MySQL-style escapes in containsSqlScriptDelimiters() that was already
+present in splitSqlScript().
+
+Issue: SPR-17120

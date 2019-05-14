@@ -1,0 +1,6 @@
+Key off of the safe key in writeLock in DiskLruCacheWrapper.
+
+The Key we’re given may have a different implementation for equals and hashCode than it does for updateDiskCacheKey. As a result, two different
+Key objects that are not equal to each other may produce the same
+disk cache key. To avoid simultaneous puts for the same disk cache key
+we need to lock on the disk cache key, not the original key object.

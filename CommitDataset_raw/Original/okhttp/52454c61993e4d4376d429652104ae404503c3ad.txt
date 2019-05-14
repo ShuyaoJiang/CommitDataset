@@ -1,0 +1,14 @@
+Refactoring: Make RouteSelector independent of Connection
+
+Ultimate goal: to improve the TLS fallback behavior so that
+socket connections will not be created if the necessary
+TLS protocols will not be supported.
+
+To achieve this RouteSelector will be moved into Connection
+and so that it can be passed the Socket or protocol information
+during the route selection process.
+
+This is a small first step: Make RouteSelector independent
+of Connection so that it can later be moved inside of
+Connection. It puts the RouteSelector interface in terms
+of Routes, which seems logical.

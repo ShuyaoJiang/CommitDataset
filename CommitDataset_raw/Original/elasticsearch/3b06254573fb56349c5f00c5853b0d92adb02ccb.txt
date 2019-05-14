@@ -1,0 +1,21 @@
+Set processors on audit remote client
+
+When creating a transport client for a remote index audit trail, we are
+implicitly allowing the construction of this transport client to
+initialize the number of processors that Netty thinks are on the
+system. Since we never pushed down the number of processors, this will
+always default to the number of cores on the machine. If the user has
+also set the processors setting, when the server bootstraps it will try
+to push the number of processors down to Netty too. If this value does
+not match the number of cores, we will fail in bootstrap because we
+guard against initializing the number of processors that Netty sees to
+different values. Instead, the transport client should inherit the
+number of processors too and push this down when it pushes the number of
+processors down to Netty. We have to worry about another possibility: an
+explicit setting for the number of processors for the transport client
+so we require this matches the inherited value.
+
+Relates elastic/x-pack-elasticsearch#3469
+
+
+Original commit: elastic/x-pack-elasticsearch@032810bb0b9a195acf08bb4f9cf6d93a1400797d

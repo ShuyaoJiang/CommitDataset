@@ -1,0 +1,9 @@
+Avoid making too many multiplications in transformer
+
+Each value takes 3 multiplications (3 matrices), when each Matrix is actually 9 values.
+Now for one value, multiplying 3 time with the matrix (X *= M1, X *= M2, X *= M3)
+When you take 10 values - it's 30 multiplications (and X9)
+
+The new approach pre-multiplies the 3 matrices into 1. So:
+First value is multiplied by the matrix, meaning 3 multiplications for the first value (M1 * M2 * M3 * X)
+But for 10 values, we have 12 multiplications (M = M1 * M2 * M3, M * X1, M * X2, M * X3 ... M * X10)

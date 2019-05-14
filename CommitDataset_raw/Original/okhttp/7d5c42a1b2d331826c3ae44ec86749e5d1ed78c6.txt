@@ -1,0 +1,16 @@
+Fixes the do not follow redirects bug
+
+The HttpEngine would not obey the set state because there was no
+correlation between the HttpURLConnection.setInstanceFollowRedirects
+method and the OkHttpClient.
+
+Fixed the missing link by adding a new setFollowRedirects method to the
+OkHttpClient class.  Bridged the gap for the HttpURLConnection.setInstanceFollowRedirects
+by forwarding that state into the OkHttpClient.
+
+Now the HttpEngine will always obey the OkHttpClient redirect state when
+attempting the followUp phase.
+
+Added necessary test to both OkUrlFactoryTest and CallTest.
+
+https://github.com/square/okhttp/issues/943

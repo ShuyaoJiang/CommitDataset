@@ -1,0 +1,22 @@
+Log the shaded form of native workdir system property (#8867)
+
+Motivation:
+
+When users' /tmp is noexec, NativeLibraryLoader logs a message informing
+them how to fix the problem by setting a system property. However, if
+Netty has been shaded that message will tell them to set the un-shaded
+system property name, which won't work.
+
+Modifications:
+
+Change the code to let shading tools rename the native.workdir property
+name reference within user-visible log messages.
+
+Notably, debug logs were _not_ changed, as there's many debug statements
+including a variety of property names. Fixing them would be a much more
+invasive change and have limited benefit.
+
+Result:
+
+The users will see the correctly-named system property to set if they
+are using a noexec /tmp.

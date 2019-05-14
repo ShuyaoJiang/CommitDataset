@@ -1,0 +1,20 @@
+Add support for RFC7413 on linux for server sockets
+
+Motivation:
+
+TCP Fast Open allows data to be carried in the SYN and SYN-ACK packets and consumed by the receiving end during the initial connection handshake, and saves up to one full round-trip time (RTT) compared to the standard TCP, which requires a three-way handshake (3WHS) to complete before data can be exchanged. This commit enables support for TFO on server sockets.
+
+Modifications:
+
+Added new Integer Option TCP_FASTOPEN in EpollChannelOption.
+Added getters/setters in EpollServerChannelConfig for TCP_FASTOPEN.
+Added way to check if TCP_FASTOPEN is supported on server in Native.
+Added setting on socket opt TCP_FASTOPEN if value is set on channel options in doBind in EpollServerSocketChannel.
+Enhanced EpollSocketTestPermutation to contain a permutation for server socket containing fast open.
+
+Result:
+
+Users of native-epoll can set TCP_FASTOPEN on server sockets and thus leverage fast connect features of RFC7413 if client is capable of it.
+
+Conflicts:
+	transport-native-epoll/src/main/java/io/netty/channel/epoll/EpollChannelOption.java

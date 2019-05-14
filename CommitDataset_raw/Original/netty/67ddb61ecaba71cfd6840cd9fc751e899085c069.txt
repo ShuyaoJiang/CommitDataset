@@ -1,0 +1,10 @@
+ByteBufUtilTest test failure
+
+Motivation:
+ByteBufUtilTest.notEqualsBufferSubsections is testing non-equality but just uses random numbers to assume they will not be equal. Even after the random bytes are generated we should check they are infact not equal so the test has no chance of failing when it should not.
+
+Modifications:
+- Loop through bytes in notEqualsBufferSubsections after they are randomly generated to ensure there is atleast 1 difference.
+
+Result:
+More reliable unit tests.

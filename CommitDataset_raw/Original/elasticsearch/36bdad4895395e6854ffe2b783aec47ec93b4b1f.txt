@@ -1,0 +1,7 @@
+Use IndexWriter.getFlushingBytes() rather than tracking it ourselves (#33582)
+
+Currently we keep track of how many bytes are currently being written to disk
+in an AtomicLong within InternalEngine, updating it on refresh. The IndexWriter
+has its own accounting for this, and exposes it via a getFlushingBytes method
+in the latest lucene 8 snapshot. This commit removes the InternalEngine tracking
+in favour of just using the IndexWriter method.

@@ -1,0 +1,7 @@
+Improve diagnostics for in StarterDependenciesIntegrationTests
+
+The root cause of the build failure something has a null message which
+means there's no information available about why the build failed.
+Instead of calling fail when a BuildException occurs, this commit
+wraps it in a RuntimeException and rethrows it. This should make the
+entire chain of exceptions available when a failure occurs.

@@ -1,0 +1,11 @@
+Ported the HTTP snoop example to the new API
+
+- Replaced pipeline factories with initializers
+- Ported essential parts related with HTTP to the new API
+- Replaced ChannelHandlerAdapter.combine() with CombinedChannelHandler
+- Fixed a bug where ReplayingDecoder does not notify the next handler
+- Fixed a bug where ReplayingDecoder calls wrong callDecode() method
+- Added a destination buffer as an argument to AbstractChannel.doRead()
+  for easier implementation
+- Fixed a bug where NioSocketChannel did not try to increase the inbound
+  buffer size (moved the logic to AbstractChannel)

@@ -1,0 +1,12 @@
+2.x: operators cast and concat tests
+
+The concat reuses the same inner subscriber to save on its allocation
+cost which works only if the inner source conforms with the spec and
+doesn't emit any event after an onComplete(). There is a test that
+explicitly calls onComplete() twice to test the resilience of concat.
+The current workaround makes this test pass but any async non-conforming
+source may still bug out the operator. 
+
+This is a tradeoff between safety and performance. If we'd expect such
+non-conforming behavior, the current optimization has to be turned into
+a regular individually allocated inner subscribers.

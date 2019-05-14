@@ -1,0 +1,10 @@
+MockMvc HtmlUnit support shares CookieManager
+
+Previously MockMvc builders failed to share the WebConnection used for
+managing cookies in the MockMvcWebConnection. This meant that the various
+CookieManagers would have different states.
+
+This commit ensures that the WebConnection is set on the
+MockMvcWebConnection.
+
+Fixes SPR-14066

@@ -1,0 +1,12 @@
+Push down the implementation of createValues() into the subclasses of ImmutableMap.
+
+The only implementations of ImmutableMap that actually use the ImmutableMapValues class are the handful of views like DenseImmutableTable.rowMap().  Pushing down the implementation of createValues() allows us to avoid getting ImmutableMapValues or its dependencies for users just using ImmutableMap directly.
+
+Effects on ImmutableMapProGuard ([]
+30202 bytes => 27737 bytes
+26 classes => 23 classes
+180 methods => 167 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147515235

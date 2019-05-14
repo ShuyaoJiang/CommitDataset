@@ -1,0 +1,25 @@
+Polish "Support flash attrs..." and related classes
+
+ - Eliminate trailing whitespace
+
+ - Update long method signatures to follow framework whitespace
+   conventions
+
+   Based on the following search,
+
+       $ git grep -A3 '^.public .* .*([^\{;]*$' */src/main
+
+   the strong convention throughout the framework when dealing with
+   methods having long signatures (i.e. many parameters) is to break
+   immediately after the opening paren, indent two tabs deeper and break
+   lines around 90 characters as necessary. Such signatures should also
+   be followed by a newline after the opening curly brace to break
+   things up visually.
+
+   The files edited in this commit had a particularly different style of
+   intenting arguments to align with each other vertically, but the
+   alignment only worked if one's tabstop is set at four spaces.
+   When viewed at a different tabstop value, the effect is is jarring,
+   both in that it is misaligned and significantly different from most
+   of the framework. The convention described above reads well at any
+   tabstop value.

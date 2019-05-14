@@ -1,0 +1,14 @@
+Watcher: Remove index template configuration via cluster settings (elastic/x-pack-elasticsearch#1680)
+
+Watcher had an undocumented feature to configure the settings of any
+index template via updating the cluster settings. Instead of changing
+the template one could add a setting during runtime that overwrote
+what is written in the index template.
+
+As index template are created once and not overwritten, users should
+just change the index template - or the concrete index settings like
+number of replicas.
+
+This feature was not exposed in our documentation at all.
+
+Original commit: elastic/x-pack-elasticsearch@32e1769925d14a91d767d8d00ba4b3be19457d9b

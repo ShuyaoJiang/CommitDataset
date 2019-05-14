@@ -1,0 +1,13 @@
+Refine BeanPostProcessorChecker condition
+
+Previously, adding `@EnableAsync` on a blank application would lead to an
+info message stating that `ProxyAsyncConfiguration` is not eligible for
+getting processed by all BeanPostProcessors. Concretely, this is ok as
+such internal configuration is not meant to be a target of such post
+processing.
+
+Revisit the condition for non infrastructure bean only. Add the
+infrastructure role to a set of internal configuration, including the
+`ProxyAsyncConfiguration`.
+
+Issue: SPR-12761

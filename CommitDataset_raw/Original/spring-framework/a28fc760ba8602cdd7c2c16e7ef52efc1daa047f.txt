@@ -1,0 +1,15 @@
+Fix SpEL compilation of static method/property/field operations
+
+Before this change the compilation of a method reference or property/field
+access was not properly cleaning up the stack if compilation meant
+calling a static method or accessing a static field. In these cases there
+is no need for a target object on the stack and it should be removed if
+present. For a simple expression it is harmless since the end result of
+the expression is the thing on the top of the stack, but for nested
+expressions if the inner expression suffered this issue, the outer
+expression can find itself operating on the wrong element.
+
+The particular issue covered the case of a static field access but this
+fix (and associated tests) cover static method, property and field access.
+
+Issue: SPR-13781

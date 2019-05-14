@@ -1,0 +1,8 @@
+Protect against 'has not been resolved to a Class'
+
+Update AbstractAutowireCapableBeanFactory.getTypeForFactoryBean to
+check AbstractBeanDefinition.hasBeanClass() before calling
+getBeanClass(). The protects against a 'Bean class name [<name>] has
+not been resolved into an actual Class' IllegalStateException.
+
+Issue: SPR-10304

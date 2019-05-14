@@ -1,0 +1,9 @@
+Separate from expectations from response creation
+
+This commit separates the creation of a response so that it is executed
+after the synchronized block inside which requests need to be matched
+and validated (for order and count).
+
+This allows a ResponseCreator to be slow or block if it has to.
+
+Issue: SPR-16319

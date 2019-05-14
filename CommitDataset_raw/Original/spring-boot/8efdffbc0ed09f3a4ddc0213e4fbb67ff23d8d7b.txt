@@ -1,0 +1,14 @@
+Smarter output detection for generated projects
+
+Previously, specifying a simple target name for a regular project would
+store the (zip) archive in a file matching the target name. Only adding a
+slash at the end of the name allows to extract it as a directory. It
+turns out that such convention is not easy to catch and if a simple name
+is provided on the command-line, the user probably wants to create a
+directory with such a name with the content of the project.
+
+Note that if a build file is required and the name does not have any
+extension, we still store a file with the required name as auto-detecting
+the extension to use is not that easy.
+
+Fixes gh-2056

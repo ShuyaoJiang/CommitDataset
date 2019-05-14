@@ -1,0 +1,13 @@
+Fix a bug in DefaultPromise.notifyLateListener() where the listener is not notified
+
+Motivation:
+
+When (listeners == null && lateListeners == null) and (stackDepth >= MAX_LISTENER_STACK_DEPTH), the listener is not notified at all. The discard client does not work.
+
+Modification:
+
+Make sure to submit the notification task.
+
+Result:
+
+The discard client works again and all listeners are notified.

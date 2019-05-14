@@ -1,0 +1,21 @@
+Preserve dependencies when uninstalling from the CLI
+
+Previously, the CLI did not keep track of a dependency's users. This
+meant that installing two extensions with a common dependency and
+then unistalling one extension would break the other extension as the
+common dependency would be deleted:
+
+ 1. Install a that depends on c
+ 2. Install b that depends on c
+ 3. Uninstall b
+ 4. a is now broken as c has been deleted
+
+This commit updates the CLI to maintain a count for each artifact
+that's installed into /lib. An artifact is now only deleted when the
+count reaches zero.
+
+As part of this change the code has been
+extensively refactored to bring the structure into line with other CLI
+commands and to improve testability.
+
+Closes gh-1410

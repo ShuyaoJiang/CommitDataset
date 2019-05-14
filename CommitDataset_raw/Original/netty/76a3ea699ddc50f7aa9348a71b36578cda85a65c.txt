@@ -1,0 +1,16 @@
+[#5629] Ensure direct ByteBuffer are wrapped in as direct ByteBuf.
+
+Motivation:
+
+We need to check if a ByteBuffer is direct via isDirect() to detect if its direct as hasArray() may also return true for a direct ByteBuffer.
+
+See also:
+https://docs.oracle.com/javase/8/docs/api/java/nio/ByteBuffer.html#allocateDirect-int-
+
+Modifications:
+
+Add isDirect() check.
+
+Result:
+
+Correct wrap a direct ByteBuffer in all cases.

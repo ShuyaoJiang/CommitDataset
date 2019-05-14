@@ -1,0 +1,10 @@
+TEST: Access cluster state directly in assertSeqNos (#33277)
+
+Some AbstractDisruptionTestCase tests start failing since we enabled
+assertSeqNos (in #33130). They fail because the assertSeqNos assertion
+queries cluster stats while the cluster is disrupted or not formed yet.
+
+This commit switches to use the cluster state and shard stats directly
+from the test cluster.
+
+Closes #33251

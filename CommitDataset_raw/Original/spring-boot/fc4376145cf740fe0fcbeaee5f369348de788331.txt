@@ -1,0 +1,14 @@
+Process CompositePropertySources before EnumerablePropertySources
+
+PropertySourcePropertyValues tries to process a PropertySource first
+as an EnumerablePropertySource and then as a CompositePropertySource.
+In Spring 4.1.2 CompositePropertySource was updated to extend
+EnumerablePropertySource. This change meant that a
+CompositePropertySource would always be processed as an
+EnumerablePropertySource.
+
+This commit updates PropertySourcePropertyValues to process a
+PropertySource as a CompositePropertySource first and to then try it
+is an EnumerablePropertySource.
+
+Fixes gh-2608

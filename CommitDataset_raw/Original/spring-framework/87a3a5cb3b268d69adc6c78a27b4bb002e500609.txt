@@ -1,0 +1,17 @@
+Introduce ContextCustomizer API in the TestContext Framework
+
+Allow third-parties to contribute ContextCustomizers that can customize
+ApplicationContexts created by the Spring TestContext Framework (TCF)
+before they are refreshed.
+
+A customizer may be provided via a ContextCustomizerFactory which is
+registered with `spring.factories`. Each factory is consulted whenever
+a new ApplicationContext needs to be created by the TCF. Factories may
+inspect various details about the test and either return a new
+ContextCustomizer or null.
+
+ContextCustomizers are similar to ApplicationContextInitializers and
+may perform any number of tasks, including bean registration, setting
+of active profiles, etc.
+
+Issue: SPR-13998

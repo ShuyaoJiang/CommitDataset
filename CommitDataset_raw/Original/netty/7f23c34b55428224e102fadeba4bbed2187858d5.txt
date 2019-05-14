@@ -1,0 +1,21 @@
+ReadOnlyHttp2Headers.contains always ignores case for values
+
+Motivation:
+
+When checking if a value is present, ReadOnlyHttp2Headers always ignores
+case for values.
+
+RFC 7540 says: https://tools.ietf.org/html/rfc7540#section-8.1.2
+"header field names are strings of ASCII characters that are compared in a case-insensitive fashion"
+
+But there is no such constraint on header values
+
+Modifications:
+
+Updated ReadOnlyHttp2Headers.contains to compare header value in a
+case-sensitive way.
+
+Result:
+
+ReadOnlyHttp2Headers compares header names in a case-insensitive way,
+values in a case-sensitive way.

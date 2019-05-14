@@ -1,0 +1,3 @@
+Replace group map settings with affix setting (#26819)
+
+We use group settings historically instead of using a prefix setting which is more restrictive and type safe. The majority of the usecases needs to access a key, value map based on the _leave node_ of the setting ie. the setting `index.tag.*` might be used to tag an index with `index.tag.test=42` and `index.tag.staging=12` which then would be turned into a `{"test": 42, "staging": 12}` map. The group settings would always use `Settings#getAsMap` which is loosing type information and uses internal representation of the settings. Using prefix settings allows now to access such a method type-safe and natively.

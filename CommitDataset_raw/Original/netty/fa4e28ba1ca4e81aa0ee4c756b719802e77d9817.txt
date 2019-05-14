@@ -1,0 +1,25 @@
+Fix random number generators in WebSocketUtil
+
+Motivation:
+
+Implementation of WebSocketUtil/randomNumber is incorrect and might violate
+the API returning values > maximum specified.
+
+Modifications:
+
+* WebSocketUtil/randomNumber is reimplemented, the idea of the solution described
+  in the comment in the code
+
+* Implementation of WebSocketUtil/randomBytes changed to nextBytes method
+
+* PlatformDependet.threadLocalRandom is used instead of Math.random to improve efficiency
+
+* Added test cases to check random numbers generator
+
+* To ensure corretness, we now assert that min < max when generating random number
+
+Result:
+
+WebSocketUtil/randomNumber always produces correct result.
+
+Covers https://github.com/netty/netty/issues/8023

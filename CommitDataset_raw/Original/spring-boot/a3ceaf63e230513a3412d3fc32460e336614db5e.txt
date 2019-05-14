@@ -1,0 +1,20 @@
+Improve performance of fat jar loading
+
+Tweak 'fat jar' handling to generally improve performance:
+
+- Allow JarURLConnection to throw a static FileNotFoundException when
+  loading classes. This exception is thrown many times when attempting
+  to load a class and is silently swallowed so there is no point in
+  providing the entry name.
+- Expose JarFile.getJarEntryData(AsciiBytes) and store AsciiBytes in
+  the JarURLConnection. Previously AsciiBytes were created, discarded
+  then created again.
+- Use EMPTY_JAR_URL for the JarURLConnection super constructor. The URL
+  is never actually used so we can improve performance by using a
+  constant.
+- Extract JarEntryName for possible caching. The jar entry name
+  extracted from the URL is now contained in an inner JarEntryName
+  class. This could be cached if necessary (although currently it is
+  not because no perceivable performance benefit was observed)
+
+Fixes gh-1119

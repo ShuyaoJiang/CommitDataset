@@ -1,0 +1,16 @@
+Refactor WebTestClient assertions take 3
+
+WebTestClient now defines all the steps from setup to performing
+an exchange and applying expectations.
+
+The order of expectations now ensures the response status and headers
+are verified first since that's available before the body is consumed
+and also because it determines how the body is to be decoded, i.e.
+error vs success scenarios.
+
+There is now a built-in option for verifying the response as a Map
+along with Map-specific assertions.
+
+There are similar options for verifying the response as a List as well
+as whether to "collect" the list or "take" the first N elements from
+the response stream.

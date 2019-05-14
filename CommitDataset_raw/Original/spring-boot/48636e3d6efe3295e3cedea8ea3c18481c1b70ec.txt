@@ -1,0 +1,24 @@
+Add additional grouping of property sources by profile
+
+Before this change the PropertySources loaded from external config
+files were just added to the list for resolution in the order that
+they were loaded. That worked for simple cases, but when there are
+profiles active, and files themselves can activate profiles, it led
+to users not being able to change default settings easily (either
+on command line or in files, mostly in files).
+
+The solution proposed here is to group PropertySources by profile
+and resolve them in order of profile first, and then in order of
+the files being loaded.
+
+There are additional shenanigans because the order of the files
+being loaded also has to be carefully defined. The rule for users
+is that in a list of files to load (e.g. if set via
+spring.config.location), the last one wins (natural if you think of
+it as a merge of multiple maps). In addition, anything specified
+by a user takes precedence over the defaults (which was broken in
+some scenarios before).
+
+Additionally, fixes profile ordering in @ConfigurationProperties(path=...)
+
+Fixes gh-483

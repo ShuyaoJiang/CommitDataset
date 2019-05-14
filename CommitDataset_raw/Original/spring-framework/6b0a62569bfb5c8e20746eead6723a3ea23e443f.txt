@@ -1,0 +1,11 @@
+Fix broken test in MvcNamespaceTests
+
+The testDefaultConfig() method in MvcNamespaceTests creates a new Date()
+in its test fixture but then performs an assertion against a hard coded
+data string of "2013-10-21". This test therefore only passed yesterday,
+on October 21, 2013.
+
+This commit addresses this by changing the hard coded date string to one
+based on the current date.
+
+Issue: SPR-10665, SPR-8826

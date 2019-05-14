@@ -1,0 +1,14 @@
+Separate Jersey WebApplicationInitializer from auto-configuration class
+
+Previously, JerseyAutoConfiguration was a WebApplicationInitializer.
+This was problematic as auto-configuration classes should not be ordered
+(they should use AutoConfigureBefore etc instead) but the web
+application initializer needs to be ordered so that it can run early and
+configure Jersey before it runs.
+
+This commit has moved the WebApplicationInitializer implementation into
+a separate class so that it can be ordered independently of the
+auto-configuration class. Note that the new class must be public for
+the servlet container (Tomcat at least) to be able to instantiate it.
+
+Closes gh-4527

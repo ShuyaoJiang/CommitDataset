@@ -1,0 +1,16 @@
+Set main thread's context class loader when starting Tomcat
+
+When an app is deployed to Tomcat, all of the application's startup
+is performed with a WebAppClassLoader being the thread context
+class loader. When an app is using embedded Tomcat, the
+WebAppClassLoader is created as part of the application starting but
+is never set as the thread context class loader. This difference
+in TCCL can cause problems. For example, it breaks the use of JNDI
+during application startup with embedded Tomcat.
+
+This commit updates the embedded Tomcat servlet container to set
+the TCCL to be the WebAppClassLoader once the Tomcat context has
+been started. Once Tomcat is stopped, it sets the TCCL back to the
+ClassLoader that loaded it.
+
+Closes gh-2308

@@ -1,0 +1,11 @@
+Produce a single library for multiple file dependencies on the same file
+
+Previously, the Gradle plugin’s ProjectLibraries produced a new library
+for every file dependency, even if the dependencies where on the same
+file. This would lead to a repackaging failure due to multiple
+libraries having the same name.
+
+This commit updates ProjectLibraries to treat file dependencies on the
+same file as a single library, thereby resolving the name clash.
+
+Fixes gh-1646

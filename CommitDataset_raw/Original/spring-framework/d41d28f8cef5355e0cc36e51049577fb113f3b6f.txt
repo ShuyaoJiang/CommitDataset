@@ -1,0 +1,12 @@
+Fix compilation of SpEL elvis/ternary expressions
+
+Without this fix the compiled version of elvis
+actual behaved differently to the interpreted version
+if the value being queried was an empty string. This
+is now fixed. It also now correctly handles the
+query value being a primitive and addresses the
+findings of SPR-15192 where some type inferencing
+logic was trying to be too clever, that code has
+been deleted.
+
+Issue: SPR-15192

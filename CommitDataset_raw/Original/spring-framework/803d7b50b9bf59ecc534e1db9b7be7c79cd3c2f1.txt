@@ -1,0 +1,9 @@
+Skip HttpServletResponse.getStatus() on Servlet 2.5
+
+Prior to this commit, ServletWebRequest would call
+HttpServletResponse.getStatus(), which is a Servlet 3.x method.
+
+This commit checks if this method is available before calling it, thus
+keeping Servlet 2.5 compatibility.
+
+Issue: SPR-13396

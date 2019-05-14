@@ -1,0 +1,10 @@
+CompatibleObjectEncoder cached ObjectOutputStream backed by release buffer bug
+
+Motivation:
+ObjectOutputStream uses a Channel Attribute to cache a ObjectOutputStream which is backed by a ByteBuf that may be released after an object is encoded and the underlying buffer is written to the channel. On subsequent encode operations the cached ObjectOutputStream will be invalid and lead to a reference count exception.
+
+Modifications:
+- CompatibleObjectEncoder should not cache a ObjectOutputStream.
+
+Result:
+CompatibleObjectEncoder doesn't use a cached object backed by a released ByteBuf.

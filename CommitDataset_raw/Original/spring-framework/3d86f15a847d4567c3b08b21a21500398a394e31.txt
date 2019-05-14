@@ -1,0 +1,13 @@
+Merge BeanWrapperImpl and DirectFieldAccessor
+
+`BeanWrapperImpl` and `DirectFieldAccessor` are two
+`ConfigurablePropertyAccessor` implementations with different features
+set.
+
+This commit harmonizes the two implementations to use a common base class
+that delegates the actual property handling to the sub-classes:
+
+* `BeanWrapperImpl`:  `PropertyDescriptor` and introspection utilities
+* `DirectFieldAccessor`: reflection on `java.lang.Field`
+
+Issues: SPR-12206 - SPR-12805

@@ -1,0 +1,21 @@
+Wrap RestTemplate extractor exceptions in RestClientExceptions
+
+When using a `RestTemplate` instance within a Spring MVC application,
+client exceptions may propagate in the MVC stack and can be wrongly
+mapped by server `ExceptionHandlers`, leading to a wrong HTTP response
+sent to the MVC client.
+
+The `RestTemplate` instance uses `HttpMessageConverter` to decode
+the remote service responses; and when those fail decoding an HTTP
+response, they can throw an `HttpMessageNotReadableException`. That
+exception then bubbles up through the `HttpMessageConverterExtractor`,
+`RestTemplate` and the whole MVC stack, later mapped to HTTP 400
+responses, since those exceptions can also be throws by the server stack
+when the incoming requests can't be deserialized.
+
+This commit wraps all `IOException` and `HttpMessageNotReadableException`
+instances thrown by the extractor into `RestClientException`` instances.
+It's now easier to consistently handle client exceptions and avoid such
+edge cases.
+
+Issue: SPR-13592

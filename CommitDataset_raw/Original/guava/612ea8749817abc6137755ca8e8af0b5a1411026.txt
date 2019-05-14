@@ -1,0 +1,11 @@
+Make RegularImmutableSet extend ImmutableSet directly, not ImmutableSet.Indexed.
+
+The only side effects are that the iterator is slightly more efficient (less indirection), and importing ImmutableSet by itself doesn't import helpers for ImmutableSet views of other collections.  A minor gain, but they add up.
+
+Effects on ImmutableSetProGuard: ([]31249 bytes => 30128 bytes
+28 classes => 26 classes
+198 methods => 192 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=146473318

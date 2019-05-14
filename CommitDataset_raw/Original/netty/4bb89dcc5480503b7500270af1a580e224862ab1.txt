@@ -1,0 +1,15 @@
+Correctly handle connect/disconnect in EpollDatagramChannel / KQueueDatagramChannel
+
+Motivation:
+
+We did not correctly handle connect() and disconnect() in EpollDatagramChannel / KQueueDatagramChannel and so the behavior was different compared to NioDatagramChannel.
+
+Modifications:
+
+- Correct implement connect and disconnect methods
+- Share connect and related code
+- Add tests
+
+Result:
+
+EpollDatagramChannel / KQueueDatagramChannel also supports correctly connect() and disconnect() methods.

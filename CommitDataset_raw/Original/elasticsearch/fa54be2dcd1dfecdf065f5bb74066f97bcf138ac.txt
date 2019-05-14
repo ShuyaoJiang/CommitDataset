@@ -1,0 +1,14 @@
+CCR: Do not minimization requesting range on leader (#30980)
+
+Today before reading operations on the leading shard, we minimization
+the requesting range with the global checkpoint. However, this might
+make the request invalid if the following shard generates a requesting
+range based on the global-checkpoint from a primary shard and sends 
+that request to a replica whose global checkpoint is lagged.
+
+Another issue is that we are mutating the request when applying
+minimization. If the request becomes invalid on a replica, we will
+reroute the mutated request instead of the original one to the primary.
+
+This commit removes the minimization and replaces it by a range check
+with the local checkpoint.

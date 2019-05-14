@@ -1,0 +1,14 @@
+Reduce Object allocations in CompositeByteBuf.
+
+Motivation:
+
+We used subList in CompositeByteBuf to remove ranges of elements from the internal storage. Beside this we also used an foreach loop in a few cases which will crate an Iterator.
+
+Modifications:
+
+- Use our own sub-class of ArrayList which exposes removeRange(...). This allows to remove a range of elements without an extra allocation.
+- Use an old style for loop to iterate over the elements to reduce object allocations.
+
+Result:
+
+Less allocations.

@@ -1,0 +1,17 @@
+Allow to enable session cache when using OpenSsl
+
+Motivation:
+
+At the moment it is not possible to make use of the session cache when OpenSsl is used. This should be possible when server mode is used.
+
+Modifications:
+
+- Add OpenSslSessionContext (implements SSLSessionContext) which exposes all the methods to modify the session cache.
+- Add various extra methods to OpenSslSessionContext for extra functionality
+- Return OpenSslSessionContext when OpenSslEngine.getSession().getContext() is called.
+- Add sessionContext() to SslContext
+- Move OpenSsl specific session operations to OpenSslSessionContext and mark the old methods @deprecated
+
+Result:
+
+It's now possible to use session cache with OpenSsl

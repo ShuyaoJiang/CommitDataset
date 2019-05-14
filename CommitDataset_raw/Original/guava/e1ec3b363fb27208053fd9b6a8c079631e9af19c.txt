@@ -1,0 +1,14 @@
+Move cancellation propagation from cancel() to done().
+
+Advantages:
+- We are no longer a blocker to making AbstractFuture.cancel() final. Realistically, that will never happen, but maybe we can make FluentFuture.cancel() final when it comes along?
+- cancel() is not the only way to cancel: setFuture(cancelledFuture) also works, bypassing any propagation logic defined in cancel(). This is probably fine in practice: Once setFuture() is called, there's generally no need for additional propagation logic. Still, it feels cleaner to me.
+- The "read to local, then cancel, then use local" dance is error-prone (<[]Extracting a method happens to simplify things.
+
+Disadvantages:
+- The method has to be defined in both copies of AbstractFuture (GWT and non-GWT). We could work around this by introducing a superclass or by making it static.
+
+Related: https://github.com/google/guava/issues/1905
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=95634367

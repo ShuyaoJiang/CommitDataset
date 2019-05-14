@@ -1,0 +1,16 @@
+Delay property source initialization till LoggingSystem is initialized
+
+Previously, the initialization of StandardServletEnvironment's
+property sources in SpringBootServletInitializer led to debug logging
+calls being made before the LoggingSystem had been initialized. As a
+result, the system's default configuration was used and, in the case
+of Logback at least, the debug logging was output to System.out
+in a war deployment.
+
+This commit updates SpringBootServletInitializer to delay the
+initialization of StandardServletEnvironment's property sources until
+after the LoggingSystem has been initialized, but still in time for
+active profiles to be configured via servlet context parameters
+(see gh-9972).
+
+Closes gh-13736

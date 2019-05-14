@@ -1,0 +1,13 @@
+Fix MockWebServer with SPDY on Android.
+
+Fix for issue #1552
+Related to commit f78f74f from issue #1294
+
+Before this change:
+SpdyConnection creates threads to handle the reading and writing. If
+those threads die from a RuntimeException it triggers Android's default
+UncaughtExceptionHandler, which kills the test process. Previously exceptions
+were being swallowed, but commit f78f74f caused the exceptions to be
+propagated.
+
+This change adds extra handling for RuntimeException to stop them escaping.

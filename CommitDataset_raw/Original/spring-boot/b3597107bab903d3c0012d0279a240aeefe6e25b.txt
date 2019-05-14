@@ -1,0 +1,7 @@
+More careful masking for the HTTP status in non-error cases
+
+The ErrorPageFilter exposes a wrapped response to the downstream
+chain and unless more care is taken the chain will be able to
+set the response status, but not inspect it.
+
+Fixes gh-2367

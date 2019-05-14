@@ -1,0 +1,13 @@
+Use simple volatile read for SingleThreadEventExecutor#state instead of UNSAFE(AtomicIntegerFieldUpdater#get), CAS operation still to use AtomicIntegerFieldUpdater
+
+Motivation:
+
+AtomicIntegerFieldUpdater#get is unnecessary, I think use simple volatile read is cleaner
+
+Modifications:
+
+Replace code STATE_UPDATER.get(this) to state in SingleThreadEventExecutor
+
+Result:
+
+Cleaner code

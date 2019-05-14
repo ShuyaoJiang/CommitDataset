@@ -1,0 +1,14 @@
+Propagate h2c upgrade success event to the next handler before removing source codec
+
+Motivation:
+
+When upgrading h2c, I found that sometimes both of http2 settings frame and http response message was arrived before receiving upgrade success event. It was because ByteToMessageDecoder propagated its internally buffered message to the next handler when removing itself from pipeline.(refer to ByteToMessageDecoder#handlerRemoved)
+I think it's better to propagate upgrade success event when handling 101 switching protocol response.
+
+Modifications:
+
+Upgrade success event will be propagated before removing source codec.
+
+Result:
+
+It guarantees that upgrade success event will be arrived first at the next handler.

@@ -1,0 +1,7 @@
+TEST: write ops should execute under shard permit (#28966)
+
+Currently ESIndexLevelReplicationTestCase executes write operations
+without acquiring  index shard permit. This may prevent the primary term
+on replica from being updated or cause a race between resync and
+indexing on primary. This commit ensures that write operations are
+always executed under shard permit like the production code.

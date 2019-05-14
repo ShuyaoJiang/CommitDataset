@@ -1,0 +1,10 @@
+Set Lucene version upon index creation. (#36038)
+
+It is important that all shards of a given index have the same
+`indexCreatedVersionMajor` to Lucene, or eg. merging those shards is going to
+be considered illegal. At the moment, we use the latest Lucene version when
+creating a shard, which could cause shards to have different created versions
+eg. in case of forced allocation. This commit makes sure to reuse the
+appropriate Lucene version in order to avoid such issues.
+
+Closes #33826

@@ -1,0 +1,20 @@
+Remove NPN support from OkHttp
+
+Work in progress.
+
+I see a new failure from a certificate pinning test but I don't
+know why. Help solving this would be appreciated.
+
+I also see failures before & after:
+1) A failure from DisconnectTest
+(https://github.com/square/okhttp/pull/1197 may fix that).
+2) A failure from CallTest.doesNotFollow21Redirects_Async (timeout)
+
+The maven changes should be treated with the contempt they deserve.
+I mostly removed things I didn't understand and stroked maven until
+it stopped squealing. The benchmarks / okcurl changes are a
+particular mystery.
+
+Tried with arbitrary versions of openjdk7 and openjdk8 I had
+lying around. Behavior was the same across both (i.e. the same
+failures).

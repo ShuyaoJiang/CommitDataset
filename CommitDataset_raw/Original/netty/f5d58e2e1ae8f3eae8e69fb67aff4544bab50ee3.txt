@@ -1,0 +1,10 @@
+DefaultPromise concurrency bug
+
+Motivation:
+If the executor changes while listeners are added and notification of listeners is being done then listeners can be notified out of order and concurrently. We should ensure that only one executor is used at any given time to notify listeners and ensure the listeners are notified in FIFO order.
+
+Modifications:
+- Move the notifyingListeners member variable from DefaultPromise into the synchronized block to prevent concurrent notification of listeners and preserve FIFO notification order
+
+Result:
+If the executor is changed for a DefaultPromise the listener notification order should be FIFO.

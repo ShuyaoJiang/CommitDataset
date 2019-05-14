@@ -1,0 +1,15 @@
+Apply appropriate methods for writing CharSequence into ByteBuf
+
+Motivation:
+
+1. `ByteBuf` contains methods to writing `CharSequence` which optimized for UTF-8 and ASCII encodings. We can also apply optimization for ISO-8859-1.
+2. In many places appropriate methods are not used.
+
+Modifications:
+
+1. Apply optimization for ISO-8859-1 encoding in the `ByteBuf#setCharSequence` realizations.
+2. Apply appropriate methods for writing `CharSequences` into buffers.
+
+Result:
+
+Reduce overhead from string-to-bytes conversion.

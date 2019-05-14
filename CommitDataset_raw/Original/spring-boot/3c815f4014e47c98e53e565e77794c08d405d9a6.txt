@@ -1,0 +1,11 @@
+Provide group in ResolvedArtifactLibrary to enable discrimination
+
+The fix for gh-1475 introduced the use of an artifact's group to
+discriminate between two libraries with the same name (artifact id)
+and version. However, in the case of Gradle, a group name was not
+provided for libraries that have been resolved from a repository.
+
+This commit updates ResolvedArtifactLibrary to use the group obtained
+from the underlying ResolvedArtifact as its discriminator.
+
+Fixes gh-1543

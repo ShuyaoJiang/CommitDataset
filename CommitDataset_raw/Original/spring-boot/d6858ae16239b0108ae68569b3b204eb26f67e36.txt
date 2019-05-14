@@ -1,0 +1,9 @@
+Fix ConfigurationPropertySources parent attach
+
+Update `ConfigurationPropertySources` so that the underlying sources
+are checked when attaching. Prior to this commit, in a parent/child
+setup the `ConfigurationPropertySources` adapter may already present
+on the parent. This means the attaching is skipped but the managed
+sources are incorrect.
+
+Fixes gh-12013

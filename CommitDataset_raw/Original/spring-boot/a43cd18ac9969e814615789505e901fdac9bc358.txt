@@ -1,0 +1,23 @@
+Avoid changing root logger level when setting level of unconfigured logger
+
+Previously getLoggerConfig(loggerName) was used to retrieve the
+LoggerConfig object on which the level was to be set. As described in the
+method’s javadoc it will “remove tokens from the package name as
+necessary or return the root LoggerConfig if no other matches were found”.
+This is problematic as, if there’s no configuration for the logger whose
+level is being configured, the level will be applied to a logger from an
+outer package or to the root logger.
+
+This commit updates Log4J2LoggingSystem to use the configuration’s map of
+LoggerConfigs, rather than calling getLoggerConfig. In the event of the
+level being set on an unconfigured logger, this will produce a null
+LoggerConfig. When a null LoggerConfig is encountered, a new one is
+created with the appropriate level. If the config already exists, its
+level is set as it was before.
+
+The code that was accessing the root logger using a magic null value
+(which was then coerced into the root logger’s name (an empty string))
+has also been updated to make it clearer that they are purposefully
+dealing with the root logger.
+
+Closes gh-3550

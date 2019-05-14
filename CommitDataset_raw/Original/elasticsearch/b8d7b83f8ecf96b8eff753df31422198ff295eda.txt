@@ -1,0 +1,7 @@
+Correctly set doc_count when MovAvg "predicts" values on existing buckets (#24892)
+
+If the bucket already exists, due to non-overlapping series or missing data, the
+MovAvg creates a merged bucket with the existing aggs + the new prediction.  This
+fixes a small bug where the doc_count was not being set correctly.
+
+Relates to #24327

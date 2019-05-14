@@ -1,0 +1,12 @@
+Remove <emphasis> to work around DocBook bug
+
+It was determined (through painful trial and error) that after the
+upgrade to DocBook 5 and the gradle-docbook-reference plugin, that
+<emphasis> elements embedded within <programlisting> elements causes
+NullPointerExceptions during processing.
+
+This change eliminates these <emphasis> elements to work around the
+problem. This means a slight degradation in presentation for the
+affected areas of the reference documentation. After some research,
+it is not clear what other workarounds may be possible that leave
+the text actually emphasized.

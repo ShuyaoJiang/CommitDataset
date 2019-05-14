@@ -1,0 +1,9 @@
+Replace the TreeMap in the composite aggregation (#36675)
+
+The `composite` aggregation uses a TreeMap to keep track of the best buckets.
+This ensures a log(n) time cost to insert new buckets but also to retrieve buckets
+that are already present in the map. In order to speed up the retrieval of buckets
+this change replaces the TreeMap with a priority queue and a HashMap. The insertion
+cost is still log(n) but the retrieval of buckets through the HashMap is now done in constant
+time. This optimization can bring significant improvement since each document needs
+to check if its associated buckets are already present in the current best buckets.

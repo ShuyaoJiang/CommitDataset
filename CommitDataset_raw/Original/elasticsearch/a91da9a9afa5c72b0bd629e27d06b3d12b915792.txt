@@ -1,0 +1,30 @@
+Only bind loopback addresses when binding to local
+
+* Only bind loopback addresses when binding to local
+
+Today when binding to local (the default) we bind to any address that is
+a loopback address, or any address on an interface that declares itself
+as a loopback interface. Yet, not all addresses on loopback interfaces
+are loopback addresses. This arises on macOS where there is a link-local
+address assigned to the loopback interface (fe80::1%lo0) and in Docker
+services where virtual IPs of the service are assigned to the loopback
+interface (docker/libnetwork#1877). These situations cause problems:
+ - because we do not handle the scope ID of a link-local address, we end
+   up bound to an address for which publishing of that address does not
+   allow that address to be reached (since we drop the scope)
+ - the virtual IPs in the Docker situation are not loopback addresses,
+   they are not link-local addresses, so we end up bound to interfaces
+   that cause the bootstrap checks to be enforced even though the
+   instance is only bound to local
+
+We address this by only binding to actual loopback addresses, and skip
+binding to any address on a loopback interface that is not a loopback
+address. This lets us simplify some code where in the bootstrap checks
+we were skipping link-local addresses, and in writing the ports file
+where we had to skip link-local addresses because again the formatting
+of them does not allow them to be connected to by another node (to be
+clear, they could be connected to via the scope-qualified address, but
+that information is not written out).
+
+Relates #28029
+

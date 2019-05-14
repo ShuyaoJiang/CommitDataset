@@ -1,0 +1,14 @@
+Ensure tests pass when sun.misc.Unsafe is not present
+
+Motivation:
+
+We need to ensure we pass all tests when sun.misc.Unsafe is not present.
+
+Modifications:
+
+- Make *ByteBufAllocatorTest work whenever sun.misc.Unsafe is present or not
+- Let Lz4FrameEncoderTest not depend on AbstractByteBufAllocator implementation details which take into account if sun.misc.Unsafe is present or not
+
+Result:
+
+Tests pass even without sun.misc.Unsafe.

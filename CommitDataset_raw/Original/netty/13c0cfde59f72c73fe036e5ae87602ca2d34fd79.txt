@@ -1,0 +1,20 @@
+Add awaitInactivity() to GlobalEventExecutor and ThreadDeathWatcher
+
+Motivation:
+
+When running Netty on a container environment, the container will often
+complain about the lingering threads such as the worker threads of
+ThreadDeathWatcher and GlobalEventExecutor.  We should provide an
+operation that allows a use to wait until such threads are terminated.
+
+Modifications:
+
+- Add awaitInactivity()
+- (misc) Fix typo in GlobalEventExecutorTest
+- (misc) Port ThreadDeathWatch's CAS-based thread life cycle management
+  to GlobalEventExecutor
+
+Result:
+
+- Fixes #2084
+- Less overhead on task submission of GlobalEventExecutor

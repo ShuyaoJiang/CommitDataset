@@ -1,0 +1,11 @@
+Adapt WebFlux.fn auto-config to SPR-15536
+
+Since SPR-15536, WebFlux.fn is now configured with `@EnableWebFlux`,
+along the annotated controllers. Both `RouterFunction` and Controller
+instances can now live within the same application and they share
+the same web infrastructure.
+
+This commit removes the custom auto-configuration for `RouterFunction`
+and relies on `@EnableWebFlux` for that.
+
+Closes gh-9165

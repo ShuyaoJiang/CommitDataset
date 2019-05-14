@@ -1,0 +1,19 @@
+Support date conversion format for java.time types
+
+Prior to this change, the Spring MVC auto-configuration would add a new
+formatter to convert `java.util.Date` to/from `String` using the
+configured configuration property `spring.mvc.date-format`.
+
+This commit adds a new `WebConversionService` class that registers
+date formatters with a custom date format, or register the default ones
+if no custom configuration is provided.
+This avoids duplicating equivalent formatters in the registry.
+
+With this change, date types from `java.util`, `org.joda.time` and
+`java.time` are now all supported.
+
+This commit also replicates this feature for WebFlux applications by
+adding a new `spring.webflux.date-format` configuration property.
+
+Closes gh-5523
+Closes gh-11402

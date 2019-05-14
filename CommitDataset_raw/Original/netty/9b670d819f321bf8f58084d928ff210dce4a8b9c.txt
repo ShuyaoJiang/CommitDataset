@@ -1,0 +1,10 @@
+[#2144] Fix NPE in Local transport caused by a race
+
+Motivation:
+At the moment it is possible to see a NPE when the LocalSocketChannels doRegister() method is called and the LocalSocketChannels doClose() method is called before the registration was completed.
+
+Modifications:
+Make sure we delay the actual close until the registration task was executed.
+
+Result:
+No more NPE

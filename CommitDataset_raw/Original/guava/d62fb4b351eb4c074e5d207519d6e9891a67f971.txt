@@ -1,0 +1,9 @@
+Disable some tests externally until GWT releases a version with the problematic bug fixed.
+
+The tests work fine in non-GWT mode, but we don't have a trivial way to say "run this everywhere except externally under GWT," so I'm just stripping them entirely.
+(In particular, I don't think "// MOE:insert @GwtIncompatible" works because we would stil generate a StreamsTest_gwt that refers to the removed methods, so it would fail to compile.)
+This ensures that we still run them internally in both modes, which seems more important than running them internally+externally but never under GWT (as @GwtIncompatible would do).
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=158046739

@@ -1,0 +1,18 @@
+Fix formatting / parsing for Android
+
+Ensuring that this Android bug is fixed for the next
+Android release:
+https://code.google.com/p/android/issues/detail?id=66135
+
+On Android the SimpleDateFormat for "zzz" returns GMT+00:00.
+This is regrettable but awkward to change as it is existing
+behavior.
+https://code.google.com/p/android/issues/detail?id=66136
+
+This change fixes the format to 'GMT'.
+
+This change also fixes a bug where the platform default
+timezone was used for parsing some date/times and not GMT.
+
+Various tests have been added to prove the behavior when
+timezones are missing and dates are malformed.

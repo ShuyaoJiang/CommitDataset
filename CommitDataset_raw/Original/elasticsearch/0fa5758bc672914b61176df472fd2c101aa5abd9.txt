@@ -1,0 +1,6 @@
+Fix potential NPE in `_cat/shards/` with partial CommonStats (#33858)
+
+Today if we fetch common stats from a shard we might get a partial response
+if the shard is closed while we fetch the stats. This causes hard to track and
+reproduce NPEs. This change streamlines null checking to ensure we only render
+stats we actually received.

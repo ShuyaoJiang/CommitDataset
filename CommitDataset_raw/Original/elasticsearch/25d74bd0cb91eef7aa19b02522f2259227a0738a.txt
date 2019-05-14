@@ -1,0 +1,22 @@
+Prefer mapped aggs to lead reductions (#33528)
+
+Previously, unmapped aggs try to delegate reduction to a sibling agg that is
+mapped.  That delegated agg will run the reductions, and also
+reduce any pipeline aggs.  But because delegation comes before running
+pipelines, the unmapped agg _also_ tries to run pipeline aggs.
+
+This causes the pipeline to run twice, and potentially double it's output
+in buckets which can create invalid JSON (e.g. same key multiple times)
+and break when converting to maps.
+
+This fixes by sorting the list of aggregations ahead of time so that mapped
+aggs appear first, meaning they preferentially lead the reduction.  If all aggs
+are unmapped, the first unmapped agg simply creates a new unmapped object
+and returns that for the reduction.
+
+This means that unmapped aggs no longer defer and there is no chance for 
+a secondary execution of pipelines (or other side effects caused by deferring
+execution).
+
+Closes #33514
+

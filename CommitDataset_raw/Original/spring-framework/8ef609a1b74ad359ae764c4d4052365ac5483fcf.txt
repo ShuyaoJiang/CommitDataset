@@ -1,0 +1,9 @@
+Add public variant getDeclaredMethods method
+
+Add a public variant of `getDeclaredMethods` that defensively copies the
+cached methods array. This is often more faster and more convenient
+for users than calling `doWithLocalMethods`. We still retain most of the
+benefits of the cache, namely fewer security manager calls and not as
+many `Method` instances being created.
+
+Closes gh-22580

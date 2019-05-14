@@ -1,0 +1,32 @@
+Read if needed on NEED_UNWRAP
+
+Motivation:
+
+There are some use cases when a client may only be willing to read from a channel once
+its previous write is finished (eg: serial dispatchers in Finagle). In this case, a
+connection with SslHandler installed and ctx.channel().config().isAutoRead() == false
+will stall in 100% of cases no matter what order of "channel active", "write", "flush"
+events was.
+
+The use case is following (how Finagle serial dispatchers work):
+
+1. Client writeAndFlushes and waits on a write-promise to perform read() once it's satisfied.
+2. A write-promise will only be satisfied once SslHandler finishes with handshaking and
+   sends the unencrypted queued message.
+3. The handshaking process itself requires a number of read()s done by a client but the
+   SslHandler doesn't request them explicitly assuming that either auto-read is enabled
+   or client requested at least one read() already.
+4. At this point a client will stall with NEED_UNWRAP status returned from underlying engine.
+
+Modifiations:
+
+Always request a read() on NEED_UNWRAP returned from engine if
+
+a) it's handshaking and
+b) auto read is disabled and
+c) it wasn't requested already.
+
+Result:
+
+SslHandler is now completely tolerant of whether or not auto-read is enabled and client
+is explicitly reading a channel.

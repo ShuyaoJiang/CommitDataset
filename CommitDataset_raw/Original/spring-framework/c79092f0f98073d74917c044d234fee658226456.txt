@@ -1,0 +1,9 @@
+Refactor random port in reactive module tests
+
+This commit removes the use of SocketUtils#findAvailableTcpPort in
+favor of letting servers pick a dynamic port by specifying port 0.
+
+This should make integration tests more stable because the port is
+chosen at the place where it needs to be used. It gives servers a
+chance to try to open a socket on some port and start using the socket
+if successful.

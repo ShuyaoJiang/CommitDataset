@@ -1,0 +1,13 @@
+Fix tx annotated tests so that they pass in the build
+
+AbstractTransactionalAnnotatedConfigClassTests is now annotated with
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) so 
+that side-effects between tests are avoided.
+
+Re-enabled TransactionalAnnotatedConfigClassWithAtConfigurationTests
+and TransactionalAnnotatedConfigClassesWithoutAtConfigurationTests.
+
+Also introduced a log4j FileAppender for tests that writes to
+"build/spring-test.log".
+
+Issue: SPR-9051

@@ -1,0 +1,13 @@
+ByteBuf.readBytes(...) should use the allocator of the buffer to create the new buffer. Related to [#5093]
+
+Motivation:
+
+ByteBuf.readBytes(...) uses Unpooled.buffer(...) internally which will use a heap ByteBuf and also not able to make use of the allocator which may be pooled. We should better make use of the allocator.
+
+Modifications:
+
+Use the allocator for thenew buffer.
+
+Result:
+
+Take allocator into account when copy bytes.

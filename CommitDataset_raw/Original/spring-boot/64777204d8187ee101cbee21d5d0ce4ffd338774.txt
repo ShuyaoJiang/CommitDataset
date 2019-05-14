@@ -1,0 +1,14 @@
+Apply codecs auto-configuration to WebFlux
+
+This commit introduces `CodecCustomizer`, a new callback-based interface
+for customizing the codecs configuration for WebFlux server and client.
+
+Instances of those customizers are applied to the `WebClient.Builder`
+and to the `WebFluxAutoConfiguration` (which deals with both WebFlux and
+WebFlux.fn).
+
+For now, only Jackson codecs are auto-configured, by getting the
+`ObjectMapper` instance created by Spring Boot. Other codecs can be
+configured as soon as WebFlux supports those.
+
+Closes gh-9166

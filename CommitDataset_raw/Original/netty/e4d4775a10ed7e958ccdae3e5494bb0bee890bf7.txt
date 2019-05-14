@@ -1,0 +1,13 @@
+Support removal using values iterator. (#8866)
+
+Motivation:
+
+As ActiveMQ project using netty, we want to make use of this class, unfortunately the iterator on values(), seems to not support remove method, even so the delegated iterator does. Currently we have to clone and modify this class locally albeit a one line change is needed, it would be ideal if netty could allow remove, then removing the need to maintain a clone.  
+
+Modifications:
+
+* remove throws UnsupportedOperationException, and instead call remove method on delegated iterator
+
+Result:
+
+Be able to call Iterator.remove() for the values.

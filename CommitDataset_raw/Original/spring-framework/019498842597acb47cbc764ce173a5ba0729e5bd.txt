@@ -1,0 +1,11 @@
+Store by value support for ConcurrentMapCacheManager
+
+ConcurrentMapCacheManager and ConcurrentMapCache now support the
+serialization of cache entries via a new `storeByValue` attribute. If it is
+explicitly enabled, the cache value is first serialized and that content
+is stored in the cache.
+
+The net result is that any further change made on the object returned
+from the annotated method is not applied on the copy held in the cache.
+
+Issue: SPR-13758

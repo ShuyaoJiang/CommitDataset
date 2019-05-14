@@ -1,0 +1,10 @@
+netty_unix_socket free nettyClassName after using it
+
+Motivation:
+netty_unix_socket attempts to use nettyClassName in an error message, but previously freed the memory. We should wait to free the memory until after we use it.
+
+Modifications:
+- Free nettyClassName after using it in snprintf
+
+Result:
+More useful error message.

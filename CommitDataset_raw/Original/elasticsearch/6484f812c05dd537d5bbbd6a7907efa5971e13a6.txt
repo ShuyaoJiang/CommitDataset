@@ -1,0 +1,18 @@
+[ML] Change the root_cause of error responses to be more informative (elastic/x-pack-elasticsearch#1598)
+
+When an error response contains multiple layers of errors, Kibana displays
+the one labelled root_cause.  The definition of root_cause is the most
+deeply nested ElasticsearchException.  Therefore, it is of great benefit to
+the UI if our config validation returns the actual problem in an
+ElasticsearchException rather than an IllegalArgumentException.
+
+This commit also adds an extra validation check to catch the case of a
+single job config containing fields x.y as well as x earlier.  Previously
+this was caught when we tried to create results mappings, and was
+accompanied by an error suggesting that using a dedicated results index
+would help, when clearly it won't for a clash in a single job config.
+
+Fixes elastic/x-pack-kibana#1387
+Fixes elastic/prelert-legacy#349
+
+Original commit: elastic/x-pack-elasticsearch@7d1b7def6c83479f7282f6fbf5c1107203ef1163

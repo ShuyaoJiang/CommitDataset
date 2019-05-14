@@ -1,0 +1,13 @@
+[CCR] Sync mappings between leader and follow index (#30115)
+
+The shard changes api returns the minimum IndexMetadata version the leader
+index needs to have. If the leader side is behind on IndexMetadata version
+then follow shard task waits with processing write operations until the
+mapping has been fetched from leader index and applied in follower index
+in the background.
+
+The cluster state api is used to fetch the leader mapping and put mapping api
+to apply the mapping in the follower index. This works because put mapping
+api accepts fields that are already defined.
+
+Relates to #30086

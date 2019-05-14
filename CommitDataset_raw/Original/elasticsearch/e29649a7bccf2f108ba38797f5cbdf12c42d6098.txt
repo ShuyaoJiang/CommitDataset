@@ -1,0 +1,11 @@
+Remove the xpack plugin's dependency on the tribe module (elastic/x-pack-elasticsearch#2901)
+
+This change removes the xpack plugin's dependency on the tribe module, which is not a published
+artifact. For the most part this just involves moving some test classes around, but for the
+security and tribe integration the usage of constant settings was removed and replaced with the
+string names. This is a bit unfortunate, but a test was added in a QA project that depends on tribe
+that will alert us if a new setting is added that we need to be aware of.
+
+relates elastic/x-pack-elasticsearch#2656
+
+Original commit: elastic/x-pack-elasticsearch@649a8033e4edea12b64c8fbb86b4e40b0cd87a32

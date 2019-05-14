@@ -1,0 +1,9 @@
+Reconnect failures delegated to TcpConnectionHandler
+
+When connecting with a ReconnectStrategy we can only report the outcome
+of the first connect to the ListenableFuture<Void> return value.
+
+Failures for all subsequent attempts to reconnect however must be
+channeled to TcpConnectHandler#afterConnectFailure which is used in
+the STOMP broker relay for example to publish
+BroadcastAvailability(true/false) events.

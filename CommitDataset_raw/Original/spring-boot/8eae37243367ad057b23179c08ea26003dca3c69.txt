@@ -1,0 +1,13 @@
+Change handling of spring.config.location so it replaces defaults
+
+Previously, spring.config.name was handled in such a way that its
+value would replace the defaults. By constrast, spring.config.location
+would add to the defaults.
+
+Update the handling of spring.config.location so that it replaces the
+defaults. This aligns its behaviour with spring.config.name. To allow
+users to add additional locations a new property,
+spring.config.additional-location, has been introduced. It behaves as
+spring.config.location did prior to this change.
+
+Closes gh-10595

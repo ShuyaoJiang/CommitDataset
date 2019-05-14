@@ -1,0 +1,12 @@
+Consolidate annotation processing constants
+
+Consolidating internal bean name and aspect class name constats within
+AnnotationConfigUtils to allow access from both the context.config
+and context.annotation packages without creating a relationship between
+the two of them (they are unrelated leaf nodes in the packaging
+currently).
+
+The .transaction module does not have a similar utils class and already
+has a relationship from transaction.config -> transaction.annotation,
+so placing the constants in .annotation.TransactionManagementCapability
+to be referenced by .config.AnnotationDrivenBeanDefinitionParser

@@ -1,0 +1,8 @@
+Return transport addresses from UnicastHostsProvider (#31426)
+
+With #20695 we removed local transport and there is just TransportAddress now. The
+UnicastHostsProvider currently returns DiscoveryNode instances, where, during pinging, we're
+actually only making use of the TransportAddress to establish a first connection to the possible new 
+node. To simplify the interface, we can just return a list of transport addresses instead, which
+means that it's not necessary anymore to create fake node objects in each plugin just to return the
+address information.

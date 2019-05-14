@@ -1,0 +1,11 @@
+Ensure `JmxEndpoint` beans get context object IDs
+
+Update `EndpointMBeanExporter` to ensure that `JmxEndpoint` as well
+as regular `Endpoint` beans are considered when searching the parent
+context.
+
+Prior to this commit if the same `JmxEndpoint` was registered in the
+both the child and parent context then the `context=` element of the
+name wasn't added.
+
+Fixes gh-8152

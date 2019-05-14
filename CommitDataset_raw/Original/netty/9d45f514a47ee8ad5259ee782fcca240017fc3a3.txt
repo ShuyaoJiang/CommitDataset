@@ -1,0 +1,23 @@
+Add a constant for Cookie "undefined maxAge"
+
+Motivation:
+
+DefaultCookie currently used an undocumented magic value for undefined
+maxAge.
+
+Clients need to be able to identify such value so they can implement a
+proper CookieJar.
+
+Ideally, we should add a `Cookie::isMaxAgeDefined` method but I guess
+we can’t add a new method without breaking API :(
+
+Modifications:
+
+Add a new constant on `Cookie` interface so clients can use it to
+compare with value return by `Cookie.maxAge` and decide if `maxAge` was
+actually defined.
+
+Result:
+
+Clients have a better documented way to check if the maxAge attribute
+was defined.

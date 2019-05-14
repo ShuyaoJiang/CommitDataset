@@ -1,0 +1,12 @@
+TEST:  Retry synced-flush if ongoing ops on primary (#30978)
+
+When the last indexing operation is completed, we will fire a global
+checkpoint sync. Since a global checkpoint sync request is a replication
+request, it will acquire an index shard permit on the primary when
+executing. If this happens at the same time while we are issuing the
+synced-flush, the synced-flush request will fail as it thinks there are
+in-flight operations. We can avoid such situation by retrying another
+synced-flush if the current request fails due to ongoing operations on
+the primary.
+
+Closes #29392

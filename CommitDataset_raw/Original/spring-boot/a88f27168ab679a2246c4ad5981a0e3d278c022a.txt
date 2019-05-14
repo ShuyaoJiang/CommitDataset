@@ -1,0 +1,14 @@
+Add support to the Gradle plugin for disabling direct use of resources
+
+The Maven plugin allows spring-boot:run to be configured so that
+resources are loaded from their output location rather than from
+src/main/resources. This commit adds an equivalent configuration
+option to the Gradle plugin. To disable source resources from being
+added to the classpath in place of those in the output location
+the configure the bootRun tasks like this:
+
+bootRun {
+	addResources = false
+}
+
+Closes gh-2431

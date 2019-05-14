@@ -1,0 +1,12 @@
+Support non-public anno. attr. values in AnnoUtils
+
+Prior to this commit, the getValue(Annotation, String) method in
+AnnotationUtils failed to retrieve the value of the desired annotation
+attribute if the annotation itself was not public -- for example if the
+annotation was declared as package private.
+
+This commit addresses this issue by ensuring that getValue(Annotation,
+String) uses reflection to make the desired annotation attribute method
+accessible before attempting to invoke it to retrieve the value.
+
+Issue: SPR-11104

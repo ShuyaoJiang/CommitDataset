@@ -1,0 +1,17 @@
+Adds concept of a safe action (#31971)
+
+* Adds concept of a safe action
+
+A safe action is one that does not have unwanted side effects if the
+configuration of the action is change in the policy while and index is
+executing the action.
+
+This commit formalises this concept with the only current unsafe action
+being ShrinkAction. It also adds testing around this and add a method
+to LifecyclePolicy which returns whether the action for the provided
+StepKey is safe.
+
+* Makes IndexLifecycleRunners checks use the safe indications instead of
+hardcoding shrink action
+
+* Fixes test failure

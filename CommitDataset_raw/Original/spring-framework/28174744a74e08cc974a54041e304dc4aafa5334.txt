@@ -1,0 +1,26 @@
+Fix race when flushing messages
+
+The use of an AtomicBoolean and no lock meant that it was possible
+for a message to be queued and then never be flushed and sent to the
+broker:
+
+1. On t1, a message is received and isConnected is false. The message
+   will be queued.
+2. On t2, CONNECTED is received from the broker. isConnected is set
+   to true, the queue is drained and the queued messages are forwarded
+3. On t1, the message is added to the queue
+
+To fix this, checking that isConnected is false (step 1 above) and the
+queueing of a message (step 3 above) need to be performed as a unit
+so that the flushing of the queued messages can't be interleaved. This
+is achieved by synchronizing on a monitor and performing steps 1
+and 3 and synchronizing on the same monitor while performing step 2.
+
+The monitor is held while the messages are actually being forwarded
+to the broker. An alternative would be to drain the queue into
+a local variable, release the monitor, and then forward the messages.
+The main advantage of this alternative is that the monitor is held for
+less time. It also reduces the theoretical risk of deadlock by not
+holding the monitor while making an alien call. The downside of the
+alternative is that it may lead to messages being forwarded out of
+order. For this reason the alternative approach was rejected.

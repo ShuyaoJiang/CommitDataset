@@ -1,0 +1,14 @@
+Inject @Configuration BeanFactory before autowire
+
+Add EnhancedConfigurationBeanPostProcessor to inject the BeanFactory
+into EnhancedConfiguration classes before the
+AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues method
+is called.
+
+Prior to this commit it was possible for @Autowire in a @Configuration
+class to invoke an enhanced configuration class method before the
+BeanFactory was injected. This is due to the fact that the
+AutowiredAnnotationBeanPostProcessor was called before
+AbstractAutowireCapableBeanFactory.invokeAwareMethods().
+
+Issue: SPR-10668

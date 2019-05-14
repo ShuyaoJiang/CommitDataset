@@ -1,0 +1,9 @@
+[Test] Update test in SharedClusterSnapshotRestoreIT (#30200)
+
+The `testDeleteSnapshotWithMissingIndexAndShardMetadata` test uses an
+obsolete repository directory structure based on index names instead of
+UUIDs. Because it swallows exceptions when deleting test files the test
+never failed when the directory structure changed.
+
+This commit fixes the test to use the right directory structure and file
+ names and to not swallow exceptions anymore.

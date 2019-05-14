@@ -1,0 +1,19 @@
+Move Hex dump related util from ByteBufUtil to inner class
+
+Motivation:
+
+Initialisation of the ByteBufUtil class, a class frequently used is
+delayed because a significant number of String operations is performed to
+fill a HEXDUMP_ROWPREFIXES array. This array also sticks to the Strings
+forever.
+It is quite likely that applications never use the hexdump facility.
+
+Modification:
+
+Moved the static initialisation and references to a static inner class.
+This delays initialisation (and memory usage) until actually needed.
+The API is kept as is.
+
+Result:
+
+Faster startup time, less memory usage for most netty using applications.

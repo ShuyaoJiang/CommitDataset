@@ -1,0 +1,10 @@
+DefaultDnsRecordDecoder compression and index decode bug
+
+Motivation:
+8cf90f05127e3eda77a8749342709ab5776f7129 switch a duplicate opreration to a slice operation. Typically this would be fine but DNS supports a compression (https://www.ietf.org/rfc/rfc1035 4.1.4. Message compression) where the payload contains absolute indexes which refer back to previously referenced content. Using a slice will break the ability for the indexes in the payload to correctly self reference to the index of the originial payload, and thus decoding may fail.
+
+Modifications:
+- Use duplicate instead of slice so DNS message compression and index references are preserved.
+
+Result:
+Fixes DefaultDnsRecordDecoder regression

@@ -1,0 +1,13 @@
+Epoll.isAvailable() must return false if sun.misc.Unsafe is not present.
+
+Motivation:
+
+Currently our epoll native transport requires sun.misc.Unsafe and so we need to take this into account for Epoll.isAvailable().
+
+Modifications:
+
+Take into account if sun.misc.Unsafe is present.
+
+Result:
+
+Only return true for Epoll.isAvailable() if sun.misc.Unsafe is present.

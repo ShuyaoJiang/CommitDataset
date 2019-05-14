@@ -1,0 +1,8 @@
+Avoid boxing ints in ConcurrentHashMultiset Preconditions checks
+
+The preconditions checks for occurrences are boxing int values for the format
+string. This has shown up in profiling as we are using this collection quite
+heavily. Switch from preconditions formatting to basic if statement to avoid boxing.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=101702798

@@ -1,0 +1,13 @@
+Rationalize multi-document config file handling
+
+Update `PropertySourceLoader` so that it no longer needs to deal with
+matching multi-document files using the `spring.profile` property. The
+loader now simply returns one or more `PropertSource` instances for a
+given `Resource`.
+
+All property matching now occurs in the `ConfigFileApplicationListener`.
+This allows document processing logic to be contained in a single place,
+and allows us to rationalize the algorithm so that negative matching
+profiles are processed last.
+
+Fixes gh-12159

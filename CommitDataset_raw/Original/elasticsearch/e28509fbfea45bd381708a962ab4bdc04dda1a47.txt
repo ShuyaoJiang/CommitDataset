@@ -1,0 +1,24 @@
+Core: Less settings to AbstractComponent (#35140)
+
+Stop passing `Settings` to `AbstractComponent`'s ctor. This allows us to
+stop passing around `Settings` in a *ton* of places. While this change
+touches many files, it touches them all in fairly small, mechanical
+ways, doing a few things per file:
+1. Drop the `super(settings);` line on everything that extends
+`AbstractComponent`.
+2. Drop the `settings` argument to the ctor if it is no longer used.
+3. If the file doesn't use `logger` then drop `extends
+AbstractComponent` from it.
+4. Clean up all compilation failure caused by the `settings` removal
+and drop any now unused `settings` isntances and method arguments.
+
+I've intentionally *not* removed the `settings` argument from a few
+files:
+1. TransportAction
+2. AbstractLifecycleComponent
+3. BaseRestHandler
+
+These files don't *need* `settings` either, but this change is large
+enough as is.
+
+Relates to #34488

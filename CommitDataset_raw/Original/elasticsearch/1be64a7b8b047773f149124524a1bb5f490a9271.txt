@@ -1,0 +1,10 @@
+SQL: Fix null handling for AND and OR in SELECT (#35277)
+
+Override `process()` in `BinaryLogicProcessor` which doesn't immediately
+return null if left or right argument is null, which is the behaviour of
+`process()` of the parent class `BinaryProcessor`.
+
+Also, add more tests for `AND` and `OR` in SELECT clause with literal.
+
+Fixes: #35240
+

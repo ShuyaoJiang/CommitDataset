@@ -1,0 +1,12 @@
+Set web application context on ServletContext in plain web app tests
+
+Previously, the web application context was only set on the
+ServletContext in a full-blown integration test or when MockMvc was
+used.
+
+This commit updates SpringApplicationContextLoader so that the context
+is also set on the context in a plain web application test (one where
+MockMvc is not being used). The change is a partial backport of commit
+7dffb702.
+
+Closes gh-4370

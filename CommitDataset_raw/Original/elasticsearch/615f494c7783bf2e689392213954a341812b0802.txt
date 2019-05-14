@@ -1,0 +1,10 @@
+MINOR: Drop Redundant Ctx. Check in ScriptService (#33782)
+
+* MINOR: Drop Redundant Ctx. Check in ScriptService
+
+* This check is completely redundant, the expression script
+engine will throw anyway (and with a similar message) for
+those contexts that it cannot compile. Moreover, the update context
+is not the only context that is not suported by the expression engine
+at this point so handling the update context separately here makes
+no sense.

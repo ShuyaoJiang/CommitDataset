@@ -1,0 +1,18 @@
+Automated (partial) g4 rollback of changelist 100047098.
+(only the testlib parts, and excluding UnmodifiableCollectionTests, where we still need a workaround for Android's toArray() bug)
+
+*** Reason for rollback ***
+
+No longer a problem now that we put test infrastructure in a separate dex (CL 100842219) and suppress searching for tests in that dex (CL 100849889).
+
+*** Original change description ***
+
+Spray @SuppressUnderAndroid on everything related to suite builders and nested test classes.
+Also:
+- Work around Android toArray() bug in UnmodifiableCollectionTests.
+- Stop referring to NavigableMapTestSuiteBuilder / ListTestSuiteBuilder in comments of ForwardingNavigableMapTest.java / ListsTest.java. The reference impedes the import stripper.
+
+***
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=100850485

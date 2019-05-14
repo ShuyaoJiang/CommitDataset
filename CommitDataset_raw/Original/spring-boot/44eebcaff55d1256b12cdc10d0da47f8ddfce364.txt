@@ -1,0 +1,12 @@
+Fix `SessionAutoConfiguration` ordering
+
+This commit updates `SessionAutoConfiguration` to ensure it is processed
+after `MongoDataAutoConfiguration` and
+`MongoReactiveDataAutoConfiguration`, instead of `MongoAutoConfiguration`
+and `MongoReactiveAutoConfiguration`. This is required in order for
+MongoDB Session auto-configuration to work, since
+`MongoSessionConfiguration` and `MongoReactiveSessionConfiguration` are
+conditional on `MongoOperations` and `ReactiveMongoOperations` beans,
+respectively.
+
+Closes gh-11054

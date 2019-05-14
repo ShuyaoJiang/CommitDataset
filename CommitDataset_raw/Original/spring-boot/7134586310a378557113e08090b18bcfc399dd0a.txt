@@ -1,0 +1,15 @@
+Ensure test @PostConstructs are only called once
+
+Rename AutoConfigureReportTestExecutionListener to
+SpringBootDependencyInjectionTestExecutionListener and ensure that it
+replaces any existing DependencyInjectionTestExecutionListener.
+
+Prior to this commit the registration of two DependencyInjection
+listeners would cause @PostConstruct methods on tests to be called
+twice.
+
+In order to allow the standard DependencyInjectionTestExecutionListener
+to be removed a new DefaultTestExecutionListenersPostProcessor interface
+has been introduced.
+
+Fixes gh-6874

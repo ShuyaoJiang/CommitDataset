@@ -1,0 +1,19 @@
+Make it easier to use Gson and the Actuator at the same time
+
+Previously the recommendation when a user wanted to use Gson was to
+exclude Jackson from the classpath and add Gson. This worked fine until
+the user also want to use the Actuator which requires Jackson. To get
+over this hurdle the user could leave Jackson on the classpath and
+perform their own HttpMessageConverter configuration and register a
+GsonHttpMessageConverter instead of or before any Jackson-based
+converter. A little complicated, but it worked.
+
+This commit makes things easier by updating the auto-configuration for
+HTTP message converters to prefer Gson when both Gson and Jackson are
+on the classpath, i.e. in the presence of both, a
+GsonHttpMessageConverter will be auto-configured and a
+MappingJackson2HttpMessageConverter won’t be. This allows an
+application to easily use Gson while allowing the Actuator to continue
+to use Jackson.
+
+Closes gh-2247

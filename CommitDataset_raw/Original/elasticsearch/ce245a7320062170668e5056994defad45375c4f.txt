@@ -1,0 +1,10 @@
+Remove RestGetAllAliasesAction (#31308)
+
+We currently have a specific REST action to retrieve all aliaes, which
+uses internally the get index API. This doesn't seem to be required
+anymore though as the existing RestGetAliaesAction could as well take
+the requests with no indices and aliases specified.
+
+This commit removes the RestGetAllAliasesAction in favour of using
+RestGetAliasesAction also for requests that don't specify indices nor
+aliases. Similar to #31129.

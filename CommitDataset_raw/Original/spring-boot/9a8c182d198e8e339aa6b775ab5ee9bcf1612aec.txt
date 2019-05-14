@@ -1,0 +1,15 @@
+Only use micrometer composites when necessary
+
+Update micrometer auto-configuration so that a `CompositeMeterRegistry`
+is only created when more than one `MeterRegistry` bean is declared.
+When a composite is crated, it is marked as `@Primary` so that it
+can be directly injected. Meter registries can now be defined directly
+as beans, and auto-configuration can back off in the usual way.
+
+The `MeterRegistryConfigurer` is now called `MeterRegistryCustomizer`
+and is generically types so it's easy to apply customizations to a
+particular `MeterRegistry` implementation.
+
+Fixes gh-11799
+
+Co-authored-by: Jon Schneider <jschneider@pivotal.io>

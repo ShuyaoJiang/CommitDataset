@@ -1,0 +1,11 @@
+Fix optional ContentNegotiationStrategy for Actuator
+
+Since https://jira.spring.io/browse/SPR-16624, the contract for
+`ContentNegotiationStrategy` has been refined and should never return an
+empty list if it's got no preference for a media type, but it should
+rather respond with a `"*/*"` instead.
+
+This commit fixes the `OptionalPathExtensionContentNegotiationStrategy`
+defined in the Spring MVC auto-configuration to have that behavior.
+
+Fixes gh-12900

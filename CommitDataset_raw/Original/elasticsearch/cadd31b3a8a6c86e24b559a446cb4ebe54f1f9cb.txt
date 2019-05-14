@@ -1,0 +1,6 @@
+Make sure range queries are correctly profiled. (#25108)
+
+We introduced a new API for ranges in order to be able to decide whether points
+or doc values would be more appropriate to execute a query, but since
+`ProfileWeight` does not implement this API, the optimization is disabled when
+profiling is enabled.

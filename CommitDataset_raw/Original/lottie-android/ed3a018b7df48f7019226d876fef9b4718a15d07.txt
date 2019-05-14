@@ -1,0 +1,7 @@
+Fixed danglign choreographer callback. (#775)
+
+**This patch fixes the performance issue.**
+
+I've seen the cases where the previous version of the code was re-adding callbacks to the choreographer in case of cancelation/pause. Now it is designed to make it impossible. It looks like there is a copy of the callbacks stored somewhere in the stack. I've been able to reproduce the problem on Android 6.0 and 7.0.
+
+This issue caused application performance degradation and battery drain in the background for us.

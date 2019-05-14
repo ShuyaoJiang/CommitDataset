@@ -1,0 +1,14 @@
+Honor scheme in MockHttpServletRequest.isSecure()
+
+Prior to this commit the implementation of isSecure() in
+MockHttpServletRequest simply returned the value of the 'secure'
+boolean flag. Thus setting the scheme to 'https' had no effect on the
+value returned by isSecure() even though most non-mock implementations
+(e.g., Tomcat, Jetty, etc.) base the return value on the actual scheme
+in the request.
+
+This commit makes the behavior of MockHttpServletRequest.isSecure()
+more intuitive by honoring both the 'secure' boolean flag and the
+current value of the scheme.
+
+Issue: SPR-12098

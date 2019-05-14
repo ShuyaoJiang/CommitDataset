@@ -1,0 +1,7 @@
+Replace task observer thread with FutureTask subclass (#1083)
+
+I noticed that the observer thread approach that was being used to check when LottieTasks are done has indeterminate delay for reporting finished tasks, since the thread polls the task. It also adds overhead to create a thread for each task.
+
+Digging into it, it looks like we can simply use FutureTask's `done` function to know when the task is done.
+
+With this change the sample app seems to run perfectly, so functionality seems to be the same.

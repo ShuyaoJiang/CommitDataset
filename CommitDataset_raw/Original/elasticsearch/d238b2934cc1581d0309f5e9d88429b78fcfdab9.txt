@@ -1,0 +1,8 @@
+TEST: Fix Engine#testRebuildLocalCheckpointTracker
+
+In this test, we verify that the LocalCheckpointTracker is initialized
+with the operations of the safe commit. And the test fails because
+Engine#Index does not implement the equals method (should not
+implement as it consists of a mutable ParsedDocument).
+
+Closes #36470

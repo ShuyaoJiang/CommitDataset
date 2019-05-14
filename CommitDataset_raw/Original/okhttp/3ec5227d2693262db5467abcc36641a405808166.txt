@@ -1,0 +1,11 @@
+Don't crash reading non-ASCII characters from the server or the cache.
+
+This doesn't completely support ISO-8859-1 headers; instead they will most likely
+be mangled when they are decoded as UTF-8. If we decide we absolutely must support
+ISO-8859-1 here we can do that in another change. (I'm not currently enthusiastic
+about this idea.)
+
+But this does prevent OkHttp from crashing when it encounters non-ASCII characters
+in headers for HTTP/2, SPDY, and cached responses.
+
+Closes: https://github.com/square/okhttp/issues/1998

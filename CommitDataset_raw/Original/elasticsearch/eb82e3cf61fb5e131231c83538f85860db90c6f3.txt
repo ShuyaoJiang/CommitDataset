@@ -1,0 +1,9 @@
+[Test] Fix bad latches in rollup state tests
+
+The latches were not placed correctly, allowing the aborts
+to be set before we checked the state for Indexing the first time.
+
+This was due to using the DelayingIndexer's built in latch, which
+isn't placed quite where we needed it.
+
+Original commit: elastic/x-pack-elasticsearch@590cfa07b095a5cd18d293f0c222bbf8ff5cf601

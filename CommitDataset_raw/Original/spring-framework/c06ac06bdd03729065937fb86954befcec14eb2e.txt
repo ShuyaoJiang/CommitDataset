@@ -1,0 +1,6 @@
+JmsMessagingTemplate uses local convertJmsException template method instead of generic MessagingExceptionTranslator interface
+
+This commit also turns MessagingException into a NestedRuntimeException subclass which delivers a root message that has the cause message appended to it. That's a common expectation with the use of Spring exceptions since all of our exception hierarchies have historically been designed that way.
+
+Issue: SPR-12064
+Issue: SPR-12038

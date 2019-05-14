@@ -1,0 +1,11 @@
+Remove hand-coded XContent duplicate checks
+
+With this commit we cleanup hand-coded duplicate checks in XContent
+parsing. They were necessary previously but since we reconfigured the
+underlying parser in #22073 and #22225, these checks are obsolete and
+were also ineffective unless an undocumented system property has been
+set. As we also remove this escape hatch, we can remove the additional
+checks as well.
+
+Closes #22253
+Relates #34588

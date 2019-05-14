@@ -1,0 +1,23 @@
+Remove Principal handler logic from security
+
+Update ManagementSecurityAutoConfiguration so that MVC Endpoints that
+have Principal arguments are not treated in any special way. This
+restores Spring Boot 1.1.x behavior where the 'sensitive' flag is used
+to determine access rules.
+
+The HealthMvcEndpoint still uses the Principal (when available) to
+determine if full status information can be displayed. It now also
+explicitly checks the environment for `endpoints.health.sensitive`
+to determine if the user has opted-out and requires complete health
+details.
+
+The health MVC endpoint should now work as follows:
+
+* Default configuration - No login is required, full information is only
+  displayed if a Principal is available.
+* endpoints.health.sensitive=true - Login is required, full information
+  is displayed.
+* endpoints.health.sensitive=false - Login is not required, full
+  information is displayed.
+
+Fixes gh-2211

@@ -1,0 +1,20 @@
+Let DnsNameResolver constructor use a default value for searchDomains
+
+Motivation:
+
+It’s currently complicated to extend `DnsNameResolver` as the default
+value for `searchDomain` is package private.
+
+Modifications:
+
+* let `DnsNameResolver` accept a null `searchDomains` and then default
+to `DEFAULT_SEARCH_DOMAINS`, just like it’s being done with
+`resolvedAddressTypes`.
+* set default `DnsNameResolverBuilder#searchDomains` value to null to
+avoid cloning internal `DnsNameResolver.DEFAULT_SEARCH_DOMAINS` in
+`DnsNameResolver` constructor.
+
+Result:
+
+More versatile `DnsNameResolver` constructor.
+No array copy when using default search domains.

@@ -1,0 +1,13 @@
+Fix management endpoint without Spring Security
+
+The method 'injectIntoSecurityFilter' added In 3c1e48c assumes that
+Spring security is in the classpath so any management endpoints that are
+deployed on a different port requires Spring Security all the sudden.
+
+This commit separates the creating of the EndpointHandlerMapping in two
+mutually exclusive @Configuration: one that is triggered if Spring
+Security is not in the classpath and one that is triggered if Spring
+Security is in the classpath. The latter apply the security filter in the
+endpoint mapping if it exists.
+
+Fixes gh-2124

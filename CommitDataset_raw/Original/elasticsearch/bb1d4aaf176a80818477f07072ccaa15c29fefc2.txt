@@ -1,0 +1,8 @@
+Watcher: Fix put watch action (#31524)
+
+If no version is specified when putting a watch, the index API should be
+used instead of the update API, so that the whole watch gets overwritten
+instead of being merged with the existing one.
+
+Merging only happens when a version is specified, so that credentials can be omitted, which is important for the watcher UI.
+

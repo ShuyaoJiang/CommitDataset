@@ -1,0 +1,14 @@
+Fix missing ResourceLeak.close() in AbstractDnsMessage
+
+Motivation:
+
+ResourceLeak.close() must be called when a reference-counted resource is
+deallocated, but AbstractDnsMessage.deallocate() forgot to call it.
+
+Modifications:
+
+Call ResourceLeak.close() for the tracked AbstractDnsMessage instances
+
+Result:
+
+Fix the false resource leak warnings

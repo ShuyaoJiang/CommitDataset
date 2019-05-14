@@ -1,0 +1,29 @@
+Use CacheResolver in Spring abstraction
+
+Prior to this commit, the CacheResolver was not used by Spring's
+caching abstraction. This commit provides the necessary configuration
+options to tune how a cache is resolved for a given operation.
+
+CacheResolver can be customized globally, at the operation level or at
+the class level. This breaks the CachingConfigurer class and a support
+implementation is provided that implements all methods so that the
+default is taken if it's not overridden. The JSR-107 support has been
+updated as well, with a similar support class.
+
+In particular, the static and runtime information of a cache
+operation were mixed which prevents any forms of caching. As the
+CacheResolver and the KeyGenerator can be customized, every operation
+call lead to a lookup in the context for the bean.
+
+This commit adds CacheOperationMetadata, a static holder of all
+the non-runtime metadata about a cache operation. This is used
+as an input source for the existing CacheOperationContext.
+
+Caching the operation metadata in an AspectJ aspect can have side
+effects as the aspect is static instance for the current ClassLoader.
+The metadata cache needs to be cleared when the context shutdowns.
+This is essentially a test issue only as in practice each application
+runs in its class loader. Tests are now closing the context properly
+to honor the DisposableBean callback.
+
+Issue: SPR-11490

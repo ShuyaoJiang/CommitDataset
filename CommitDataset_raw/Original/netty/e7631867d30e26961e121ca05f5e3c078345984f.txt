@@ -1,0 +1,10 @@
+LzmaFrameEncoderTest double release
+
+Motivation:
+2c78902ebc7a81caa0ee6e3892438455f06dec9c ensured buffers were released in the general case but didn't clean up an extra release in LzmaFrameEncoderTest#testCompressionOfBatchedFlowOfData which lead to a double release.
+
+Modifications:
+LzmaFrameEncoderTest#testCompressionOfBatchedFlowOfData should not explicitly release the buffer because decompress will release the buffer
+
+Result:
+No more reference count exception and failed test.

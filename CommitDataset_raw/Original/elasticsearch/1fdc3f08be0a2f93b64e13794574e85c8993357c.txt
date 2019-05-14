@@ -1,0 +1,10 @@
+Do not expose hard-deleted docs in Lucene history (#32333)
+
+Today when reading operation history in Lucene, we read all documents.
+However, if indexing a document is aborted, IndexWriter will hard-delete
+it; we, therefore, need to exclude that document from Lucene history.
+
+This commit makes sure that we exclude aborted documents by using the
+hard liveDocs of a SegmentReader if there are deletes.
+
+Closes #32269

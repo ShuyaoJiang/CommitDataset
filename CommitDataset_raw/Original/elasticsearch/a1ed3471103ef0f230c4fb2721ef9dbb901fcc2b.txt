@@ -1,0 +1,21 @@
+Fail restore when the shard allocations max retries count is reached (#27493)
+
+This commit changes the RestoreService so that it now fails the snapshot 
+restore if one of the shards to restore has failed to be allocated. It also adds
+a new RestoreInProgressAllocationDecider that forbids such shards to be 
+allocated again. This way, when a restore is impossible or failed too many 
+times, the user is forced to take a manual action (like deleting the index 
+which failed shards) in order to try to restore it again.
+
+This behaviour has been implemented because when the allocation of a 
+shard has been retried too many times, the MaxRetryDecider is engaged 
+to prevent any future allocation of the failed shard. If it happens while 
+restoring a snapshot, the restore hanged and was never completed because 
+it stayed around waiting for the shards to be assigned (and that won't happen).
+It also blocked future attempts to restore the snapshot again. With this commit,
+the restore does not hang and is marked as failed, leaving failed shards 
+around for investigation.
+
+This is the second part of the #26865 issue.
+
+Closes #26865

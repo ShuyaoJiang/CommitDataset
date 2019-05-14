@@ -1,0 +1,32 @@
+Fix failing h2spec tests 8.1.2.1 related to pseudo-headers validation
+
+Motivation:
+
+According to the spec:
+All pseudo-header fields MUST appear in the header block before regular
+header fields. Any request or response that contains a pseudo-header
+field that appears in a header block after
+a regular header field MUST be treated as malformed (Section 8.1.2.6).
+
+Pseudo-header fields are only valid in the context in which they are defined.
+Pseudo-header fields defined for requests MUST NOT appear in responses;
+pseudo-header fields defined for responses MUST NOT appear in requests.
+Pseudo-header fields MUST NOT appear in trailers.
+Endpoints MUST treat a request or response that contains undefined or
+invalid pseudo-header fields as malformed (Section 8.1.2.6).
+
+Clients MUST NOT accept a malformed response. Note that these requirements
+are intended to protect against several types of common attacks against HTTP;
+they are deliberately strict because being permissive can expose
+implementations to these vulnerabilities.
+
+Modifications:
+
+- Introduce validation in HPackDecoder
+
+Result:
+
+- Requests with unknown pseudo-field headers are rejected
+- Requests with containing response specific pseudo-headers are rejected
+- Requests where pseudo-header appear after regular header are rejected
+- h2spec 8.1.2.1 pass

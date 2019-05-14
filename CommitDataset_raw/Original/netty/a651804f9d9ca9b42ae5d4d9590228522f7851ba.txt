@@ -1,0 +1,20 @@
+Carefully manage Keep-Alive connections in HttpStaticFileServer (#8914)
+
+Motivation:
+
+Simple rules:
+
+* close the connection when sending any error
+* specify "Connection: close" header when closing the connection
+* successful responses should keep the connection intact when otherwise is not requested by the client
+
+Modifications:
+
+* "send response and cleanup the connection" logic moved to a helper
+* for all successful responses set "Content-Lenght" header
+* do not specify "Connection: Keep-Alive" header as far it's a default for HTTP/1.1
+* set "Connection: close" header when necessary
+
+Result:
+
+Keep-Alive connections management is inlined with RFCs.

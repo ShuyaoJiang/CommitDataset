@@ -1,0 +1,12 @@
+Watcher: Allow unmet action conditions to reset action status (elastic/x-pack-elasticsearch#1859)
+
+The logic of resetting acknowledgements is only executed, if the watch
+wide condition is not met. However, if you dont specify a condition
+(which makes it always true), but create a condition in your action
+(this might make sense because it allows you to execute a transform and
+then execute the condition), then after acking this action, it will
+never get be unacked, because the watch wide condition is always met.
+
+relates elastic/x-pack-elasticsearch#1857
+
+Original commit: elastic/x-pack-elasticsearch@95aa402c2792ec29273ae0faa6939211ad604756

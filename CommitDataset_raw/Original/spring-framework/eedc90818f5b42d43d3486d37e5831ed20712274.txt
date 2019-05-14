@@ -1,0 +1,15 @@
+Re-introduce writeHeaders() in ServerHttpResponse
+
+This commit brings back the writeHeaders method on ServerHttpResponse
+that was once added (2a6a4f) and then removed (9c7151).
+
+This version is a little simpler since writeHeaders doesn't explicitly
+flush/send headers which runtimes are expected to do by default.
+Instead the main purpose of writeHeaders now is to ensure changes made
+via HttpHeaders are applied to the underlying runtime response at some
+point and we now do that once at the very end.
+
+This approach provides the most flexibility (vs keeping HttpHeaders in
+sync) because it allows a full and consistent set of mutative
+operations for both headers and cookies (to be added) regardless of the
+API exposed by the underlying runtime.

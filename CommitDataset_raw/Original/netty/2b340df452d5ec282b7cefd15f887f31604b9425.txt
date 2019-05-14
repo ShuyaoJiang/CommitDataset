@@ -1,0 +1,12 @@
+DuplexChannel to support shutdownInput
+
+Motivation:
+The DuplexChannel is currently incomplete and only supports shutting down the output side of a channel. This interface should also support shutting down the input side of the channel.
+
+Modifications:
+- Add shutdownInput and shutdown methods to the DuplexChannel interface
+- Remove state in NIO and OIO for tracking input being shutdown independent of the underlying transport's socket type. Tracking the state independently may lead to inconsistent state.
+
+Result:
+DuplexChannel supports shutting down the input side of the channel
+Fixes https://github.com/netty/netty/issues/5175

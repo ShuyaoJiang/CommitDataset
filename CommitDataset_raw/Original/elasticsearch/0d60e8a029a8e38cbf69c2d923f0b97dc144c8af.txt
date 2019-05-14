@@ -1,0 +1,19 @@
+Fix race between replica reset and primary promotion (#32442)
+
+We've recently seen a number of test failures that tripped an assertion in IndexShard (see issues
+linked below), leading to the discovery of a race between resetting a replica when it learns about a
+higher term and when the same replica is promoted to primary. This commit fixes the race by
+distinguishing between a cluster state primary term (called pendingPrimaryTerm) and a shard-level
+operation term. The former is set during the cluster state update or when a replica learns about a
+new primary. The latter is only incremented under the operation block, which can happen in a
+delayed fashion. It also solves the issue where a replica that's still adjusting to the new term
+receives a cluster state update that promotes it to primary, which can happen in the situation of
+multiple nodes being shut down in short succession. In that case, the cluster state update thread
+would call `asyncBlockOperations` in `updateShardState`, which in turn would throw an exception
+as blocking permits is not allowed while an ongoing block is in place, subsequently failing the shard.
+This commit therefore extends the IndexShardOperationPermits to allow it to queue multiple blocks
+(which will all take precedence over operations acquiring permits). Finally, it also moves the primary
+activation of the replication tracker under the operation block, so that the actual transition to
+primary only happens under the operation block.
+
+Relates to #32431, #32304 and #32118

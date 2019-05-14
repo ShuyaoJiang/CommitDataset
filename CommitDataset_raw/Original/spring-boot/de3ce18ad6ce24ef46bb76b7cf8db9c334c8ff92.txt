@@ -1,0 +1,6 @@
+Defensive check for cglib proxy in RequestMappingEndpoint
+
+Since AbstractHandlerMethodMapping.getHandlerMap() is final it can't
+be cglibbed and a proxy will barf if you try and call that method.
+The RequestMappingEndpoint can be protected simply by defensively
+checking if the mapping is a proxy before trying to inspect it.

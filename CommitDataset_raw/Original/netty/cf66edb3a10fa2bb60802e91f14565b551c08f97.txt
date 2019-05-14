@@ -1,0 +1,13 @@
+[#3675] Fix livelock issue in MpscLinkedQueue
+
+Motivation:
+
+All read operations should be safe to execute from multiple threads which was not the case and so could produce a livelock.
+
+Modifications:
+
+Modify methods so these are safe to be called from multiple threads.
+
+Result:
+
+No more livelock.

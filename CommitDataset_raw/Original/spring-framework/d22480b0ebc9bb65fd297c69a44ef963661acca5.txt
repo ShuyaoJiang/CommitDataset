@@ -1,0 +1,17 @@
+Ensure all aliased attributes in target annotation are overridden
+
+Prior to this commit, it was possible that implicit aliases and
+transitive implicit aliases (configured via @AliasFor) might not be
+honored in certain circumstances, in particular if implicit aliases
+were declared to override different attributes within an alias pair in
+the target meta-annotation.
+
+This commit addresses this issue by ensuring that all aliased
+attributes in the target meta-annotation are overridden during the
+merge process in AnnotatedElementUtils.
+
+In addition, concrete default values for attributes in a
+meta-annotation declaration can now be effectively shadowed by
+transitive implicit aliases in composed annotations.
+
+Issue: SPR-14069

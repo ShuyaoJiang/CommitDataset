@@ -1,0 +1,16 @@
+Fix regressions from 8f558e7
+
+The change to provide public register/unregister methods in
+AbstractHandlerMethodMapping assumed that a single method cannot be
+mapped more than once. This is not the case with the MvcEndpoints and
+EndpointHandlerMapping from Spring Boot which wrap one or more
+non-web Endpoint types with an MvcEndpointAdapter in order to expose
+them for use over the web. In effect Spring MVC sees a single handler
+method mapped many times.
+
+This change removes that assumption so rather than unregistering with
+a HandlerMethod, which is not necessarily unique, the unregister method
+now takes the actual mapping, which is the only thing that should actually
+be unique.
+
+Issue: SPR-11541

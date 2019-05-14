@@ -1,0 +1,11 @@
+Don't use ImmutableSet.of() for the keySet of ImmutableMap.of().
+
+The keySet of the empty map will still be a singleton (since the empty map is a singleton and it caches keySet), it'll just be a different singleton from ImmutableSet.of().  This ensures that the only implementation of ImmutableSet retained by usages of ImmutableMap are its own keySet implementations.
+
+Effects on ImmutableMapProGuard ([]38966 bytes => 37886 bytes
+37 classes => 36 classes
+231 methods => 219 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147078624

@@ -1,0 +1,13 @@
+Add @Conditionals to permit JPA/Mongo mixed usage
+
+I decided to go with both approaches (make the autoconfig for
+repositories @ConditionalOnMissingBean(RepositoryFactoryBeanSupport),
+so the first one wins; and also make them conditional on
+spring.data.*.repositories.enabled=true. The ordering problem
+is still there really (it's not defined which repositories will
+be created by the autoconfig), so if a user is going to have
+2 repository implementations on the classpath, he is going to
+have to either choose one to disable, or manualy @Enable* the
+other one.
+
+Fixes gh-1042

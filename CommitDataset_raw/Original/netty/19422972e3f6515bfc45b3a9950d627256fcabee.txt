@@ -1,0 +1,15 @@
+Fix and simplify freeing a direct buffer / Fix Android support
+
+Motivation:
+
+6e8ba291cfcb325fe4397a8e7db43579070e7a07 introduced a regression in Android because Android does not have sun.nio.ch.DirectBuffer (see #2330.)  I also found PlatformDependent0.freeDirectBuffer() and freeDirectBufferUnsafe() are pretty much same after the commit and the unsafe version should be removed.
+
+Modifications:
+
+- Do not use the pooled allocator in Android because it's too resource hungry for Androids.
+- Merge PlatformDependent0.freeDirectBuffer() and freeDirectBufferUnsafe() into one method.
+- Make the Unsafe unavailable when sun.nio.ch.DirectBuffer is unavailable.  We could keep the Unsafe available and handle the sun.nio.ch.DirectBuffer case separately, but I don't want to complicate our code just because of that.  All supported JDK versions have sun.nio.ch.DirectBuffer if the Unsafe is available.
+
+Result:
+
+Simpler code. Fixes Android support (#2330)

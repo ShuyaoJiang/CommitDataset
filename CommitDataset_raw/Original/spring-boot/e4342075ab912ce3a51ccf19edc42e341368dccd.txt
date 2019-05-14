@@ -1,0 +1,12 @@
+Fix class loading problem with DevTools and Spring Session with Redis
+
+Previously, when a session attribute that had been stored in Redis was
+being deserialized, the app class loader would be used. This would
+result in a ClassCastException if the attribute was an instance of a
+class visible to the restart class loader.
+
+This commit auto-configures Spring Session’s RedisTemplate to use a
+custom deserializer that uses the restart class loader when
+deserializing session attributes.
+
+Closes gh-3805

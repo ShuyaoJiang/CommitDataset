@@ -1,0 +1,10 @@
+Relax handling of Cache-Control: immutable
+
+Previously we were treating this header as if the response would never
+change. This was incorrect. The correct behavior according to RFC 8246
+is that the 'immutable' directive only applies to conditional requests
+made during the freshness lifetime. We don't make conditional requests
+during the freshness lifetime, so the entire directive doesn't apply
+to us.
+
+https://github.com/square/okhttp/issues/4313

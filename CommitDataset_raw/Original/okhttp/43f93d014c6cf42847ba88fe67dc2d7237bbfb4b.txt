@@ -1,0 +1,5 @@
+Fix flaky testRfc2109Response()
+
+The time delta in the cookie max-age is rounded down, so is at most 59 seconds. Possibly a GC or some other hiccup can occasionally make it lower, so allow some room for error.
+
+Fixes https://github.com/square/okhttp/issues/4733.

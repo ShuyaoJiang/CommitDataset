@@ -1,0 +1,9 @@
+Remove transport name from tcp channel (#40074)
+
+Currently, we maintain a transport name ("mock-nio", "nio", "netty")
+that is passed to a `TcpTransportChannel` when a request is received.
+The value of this name is to associate with the task when we register a
+task with the task manager. However, it is only possible to run ES with
+one transport, so having an implementation specific name is unnecessary.
+This commit removes the name and replaces it with the generic
+"transport".

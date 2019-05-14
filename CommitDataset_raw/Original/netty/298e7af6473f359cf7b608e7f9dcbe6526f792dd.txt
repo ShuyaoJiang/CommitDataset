@@ -1,0 +1,25 @@
+Trigger channelWritabilityChanged() later to avoid reentrance
+
+Related: #3212
+
+Motivation:
+
+When SslHandler and ChunkedWriteHandler exists in a pipeline together,
+it is possible that ChunkedWriteHandler.channelWritabilityChanged()
+invokes SslHandler.flush() and vice versa. Because they can feed each
+other (i.e. ChunkedWriteHandler.channelWritabilityChanged() ->
+SslHandler.flush() -> ChunkedWriteHandler.channelWritabilityChanged() ->
+..), they can fall into an inconsistent state due to reentrance (e.g.
+bad MAC record at the remote peer due to incorrect ordering.)
+
+Modifications:
+
+- Trigger channelWritabilityChanged() using EventLoop.execute() when
+  there's a chance where channelWritabilityChanged() can cause a
+  reentrance issue
+- Fix test failures caused by the modification
+
+Result:
+
+Fix the handler reentrance issues related with a
+channelWritabilityChanged() event

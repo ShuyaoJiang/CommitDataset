@@ -1,0 +1,20 @@
+Add pluggable XContentBuilder writers and human readable writers (#29120)
+
+* Add pluggable XContentBuilder writers and human readable writers
+
+This adds the ability to use SPI to plug in writers for XContentBuilder. By
+implementing the XContentBuilderProvider class we can allow Elasticsearch to
+plug in different ways to encode types to JSON.
+
+Important caveat for this, we should always try to have the class implement
+`ToXContentFragment` first, however, in the case of classes from our
+dependencies (think Joda classes or Lucene classes) we need a way to specify
+writers for these classes.
+
+This also makes the human-readable field writers generic and pluggable, so that
+we no longer need to tie XContentBuilder to things like `TimeValue` and
+`ByteSizeValue`. Contained as part of this moves all the TimeValue human
+readable fields to the new `humanReadableField` method. A future commit will
+move the `ByteSizeValue` calls over to this method.
+
+Relates to #28504

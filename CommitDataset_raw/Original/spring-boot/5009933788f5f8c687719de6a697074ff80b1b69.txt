@@ -1,0 +1,11 @@
+Move to constructor injection in simple configuration classes
+
+This commit updates "simple" configuration classes to use constructor
+injection. Simple means that there are no optional dependencies
+(@Autowired(required=false) is not used), and none of the dependencies
+use generics.
+
+Configuration classes that are not simple will be updated in a second
+pass once https://jira.spring.io/browse/SPR-14015 has been fixed.
+
+See gh-5306

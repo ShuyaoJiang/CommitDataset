@@ -1,0 +1,10 @@
+Correct bug in ScriptDocValues (#40488)
+
+If a field `field_name` was missing in a document,
+doc['field_name'].get(0) incorrectly retrieved
+a value of the previously accessed document.
+This happened because `get(int index)` function
+was just accessing `values[index]` without
+checking the number of values - `count`.
+
+This PR fixes this.

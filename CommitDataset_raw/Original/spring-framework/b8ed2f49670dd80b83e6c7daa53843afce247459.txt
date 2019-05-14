@@ -1,0 +1,17 @@
+Ensure all tests are executed in the Gradle build
+
+Prior to this commit several test classes named "*Test" were not
+recognized as tests by the Gradle build. This is due to the configured
+inclusion of '**/*Tests.*' which follows Spring's naming convention for
+test classes.
+
+This commit addresses this issue by:
+
+ - Renaming real test classes consistently to "*Tests".
+ - Renaming internal test classes to "*TestCase".
+ - Renaming @WebTest to @WebTestStereotype.
+ - Disabling broken tests in AnnoDrivenStaticEntityMockingControlTest.
+ - Modifying the Gradle build configuration so that classes ending in
+   either "*Tests" or "*Test" are considered test classes.
+
+Issue: SPR-11384

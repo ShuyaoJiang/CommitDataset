@@ -1,0 +1,52 @@
+Add an OpenSslEngine and the universal API for enabling SSL
+
+Motivation:
+
+Some users already use an SSLEngine implementation in finagle-native. It
+wraps OpenSSL to get higher SSL performance.  However, to take advantage
+of it, finagle-native must be compiled manually, and it means we cannot
+pull it in as a dependency and thus we cannot test our SslHandler
+against the OpenSSL-based SSLEngine.  For an instance, we had #2216.
+
+Because the construction procedures of JDK SSLEngine and OpenSslEngine
+are very different from each other, we also need to provide a universal
+way to enable SSL in a Netty application.
+
+Modifications:
+
+- Pull netty-tcnative in as an optional dependency.
+  http://netty.io/wiki/forked-tomcat-native.html
+- Backport NativeLibraryLoader from 4.0
+- Move OpenSSL-based SSLEngine implementation into our code base.
+  - Copied from finagle-native; originally written by @jpinner et al.
+  - Overall cleanup by @trustin.
+- Run all SslHandler tests with both default SSLEngine and OpenSslEngine
+- Add a unified API for creating an SSL context
+  - SslContext allows you to create a new SSLEngine or a new SslHandler
+    with your PKCS#8 key and X.509 certificate chain.
+  - Add JdkSslContext and its subclasses
+  - Add OpenSslServerContext
+- Add ApplicationProtocolSelector to ensure the future support for NPN
+  (NextProtoNego) and ALPN (Application Layer Protocol Negotiation) on
+  the client-side.
+- Add SimpleTrustManagerFactory to help a user write a
+  TrustManagerFactory easily, which should be useful for those who need
+  to write an alternative verification mechanism. For example, we can
+  use it to implement an unsafe TrustManagerFactory that accepts
+  self-signed certificates for testing purposes.
+- Add InsecureTrustManagerFactory and FingerprintTrustManager for quick
+  and dirty testing
+- Add SelfSignedCertificate class which generates a self-signed X.509
+  certificate very easily.
+- Update all our examples to use SslContext.newClient/ServerContext()
+- SslHandler now logs the chosen cipher suite when handshake is
+  finished.
+
+Result:
+
+- Cleaner unified API for configuring an SSL client and an SSL server
+  regardless of its internal implementation.
+- When native libraries are available, OpenSSL-based SSLEngine
+  implementation is selected automatically to take advantage of its
+  performance benefit.
+- Examples take advantage of this modification and thus are cleaner.

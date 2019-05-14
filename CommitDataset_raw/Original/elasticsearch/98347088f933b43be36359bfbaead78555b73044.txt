@@ -1,0 +1,10 @@
+Fix LDAP Authc connections deadlock (elastic/x-pack-elasticsearch#2587)
+
+Do not execute bind on on the LDAP reader thread
+
+Each LDAP connection has a single associated thread, executing the handlers for async requests; this is managed by the LDAP library. The bind operation is blocking for the connection. It is a deadlock to call bind, if on the LDAP reader thread for the same connection, because waiting for the bind response blocks the thread processing responses (for this connection).
+This will execute the bind operation (and the subsequent runnable) on a thread pool after checking for the conflict above.
+
+Closes: elastic/x-pack-elasticsearch#2570, elastic/x-pack-elasticsearch#2620
+
+Original commit: elastic/x-pack-elasticsearch@404a3d873782c590a9043ae08c45db0b463968cd

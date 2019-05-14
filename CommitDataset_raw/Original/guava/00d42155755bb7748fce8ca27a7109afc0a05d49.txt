@@ -1,0 +1,12 @@
+Change StatsAccumulator.addAll(Stats) to use a more Knuth-like calculation for the mean. I claim that this is more accurate in the cases we care about.
+
+We know that this method is more accurate when adding a single value to an accumulator which has accumulated a large number of values (see Knuth for the background). I believe that it is generally more accurate when we are adding a small number of values to a larger number. It may be less accurate when the two datasets are comparable in size. But I claim that we care about the former more than the latter.
+
+As a motivating example, think turning a double into a Stats of a single value, and then merging the Iterator<Stats> into a single Stats using this new method. The aggregation will happen hierarchically: typically, there will be a first phase on the mapper where we combine individual values on a given shard, and a second phase on the reducer where we combine values from the various shards. In the first phase, we're combining a lot of Stats each with a single value, so this is actually equivalent to the case where we're adding a single value, and the Knuth method is definitely more accurate. In the second phase, we can expect to be combining similarly-sized Stats instances from a large number of shards, so the process will be dominated by the case where we're adding one shard's values to many shards' values, which is adding a small number to a larger number.
+
+Anything where we're combining more than a few similarly-sized Stats instances will benefit from this change.
+
+This CL also makes a tiny tweak to add(double): instead of incrementing count and then branching on count==1, it branches count==0 and increments (or sets to 1) inside both branches. This is probably more readable (because it's easier to understand "are we starting from an empty accumulator" than "are we creating an accumulator with one value"), it improves the symmetry between the two methods, and there's an outside chance it could be faster (if the compiler/hotspot create better code for comparing to zero).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=111495046

@@ -1,0 +1,9 @@
+[Rollup] Metric config parser must use builder so validation runs (#31159)
+
+The parser for the Metric config was directly instantiating
+the config object, rather than using the builder.  That means it was
+bypassing the validation logic built into the builder, and would allow
+users to create invalid metric configs (like using unsupported metrics).
+
+The job would later blow up and abort due to bad configs, but this isn't
+immediately obvious to the user since the PutJob API succeeded.

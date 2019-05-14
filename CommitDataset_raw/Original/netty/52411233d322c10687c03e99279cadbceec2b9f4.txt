@@ -1,0 +1,20 @@
+Carefully manage Keep-Alive/Close connection headers in all examples (#8966)
+
+Motivation:
+
+"Connection: close" header should be specified each time we're going
+to close an underlying TCP connection when sending HTTP/1.1 reply.
+
+Modifications:
+
+Introduces changes made in #8914 for the following examples:
+
+* WebSocket index page and WebSocket server handler
+* HelloWorld server
+* SPDY server handler
+* HTTP/1.1 server handler from HTTP/2 HelloWorld example
+* HTTP/1.1 server handler from tiles example
+
+Result:
+
+Keep-Alive connections management conforms with RFCs.

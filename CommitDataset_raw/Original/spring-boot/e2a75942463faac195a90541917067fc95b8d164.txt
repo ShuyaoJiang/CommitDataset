@@ -1,0 +1,12 @@
+Configure Reactor HTTP client resources
+
+This commit adds support for the new `ReactorResourceFactory` and
+ensures that such a bean is created and destroyed with the application
+context. This will create a `ClientHttpConnector` bean, to be configured
+on the `WebClient.Builder` instance - or let developers create their own
+`ClientHttpConnector` bean to override that opinion.
+
+By default, the `ReactorResourceFactory` is configured to participate
+with the global resources, for better efficiency.
+
+Closes gh-14058

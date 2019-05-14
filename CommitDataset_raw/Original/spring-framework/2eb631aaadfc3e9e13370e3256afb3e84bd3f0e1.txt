@@ -1,0 +1,17 @@
+Avoid exposing (Co)RouterFunctionDsl#invoke
+
+WebFlux.fn RouterFunctionDsl#invoke and CoRouterFunctionDsl#invoke
+were wrongly exposed on public API and have never been designed to
+be used by end users, but rather only invoked from router { } or
+coRouter { } builders.
+
+To fix that, avoiding this method being accessible from the DSL and
+for the sake of consistency with WebMvc.fn RouterFunctionDsl,
+Spring Framework 5.2 turns public fun invoke() method to
+an internal fun build() one.
+
+As a consequence RouterFunctionDsl and CoRouterFunctionDsl are not
+open anymore, they are expected to be extended via Kotlin
+extensions if needed.
+
+Closes gh-22736

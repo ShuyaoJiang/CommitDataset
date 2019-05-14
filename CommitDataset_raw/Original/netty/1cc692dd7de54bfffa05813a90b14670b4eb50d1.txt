@@ -1,0 +1,13 @@
+Fix incorrect reachability assumption in ResourceLeakDetector (#8410)
+
+Motivation:
+
+trackedObject != null gives no guarantee that trackedObject remains reachable. This may cause problems related to premature finalization: false leak detector warnings.
+ 
+Modifications:
+
+Add private method reachabilityFence0 that works on JDK 8 and can be factored out into PlatformDependent. Later, it can be swapped for the real Reference.reachabilityFence.
+ 
+Result:
+
+No false leak detector warnings in future versions of JDK.

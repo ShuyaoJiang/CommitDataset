@@ -1,0 +1,28 @@
+Introduce null-safety of Spring Framework API
+
+This commit introduces 2 new @Nullable and @NonNullApi
+annotations that leverage JSR 305 (dormant but available via
+Findbugs jsr305 dependency and already used by libraries
+like OkHttp) meta-annotations to specify explicitly
+null-safety of Spring Framework parameters and return values.
+
+In order to avoid adding too much annotations, the
+default is set at package level with @NonNullApi and
+@Nullable annotations are added when needed at parameter or
+return value level. These annotations are intended to be used
+on Spring Framework itself but also by other Spring projects.
+
+@Nullable annotations have been introduced based on Javadoc
+and search of patterns like "return null;". It is expected that
+nullability of Spring Framework API will be polished with
+complementary commits.
+
+In practice, this will make the whole Spring Framework API
+null-safe for Kotlin projects (when KT-10942 will be fixed)
+since Kotlin will be able to leverage these annotations to
+know if a parameter or a return value is nullable or not. But
+this is also useful for Java developers as well since IntelliJ
+IDEA, for example, also understands these annotations to
+generate warnings when unsafe nullable usages are detected.
+
+Issue: SPR-15540

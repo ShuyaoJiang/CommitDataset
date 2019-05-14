@@ -1,0 +1,14 @@
+[ML] Refactor aggregation response handling to make more flexible (elastic/x-pack-elasticsearch#1795)
+
+Currently, aggregated datafeeds construct JSON from the aggregation
+response by traversing all nested aggregations. In order to
+achieve this, multiple leaf aggregations are not supported. Also,
+scenarios it makes it impossible to effectively use pipeline
+aggregations as it will not ignore the intermediate bucket
+aggregations.
+
+This commit refactors AggregationToJsonProcessor in order to
+support the above scenarios. This is achieved by only converting
+the fields of interest, that is the job analysis fields.
+
+Original commit: elastic/x-pack-elasticsearch@8b575956ca1aca5de19c1b1d6ed85d17cadb93dc

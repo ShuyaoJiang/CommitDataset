@@ -1,0 +1,14 @@
+Allow to reset a log level
+
+This commit ensures that `setLogLevel` on the `LoggingSystem` accepts
+a `null` level. A `null` level means any customization sets on that
+level should be removed and the default configuration should be used
+instead.
+
+Effectively, the level of the parent logger is going to be used when
+`setLevel` is called with `null` for a given logger.
+
+Most JMX clients do not accept to pass `null` for an argument so an
+empty String is translated to null in that specific case.
+
+Closes gh-8776

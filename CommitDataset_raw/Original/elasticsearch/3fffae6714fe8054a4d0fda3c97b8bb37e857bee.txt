@@ -1,0 +1,11 @@
+Remove with(out)-system-key tests (#40547)
+
+This change removes the variants of the rolling upgrade and full
+cluster restart tests that use or do not use a system key. These tests
+were added during 5.x when the system key was still used for security
+and now the system key is only used as the watcher encryption key so
+duplicating rolling upgrade and full cluster restarts is not needed.
+
+The change here removes the subprojects for testing these scenarios and
+defaults to always run with the watcher sensitive values encrypted for
+these tests.

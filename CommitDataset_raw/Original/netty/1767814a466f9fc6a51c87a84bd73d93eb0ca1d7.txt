@@ -1,0 +1,11 @@
+Replace DnsNameResolverContext#trace special code with an implementation of DnsQueryLifecycleObserver
+
+Motivation:
+DnsQueryLifecycleObserver is designed to capture the life cycle of every query. DnsNameResolverContext has a custom trace mechanism which consists of a StringBuilder and manual calls throughout the class. We can remove some special case code in DnsNameResolverContext and instead use a special implementation of DnsQueryLifecycleObserver when trace is enabled.
+
+Modifications:
+- Remove all references to the boolean trace variables in DnsNameResolverContext and DnsNameResolver
+- Introduce TraceDnsQueryLifecycleObserver which will be used when trace is enabled and will log similar data as what trace currently provides
+
+Result:
+Less special case code in DnsNameResolverContext and instead delegate to TraceDnsQueryLifecycleObserver to capture trace information.

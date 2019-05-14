@@ -1,0 +1,5 @@
+Use cancel instead of timeout for aborting publications (#37670)
+
+When publications were cancelled because a node turned to follower or candidate, it would still
+show as time out, which can be confusing in the logs. This change adapts the improper call of
+onTimeout by generalizing it to a cancel method.

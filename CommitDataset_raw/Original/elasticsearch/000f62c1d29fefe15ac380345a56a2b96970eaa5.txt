@@ -1,0 +1,12 @@
+TEST: makes sure to corrupt referenced tlog files (#27546)
+
+Method TruncateTranslogIT#corruptTranslogFiles corrupts some random
+existing *.tlog files in a translog directory. However, this may not
+actually corrupt translog at all if it corrupts only tlog files which
+are not referenced by the Checkpoint (eg. their translog generations are
+smaller the Checkpoint).
+
+This commit makes sure that we corrupt some tlog files which are
+referenced by the Checkpoint.
+
+Closes #27538

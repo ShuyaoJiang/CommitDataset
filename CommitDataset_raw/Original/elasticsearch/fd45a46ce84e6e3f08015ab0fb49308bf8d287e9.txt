@@ -1,0 +1,10 @@
+Deprecate `isShardsAcked()` in favour of `isShardsAcknowledged()` (#27819)
+
+Several responses include the shards_acknowledged flag (indicating whether the
+requisite number of shard copies started before the completion of the operation)
+and there are two different getters used : isShardsAcknowledged() and isShardsAcked().
+
+This PR deprecates the isShardsAcked() in favour of isShardsAcknowledged() in 
+CreateIndexResponse, RolloverResponse and CreateIndexClusterStateUpdateResponse.
+
+Closes #27784

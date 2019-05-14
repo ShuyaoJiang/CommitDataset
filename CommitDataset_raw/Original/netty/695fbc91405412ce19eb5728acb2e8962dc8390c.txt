@@ -1,0 +1,13 @@
+[#2684] EpollSocketChannel gathering writes should take fast-path if possible
+
+Motivation:
+
+In EpollSocketchannel.writeBytesMultiple(...) we loop over all buffers to see if we need to adjust the readerIndex for incomplete writes. We can skip this if we know that everything was written (a.k.a complete write).
+
+Modification:
+
+Use fast-path if all bytes are written and so no need to loop over buffers
+
+Result:
+
+Fast write path for the average use.

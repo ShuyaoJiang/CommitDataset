@@ -1,0 +1,11 @@
+Property detect Health web extension with management context
+
+Previously, the Health web extension was defined in the management
+context and, as a result, it wasn't found when a separate port was
+required. The side effect is that anything that the health web extension
+does was not active anymore in that case.
+
+This commit makes sure that the extension is always defined as part of
+the main context where operations are discovered and merged.
+
+Closes gh-11285

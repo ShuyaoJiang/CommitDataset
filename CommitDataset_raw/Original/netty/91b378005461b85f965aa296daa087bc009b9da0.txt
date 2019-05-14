@@ -1,0 +1,10 @@
+[#2377] Implement epoll based DatagramChannel
+
+Motivation:
+There is currently no epoll based DatagramChannel. We should add one to make the set of provided channels complete and also to be able to offer better performance compared to the NioDatagramChannel once SO_REUSEPORT is implemented.
+
+Modifications:
+Add implementation of DatagramChannel which uses epoll. This implementation does currently not support multicast yet which will me implemented later on. As most users will not use multicast anyway I think it is fair to just add the EpollDatagramChannel without the support for now. We shipped NioDatagramChannel without support earlier too ...
+
+Result:
+Be able to use EpollDatagramChannel for max. performance on linux

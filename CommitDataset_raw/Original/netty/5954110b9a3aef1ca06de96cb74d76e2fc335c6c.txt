@@ -1,0 +1,17 @@
+Use ByteBufUtil.BYTE_ARRAYS ThreadLocal temporary arrays in more places (#8464)
+
+Motivation:
+
+#8388 introduced a reusable ThreadLocal<byte[]> for use in
+decodeString(...). It can be used in more places in the buffer package
+to avoid temporary allocations of small arrays.
+
+Modifications:
+
+Encapsulate use of the ThreadLocal in a static package-private
+ByteBufUtil.threadLocalTempArray(int) method, and make use of it from a
+handful of new places including ByteBufUtil.readBytes(...).
+
+Result:
+
+Fewer short-lived small byte array allocations.

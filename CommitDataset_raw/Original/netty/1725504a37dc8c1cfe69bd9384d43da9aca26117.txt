@@ -1,0 +1,24 @@
+Do not use GetPrimitiveArrayCritical(...) due multiple not-fixed bugs… (#8921)
+
+* Do not use GetPrimitiveArrayCritical(...) due multiple not-fixed bugs related to GCLocker
+
+Motivation:
+
+GetPrimitiveArrayCritical(...) may cause multiple not-fixed bugs related to the GCLocker while there is little gain for our use-case. We should just use GetByteArrayRegion(...) and copy into a small on-stack buffer.
+
+See also:
+
+- https://shipilev.net/jvm/anatomy-quarks/9-jni-critical-gclocker/#_g1
+- https://bugs.openjdk.java.net/browse/JDK-8048556
+- https://bugs.openjdk.java.net/browse/JDK-8057573
+- https://bugs.openjdk.java.net/browse/JDK-8057586
+
+Special thanks to @jayv @shipilev @apangin for the pointers.
+
+Modifications:
+
+Replace GetPrimitiveArrayCritical(...) with GetByteArrayRegion(...)
+
+Result:
+
+Less risks hitting GCLocker related bugs.

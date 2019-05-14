@@ -1,0 +1,14 @@
+Correctly handle errors when using OpenSSL
+
+Motivation:
+
+We used ERR_get_error() to detect errors and missed to handle different errors. Also we missed to clear the error queue for a thread before invoke SSL operations,
+this could lead to detecting errors on different OpenSslEngines then the one in which the error actual happened.
+
+Modifications:
+
+Explicit handle errors via SSL.get_error and clear the error code before SSL operations.
+
+Result:
+
+Correctly handle errors and no false-positives in different OpenSslEngines then the one which detected an error.

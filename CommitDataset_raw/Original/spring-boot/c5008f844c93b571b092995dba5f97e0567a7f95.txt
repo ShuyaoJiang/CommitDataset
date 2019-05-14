@@ -1,0 +1,8 @@
+Make sure bean resolver is set in the OAuth2 expression evaluator
+
+Also copies the ExpressionParser (the only public getter), trust
+resolver and permission evaluator (if available in the context). Changes
+the logic to not replace an existing OAuth2MethodSecurityExpressionHandler
+so that users can override simply by providing a bean of that type.
+
+Fixes gh-3542

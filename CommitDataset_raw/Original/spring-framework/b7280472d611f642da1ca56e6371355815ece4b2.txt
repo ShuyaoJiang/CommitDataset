@@ -1,0 +1,19 @@
+Improve WebSession related tests
+
+Add missing DefaultWebSessionManagerTests .block(). Previously
+session.save() was invoked, but we did not ensure it was completed.
+This commit makes it block on session.save()
+
+Fix existingSessionIsExpired. This test is actually broken and is
+testing a new session is created because the session id returned
+by the idResolver does not match the existing WebSession.
+This commit ensures that the id of the WebSession found by idResolver
+matches the existing WebSession.
+
+DefaultWebSessionManagerTests use Mockito. To ensure we test with
+independence from InMemoryWebSessionStore we use Mockito for the
+DefaultWebessionManager collaborators.
+
+Add test for response.setComplete(). We want to ensure that when the
+response is completed, it saves the WebSession and writes it to the
+response using idResolver

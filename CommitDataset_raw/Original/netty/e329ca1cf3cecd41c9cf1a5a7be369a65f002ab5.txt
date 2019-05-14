@@ -1,0 +1,17 @@
+Introduce ObjectCleaner and use it in FastThreadLocal to ensure FastThreadLocal.onRemoval(...) is called
+
+Motivation:
+
+There is no guarantee that FastThreadLocal.onRemoval(...) is called if the FastThreadLocal is used by "non" FastThreacLocalThreads. This can lead to all sort of problems, like for example memory leaks as direct memory is not correctly cleaned up etc.
+
+Beside this we use ThreadDeathWatcher to check if we need to release buffers back to the pool when thread local caches are collected. In the past ThreadDeathWatcher was used which will need to "wakeup" every second to check if the registered Threads are still alive. If we can ensure FastThreadLocal.onRemoval(...) is called we do not need this anymore.
+
+Modifications:
+
+- Introduce ObjectCleaner and use it to ensure FastThreadLocal.onRemoval(...) is always called when a Thread is collected.
+- Deprecate ThreadDeathWatcher
+- Add unit tests.
+
+Result:
+
+Consistent way of cleanup FastThreadLocals when a Thread is collected.

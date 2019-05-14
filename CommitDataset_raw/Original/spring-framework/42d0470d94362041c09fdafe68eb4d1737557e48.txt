@@ -1,0 +1,14 @@
+Improve expanding in MvcUriComponentsBuilder
+
+Before this change MvcUriComponentsBuilder could not create a
+UriComponentsBuilder for methods where the mapping has a URI variable
+and no matching method argument for it.
+
+For example a URI variable may be in the type-level mapping but not
+all methods may have an @PathVariable argument for it.
+
+This fix addresses the shortcoming such that MvcUriComponentsBuilder
+expands the method argument values available to it and leaves remaining
+URI variables to be further expanded via UriComponents.expand().
+
+Issue: SPR-11391

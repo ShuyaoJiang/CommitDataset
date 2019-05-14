@@ -1,0 +1,31 @@
+Loosen bounds check on CompositeByteBuf's maxNumComponents (#8621)
+
+
+Motivation:
+
+In versions of Netty prior to 4.1.31.Final, a CompositeByteBuf could be
+created with any size (including potentially nonsensical negative
+values). This behavior changed in e7737b993, which introduced a bounds
+check to only allow for a component size greater than one. This broke
+some existing use cases that attempted to create a byte buf with a
+single component.
+
+Modifications:
+
+Lower the bounds check on numComponents to include the single component
+case, but still throw an exception for anything less than one.
+
+Add unit tests for the case of numComponents being less than, equal to,
+and greater than this lower bound.
+
+Result:
+
+Return to the behavior of 4.1.30.Final, allowing one component, but
+still include an explicit check against a lower bound.
+
+Note that while creating a CompositeByteBuf with a single component is
+in some ways a contradiction of the term "composite", this patch caters
+for existing uses while excluding the clearly nonsensical case of asking
+for a CompositeByteBuf with zero or fewer components.
+
+Fixes #8613.

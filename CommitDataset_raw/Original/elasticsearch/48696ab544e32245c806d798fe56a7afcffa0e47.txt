@@ -1,0 +1,15 @@
+expose simple pattern tokenizers (#25159)
+
+Expose the experimental simplepattern and 
+simplepatternsplit tokenizers in the common 
+analysis plugin. They provide tokenization based 
+on regular expressions, using Lucene's 
+deterministic regex implementation that is usually 
+faster than Java's and has protections against 
+creating too-deep stacks during matching.
+
+Both have a not-very-useful default pattern of the 
+empty string because all tokenizer factories must 
+be able to be instantiated at index creation time. 
+They should always be configured by the user 
+in practice.

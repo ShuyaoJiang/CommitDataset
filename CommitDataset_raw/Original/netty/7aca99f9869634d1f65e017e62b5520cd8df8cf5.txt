@@ -1,0 +1,14 @@
+DefaultHttpHeader.names().toArray(...) may throw ArrayStoreException
+
+Motivation:
+
+DefaultHttpHeader.names() exposes HTTP header names as a Set<String>. Converting the resulting set to an array using toArray(String[]) throws an exception: java.lang.ArrayStoreException: io.netty.util.AsciiString.
+
+Modifications:
+
+- Remove our custom implementation of toArray(...) (and others) by just extending AbstractCollection.
+- Add unit test
+
+Result:
+
+Fixes [#7428].

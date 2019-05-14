@@ -1,0 +1,13 @@
+Add ResourceRegionEncoder
+
+This commit adds the necessary infrastructure for the support of HTTP
+Range requests. The new `ResourceRegionEncoder` can write
+`ResourceRegion` objects as streams of bytes.
+
+The `ResourceRegionEncoder` relies on an encoding hint
+`BOUNDARY_STRING_HINT`. If present, the encoder infers that multiple
+`ResourceRegion`s should be encoded and that the provided boundary
+String should be used to separate ranges by mime boundaries.
+If that hint is absent, only a single resource region is encoded.
+
+Issue: SPR-14664

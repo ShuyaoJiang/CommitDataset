@@ -1,0 +1,18 @@
+Resolve versionManagement configuration lazily and preserve exclusions
+
+Previously, the versionManagement configuration was resolved as part of
+the Boot Gradle plugin being applied. This meant that no dependencies
+could be added to it and attempting to do so would result in a failure:
+“You can't change a configuration which is not in unresolved state”.
+This commit updates ApplyExcludeRules to wrap its processing in a
+before resolve action. This defers the resolution of the
+versionManagement configuration until one of the project’s other
+configurations is being resolved. Fixes #1077
+
+In addition to the above, the transitive exclusions that the Gradle
+plugin provides were being lost if custom version management provided
+a version for the same dependency. This commit updates
+AbstractDependencies to preserve the exclusions from an existing
+dependency declaration while using the version from the newer
+dependency. This ensures that the exclusions remain while allowing
+versions to be overridden. Fixes #1079

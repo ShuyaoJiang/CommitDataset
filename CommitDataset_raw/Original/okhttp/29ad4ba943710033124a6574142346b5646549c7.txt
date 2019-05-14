@@ -1,0 +1,24 @@
+Strict, modern HostnameVerifier.
+
+This brings OkHostnameVerifier up to date with the intersection of
+RFC 2818 and Baseline Requirements, and adds support for absolute
+domain names.
+
+The changes are:
+* Absolute domain names are supported. All presented hostnames are
+  treated as absolute domain names. All domain names in server
+  certificates are treated as absolute domain names as well.
+* Wildcard character (*) is permitted only in the left-most domain
+  name label and must be the only character in that label. For
+  example, *.example.com is permitted, while *a.example.com,
+  a*.example.com, a*b.example.com, a.*.example.com are not permitted.
+* Wildcard character (*) must match exactly one domain name label.
+  For example, *.example.com matches www.example.com, but does not
+  match example.com or www.test.example.com.
+* Wildcard pattern cannot mach single-label domain names: * and *.
+  patterns are rejected.
+
+This is a cherry-pick of the Android Open Source Project (AOSP) change
+https://android-review.googlesource.com/#/c/117462/.
+
+Fixes #1165

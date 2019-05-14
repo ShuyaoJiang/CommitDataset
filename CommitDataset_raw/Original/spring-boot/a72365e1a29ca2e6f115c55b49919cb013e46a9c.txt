@@ -1,0 +1,13 @@
+Expose context hierarchy in beans endpoint
+
+Previously, the beans endpoint would only expose the context that
+contained the endpoint. This commit updates the endpoint so that
+the context that contains the endpoint and all of its ancestors are
+exposed.
+
+In a context hierarhcy, the relation ship is child -> parent and there
+is no way to navigate from a parent to a child. As a result, any
+contexts that are descendants of the context containing the endpoint
+are not exposed.
+
+Closes gh-5188

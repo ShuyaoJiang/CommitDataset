@@ -1,0 +1,9 @@
+ Reduce channels in AbstractSimpleTransportTestCase (#34863)
+
+This is related to #30876. The AbstractSimpleTransportTestCase initiates
+many tcp connections. There are normally over 1,000 connections in
+TIME_WAIT at the end of the test. This is because every test opens at
+least two different transports that connect to each other with 13
+channel connection profiles. This commit modifies the default
+connection profile used by this test to 6. One connection for each
+type, except for REG which gets 2 connections.

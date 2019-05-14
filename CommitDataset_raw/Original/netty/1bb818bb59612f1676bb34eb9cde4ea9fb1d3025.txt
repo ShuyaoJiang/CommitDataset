@@ -1,0 +1,16 @@
+Reduce memory copies when using OpenSslEngine with SslHandler
+
+Motivation:
+
+When using OpenSslEngine with the SslHandler it is possible to reduce memory copies by unwrap(...) multiple ByteBuffers at the same time. This way we can eliminate a memory copy that is needed otherwise to cumulate partial received data.
+
+Modifications:
+
+- Add OpenSslEngine.unwrap(ByteBuffer[],...) method that can be used to unwrap multiple src ByteBuffer a the same time
+- Use a CompositeByteBuffer in SslHandler for inbound data so we not need to memory copy
+- Add OpenSslEngine.unwrap(ByteBuffer[],...) in SslHandler if OpenSslEngine is used and the inbound ByteBuf is backed by more then one ByteBuffer
+- Reduce object allocation
+
+Result:
+
+SslHandler is faster when using OpenSslEngine and produce less GC

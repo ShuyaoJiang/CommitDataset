@@ -1,0 +1,14 @@
+Favor local, composed annotations in the TCF
+
+Prior to this commit, AnnotationAttributes retrieved from
+MetaAnnotationUtils's AnnotationDescriptor could contain attributes
+from the wrong annotation if an inherited annotation shadowed a locally
+declared composed annotation.
+
+This commit addresses this issue by invoking the new
+getAnnotationAttributes() method in AnnotatedElementUtils that provides
+a flag to control whether superclasses should be searched -- which
+coincidentally processes local annotations before searching the class
+hierarchy.
+
+Issue: SPR-12749, SPR-11598

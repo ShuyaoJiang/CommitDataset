@@ -1,0 +1,13 @@
+Fix eternal loop in Recycler.WeakOrderQueue.Head#run() that blocks ObjectCleaner thread (#7878)
+
+Motivation:
+
+When trying to cleanup WeakOrderQueue by the ObjectCleaner we end up in an endless loop which will cause the ObjectCleaner to be not able to cleanup any other resources anymore.This bug was introduced by 6eb9674bf5ded128cb230a31987f14816b7f1886.
+
+Modifications:
+
+Correctly update link while cleanup
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7877

@@ -1,0 +1,19 @@
+Avoid a reverse DNS-lookup for a numeric proxy address
+
+When the proxy was specified as an IP address the RouteSelector would force
+a reverse-lookup. This introduced extra latency when the DNS is being slow or
+missing. It also then turned the name back into a set of IPs, which could
+result in the original IP address not being given priority and
+connection attempts being made to IPs besides the one specified by the
+original Proxy specifier.
+
+This change distinguishes between whether the proxy InetSocketAddress is
+specified with a string, or with an InetAddress. This is referred to as
+"unresolved" and "resolved" respectively. If an InetAddress is present
+we assume we should use that single address to communicate with the
+proxy.
+
+This relies on the InetSocketAddress being created "unresolved": if the
+InetSocketAddress is created from a hostname but created "resolved",
+the InetAddress is filled in and OkHttp will interpret that as an
+instruction to just communicate with just that one IP.

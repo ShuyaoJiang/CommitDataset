@@ -1,0 +1,17 @@
+Allow PropertyResolvers to ignore unresolvable ${placeholders}
+
+Prior to this commit, the PropertyResolver API (and therefore the
+Environment API) allowed callers a choice between
+ #resolvePlaceholders and #resolveRequiredPlaceholders for low-level
+${placeholder} resolution. However, when calling the higher level
+ #getProperty variants, users had no control over whether property
+values returned with unresolvable ${placeholders} would result in an
+exception or simply be passed through.
+
+This commit introduces a #setIgnoreUnresolvableNestedPlaceholders
+property via ConfigurablePropertyResolver, defaulting to false, the
+value of which is respected by AbstractPropertyResolver#getProperty
+method implementations. See the new test in
+PropertySourcesPropertyResolverTests for usage examples.
+
+Issue: SPR-9569, SPR-9473

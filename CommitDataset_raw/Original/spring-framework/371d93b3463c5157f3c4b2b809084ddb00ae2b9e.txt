@@ -1,0 +1,11 @@
+Detect unsent DISCONNECT messages
+
+This change uses a ChannelInterceptor (inserted at index 0) to detect
+when a DISCONNECT message is precluded from being sent on the
+clientInboundChannel. This can happen if another interceptor allows
+a runtime exception out from preSend or returns false.
+
+It is crucial for such messages to be processed, so when detected
+they're processed still.
+
+Issue: SPR-12218

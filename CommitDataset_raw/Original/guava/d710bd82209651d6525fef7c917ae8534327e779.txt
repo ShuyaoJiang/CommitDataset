@@ -1,0 +1,13 @@
+Fix List<Foo<?>>.isSubtypeOf(List<Foo<?>>).
+
+This used to return false because isSubtypeOf() does a wildcard capture of the Foo<?> type parameter, turning it into Foo<C>, and then List<Foo<C>> isn't a subtype of List<Foo<?>>.
+
+Wildcard capture is needed for resolving types at invariant or contravariant elements (fields and parameters). But for resolving in covariant context, wildcard should remain as is.
+
+I found this when trying to add isSubtypeOf() precondition check in getSubtype(), in response to https://github.com/google/guava/issues/3048.
+
+RELNOTES=TypeToken.isSubtypeOf() bug fix.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=187730924

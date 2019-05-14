@@ -1,0 +1,17 @@
+Match Http2ClientUpgradeCodec to the new upgrade policy
+
+Motivation:
+
+We changed Http2ConnectionHandler to expect the upgrade method to be
+called *after* we send the preface (ie add the handler to the pipeline)
+but we forgot to change the Http2ClientUpgradeCodec to match the new
+policy.  This meant that client-side h2c upgrades failed.
+
+Modifications:
+
+Reverse sending the preface and calling the upgrade method to match the
+new policy.
+
+Result:
+
+Clients can initiate h2c upgrades successfully.

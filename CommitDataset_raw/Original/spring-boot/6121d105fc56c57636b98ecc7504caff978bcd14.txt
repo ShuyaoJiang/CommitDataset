@@ -1,0 +1,11 @@
+Update JarLauncher to filter BOOT-INF/classes correctly
+
+Previously, JarLauncher considered any entry whose name began with
+BOOT-INF/classes/ as being a nested entry. This was incorrect as it
+meant that subdirectories of BOOT-INF/classes/ would be added to the
+classpath rather than just BOOT-INF/classes/ itself.
+
+This commit updates JarLauncher so that only directory entries with a
+name equal to BOOT-INF/classes are used.
+
+Closes gh-5610

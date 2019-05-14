@@ -1,0 +1,15 @@
+Ignore frames for streams that may have previously existed.
+
+Motivation:
+
+The recent PR that discarded the Http2StreamRemovalPolicy causes connection errors when receiving a frame for a stream that no longer exists. We should ignore these frames if we think there's a chance that the stream has existed previously
+
+Modifications:
+
+Modified the Http2Connection interface to provide a `streamMayHaveExisted` method. Also removed the requireStream() method to identify all of the places in the code that need to be updated.
+
+Modified the encoder and decoder to properly handle cases where a stream may have existed but no longer does.
+
+Result:
+
+Fixes #3643

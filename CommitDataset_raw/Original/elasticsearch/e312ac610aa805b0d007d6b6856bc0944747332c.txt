@@ -1,0 +1,7 @@
+Cleanup exception handling in IOUtils (#29069)
+
+When we copied IOUtils into the Elasticsearch codebase from Lucene, we
+brought with it its handling of throwables which are out of whack with
+how we handle throwables in our codebase. This commit modifies our copy
+of IOUtils to be consistent with how we handle throwables today: do not
+catch them. We take advantage of this cleanup to simplify IOUtils.

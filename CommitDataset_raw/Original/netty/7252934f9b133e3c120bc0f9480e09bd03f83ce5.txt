@@ -1,0 +1,14 @@
+Limit the number of bytes to copy per Unsafe.copyMemory()
+
+Motivation:
+
+During a large memory copy, safepoint polling is diabled, hindering
+accurate profiling.
+
+Modifications:
+
+Only copy up to 1 MiB per Unsafe.copyMemory()
+
+Result:
+
+Potentially more reliable performance

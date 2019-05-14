@@ -1,0 +1,12 @@
+Reenable LiveVersionMapTests.testRamBytesUsed on Java 9. (#29063)
+
+I also had to make the test more lenient. This is due to the fact that
+Lucene's RamUsageTester was changed in order not to reflect `java.*`
+classes and the way that it estimates ram usage of maps is by assuming
+it has similar memory usage to an `Object[]` array that stores all keys
+and values. The implementation in `LiveVersionMap` tries to be slightly
+more realistic by taking the load factor and linked lists into account,
+so it usually gives a higher estimate which happens to be closer to
+reality.
+
+Closes #22548

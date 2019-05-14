@@ -1,0 +1,11 @@
+Prevent reverse name lookup when configuring Jetty's address
+
+Previously, the host on Jetty's connector was configured using the
+host address of the InetSocketAddress. This could result in reverse
+name resolution that could cause Jetty to bind to a different IP
+address than was configured.
+
+This commit updates the configuration code to use the host string
+when specifically does not perform reverse name resolution.
+
+See gh-11889

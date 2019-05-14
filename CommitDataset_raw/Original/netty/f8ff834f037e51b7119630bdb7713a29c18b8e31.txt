@@ -1,0 +1,12 @@
+Checks accessibility in the #slice and #duplicate methods of ByteBuf (#7846)
+
+Motivation:
+The `ByteBuf#slice` and `ByteBuf#duplicate` methods should check
+an accessibility to prevent creation slice or duplicate
+of released buffer. At now this works not in the all scenarios.
+
+Modifications:
+Add missed checks.
+
+Result:
+More correct and consistent behavior of `ByteBuf` methods.

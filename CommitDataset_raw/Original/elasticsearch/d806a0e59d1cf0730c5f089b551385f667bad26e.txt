@@ -1,0 +1,7 @@
+Fix race in global checkpoint listeners test
+
+This race can occur if the latch from the listener notifies the test
+thread and the test thread races ahead before the scheduler thread has a
+chance to emit the log message. This commit fixes this test by not
+counting down the latch until after the log message we are going to
+assert on has been emitted.

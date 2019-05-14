@@ -1,0 +1,16 @@
+Preserve REST client auth despite 401 response (#30558)
+
+The default behaviour for Apache HTTP client is to mimic the standard
+browser behaviour of clearing the authentication cache (for a given
+host) if that host responds with 401.
+This behaviour is appropriate in a interactive browser environment
+where the user is given the opportunity to provide alternative
+credentials, but it is not the preferred behaviour for the ES REST
+client.
+
+X-Pack may respond with a 401 status if a request is made before the
+node/cluster has recovered sufficient state to know how to handle the
+provided authentication credentials - for example the security index
+need to be recovered before we can authenticate native users.
+In these cases the correct behaviour is to retry with the same
+credentials (rather than discarding those credentials).

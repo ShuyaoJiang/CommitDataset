@@ -1,0 +1,16 @@
+Fix SpEL handling of function reference
+
+These changes provide more robust handling of function
+reference compilation in SpEL expressions. Prior to
+this change the isCompilable check was not performing
+enough visibility checks on the proposed target
+function, causing bytecode to be generated that
+would lead to an IllegalAccessError.
+The changes also bring the argument handling for
+function invocation completely inline with that used
+for method invocation allowing some code to be deleted.
+
+Many new tests are also included for function
+reference compilation.
+
+Issue: SPR-12359

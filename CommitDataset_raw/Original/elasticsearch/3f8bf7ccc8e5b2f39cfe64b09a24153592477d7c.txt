@@ -1,0 +1,15 @@
+Integrate sql's metadata with security (elastic/x-pack-elasticsearch#2446)
+
+This integrates SQL's metadata calls with security by creating
+`SqlIndicesAction` and routing all of SQL's metadata calls through
+it. Since it *does* know up from which indices it is working against
+it can be an `IndicesRequest.Replaceable` and integrate with the
+existing security infrastructure for filtering indices.
+
+This request is implemented fairly similarly to the `GetIndexAction`
+with the option to read from the master or from a local copy of
+cluster state. Currently SQL forces it to run on the local copy
+because the request doesn't properly support serialization. I'd
+like to implement that in a followup.
+
+Original commit: elastic/x-pack-elasticsearch@15f95128207f1272e7cc71c383ebe7c30efdd89b

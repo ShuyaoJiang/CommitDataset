@@ -1,0 +1,14 @@
+Add a EventLoopGroup.register(ChannelPromise)
+
+Motivation:
+
+EventLoopGroup.register doesn't need the Channel paramter when ChannelPromise is provided as we can get the Channel from ChannelPromise. Resolves #2422.
+
+Modifications:
+
+- Add EventLoopGroup.register(ChannelPromise)
+- Deprecate EventLoopGroup.register(Channel, ChannelPromise)
+
+Result:
+
+EventLoopGroup.register is more convenient as people only need to set one parameter.

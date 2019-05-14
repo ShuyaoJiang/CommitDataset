@@ -1,0 +1,13 @@
+Create keystore on RPM and Debian package install
+
+When Elasticsearch starts up, it tries to create a keystore if one does
+not exist; this is so the keystore can be seeded. With the RPM and
+Debian packages, the keystore would be located in
+/etc/elasticsearch. This configuration directory is typically not
+writable by the elasticsearch user so the Elasticsearch process will not
+have permission to create the keystore. Instead, the RPM and Debian
+packages should create the keystore (if it does not exist) on package
+installation. This commit enables these packages to do that in the
+post-install routines.
+
+Relates #26282

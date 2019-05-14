@@ -1,0 +1,17 @@
+Add a LoggingEventListener and use it in okcurl (#4353)
+
+* Add LoggingEventListener and use it in okcurl
+
+* Fix tests failing in IP6 environment
+
+* Make less assumptions about test environment
+
+* Disable retry in test to make test sequence more predictable
+
+* Fix javadoc compilation
+
+There seems to be inconsistency between javdoc parsing between 'mvn verify' and Travis CI. Before the change, 'mvn clean verify' passes but Travis CI fails due to missing import of okhttp3.OkHttpClient. Just adding the missing import, causes 'mvn verify' to fail die to unused import. Changing the line wrapping seems to appease 'mvn verify'.
+
+* Address comments
+
+* Remove unused imports

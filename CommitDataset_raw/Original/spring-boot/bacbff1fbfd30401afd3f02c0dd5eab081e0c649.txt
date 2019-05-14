@@ -1,0 +1,14 @@
+Do not flush response buffer in ErrorPageFilter if request is async
+
+Previously, the ErrorPageFilter would always flush the response
+buffer, irrespective of the request being asynchronous. This could
+lead to a response being committed prematurely, preventing, for
+example, headers being set by subsequent processing.
+
+This commit updates ErrorPageFilter so that in the success case
+(status < 400) the response buffer is only flushed if the request is
+not async (determined by calling request.isAsyncStarted()). If an
+exception's been thrown or the status is >= 400 the response buffer
+is always flushed.
+
+Fixes #1316

@@ -1,0 +1,13 @@
+Avoid a double check ByteBuf#ensureWritable in ByteBufUtil
+
+Motivation:
+
+Methods `ByteBufUtil#writeUtf8` and `ByteBufUtil#writeAscii` contains a check `ByteBuf#ensureWritable` before the calling `ByteBuf#writeBytes`. But the `ByteBuf#writeBytes` also do a such check inside.
+
+Modifications:
+
+Make checks more targeted.
+
+Result:
+
+Less redundant method calls.

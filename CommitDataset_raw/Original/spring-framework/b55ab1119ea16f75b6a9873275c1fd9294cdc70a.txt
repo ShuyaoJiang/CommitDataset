@@ -1,0 +1,13 @@
+Sync argument resolution and HandlerMethod invocation
+
+HandlerMethodArgumentResolver is a non-blocking contract, however only
+implementations that read the request body require blocking.
+
+This commit introduces SyncMethodArgumentResolver as an extension of
+the non-blocking contract that allows synchronous implementations to
+use synchronous argument resolution.
+
+There is also a SyncInvocableHandlerMethod extension that uses only
+sync argument resolvers and allows a synchronous invocation.
+
+Issue: SPR-14543

@@ -1,0 +1,14 @@
+Ensure connectPromise is not notified before fireChannelActive() is called.
+
+Motivation:
+
+Our contract in Channels is that the promise should always be notified before the actual callbacks of the ChannelInboundHandler are called. This was not done in the LocalChannel and so the behavior was different to other Channel implementations.
+
+Modifications:
+
+- First complete the ChannelPromise then call fireChannelActive()
+- Guard against NPE when doClose() was called before the task was executed.
+
+Result:
+
+Consistent behavior between LocalChannel and other Channel implementations.

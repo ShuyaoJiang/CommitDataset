@@ -1,0 +1,17 @@
+Make configuration of Liquibase’s logging more robust
+
+We make Liquibase aware of our custom Commons Logging-based logger by
+adding its package to the Liquibase ServiceLocator’s packages to scan.
+Previously, this was happening too late so Liquibase may have already
+initialized and cached a particular logger.
+
+This commit moves the registration of the extra package from the
+Liquibase auto-configuration to the application listener that customises
+Liquibase’s ServiceLocator. This ensures that the package is added
+before Liquibase is used. Unfortunately, configuring Liquibase’s
+ServiceLocator and its packages to scan causes it to try to perform
+some logging, resulting in it caching the wrong type of logger. We
+work around this problem by resetting Liquibase’s LogFactory once we’ve
+finished setting everything up.
+
+Closes gh-6713

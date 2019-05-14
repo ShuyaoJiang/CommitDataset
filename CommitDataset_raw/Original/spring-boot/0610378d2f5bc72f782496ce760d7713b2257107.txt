@@ -1,0 +1,9 @@
+Resolves #127: Prevent duplicate report outcomes
+
+The collection of outcomes is a list. Sometimes a race condition causes to instances
+of the same outcome to get added to the list shown in the report. By replacing this
+with a set and propery equals/hashCode, duplicates are prevented from appearing
+in the report.
+
+I added test cases to prove that that POJO is properly managed inside a Set and also
+to show that duplicates don't appear in the final report.

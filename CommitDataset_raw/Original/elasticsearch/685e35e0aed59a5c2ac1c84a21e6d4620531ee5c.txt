@@ -1,0 +1,8 @@
+Fix DiskThresholdMonitor flood warning
+
+The flood warning checks the wrong threshold, namely the high
+watermark. This would impact any node for which the disk usage is above
+the high watermark and below the flood stage watermark. This commit
+fixes this so that it compares to the flood threshold.
+
+Relates #26204

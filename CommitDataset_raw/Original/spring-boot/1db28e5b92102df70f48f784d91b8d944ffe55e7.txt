@@ -1,0 +1,6 @@
+Prevent cryptic exception if SecurityProperties not created
+
+Previously if a user happened to provide an @EnableWebSecurity bean
+the SecurityProperties would not be created, which is fine until you
+add the Actuator (which needs them). Fixed by adding an explicit
+SecurityProperties @Bean if not already present.

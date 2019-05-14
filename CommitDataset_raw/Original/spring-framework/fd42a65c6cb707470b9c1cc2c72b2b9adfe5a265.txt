@@ -1,0 +1,28 @@
+Allow ConfigurationCPP to process multiple registries
+
+Prior to this change, an instance of ConfigurationClassPostProcessor
+would throw IllegalStateException if its
+postProcessBeanDefinitionRegistry method were called more than once.
+This check is important to ensure that @Configuration classes are
+not proxied by CGLIB multiple times, and works for most normal use
+cases.
+
+However, if the same CCPP instance is used to process multiple
+registries/factories/contexts, this check creates a false negative
+because it does not distinguish between invocations of
+postProcessBeanDefinitionRegistry across different registries.
+
+A use case for this, though admittedly uncommon, would be creating
+a CCPP instance and registering it via
+ConfigurableApplicationContext#addBeanDefinitionPostProcessor against
+several ApplicationContexts. In such a case, the same CCPP instance
+will post-process multiple different registry instances, and throw the
+above mentioned exception.
+
+With this change, CCPP now performs lightweight tracking of the
+registries/beanFactories that it has already processed by recording
+the identity hashcodes of these objects.  This is only slightly more
+complex than the previous boolean-based 'already processed' flags, and
+prevents this issue (however rare it may be) from occurring.
+
+Issue: SPR-8527

@@ -1,0 +1,10 @@
+Add support for merging multiple search responses into one (#37566)
+
+This will be used in cross-cluster search when reduction will be
+performed locally on each cluster. The CCS coordinating node will send
+one search request per remote cluster involved and will get one search
+response back from each one of them. Such responses contain all the info
+to be able to perform an additional reduction and return results back
+to the user.
+
+Relates to #32125

@@ -1,0 +1,13 @@
+Check if hostname validation is supported before trying to use in test. (#8333)
+
+Motivation:
+
+a208f6dc7c775ce8d7934f252cd6fa7527643f76 added a testcase which uses hostname validation which may not be supported by OpenSSL depending on the version that is used. We should check first before we try to use it.
+
+Modifications:
+
+Add assumeTrue(...) check to ensure hostname validation is supported before trying to run the test.
+
+Result:
+
+No more test-failures on OpenSSL versions < 1.0.2.

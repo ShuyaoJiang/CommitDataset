@@ -1,0 +1,18 @@
+Make MBeanServer integration tests more robust
+
+This commit overhauls several of the tests that interact with an
+MBeanServer with the goal of increasing the reliability of these tests.
+
+ - MBeanClientInterceptorTests now uses JUnit "assumptions" instead of
+   preemptively returning from test methods, thus allowing such methods
+   to be properly marked as "ignored" instead of "passed".
+
+ - MBeanClientInterceptorTests now uses JUnit's support for expected
+   exceptions where appropriate.
+
+ - MBeanClientInterceptorTests and RemoteMBeanClientInterceptorTests now
+   use Spring's SocketUtils to find an available TCP port when starting
+   an MBeanServer instead of aborting the tests when the default JMX
+   port is not available.
+
+Issue: SPR-12601

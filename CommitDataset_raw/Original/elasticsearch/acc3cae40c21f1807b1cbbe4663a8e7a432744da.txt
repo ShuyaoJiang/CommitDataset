@@ -1,0 +1,9 @@
+Remove "reinstall" packaging tests (#37851)
+
+The packaging tests currently have a test which installs elasticsearch,
+removes it, modifies ownership of /etc/elasticsearch, and
+reinstalls. It then checks that the /etc/elasticsearch directory has
+ownership that the package expects. But the recursive change touches
+files not owned by the package. In the past this worked because we did a
+recursive ownership change within the package postinst. However, that
+was recently removed, and thus this test no longer makes sense.

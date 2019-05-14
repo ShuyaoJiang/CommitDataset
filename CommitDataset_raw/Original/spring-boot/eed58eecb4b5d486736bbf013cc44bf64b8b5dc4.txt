@@ -1,0 +1,14 @@
+Improve error handling in EnableAutoConfigurationImportSelector
+
+Previously, EnableAutoConfigurationImportSelector assumed that it
+would always find auto-configuration attributes from an
+@EnableAutoConfiguration annotation. This assumption does not hold
+true in certain circumstances, although exactly what those
+circumstances are is unclear. It could occur if the import selector
+were used directly, but it's package-private making that unlikey. In
+such circumstances a NullPointerException was being thrown.
+
+This commit asserts that the attributes are non-null and, should the
+assertion fail, produces an error that is more helpful than an NPE.
+
+Closes gh-1512

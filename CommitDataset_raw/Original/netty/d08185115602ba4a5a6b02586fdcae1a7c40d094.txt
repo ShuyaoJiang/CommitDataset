@@ -1,0 +1,13 @@
+Remove ByteBuf.readBytes(int) calls when possible
+
+Motivation:
+
+We use ByteBuf.readBytes(int) in various places where we could either remove it completely or use readSlice(int).retain().
+
+Modifications:
+
+- Remove ByteBuf.readBytes(int) when possible or replace by readSlice(int).retain().
+
+Result:
+
+Faster code.

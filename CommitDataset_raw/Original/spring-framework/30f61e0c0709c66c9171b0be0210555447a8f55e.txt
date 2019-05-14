@@ -1,0 +1,14 @@
+Add body(Object) method to ServerResponse.BodyBuilder
+
+This method introduces a new body(Object) to ServerResponse, a shortcut
+to body(BodyInserters.fromObject(Object)).
+
+Note that in the implementation of the method, an `instanceof` check is
+performed to make sure that the passed argument is not a `Publisher`,
+as users should call `body(Publisher, Class)` for sending a reactive
+type.
+
+This Publisher-check is also done in the `WebClient`, for the same
+reasons.
+
+Issue: SPR-15461

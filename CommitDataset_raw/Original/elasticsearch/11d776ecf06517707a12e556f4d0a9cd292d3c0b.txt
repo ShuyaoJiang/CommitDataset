@@ -1,0 +1,10 @@
+Watcher: Fix watch history template for dynamic slack attachments (#30172)
+
+The part of the history template responsible for slack attachments had a
+dynamic mapping configured which could lead to problems, when a string
+value looking like a date was configured in the value field of an
+attachment.
+
+This commit fixes the template by setting this field always to text.
+This also requires a change in the template numbering to be sure this
+will be applied properly when starting watcher.

@@ -1,0 +1,11 @@
+Fix "signer information does not match" error
+
+Update ExecutableArchiveLauncher so that `-cp` URLs are not added
+when they are already contained as nested JARs. This prevents a
+SecurityException "signer information does not match error" when using
+signed jars. The root cause of the issue was that the primary JAR file
+was on the default classpath with the URL "file:....jar" and in the
+main URL set as "jar:file:....jar". It is now filtered so that only
+the "jar:" variant is added.
+
+Fixes gh-1134

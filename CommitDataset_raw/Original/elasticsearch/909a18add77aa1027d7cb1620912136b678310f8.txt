@@ -1,0 +1,9 @@
+Only set vm.max_map_count if greater than default (#31512)
+
+So the issue here is that we want to avoid setting vm.max_map_count if
+it is already equal to the desired value (the bootstrap check requires
+262144). The reason we want to avoid this is because in some use-cases
+using sysctl to set this will fail. In this case, we want to enable
+users to set this value externally and then allow that to cause using
+sysctl to set the value to be skipped so that cases where using sysctl
+will fail to no longer fail.

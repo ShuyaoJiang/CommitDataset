@@ -1,0 +1,13 @@
+Support nested double quotes in SpEL expressions
+
+The Spring Expression Language currently supports nested single quotes
+within expressions but not nested double quotes.
+
+The SpEL tokenizer has been modified to support nested double quotes in
+the same way it supports single quotes. A sequence of two double quotes
+will now be replaced by one when evaluated.
+
+Extra error handling has also been added to report when invalid escaping
+is encountered, since SpEL does not support escaping with backslash.
+
+Issue: SPR-9620

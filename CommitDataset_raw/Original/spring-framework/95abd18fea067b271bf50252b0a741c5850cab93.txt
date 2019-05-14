@@ -1,0 +1,21 @@
+Fix Exception Handling result handler resolution
+
+Prior to this commit, the wrong `HandlerResultHandler` could be
+resolved when handling exceptions; this could happen only if the
+original handler and exception handler had different signatures:
+
+```
+Publisher<String> originalHandler() { ... }
+
+@ExceptionHandler(MyCustomException.class)
+ResponseEntity<Mono<String>> handleException() { ... }
+```
+
+In that case, the `ResponseBodyResultHandler` would be used when
+handling exceptions instead of the `ResponseEntityResultHandler`.
+
+This commit ensures that the `HandlerResult` returned by the exception
+handler is used to resolve the `HandlerResultHandler`. The latter will
+process the result and use it to write to the HTTP response.
+
+Issue: SPR-14876

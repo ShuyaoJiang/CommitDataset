@@ -1,0 +1,17 @@
+Fixed rfc violation about sending extension frame in the middle of headers
+
+Motivation:
+
+At rfc7540 5.5, it said that it's not permitted to send extension
+frame in the middle of header block and need be treated as
+protocol error
+
+Modifications:
+
+When received a extension frame, in netty it's called unknown frame,
+will verify that is there an headersContinuation exists
+
+Result:
+
+When received a extension frame in the middle of header block,
+will throw connection error and closed the connection

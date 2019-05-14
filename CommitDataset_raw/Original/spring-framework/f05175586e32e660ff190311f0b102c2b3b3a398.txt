@@ -1,0 +1,17 @@
+Refine behavior on error after response committed
+
+If the response is set and we can't change the status through
+ServerHttpResponse any more, allow the error signal to propagate and
+let the individual server adapters handle it. Ultimately that should
+result in closing the connection.
+
+On Servlet containers, we check one last time if the response is
+committed (we may not have filled the buffer). If not then save
+the exception as a request attribute, dispatch, and re-throw it on the
+container thread.
+
+On Undertow access the connection and close it.
+
+On Netty just let the error through to Reactor Netty.
+
+Issue: SPR-16051

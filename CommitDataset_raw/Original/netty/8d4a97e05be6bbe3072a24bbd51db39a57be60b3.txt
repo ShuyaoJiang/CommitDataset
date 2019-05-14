@@ -1,0 +1,32 @@
+Generate non-test JAR for netty-testsuite
+
+Motivation:
+
+So far, we generated and deployed test JARs to Maven repositories. The
+deployed JAR had the classifier 'test-jar'.  The test JAR is consumed by
+transport-native-epoll as a test dependency.
+
+The problem is, when netty-transport-native-epoll pulls the test JAR as
+a dependency, that Maven resolves its transitive dependencies at
+'compile' and 'runtime' scope only, which is incorrect.
+
+I was bitten by this problem recently while trying to add a new
+dependency to netty-testsuite.  Because I added a new dependency at the
+'test' scope, the new dependency was not pulled transitively by
+transport-native-epoll and caused an unexpected build failure.
+
+- d6160208c37cfd21b690f1a0df67776bf986b28e
+- bf77bb4c3ae04778e65b8a38c2a9ec0e15207de8
+
+Modifications:
+
+- Move all classes in netty-testsuite from src/test to src/main
+- Update the 'compile' scope dependencies of netty-testsuite
+- Override the test directory configuration properties of the surefire
+  plugin
+- Do not generate the test JAR anymore
+- Update the dependency of netty-transport-native-epoll
+
+Result:
+
+It is less error-prone to add a new dependency to netty-testsuite.

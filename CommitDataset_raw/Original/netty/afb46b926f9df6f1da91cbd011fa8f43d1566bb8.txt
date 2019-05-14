@@ -1,0 +1,46 @@
+Improve the API design of Http2OrHttpChooser and SpdyOrHttpChooser
+
+Related: #3641 and #3813
+
+Motivation:
+
+When setting up an HTTP/1 or HTTP/2 (or SPDY) pipeline, a user usually
+ends up with adding arbitrary set of handlers.
+
+Http2OrHttpChooser and SpdyOrHttpChooser have two abstract methods
+(create*Handler()) that expect a user to return a single handler, and
+also have add*Handlers() methods that add the handler returned by
+create*Handler() to the pipeline as well as the pre-defined set of
+handlers.
+
+The problem is, some users (read: I) don't need all of them or the
+user wants to add more than one handler. For example, take a look at
+io.netty.example.http2.tiles.Http2OrHttpHandler, which works around
+this issue by overriding addHttp2Handlers() and making
+createHttp2RequestHandler() a no-op.
+
+Modifications:
+
+- Replace add*Handlers() and create*Handler() with configure*()
+- Rename getProtocol() to selectProtocol() to make what it does clear
+- Provide the default implementation of selectProtocol()
+- Remove SelectedProtocol.UNKNOWN and use null instead, because
+  'UNKNOWN' is not a protocol
+- Proper exception handling in the *OrHttpChooser so that the
+  exception is logged and the connection is closed when failed to
+  select a protocol
+- Make SpdyClient example always use SSL. It was always using SSL
+  anyway.
+- Implement SslHandshakeCompletionEvent.toString() for debuggability
+- Remove an orphaned class: JettyNpnSslSession
+- Add SslHandler.applicationProtocol() to get the name of the
+  application protocol
+  - SSLSession.getProtocol() now returns transport-layer protocol name
+    only, so that it conforms to its contract.
+
+Result:
+
+- *OrHttpChooser have better API.
+- *OrHttpChooser handle protocol selection failure properly.
+- SSLSession.getProtocol() now conforms to its contract.
+- SpdyClient example works with SpdyServer example out of the box

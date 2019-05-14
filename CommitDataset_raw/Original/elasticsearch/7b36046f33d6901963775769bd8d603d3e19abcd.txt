@@ -1,0 +1,10 @@
+Use TestEnvironment factory method to create test Environment objects (elastic/x-pack-elasticsearch#2860)
+
+This is the X-Pack side of elastic/elasticsearch#27235.  To force people
+who construct an Environment object in production code to think about the
+correct setting of configPath there is no longer a single argument
+constructor in the Environment class.  Instead there is a factory method
+in the test framework to replace it.  Having this in the test framework
+ensures that there is no way to use it in production code.
+
+Original commit: elastic/x-pack-elasticsearch@4860e92d906e046a23aa07b39ee6ef637f011dc1

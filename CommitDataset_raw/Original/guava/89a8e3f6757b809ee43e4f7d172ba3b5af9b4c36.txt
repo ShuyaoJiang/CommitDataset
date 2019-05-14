@@ -1,0 +1,10 @@
+Fix cases where GWT sometimes couldn't infer which types are serialized.
+And finally revise our (internal-only) tests to catch these problems and the problem fixed by CL 147488537.
+
+As far as I can tell, our old tests passed only because of a GWT bug.
+The fixes are mostly to create dummy superclasses with dummy fields, as usual.
+The exception is ImmutableSortedSet. For some reason, the fix there is to move the existing dummy fields to RegularImmutableSortedSet. My completely wild guess (without investigating at all) is that GWT ignores the ImmutableSortedSet fields because ImmutableSortedSet_CustomFieldSerializer doesn't have the expected methods. This guess makes no sense, especially because GWT appears to be fine with the *Comparator<E>* field on ImmutableSortedSet, just not the E field. Basically nothing makes any sense, but I'm just happy it works now.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147607863

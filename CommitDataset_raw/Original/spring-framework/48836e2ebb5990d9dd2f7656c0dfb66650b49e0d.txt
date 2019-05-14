@@ -1,0 +1,19 @@
+Allow parameters in FactoryBean-returning @Bean methods
+
+Prior to this change, an assumption was made in
+AbstractAutowireCapableBeanFactory that any factory-method would have
+zero parameters.  This may not be the case in @Bean methods.
+
+We now look for the factory-method by name in a more flexible fashion
+that accomodates the possibility of method parameters.
+
+There remains at least one edge cases here where things could still fail,
+for example a @Configuration class could have two FactoryBean-returning
+methods of the same name, but each with different generic FactoryBean
+types and different parameter lists. In this case, the implementation
+may infer and return the wrong object type, as it currently returns
+the first match for the given factory-method name.  The complexity cost
+of ensuring that this never happens is not likely worth the trouble
+given the very low likelihood of such an arrangement.
+
+Issue: SPR-8762

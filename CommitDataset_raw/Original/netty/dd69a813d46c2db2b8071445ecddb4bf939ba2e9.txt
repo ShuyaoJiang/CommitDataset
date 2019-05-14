@@ -1,0 +1,27 @@
+Performance improvement for HttpRequestEncoder. Insert char into the string optimized.
+
+Motivation:
+
+Right now HttpRequestEncoder does insertion of slash for url like http://localhost?pararm=1 before the question mark. It is done not effectively.
+
+Modification:
+
+Code:
+
+new StringBuilder(len + 1)
+                .append(uri, 0, index)
+                .append(SLASH)
+                .append(uri, index, len)
+                .toString();
+Replaced with:
+
+new StringBuilder(uri)
+                .insert(index, SLASH)
+                .toString();
+Result:
+
+Faster HttpRequestEncoder. Additional small test. Attached benchmark in PR.
+
+Benchmark                                      Mode  Cnt        Score        Error  Units
+HttpRequestEncoderInsertBenchmark.newEncoder  thrpt   40  3704843.303 ±  98950.919  ops/s
+HttpRequestEncoderInsertBenchmark.oldEncoder  thrpt   40  3284236.960 ± 134433.217  ops/s

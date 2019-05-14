@@ -1,0 +1,14 @@
+Avoid NPE in ObjectToObjectConverter
+
+Bypass ObjectToObject conversion when source and object types are
+identical and protect against a null source object.
+
+Prior to this commit the TypeDescriptor was used to determine if
+conversion was necessary.  This caused issues when comparing a
+descriptor with annotations to one without.  The updated code
+now compares using TypeDescriptor.getType().
+
+The ObjectToObject converter will now no longer attempt to convert
+null source objects.
+
+Issue: SPR-9933

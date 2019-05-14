@@ -1,0 +1,17 @@
+Add -verbose:gc option for test runs
+
+Motivation:
+
+While investigating the recent CI machine crashes, I observed that the
+JVM processes spawned by surefire sometimes take up to 1 GiB RAM.
+Consuming large amount of memory isn't really a problem, but we need to
+make sure no GC trashing is occuring during the tests.
+
+Modifications:
+
+Add -verbose:gc option to the test JVM arguments
+
+Result:
+
+We can determine if there is any GC anomalies going on in our CI
+machine.

@@ -1,0 +1,12 @@
+http-proxy: attach headers to connection exception (#8824)
+
+Motivation:
+When a proxy fails to connect, it includes useful error detail in
+the headers.
+
+Modification:
+- Add an HTTP Specific ProxyConnectException
+- Attach headers (if any) in the event of a non-200 response
+
+Result:
+Able to surface more useful error info to applications

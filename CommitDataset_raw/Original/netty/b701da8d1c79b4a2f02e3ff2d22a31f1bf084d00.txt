@@ -1,0 +1,13 @@
+HTTP/2 HPACK Integer Encoding Bugs
+
+Motivation:
+- Decoder#decodeULE128 has a bounds bug and cannot decode Integer.MAX_VALUE
+- Decoder#decodeULE128 doesn't support values greater than can be represented with Java's int data type. This is a problem because there are cases that require at least unsigned 32 bits (max header table size).
+- Decoder#decodeULE128 treats overflowing the data type and invalid input the same. This can be misleading when inspecting the error that is thrown.
+- Encoder#encodeInteger doesn't support values greater than can be represented with Java's int data type. This is a problem because there are cases that require at least unsigned 32 bits (max header table size).
+
+Modifications:
+- Correct the above issues and add unit tests.
+
+Result:
+Fixes https://github.com/netty/netty/issues/6210.

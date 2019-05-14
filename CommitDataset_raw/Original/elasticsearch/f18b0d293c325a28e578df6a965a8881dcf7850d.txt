@@ -1,0 +1,7 @@
+Move TransportStats accounting into TcpTransport (#25251)
+
+Today TcpTransport is the de-facto base-class for transport implementations.
+The need for all the callbacks we have in TransportServiceAdaptor are not necessary
+anymore since we can simply have the logic inside the base class itself. This change
+moves the stats metrics directly into TcpTransport removing the need for low level
+bytes send / received callbacks.

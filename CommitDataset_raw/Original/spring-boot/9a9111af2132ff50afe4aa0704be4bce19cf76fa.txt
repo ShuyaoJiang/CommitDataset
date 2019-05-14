@@ -1,0 +1,15 @@
+Support path discovery for main dispatcher servlet
+
+Add an `DispatcherServletPath` interface which provides a much more
+consistent way to discover the path of the main dispatcher servet.
+
+Prior to this commit, auto-configurations would often make use of the
+`ServerProperties` class to discover the dispatcher servlet path. This
+mechanism isn't very explicit and also makes it hard for us to relocate
+that property in Spring Boot 2.1.
+
+This commit also reverts most of fddc9e9c7e since it is now clear that
+the supporting multiple dispatcher servlet paths will be much more
+involved that we originally anticipated.
+
+Closes gh-13834

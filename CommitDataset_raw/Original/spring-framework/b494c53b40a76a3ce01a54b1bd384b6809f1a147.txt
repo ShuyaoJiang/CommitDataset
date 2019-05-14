@@ -1,0 +1,16 @@
+Avoid defining nullability for non-relevant API
+
+Defining nullability of some API like EnvironmentCapable
+or ConditionContext causes issues in Spring Boot because
+in the context where they are used, it is known for sure
+they will return non-null values even if their API can in
+other context return null values.
+
+It is better in this case for both Java and Kotlin to
+not define at all the nullabity of such API.
+
+In practice, this is achieved by removing the package level
+@NonNullApi annotation and adding it only on the
+relevant classes.
+
+Issue: SPR-15540

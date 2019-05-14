@@ -1,0 +1,18 @@
+Reduce the execution time of maven-antrun-plugin
+
+Related issue: #2508
+
+Motivation:
+
+The '<exec/>' task takes unnecessarily long time due to a known issue:
+
+- https://issues.apache.org/bugzilla/show_bug.cgi?id=54128
+
+Modifications:
+
+- Reduce the number of '<exec/>' tasks for faster build
+- Use '<propertyregex/>' to extract the output
+
+Result:
+
+Slightly faster build

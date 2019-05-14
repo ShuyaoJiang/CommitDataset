@@ -1,0 +1,22 @@
+Fix directories I/O in ResourceHttpRequestHandler
+
+Prior to this commit, the `ResourceHttpRequestHandler` would not
+properly handle HTTP requests to **directories contained in JARs**.
+This would result in HTTP 500 errors, caused by `FileNotFoundException`
+or `NullPointerException`.
+
+This can be tracked to webapp ClassLoader implementations in servlet
+containers:
+* in Jetty9x, fetching a directory within a JAR as a `Resource` and
+getting its InputStream work fine, but attempting to `close()` it
+results in a NullPointerException as the underlying stream is null.
+* In Tomcat6x, one cannot fetch an InputStream for the same `Resource`
+as it throws a FileNotFoundException.
+
+This change adds more try/catch clauses and catches more Exception so as
+to result in HTTP 200 OK responses instead of server errors. While this
+is inconsistent because the same code path would result in HTTP 404 with
+existing directories on the file system, there's no other simple way to
+make those checks for resources contained in JARs.
+
+Issue: SPR-12999

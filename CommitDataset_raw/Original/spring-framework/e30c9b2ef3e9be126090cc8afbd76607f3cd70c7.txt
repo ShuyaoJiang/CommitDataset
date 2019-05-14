@@ -1,0 +1,52 @@
+Synthesize annotation from a map of attributes
+
+Spring Framework 4.2 RC1 introduced support for synthesizing an
+annotation from an existing annotation in order to provide additional
+functionality above and beyond that provided by Java. Specifically,
+such synthesized annotations provide support for @AliasFor semantics.
+As luck would have it, the same principle can be used to synthesize an
+annotation from any map of attributes, and in particular, from an
+instance of AnnotationAttributes.
+
+The following highlight the major changes in this commit toward
+achieving this goal.
+
+- Introduced AnnotationAttributeExtractor abstraction and refactored
+  SynthesizedAnnotationInvocationHandler to delegate to an
+  AnnotationAttributeExtractor.
+
+- Extracted code from SynthesizedAnnotationInvocationHandler into new
+  AbstractAliasAwareAnnotationAttributeExtractor and
+  DefaultAnnotationAttributeExtractor implementation classes.
+
+- Introduced MapAnnotationAttributeExtractor for synthesizing an
+  annotation that is backed by a map or AnnotationAttributes instance.
+
+- Introduced a variant of synthesizeAnnotation() in AnnotationUtils
+  that accepts a map.
+
+- Introduced findAnnotation(*) methods in AnnotatedElementUtils that
+  synthesize merged AnnotationAttributes back into an annotation of the
+  target type.
+
+The following classes have been refactored to use the new support for
+synthesizing AnnotationAttributes back into an annotation.
+
+- ApplicationListenerMethodAdapter
+- TestAnnotationUtils
+- AbstractTestContextBootstrapper
+- ActiveProfilesUtils
+- ContextLoaderUtils
+- DefaultActiveProfilesResolver
+- DirtiesContextTestExecutionListener
+- TestPropertySourceAttributes
+- TestPropertySourceUtils
+- TransactionalTestExecutionListener
+- MetaAnnotationUtils
+- MvcUriComponentsBuilder
+- RequestMappingHandlerMapping
+
+In addition, this commit also includes changes to ensure that arrays
+returned by synthesized annotations are properly cloned first.
+
+Issue: SPR-13067

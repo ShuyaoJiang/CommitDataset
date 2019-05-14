@@ -1,0 +1,10 @@
+Package private request and response implementations
+
+Concrete server and client, reactive request and response
+implementations should not have to be accessed outside their package.
+They could be seen as private to their HttpHandler adapters and
+ClientHttpConnector's respectively.
+
+The one exception, WebSocket upgrades in spring-webflux, is an internal
+framework use case, accommodated via downcast + accessors in the
+abstract base classes.

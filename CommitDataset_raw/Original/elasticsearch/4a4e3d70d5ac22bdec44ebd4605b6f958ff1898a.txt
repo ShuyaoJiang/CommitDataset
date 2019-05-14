@@ -1,0 +1,23 @@
+Default to one shard (#30539)
+
+This commit changes the default out-of-the-box configuration for the
+number of shards from five to one. We think this will help address a
+common problem of oversharding. For users with time-based indices that
+need a different default, this can be managed with index templates. For
+users with non-time-based indices that find they need to re-shard with
+the split API in place they no longer need to resort only to
+reindexing.
+
+Since this has the impact of changing the default number of shards used
+in REST tests, we want to ensure that we still have coverage for issues
+that could arise from multiple shards. As such, we randomize (rarely)
+the default number of shards in REST tests to two. This is managed via a
+global index template. However, some tests check the templates that are
+in the cluster state during the test. Since this template is randomly
+there, we need a way for tests to skip adding the template used to set
+the number of shards to two. For this we add the default_shards feature
+skip. To avoid having to write our docs in a complicated way because
+sometimes they might be behind one shard, and sometimes they might be
+behind two shards we apply the default_shards feature skip to all docs
+tests. That is, these tests will always run with the default number of
+shards (one).

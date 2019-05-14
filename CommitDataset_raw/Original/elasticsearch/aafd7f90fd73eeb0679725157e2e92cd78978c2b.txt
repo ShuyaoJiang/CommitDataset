@@ -1,0 +1,5 @@
+[TEST] fix NPE when generating random query (#26023)
+
+`ClusterSearchShardsResponseTests.testSerialization` randomly uses `IdsQueryBuilderTests` to generate an alias filter. `IdsQueryBuilderTests` shecks if the array of current types is length zero but it can also be null which causes a `NullPointerException`. This changes adds a null check to avoid the exception.
+
+Closes #26021

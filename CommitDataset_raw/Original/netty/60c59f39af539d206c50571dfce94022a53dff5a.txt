@@ -1,0 +1,17 @@
+Use CoalescingBufferQueue to merge data writes on a stream in HTTP2 instead of CompositeByteBuf
+
+Motivation:
+
+Slicing a mutable CompositeByteBuf is not the appropriate mechanism to use to track and release buffers that have been written to a channel.
+In particular buffers passed over an Embedded or LocalChannel are retained after the ChannelPromise is completed and listening to the
+promise to consolidate a CompositeBuffer breaks slices taken from the composite as the offset indices have changed.
+
+In addition CoalescingBufferQueue handles taking arbitrarily sized slices of a sequence of buffers more efficiently.
+
+Modifications:
+
+Convert FlowControlledData to use a CoalescingBufferQueue to handle merging data writes.
+
+Result:
+
+HTTP2 works over LocalChannel and code is considerably simpler.

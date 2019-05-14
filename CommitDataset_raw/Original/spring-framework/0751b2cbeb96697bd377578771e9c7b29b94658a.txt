@@ -1,0 +1,22 @@
+Convert Gradle build to use new propdeps-plugin
+
+Replace existing 'optional' and 'provided' Spring specific build
+extensions with a new Gradle propdeps-plugin. Optional and Provided
+dependencies are now defined use dependency configurations.
+
+The new plugin does not currently support the notion of optional
+runtime dependencies. All optional dependencies are implicitly
+part of the 'compile' scope. This is an intentional design decision
+that aims to keep both the plugin and the build simple. Since optional
+dependencies are non-transitive this restriction should not cause
+any real problems for existing users. The only existing dependency
+affected is 'commons-io' in the 'spring-beans' project, however, this
+was an optional compile scope dependency in the previous Spring 3.1
+release.
+
+Both provided and optional dependencies are no longer exported from
+generated eclipse .classpath files. This fixes several tests that
+would previously fail when running within eclipse. The servlet-api
+specific elements of ide.gradle are also no longer required.
+
+Issue: SPR-9656, SPR-10070

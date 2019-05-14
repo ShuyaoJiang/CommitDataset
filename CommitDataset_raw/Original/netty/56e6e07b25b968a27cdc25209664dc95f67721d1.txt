@@ -1,0 +1,11 @@
+HTTP/2 RST_STREAM Regression f990f99
+
+Motivation:
+Commit f990f99 introduced a bug into the RST_STREAM processing that would prevent a RST_STREAM from being sent when it should have been. The promise would be marked as successful even though the RST_STREAM frame would never be sent.
+
+Modifications:
+- Fix conditional in Http2ConnectionHandler.resetStream to allow reset streams to be sent in all stream states besides IDLE.
+
+Result:
+RST_STREAM frames are now sent when they are supposed to be sent
+Fixes https://github.com/netty/netty/issues/4856

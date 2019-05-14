@@ -1,0 +1,14 @@
+SSL connection not closed properly after handshake failure
+
+Motivation:
+
+When SSL handshake fails, the connection should be closed. This is not true anymore after 978a46c.
+
+Modifications:
+
+- Ensure we always flush and close the channel on handshake failure.
+- Add testcase.
+
+Result:
+
+Fixes [#7724].

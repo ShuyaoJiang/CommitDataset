@@ -1,0 +1,8 @@
+Build: Omit dependency licenses check for elasticsearch deps (#28304)
+
+Sometimes modules/plugins depend on locally built elasticsearch jars.
+This means not only that the jar is constantly changing (so no need for
+a sha check), but also that the license falls under the Elasticsearch
+license, and there is no need to keep another copy. This commit updates
+the dependencies checked by dependencyLicenses to exclude those that are
+built by elasticsearch.

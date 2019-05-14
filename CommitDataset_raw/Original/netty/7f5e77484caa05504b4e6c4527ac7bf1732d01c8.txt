@@ -1,0 +1,13 @@
+Fix support for shading native libraries which was broken in b818852cdb0ee56ce3cf939e2faa538d519baabd. (#8091)
+
+Motivation:
+
+b818852cdb0ee56ce3cf939e2faa538d519baabd broke support for shading the native libraries in netty as it missed to respect the package prefix that is used when shading.
+
+Modifications:
+
+Correctly respect package prefix for constructor argument and include the used classname when logging that we could not find the constructor.
+
+Result:
+
+Be able to shade native libraries of netty again.

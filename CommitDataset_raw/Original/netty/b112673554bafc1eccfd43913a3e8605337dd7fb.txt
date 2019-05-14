@@ -1,0 +1,11 @@
+ByteToMessageDecoder ChannelInputShutdownEvent support
+
+Motivation:
+b714297a44ced34643fa60ca854f1880d02ba649 introduced ChannelInputShutdownEvent support for HttpObjectDecoder. However this should have been added to the super class ByteToMessageDecoder, and ByteToMessageDecoder should not propegate a channelInactive event through the pipeline in this case.
+
+Modifications:
+- Move the ChannelInputShutdownEvent handling from HttpObjectDecoder to ByteToMessageDecoder
+- ByteToMessageDecoder doesn't call ctx.fireChannelInactive() on ChannelInputShutdownEvent
+
+Result:
+Half closed events are treated more generically, and don't get translated into a channelInactive pipeline event.

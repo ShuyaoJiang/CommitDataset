@@ -1,0 +1,14 @@
+Remove direct usage of JKS and SunX509
+
+Motivation:
+
+When using netty on android or with for example a IBM JVM it may not be able to build a SslContext as we hardcoded the use of JKS and SunX509 (which both may not be present).
+
+Modifications:
+
+- Use the default algorithm / type which can be override via a System property
+- Remove System property check as its redundant with KeyManagerFactory.getDefaultAlgorithm()
+
+Result:
+
+More portable code. Fixes [#7546].

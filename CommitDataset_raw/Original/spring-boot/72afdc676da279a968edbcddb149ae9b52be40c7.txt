@@ -1,0 +1,19 @@
+Reorder WebMvcConfigurer from auto-configuration
+
+Prior to this commit, all `WebMvcConfigurer` instances provided by user
+configuration were processed *before* the one provided by the
+`WebMvcAutoConfiguration`.
+
+For many options this has no consequence, but for some, like the
+`ContentNegotiationConfigurer`, settings were overriden by the
+auto-configuration even if developers provided an opinion.
+
+This commit orders the `WebMvcConfigurer` provided by the
+auto-configuration at `0`, so that custom configurers (unordered, at
+`Ordered.LOWEST_PRECEDENCE`) are processed *after*.
+
+This still gives room to developers for configuring things *before* the
+auto-configuration - they can still order their own configuration
+accordingly.
+
+Fixes gh-12389

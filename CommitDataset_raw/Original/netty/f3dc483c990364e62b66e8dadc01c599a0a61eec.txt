@@ -1,0 +1,16 @@
+Fix NPE in OpenSslEngine
+
+Motivation:
+
+The gRPC interop tests fail due to a NPE in OpenSslEngine.
+
+Caused by: java.lang.NullPointerException
+at io.netty.handler.ssl.OpenSslEngine.setSSLParameters(OpenSslEngine.java:1473)
+
+Modifications:
+
+Add a null check
+
+Result:
+
+No more NPE exceptions :-)

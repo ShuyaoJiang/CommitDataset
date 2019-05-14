@@ -1,0 +1,9 @@
+metric on watcher stats is a list not an enum (#39114)
+
+`enum` is a single option from a known list of `options`
+`list` is an array of unknown values
+`flags` are multiple options from a list of known `options`.
+
+We don't support the `flags` type but a `list` with `options` acts as one. This is already the case for other API's taking metric such as `node.stats.json`. 
+
+watcher.stats behaves the same as other API's as `metrics` and as such accepts the following `GET _xpack/watcher/stats/queued_watches,current_watches`

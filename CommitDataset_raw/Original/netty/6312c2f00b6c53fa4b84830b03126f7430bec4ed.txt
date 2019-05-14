@@ -1,0 +1,11 @@
+CompositeByteBuf.addComponent always assume reference count ownership
+
+Motivation:
+The current interface for CompositeByteBuf.addComponent is not clear under what conditions ownership is transferred when addComponent is called. There should be a well defined behavior so that users can ensure that no leaks occur.
+
+Modifications:
+- CompositeByteBuf.addComponent should always assume reference count ownership
+
+Result:
+Users that call CompositeByteBuf.addComponent do not have to independently check if the buffer's ownership has been transferred and if not independently release the buffer.
+Fixes https://github.com/netty/netty/issues/4760

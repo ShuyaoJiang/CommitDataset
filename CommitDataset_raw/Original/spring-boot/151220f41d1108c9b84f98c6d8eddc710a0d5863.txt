@@ -1,0 +1,31 @@
+Add cache manager auto-configuration
+
+Add support for cache manager auto-configuration that is triggered when
+the `EnableCaching` annotation is added to a Spring Boot application.
+
+A new "spring.cache" set of configuration keys is also provided. The
+"spring.cache.mode" allows the user to specify the cache provider that
+should be auto-configured. If no explicit configuration is provided,
+the environment is checked for the best suited cache implementation,
+that is:
+
+- Generic if at least one `Cache` bean is defined in the context.
+- Hazelcast if either a default configuration file is present or the
+  `spring.cache.config` property is set.
+- JCache if one JSR-107 provider is present
+- Redis if a `RedisTemplate` is defined in the context
+- Guava
+- Simple as a fallback option, using concurrent maps
+- NoOp (that is, no cache) if the mode is set to "none"
+
+If the provider supports it, it is possible to specify the caches
+to create on startup via `spring.cache.cache-names`. If the provider
+relies on a configuration file and a custom one needs to be used
+`spring.cache.config` can be set to such custom resource.
+
+If more than one JSR-107 provider is present, it is possible to force
+the provider to use by setting the mode to `jcache` and specifying the
+fully qualified class name of the CachingProvider to use via
+`spring.cache.jcache.provider`.
+
+See gh-2633

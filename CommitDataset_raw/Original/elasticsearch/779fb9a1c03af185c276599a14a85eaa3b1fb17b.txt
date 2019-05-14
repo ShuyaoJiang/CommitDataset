@@ -1,0 +1,31 @@
+Adds nodes usage API to monitor usages of actions (#24169)
+
+* Adds nodes usage API to monitor usages of actions
+
+The nodes usage API has 2 main endpoints
+
+/_nodes/usage and /_nodes/{nodeIds}/usage return the usage statistics
+for all nodes and the specified node(s) respectively.
+
+At the moment only one type of usage statistics is available, the REST
+actions usage. This records the number of times each REST action class is
+called and when the nodes usage api is called will return a map of rest
+action class name to long representing the number of times each of the action
+classes has been called.
+
+Still to do:
+
+* [x] Create usage service to store usage statistics
+* [x] Record usage in REST layer
+* [x] Add Transport Actions
+* [x] Add REST Actions
+* [x] Tests
+* [x] Documentation
+
+* Rafactors UsageService so counts are done by the handlers
+
+* Fixing up docs tests
+
+* Adds a name to all rest actions
+
+* Addresses review comments

@@ -1,0 +1,23 @@
+Fix and enable datetime tests (elastic/x-pack-elasticsearch#2680)
+
+Firstly, data in H2 is now stored in TIMESTAMP WITH TIME ZONE since H2
+does not allow a global TZ to be set and picks the JVM TZ when a record
+is read.
+JdbcAssert is now aware of this allows TIMESTAMP with TZ == TIMESTAMP
+
+Discovered a serious bug in DateTimeFunction - unfortunately date
+histogram is not useful except for year since most extract functions
+avoid ordering which a histogram preserves.
+Thus most DTF are now terms aggs with scripting.
+
+Improved a bug that caused duplicate functions to not be detected because
+of aliasing.
+
+Moved some datetime tests to CSV but the aggs tests now are in sync with
+H2
+
+Fixed bug that caused arithmetic on aggs to not be properly resolved by
+splitting the processor definition tree to aggName (unresolved) and
+aggPath (resolved)
+
+Original commit: elastic/x-pack-elasticsearch@e75ada68f11b1cdecc6f0a6e566c8ba8cb6c2649

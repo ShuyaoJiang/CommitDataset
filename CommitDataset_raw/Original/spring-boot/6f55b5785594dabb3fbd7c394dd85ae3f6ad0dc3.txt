@@ -1,0 +1,21 @@
+Make discovery of additional config metdata more robust with Gradle
+
+Previously, the configuration metadata annotation processor relied
+upon an additional metadata file have been copied to an output
+location. When building with Gradle, it's the processResources task
+that performs this copy and there is no guarantee that it will have
+run before the compileJava task unless an explicit dependency betwee
+the two tasks has been configured. If a project is built using
+Gradle's parallel build support, the likelihood of this required
+ordering not occurring increases.
+
+This commit updates the configuration metadata annotation processor to
+consider a new annotation processor option when looking for the
+additional config metadata file. The Gradle plugin has been updated
+to provide this option as a compiler argument. The option is only
+provided when the annotation processor is found on the compilation
+classpath to avoid a warning from javac's annotation processing about
+the use of an option that is not supported by any of the available
+annotation processors.
+
+Closes gh-9755

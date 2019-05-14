@@ -1,0 +1,16 @@
+Prevent unbounded retention of cancelled SockJS tasks
+
+This change sets the removeOnCancelPolicy on the SockJS
+ScheduledThreadPoolExecutor to true. This ensures that cancelled
+tasks are removed immediately to avoid the "unbounded retention
+of cancelled tasks" that is mentioned in the Javadoc of
+ScheduledThreadPoolExecutor:
+
+"By default, such a cancelled task is not automatically removed from
+the work queue until its delay elapses. While this enables further
+inspection and monitoring, it may also cause unbounded retention of
+cancelled tasks. To avoid this, set setRemoveOnCancelPolicy to true,
+which causes tasks to be immediately removed from the work queue at
+time of cancellation."
+
+Issue: SPR-11918

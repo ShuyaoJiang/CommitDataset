@@ -1,0 +1,12 @@
+Set original, possibly wrapped request factory on built RestTemplate
+
+Previously, RestTemplateBuilder unwrapped the request factory to allow
+the actual factory to be customised but then set this unwrapped factory
+on the template that is being built. This meant that any wrappers were
+lost.
+
+This commit updates the build to unwrap the factory prior to it being
+customised, but to the set the original, possibly wrapped factory on
+the template that is being built.
+
+Closes gh-6685

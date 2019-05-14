@@ -1,0 +1,10 @@
+Replica start peer recovery with safe commit (#28181)
+
+Today a replica starts a peer-recovery with the last commit. If the last
+commit is not a safe commit, a replica will immediately fallback to the
+file based sync which is more expensive than the sequence based
+recovery. This commit modifies the peer-recovery in replica to start
+with a safe commit. Moreover we can keep the existing translog on the
+target if the recovery is sequence based recovery.
+
+Relates #10708

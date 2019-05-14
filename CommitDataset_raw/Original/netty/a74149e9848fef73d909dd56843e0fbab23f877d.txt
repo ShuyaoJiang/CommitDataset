@@ -1,0 +1,4 @@
+[#1865] Only use internalNioBuffer when one of the read* or write* methods are used. This is neccessary to prevent races as those can happen when a slice or duplicate is shared between different Channels
+that are not assigned to the same EventLoop. In general get* operations should always be safe to be used from different Threads.
+
+This aslo include unit tests that show the issue

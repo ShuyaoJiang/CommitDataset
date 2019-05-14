@@ -1,0 +1,8 @@
+Watcher: Fix check for currently executed watches (#31137)
+
+The ack watch action has a check for currently executed watches, to make
+sure that currently running watches cannot be acknowledged. This check
+only checked on the coordinating node for watches being executed, but should
+have checked the whole cluster using a WatcherStatsRequest, which is
+being switched to in this commit.
+

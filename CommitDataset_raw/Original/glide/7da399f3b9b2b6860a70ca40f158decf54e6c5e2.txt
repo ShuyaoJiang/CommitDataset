@@ -1,0 +1,8 @@
+Avoid recycle Drawables/Bitmaps passed in or loaded from Resources.
+
+Both Android’s Resources class and AppCompat class will cache content
+they decode. If they happen to decode a Bitmap or a BitmapDrawable,
+it’s not safe for Glide to recycle or re-use the Bitmap or 
+BitmapDrawable because the cached entry may eventually be returned 
+again. To avoid this case, we now simply avoid recycling Bitmaps and
+Drawables we don’t decode directly.

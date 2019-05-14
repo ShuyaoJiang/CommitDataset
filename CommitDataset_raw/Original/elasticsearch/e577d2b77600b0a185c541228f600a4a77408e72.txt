@@ -1,0 +1,10 @@
+Fix handling of IOException when computing key for tokens (elastic/x-pack-elasticsearch#3639)
+
+The invalid token test has been failing due to the way the test expects an exception to be
+returned. Recent changes allowed the exception to be returned via a listener but the test
+was not adapted and the code in the token service was not properly handling these exceptions
+when they were returned via a listener.
+
+relates elastic/x-pack-elasticsearch#3630
+
+Original commit: elastic/x-pack-elasticsearch@1cf2cc0427dd3695a5fc4982fe724699150f5bbc

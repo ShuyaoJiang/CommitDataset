@@ -1,0 +1,12 @@
+Update computation of ehcache statistics
+
+Previously, the ehcache statistics were computed on the activity of the
+last minute which gives a "live" overview. All others cache managers,
+including JCache, provides a "cumulative" metrics (i.e. the hit/miss
+ratio since the creation of the cache or the last time it got cleared).
+
+Ths commit aligns the ehcache statistics to provide a similar semantics
+as the other cache managers. The side effect is that the metrics are now
+available, even if there is no cache activity at all at the moment.
+
+Closes gh-4891

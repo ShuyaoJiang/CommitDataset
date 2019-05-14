@@ -1,0 +1,12 @@
+Change CookieJar to deal with Cookies, not Headers.
+
+There's a big consequence to this for compatible with RFC 2965 Cookies. In particular,
+this drops our ability to support 'Set-Cookie2' headers, and some features used there
+including quoted attributes like 'Max-Age="25"'. This is the right move for interop with
+browsers, and likely to make things better for application developers, but some
+people who strictly followed the RFC 2965 spec will be broken. (That spec was never
+seriously adopted anywhere, which is the entire motivation of RFC 6265.)
+
+The upside is the CookieJar interface is now much more straightforward. This is
+particularly good going forward, and for clients who don't have to worry about the
+strangeness of things like $Version=1 in the RFC 2965 spec.

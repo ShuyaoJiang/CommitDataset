@@ -1,0 +1,9 @@
+Clarify the use of sleep in CCR test
+
+Sleeps in tests smell funny, and we try to avoid them to the extent
+possible. We are using a small one in a CCR test. This commit clarifies
+the purpose of that sleep by adding a comment explaining it. We also
+removed a hard-coded value from the test, that if we ever modified the
+value higher up where it was set, we could end up forgetting to change
+the value here. Now we ensure that these would move in lock step if we
+ever maintain them later.

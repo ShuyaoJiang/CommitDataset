@@ -1,0 +1,5 @@
+Start running the tests for guava-testlib under Android.
+This revealed the usual minor problems and also a new test bug in ForwardingWrapperTesterTest: The sample buggy forwarding class was buggy in *two* ways instead of the intended one. Not only did it forward to the wrong method in one case, but it also reversed the order of parameters in all cases. Android happens to test its methods in a different order than the JVM, so it detects the reversed parameters first. I've fixed this by fixing the parameter order.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=107246813

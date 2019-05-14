@@ -1,0 +1,13 @@
+Reinstate ./repository as a "remote" repository
+
+The grab command downloads the dependencies of one or more Groovy
+scripts to ./repository. This commit ensures that those previously
+downloaded dependencies can be used by a subsequent invocation of the
+run command.
+
+The location and behaviour of the local cache is unaffected by this
+change. If the dependencies in ./repository do not exist in the local
+cache, Aether will "download" them from ./repository and store them in
+the local cache.
+
+Fixes #191

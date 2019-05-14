@@ -1,0 +1,10 @@
+Test output should include GC details
+
+Motivation:
+Our tests are often asynchronous and have timeouts to avoid hanging indefinitely. However sometimes the timeouts maybe set to low for the CI servers. It would be helpful to confirm if the application was busy with GC and if that was a contributing factor to the test timing out.
+
+Modifications:
+- Unit tests should run with -XX:+PrintGCDetails by default
+
+Result:
+More visibility into GC behavior in unit tests.

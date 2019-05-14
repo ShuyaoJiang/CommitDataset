@@ -1,0 +1,6 @@
+Don't build bwc on assemble (#33372)
+
+Gradle triggers the build of artifacts even if assemble is disabled.
+Most users will not need bwc distributions after running `./gradlew
+assemble` so instead of forcing them to add `-x buildBwcVersion`, we
+detect this and skip the configuration of the artifacts.

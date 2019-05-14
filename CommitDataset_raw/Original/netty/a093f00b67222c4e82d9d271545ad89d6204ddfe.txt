@@ -1,0 +1,22 @@
+Cipher suite conversion between Java and OpenSSL
+
+Related: #3285
+
+Motivation:
+
+When a user attempts to switch from JdkSslContext to OpenSslContext, he
+or she will see the initialization failure if he or she specified custom
+cipher suites.
+
+Modifications:
+
+- Provide a utility class that converts between Java cipher suite string
+  and OpenSSL cipher suite string
+- Attempt to convert the cipher suite so that a user can use the cipher
+  suite string format of Java regardless of the chosen SslContext impl
+
+Result:
+
+- It is possible to convert all known cipher suite strings.
+- It is possible to switch from JdkSslContext and OpenSslContext and
+  vice versa without any configuration changes

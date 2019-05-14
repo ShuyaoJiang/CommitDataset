@@ -1,0 +1,12 @@
+Avoid duplicate Accept header values in RestTemplate
+
+Prior to this commit, the various `HttpMessageConverter` instances
+configured for a given `RestTemplate` instance could all contribute
+`MediaType` values to the "Accept:" request header.
+
+This could lead to duplicate media types in that request header,
+cluttering for the HTTP request for no reason.
+
+This commit ensures that only distinct values are added to the request.
+
+Issue: SPR-16690

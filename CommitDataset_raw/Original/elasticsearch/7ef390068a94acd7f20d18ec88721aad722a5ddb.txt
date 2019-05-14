@@ -1,0 +1,8 @@
+Move remaining pre-configured token filters into analysis-common (#24716)
+
+Moves the remaining preconfigured token figured into the analysis-common module. There were a couple of tests in core that depended on the pre-configured token filters so I had to touch them:
+
+* `GetTermVectorsCheckDocFreqIT` depended on `type_as_payload` but didn't do anything important with it. I dropped the dependency. Then I moved the test to a single node test case because we're trying to cut down on the number of `ESIntegTestCase` subclasses.
+* `AbstractTermVectorsTestCase` and its subclasses depended on `type_as_payload`. I dropped their usage of the token filter and added an integration test for the termvectors API that uses `type_as_payload` to the `analysis-common` module.
+* `AnalysisModuleTests` expected a few pre-configured token filtes be registered by default. They aren't any more so I dropped this assertion. We assert that the `CommonAnalysisPlugin` registers these pre-built token filters in `CommonAnalysisFactoryTests`
+* `SearchQueryIT` and `SuggestSearchIT` had tests that depended on the specific behavior of the token filters so I moved the tests to integration tests in `analysis-common`.

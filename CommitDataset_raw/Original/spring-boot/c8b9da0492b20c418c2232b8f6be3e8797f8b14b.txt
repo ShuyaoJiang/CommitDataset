@@ -1,0 +1,9 @@
+Ensure DeploymentInfo contextPath is never "/"
+
+Undertow 1.1 expects that DeploymentInfo.contextPath is set to "/" for
+a root context. If it is left as "" the session cookie path is not
+correctly set. See UNDERTOW-350 for background.
+
+This commit simplifies the original work-around committed in 78c22813d.
+
+Fixes gh-2065

@@ -1,0 +1,19 @@
+Allow unstashing values into keys (#24685)
+
+This is almost exclusively for docs test which frequently match the
+entire response. This allow something like:
+```
+  - set: {nodes.$master.http.publish_address: host}
+  - match:
+      $body:
+        {
+          "nodes": {
+            $host: {
+              ... stuff in here ...
+            }
+          }
+        }
+```
+
+This should make it possible for the docs tests to work with
+unpredictable keys.

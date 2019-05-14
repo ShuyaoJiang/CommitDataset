@@ -1,0 +1,7 @@
+Optimize SslHandler
+
+- Fixes #1905
+- Call ctx.flush() only when necessary
+- Improve the estimation of application and packet buffer sizes
+- decode() method now tries to call unwrap() with as many SSL records as
+  possible to reduce the number of events triggered

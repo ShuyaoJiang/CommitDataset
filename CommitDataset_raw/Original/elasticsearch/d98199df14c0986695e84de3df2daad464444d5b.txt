@@ -1,0 +1,5 @@
+Extend duration of fixLag() (#34364)
+
+Today, fixLag() waits for a new cluster state to be committed. However, it does
+not account for the fact that a term bump may occur, requiring a new election
+to take place after the cluster state is committed. This change fixes this.

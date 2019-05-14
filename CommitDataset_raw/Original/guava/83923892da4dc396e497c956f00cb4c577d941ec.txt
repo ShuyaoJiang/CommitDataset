@@ -1,0 +1,8 @@
+Remove more possible static-init deadlocks (https://github.com/google/guava/issues/1977).
+
+- ImmutableSortedMultiset: I couldn't figure out a way for this to actually deadlock, but I figure it's best for it to follow the pattern of the others.
+- ImmutableSortedSet: This might be able to deadlock if one thread creates a RegularImmutableMap (which then calls into RegularImmutableSortedSet and then ImmutableSet) while another initializes ImmutableSortedSet (which then calls into RegularImmutableSortedSet).
+- ImmutableTable: This might be able to deadlock if one thread GWT-deserializes a SparseImmutableTable (which then calls into ImmutableTable) while another initializes ImmutableTable (which calls into SparseImmutableTable).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=104995935

@@ -1,0 +1,9 @@
+When stopping via systemd only kill the JVM, not its control group (#25195)
+
+This prevents possible race conditions between the Elasticsearch JVM and
+plugin native controller processes that can cause the Elasticsearch shutdown
+to hang.  The problem can happen when the JVM and the controller process
+receive a SIGTERM at almost the same time.
+
+(There's an assumption here that Elasticsearch will continue to use other
+mechanisms to kill native controller processes.)

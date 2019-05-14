@@ -1,0 +1,14 @@
+Ensure that Undertow is stopped when it fails to start
+
+Previously, if Undertow failed to start, some of Undertow's
+internal components would have been started but the started field of
+UndertowEmbeddedServletContainer remained false. This meant that when
+stop() was called nothing was done as the container believed it had
+not been started.
+
+This commit updates UndertowEmbeddedServletContainer to stop both the
+DeploymentManager and the Undertow instance in start() if an exception
+is thrown. This aligns the behaviour of
+UndertowEmbeddedServletContainer with that of the Tomcat equivalent.
+
+Closes gh-10528

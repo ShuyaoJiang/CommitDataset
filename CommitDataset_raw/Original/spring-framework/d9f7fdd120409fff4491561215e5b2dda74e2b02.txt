@@ -1,0 +1,111 @@
+Support reading nested annotations via ASM
+
+Background
+
+  Spring 3.1 introduced the @ComponentScan annotation, which can accept
+  an optional array of include and/or exclude @Filter annotations, e.g.
+
+     @ComponentScan(
+         basePackages = "com.acme.app",
+         includeFilters = { @Filter(MyStereotype.class), ... }
+     )
+     @Configuration
+     public class AppConfig { ... }
+
+  @ComponentScan and other annotations related to @Configuration class
+  processing such as @Import, @ImportResource and the @Enable*
+  annotations are parsed using reflection in certain code paths, e.g.
+  when registered directly against AnnotationConfigApplicationContext,
+  and via ASM in other code paths, e.g. when a @Configuration class is
+  discovered via an XML bean definition or when included via the
+  @Import annotation.
+
+  The ASM-based approach is designed to avoid premature classloading of
+  user types and is instrumental in providing tooling support (STS, etc).
+
+  Prior to this commit, the ASM-based routines for reading annotation
+  attributes were unable to recurse into nested annotations, such as in
+  the @Filter example above. Prior to Spring 3.1 this was not a problem,
+  because prior to @ComponentScan, there were no cases of nested
+  annotations in the framework.
+
+  This limitation manifested itself in cases where users encounter
+  the ASM-based annotation parsing code paths AND declare
+  @ComponentScan annotations with explicit nested @Filter annotations.
+  In these cases, the 'includeFilters' and 'excludeFilters' attributes
+  are simply empty where they should be populated, causing the framework
+  to ignore the filter directives and provide incorrect results from
+  component scanning.
+
+  The purpose of this change then, is to introduce the capability on the
+  ASM side to recurse into nested annotations and annotation arrays. The
+  challenge in doing so is that the nested annotations themselves cannot
+  be realized as annotation instances, so must be represented as a
+  nested Map (or, as described below, the new AnnotationAttributes type).
+
+  Furthermore, the reflection-based annotation parsing must also be
+  updated to treat nested annotations in a similar fashion; even though
+  the reflection-based approach has no problem accessing nested
+  annotations (it just works out of the box), for substitutability
+  against the AnnotationMetadata SPI, both ASM- and reflection-based
+  implementations should return the same results in any case. Therefore,
+  the reflection-based StandardAnnotationMetadata has also been updated
+  with an optional 'nestedAnnotationsAsMap' constructor argument that is
+  false by default to preserve compatibility in the rare case that
+  StandardAnnotationMetadata is being used outside the core framework.
+  Within the framework, all uses of StandardAnnotationMetadata have been
+  updated to set this new flag to true, meaning that nested annotation
+  results will be consistent regardless the parsing approach used.
+
+  Spr9031Tests corners this bug and demonstrates that nested @Filter
+  annotations can be parsed and read in both the ASM- and
+  reflection-based paths.
+
+Major changes
+
+ - AnnotationAttributes has been introduced as a concrete
+   LinkedHashMap<String, Object> to be used anywhere annotation
+   attributes are accessed, providing error reporting on attribute
+   lookup and convenient type-safe access to common annotation types
+   such as String, String[], boolean, int, and nested annotation and
+   annotation arrays, with the latter two also returned as
+   AnnotationAttributes instances.
+
+ - AnnotationUtils#getAnnotationAttributes methods now return
+   AnnotationAttributes instances, even though for binary compatibility
+   the signatures of these methods have been preserved as returning
+   Map<String, Object>.
+
+ - AnnotationAttributes#forMap provides a convenient mechanism for
+   adapting any Map<String, Object> into an AnnotationAttributes
+   instance. In the case that the Map is already actually of
+   type AnnotationAttributes, it is simply casted and returned.
+   Otherwise, the map is supplied to the AnnotationAttributes(Map)
+   constructor and wrapped in common collections style.
+
+ - The protected MetadataUtils#attributesFor(Metadata, Class) provides
+   further convenience in the many locations throughout the
+   .context.annotation packagage that depend on annotation attribute
+   introspection.
+
+ - ASM-based core.type.classreading package reworked
+
+   Specifically, AnnotationAttributesReadingVisitor has been enhanced to
+   support recursive reading of annotations and annotation arrays, for
+   example in @ComponentScan's nested array of @Filter annotations,
+   ensuring that nested AnnotationAttributes objects are populated as
+   described above.
+
+   AnnotationAttributesReadingVisitor has also been refactored for
+   clarity, being broken up into several additional ASM
+   AnnotationVisitor implementations. Given that all types are
+   package-private here, these changes represent no risk to binary
+   compatibility.
+
+ - Reflection-based StandardAnnotationMetadata updated
+
+   As described above, the 'nestedAnnotationsAsMap' constructor argument
+   has been added, and all framework-internal uses of this class have
+   been updated to set this flag to true.
+
+Issue: SPR-7979, SPR-8719, SPR-9031

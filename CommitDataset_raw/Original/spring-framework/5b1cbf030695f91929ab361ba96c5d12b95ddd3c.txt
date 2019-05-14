@@ -1,0 +1,12 @@
+Log WebSocket connection issues at DEBUG level
+
+WebSocket clients going away is an expected and common occurance.
+Logging at ERROR level on failure to close a connection or on failures
+to write data to a WebSocket sessions has a high potential for false
+positives with very little to do. This change lowers the log level for
+a number of log messages that fit this category.
+
+This should be helped by the effort already spent for 4.1 to ensure
+logging at DEBUG level doesn't produce excessive amounts of logging.
+
+Issue: SPR-12155

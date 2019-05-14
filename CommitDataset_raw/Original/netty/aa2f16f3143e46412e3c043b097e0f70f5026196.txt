@@ -1,0 +1,18 @@
+EmptyByteBuf allows writing ByteBufs with 0 readable bytes
+
+Motivation:
+
+The contract of `ByteBuf.writeBytes(ByteBuf src)` is such that it will
+throw an `IndexOutOfBoundsException if `src.readableBytes()` is greater than
+`this.writableBytes()`. The EmptyByteBuf class will throw the exception,
+even if the source buffer has zero readable bytes, in violation of the
+contract.
+
+Modifications:
+
+Use the helper method `checkLength(..)` to check the length and throw
+the exception, if appropriate.
+
+Result:
+
+Conformance with the stated behavior of ByteBuf.

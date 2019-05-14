@@ -1,0 +1,11 @@
+Watcher: Fix SmokeTestWatcherWithSecurityIT test (elastic/x-pack-elasticsearch#4140)
+
+These tests were configured to run every second, some of the watch
+history entries could have an execution state throttled, when two
+executions happened while waiting. The tests who were affected by 
+this are now explicitely searching for the watch history entry with 
+the correct state.
+
+relates elastic/x-pack-elasticsearch#4137
+
+Original commit: elastic/x-pack-elasticsearch@e463cc4770321fe8038618b161aefd1b47716075

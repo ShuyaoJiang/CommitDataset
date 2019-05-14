@@ -1,0 +1,13 @@
+First proper draft of DSL for Groovy Commands
+
+Users can declare or Command, OptionHandler classes in an init script
+or they can use a DSL, e.g.
+
+command("foo") { args -> println "Do stuff with ${args} array" }
+
+or
+
+command("foo") {
+  options { option "bar", "Help text for bar option" ithOptionArg() ofType Integer }
+  run { options -> println "Do stuff with ${options.valueOf('bar')}" }
+}

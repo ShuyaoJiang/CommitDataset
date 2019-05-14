@@ -1,0 +1,15 @@
+Log the correct line-number when using SLF4j with netty if possible. (#8258)
+
+* Log the correct line-number when using SLF4j with netty if possible.
+
+Motivation:
+
+At the moment we do not log the correct line number in many cases as it will log the line number of the logger wrapper itself. Slf4j does have an extra interface that can be used to filter out these nad make it more usable with logging wrappers.
+
+Modifications:
+
+Detect if the returned logger implements LocationAwareLogger and if so make use of its extra methods to be able to log the correct origin of the log request.
+
+Result:
+
+Better logging when using slf4j.

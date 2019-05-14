@@ -1,0 +1,14 @@
+Prefer the NIC with global IP address when getting the default machine ID
+
+Motivation:
+
+When there are two MAC addresses which are good enough, we can choose the one with better IP address rather than just choosing the first appeared one.
+
+Modification:
+
+Replace isBetterAddress() with compareAddresses() to make it return if both addresses are in the same preference level.
+Add compareAddresses() which compare InetAddresses and use it when compareAddress(byte[], byte[]) returns 0 (same preference)
+
+Result:
+
+More correct primary MAC address detection

@@ -1,0 +1,13 @@
+Use jndi-dns to obtain default name servers
+
+Motivation:
+
+Using reflection to obtain the default name servers may fail in Java9 and also in previous Java versions if a SecurityManager is present.
+
+Modifications:
+
+Try using jndi-dns to obtain default name servers and only try using reflection if this fails.
+
+Result:
+
+Be able to detect default name servers in all cases. Fixes [#6347].

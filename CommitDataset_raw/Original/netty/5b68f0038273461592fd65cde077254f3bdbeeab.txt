@@ -1,0 +1,12 @@
+Make CompatibleMarshallingDecoder discard the inbound buffer once TooLongFrameException is raised
+
+(See #768)
+
+Once too long object is received, CompatibleMarshallingDecoder has to
+discard all input from now on, just like MarshallingDecoder does.
+Otherwise, the decoder will raise more exceptions because the decoder
+has no idea anymore where the object starts.
+
+Before this fix, SerialThreadLocalCompatibleMarshallingDecoderTest
+logged many additional exceptions raised by the decoder after test is
+finished.

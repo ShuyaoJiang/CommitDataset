@@ -1,0 +1,18 @@
+Support test annotations on interfaces
+
+Prior to Java 8 it never really made much sense to author integration
+tests using interfaces. Consequently, the Spring TestContext Framework
+has never supported finding test-related annotations on interfaces in
+its search algorithms.
+
+However, Java 8's support for interface default methods introduces new
+testing use cases for which it makes sense to declare test
+configuration (e.g., @ContextConfiguration, etc.) on an interface
+containing default methods instead of on an abstract base class.
+
+This commit ensures that all non-repeatable, class-level test
+annotations in the Spring TestContext Framework can now be declared on
+test interfaces. The only test annotations that cannot be declared on
+interfaces are therefore @Sql and @SqlGroup.
+
+Issue: SPR-14184

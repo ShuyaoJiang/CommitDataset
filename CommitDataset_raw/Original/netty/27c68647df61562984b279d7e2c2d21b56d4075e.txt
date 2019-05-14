@@ -1,0 +1,16 @@
+In (Pooled|Unpooled)UnsafeDirectByteBuf copy memory directly to and from ByteBuffer
+
+Motivation:
+
+When moving bytes between a PooledUnsafeDirectByteBuf or an UnpooledUnsafeDirectByteBuf
+and a ByteBuffer, a temp ByteBuffer is allocated and will need to be GCed. This is a
+common case since a ByteBuffer is always needed when reading/writing on a file,
+for example.
+
+Modifications:
+
+Use PlatformDependent.copyMemory() to avoid the need for the temp ByteBuffer
+
+Result:
+
+No temp ByteBuffer allocated and GCed.

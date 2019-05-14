@@ -1,0 +1,32 @@
+Break cycle caused by JndiDataSourceAutoConfiguration
+
+There's a long cycle when Spring Data REST, Data JPA and Actuator
+are used in an app that retrieves its DataSource from JNDI. The cycle
+is:
+
+- WebMvcAutoConfiguration
+- HttpMessageConverters
+- MappingJackson2HttpMessageConverter (needs an ObjectMapper)
+- SpringBootRepositoryRestMvcConfiguration
+- ObjectMapper
+- RepositoryResourceMappings (part of a custom Jackson module)
+- Repositories
+- EntityManagerFactory (Triggered by application's Spring Data JPA repository)
+- HibernateJpaAutoConfiguration
+- JndiDataSourceAutoConfiguration
+- MBeanExporter (Used to prevent export of DataSource MBean that's already in JMX)
+- EndpointMBeanExportAutoConfiguration
+- ObjectMapper (Used to format JSON produced by the exported endpoints)
+
+Spring Data Rest caused the ObjectMapper to depend on JPA. JPA depends
+on the DataSource. JnidDataSourceAutoConfiguration depends on the
+MBeanExporter. Actuator's MBeanExporter requires an ObjectMapper to
+produce JSON strings.
+
+This commit breaks the cycle by making JndiDataSourceAutoConfiguration
+access the MBeanExporter lazily. Rather than using `@Lazy`. which does
+not work with `@Autowired(required=false)`, the application context
+is injected and the MBeanExporter is retrieved manually when it is
+needed.
+
+Closes gh-4980

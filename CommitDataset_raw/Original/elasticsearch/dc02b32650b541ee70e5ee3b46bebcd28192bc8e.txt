@@ -1,0 +1,13 @@
+Simplify connection closing and cleanups in TcpTransport (#25250)
+
+Today we maintain a map of open connections in order to close them when
+a low level channel gets closed or handles a failure. We also spawn a thread due to some
+tricky concurrency issues especially with respect to netty since they listener might
+be called on a transport / boss thread. Executions on those threads must not be blocking
+since otherwise we will likely deadlock the event processing which adds to the
+complexity of the concurrency model in this class.
+
+This change associates the connection with the close callback that every channel invokes
+once it's closed which allows us to remove the connections map. A relaxed non-blocking
+concurrency model in the connection close listener allows cleaning up connected nodes without
+blocking on any lock.

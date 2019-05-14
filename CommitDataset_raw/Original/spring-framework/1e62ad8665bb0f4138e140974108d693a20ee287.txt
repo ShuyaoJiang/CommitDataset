@@ -1,0 +1,16 @@
+Add beforeConcurrentHandling support
+
+Previously CallableProcessingInterceptor and
+DeferredResultProcessingInterceptor did not have support for capturing
+the state of the original Thread just prior to processing. This made it
+difficult to transfer the state of one Thread (i.e. ThreadLocal) to the
+Thread used to process the Callable.
+
+This commit adds a new method to CallableProcessingInterceptor and
+DeferredResultProcessingInterceptor named beforeConcurrentHandling
+which will be invoked on the original Thread used to submit the Callable
+or DeferredResult. This means the state of the original Thread can be
+captured in beforeConcurrentHandling and transfered to the new Thread
+in preProcess.
+
+Issue: SPR-10052

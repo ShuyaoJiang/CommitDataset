@@ -1,0 +1,16 @@
+Add overloads to Preconditions checkState,checkArgument and checkNotNull to avoid boxing and varargs for the most common parameter combinations.
+
+This adds primitive overloads for all combinations of Object,char,int and long up to 2 parameters and Object only overloads up to 4 parameters.  This covers 92-98% of formatting calls based on an analysis of googles codebase.
+
+This change is fully binary compatible but only mostly source compatible.  It is possible that this cl will call some Preconditions calls to become ambiguous with respect to overload resolution.  For example this call
+
+void foo(Boolean condition, short s) {
+  checkState(condition, "%s", s);
+}
+
+will fail to compile with this change.  There are two simple changes to the invocation that will resolve the ambiguity.  'condition' can be explicitly unboxed, or 's' can be explicitly boxed.  We believe that such situations will be incredibly rare.
+
+See the JLS 15.12.2 for full information on overload resolution: https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.12.2
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=115881707

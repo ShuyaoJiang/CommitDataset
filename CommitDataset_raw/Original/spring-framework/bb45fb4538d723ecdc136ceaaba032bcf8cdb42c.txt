@@ -1,0 +1,13 @@
+Restore sleep interval between recovery attempt
+
+Commit 6a04831 introduced a regression that lead to burst recovery
+attempts when the broker is up but the listener is failing for some
+reason (the most obvious one being that the destination does not
+exist).
+
+Since the sleep period between recovery attempts strategy is more
+complex, we can't just sleep for a period of time. But we can create
+an execution and apply it once which should work just fine for most
+use cases.
+
+Issue: SPR-12183

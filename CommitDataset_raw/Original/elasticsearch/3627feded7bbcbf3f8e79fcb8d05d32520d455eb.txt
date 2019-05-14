@@ -1,0 +1,3 @@
+Refactors lifecycle type to its own class (#3381)
+
+To clean up the parsing of the LifecyclePolicy this change moves the LifecycleType to its own class so it can be created in the normal parsing of LifecyclePolicy rather than having to parse to an intermediary object first. The LifecycleType is an interface which can be implemented for different lifecycle types. These types shiould be singletons and are register with the NamedXContentRegistry and NamedWriteableRegistry only so they are available when reading from a stream or parsing.

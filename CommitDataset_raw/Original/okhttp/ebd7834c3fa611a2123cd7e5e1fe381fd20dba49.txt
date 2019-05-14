@@ -1,0 +1,23 @@
+Let CipherSuites have arbitrary names.
+
+This allows Handshake to accept CipherSuite names that do not have a
+corresponding predefined instance in CipherSuite.java, including ones
+that conscrypt uses today or might use in future.
+
+The following OkHttp 3 APIs are not changed by this CL:
+
+ - ConnectionSpec still uses Strings to represent CipherSuites for now.
+
+ - CipherSuites are interned (value equality is based on object
+   equality) in order to not break clients that use ==.
+
+This CL does introduce these API and behavioral changes:
+ - CipherSuite instances constructed via CipherSuite.forJavaName("TLS_" + s)
+   will now always be different from CipherSuite.forJavaName("SSL_" + s)
+   for all possible values of s. Previously, there were 19 specific
+   values of s for which those would have yielded equal instances.
+ - Since CipherSuite is no longer an enum, it no longer extends Enum,
+   no longer has name() or valueOf() methods, and no longer implements
+   Serializable.
+
+Change-Id: I9a544e1c0a51848d492883b3c9b4579899e2744a

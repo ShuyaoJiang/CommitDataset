@@ -1,0 +1,15 @@
+Use epoch millis for token expiration instead of ZonedDateTime (elastic/x-pack-elasticsearch#1417)
+
+For user tokens, we were storing the expiration time as a date with the date time format in the
+mappings. Occasionally, we would get CI failures due to parsing the date and having an invalid
+format. This change simplifies the user tokens to simply use an Instant and convert it to the epoch
+millis when we index the document. This eliminates the need for a date formatter and should ensure
+we no longer have issues with parsing the dates.
+
+Additionally, the TokenAuthIntegTests#testExpireMultipleTimes could fail if the token was expired
+but the approximation for the expiration time was after the current time. In order to resolve this
+we get the exact expiration time from the token and use that in the test.
+
+relates elastic/x-pack-elasticsearch#1255
+
+Original commit: elastic/x-pack-elasticsearch@d4bf53e7bc1e9068559b823f7605cd4cf144e82c

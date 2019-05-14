@@ -1,0 +1,19 @@
+Require translogUUID when reading global checkpoint (#28587)
+
+Today we use the persisted global checkpoint to calculate the starting 
+seqno in peer-recovery. However we do not check whether the translog 
+actually belongs to the existing Lucene index when reading the global
+checkpoint. In some rare cases if the translog does not match the Lucene
+index, that recovering replica won't be able to complete its recovery.
+This can happen as follows.
+
+1. Replica executes a file-based recovery
+2. Index files are copied to replica but crashed before finishing the recovery
+3. Replica starts recovery again with seq-based as the copied commit is safe
+4. Replica fails to open engine because translog and Lucene index are not matched
+5. Replica won't be able to recover from primary
+
+This commit enforces the translogUUID requirement when reading the 
+global checkpoint directly from the checkpoint file.
+
+Relates #28435

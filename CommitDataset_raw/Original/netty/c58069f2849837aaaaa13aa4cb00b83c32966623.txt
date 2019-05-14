@@ -1,0 +1,13 @@
+Better handling of streaming JSON data in JsonObjectDecoder (#7821)
+
+Motivation:
+
+When the JsonObjectDecoder determines that the incoming buffer had some data discarded, it resets the internal index to readerIndex and attempts to adjust the state which does not correctly work for streams of JSON objects.
+
+Modifications:
+
+Reset the internal index to the value considering the previous reads.
+
+Result:
+
+JsonObjectDecoder correctly handles streams of both JSON objects and arrays with no state adjustments or repeatable reads.

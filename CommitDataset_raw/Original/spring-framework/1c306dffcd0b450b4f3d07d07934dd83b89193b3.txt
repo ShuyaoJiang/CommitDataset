@@ -1,0 +1,29 @@
+Handle non-void write methods deterministically
+
+This change resolves a specific issue with processing
+java.math.BigDecimal via ExtendedBeanInfo. BigDecimal has a particular
+constellation of #setScale methods that, prior to this change, had the
+potential to cause ExtendedBeanInfo to throw an IntrospectionException
+depending on the order in which the methods were processed.
+
+Because JDK 7 no longer returns deterministic results from
+Class#getDeclaredMethods, it became a genuine possibility - indeed a
+statistical certainty that the 'wrong' setScale method handling order
+happens sooner or later. Typically one could observe this failure once
+out of every four test runs.
+
+This commit introduces deterministic method ordering of all discovered
+non-void returning write methods in such a way that solves the problem
+for BigDecimal as well as for any other class having a similar method
+arrangement.
+
+Also:
+
+ - Remove unnecessary cast
+
+ - Pass no method information to PropertyDescriptor superclasses when
+   invoking super(...). This ensures that any 'type mismatch'
+   IntrospectionExceptions are handled locally in ExtendedBeanInfo and
+   its Simple* PropertyDescriptor variants where we have full control.
+
+Issue: SPR-10111, SPR-9702

@@ -1,0 +1,11 @@
+LocalChannel Event Ordering Error
+
+Motivation:
+When a LocalChannel write operation occurs, the promise associated with the write operation is marked successful when it is added to the peer's queue, but before the peer has actually received the data. If the promise callback closes the channel then a race condition exists where the close event may occur before the data is delivered. We should preserve ordering of events.
+
+Modifications:
+- LocalChannel should track when a write is in progress, and if a close operation happens make sure the peer gets all pending read operations.
+
+Result:
+LocalChannel preserves order of operations.
+Fixes https://github.com/netty/netty/issues/4118

@@ -1,0 +1,13 @@
+Porting BufferingHttp2ConnectionEncoder from gRPC
+
+Motivation:
+
+gRPC's BufferingHttp2ConnectionEncoder is a generic utility that simplifies client-side applications that want to allow stream creation without worrying about violating the SETTINGS_MAX_CONCURRENT_STREAMS limit.  Since it's not gRPC-specific it makes sense to move it into Netty proper.
+
+Modifications:
+
+Adding the BufferingHttp2ConnectionEncoder and it's unit test.
+
+Result:
+
+Netty now supports buffering stream creation.

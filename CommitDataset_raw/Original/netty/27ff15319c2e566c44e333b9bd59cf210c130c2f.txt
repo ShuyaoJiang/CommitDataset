@@ -1,0 +1,13 @@
+Reduce memory allocations in StompSubframeDecoder.readHeaders
+
+Motivation:
+When decoding stomp frames a lot of unnecessary character arrays are created when parsing headers.
+For every header, an array is created to read the line into and then more when splitting the line at the colon.
+
+Modifications:
+Parse key and value of a header while reading the line instead of afterwards.
+Reuse a single AppendableCharSequence.
+Reduce initial size of AppendableCharSequence when reading the command as it is expected to be short.
+
+Result:
+Allocations when parsing stomp frames have dropped significantly.

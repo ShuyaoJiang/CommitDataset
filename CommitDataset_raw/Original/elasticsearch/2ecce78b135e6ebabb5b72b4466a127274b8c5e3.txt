@@ -1,0 +1,10 @@
+Decouple XContentType from StreamInput/Output (elastic/x-pack-elasticsearch#4065)
+
+This removes the readFrom and writeTo methods from XContentType, instead using
+the more generic `readEnum` and `writeEnum` methods. Luckily they are both
+encoded exactly the same way, so there is no compatibility layer needed for
+backwards compatibility.
+
+This is the x-pack side of https://github.com/elastic/elasticsearch/pull/28927
+
+Original commit: elastic/x-pack-elasticsearch@f1c0928490b12da82016995056764cd2bc48ec8c

@@ -1,0 +1,11 @@
+Add support for selecting percolator query candidate matches containing range queries.
+
+Extracts ranges from range queries on byte, short, integer, long, half_float, scaled_float, float, double, date and ip fields.
+byte, short, integer and date ranges are normalized to Lucene's LongRange.
+half_float and float are normalized to Lucene's DoubleRange.
+
+When extracting range queries, the QueryAnalyzer computes the width of the range.  This width is used to determine
+what range should be preferred in a conjunction query. The QueryAnalyzer prefers the smaller ranges, because these
+ranges tend to match with less documents.
+
+Closes #21040

@@ -1,0 +1,8 @@
+Allow Uid#decodeId to decode from a byte array slice (#26987)
+
+Today we only allow to decode byte arrays where the data has a 0 offset
+and the same length as the array. Allowing to decode stuff from a slice will
+make decoding IDs cheaper if the the ID is for instance coming from a term dictionary
+or BytesRef.
+
+Relates to #26931

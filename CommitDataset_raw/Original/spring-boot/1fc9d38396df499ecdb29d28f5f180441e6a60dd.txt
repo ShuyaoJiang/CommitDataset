@@ -1,0 +1,8 @@
+Fix potential Jetty MalformedURLException
+
+Update JettyEmbeddedServletContainerFactory to use the JarResource
+class to create the base resource. This prevents a potential
+"java.lang.NullPointerException: no !/ in spec" error which can occur
+when using shaded executable jars.
+
+Fixes gh-2245

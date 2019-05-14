@@ -1,0 +1,10 @@
+Fix DefaultChannelId MAC address parsing bug
+
+Motivation:
+DefaultChannelId provides a regular expression which validates if a user provided MAC address is valid. This regular expression may allow invalid MAC addresses and also not allow valid MAC addresses.
+
+Modifications:
+- Introduce a MacAddressUtil#parseMac method which can parse and validate the MAC address at the same time. The regular expression check before hand is additional overhead if we have to parse the MAC address.
+
+Result:
+Fixes https://github.com/netty/netty/issues/6132.

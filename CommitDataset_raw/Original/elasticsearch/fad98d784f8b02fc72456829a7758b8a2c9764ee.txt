@@ -1,0 +1,12 @@
+[ML] Align aggregated data extraction to histogram interval (elastic/x-pack-elasticsearch#2553)
+
+When the datafeed uses aggregations and in order to accommodate
+derivatives, an extra bucket is queried at the beginning of each
+search. In order to avoid visiting the same bucket twice, we need
+to search buckets aligned to the histogram interval. This allows
+us to steer away from partial buckets, and thus avoid the problem
+of dropping or duplicating data.
+
+relates elastic/x-pack-elasticsearch#2519
+
+Original commit: elastic/x-pack-elasticsearch@e03dde5fea609ddee266ba0f46e65176fe449f23

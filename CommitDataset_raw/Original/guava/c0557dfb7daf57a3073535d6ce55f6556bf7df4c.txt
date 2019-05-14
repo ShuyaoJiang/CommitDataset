@@ -1,0 +1,9 @@
+Run tests in a deterministic order.
+
+We just had a failure that depends on test execution order. It wasn't too hard to figure out (and would have been even easier with the output that I'm adding in CL 174361258), but determinism is a good thing that may help us in the future.
+
+(It *might* also bring us closer to the Bazel test-runner behavior, but I haven't actually checked. And anyway, we shard some of our Bazel tests, so even if both systems now use the samer order, they might be executing different subsets of tests, so they still might not show the same errors.)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=174365332

@@ -1,0 +1,10 @@
+ObjectCleaner may indefinitely block on ReferenceQueue#poll
+
+Motivation:
+ObjectCleaner polls a ReferenceQueue which will block indefinitely. However it is possible there is a race condition between the live set of objects being empty due to the WeakReference being cleaned/cleared and polling the queue. If this situation occurs the cleanup thread may never unblock if no more objects are added to the live set, and may result in an application's failure to gracefully close.
+
+Modifications:
+- ReferenceQueue.remove should use a timeout to compensate for the race condition, and avoid dead lock
+
+Result:
+No more dead lock in ObjectCleaner when polling the ReferenceQueue.

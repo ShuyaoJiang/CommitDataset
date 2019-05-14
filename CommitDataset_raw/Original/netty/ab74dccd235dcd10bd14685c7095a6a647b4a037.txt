@@ -1,0 +1,10 @@
+Http/2 Priority on CLOSED stream
+
+Motivation:
+The encoder/decoder currently do not handle streams which have previously existed but no longer exist because they were closed. The specification requires supporting this.
+
+Modifications:
+- encoder/decoder should tolerate the frame or the dependent frame not existing in the streams map due to the fact that it may have previously existed.
+
+Result:
+encoder/decoder are more compliant with the specification.

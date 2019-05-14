@@ -1,0 +1,13 @@
+Remove all dependencies from XContentBuilder (#29225)
+
+* Remove all dependencies from XContentBuilder
+
+This commit removes all of the non-JDK dependencies from XContentBuilder, with
+the exception of `CollectionUtils.ensureNoSelfReferences`. It adds a third
+extension point around dealing with time-based fields and formatters to work
+around the Joda dependency.
+
+This decoupling allows us to be able to move XContentBuilder to a separate lib
+so it can be available for things like the high level rest client.
+
+Relates to #28504

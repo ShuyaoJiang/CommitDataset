@@ -1,0 +1,626 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (build.xml, testModule.gwt.xml). 
+ This change set is mainly composed of:  
+
+1. Changes to package com.google.common.base:  
+
+1. Changes to package com.google.common.cache:  
+
+1. Changes to package com.google.common.collect:  
+
+1.1. Add an interface declaration  for sorted iterable. It allows to:
+
+	Get comparator;
+	Get iterator
+
+1.2. Add an interface declaration  for sorted multiset. It allows to:
+
+	Get comparator;
+	First entry;
+	Handle last entry;
+	Poll first entry;
+	Poll last entry;
+	Get element set;
+	Get entry set;
+	Get iterator;
+	Descending multiset;
+	Head multiset;
+	Get sub multiset;
+	Get tail multiset
+
+2. Changes to package com.google.common.collect.testing.features:  
+
+2.1. Add a class for conflicting requirements exception. It allows to:
+
+	Instantiate conflicting requirements exception  with conflicts set;
+	Get conflicts;
+	Get source;
+	Get message
+
+2.2. Add an interface declaration  for feature. It allows to:
+
+	Get implied features
+
+2.3. Add a class for feature util. It allows to:
+
+	Add implied features;
+	Get implied features;
+	Get tester requirements;
+	Build tester requirements;
+	Build declared tester requirements;
+	Get tester annotations;
+	Incorporate requirements;
+	Check conflict;
+	Get intersection
+
+2.4. Add a class for tester requirements. It allows to:
+
+	Instantiate tester requirements  with present features set, absent features set and absent features set;
+	Instantiate tester requirements  with tr tester requirements;
+	Instantiate tester requirements;
+	Get present features;
+	Get absent features;
+	Check if tester requirements equals;
+	Hash code;
+	Convert tester requirements to string
+
+3. Changes to package com.google.common.collect.testing.testers:  
+
+3.1. Add a class for abstract list index of tester. It allows to:
+
+	Find abstract list index of tester;
+	Get method name;
+	Handle test find yes;
+	Handle test find no;
+	Handle test find null not contained but supported;
+	Handle test find null not contained and unsupported;
+	Handle test find non null when null contained;
+	Handle test find null contained;
+	Handle test find wrong type
+
+3.2. Add a class for abstract list tester. It allows to:
+
+	Get list;
+	Expect contents;
+	Report context
+
+3.3. Add a class for abstract queue tester. It allows to:
+
+	Get queue
+
+3.4. Add a class for abstract set tester. It allows to:
+
+	Set abstract set tester
+
+3.5. Add a class for collection add all tester. It allows to:
+
+	Handle test add all supported nothing;
+	Handle test add all unsupported nothing;
+	Handle test add all supported none present;
+	Handle test add all unsupported none present;
+	Handle test add all supported some present;
+	Handle test add all unsupported some present;
+	Handle test add all concurrent with iteration;
+	Handle test add all unsupported all present;
+	Handle test add all null supported;
+	Handle test add all null unsupported;
+	Handle test add all null collection reference;
+	Get add all null unsupported method;
+	Get add all unsupported none present method;
+	Get add all unsupported some present method
+
+3.6. Add a class for collection add tester. It allows to:
+
+	Handle test add supported not present;
+	Handle test add unsupported not present;
+	Handle test add unsupported present;
+	Handle test add null supported;
+	Handle test add null unsupported;
+	Handle test add concurrent with iteration;
+	Get add null supported method;
+	Get add null unsupported method;
+	Get add unsupported  not present method
+
+3.7. Add a class for collection clear tester. It allows to:
+
+	Handle test clear;
+	Handle test clear unsupported;
+	Handle test clear unsupported by empty collection;
+	Handle test clear concurrent with iteration
+
+3.8. Add a class for collection contains all tester. It allows to:
+
+	Handle test contains all empty;
+	Handle test contains all subset;
+	Handle test contains all same elements;
+	Handle test contains all self;
+	Handle test contains all partial overlap;
+	Handle test contains all disjoint;
+	Handle test contains all null not allowed;
+	Handle test contains all null allowed;
+	Handle test contains all null present;
+	Handle test contains all wrong type
+
+3.9. Add a class for collection contains tester. It allows to:
+
+	Handle test contains yes;
+	Handle test contains no;
+	Handle test contains null not contained but queries supported;
+	Handle test contains null not contained and unsupported;
+	Handle test contains non null when null contained;
+	Handle test contains null contained;
+	Handle test contains wrong type
+
+3.10. Add a class for collection creation tester. It allows to:
+
+	Handle test create with null supported;
+	Handle test create with null unsupported;
+	Get create  with null unsupported method
+
+3.11. Add a class for collection equals tester. It allows to:
+
+	Handle test equals self;
+	Handle test equals null;
+	Handle test equals not A collection
+
+3.12. Add a class for collection is empty tester. It allows to:
+
+	Handle test is empty yes;
+	Handle test is empty no
+
+3.13. Add a class for collection iterator tester. It allows to:
+
+	Handle test iterator;
+	Handle test iteration ordering;
+	Handle test iterator remove affects backing collection;
+	Handle test iterator known order remove supported;
+	Handle test iterator known order remove unsupported;
+	Handle test iterator unknown order remove supported;
+	Handle test iterator unknown order remove unsupported;
+	Run iterator test;
+	Handle new target iterator;
+	Verify elements list;
+	Handle test iterator no such element exception
+
+3.14. Add a class for collection remove all tester. It allows to:
+
+	Handle test remove all empty collection;
+	Handle test remove all none present;
+	Handle test remove all all present;
+	Handle test remove all some present;
+	Handle test remove all some present concurrent with iteration;
+	Convert test remove all some present large collection;
+	Handle test remove all unsupported empty collection;
+	Handle test remove all unsupported none present;
+	Handle test remove all unsupported present;
+	Handle test remove all null collection reference empty subject;
+	Handle test remove all null collection reference non empty subject;
+	Handle test remove all contains null no;
+	Handle test remove all contains null no but allowed;
+	Handle test remove all contains null yes;
+	Handle test remove all contains wrong type
+
+3.15. Add a class for collection remove tester. It allows to:
+
+	Handle test remove present;
+	Handle test remove present concurrent with iteration;
+	Handle test remove not present;
+	Handle test remove null present;
+	Handle test remove unsupported;
+	Handle test remove unsupported not present;
+	Handle test remove null not supported;
+	Handle test remove null allowed;
+	Handle test iterator remove unsupported;
+	Handle test remove wrong type
+
+3.16. Add a class for collection size tester. It allows to:
+
+	Handle test size
+
+3.17. Add a class for collection to array tester. It allows to:
+
+	Convert test;
+	Handle test to array empty array ordered;
+	Handle test to array right sized array ordered;
+	Handle test to array right sized array of object ordered;
+	Handle test to array oversized array ordered;
+	Expect array contents any order;
+	Expect array contents  in order;
+	Get collection to array tester to array is plain object array method
+
+3.18. Add a class for collection to string tester. It allows to:
+
+	Convert test;
+
+3.19. Add a class for list add all at index tester. It allows to:
+
+	Handle test add all at index supported all present;
+	Handle test add all at index unsupported all present;
+	Handle test add all at index supported some present;
+	Handle test add all at index unsupported some present;
+	Handle test add all at index supported nothing;
+	Handle test add all at index unsupported nothing;
+	Handle test add all at index with duplicates;
+	Handle test add all at index null supported;
+	Handle test add all at index null unsupported;
+	Handle test add all at index middle;
+	Handle test add all at index end;
+	Handle test add all at index null collection reference;
+	Handle test add all at index negative;
+	Handle test add all at index too large
+
+3.20. Add a class for list add all tester. It allows to:
+
+	Handle test add all supported all present;
+	Handle test add all unsupported all present;
+	Handle test add all with duplicates
+
+3.21. Add a class for list add at index tester. It allows to:
+
+	Handle test add at index supported present;
+	Handle test add at index unsupported present;
+	Handle test add at index supported not present;
+	Handle test add at index concurrent with iteration;
+	Handle test add at index unsupported not present;
+	Handle test add at index middle;
+	Handle test add at index end;
+	Handle test add at index null supported;
+	Handle test add at index null unsupported;
+	Handle test add at index negative;
+	Handle test add at index too large;
+	Get add null supported method
+
+3.22. Add a class for list add tester. It allows to:
+
+	Handle test add supported present;
+	Handle test add unsupported present;
+	Handle test add supported null present;
+	Get add supported null present method
+
+3.23. Add a class for list creation tester. It allows to:
+
+	Handle test create with duplicates
+
+3.24. Add a class for list equals tester. It allows to:
+
+	Handle test equals other list with same elements;
+	Handle test equals other list with different elements;
+	Handle test equals other list containing null;
+	Handle test equals containing null;
+	Handle test equals shorter list;
+	Handle test equals longer list;
+	Handle test equals set
+
+3.25. Add a class for list get tester. It allows to:
+
+	Handle test get valid;
+	Handle test get negative;
+	Handle test get too large
+
+3.26. Add a class for list hash code tester. It allows to:
+
+	Handle test hash code;
+	Get hash code method
+
+3.27. Add a class for list index of tester. It allows to:
+
+	Find list index of tester;
+	Get method name;
+	Handle test index of duplicate
+
+3.28. Add a class for list last index of tester. It allows to:
+
+	Find list last index of tester;
+	Get method name;
+	Handle test last index of duplicate
+
+3.29. Add a class for list list iterator tester. It allows to:
+
+	Handle test list iterator unmodifiable;
+	Handle test list iterator fully modifiable;
+	Run list iterator test;
+	Handle new target iterator;
+	Verify elements list;
+	Handle test list iterator too low;
+	Handle test list iterator too high;
+	Handle test list iterator at size;
+	Get list iterator  fully modifiable method;
+	Get list iterator unmodifiable method
+
+3.30. Add a class for list remove all tester. It allows to:
+
+	Handle test remove all duplicate
+
+3.31. Add a class for list remove at index tester. It allows to:
+
+	Handle test remove at index unsupported;
+	Handle test remove at index negative;
+	Handle test remove at index too large;
+	Handle test remove at index first;
+	Handle test remove at index middle;
+	Handle test remove at index concurrent with iteration;
+	Handle test remove at index last;
+	Run remove test
+
+3.32. Add a class for list remove tester. It allows to:
+
+	Handle test remove duplicate
+
+3.33. Add a class for list retain all tester. It allows to:
+
+	Handle test retain all duplicates kept;
+	Handle test retain all duplicates removed;
+	Handle test retain all count ignored
+
+3.34. Add a class for list set tester. It allows to:
+
+	Handle test set;
+	Handle test set null;
+	Handle test set replacing null;
+	Do test set;
+	Handle test set index too low;
+	Handle test set index too high;
+	Handle test set unsupported;
+	Handle test set unsupported by empty list;
+	Handle test set null unsupported;
+	A valid index;
+	Get set null supported method
+
+3.35. Add a class for list sub list tester. It allows to:
+
+	Handle test sub list start negative;
+	Handle test sub list end too large;
+	Handle test sub list start greater than end;
+	Handle test sub list empty;
+	Handle test sub list entire list;
+	Handle test sub list sub list remove affects original;
+	Handle test sub list sub list clear affects original;
+	Handle test sub list sub list add affects original;
+	Handle test sub list sub list set affects original;
+	Handle test sub list original list set affects sub list;
+	Handle test sub list sub list remove affects original large list;
+	Handle test sub list sub list add at index affects original large list;
+	Handle test sub list sub list set affects original large list;
+	Handle test sub list original list set affects sub list large list;
+	Handle test sub list of sub list empty;
+	Handle test sub list of sub list non empty;
+	Handle test sub list size;
+	Handle test sub list is empty;
+	Handle test sub list get;
+	Handle test sub list contains;
+	Handle test sub list index of;
+	Handle test sub list last index of;
+	Handle test reserialize whole sub list;
+	Handle test reserialize empty sub list;
+	Handle test reserialize sub list;
+	Get sub list original list set affects sub list method;
+	Get sub list original list set affects sub list large list method;
+	Get sub list sub list remove affects original large list method
+
+3.36. Add a class for list to array tester. It allows to:
+
+	Convert test;
+	Assert array equals
+
+3.37. Add a class for map clear tester. It allows to:
+
+	Handle test clear;
+	Handle test clear concurrent with entry set iteration;
+	Handle test clear concurrent with key set iteration;
+	Handle test clear concurrent with values iteration;
+	Handle test clear unsupported;
+	Handle test clear unsupported by empty collection
+
+3.38. Add a class for map contains key tester. It allows to:
+
+	Handle test contains yes;
+	Handle test contains no;
+	Handle test contains null not contained but allowed;
+	Handle test contains null not contained and unsupported;
+	Handle test contains non null when null contained;
+	Handle test contains null contained;
+	Handle test contains wrong type
+
+3.39. Add a class for map contains value tester. It allows to:
+
+	Handle test contains yes;
+	Handle test contains no;
+	Handle test contains null not contained but allowed;
+	Handle test contains null not contained and unsupported;
+	Handle test contains non null when null contained;
+	Handle test contains null contained;
+	Handle test contains wrong type
+
+3.40. Add a class for map creation tester. It allows to:
+
+	Handle test create with null key supported;
+	Handle test create with null key unsupported;
+	Handle test create with null value supported;
+	Handle test create with null value unsupported;
+	Handle test create with null key and value supported;
+	Handle test create with duplicates null duplicates not rejected;
+	Handle test create with duplicates non null duplicates not rejected;
+	Handle test create with duplicates null duplicates rejected;
+	Handle test create with duplicates non null duplicates rejected;
+	Get entries multiple null keys;
+	Get entries multiple non null keys;
+	Expect first removed;
+	Get create  with null key unsupported method
+
+3.41. Add a class for map equals tester. It allows to:
+
+	Handle test equals other map with same entries;
+	Handle test equals other map with different entries;
+	Handle test equals containing null key;
+	Handle test equals other contains null key;
+	Handle test equals containing null value;
+	Handle test equals other contains null value;
+	Handle test equals smaller map;
+	Handle test equals larger map;
+	Handle test equals list;
+	Handle new hash map
+
+3.42. Add a class for map get tester. It allows to:
+
+	Handle test get yes;
+	Handle test get no;
+	Handle test get null not contained but allowed;
+	Handle test get null not contained and unsupported;
+	Handle test get non null when null contained;
+	Handle test get null contained;
+	Handle test get wrong type
+
+3.43. Add a class for map hash code tester. It allows to:
+
+	Handle test hash code;
+	Handle test hash code containing null key;
+	Handle test hash code containing null value;
+	Run entry  with null test;
+	Hash entry
+
+3.44. Add a class for map is empty tester. It allows to:
+
+	Handle test is empty yes;
+	Handle test is empty no
+
+3.45. Add a class for map put all tester. It allows to:
+
+	Set map put all tester;
+	Handle test put all supported nothing;
+	Handle test put all unsupported nothing;
+	Handle test put all supported none present;
+	Handle test put all unsupported none present;
+	Handle test put all supported some present;
+	Handle test put all some present concurrent with entry set iteration;
+	Handle test put all unsupported some present;
+	Handle test put all unsupported all present;
+	Handle test put all null key supported;
+	Handle test put all null key unsupported;
+	Handle test put all null value supported;
+	Handle test put all null value unsupported;
+	Handle test put all null collection reference;
+	Handle empty map;
+	Put entries iterable;
+	Get put all null key unsupported method
+
+3.46. Add a class for map put tester. It allows to:
+
+	Set map put tester;
+	Handle test put supported present;
+	Handle test put supported not present;
+	Handle test put absent concurrent with entry set iteration;
+	Handle test put absent concurrent with key set iteration;
+	Handle test put absent concurrent with value iteration;
+	Handle test put unsupported not present;
+	Handle test put unsupported present existing value;
+	Handle test put unsupported present different value;
+	Handle test put null key supported not present;
+	Handle test put null key supported present;
+	Handle test put null key unsupported;
+	Handle test put null value supported;
+	Handle test put null value unsupported;
+	Handle test put replace with null value supported;
+	Handle test put replace with null value unsupported;
+	Handle test put replace null value with null supported;
+	Handle test put replace null value with non null supported;
+	Handle test put null key and value supported;
+	Put entry;
+	Get put null key unsupported method
+
+3.47. Add a class for map remove tester. It allows to:
+
+	Handle test remove present;
+	Handle test remove present concurrent with entry set iteration;
+	Handle test remove present concurrent with key set iteration;
+	Handle test remove present concurrent with values iteration;
+	Handle test remove not present;
+	Handle test remove null present;
+	Handle test remove unsupported;
+	Handle test remove unsupported not present;
+	Handle test remove null queries not supported;
+	Handle test remove null supported missing;
+	Handle test remove wrong type
+
+3.48. Add a class for map size tester. It allows to:
+
+	Handle test size
+
+3.49. Add a class for platform. It allows to:
+
+	Get format;
+	Get list list iterator tester num iterations;
+	Get collection iterator tester num iterations;
+	Instantiate platform
+
+3.50. Add a class for queue element tester. It allows to:
+
+	Handle test element empty;
+	Handle test element size 1;
+	Handle test element size many
+
+3.51. Add a class for queue offer tester. It allows to:
+
+	Handle test offer supported not present;
+	Handle test offer null supported;
+	Handle test offer null unsupported
+
+3.52. Add a class for queue peek tester. It allows to:
+
+	Handle test peek empty;
+	Handle test peek size 1;
+	Handle test peek size many
+
+3.53. Add a class for queue poll tester. It allows to:
+
+	Handle test poll empty;
+	Handle test poll size 1;
+	Handle test poll size many
+
+3.54. Add a class for queue remove tester. It allows to:
+
+	Handle test remove empty;
+	Handle test remove size 1;
+	Handle test remove size many
+
+3.55. Add a class for set add all tester. It allows to:
+
+	Handle test add all supported some present;
+	Handle test add all with duplicates;
+	Handle test add all supported all present
+
+3.56. Add a class for set add tester. It allows to:
+
+	Handle test add supported present;
+	Handle test add supported null present;
+	Get add supported null present method
+
+3.57. Add a class for set creation tester. It allows to:
+
+	Handle test create with duplicates null duplicates not rejected;
+	Handle test create with duplicates non null duplicates not rejected;
+	Handle test create with duplicates null duplicates rejected;
+	Handle test create with duplicates non null duplicates rejected
+
+3.58. Add a class for set equals tester. It allows to:
+
+	Handle test equals other set with same elements;
+	Handle test equals other set with different elements;
+	Handle test equals containing null;
+	Handle test equals other contains null;
+	Handle test equals smaller set;
+	Handle test equals larger set;
+	Handle test equals list
+
+3.59. Add a class for set hash code tester. It allows to:
+
+	Handle test hash code;
+	Handle test hash code containing null;
+	Get hash code methods
+
+3.60. Add a class for set remove tester. It allows to:
+
+	Handle test remove present
+
+4. Changes to package com.google.common.util.concurrent:  
+

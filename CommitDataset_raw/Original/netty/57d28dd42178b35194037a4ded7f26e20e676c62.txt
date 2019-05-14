@@ -1,0 +1,16 @@
+Support conversion of HttpMessage and HttpContent to HTTP/2 Frames
+
+Motivation:
+
+HttpToHttp2ConnectionHandler only converts FullHttpMessage to HTTP/2 Frames. This does not support other use cases such as adding a HttpContentCompressor to the pipeline, which writes HttpMessage and HttpContent.
+
+Additionally HttpToHttp2ConnectionHandler ignores converting and sending HTTP trailing headers, which is a bug as the HTTP/2 spec states that they should be sent.
+
+Modifications:
+
+Update HttpToHttp2ConnectionHandler to support converting HttpMessage and HttpContent to HTTP/2 Frames.
+Additionally, include an extra call to writeHeaders if the message includes trailing headers
+
+Result:
+
+One can now write HttpMessage and HttpContent (http chunking) down the pipeline and they will be converted to HTTP/2 Frames.  If any trailing headers exist, they will be converted and sent as well.

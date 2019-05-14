@@ -1,0 +1,12 @@
+Optimize use of HandlerMethod and sub-classes
+
+While HandlerMethod instances are cached for lookup purposes, a new
+ServletInvocableHandlerMethod instance has to be created prior to each
+invocation since handlers may have non-singleton scope semantics.
+
+This change reduces the overhead of creating per request instances
+by using a logger with a fixed name rather than relying on getClass()
+and also by copying introspected method parameters from the cached
+HandlerMethod instance.
+
+Issue: SPR-9747, SPR-9748

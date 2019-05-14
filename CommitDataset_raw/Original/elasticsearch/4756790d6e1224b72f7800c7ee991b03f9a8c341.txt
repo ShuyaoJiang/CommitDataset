@@ -1,0 +1,12 @@
+Use fixture to test the repository-gcs plugin (#28788)
+
+This commit adds a GoogleCloudStorageFixture that uses the
+logic of a GoogleCloudStorageTestServer (added in #28576)
+to emulate a remote Google Cloud Storage service.
+
+By adding this fixture and a more complete integration test, we 
+should be able to catch more bugs when upgrading the client library.
+
+The fixture is started by the googleCloudStorageFixture task
+and a custom Service Account file is created and added to the
+Elasticsearch keystore for each test.

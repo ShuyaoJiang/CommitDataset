@@ -1,0 +1,12 @@
+Configure Tomcat to create upload targets
+
+Previously, if the directory to which Tomcat would write a file upload did not exist
+the upload attempt would fail and a 500 response would be returned to the client.
+This could happen when, for example, Tomcat is using a temporary directory for file
+uploads and tmpwatch has deleted the directory.
+
+This commit configures Tomcat so that, during multipart request parsing, it will
+automatically create the directory to which the parts will be written if it does not
+already exist.
+
+Closes gh-9616

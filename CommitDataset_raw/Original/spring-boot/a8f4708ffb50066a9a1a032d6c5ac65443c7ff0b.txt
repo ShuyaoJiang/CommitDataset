@@ -1,0 +1,18 @@
+Shut down in-memory database when DevTools restarts the context
+
+Previously an in-memory database that wasn’t pooled (an
+EmbeddedDatabase) would be shutdown when the context restarted, but
+an in-memory database wrapped in a connection pool was not. This meant
+that the former would be be wiped clean after each restart, whereas the
+latter would not. In addition to being inconsistent, this also
+caused problems with schema.sql and data.sql scripts when using
+DevTools. If you were using an in-memory database wrapped in a
+connection pool, a failure may occur during a restart as the scripts
+were not being run against in clean database.
+
+This commit adds an auto-configured bean to DevTools that, when the
+context is being closed, will execute “SHUTDOWN” if it identifies that
+the DataSource is not an EmbeddedDatabase and is for an in-memory
+database.
+
+Closes gh-4699

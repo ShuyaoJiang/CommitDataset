@@ -1,0 +1,12 @@
+Build: Move shadow customizations into common code (#32014)
+
+Moves the customizations to the build to produce nice shadow jars and
+javadocs into common build code, mostly BuildPlugin with a little into
+the root build.gradle file. This means that any project that applies the
+shadow plugin will automatically be set up just like the high level rest
+client:
+* The non-shadow jar will not be built
+* The shadow jar will not have a "classifier"
+* Tests will run against the shadow jar
+* Javadoc will include all of the shadowed classes
+* Service files in `META-INF/services` will be merged

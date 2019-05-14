@@ -1,0 +1,13 @@
+Allowing inbound HTTP/2 frames after sending GOAWAY
+
+Motivation:
+
+If the client closes, a GOWAY is sent with a lastKnownStream of zero (since the remote side never created a stream). If there is still an exchange in progress, inbound frames for streams created by the client will be ignored because our ignore logic doesn't check to see if the stream was created by the remote endpoint. Frames for streams created by the local endpoint should continue to come through after sending GOAWAY.
+
+Modifications:
+
+Changed the decoder's streamCreatedAfterGoAwaySent logic to properly ensure that the stream was created remotely.
+
+Result:
+
+We now propertly process frames received after sending GOAWAY.

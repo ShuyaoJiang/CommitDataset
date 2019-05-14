@@ -1,0 +1,14 @@
+Uses Charset instead of String in MimeType.equals()
+
+Prior to this commit, Spring's MimeType checked for equality between
+two MIME types based on the equality of their properties maps; however,
+the properties maps contain string representations of the "charset"
+values. Thus, "UTF-8" is never equal to "utf-8" which breaks the
+contract for character set names which must be compared in a
+case-insensitive manner.
+
+This commit addresses this issue by ensuring that "charset" properties
+in MimeType instances are compared as Java Charset instances, thereby
+ignoring case when checking for equality between charset names.
+
+Issue: SPR-13157

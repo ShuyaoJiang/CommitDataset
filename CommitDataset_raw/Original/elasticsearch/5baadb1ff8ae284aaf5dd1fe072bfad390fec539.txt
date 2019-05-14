@@ -1,0 +1,11 @@
+Template upgrades should happen in a system context (#30621)
+
+The TemplateUpgradeService is a system service that allows for plugins
+to register templates that need to be upgraded. These template upgrades
+should always happen in a system context as they are not a user
+initiated action. For security integrations, the lack of running this
+in a system context could lead to unexpected failures. The changes in
+this commit set an empty system context for the execution of the
+template upgrades performed by this service.
+
+Relates #30603

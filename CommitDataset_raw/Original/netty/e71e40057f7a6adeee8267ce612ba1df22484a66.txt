@@ -1,0 +1,13 @@
+Fix possible IllegalStateException caused by closeNotifyTimeout when using SslHandler
+
+Motivation:
+
+In the SslHandler we schedule a timeout at which we close the Channel if a timeout was detected during close_notify. Because this can race with notify the flushFuture we can see an IllegalStateException when the Channel is closed.
+
+Modifications:
+
+- Use a trySuccess() and tryFailure(...) to guard against race.
+
+Result:
+
+No more race.

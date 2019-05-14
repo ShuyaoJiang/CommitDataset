@@ -1,0 +1,6 @@
+Fix CCR stats assertions
+
+This commit addresses a race that can happen in the basic CCR stats REST
+tests. Namely, peek reads can fire before the REST test client fires the
+stats request. This means that we have to weaken our assertions about
+the expected stats response.

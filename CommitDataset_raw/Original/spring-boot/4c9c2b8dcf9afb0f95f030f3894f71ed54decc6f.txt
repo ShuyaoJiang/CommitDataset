@@ -1,0 +1,72 @@
+Tweaks for boot gradle plugin
+
+Fixes gh-152.
+
+... to ease excluding dependencies
+eckage changed to bootRepackage
+
+- Register BootRepackage order to use task foo(type: BootRepackage){}
+- Allow user to use customConfiguration
+
+configurations {
+  hadoopruntime.exclude group: 'log4j'
+  hadoopruntime.exclude group: 'org.slf4j'
+  hadoopruntime.exclude group: 'org.apache.hadoop'
+  hadoopruntime.exclude group: 'org.apache.hive'
+  hadoopruntime.exclude group: 'commons-logging'
+  hadoopruntime.exclude group: 'org.codehaus.jettison'
+  hadoopruntime.exclude group: 'com.thoughtworks.xstream'
+}
+dependencies {
+  compile "org.springframework.batch:spring-batch-core:$springBatchVersion"
+  compile "org.springframework.batch:spring-batch-infrastructure:$springBatchVersion"
+  compile "org.springframework.data:spring-yarn-batch:$springDataVersion"
+  compile "org.springframework.data:spring-yarn-boot:$springDataVersion"
+  runtime "org.springframework.data:spring-data-hadoop:$springDataVersion"
+  runtime "org.springframework.data:spring-data-hadoop-core:$springDataVersion"
+  runtime "log4j:log4j:$log4jVersion"
+  runtime "org.slf4j:slf4j-log4j12:$slf4jVersion"
+  testCompile "org.springframework.data:spring-yarn-test:$springDataVersion"
+  testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
+  testCompile "org.hamcrest:hamcrest-library:$hamcrestVersion"
+  hadoopruntime configurations.runtime
+}
+
+springBoot {
+  backupSource = true
+  customConfiguration = 'hadoopruntime'
+}
+
+task appmasterJar(type: Jar) {
+  appendix = 'appmaster'
+  from sourceSets.main.output
+  exclude('**/*Container*')
+  exclude('**/*Client*')
+}
+
+task clientJar(type: Jar) {
+  appendix = 'client'
+  from sourceSets.main.output
+  exclude('**/*Appmaster*')
+  exclude('**/*Container*')
+}
+
+task clientBoot(type: BootRepackage, dependsOn: clientJar) {
+  withJarTask = clientJar
+}
+
+task appmasterBoot(type: BootRepackage, dependsOn: appmasterJar) {
+  customConfiguration = "hadoopruntime"
+  withJarTask = appmasterJar
+}
+
+//jar.enabled = false
+//bootRepackage.enabled = false
+
+task bootJars
+bootJars.dependsOn = [clientBoot,containerBoot,appmasterBoot]
+
+build.dependsOn(clientBoot)
+build.dependsOn(containerBoot)
+build.dependsOn(appmasterBoot)
+//build.dependsOn(bootJars)

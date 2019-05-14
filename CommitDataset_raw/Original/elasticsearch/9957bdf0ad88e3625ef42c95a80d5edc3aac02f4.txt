@@ -1,0 +1,15 @@
+Handle primary failure handling replica response
+
+Today if the primary throws an exception while handling the replica
+response (e.g., because it is already closed while updating the local
+checkpoint for the replica), or because of a bug that causes an
+exception to be thrown in the replica operation listener, this exception
+is caught by the underlying transport handler plumbing and is translated
+into a response handler failure transport exception that is passed to
+the onFailure method of the replica operation listener. This causes the
+primary to turn around and fail the replica which is a disastrous and
+incorrect outcome as there's nothing wrong with the replica, it is the
+primary that is broken and deserves a paddlin'. This commit handles this
+situation by failing the primary.
+
+Relates #24926

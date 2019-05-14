@@ -1,0 +1,11 @@
+TESTS: Fix Race Condition in Temp Path Creation (#33352)
+
+* TESTS: Fix Race Condition in Temp Path Creation
+
+* Calling `createTempDir` concurrently here in
+the `Follower`s causes collisions at times
+which lead to `createEngine` throwing because
+of unexpected files in the newly created temp
+dir
+   * Fixed by creating all temp dirs in the main test thread
+* closes #33344

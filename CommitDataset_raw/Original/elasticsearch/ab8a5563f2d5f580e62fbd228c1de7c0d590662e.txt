@@ -1,0 +1,8 @@
+Logging: Drop remaining Settings log ctor (#34149)
+
+Drops the last logging constructor that takes `Settings` because it is
+no longer needed.
+
+Watcher goes through a lot of effort to pass `Settings` to `Logger`
+constructors and dropping `Settings` from all of those calls allowed us
+to remove quite a bit of log-based ceremony from watcher.

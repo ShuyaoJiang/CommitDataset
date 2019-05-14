@@ -1,0 +1,23 @@
+[SECURITY] Set Auth-scheme preference (#33156)
+
+Some browsers (eg. Firefox) behave differently when presented with
+multiple auth schemes in 'WWW-Authenticate' header. The expected
+behavior is that browser select the most secure auth-scheme before
+trying others, but Firefox selects the first presented auth scheme and
+tries the next ones sequentially. As the browser interpretation is
+something that we do not control, we can at least present the auth
+schemes in most to least secure order as the server's preference.
+
+This commit modifies the code to collect and sort the auth schemes
+presented by most to least secure. The priority of the auth schemes is
+fixed, the lower number denoting more secure auth-scheme.
+The current order of schemes based on the ES supported auth-scheme is
+[Negotiate, Bearer,Basic] and when we add future support for
+other schemes we will need to update the code. If need be we will make
+this configuration customizable in future.
+
+Unit test to verify the WWW-Authenticate header values are sorted by
+server preference as more secure to least secure auth schemes.
+Tested with Firefox, Chrome, Internet Explorer 11.
+
+Closes#32699

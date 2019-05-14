@@ -1,0 +1,16 @@
+Fix size blocking queue to not lie about its weight
+
+Today when offering an item to a size blocking queue that is at
+capacity, we first increment the size of the queue and then check if the
+capacity is exceeded or not. If the capacity is indeed exceeded, we do
+not add the item to the queue and immediately decrement the size of the
+queue. However, this incremented size is exposed externally even though
+the offered item was never added to the queue (this is effectively a
+race on the size of the queue). This can lead to misleading statistics
+such as the size of a queue backing a thread pool. This commit fixes
+this issue so that such a size is never exposed. To do this, we replace
+the hidden CAS loop that increments the size of the queue with a CAS
+loop that only increments the size of the queue if we are going to be
+successful in adding the item to the queue.
+
+Relates #28557

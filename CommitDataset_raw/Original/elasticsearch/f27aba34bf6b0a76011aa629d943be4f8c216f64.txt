@@ -1,0 +1,11 @@
+Mark shutdown non-master nodes test as awaits fix
+
+This commit marks a failing test as awaits fix. The test is failing due
+to a primary shard not knowing its own local checkpoint in the global
+checkpoint tracker after recovery. If such a shard becomes primary after
+promotion, and is then subsequently relocated, it can lead to a
+violation of an assertion that when the primary context is transferred
+the knowledge of all in-sync local checkpoints is consistent with the
+global checkpoint on the relocation target.
+
+Relates #25415

@@ -1,0 +1,13 @@
+[#4936] NetUtil can prevent using Netty due to SecurityManager denial
+
+Motivation:
+
+A custom SecurityManager may prevent calling File.exists() and so throw a SecurityException in the static init block of NetUtil.
+
+Modifications:
+
+Correctly catch the exception and so allow to static init NetUtil.
+
+Result:
+
+Allow static init method of NetUtil to work even with custom SecurityManager.

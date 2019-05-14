@@ -1,0 +1,24 @@
+Merge complex types from multiple source correctly
+
+Update PropertySourcesPropertyValues so that source detection logic for
+collection values also considers complex types. Prior to this commit
+properties of the following form were processed correctly:
+
+	PropertySource-A
+	  list[0]=x
+
+	PropertySource-B
+	  list[0]=y
+	  list[1]=z
+
+But properties of the form were not:
+
+	PropertySource-A
+	  list[0].name=x
+
+	PropertySource-B
+	  list[0].name=y
+	  list[1].name=z
+
+Fixes gh-4313
+See gh-2611

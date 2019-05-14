@@ -1,0 +1,15 @@
+Fix NPE in Logfile Audit Filter (#38120)
+
+The culprit in #38097 is an `IndicesRequest` that has no indices,
+but instead of `request.indices()` returning `null` or `String[0]`
+it returned `String[] {null}` . This tripped the audit filter.
+
+I have addressed this in two ways:
+1. `request.indices()` returning `String[] {null}` is treated as `null`
+    or `String[0]`, i.e. no indices
+2. `null` values among the roles and indices lists, which are
+    unexpected, will never again stumble the audit filter; `null` values
+    are treated as special values that will not match any policy,
+    i.e. their events will always be printed.
+
+Closes #38097

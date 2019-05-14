@@ -1,0 +1,10 @@
+SQL: Internal refactoring of operators as functions (#34097)
+
+Centralize and simplify the script generation between operators and functions which are currently decoupled. As part of this process most predicates (<, <=, etc...) were made ScalarFunction as their purpose and functionality is quite similar (see % and MOD functions).
+Renamed ProcessDefinition to Pipe
+Add ScriptWeaver as a mixin-in interface for script customization
+Add logic for equals/lte/lt
+Improve BinaryOperator/expression toString
+Minimize duplication across string functions
+
+Close #33975

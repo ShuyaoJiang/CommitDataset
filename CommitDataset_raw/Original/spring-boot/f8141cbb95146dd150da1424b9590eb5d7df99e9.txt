@@ -1,0 +1,11 @@
+Restore use of management.health.*.enabled keys
+
+The move of health.* keys to management.health.* broke them as they
+are not defined as configuration keys and `ManagementServerProperties`
+is strict on the whole management namespace.
+
+This commit updates the tests to actually include that properties class
+and relax the "ignoreUnknownFields" condition so that extra attributes
+can be defined on the "management" namespace.
+
+Fixes gh-2115

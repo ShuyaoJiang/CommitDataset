@@ -1,0 +1,9 @@
+Don't fail init script if `/proc/.../max_map_count` absent (#35933)
+
+Currently init scripts fail when `/proc/sys/vm/max_map_count` is not present
+with `-bash: [: too many arguments`.
+
+Fix conditional logic to avoid trying to set the `max_map_count` sysctl if not
+present.
+
+Relates #27236

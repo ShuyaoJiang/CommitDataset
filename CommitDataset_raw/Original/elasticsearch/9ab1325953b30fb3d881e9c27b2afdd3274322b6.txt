@@ -1,0 +1,13 @@
+Introduce http and tcp server channels (#31446)
+
+Historically in TcpTransport server channels were represented by the
+same channel interface as socket channels. This was necessary as
+TcpTransport was parameterized by the channel type. This commit
+introduces TcpServerChannel and HttpServerChannel classes. Additionally,
+it adds the implementations for the various transports. This allows
+server channels to have unique functionality and not implement the
+methods they do not support (such as send and getRemoteAddress).
+
+Additionally, with the introduction of HttpServerChannel this commit
+extracts some of the storing and closing channel work to the abstract
+http server transport.

@@ -1,0 +1,11 @@
+Add `coordinating_only` node selector (#30313)
+
+Today we can execute cluster API actions on only master, data or ingest nodes
+using the `master:true`, `data:true` and `ingest:true` filters, but it is not
+so easy to select coordinating-only nodes (i.e. those nodes that are neither
+master nor data nor ingest nodes). This change fixes this by adding support for
+a `coordinating_only` filter such that `coordinating_only:true` adds all
+coordinating-only nodes to the set of selected nodes, and 
+`coordinating_only:false` deletes them.
+
+Resolves #28831.

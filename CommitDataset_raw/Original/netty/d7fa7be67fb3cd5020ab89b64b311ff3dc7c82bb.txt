@@ -1,0 +1,28 @@
+Exploit PlatformDependent.allocateUninitializedArray() in more places (#8393)
+
+Motivation:
+
+There are currently many more places where this could be used which were
+possibly not considered when the method was added.
+
+If https://github.com/netty/netty/pull/8388 is included in its current
+form, a number of these places could additionally make use of the same
+BYTE_ARRAYS threadlocal.
+
+There's also a couple of adjacent places where an optimistically-pooled
+heap buffer is used for temp byte storage which could use the
+threadlocal too in preference to allocating a temp heap bytebuf wrapper.
+For example
+https://github.com/netty/netty/blob/4.1/buffer/src/main/java/io/netty/buffer/ByteBufUtil.java#L1417.
+
+Modifications:
+
+Replace new byte[] with PlatformDependent.allocateUninitializedArray()
+where appropriate; make use of ByteBufUtil.getBytes() in some places
+which currently perform the equivalent logic, including avoiding copy of
+backing array if possible (although would be rare).
+
+Result:
+
+Further potential speed-up with java9+ and appropriate compile flags.
+Many of these places could be on latency-sensitive code paths.

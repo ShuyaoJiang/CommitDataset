@@ -1,0 +1,11 @@
+[Zen2] Best-effort cluster formation if unconfigured (#36215)
+
+In real deployments it is important that clusters are properly configured to
+avoid accidentally forming multiple independent clusters at cluster
+bootstrapping time. However we also expect to be able to unpack Elasticsearch
+and start up one or more nodes without any up-front configuration, and have
+them do their best to find each other and form a cluster after a few seconds.
+
+This change adds a delayed automatic bootstrapping process to nodes that start
+up with no relevant settings set to support the desired out-of-the-box
+experience without compromising safety in properly-configured deployments.

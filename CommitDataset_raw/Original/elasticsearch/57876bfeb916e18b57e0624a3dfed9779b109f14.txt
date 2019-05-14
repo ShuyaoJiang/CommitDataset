@@ -1,0 +1,15 @@
+INGEST: Fix Deprecation Warning in Script Proc. (#32407)
+
+* Using short script form normalized to a map that used 'inline' instead of 'source' so a short form processor definition like:
+
+```
+{
+ "script": "ctx.foo= 'bar'"
+}
+```
+
+would always warn about the following deprecation:
+
+```
+  #! Deprecation: Deprecated field [inline] used, expected [source] 
+```

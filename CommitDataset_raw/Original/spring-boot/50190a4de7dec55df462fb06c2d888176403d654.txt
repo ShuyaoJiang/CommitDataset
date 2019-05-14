@@ -1,0 +1,21 @@
+Add support for HikariDataSource
+
+We still prefer Tomcat if it is available (that can change
+if the community asks loudly enough). Hikari is supported
+via the same spring.datasource.* properties as Tomcat (and
+DBCP), with some modifications:
+
+* The validation and timeout settings are not as fine-grained
+in Hikari, so many of them will simply be ignored. The most
+common options (url, username, password, driverClassName) all
+work as expected.
+
+* The Hikari team recommends using a vendor-specific DataSource
+via spring.datasource.dataSourceClassName and supplying it with
+Properties (spring.datasource.hikari.*).
+
+Hikari prefers the JDBC4 isValid() API (encapsulates vendor-
+specific queries) which is probably a good thing, but we
+haven't provided any explicit support or testing for that yet.
+
+Fixes gh-418

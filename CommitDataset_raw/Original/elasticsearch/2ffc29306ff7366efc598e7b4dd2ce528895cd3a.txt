@@ -1,0 +1,20 @@
+cd ES_HOME in elasticsearch-env (#39937)
+
+This commit adds cd $ES_HOME to elasticsearch-env and removes it from
+elasticsearch. This way, both elasticsearch and elasticsearch-cli are
+executed with the working directory set to $ES_HOME. The need for the
+fix arose from the following bug:
+1. Explicitly set path.data to relative to ES_HOME path in
+elasticsearch.yml.
+2. Run elasticsearch from any directory. Elasticsearch is able to
+correctly start.
+3. Stop elasticsearch.
+4. Run elasticsearch-node unsafe-bootstrap, not from ES_HOME directory.
+It will fail with an exception.
+This commit fixes the issue and adds a new test.
+
+This PR fixes the issue and adds a new test.
+Also tests >=100 are renamed because alphabetic order does not work for
+them.
+
+

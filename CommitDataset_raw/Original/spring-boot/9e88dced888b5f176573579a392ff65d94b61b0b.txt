@@ -1,0 +1,17 @@
+Update devtools to customise environment before app context is refreshed
+
+Prior to this commit, the devtools used bean factory post processors to
+configure the environment with custom, development-time properties. This
+meant that the environment was configured as part of the application
+context being refreshed. Crucially, this happened after any property
+conditions were evaluated making it impossible for the devtools to
+change the default auto-configuration behaviour for a bean or
+configuration class that was conditional on a property.
+
+This commit moves the configuration of the environment into an
+ApplicationListener that listens for the
+ApplicationEnvironmentPreparedEvent which is published as soon as the
+Environment has been prepared and before the application context is
+refreshed.
+
+Closes gh-3726

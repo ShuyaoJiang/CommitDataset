@@ -1,0 +1,11 @@
+Consistently apply exclude on auto-configuration
+
+Previously, exclude of an import selector was applied only locally. In
+other words, if one import selector imports `AcmeAutoConfiguration` and
+another one exclude it, it would still be imported because exclude were
+applied separately
+
+This commit collects the outcome of all auto-configuration import
+selectors and then apply exclusions in a single pass.
+
+Closes gh-12586

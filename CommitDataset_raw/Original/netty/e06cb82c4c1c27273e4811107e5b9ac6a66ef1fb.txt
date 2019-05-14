@@ -1,0 +1,10 @@
+JdkZlibDecoder and JZlibDecoder consistency
+
+Motivation:
+JdkZlibDecoder will allocate a new buffer when the previous buffer is filled with inflated data, but JZlibDecoder will attempt to use the same buffer by resizing. This leads to inconsistent results when these two decoders that are intended to be functionality equivalent.
+
+Modifications:
+- JdkZlibDecoder should attempt to resize and reuse the existing buffer instead of creating multiple buffers
+
+Result:
+Fixes https://github.com/netty/netty/issues/6804

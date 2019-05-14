@@ -1,0 +1,9 @@
+Remove Watcher Account "unsecure" settings (#36736)
+
+Removes all sensitive settings (passwords, auth tokens, urls, etc...) for
+watcher notifications accounts. These settings were deprecated (and
+herein removed) in favor of their secure sibling that is set inside the
+elasticsearch keystore. For example:
+`xpack.notification.email.account.<id>.smtp.password`
+is no longer a valid setting, and it is replaced by
+`xpack.notification.email.account.<id>.smtp.secure_password`

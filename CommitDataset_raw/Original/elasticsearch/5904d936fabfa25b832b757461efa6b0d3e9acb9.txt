@@ -1,0 +1,13 @@
+Copy Lucene IOUtils (#29012)
+
+As we have factored Elasticsearch into smaller libraries, we have ended
+up in a situation that some of the dependencies of Elasticsearch are not
+available to code that depends on these smaller libraries but not server
+Elasticsearch. This is a good thing, this was one of the goals of
+separating Elasticsearch into smaller libraries, to shed some of the
+dependencies from other components of the system. However, this now
+means that simple utility methods from Lucene that we rely on are no
+longer available everywhere. This commit copies IOUtils (with some small
+formatting changes for our codebase) into the fold so that other
+components of the system can rely on these methods where they no longer
+depend on Lucene.

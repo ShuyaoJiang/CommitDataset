@@ -1,0 +1,8 @@
+Increase the REST test timeout. (#28640)
+
+By default we wait for 30 seconds for nodes to start. Looking at CI,
+even for passing builds, the startup time is frequently over 20 seconds
+(grep for `#wait (Thread[Task worker for ':',5,main]) completed` in any
+console log), which is close to the threshold. This commit sets a
+default timeout of 120 seconds instead, so that REST tests are less
+likely to hit a timeout.

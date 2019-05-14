@@ -1,0 +1,15 @@
+Fix a race condition in Connection.isExpired().
+
+This was causing some SPDY connections to be evicted early,
+and preventing connection reuse.
+
+The spdyConnectionReuse test becomes flaky with the
+fix that makes MockWebServer use different sequenceNumbers
+for different requests on the same socket. With the fix
+the test is no longer flaky. The old test wasn't good enough
+to detect what it wanted to detect!
+
+This race has existed in the code since we added more
+aggressive time-based expiration in January 2013. In my
+basic tests the race impacted ~20% of connections on a
+desktop VM. It may have been more on mobile.

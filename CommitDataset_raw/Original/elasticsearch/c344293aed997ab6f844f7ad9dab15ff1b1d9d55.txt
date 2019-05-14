@@ -1,0 +1,25 @@
+Security: don't call prepare index for reads (#34568)
+
+The security native stores follow a pattern where
+`SecurityIndexManager#prepareIndexIfNeededThenExecute` wraps most calls
+made for the security index. The reasoning behind this was to check if
+the security index had been upgraded to the latest version in a
+consistent manner. However, this has the potential side effect that a
+read will trigger the creation of the security index or an updating of
+its mappings, which can lead to issues such as failures due to put
+mapping requests timing out even though we might have been able to read
+from the index and get the data necessary.
+
+This change introduces a new method, `checkIndexVersionThenExecute`,
+that provides the consistent checking of the security index to make
+sure it has been upgraded. That is the only check that this method
+performs prior to running the passed in operation, which removes the
+possible triggering of index creation and mapping updates for reads.
+
+Additionally, areas where we do reads now check the availability of the
+security index and can short circuit requests. Availability in this
+context means that the index exists and all primaries are active.
+
+This is the fixed version of #34246, which was reverted.
+
+Relates #33205

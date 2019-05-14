@@ -1,0 +1,16 @@
+Merge rather than add URI vars to data binding values
+
+As of Spring 3.1 URI variables can be used for data binding purposes in
+addition to request parameters (including query string and form params)
+
+In some cases URI variables and request params can overlap (e.g. form
+contains a child entity with an entityId as hidden form input while the
+URI contains the entityId of the parent entity) and that can lead to
+surprises if the application already exists.
+
+This change ensures that request parameters are used first and URI
+vars are added only if they don't overlap. Ideally however an
+application should not use the same uri variable name as the name of
+a request parameter where they don't refer to the same value.
+
+Issue: SPR-9349

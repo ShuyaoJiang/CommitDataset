@@ -1,0 +1,20 @@
+Fix compiler warnings
+
+This patch fixes several compiler warnings that do not point to code
+problems. Two kinds of warnings are fixed. First in a lot of cases
+@SuppressWarnings("unchecked") is used although there are no unchecked
+casts happening. This seems to be a leftover from when the code base
+was on Java 1.4, now that the code base was moved to Java 1.5 these are
+no longer necessary. Secondly there some places where the raw types of
+List and Class are used where there wildcard types (List<?> and
+Class<?>) would work just as well without causing any raw type warnings.
+
+These changes are beneficial particularly when working in Eclipse or
+other IDEs because it reduces 'noise', helping to isolate actual
+potential problems in the code.
+
+The following changes have been made:
+
+ - remove @SuppressWarnings where no longer needed
+
+ - use wildcard types instead of raw types where possible

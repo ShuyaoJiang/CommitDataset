@@ -1,0 +1,28 @@
+Core: Default node.name to the hostname (#33677)
+
+Changes the default of the `node.name` setting to the hostname of the
+machine on which Elasticsearch is running. Previously it was the first 8
+characters of the node id. This had the advantage of producing a unique
+name even when the node name isn't configured but the disadvantage of
+being unrecognizable and not being available until fairly late in the
+startup process. Of particular interest is that it isn't available until
+after logging is configured. This forces us to use a volatile read
+whenever we add the node name to the log.
+
+Using the hostname is available immediately on startup and is generally
+recognizable but has the disadvantage of not being unique when run on
+machines that don't set their hostname or when multiple elasticsearch
+processes are run on the same host. I believe that, taken together, it
+is better to default to the hostname.
+
+1. Running multiple copies of Elasticsearch on the same node is a fairly
+advanced feature. We do it all the as part of the elasticsearch build
+for testing but we make sure to set the node name then.
+2. That the node.name defaults to some flavor of "localhost" on an
+unconfigured box feels like it isn't going to come up too much in
+production. I expect most production deployments to at least set the
+hostname.
+
+As a bonus, production deployments need no longer set the node name in
+most cases. At least in my experience most folks set it to the hostname
+anyway.

@@ -1,0 +1,7 @@
+Wrote a new ByteArray class to replace StringPiece and fixed all uses of it. Also converted all uses of stl::string (which was being used as vector<unsigned char>) to ByteArray. Everything in the Encoder but the Reed Solomon related code compiles now.
+
+ByteArray could certainly move up to the common package, although it currently has a dependency on BitVector. We'll have to figure out what to do with the latter first.
+
+This is the first set of changes I've made which are error prone. They involved a lot of pointer conversion, signed/unsigned semantics, etc. These diffs may have clues for later bugs.
+
+git-svn-id: https://zxing.googlecode.com/svn/trunk@705 59b500cc-1b3d-0410-9834-0bbf25fbcc57

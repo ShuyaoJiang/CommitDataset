@@ -1,0 +1,10 @@
+Zen2: Persist cluster states the old way on non-master-eligible nodes (#36247)
+
+The shard deletion logic (triggered by IndicesStore), which also leads to index metadata deletion on
+non-master-eligible data nodes, currently races against the new cluster state persistence logic
+triggered by accepting cluster states. One thread is writing the index metadata while another one is
+deleting the index metadata, leading to exceptions and assertions tripping (see below). The solution
+proposed by this PR is to move the cluster state persistence of non-master-eligible nodes back to
+the cluster applier service, just as it used to be for Zen1. This ensures that the index metadata
+deletion logic, which is triggered by the shard deletion logic, runs on the same thread on which we
+persist the cluster state.

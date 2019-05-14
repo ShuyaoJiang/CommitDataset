@@ -1,0 +1,20 @@
+Use configured ObjectMapper, if available, in all EndpointMBeans
+
+Prior to this commit, every EndpointMBean used its own ObjectMapper.
+Each of these ObjectMappers was created using new ObjectMapper() with
+no opportunity for configuration.
+
+This commit uses the ObjectMapper from the application context and
+shares it among all EndpointMBeans. This gives the user control over
+the ObjectMapper’s configuration using spring.jackson.* properties,
+their own Jackson2ObjectMapperBuilder bean, etc. In the absence of an
+ObjectMapper in the application context a single ObjectMapper is
+instantiated and is used by all EndpointMBeans instead.
+
+To allow the ObjectMapper to be shared, a number of constructors have
+been overloaded to also take the ObjectMapper as a parameter. In these
+cases the old constructor has been preserved for backwards compatibility
+but has been deprecated.
+
+Closes gh-2393
+

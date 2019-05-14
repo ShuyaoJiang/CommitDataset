@@ -1,0 +1,16 @@
+Reduce the memory requirement of heap dump compression
+
+Motivation:
+
+The current heap dump compression preset (9) requires way too much
+memory (768 MiB at maximum for dictionary), resulting in OOME in many
+cases.
+
+Modifications:
+
+- Use the default preset (6) which uses 8 MiB dictionary.
+- Do not fail abruptly even when OOME has been raised.
+
+Result:
+
+More stable heap dump acquisition

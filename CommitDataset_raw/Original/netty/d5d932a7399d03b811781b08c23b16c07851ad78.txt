@@ -1,0 +1,20 @@
+Fix GOAWAY logic in Http2Encoder and Http2Decoder.
+
+Motivation:
+
+1) The current implementation doesn't allow for HEADERS, DATA, PING, PRIORITY and SETTINGS
+   frames to be sent after GOAWAY.
+
+2) When receiving or sending a GOAWAY frame, all streams with ids greater than the lastStreamId
+   of the GOAWAY frame should be closed. That's not happening.
+
+Modifications:
+
+1) Allow sending of HEADERS and DATA frames after GOAWAY for streams with ids < lastStreamId.
+2) Always allow sending PING, PRIORITY AND SETTINGS frames.
+3) Allow sending multiple GOAWAY frames with decreasing lastStreamIds.
+4) After receiving or sending a GOAWAY frame, close all streams with ids > lastStreamId.
+
+Result:
+
+The GOAWAY handling is more correct.

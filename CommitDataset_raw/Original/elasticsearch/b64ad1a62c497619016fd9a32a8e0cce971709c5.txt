@@ -1,0 +1,5 @@
+Tie break search shard iterator comparisons on cluster alias (#38853)
+
+`SearchShardIterator` inherits its `compareTo` implementation from `PlainShardIterator`. That is good in most of the cases, as such comparisons are based on the shard id which is unique, even when searching against indices with same names across multiple clusters (thanks to the index uuid being different). In case though the same cluster is registered multiple times with different aliases, the shard id is exactly the same, hence remote results will be returned before local ones with same shard id objects. That is because remote iterators are added before local ones, and we use a stable sorting method in `GroupShardIterators` constructor.
+
+This PR enhances `compareTo` for `SearchShardIterator` to tie break on cluster alias and introduces consistent `equals` and `hashcode` methods. This allows to remove a TODO in `SearchResponseMerger` which otherwise has to handle this special case specifically. Also, while at it I added missing tests around equals/hashcode and compareTo and expanded existing ones.

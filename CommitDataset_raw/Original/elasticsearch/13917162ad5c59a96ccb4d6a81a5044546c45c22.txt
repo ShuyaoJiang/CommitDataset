@@ -1,0 +1,15 @@
+ReplicationTracker.markAllocationIdAsInSync may hang if allocation is cancelled (#30316)
+
+At the end of recovery, we mark the recovering shard as "in sync" on the primary. From this point on 
+the primary will treat any replication failure on it as critical and will reach out to the master to fail the 
+shard. To do so, we wait for the local checkpoint of the recovered shard to be above the global 
+checkpoint (in order to maintain global checkpoint invariant).
+
+If the master decides to cancel the allocation of the recovering shard while we wait, the method can 
+currently hang and fail to return. It will also ignore the interrupts that are triggered by the cancelled 
+recovery due to the primary closing. 
+
+Note that this is crucial as this method is called while holding a primary permit. Since the method 
+never comes back, the permit is never released. The unreleased permit will then block any primary 
+relocation *and* while the primary is trying to relocate all indexing will be blocked for 30m as it 
+waits to acquire the missing permit.

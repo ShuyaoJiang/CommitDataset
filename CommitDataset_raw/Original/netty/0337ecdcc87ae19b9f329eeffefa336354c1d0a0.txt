@@ -1,0 +1,14 @@
+Allow to cache keymaterial when using OpenSSL
+
+Motiviation:
+
+During profiling it showed that a lot of time during the handshake is spent by parsing the key / chain over and over again. We should cache these parsed structures if possible to reduce the overhead during handshake.
+
+Modification:
+
+- Use new APIs provided by https://github.com/netty/netty-tcnative/pull/360.
+- Introduce OpensslStaticX509KeyManagerFactory which allows to wrap another KeyManagerFactory and caches the key material provided by it.
+
+Result:
+
+In benchmarks handshake times have improved by 30 %.

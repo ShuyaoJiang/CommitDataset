@@ -1,0 +1,12 @@
+For public Guava only, rely on the GWT compiler's built-in @GwtIncompatible stripping instead of our custom stripping.
+The custom stripping dates from the days before GWT 2.6.0 added it to the compiler: http://www.gwtproject.org/release-notes.html#Release_Notes_2_6_0_RC1
+This change has been possible for a while, since Guava has required GWT 2.6.1 since Guava 18, but we hadn't had the motivation.
+Now we do: This lets us avoid checking the stripped sources into Github, which lets us avoid mixing stripped and handwritten sources, which lets us simplify our MOE inverse mappings.
+Internally, we will continue to rely on the custom stripper for now.
+
+Mechanically, all we're doing is:
+- Remove all the stripped sources from public Guava (by removing the build rules that put them into Guava).
+- In Maven/Ant, copy *all* GWT-compatible sources, whether fully GWT-compatible or not, into our GWT resources. Those that aren't fully GWT-compatible either have supersource emulations (in which case the main sources will be ignored under GWT's usual supersource mechanism, as they are now) or simply require the built-in @GwtIncompatible stripping (in lieu of the previous custom stripping).
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=105596491

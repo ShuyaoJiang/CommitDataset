@@ -1,0 +1,13 @@
+Fix Spring Batch job restart parameters handling
+
+Fix the `JobLauncherCommandLineRunner` to correctly deal with job
+parameters when restarting a job.
+
+Prior to this commit, we were was calling the `getNextJobParameters`
+method of the `JobParametersBuilder` from batch. This method was getting
+the previous parameters of the wrong job instance in a restart scenario.
+
+This commit fixes the issue by first getting the right job instance with
+the provided parameters, then restarting it.
+
+Closes gh-14933

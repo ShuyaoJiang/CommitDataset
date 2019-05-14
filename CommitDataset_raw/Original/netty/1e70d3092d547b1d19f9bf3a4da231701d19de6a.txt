@@ -1,0 +1,12 @@
+Avoid register multiple cleaner task for same thread's FastThreadLocal index
+
+Motivation:
+
+Currently if user call set/remove/set/remove many times, it will create multiple cleaner task for same index. It may cause OOM due to long live thread will have more and more task in LIVE_SET.
+
+Modification:
+
+Add flag to avoid recreating tasks.
+
+Result:
+Only create 1 clean task. But use more space of indexedVariables.

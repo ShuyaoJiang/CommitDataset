@@ -1,0 +1,11 @@
+Carry over version map size to prevent excessive resizing (#27516)
+
+Today we create a new concurrent hash map everytime we refresh
+the internal reader. Under defaults this isn't much of a deal but
+once the refresh interval is set to `-1` these maps grow quite large
+and it can have a significant impact on indexing throughput. Under low
+memory situations this can cause up to 2x slowdown. This change carries
+over the map size as the initial capacity wich will be auto-adjusted once
+indexing stops.
+
+Closes #20498

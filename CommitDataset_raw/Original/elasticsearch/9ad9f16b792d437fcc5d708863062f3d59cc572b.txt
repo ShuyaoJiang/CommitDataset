@@ -1,0 +1,14 @@
+Remove some abstractions from `TransportReplicationAction` (#40706)
+
+`TransportReplicationAction` is a rather complex beast, and some of its
+concrete implementations do not need all of its features. More specifically, it
+(a) chases a primary around the cluster until it manages to pin it down and
+then (b) executes an action on that primary and all its replicas. There are
+some actions that are coordinated by the primary itself, meaning that there is
+no need for the chase-the-primary phases, and in the case of peer recovery
+retention leases and primary/replica resync it is important to bypass these
+first phases.
+
+This commit is a step towards separating the `TransportReplicationAction` into
+these two parts. It is a mostly mechanical sequence of steps to remove some
+abstractions that are no longer in use.

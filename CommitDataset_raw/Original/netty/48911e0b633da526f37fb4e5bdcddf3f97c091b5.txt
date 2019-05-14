@@ -1,0 +1,24 @@
+Set (and override) websocket handshake headers after custom headers (#7975)
+
+Motivation:
+
+Currently, when passing custom headers to a WebSocketClientHandshaker,
+if values are added for headers that are reserved for use in the
+websocket handshake performed with the server, these custom values can
+be used by the server to compute the websocket handshake challenge. If
+the server computes the response to the challenge with the custom header
+values, rather than the values computed by the client handshaker, the
+handshake may fail.
+
+Modifications:
+
+Update the client handshaker implementations to add the custom header
+values first, and then set the reserved websocket header values.
+
+Result:
+
+Reserved websocket handshake headers, if present in the custom headers
+passed to the client handshaker, will not be propagated to the server.
+Instead the client handshaker will propagate the values it generates.
+
+Fixes #7973.

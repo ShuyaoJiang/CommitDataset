@@ -1,0 +1,19 @@
+Allow Splitting/aggregation operations in Decoders
+
+When decoding buffers as plain strings, the StringDecoder returns a
+Publisher that may produce one or more `onNext` events.
+This is perfectly valid, but leads to errors when trying to convert the
+resulting Publisher into a `reactor.Mono` or `rx.Single`.
+
+If the original Publisher emits 2 or more `onNext` signals,
+converting to:
+* `rx.Single` will throw an error saying that the underlying Observable
+"emitted too many elements"
+* `reactor.Mono` may contain only the first emitted element
+
+This commit adds a `AbstractRawByteStreamDecoder` that takes a
+`SubscriberBarrier` to apply splitting/aggregation operations on the
+received elements.
+The `StringDecoder` class now inherits from this abstract class and
+uses one of the provided `SubscriberBarrier` implementations to
+buffer all received elements in a single buffer.

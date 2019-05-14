@@ -1,0 +1,1 @@
+[+++ b/spring-boot-tools/spring-boot-loader-tools/src/main/resources/org/springframework/boot/loader/tools/launch.script, +await_file() {, +  end=`date +%s`, +  let "end+=10", +  while [ ! -f $1 ], +  do, +    now=`date +%s`, +    echo $now, +    if [[ $now -ge $end ]]; then, +      break, +    fi, +    sleep 1, +  done, +}, +, +      await_file $pid_file]

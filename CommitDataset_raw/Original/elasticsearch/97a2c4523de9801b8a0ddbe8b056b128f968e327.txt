@@ -1,0 +1,22 @@
+Get short path name for native controllers
+
+Due to limitations with CreateProcessW on Windows (ultimately used by
+ProcessBuilder) with respect to maximum path lengths, we need to get the
+short path name for any native controllers before trying to start them
+in case the absolute path exceeds the maximum path length. This commit
+uses JNA to invoke the necessary Windows API for this to start the
+native controller using the short path.
+
+To be precise about the limitation here, the MSDN docs for
+CreateProcessW say for the command line parameter:
+
+>The command line to be executed. The maximum length of this string is
+>32,768 characters, including the Unicode terminating null character. If
+>lpApplicationName is NULL, the module name portionof lpCommandLine is
+>limited to MAX_PATH characters.
+
+This is exactly how the Windows implementation of Process in the JDK
+invokes CreateProcessW: with the executable name (lpApplicationName) set
+to NULL.
+
+Relates #25344

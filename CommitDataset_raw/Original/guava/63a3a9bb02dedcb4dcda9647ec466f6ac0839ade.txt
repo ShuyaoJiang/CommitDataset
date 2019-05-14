@@ -1,0 +1,18 @@
+Eliminate references to ObjectArrays in the closure of ImmutableSet and ImmutableMap.
+
+ProGuard cannot currently eliminate any class that has a static constant that isn't a primitive or String, and ObjectArrays has the EMPTY_ARRAY static constant.  Instead, we'll directly inline empty object array singletons anywhere we need them; Object[0]s will still be singletons, we'll just have different singletons in different places.
+
+[]
+Effects on ImmutableSetProGuard:
+23072 bytes => 22614 bytes
+17 classes => 16 classes
+140 methods => 140 methods (no change)
+
+Effects on ImmutableMapProGuard:
+30589 bytes => 30224 bytes
+27 classes => 26 classes
+180 methods => 180 methods (no change)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=147491289

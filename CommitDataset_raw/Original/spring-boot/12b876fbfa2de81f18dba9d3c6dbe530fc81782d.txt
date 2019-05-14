@@ -1,0 +1,10 @@
+Reduce PropertySource access when binding
+
+Update `PropertiesConfigurationFactory` so that when possible fewer
+calls are made to the underlying `PropertySource`. The
+`PropertySourcesPropertyValues` class now accepts a matcher which is
+used to limit the properties that should be adapted. The factory will
+create a matcher based on the standard relaxed binding rules.
+
+Fixes gh-3402
+See gh-3515

@@ -1,0 +1,15 @@
+Fix GenericConversionService search algorithm
+
+Previously the algorithm used by GenericConversionService to find
+converters incorrectly searched for interfaces working up from the
+base class. This caused particular problems with custom List
+converters as as the Collection interface would be considered before
+the List interface giving CollectionToObjectConverter precedence
+over the custom converter.
+
+The updated algorithm restores the class search order to behave in the
+same way as Spring 3.1.
+
+Issue: SPR-10116
+Backport-Issue: SPR-10117
+Backport-Commit: aa914497dc312568cc541e53302038729364ce68

@@ -1,0 +1,22 @@
+Consistent InvocableHandlerMethod implementations
+
+This commit makes the 3 existing InvocableHandlerMethod types more
+consistent and comparable with each other.
+
+1. Use of consistent method names and method order.
+
+2. Consistent error formatting.
+
+3. Explicit for loops for resolving argument values in webflux variant
+because that makes it more readable, creates less garabage, and it's
+the only way to bring consistency since the other two variants cannot
+throw exceptions inside Optional lambdas (vs webflux variant which can
+wrap it in a Mono).
+
+4. Use package private HandlerMethodArgumentComposite in webflux
+variant in order to pick up the resolver argument caching that the
+other two variants have.
+
+5. Polish tests.
+
+6. Add missing tests for messaging variant.

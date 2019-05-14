@@ -1,0 +1,8 @@
+Avoid NPE when getting build information
+
+When the Elasticsearch code is loaded in an unusual classloading
+environment (e.g., when using the high-level REST client) in Jetty, the
+code source can be null and we trip with an NPE. This commit addresses
+this.
+
+Relates #27442

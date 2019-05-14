@@ -1,0 +1,19 @@
+Ensure JPA/Security are not fighting with each other on startup
+
+This is *really* nasty (and led me to discover a related bug
+https://jira.spring.io/browse/SPR-11844), but fortunately easy to
+hide from users once you have a test case.
+
+The problem is that Spring Security registers a `BeanPostProcessor`
+to handle `GlobalAuthenticationConfigurerAdapters`, and Boot
+registers a `BeanPostProcessor` to handle injecting the packages
+to scan into an `EntityManagerFactory` from `@EntityScan`. The
+clash comes because the `EntityScanBeanPostProcessor` wants to be
+postprocessed by the Security postprocessor, but if the Security
+configuration depends on JPA it won't be ready in time.
+
+The fix (or workaround) depending on how you look at it is to
+prevent the other bean post processors from taking an interest in
+`EntityScanBeanPostProcessor` at all (mark it as synthetic).
+
+Fixes gh-1008

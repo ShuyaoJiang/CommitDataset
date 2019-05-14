@@ -1,0 +1,14 @@
+Avoid race when shutting down controller processes (#24579)
+
+This commit terminates any controller processes plugins might have after
+the node has been closed.  This gives the plugins a chance to shut down their
+controllers gracefully.
+
+Previously there was a race condition where controller processes could be shut
+down gracefully and terminated by two threads running in parallel, leading to
+non-deterministic outcomes.
+
+Additionally, controller processes that failed to shut down gracefully were
+not forcibly terminated when running as a Windows service; there was a reliance
+on the plugin to shut down its controller gracefully in this situation.
+This commit also fixes this problem.

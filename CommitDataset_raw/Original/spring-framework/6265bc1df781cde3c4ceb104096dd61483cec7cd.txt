@@ -1,0 +1,11 @@
+Fall back on user in the Jetty UpgradeRequest
+
+The Jetty ServletWebUpgradeRequest implements getUserPrincipal to
+return the Principal from the HttpServletRequest on the upgrade.
+This change ensures we can fall back on that.
+
+However the JettyRequestUpgradeStrategy still passes the user from
+HttpServletRequest from the upgrade, in order to work with Jetty
+9.0.x and avoid running into this 9.1.x issue:
+
+https://bugs.eclipse.org/bugs/show_bug.cgi?id=423118

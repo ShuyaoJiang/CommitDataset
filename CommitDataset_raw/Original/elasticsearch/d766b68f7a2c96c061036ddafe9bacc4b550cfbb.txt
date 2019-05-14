@@ -1,0 +1,8 @@
+Set Java 9 checkstyle to depend on checkstyle conf (#28383)
+
+We need to configure the Java 9 checkstyle task to depend on the
+checkstyle configuration task or the task could run before the
+checkstyle conf has been copied leading to runtime failures. We have to
+do this after projects have been evaluated because the configuration of
+these tasks can occur before the Java 9 source set has been added to a
+project.

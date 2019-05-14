@@ -1,0 +1,15 @@
+Adapt to and from Mono when calling an operation on an endpoint
+
+This commit adds support for adapting to and from Mono when calling
+an operation on an endpoint.
+
+When an endpoint is exposed using WebFlux, a call to a blocking
+operation is adapted to return a Mono by dispatching the operation
+invocation on a separate thread using Reactor's elastic scheduler.
+
+When an endpoint is exposed using Jersey, a call to an endpoint that
+returns a Mono is adapted to return the Mono's result by blocking
+until it is available. Note that such adaptation is not necessary when
+using Spring MVC as it supports Mono natively.
+
+Closes gh-10112

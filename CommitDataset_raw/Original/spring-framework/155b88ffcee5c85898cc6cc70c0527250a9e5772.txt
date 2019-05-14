@@ -1,0 +1,36 @@
+Improve dependency management for spring-test
+
+In Spring 3.1 the spring-test Maven artifact did not have a required
+dependency on spring-core, but there is practically no part of
+spring-test that can be used without spring-core. Most test utilities
+that are intended to be stand-alone utilities in fact use utility
+classes from spring-core (e.g., ReflectionTestUtils). Even some of the
+web mocks/stubs use spring-core (e.g., DelegatingServletInputStream).
+
+In addition, the current Gradle build configuration for the spring-test
+module is very simplistic -- in that it does not explicitly list any
+optional dependencies such as the Servlet and Portlet APIs -- and it
+defines a 'compile' dependency on spring-webmvc-portlet.
+
+The resulting Maven dependencies in the generated POM are therefore not
+what a typical consumer of the spring-test artifact would reasonably
+expect.
+
+To address these issues, the Gradle build configuration for the
+spring-test module now explicitly defines the following 'compile'
+dependencies:
+
+ - spring-core
+ - spring-webmvc, optional
+ - spring-webmvc-portlet, optional
+ - junit, optional
+ - testng, optional
+ - servlet-api, optional
+ - jsp-api, optional
+ - portlet-api, optional
+ - activation, provided
+
+The only required dependency is now spring-core; all other dependencies
+are 'optional'.
+
+Issue: SPR-8861

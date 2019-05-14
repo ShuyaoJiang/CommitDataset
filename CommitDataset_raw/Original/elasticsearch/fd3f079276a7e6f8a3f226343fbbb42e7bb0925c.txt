@@ -1,0 +1,10 @@
+[ML] Exclude failed jobs from node allocation decision (elastic/x-pack-elasticsearch#4395)
+
+When calculating the current load on each ML node during the
+node allocation process we should be ignoring failed jobs.
+This is because failed jobs do not have a corresponding native
+process, so do not consume memory or CPU resources.
+
+relates elastic/x-pack-elasticsearch#4381
+
+Original commit: elastic/x-pack-elasticsearch@1cb0ca973e829670f581e206fe1e64fe569c1e1f

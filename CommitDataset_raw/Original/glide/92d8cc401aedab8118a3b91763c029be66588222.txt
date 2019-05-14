@@ -1,0 +1,14 @@
+Fix a deadlock in EngineResource/Engine.
+
+Engine acquires it's lock, then the EngineResource lock when it loads
+resources from cache or active resources. EngineResource acquires its
+lock, then the EngineLock, when a resource is cleared. This conflicting
+lock order leads to deadlock.
+
+The fix is similar to the fix applied in ActiveResources. We always make
+sure that the Engine (listener) lock is acquired before the
+EngineResource lock.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=233861929

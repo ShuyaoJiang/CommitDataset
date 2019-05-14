@@ -1,0 +1,98 @@
+Adds infrastructure for dealing with errors in step execution (#30341)
+
+* Adds infrastructure for dealing with errors in step execution
+
+This change adds a new ErrorStep which a step can move to if it
+encounters an error it cannot automatically recover from by retrying on
+the next execution. The error step is special in that it cannot
+complete. The intention is that the user will need to call an API to man
+ually mocve the step in order to progress the index's lifecycle. The
+error step retains the phase and action names of the step before it but
+with the step name set to `ERROR`. For this reason no ordinary step can
+have this name. `AbstractStepTestCase.testStepNameNotError()` ensures
+that no step uses `ERROR` as the step name for either its stepKey or
+its nextStepKey.
+
+The new `index.lifecycle.failed_step` setting is used
+to store the name of the failed step so the user can know in which step
+the error occured. More error information will be added shortly.
+
+The async steps will now move to the error step if listener.onFailure()
+is called.
+
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/LifecycleSettings.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/ErrorStep.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTask.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/PolicyStepsRegistry.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/ErrorStepTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToNextStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/PolicyStepsRegistryTests.java
+
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ErrorStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/LifecycleSettings.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AbstractStepTestCase.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ErrorStepTests.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTask.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/PolicyStepsRegistry.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToNextStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/PolicyStepsRegistryTests.java
+
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ErrorStep.java
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/LifecycleSettings.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/AbstractStepTestCase.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ErrorStepTests.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTask.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/PolicyStepsRegistry.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToErrorStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/MoveToNextStepUpdateTaskTests.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/PolicyStepsRegistryTests.java
+
+* Addresses review comments
+x-pack/plugin/core/src/main/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ErrorStep.java
+x-pack/plugin/core/src/test/java/org/elasticsearch/xpack/core/indexlifec
+ycle/ErrorStepTests.java
+x-pack/plugin/index-lifecycle/src/main/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunner.java
+x-pack/plugin/index-lifecycle/src/test/java/org/elasticsearch/xpack/inde
+xlifecycle/IndexLifecycleRunnerTests.java

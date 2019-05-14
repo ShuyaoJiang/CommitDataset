@@ -1,0 +1,10 @@
+SocketGatheringWriteTest increase timeouts
+
+Motivation:
+EpollDomainSocketGatheringWriteTest. testGatheringWriteBig takes on average about 20-25 seconds on the CI servers, but there is a 30 second timeout being applied which leads to what maybe false positive test failures.
+
+Modifications:
+- Increase the test timeout to 120 seconds globally and 60 seconds to wait for all writes per test
+
+Result:
+Higher timeout for potentially less false positive test failures.

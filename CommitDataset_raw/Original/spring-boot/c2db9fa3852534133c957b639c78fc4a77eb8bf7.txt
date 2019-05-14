@@ -1,0 +1,12 @@
+Update admin MBean to only be ready when its own context is ready
+
+Previously, if there was a hierarchy of SpringApplications, the admin
+MBean would report that the application was ready as soon as any
+application in the hierarchy was ready. This could lead to a client
+trying to query a property in the environment before it's available.
+
+This commit updates the MBean registrar to that the MBean only reports
+that the application is ready when the context that contains the
+registrar has refreshed and fired its ApplicationReadyEvent.
+
+Closes gh-6362

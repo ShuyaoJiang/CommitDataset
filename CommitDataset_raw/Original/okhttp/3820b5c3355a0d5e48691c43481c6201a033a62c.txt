@@ -1,0 +1,7 @@
+Fix a concurrency bug in SPDY settings.
+
+We were making a copy of the streams HashMap so that we could
+iterate it safely after releasing our lock. But we weren't
+actually using that copy when iterating. Whoops!
+
+Fixes https://github.com/square/okhttp/issues/1119

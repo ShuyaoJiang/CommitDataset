@@ -1,0 +1,9 @@
+Compound order for histogram aggregations. (#22343)
+
+This commit adds support for histogram and date_histogram agg compound order by refactoring and reusing terms agg order code. The major change is that the Terms.Order and Histogram.Order classes have been replaced/refactored into a new class BucketOrder. This is a breaking change for the Java Transport API. For backward compatibility with previous ES versions the (date)histogram compound order will use the first order. Also the _term and _time aggregation order keys have been deprecated; replaced by _key.
+
+Relates to #20003: now that all these aggregations use the same order code, it should be easier to move validation to parse time (as a follow up PR).
+
+Relates to #14771: histogram and date_histogram aggregation order will now be validated at reduce time.
+
+Closes #23613: if a single BucketOrder that is not a tie-breaker is added with the Java Transport API, it will be converted into a CompoundOrder with a tie-breaker.

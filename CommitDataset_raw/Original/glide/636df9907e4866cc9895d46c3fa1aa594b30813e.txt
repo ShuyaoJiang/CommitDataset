@@ -1,0 +1,13 @@
+Use Interface instead of abstract ListPreloader
+In your examples the ListAdapter and the final ListPreloader are
+strongly connected. Using an Interface will remove this strong
+connection.
+
+Using an interface that an Adapter can implement has the following
+advantages:
+1. the dimensions don´t must be passed to the ListPreloader while the Adapter has the first access to the dimensions of the ImageView
+2. you don´t have to pass the items to the ListPreloader, while the
+Adapter already has the newest set of items (e.g.: CursorAdapter)
+3. in most cases the ListAdapter already has an RequestBuilder, so
+you don´t have to pass them twice
+4. you get rid of an extra class (ListPrelaoder) you have to implement

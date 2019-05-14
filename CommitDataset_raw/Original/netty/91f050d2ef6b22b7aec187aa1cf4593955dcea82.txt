@@ -1,0 +1,14 @@
+More precise calculate the maximum record size when using SslProvider.OPENSSL* and so decrease mem usage.
+
+Motivation:
+
+We used ca 2k as maximum overhead for encrypted packets which is a lot more then what is needed in reality by OpenSSL. This could lead to the need of more memory.
+
+Modification:
+
+- Use a lower overhead of 86 bytes as defined by the spec and openssl itself
+- Fix unit test to use the correct session to calculate needed buffer size
+
+Result:
+
+Less memory usage.

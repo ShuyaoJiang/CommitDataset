@@ -1,0 +1,4 @@
+add support for write index resolution when creating/updating documents (#31520)
+
+Now write operations like Index, Delete, Update rely on the write-index associated with 
+an alias to operate against. This means writes will be accepted even when an alias points to multiple indices, so long as one is the write index. Routing values will be used from the AliasMetaData for the alias in the write-index. All read operations are left untouched.

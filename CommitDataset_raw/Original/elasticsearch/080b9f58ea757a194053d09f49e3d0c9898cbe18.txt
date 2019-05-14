@@ -1,0 +1,14 @@
+[TEST] Test for shard failures, add debug to testProfileMatchesRegular
+
+Unmuting the test and adding some more debug output.  Was not able to
+reproduce the prior failure, but it seems possible that the
+failure (mismatched counts) could be caused by partial search results
+during the test.
+
+The assertions check for shard failures first, because if one of the
+two searches is partial the rest of the test will fail.
+
+Next, instead of just checking respective hit counts, we emit the
+difference in hits to help identify what went wrong.
+
+Closes #32492

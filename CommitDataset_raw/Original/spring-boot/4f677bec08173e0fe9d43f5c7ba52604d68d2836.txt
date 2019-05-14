@@ -1,0 +1,13 @@
+Filter non-jar artifacts when packaging libs in Gradle plugin
+
+Previously, the Gradle plugin would package all of a project's
+dependencies in the jar's lib directory, irrespective of each
+dependency's type. This led to non-jar artifacts being packaged in
+the lib directory where only jar dependencies are expected. See #334
+for an example failure.
+
+This commit updates the Gradle plugin such that it only packages
+dependencies of type jar, ejb, ejb-client, test-jar, or bundle. This
+brings the Gradle plugin into line with the Maven plugin.
+
+Fixes #334.

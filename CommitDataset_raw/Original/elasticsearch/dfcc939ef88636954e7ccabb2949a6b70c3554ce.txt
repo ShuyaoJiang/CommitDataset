@@ -1,0 +1,7 @@
+QA: Better seed nodes for rolling restart
+
+Use all running nodes as unicast seeds in the rolling restart tests to
+avoid a race between pinging and the tests. Without this if the tests
+are too fast then when a new node comes up and pings its single
+configured seed node that node *might* not have a ping from the other
+running node.

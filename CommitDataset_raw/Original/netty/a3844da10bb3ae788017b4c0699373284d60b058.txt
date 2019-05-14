@@ -1,0 +1,13 @@
+NoClassDefFoundError on Android platform when try to use DefaultDnsServerAddressStreamProvider. (#8656)
+
+Motivation:
+
+Andoid does not contain javax.naming.* so we should not try to use it to prevent a NoClassDefFoundError on init.
+
+Modifications:
+
+Only try to use javax.naming.* to retrieve nameservers when not using Android.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8654.

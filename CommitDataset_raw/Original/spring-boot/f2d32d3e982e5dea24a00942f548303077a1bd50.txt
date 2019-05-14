@@ -1,0 +1,18 @@
+Add support for property deprecation
+
+Previously, an item could only have a 'deprecated' boolean flag to
+indicate that the property is deprecated. It is desirable to provide an
+additional description for the deprecation as well as the name of the
+property to use instead.
+
+The `deprecated` boolean flag is now supported. Instead, a `deprecated`
+object can be specified with two optional attributes: `reason` to provide
+an explanation for the deprecation and `replacement` to refer to the
+property that should be used instead. If none of them is present, an
+empty deprecation object should be set.
+
+For backward compatibility, the `deprecated` field is still set.
+
+Deprecation information can only set via manual meta-data.
+
+Closes gh-3449

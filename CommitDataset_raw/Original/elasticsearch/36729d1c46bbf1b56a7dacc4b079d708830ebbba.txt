@@ -1,0 +1,38 @@
+Add the ability to bundle multiple plugins into a meta plugin (#28022)
+
+This commit adds the ability to package multiple plugins in a single zip.
+The zip file for a meta plugin must contains the following structure:
+
+|____elasticsearch/
+| |____   <plugin1> <-- The plugin files for plugin1 (the content of the elastisearch directory)
+| |____   <plugin2>  <-- The plugin files for plugin2
+| |____   meta-plugin-descriptor.properties <-- example contents below
+The meta plugin properties descriptor is mandatory and must contain the following properties:
+
+description: simple summary of the meta plugin.
+name: the meta plugin name
+The installation process installs each plugin in a sub-folder inside the meta plugin directory.
+The example above would create the following structure in the plugins directory:
+
+|_____ plugins
+| |____   <name_of_the_meta_plugin>
+| | |____   meta-plugin-descriptor.properties
+| | |____   <plugin1>
+| | |____   <plugin2>
+If the sub plugins contain a config or a bin directory, they are copied in a sub folder inside the meta plugin config/bin directory.
+
+|_____ config
+| |____   <name_of_the_meta_plugin>
+| | |____   <plugin1>
+| | |____   <plugin2>
+
+|_____ bin
+| |____   <name_of_the_meta_plugin>
+| | |____   <plugin1>
+| | |____   <plugin2>
+The sub-plugins are loaded at startup like normal plugins with the same restrictions; they have a separate class loader and a sub-plugin
+cannot have the same name than another plugin (or a sub-plugin inside another meta plugin).
+
+It is also not possible to remove a sub-plugin inside a meta plugin, only full removal of the meta plugin is allowed.
+
+Closes #27316

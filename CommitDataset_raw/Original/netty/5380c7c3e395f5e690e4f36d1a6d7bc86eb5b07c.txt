@@ -1,0 +1,55 @@
+HTTP/2 Child Channel and FrameCodec Feature Parity.
+
+Motivation:
+
+This PR (unfortunately) does 4 things:
+1) Add outbound flow control to the Http2MultiplexCodec:
+   The HTTP/2 child channel API should interact with HTTP/2 outbound/remote flow control. That is,
+   if a H2 stream used up all its flow control window, the corresponding child channel should be
+   marked unwritable and a writability-changed event should be fired. Similarly, a unwritable
+   child channel should be marked writable and a writability-event should be fired, once a
+   WINDOW_UPDATE frame has been received. The changes are (mostly) contained in ChannelOutboundBuffer,
+   AbstractHttp2StreamChannel and Http2MultiplexCodec.
+
+2) Introduce a Http2Stream2 object, that is used instead of stream identifiers on stream frames. A
+   Http2Stream2 object allows an application to attach state to it, and so a application handler
+   no longer needs to maintain stream state (i.e. in a map(id -> state)) himself.
+
+3) Remove stream state events, which are no longer necessary due to the introduction of Http2Stream2.
+   Also those stream state events have been found hard and complex to work with, when porting gRPC
+   to the Http2FrameCodec.
+
+4) Add support for HTTP/2 frames that have not yet been implemented, like PING and SETTINGS. Also add
+   a Http2FrameCodecBuilder that exposes options from the Http2ConnectionHandler API that couldn't else
+   be used with the frame codec, like buffering outbound streams, window update ratio, frame logger, etc.
+
+Modifications:
+
+1) A child channel's writability and a H2 stream's outbound flow control window interact, as described
+   in the motivation. A channel handler is free to ignore the channel's writability, in which case the
+   parent channel is reponsible for buffering writes until a WINDOW_UPDATE is received.
+
+   The connection-level flow control window is ignored for now. That is, a child channel's writability
+   is only affected by the stream-level flow control window. So a child channel could be marked writable,
+   even though the connection-level flow control window is zero.
+
+2) Modify Http2StreamFrame and the Http2FrameCodec to take a Http2Stream2 object intstead of a primitive
+   integer. Introduce a special Http2ChannelDuplexHandler that has newStream() and forEachActiveStream()
+   methods. It's recommended for a user to extend from this handler, to use those advanced features.
+
+3) As explained in the documentation, a new inbound stream active can be detected by checking if the
+   Http2Stream2.managedState() of a Http2HeadersFrame is null. An outbound stream active can be detected
+   by adding a listener to the ChannelPromise of the write of the first Http2HeadersFrame. A stream
+   closed event can be listened to by adding a listener to the Http2Stream2.closeFuture().
+
+4) Add a simple Http2FrameCodecBuilder and implement the missing frame types.
+
+Result:
+
+1) The Http2MultiplexCodec supports outbound flow control.
+2) The Http2FrameCodec API makes it easy for a user to manage custom stream specific state and to create
+   new outbound streams.
+3) The Http2FrameCodec API is much cleaner and easier to work with. Hacks like the ChannelCarryingHeadersFrame
+   are no longer necessary.
+4) The Http2FrameCodec now also supports PING and SETTINGS frames. The Http2FrameCodecBuilder allows the Http2FrameCodec
+   to use some of the rich features of the Http2ConnectionHandler API.

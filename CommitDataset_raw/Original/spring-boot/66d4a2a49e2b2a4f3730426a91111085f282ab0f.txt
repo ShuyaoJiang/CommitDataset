@@ -1,0 +1,18 @@
+Ignore Azure’s default LOGGING_CONFIG env var when initialising logging
+
+When using Tomcat, Azure automatically configures an environment
+variable called LOGGING_CONFIG that configures the
+java.util.logging.config.file system property.
+LoggingApplicationListener finds this configuration via the Spring
+environment (it looks for logging.config) and attempts to use it as the
+name of the logging configuration file. Since c3d93f7 this failure
+causes the app to fail to start, rather than the previous behaviour of
+silently falling back to the default configuration.
+
+This commit updates LoggingApplicationListener to only consider
+configuration that is a non-empty string and that does not start with
+-Djava.util.logging.config.file=, which is the beginning of the default
+configuration on Azure, and is very unlikely to be part of the name of a
+logging configuration file.
+
+Closes gh-3366

@@ -1,0 +1,10 @@
+Properly guard ManagementSecurityAutoConfiguration
+
+ManagementSecurityAutoConfiguration fully relies on the presence of a
+web environment, yet the configuration class itself was not guarded by
+`@ConditionalOnWebApplication` (while nested config where).
+
+This turned out to be a problem for command-line applications using
+spring security (i.e. CRaSH integration).
+
+Fixes gh-2112

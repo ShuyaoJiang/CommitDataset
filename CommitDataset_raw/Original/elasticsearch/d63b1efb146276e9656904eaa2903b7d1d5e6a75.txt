@@ -1,0 +1,9 @@
+Splits nio project into two for eclipse build only (#27939)
+
+* Splits nio project into two for eclipse build only
+
+https://github.com/elastic/elasticsearch/pull/27801 introduced a new gradle project `:libs:elasticsearch-nio` which creates cyclical project dependencies when importingthe projects into Eclipse.
+
+This change applies the same trick as we have for the core project where, and building for Eclipse, splits the `:libs:elasticsearch-nio` project into `:libs:elasticsearch-nio` which points to `src/main` and `:libs:elasticsearch-nio-tests` which points to `src/test`. This prevents cyclical project dependencies in Eclipse arising from the fact that eclipse does not separate compile/runtime dependencies from test dependencies.
+
+* Removes integTest bits since there are none

@@ -1,0 +1,11 @@
+Make `spring.session.store-type` mandatory
+
+Previously, Spring Session would be auto-configured by the mere presence
+of Spring Session in the classpath. This was fragile as determining a
+store type according to the environment could easily change when the
+classpath of the project changes.
+
+This commit makes the store-type property mandatory. If it is not set,
+Spring Session is no longer auto-configured.
+
+Closes gh-5838

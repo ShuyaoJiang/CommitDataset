@@ -1,0 +1,12 @@
+Pass a non-application Context into Glide’s Requests.
+
+We can use the default themes from Activities and/or Context wrappers
+to obtain placeholder Drawables, which can be more efficient than
+forcing callers to call getDrawable when building their request and more
+powerful/neater than having callers pass in a Theme.
+
+This change does NOT pass through the Context or Themes to the decoder
+that loads non-Bitmap drawables on a background thread to avoid memory
+leaks.
+
+Fixes #1267.

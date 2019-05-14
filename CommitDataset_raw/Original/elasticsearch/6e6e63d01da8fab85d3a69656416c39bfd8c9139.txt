@@ -1,0 +1,10 @@
+Zen2: Move all mixed-version REST tests to Zen2 (#36398)
+
+Moves all remaining (rolling-upgrade and mixed-version) REST tests to use Zen2. To avoid adding
+extra configuration, it relies on Zen2 being set as the default discovery type. This required a few
+smaller changes in other tests. I've removed AzureMinimumMasterNodesTests which tests Zen1
+functionality and dates from a time where host providers were not configurable and each cloud
+plugin had its own discovery.type, subclassing the ZenDiscovery class. I've also adapted a few tests
+which were unnecessarily adding addTestZenDiscovery = false for the same legacy reasons. Finally,
+this also moves the unconfigured-node-name REST test to Zen2, testing the auto-bootstrapping
+functionality in development mode when no discovery configuration is provided.

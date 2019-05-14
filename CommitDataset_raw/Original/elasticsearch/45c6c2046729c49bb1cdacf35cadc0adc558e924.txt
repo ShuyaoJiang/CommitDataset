@@ -1,0 +1,14 @@
+Enforce translog access via engine (#29542)
+
+Today the translog of an engine is exposed and can be accessed directly.
+While this exposure offers much flexibility, it also causes these troubles:
+
+- Inconsistent behavior between translog method and engine method.
+For example, rolling a translog generation via an engine also trims
+unreferenced files, but translog's method does not.
+
+- An engine does not get notified when critical errors happen in translog
+as the access is direct.
+
+This change isolates translog of an engine and enforces all accesses to
+translog via the engine.

@@ -1,0 +1,5 @@
+Fix runtime class cast exception in TRA
+
+If we fail to acquire the shard lock, need to retry and wait for the new
+cluster state, we were sending the wrong kind of request for the replica
+action. This commit fixes this issue.

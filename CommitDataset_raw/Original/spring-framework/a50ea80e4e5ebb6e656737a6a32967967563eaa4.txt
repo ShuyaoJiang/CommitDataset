@@ -1,0 +1,13 @@
+Handle multiple conditional request headers
+
+Prior to this change, setting both "If-None-Match" and
+"If-Unmodified-Since" conditional request headers would check for both
+conditions to be met.
+
+This commit fixes this behavior to follow the RFC7232 Section 6:
+> entity tags are presumed to be more accurate than date validators
+
+So in case both conditions are present, the "If-None-Match" condition
+takes precedence.
+
+Issue: SPR-14224

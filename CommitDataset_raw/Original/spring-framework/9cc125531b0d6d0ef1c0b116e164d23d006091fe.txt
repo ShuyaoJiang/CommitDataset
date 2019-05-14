@@ -1,0 +1,47 @@
+Fix STS compatibility issues; other improvements
+
+Revert changes to ParserContext, ReaderContext, and XmlReaderContext
+
+    These changes cause cross-version incompatibilities at tooling time
+    -- for instance, an STS version that ships with Spring 3.0.5
+    classloads the ParserContext defined in that version, whereas it
+    classloads NamespaceHandlers and BeanDefinitionParsers (by default)
+    from the user application classpath, which may be building against
+    3.1.0. If so, the changes introduced to these types in 3.1.0 are
+    incompatible with expectations in the 3.0.5 world and cause all
+    manner of problems.  In this case, it was NoSuchMethodError due to
+    the newly-added XmlReaderContext.getProblemReporter() method; also
+    IncompatibleClassChangeError due to the introduction of the
+    ComponentRegistrar interface on ParserContext.
+
+    Each of these problems have been mitigated, though the solutions
+    are not ideal. The method mentioned has been removed, and instead
+    the problemReporter field is now accessed reflectively.
+    ParserContext now no longer implements ComponentRegistrar, and
+    rather a ComponentRegistrarAdapter class has been introduced that
+    passes method calls through to a ParserContext delegate.
+
+Introduce AbstractSpecificationBeanDefinitionParser
+
+    AbstractSpecificationBeanDefinitionParser has been introduced in
+    order to improve the programming model for BeanDefinitionParsers
+    that have been refactored to the new FeatureSpecification model.
+    This new base class and it's template method implementation of
+    parse/doParse ensure that common concerns like (1) adapting a
+    ParserContext into a SpecificationContext, (2) setting source and
+    source name on the specification, and (3) actually executing the
+    specification are all managed by the base class.  The subclass
+    implementation of doParse need only actually parse XML, populate
+    and return the FeatureSpecification object.  This change removed
+    the many duplicate 'createSpecificationContext' methods that had
+    been lingering.
+
+Minor improvement to BeanDefinitionReaderUtils API
+
+    Introduced new BeanDefinitionReaderUtils#registerWithGeneratedName
+    variant that accepts BeanDefinition as opposed to
+    AbstractBeanDefinition, as BeanDefinition is all that is actually
+    necessary to satisfy the needs of the method implementation. The
+    latter variant accepting AbstractBeanDefinition has been deprecated
+    but remains intact and delegates to the new variant in order to
+    maintain binary compatibility.

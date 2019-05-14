@@ -1,0 +1,19 @@
+DNS Resolver Search Domain Bugs
+
+Motivation:
+The DNS resolver supports search domains. However the ndots are not correctly enforced. The search domain should only be appended under the following scenario [1]:
+
+> Resolver queries having fewer than ndots dots (default is 1) in them will be attempted using each component of the search path in turn until a match is found.
+
+The DNS resolver current appends the search domains if ndots is 0 which should never happen (because no domain can have less than 0 dots).
+
+[1] https://linux.die.net/man/5/resolv.conf
+
+Modifications:
+- Parse /etc/resolv.conf to get the default value for ndots on Unix platforms
+- The search domain shouldn't be used if ndots is 0
+- Avoid failing a promise to trigger the search domain queries in DnsNameResolverContext#resolve
+
+Result:
+More correct usage of search domains in the DNS resolver.
+Fixes https://github.com/netty/netty/issues/6844.

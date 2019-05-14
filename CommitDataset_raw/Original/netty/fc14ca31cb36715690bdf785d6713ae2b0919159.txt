@@ -1,0 +1,13 @@
+Add NonStickyEventExecutorGroup
+
+Motivation:
+
+We offer DefaultEventExecutorGroup as an EventExecutorGroup which return OrderedEventExecutor and so provide strict ordering of event execution. One limitations of this implementation is that each contained DefaultEventExecutor will always be tied to a single thread, which can lead to a very unbalanced execution as one thread may be super busy while others are idling.
+
+Modifications:
+
+- Add NonStickyEventExecutorGroup which can be used to wrap another EventExecutorGroup (like UnorderedThreadPoolEventExecutor) and expose ordering while not be sticky with the thread that is used for a given EventExecutor. This basically means that Threads may change between execution of tasks for an EventExecutor but ordering is still guaranteed.
+
+Result:
+
+Better utalization of threads in some use-cases.

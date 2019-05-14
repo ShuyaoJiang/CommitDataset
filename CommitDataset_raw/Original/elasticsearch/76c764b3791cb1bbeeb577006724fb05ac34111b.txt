@@ -1,0 +1,13 @@
+SQL: Prepare JDBC for release (elastic/x-pack-elasticsearch#4341)
+
+This changes JDBC so it can be released. It bundles the
+`sql-shared-client` and `sql-proto` jars into the jar for the jdbc client.
+It also Generates a pom for the jdbc driver when you run `gradle assemble`
+on it. This will allow us to release the jdbc driver.
+
+It also adds a zip distribution of the jdbc driver with all of its
+dependencies bundled in the zip. It'd be nice to bundle all of the jdbc
+driver's dependencies in the jar but we can't quite do that yet. So, for
+now, to help folks using BI tools use the JDBC driver, we build a zip.
+
+Original commit: elastic/x-pack-elasticsearch@9c668231d460bf9f005e6d0627e77dc5c7e6e95a

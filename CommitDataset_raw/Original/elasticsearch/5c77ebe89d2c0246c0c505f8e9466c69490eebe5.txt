@@ -1,0 +1,46 @@
+[ML] Implement new rules design (#31110)
+
+Rules allow users to supply a detector with domain
+knowledge that can improve the quality of the results.
+The model detects statistically anomalous results but it
+has no knowledge of the meaning of the values being modelled.
+
+For example, a detector that performs a population analysis
+over IP addresses could benefit from a list of IP addresses
+that the user knows to be safe. Then anomalous results for
+those IP addresses will not be created and will not affect
+the quantiles either.
+
+Another example would be a detector looking for anomalies
+in the median value of CPU utilization. A user might want
+to inform the detector that any results where the actual
+value is less than 5 is not interesting.
+
+This commit introduces a `custom_rules` field to the `Detector`.
+A detector may have multiple rules which are combined with `or`.
+
+A rule has 3 fields: `actions`, `scope` and `conditions`.
+
+Actions is a list of what should happen when the rule applies.
+The current options include `skip_result` and `skip_model_update`.
+The default value for `actions` is the `skip_result` action.
+
+Scope is optional and allows for applying filters on any of the
+partition/over/by field. When not defined the rule applies to
+all series. The `filter_id` needs to be specified to match the id
+of the filter to be used. Optionally, the `filter_type` can be specified
+as either `include` (default) or `exclude`. When set to `include`
+the rule applies to entities that are in the filter. When set to
+`exclude` the rule only applies to entities not in the filter.
+
+There may be zero or more conditions. A condition requires `applies_to`,
+`operator` and `value` to be specified. The `applies_to` value can be
+either `actual`, `typical` or `diff_from_typical` and it specifies
+the numerical value to which the condition applies. The `operator`
+(`lt`, `lte`, `gt`, `gte`) and `value` complete the definition.
+Conditions are combined with `and` and allow to specify numerical
+conditions for when a rule applies.
+
+A rule must either have a scope or one or more conditions. Finally,
+a rule with scope and conditions applies when all of them apply.
+

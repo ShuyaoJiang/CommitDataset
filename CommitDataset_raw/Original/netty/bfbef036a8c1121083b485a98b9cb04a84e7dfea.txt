@@ -1,0 +1,12 @@
+EPOLL ET AutoRead
+
+Motivation:
+EPOLL does not support autoread when in ET mode.
+
+Modifications:
+- EpollRecvByteAllocatorHandle should not unconditionally force reading just because ET is enabled
+- AbstractEpollChannel and all derived classes which implement epollInReady must support a variable which indicates
+there may be more data to read. The variable will be used when read is called to simulate a EPOLL wakeup and call epollInReady if necessary. This will ensure that if we don't read until EAGAIN that we will try to read again and not rely on EPOLL to notify us.
+
+Result:
+EPOLL ET supports auto read.

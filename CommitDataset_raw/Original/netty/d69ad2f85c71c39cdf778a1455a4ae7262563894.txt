@@ -1,0 +1,13 @@
+More robust native library discovery in Mac OS X
+
+Motivation:
+
+Some JDK versions of Mac OS X generates a JNI dynamic library with '.jnilib' extension rather than with '.dynlib' extension.  However, System.mapLibraryName() always returns 'lib<name>.dynlib'. As a result, NativeLibraryLoader fails to load the native library whose extension is .jnilib.
+
+Modification:
+
+Try to find both '.jnilib' and '.dynlib' resources on OS X.
+
+Result:
+
+Dynamic libraries are loaded correctly in Mac OS X, and thus we can continue the OpenSslEngine work.

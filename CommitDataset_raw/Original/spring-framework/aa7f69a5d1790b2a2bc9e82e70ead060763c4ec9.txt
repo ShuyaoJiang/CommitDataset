@@ -1,0 +1,15 @@
+Ensure that parameter resolution in SpringExtension is thread-safe
+
+Prior to this commit, parallel execution of @BeforeEach and @AfterEach
+methods that accepted @Autowired arguments would fail intermittently
+due to a race condition in the internal implementation of the JDK's
+java.lang.reflect.Executable.getParameters() method.
+
+This commit addresses this issue by creating instances of
+SynthesizingMethodParameter via
+SynthesizingMethodParameter.forExecutable(Executable, int) instead of
+SynthesizingMethodParameter.forParameter(Parameter), since the latter
+looks up the parameter index by iterating over the array returned by
+Executable.getParameters() (which is not thread-safe).
+
+Issue: SPR-17533

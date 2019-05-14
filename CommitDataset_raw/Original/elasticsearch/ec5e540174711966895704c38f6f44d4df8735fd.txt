@@ -1,0 +1,12 @@
+Fix routing with leading or trailing whitespace
+
+The problem here is that splitting was using a method that intentionally
+trims whitespace (the method is really meant to be used for splitting
+parameters where whitespace should be trimmed like list
+settings). However, for routing values whitespace should not be trimmed
+because we allow routing with leading and trailing spaces. This commit
+switches the parsing of these routing values to a method that does not
+trim whitespace.
+
+Relates #27712
+

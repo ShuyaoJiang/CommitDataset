@@ -1,0 +1,11 @@
+Support for mutating ServerWebExchange in WebTestClient
+
+This commit adds a common base class for server-less setup with the
+option to configure a transformation function on the
+ServerWebExchange for every request.
+
+The transformation is applied through a WebFilter. As a result the
+RouterFunction setup is now invoked behind a DispatcherHandler with
+a HandlerMapping + HandlerAdapter.
+
+Issue: SPR-15250

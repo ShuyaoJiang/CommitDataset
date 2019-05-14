@@ -1,0 +1,10 @@
+Handle missing exceptions in WebMvcMetricsFilter
+
+Prior to this commit, exceptions nested in
+`NestedServletExceptions` would not be recorded by the
+`WebMvcMetricsFilter`. This commit ensures that exceptions
+happening downstream (e.g. happening while writing the response
+body itself) are properly recorded.
+
+See https://github.com/micrometer-metrics/micrometer/issues/1190
+See gh-16014

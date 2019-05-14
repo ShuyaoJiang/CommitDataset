@@ -1,0 +1,10 @@
+Scripting: Rework joda time backcompat (#33486)
+
+This commit switches the joda time backcompat in scripting to use
+augmentation over ZonedDateTime. The augmentation methods provide
+compatibility with the missing methods between joda's DateTime and
+java's ZonedDateTime. Due to getDayOfWeek returning an enum in the java
+API, ZonedDateTime is wrapped so that the method can return int like the
+joda time does. The java time api version is renamed to
+getDayOfWeekEnum, which will be kept through 7.x for compatibility while
+users switch back to getDayOfWeek once joda compatibility is removed.

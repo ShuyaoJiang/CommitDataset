@@ -1,0 +1,17 @@
+Test: wait for netty threads in a JUnit ClassRule (#30763)
+
+This commit changes the wait for a few netty threads to wait for these
+threads to complete after the cluster has stopped. Previously, we were
+waiting for these threads before the cluster was actually stopped; the
+cluster is stopped in an AfterClass method of ESIntegTestCase, while
+the wait was performed in the AfterClass of a class that extended
+ESIntegTestCase, which is always executed before the AfterClass of
+ESIntegTestCase.
+
+Now, the wait is contained in an ExternalResource ClassRule that
+implements the waiting for the threads to terminate in the after
+method. This rule is executed after the AfterClass method in
+ESIntegTestCase. The same fix has also been applied in
+SecuritySingleNodeTestCase.
+
+Closes #30563 

@@ -1,0 +1,11 @@
+Non-peer recovery should set the global checkpoint (#27965)
+
+Non-Peer recoveries should restore the global checkpoint rather than wait for the activation of the primary. This brings us a step closer to a universe where a recovered shard always has a valid global checkpoint. Concretely:
+
+1) Recovery from store can read the checkpoint from the translog
+2) Recovery from local shards and snapshots can set the global checkpoint to the local checkpoint as this is the only copy of the shard.
+3) Recovery of an empty shard can set it to `NO_OPS_PERFORMED`
+
+Peer recoveries will follow but require more work and thus will have their own PR.
+
+I also used the moment to clean up `IndexShard`'s api around starting the engine and doing recovery from the translog. The current naming are a relic of the past and don't align with the current naming schemes in the engine.

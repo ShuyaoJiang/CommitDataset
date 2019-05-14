@@ -1,0 +1,16 @@
+[RCI] Check blocks while having index shard permit in TransportReplicationAction (#35332)
+
+Today, the TransportReplicationAction checks the global level blocks and 
+the index level blocks before routing the operation to the primary, in the 
+ReroutePhase, and it happens at the very beginning of the transport 
+replication action execution. For the upcoming rework of the Close Index 
+API and in order to deal with primary relocation, we'll need to also check 
+for blocks before executing the operation on the primary (while holding a 
+permit) but before routing to the new primary.
+
+This pull request change the AsyncPrimaryAction so that it checks for 
+replication action's blocks before executing the operation locally or before 
+routing the primary action to the newly primary shard. The check is done 
+while holding a PrimaryShardReference.
+
+Related to #33888

@@ -1,0 +1,9 @@
+Fix assertIngestDocument wrongfully passing (#31913)
+
+* Fix assertIngestDocument wrongfully passing
+
+* Previously docA being subset of docB passed because iteration was over docA's keys only
+* Scalars in nested fields were not compared in all cases
+* Assertion errors were hard to interpret (message wasn't correct since it only mentioned the class type)
+* In cases where two paths contained different types a ClassCastException was thrown instead of an AssertionError
+* Fixes #28492

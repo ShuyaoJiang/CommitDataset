@@ -1,0 +1,6 @@
+TEST: Adjust translog size assumption in new engine
+
+A new engine now can have more than one empty translog since #28676.
+This cause #testShouldPeriodicallyFlush failed because in the test we
+asssume an engine should have one empty translog. This commit takes into
+account the extra translog size of a new engine.

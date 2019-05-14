@@ -1,0 +1,27 @@
+SPR-8750 Refine 'Content-Type' update in MockHttpServletRequest/Response.
+
+The initial solution kept these three in full sync at all times:
+contentType field, characterEncoding field, 'Content-Type' header.
+That is correct behavior, however it breaks existing tests that rely
+on contentType and characterEncoding being equal to exactly what 
+they were set to.
+
+For example, consider:
+response.setContentType("text/plain");
+response.setCharacterEncoding("UTF-8");
+
+Ideally both contentType and the 'Content-Type' header would now be
+"text/plain;charset=UTF-8". However, existing tests would expect 
+that contentType is equal to "text/plain".
+
+To avoid breaking existing tests, contentType and characterEncoding
+will continue to be equal to exactly what they were set to while
+the 'Content-Type' header will always include both the content 
+type and the charset.
+
+The only exception to this rule is when a 'Content-Type' header
+is set explicitly, the contentType and characterEncoding fields will 
+be updated accordingly, possibly overriding the existing values.
+
+
+

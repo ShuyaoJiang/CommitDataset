@@ -1,0 +1,30 @@
+Resolve absolute resource links in ResourceTransformers
+
+Prior to this commit, `ResourceTransformer` implementations would
+resolve internal links to other resources: both relative and absolute
+request paths.
+For relative request paths, those transformers would call
+`ResourceTransformerSupport.resolveUrlPath` with the resource path,
+as provided in the original file. This can cause problems when a
+`CachingResourceResolver` is configured in the resolver chain, because
+this resolver is caching resources, deriving the cache key from the
+given resource path — this can cause collisions for cases like this:
+
+    resources/
+    |--foo/
+    |  |--foo.css (imports style.css)
+    |  |--style.css
+    |--bar/
+    |  |--bar.css (imports style.css)
+    |  |--style.css
+
+The first "style.css" resolved resource is then cached and will be given
+to any request asking for "style.css".
+
+To avoid those issues, this commit improves the `ResourceTransformer`
+implementations to calculate the absolute request path before asking the
+chain to resolve the resource URL, thus avoiding duplications.
+The resource chain will be then asked to resolve "/foo/style/css" or
+"/bar/style.css".
+
+Issue: SPR-14597

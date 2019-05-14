@@ -1,0 +1,16 @@
+Prepare Undertow 1.3.0 compatibility
+
+Xnio 3.4.0 will introduce a new source of ByteBuffers: ByteBufferPool.
+Previously this feature was offered by Pooled/Pool/ByteBufferSlicePool;
+those classes are now marked as deprecated.
+
+As of 1.3.0.Beta9, Undertow still implements the following method in its
+ClientConnection interface, using those deprecated types:
+
+    Pool<ByteBuffer> getBufferPool();
+
+This commit prepares compatibility by suppressing warnings in order to
+avoid build failures in our build. Once appropriate changes are made in
+Undertow, a specific implementation with new types could be introduced.
+
+Issue: SPR-13366

@@ -1,0 +1,10 @@
+Revert "Upgrade to Tomcat 8.0.35"
+
+This reverts commit 66e093ed0d9ccf30c8263cabead30c54c11fbdd3. There's
+a regression [1] in Tomcat 8.0.35 that causes it to throw an NPE when
+it scans a jar file without a manifest. It's already been fixed [2].
+
+See gh-6087
+
+[1] https://svn.apache.org/viewvc/tomcat/tc8.0.x/trunk/java/org/apache/tomcat/util/scan/StandardJarScanner.java?annotate=1742274#l369
+[2] https://svn.apache.org/viewvc/tomcat/tc8.0.x/trunk/java/org/apache/tomcat/util/scan/StandardJarScanner.java?annotate=1744197#l369

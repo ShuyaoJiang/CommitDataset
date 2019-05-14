@@ -1,0 +1,15 @@
+Add limits for ngram and shingle settings (#27211)
+
+* Add limits for ngram and shingle settings (#27211)
+
+Create index-level settings:
+max_ngram_diff - maximum allowed difference between max_gram and min_gram in
+NGramTokenFilter/NGramTokenizer. Default is 1.
+max_shingle_diff - maximum allowed difference between max_shingle_size and
+ min_shingle_size in ShingleTokenFilter.  Default is 3.
+
+Throw an IllegalArgumentException when
+trying to create NGramTokenFilter, NGramTokenizer, ShingleTokenFilter
+where difference between max_size and min_size exceeds the settings value.
+
+Closes #25887

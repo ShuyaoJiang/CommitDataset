@@ -1,0 +1,7 @@
+Avoid concurrent snapshot finalizations when deleting an INIT snapshot (#28078)
+
+This commit removes the finalization of a snapshot by the snapshot deletion request. This way, the deletion marks the snapshot as ABORTED in cluster state and waits for the snapshot completion. It is the responsability of the snapshot execution to detect the abortion and terminates itself correctly. This
+avoids concurrent snapshot finalizations and also ordinates the operations: the deletion
+aborts the snapshot and waits for the snapshot completion, the creation detects the abortion
+and stops by itself and finalizes the snapshot, then the deletion resumes and continues
+the deletion process.

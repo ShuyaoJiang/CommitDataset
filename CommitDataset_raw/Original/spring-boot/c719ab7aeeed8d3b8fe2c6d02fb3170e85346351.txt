@@ -1,0 +1,14 @@
+Exclude commons-logging from starter POMs
+
+Update all relevant starter POMs to include a `spring-core` dependency
+with an exclusion on `commons-logging`. This prevents `commons-logging`
+and `jcl-over-slf4j` from both being on the classpath.
+
+Also add enforcer rules to ensure that commons-logging doesn't sneak
+back in, and that there is no dependency convergence. (some additional
+libraries were required in spring-boot-dependencies)
+
+Tested with a sample maven project as well as using the `spring jar`
+command.
+
+Fixes gh-985

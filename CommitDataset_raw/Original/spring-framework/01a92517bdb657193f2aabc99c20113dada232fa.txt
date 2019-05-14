@@ -1,0 +1,13 @@
+Refactor RequestedContentTypeResolverBuilder
+
+The revised builder emphasizes creating a list of resolvers either
+built-in or custom with each top-level builder method resulting in
+adding a resolver.
+
+By default only the Header resolver is configured.
+
+The path extension resolver is removed altogether to discourage its use
+but is trivial to create manually with the helpf of
+UriUtils#extractFileExtension + MediaTypeFactory.
+
+Issue: SPR-15639

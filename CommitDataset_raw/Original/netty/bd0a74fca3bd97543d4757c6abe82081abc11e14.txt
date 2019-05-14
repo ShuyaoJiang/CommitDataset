@@ -1,0 +1,13 @@
+Allow to disable ResourceLeak creation when worker thread is deamon in HashedWheelTimer
+
+Motivation:
+
+Sometimes a shared HashedWheelTimer can not easily be stopped in a good place. If the worker thread is daemon this is not a big deal and we should allow to not log a leak.
+
+Modifications:
+
+Add another constructor which allows to disable resource leak detection if worker thread is used.
+
+Result:
+
+Not log resource leak when HashedWheelTimer is not stopped and the  worker thread is a deamon thread.

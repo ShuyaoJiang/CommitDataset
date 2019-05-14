@@ -1,0 +1,13 @@
+Only call System.nanoTime() if no read batch is ongoing. Related to [#3808]
+
+Motivation:
+
+[#3808] introduced some improvements to reduce the calls to System.nanoTime() but missed one possible optimization.
+
+Modifications:
+
+Only call System.nanoTime() if no reading patch is in process.
+
+Result:
+
+Less System.nanoTime() calls.

@@ -1,0 +1,13 @@
+Fail fast if @WebAppConfiguration is used with a non-mock web environement
+
+@WebAppConfiguration expects a mock web environment. If it is used
+in conjuction with @SpringBootTest configured with a RANDOM_PORT or
+DEFINED_PORT web environment a null pointer exception occurs as an
+assumption that's made by MockServerContainerContextCustomizer doesn't
+hold true in a non-mock web environment.
+
+This commit updates SpringBootTestContextBootstrap to detect the
+illegal configuration combination and fail fast, advising the user
+to remove @WebAppConfiguration or reconfigure @SpringBootTest.
+
+Closes gh-6795

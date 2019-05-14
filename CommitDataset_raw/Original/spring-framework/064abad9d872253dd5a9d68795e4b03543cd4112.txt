@@ -1,0 +1,20 @@
+PathResourceResolver should not resolve root path
+
+When resolving resources, the PathResourceResolver creates a Resource
+instance and checks whether this resource `exists()` and `isReadable()`.
+While that last call returns false for folders on the file system, both
+calls return true for folders located inside JARs.
+
+If a JAR location is configured as a resource location, then
+PathResourceResolver can resolve folders in JARs as valid locations and
+candidates for paths resolution.
+
+Prior to this change, the PathResourceResolver would resolve "" as a
+valid resource path (here, the "/META-INF/resources/webjars" if
+configured, for example) and return a "" path for this resource,
+effectively turning all "/" URLs into empty ones "".
+
+This commit fixes the resolveUrlPathInternal implementation by not
+allowing empty paths as valid resource paths.
+
+Issue: SPR-13241

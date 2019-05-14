@@ -1,0 +1,19 @@
+Work around problems with GemFire 8.0’s dependencies
+
+GemFire 8.0 depends on two different versions of xml-apis:xml-apis and
+org.eclipse.jdt.core.compiler:ecj. This commit adds dependency
+management for those two dependencies to address the dependency
+convergence errors reported by Maven’s enforcer plugin.
+
+GemFire 8.0 also depends on commons-logging and Spring Boot starters
+should use jcl-over-slf4j instead. This commit adds an exclusion for
+commons-logging
+
+GemFire 8.0 depends (optionally) on spring-data-gemfire and
+spring-data-gemfire depends on GemFire, i.e. there’s a dependency cycle
+between the two projects. This commit breaks this cycle by adding an
+exclusion for spring-data-gemfire to the dependency management for
+com.gemstone.gemfire:gemfire.
+
+This commit should be reverted once the problems with GemFire’s
+dependencies have been addressed. See gh-2884.

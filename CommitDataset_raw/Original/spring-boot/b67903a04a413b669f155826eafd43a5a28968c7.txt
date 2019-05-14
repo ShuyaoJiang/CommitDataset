@@ -1,0 +1,11 @@
+Keep "testdb" default datasource name internal
+
+Previously, Hikari's pool name was auto-configured with the value of
+`spring.datasource.name` that defaults  to `testdb`, which brings some
+confusion.
+
+This commit removes the default `testdb` value on
+`spring.datasource.name` as it is a sane default only for an embedded
+datasource. It is applied whenever applicable instead.
+
+Closes gh-11719

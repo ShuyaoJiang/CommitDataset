@@ -1,0 +1,17 @@
+SSE reader support to read full content as a String
+
+The SSE reader is ordered ahead of StringDecoder because with
+response.decodeToFlux(String.class) we actually want the SSE reader
+to get involved first based on the content-type.
+
+At the same time with response.decodeToMono(String.class) there is
+nothing the SSE reader can do while the StringDecoder could read the
+entore content as one String, as long as the server does terminate
+the stream which can happen in a testing scenario.
+
+This commit updates ServerSentEventHttpMessageReader#readMono in
+to support String.class by delegating to StringDecoder. Since
+reading to a Mono is an explicit choice there is not much possibility
+for interfering with decoding to Flux.
+
+Issue: SPR-15331

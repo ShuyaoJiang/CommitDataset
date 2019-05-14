@@ -1,0 +1,8 @@
+Reject multiple methods in `percentiles` aggregation (#26163)
+
+Currently the `percentiles` aggregation allows specifying both possible methods
+in the query DSL, but only the later one is used. This changes it to rejecting
+such requests with an error. Setting the method multiple times via the java API
+still works (and the last one wins).
+
+Closes #26095

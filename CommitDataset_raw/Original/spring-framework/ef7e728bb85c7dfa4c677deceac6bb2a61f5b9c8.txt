@@ -1,0 +1,21 @@
+Fix annotation search ending too early
+
+In AnnotationUtils#findAnnotation(Method, Class), the search for a
+method annotation fails if:
+
+ - the original method does not have the annotation
+
+ - an abstract superclass does not have an equivalent method declared
+
+ - an interface implemented by the superclass has the method and
+   the annotation -> this should be found, but is not!
+
+This happens because the try-catch block in #findAnnotation is too wide:
+cl.getDeclaredMethod() can throw NoSuchMethodException and skip the
+'#searchOnInterfaces' call prematurely.
+
+The try-catch block was made narrower to allow #searchOnInterfaces to
+be called even if the abstract class does not have the method declared
+at all.
+
+Issue: SPR-9342

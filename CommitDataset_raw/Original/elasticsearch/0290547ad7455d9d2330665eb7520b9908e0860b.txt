@@ -1,0 +1,12 @@
+Ensure that max seq # is equal to the global checkpoint when creating ReadOnlyEngines (#37426)
+
+Since version 6.7.0 the Close Index API guarantees that all translog 
+operations have been correctly flushed before the index is closed. If 
+the index is reopened as a Frozen index (which uses a ReadOnlyEngine) 
+we can verify that the maximum sequence number from the last Lucene 
+commit is indeed equal to the last known global checkpoint and refuses 
+to open the read only engine if it's not the case. In this PR the check is 
+only done for indices created on or after 6.7.0 as they are guaranteed 
+to be closed using the new Close Index API.
+
+Related #33888 

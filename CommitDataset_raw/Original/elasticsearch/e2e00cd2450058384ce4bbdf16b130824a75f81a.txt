@@ -1,0 +1,26 @@
+Fix MetaStateFormat tests
+
+
+It's not safe to continue writing state using MetaDataStateFormat
+after dirty WriteStateException occurred if it's not recovered by
+successful subsequent state write.
+
+We've encountered test failure of testFailRandomlyAndReadAnyState.
+The test breaks in the following way. There are 3 state paths. And what
+happens next
+
+Successful write at the beginning of the test yields 0 0 0 state
+files in the directories.
+1st write in the loop is unsuccessful, but not dirty - 0 0 0.
+2nd write in the loop is not successful and dirty (failure during
+fsync), however before removing new files we have 1 1 1. But now during
+deletion, the first deletion fails and we get - 1 0 0.
+3rd write in the loop is unsuccessful, but not dirty - so we want to
+keep old generation, which happens to be the 1st generation, so now we
+have 1 x x in state folders. Now we assert that we either load 0 or 1
+state from the state folders and select only 2rd and 3th folder to
+emulate disk failures - this results in NPE because there is nothing in
+these folders.
+Fortunately, this won’t be a problem in real life, because if there is
+a dirty exception, we shut down the node and make sure we perform a
+successful write on the node startup.

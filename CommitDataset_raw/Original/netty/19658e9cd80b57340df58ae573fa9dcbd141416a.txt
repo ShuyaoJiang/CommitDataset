@@ -1,0 +1,12 @@
+HTTP/2 Headers Type Updates
+
+Motivation:
+The HTTP/2 RFC (https://tools.ietf.org/html/rfc7540#section-8.1.2) indicates that header names consist of ASCII characters. We currently use ByteString to represent HTTP/2 header names. The HTTP/2 RFC (https://tools.ietf.org/html/rfc7540#section-10.3) also eludes to header values inheriting the same validity characteristics as HTTP/1.x. Using AsciiString for the value type of HTTP/2 headers would allow for re-use of predefined HTTP/1.x values, and make comparisons more intuitive. The Headers<T> interface could also be expanded to allow for easier use of header types which do not have the same Key and Value type.
+
+Motivation:
+- Change Headers<T> to Headers<K, V>
+- Change Http2Headers<ByteString> to Http2Headers<CharSequence, CharSequence>
+- Remove ByteString. Having AsciiString extend ByteString complicates equality comparisons when the hash code algorithm is no longer shared.
+
+Result:
+Http2Header types are more representative of the HTTP/2 RFC, and relationship between HTTP/2 header name/values more directly relates to HTTP/1.x header names/values.

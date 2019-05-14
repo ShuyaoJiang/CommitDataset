@@ -1,0 +1,36 @@
+Scripting: Remove support for deprecated StoredScript contexts (#31394)
+
+Removes support for storing scripts without the usual json around the
+script. So You can no longer do:
+```
+POST _scripts/<templatename>
+{
+    "query": {
+        "match": {
+            "title": "{{query_string}}"
+        }
+    }
+}
+```
+
+and must instead do:
+```
+POST _scripts/<templatename>
+{
+    "script": {
+        "lang": "mustache",
+        "source": {
+            "query": {
+                "match": {
+                    "title": "{{query_string}}"
+                }
+            }
+        }
+    }
+}
+```
+
+This improves error reporting when you attempt to store a script but don't
+quite get the syntax right. Before, there was a good chance that we'd
+think of it as a "raw" template and just store it. Now we won't do that.
+Nice.

@@ -1,0 +1,27 @@
+Fix DefaultHeaders.toString() for keys with multiple values.
+
+Motivation:
+
+For example,
+
+DefaultHttp2Headers headers = new DefaultHttp2Headers();
+headers.add("key1", "value1");
+headers.add("key1", "value2");
+headers.add("key1", "value3");
+headers.add("key2", "value4");
+
+produces:
+
+DefaultHttp2Headers[key1: value1key1: value2key1: value3, key2: value4]
+
+while correctly it should be
+
+DefaultHttp2Headers[key1: value1, key1: value2, key1: value3, key2: value4]
+
+Modifications:
+
+Change the toString() method to produce the beforementioned output.
+
+Result:
+
+toString() format is correct also for keys with multiple values.

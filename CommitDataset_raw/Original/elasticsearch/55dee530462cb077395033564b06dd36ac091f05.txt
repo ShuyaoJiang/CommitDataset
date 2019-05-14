@@ -1,0 +1,33 @@
+Do not update number of replicas on no indices (#34481)
+
+Today when submitting an update settings request to update the number of
+replicas with a wildcard that does not match any indices and allow no
+indices is set to true, the request ends up being interpreted as
+updating the number of replicas for all indices. That is, consider the
+following sequence:
+
+PUT /test-index
+{
+  "settings": {
+    "index.number_of_replicas": 0
+  }
+}
+
+PUT /non-existent-*/_settings?expand_wildcards=open&allow_no_indices=true
+{
+  "settings": {
+    "index.number_of_replicas": 1
+  }
+}
+
+GET /test-index/_settings
+
+The latter will show that the number of replicas on test-index is now
+one. This is surprising, and should be considered a bug.
+
+The underlying problem here is treating no indices in the underlying
+methods used to update the routing table and the metadata as meaning all
+indices. This commit takes away this assumption. Tests that relied on
+this behavior have been changed to no longer rely on this.
+
+A test for this situation is added in UpdateNumberOfReplicasIT.

@@ -1,0 +1,8 @@
+Improve Error Handling and Stacktraces
+
+The stacktraces were a mess when onError failed or was not implemented and unsubscribe also failed.
+That is a far edge case and means code is broken and breaking the Rx contracts … but that’s just when we need clear stacktraces.
+The CompositeException and SafeObserver class now do a dance and wire together a causal chain to provide a stacktrace that can identity all the points of error.
+Also standardized and simplified the RxJavaPlugin.onErrorHandler while working in the vicinity.
+
+This came about after I was asked to help debug a problem and couldn’t do it by looking at the thrown exception, I had to use a debugger and step through.

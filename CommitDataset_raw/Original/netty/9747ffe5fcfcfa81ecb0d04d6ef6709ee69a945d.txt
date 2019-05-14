@@ -1,0 +1,11 @@
+HTTP/2 Flow Controller should use Channel.isWritable()
+
+Motivation:
+See #3783
+
+Modifications:
+- The DefaultHttp2RemoteFlowController should use Channel.isWritable() before attempting to do any write operations.
+- The Flow controller methods should no longer take ChannelHandlerContext. The concept of flow control is tied to a connection and we do not support 1 flow controller keeping track of multiple ChannelHandlerContext.
+
+Result:
+Writes are delayed until isWritable() is true. Flow controller interface methods are more clear as to ChannelHandlerContext restrictions.

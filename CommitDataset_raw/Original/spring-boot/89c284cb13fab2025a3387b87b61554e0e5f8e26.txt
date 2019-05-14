@@ -1,0 +1,16 @@
+Add reactive websocket auto-configuration for Tomcat
+
+This commit adds a `TomcatWebSocketReactiveWebServerCustomizer`
+that customizes the Tomcat context to accept WebSockets connections.
+Since reactive servers don't use the JSR 356 for that support,
+only Tomcat customization is required for now.
+
+This commit also reorders the server auto-configuration
+so that undertow has a chance to be auto-configured before
+reactor-netty, which should be a popular dependency thanks to
+its HTTP client library.
+
+The existing WebSocket infrastructure for Serlvet based containers
+has been moved to a dedicated package and renamed accordingly.
+
+Fixes gh-9113

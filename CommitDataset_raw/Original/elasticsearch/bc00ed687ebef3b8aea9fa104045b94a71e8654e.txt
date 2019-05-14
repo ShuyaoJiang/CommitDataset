@@ -1,0 +1,40 @@
+Fix testSnapshotFileFailureDuringSnapshot (#39362)
+
+Today this test catches an exception and asserts that its proximate cause has
+message `Random IOException` but occasionally this exception is wrapped two
+layers deep, causing the test to fail. This commit adjusts the test to look at
+the root cause of the exception instead.
+
+      1> [2019-02-25T12:31:50,837][INFO ][o.e.s.SharedClusterSnapshotRestoreIT] [testSnapshotFileFailureDuringSnapshot] --> caught a top level exception, asserting what's expected
+      1> org.elasticsearch.snapshots.SnapshotException: [test-repo:test-snap/e-hn_pLGRmOo97ENEXdQMQ] Snapshot could not be read
+      1> 	at org.elasticsearch.snapshots.SnapshotsService.snapshots(SnapshotsService.java:212) ~[main/:?]
+      1> 	at org.elasticsearch.action.admin.cluster.snapshots.get.TransportGetSnapshotsAction.masterOperation(TransportGetSnapshotsAction.java:135) ~[main/:?]
+      1> 	at org.elasticsearch.action.admin.cluster.snapshots.get.TransportGetSnapshotsAction.masterOperation(TransportGetSnapshotsAction.java:54) ~[main/:?]
+      1> 	at org.elasticsearch.action.support.master.TransportMasterNodeAction.masterOperation(TransportMasterNodeAction.java:127) ~[main/:?]
+      1> 	at org.elasticsearch.action.support.master.TransportMasterNodeAction$AsyncSingleAction$2.doRun(TransportMasterNodeAction.java:208) ~[main/:?]
+      1> 	at org.elasticsearch.common.util.concurrent.ThreadContext$ContextPreservingAbstractRunnable.doRun(ThreadContext.java:751) ~[main/:?]
+      1> 	at org.elasticsearch.common.util.concurrent.AbstractRunnable.run(AbstractRunnable.java:37) ~[main/:?]
+      1> 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) ~[?:1.8.0_202]
+      1> 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) ~[?:1.8.0_202]
+      1> 	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_202]
+      1> Caused by: org.elasticsearch.snapshots.SnapshotException: [test-repo:test-snap/e-hn_pLGRmOo97ENEXdQMQ] failed to get snapshots
+      1> 	at org.elasticsearch.repositories.blobstore.BlobStoreRepository.getSnapshotInfo(BlobStoreRepository.java:564) ~[main/:?]
+      1> 	at org.elasticsearch.snapshots.SnapshotsService.snapshots(SnapshotsService.java:206) ~[main/:?]
+      1> 	... 9 more
+      1> Caused by: java.io.IOException: Random IOException
+      1> 	at org.elasticsearch.snapshots.mockstore.MockRepository$MockBlobStore$MockBlobContainer.maybeIOExceptionOrBlock(MockRepository.java:275) ~[test/:?]
+      1> 	at org.elasticsearch.snapshots.mockstore.MockRepository$MockBlobStore$MockBlobContainer.readBlob(MockRepository.java:317) ~[test/:?]
+      1> 	at org.elasticsearch.repositories.blobstore.ChecksumBlobStoreFormat.readBlob(ChecksumBlobStoreFormat.java:101) ~[main/:?]
+      1> 	at org.elasticsearch.repositories.blobstore.BlobStoreFormat.read(BlobStoreFormat.java:90) ~[main/:?]
+      1> 	at org.elasticsearch.repositories.blobstore.BlobStoreRepository.getSnapshotInfo(BlobStoreRepository.java:560) ~[main/:?]
+      1> 	at org.elasticsearch.snapshots.SnapshotsService.snapshots(SnapshotsService.java:206) ~[main/:?]
+      1> 	... 9 more
+
+    FAILURE 0.59s J0 | SharedClusterSnapshotRestoreIT.testSnapshotFileFailureDuringSnapshot <<< FAILURES!
+       > Throwable #1: java.lang.AssertionError:
+       > Expected: a string containing "Random IOException"
+       >      but: was "[test-repo:test-snap/e-hn_pLGRmOo97ENEXdQMQ] failed to get snapshots"
+       > 	at __randomizedtesting.SeedInfo.seed([B73CA847D4B4F52D:884E042D2D899330]:0)
+       > 	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+       > 	at org.elasticsearch.snapshots.SharedClusterSnapshotRestoreIT.testSnapshotFileFailureDuringSnapshot(SharedClusterSnapshotRestoreIT.java:821)
+       > 	at java.lang.Thread.run(Thread.java:748)

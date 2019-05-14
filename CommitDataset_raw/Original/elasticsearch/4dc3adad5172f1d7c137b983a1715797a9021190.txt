@@ -1,0 +1,18 @@
+Archive unknown or invalid settings on updates (#28888)
+
+Today we can end up in a situation where the cluster state contains
+unknown or invalid settings. This can happen easily during a rolling
+upgrade. For example, consider two nodes that are on a version that
+considers the setting foo.bar to be known and valid. Assume one of these
+nodes is restarted on a higher version that considers foo.bar to now be
+either unknown or invalid, and then the second node is restarted
+too. Now, both nodes will be on a version that consider foo.bar to be
+unknown or invalid yet this setting will still be contained in the
+cluster state. This means that if a cluster settings update is applied
+and we validate the settings update with the existing settings then
+validation will fail. In such a state, the offending setting can not
+even be removed. This commit helps out with this situation by archiving
+any settings that are unknown or invalid at the time that a settings
+update is applied. This allows the setting update to go through, and the
+archived settings can be removed at a later time.
+

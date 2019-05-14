@@ -1,0 +1,22 @@
+Fix IllegalReferenceCountException caused by HttpClientCodec.upgradeFrom()
+
+Motivation:
+
+On a successful protocol upgrade in HTTP, HttpClientUpgradeHandler calls
+HttpClientCodec.upgradeFrom(), which removed both the HTTP encoder and
+decoder from the pipeline immediately.
+
+However, because the decoder is in the middle of the decode loop,
+removing it from the pipeline immediately will cause the cumulation
+buffer to be released prematurely.
+
+This often leads to an IllegalReferenceCountException or missing first
+response after the upgrade response.
+
+Modifications:
+
+- Remove the decoder *after* the decode loop is done
+
+Result:
+
+Fixes #4504

@@ -1,0 +1,46 @@
+[Zen2] Move ClusterState fields to be persisted to ClusterState.MetaData (#35625)
+
+Today we have a way to atomically persist global MetaData and
+IndexMetaData to disk when new ClusterState is received. All other
+ClusterState fields are not persisted.
+However, there are other parts of ClusterState that should be
+persisted, namely:
+
+version
+term
+lastCommittedConfiguration
+lastAcceptedConfiguration
+votingTombstones
+
+version is changed frequently, other fields are not. We decided
+to group term, lastCommittedConfiguration,
+lastAcceptedConfiguration and votingTombstones into
+CoordinationMetaData class and make CoordinationMetaData a field
+inside MetaData.
+MetaData.toXContent and MetaData.fromXContent should take care of
+CoordinationMetaData.
+version stays as a top level field in ClusterState and will be
+persisted as part of Manifest in a follow-up commit.
+Also MetaData.isGlobalStateEquals should be extended to include
+coordinationMetaData in comparison.
+
+This commit favors exposing getters, such as getTerm directly in
+ClusterState to avoid massive code changes.
+
+An example of CoordinationMetaState.toXContent:
+
+{
+  "term": 1,
+  "last_committed_config": [
+    "TiIuBcbBtpuXyDDVHXeD",
+    "ZIAoVbkjjLPLUuYLaTkw"
+  ],
+  "last_accepted_config": [
+    "OwkXbXZNOZPJqccdFHdz",
+    "LouzsGYwmQzpeQMrboZe",
+    "fCKGRZdjLTqzXAqPUtGL",
+    "pLoxshjpJXwDhbgjfYJy",
+    "SjINLwFIlIEFZCbjrSFo",
+    "MDkVncJEVyZLJktopWje"
+  ]
+}

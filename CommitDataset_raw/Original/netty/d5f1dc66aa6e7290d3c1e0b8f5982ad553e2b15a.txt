@@ -1,0 +1,10 @@
+Consistent use of SSLHandshakeException for ALPN
+
+Motiviation:
+The OpenSSL engine uses SSLHandshakeException in the event of failures that occur during the handshake process. The alpn-boot project's getSSLException will also map the no_application_protocol to a SSLHandshakeException exception. We should be consistent and use SSLHandshakeException for handshake failure events.
+
+Modifications:
+-Update JdkAlpnSslEngine to propagate an SSLHandshakeException in the event of a failure.
+
+Result:
+Consistent usage of SSLHandshakeException during a handshake failure event.

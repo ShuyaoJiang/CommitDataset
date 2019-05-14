@@ -1,0 +1,28 @@
+Remove CONNECT-related message buffer from STOMP relay
+
+Before this change, the StompProtocolHandler always responded to
+clients with a CONNECTED frame, while the STOMP broker relay
+independantly forwarded the client CONNECT to the broker and waited
+for the CONNECTED frame back. That meant the relay had to buffer
+client messages until it received the CONNECTED response from
+the message broker.
+
+This change ensures that clients wait for a CONNECTED frame from
+the message broker. The broker relay forwards the CONNECT frame to
+the broker. The broker responds with a CONNECTED frame, which the
+relay then forwards to the client. As a result, a (well-written)
+client will not send any messages to the relay until the connection
+to the broker is fully established.
+
+The StompProtcolHandler can now be configured whether to send CONNECTED
+frame back. By default that is off. So when using the simple broker,
+the StompProtocolHandler can still respond with CONNECTED frames.
+
+The relay's handling of a connection being dropped has also been
+improved. When a connection for a client relay session is dropped
+an ERROR frame will be sent back to the client. If a connection is
+closed as part of a DISCONNECT frame being sent, no ERROR frame
+is sent back to the client. When the connection for the system relay
+session is dropped, an event is published indicating that the broker
+is unavailable. Reactor's TcpClient will then attempt to re-restablish
+the connection.

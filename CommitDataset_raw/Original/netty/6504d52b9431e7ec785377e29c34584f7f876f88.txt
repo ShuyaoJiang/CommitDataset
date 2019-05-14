@@ -1,0 +1,15 @@
+Add HTTP/2 local flow control option for auto refill
+
+Motivation:
+
+For many HTTP/2 applications (such as gRPC) it is necessary to autorefill the connection window in order to prevent application-level deadlocking.
+
+Consider an application with 2 streams, A and B.  A receives a stream of messages and the application pops off one message at a time and makes a request on stream B. However, if receiving of data on A has caused the connection window to collapse, B will not be able to receive any data and the application will deadlock.  The only way (currently) to get around this is 1) use multiple connections, or 2) manually refill the connection window.  Both are undesirable and could needlessly complicate the application code.
+
+Modifications:
+
+Add a configuration option to DefaultHttp2LocalFlowController, allowing it to autorefill the connection window.
+
+Result:
+
+Applications can configure HTTP/2 to avoid inter-stream deadlocking.

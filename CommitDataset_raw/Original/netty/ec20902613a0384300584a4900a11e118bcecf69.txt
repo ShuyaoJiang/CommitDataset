@@ -1,0 +1,13 @@
+Don't set HTTP/2 flow controller ctx to null
+
+Motivation:
+
+We currently set the flow controller ChannelHandlerContexts to null when the channel becomes inactive. This is bad :)
+
+Modifications:
+
+Just remove that code in Http2ConnectionHandler
+
+Result:
+
+Fixes #4240

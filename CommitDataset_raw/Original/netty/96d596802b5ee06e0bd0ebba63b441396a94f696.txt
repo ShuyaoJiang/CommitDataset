@@ -1,0 +1,20 @@
+Fix dependency issues with hamcrest
+
+Motivation:
+
+We use 3 (!) libraries to build mock objects - easymock, mockito, jmock.
+Mockito and jMock pulls in the different versions of Hamcrest, and it
+conflicts with the version pulled by jUnit.
+
+Modifications:
+
+- Replace mockito-all with mockito-core to avoid pulling in outdated
+  jUnit and Hamcrest
+- Exclude junit-dep when pulling in jmock-junit4, because it pulls an
+  outdated Hamcrest version
+- Pull in the hamcrest-library version used by jUnit explicitly
+
+Result:
+
+No more dependency hell that results in NoSuchMethodError during the
+tests

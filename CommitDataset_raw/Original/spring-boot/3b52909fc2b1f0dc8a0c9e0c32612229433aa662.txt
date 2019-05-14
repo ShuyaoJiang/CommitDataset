@@ -1,0 +1,20 @@
+Don't change ownership of PID_FOLDER
+
+Update the launch script so that it no longer changes ownership of the
+PID_FOLDER.
+
+Commit b24e736cfed77be5902f30b79548f051e91d56c9 had changed the chown
+line from:
+	chown "$run_user" "$PID_FOLDER/${identity}"
+to:
+	chown "$run_user" "$PID_FOLDER"
+
+This meant that it was possible for the launch script to change
+ownership of `/var/run` and prevent later processes from writing to
+the folder.
+
+Since PID_FOLDER is created before the chown statement, and that
+the `checkPermissions` function runs to ensure that the PID file can
+be written, it appears that the chown is not even required.
+
+Fixes gh-6532

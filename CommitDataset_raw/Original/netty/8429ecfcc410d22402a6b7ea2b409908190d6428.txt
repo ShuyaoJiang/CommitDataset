@@ -1,0 +1,18 @@
+Implement Thread caches for pooled buffers to minimize conditions. This fixes [#2264] and [#808].
+
+Motivation:
+Remove the synchronization bottleneck in PoolArena and so speed up things
+
+Modifications:
+
+This implementation uses kind of the same technics as outlined in the jemalloc paper and jemalloc
+blogpost https://www.facebook.com/notes/facebook-engineering/scalable-memory-allocation-using-jemalloc/480222803919.
+
+At the moment we only cache for "known" Threads (that powers EventExecutors) and not for others to keep the overhead
+minimal when need to free up unused buffers in the cache and free up cached buffers once the Thread completes. Here
+we use multi-level caches for tiny, small and normal allocations. Huge allocations are not cached at all to keep the
+memory usage at a sane level. All the different cache configurations can be adjusted via system properties or the constructor
+directly where it makes sense.
+
+Result:
+Less conditions as most allocations can be served by the cache itself

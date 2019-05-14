@@ -1,0 +1,15 @@
+Fix "status" metrics tag for error responses
+
+Prior to this commit, the metrics `WebFilter` would handle exceptions
+flowing through the pipeline and extract tag information right away.
+Since error handling turns the exception information into error HTTP
+responses later in the chain, the information extracted from the
+response earlier is invalid.
+In this case, the "status" information could be "200" whereas error
+handlers would later set that status to "500".
+
+This commit delays the tags extraction later in the process, right
+before the response is comitted. The happy path is not changed, as
+handlers signal that the response is fully taken care of at that point.
+
+Fixes gh-11514

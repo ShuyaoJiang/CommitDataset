@@ -1,0 +1,13 @@
+Fix quoting of start-stop-daemon RUN_ARGS and JAVA_OPTS in launch script
+
+81a4763 introduced a regression when multiple RUN_ARGS or JAVA_OPTS were
+configured. Rather than the JVM being launched with multiple arguments
+all of the RUN_ARGS or JAVA_OPTS were passed as a single argument. This
+caused unexpected behaviour and typically caused the application to fail
+to start.
+
+This commit updates the quoting of the arguments the are supplied when
+launching the app using start-stop-daemon so that space-separated
+entries in RUN_ARGS and JAVA_OPTS remain separate.
+
+Closes gh-4866

@@ -1,0 +1,21 @@
+Introduced MvcUriComponentsBuilder to create URIs pointing to controller methods.
+
+MvcUriComponentsBuilder allows creating URIs that point to Spring MVC
+controller methods annotated with @RequestMapping. It builds them by
+exposing a mock method invocation API similar to Mockito, records the
+method invocations and thus builds up the URI by inspecting the mapping
+annotations and the parameters handed into the method invocations.
+
+Introduced a new SPI UriComponentsContributor that should be implemented 
+by HandlerMethodArgumentResolvers that actually contribute path segments 
+or query parameters to a URI. While the newly introduced 
+MvcUriComponentsBuilder looks up those UriComponentsContributor instances 
+from the MVC configuration.
+
+The MvcUriComponentsBuilderFactory (name to be discussed - MvcUris maybe?) 
+prevents the multiple lookups by keeping the UriComponentsBuilder 
+instances in an instance variable. So an instance of the factory could 
+be exposed as Spring bean or through a HandlerMethodArgumentResolver to 
+be injected into Controller methods.
+
+Issue: SPR-10665, SPR-8826

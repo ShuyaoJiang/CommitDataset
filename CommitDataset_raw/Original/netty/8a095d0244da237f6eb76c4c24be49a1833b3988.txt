@@ -1,0 +1,13 @@
+Http2MultiplexCodec should propagate unhandled Http2Frames down the pipeline
+
+Motivation:
+
+Http2MultiplexCodec swallows Http2PingFrames without releasing the payload, resulting in a memory leak.
+
+Modification:
+
+Send unhandled frames down the pipeline for consumption/disposal by another InboundChannelHandler.
+
+Result:
+
+Fixes #7607.

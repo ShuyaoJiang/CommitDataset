@@ -1,0 +1,20 @@
+Watcher: Prevent watch acknowledgement while watch is executing (elastic/x-pack-elasticsearch#4224)
+
+When a watch is acknowledged, while it is also being executed, the
+acknowledgment information can get lost. The reason for this is the
+fact, that the execution writes the watch status inside of the watch
+regardless, if other writes happened inbetween to make sure the
+execution state is caught.
+
+This commit checks the current executions in the execution service and
+aborts the API call, if the specified watch ID can be found in those.
+
+Note, this does not prevent this issue fully, as a watch could be
+triggered, while the acknowledgement update is running, but it does
+reduce the surface area of this problem. In order to properly solve
+this, indexing the watch status as part of a watch would need to be
+changed.
+
+relates elastic/x-pack-elasticsearch#4003
+
+Original commit: elastic/x-pack-elasticsearch@d7e218b2acbd18d7d894bb04ae0e550e6a093488

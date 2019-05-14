@@ -1,0 +1,28 @@
+Add AppCacheResourceTransformer
+
+This change adds a new ResourceTransformer that helps handling resources
+within HTML5 AppCache manifests for HTML5 offline application.
+
+This transformer:
+* modifies links to match the public URL paths
+* appends a comment in the manifest, containing a Hash (e.g. "# Hash:
+9de0f09ed7caf84e885f1f0f11c7e326")
+
+See http://www.whatwg.org/specs/web-apps/current-work/multipage/offline.html#offline
+for more details on HTML5 offline apps and appcache manifests.
+
+Here is a WebConfig example:
+
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+    AppCacheResourceTransformer appCacheTransformer =
+          new AppCacheResourceTransformer();
+
+      registry.addResourceHandler("/**")
+          .addResourceLocations("classpath:static/")
+          .setResourceResolvers(...)
+          .setResourceTransformers(..., appCacheTransformer);
+  }
+
+Issue: SPR-11964

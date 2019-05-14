@@ -1,0 +1,23 @@
+Add support for local cluster alias to SearchRequest (#36997)
+
+With the upcoming cross-cluster search alternate execution mode, the CCS
+ node will be able to split a CCS request into multiple search requests,
+ one per remote cluster involved. In order to do that, the CCS node has
+to be able to signal to each remote cluster that such sub-requests are
+part of a CCS request. Each cluster does not know about the other
+clusters involved, and does not know either what alias it is given in
+the CCS node, hence the CCS coordinating node needs to be able to provide
+the alias as part of the search request so that it is used as index prefix
+in the returned search hits.
+
+The cluster alias is a notion that's already supported in the search shards
+iterator and search shard target, but it is currently used in CCS as both
+ index prefix and connection lookup key when fanning out to all the shards.
+With CCS alternate execution mode the provided cluster alias needs to be
+used only as index prefix, as shards are local to each cluster hence no
+cluster alias should be used for connection lookups.
+
+The local cluster alias can be set to the SearchRequest at the transport layer
+only, and its constructor/getter methods are package private.
+
+Relates to #32125

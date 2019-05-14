@@ -1,0 +1,5 @@
+Move cache writing out of the transport.
+
+This is necessary to unblock network interceptors, where the interceptor
+may elect to rewrite the response body. If we've already cached the
+original response body, we're too late.

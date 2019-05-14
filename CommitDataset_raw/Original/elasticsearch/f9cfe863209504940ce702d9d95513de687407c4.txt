@@ -1,0 +1,11 @@
+Make RemoteClusterConnectionTests more robust against cancelable threads aborts
+
+Today we assert hart if failure listeners are invoked more than once. Yet, this
+can happen if we cancel the execution since the caller and the handler will get
+the exception on the cancelable threads and will notify the listener concurrently
+if timinig allows. This commit relaxes the assertion towards handling multiple
+invocations with `ExecutionCancelledException`
+
+Closes #24010
+Closes #24179
+Closes vagnerclementino/elasticsearch/#98

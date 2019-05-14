@@ -1,0 +1,7 @@
+Move generic http settings out of netty module (#26310)
+
+There is a group of five settings relating to raw tcp configurations
+(no_delay, buffer sizes, etc) that we have for the http transport. These
+currently live in the netty module. As they are unrelated to netty
+specifically, this commit moves these settings to the
+`HttpTransportSettings` class in core.

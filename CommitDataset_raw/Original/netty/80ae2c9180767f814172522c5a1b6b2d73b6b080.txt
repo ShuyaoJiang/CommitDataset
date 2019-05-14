@@ -1,0 +1,11 @@
+Add a test for handover from HTTP to Websocket
+
+Motivation:
+I was not fully reassured that whether everything works correctly when a websocket client receives the websocket handshake HTTP response and a websocket frame in a single ByteBuf (which can happen when the server sends a response directly or shortly after the connect). In this case some parts of the ByteBuf must be processed by HTTP decoder and the remaining by the websocket decoder.
+
+Modification:
+Adding a test that verifies that in this scenaria the handshake and the message are correctly interpreted and delivered by Netty.
+
+Result:
+One more test for Netty.
+The test succeeds - No problems

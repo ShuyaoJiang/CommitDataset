@@ -1,0 +1,16 @@
+[Close Index API] Add TransportShardCloseAction for pre-closing verifications (#36249)
+
+This pull request adds the TransportShardCloseAction which is a 
+transport replication action that acquires all index shard permits for
+ its execution. This action will be used in the future by the 
+MetaDataIndexStateService in a new index closing process, where 
+we need to execute some sanity checks before closing an index.
+
+The action executes the following verifications on the primary and replicas:
+ * there is no other on going operation active on the shard
+ * the data node holding the shard knows that the index is blocked for writes
+ * the shard's max sequence number is equal to the global checkpoint
+
+When the verifications are done and successful, the shard is flushed.
+
+Relates #33888 

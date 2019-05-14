@@ -1,0 +1,14 @@
+Deprecate micrometer meter's enabled flags
+
+This commit deprecates the few 'enabled' flags that control whether
+certain meter binders are registered in the context.
+
+Metrics auto-configuration for the JVM, Logback and System-related
+information have been moved to individual auto-configurations so that
+they can be excluded rather than using the now deprecated flag.
+
+This harmonizes our policy with regards to disabling behaviour,
+especially since other similar auto-configurations do not have such
+flag.
+
+Closes gh-13408

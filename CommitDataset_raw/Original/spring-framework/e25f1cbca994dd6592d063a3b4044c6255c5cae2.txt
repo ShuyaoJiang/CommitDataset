@@ -1,0 +1,34 @@
+Infer AnnotationAttributes method return types
+
+ - Drop 'expectedType' parameter from #getClass and #getEnum methods and
+   rely on compiler inference based on type of assigned variable, e.g.
+
+     public @interface Example {
+         Color color();
+         Class<? extends UserType> userType();
+         int order() default 0;
+     }
+
+     AnnotationAttributes example =
+        AnnotationUtils.getAnnotationAttributes(Example.class, true, true);
+
+     Color color = example.getEnum("color");
+     Class<? extends UserType> userType = example.getClass("userType");
+
+   or in cases where there is no variable assignment (and thus no
+   inference possible), use explicit generic type, e.g.
+
+     bean.setColor(example.<Color>getEnum("color"));
+
+ - Rename #get{Int=>Number} and update return type from int to
+   <N extends Number>, allowing invocations such as:
+
+     int order = example.getNumber("order");
+
+These changes reduce the overall number of methods exposed by
+AnnotationAttributes, while at the same time providing comprehensive
+access to all possible annotation attribute types -- that is, instead of
+requiring explicit #getInt, #getFloat, #getDouble methods, the
+single #getNumber method is capabable of handling them all, and without
+any casting required. And the obvious additional benefit is more concise
+invocation as no redundant 'expectedType' parameters are required.

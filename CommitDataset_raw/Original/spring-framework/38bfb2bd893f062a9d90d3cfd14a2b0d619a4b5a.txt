@@ -1,0 +1,21 @@
+Introduce MessageCodeFormatter abstraction
+
+This commit refactors changes introduced in 21760a8 as follows:
+
+ - Introduce top-level MessageCodeFormatter interface and
+   DefaultMessageCodesResolver#setMessageCodeFormatter property to allow
+   for user-defined message code formatting strategies
+
+ - Rename DefaultMessageCodesResolver.Style enum => DMCR.Format
+
+ - Refactor DefaultMessageCodesResolver.Format to implement the new
+   MessageCodeFormatter interface
+
+The result is that users have convenient access to common formatting
+strategies via the Format enum, while retaining the flexibility to
+provide their own custom MessageCodeFormatter implementation if desired.
+
+See DefaultMessageCodesResolverTests#shouldSupport*Format tests for
+usage examples.
+
+Issue: SPR-9707

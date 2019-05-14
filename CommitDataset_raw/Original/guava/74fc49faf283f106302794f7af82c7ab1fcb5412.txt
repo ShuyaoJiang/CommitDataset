@@ -1,0 +1,18 @@
+Use J2ObjC's @RetainedWith annotation instead of @Weak on
+ImmutableMap.entrySet() to prevent crashes on iOS.
+
+TESTED=Created a map inside an autorelease pool and saved a reference to the
+entry set. Checked that the entry set functions correctly outside the
+autorelease pool. Checked that both the entry set and the are deallocated by the
+autorelease pool when not holding a strong reference to the entry set. Did this
+test with the following constructions to cover all entry set implementations:
+- ImmutableMap.of(<2 entries>)
+- ImmutableMap.copyOf(<EnumMap with 2 entries>)
+- ImmutableSortedMap.of(<2 entries>)
+- ImmutableBiMap.of(<2 entries>).inverse()
+
+RELNOTES=J2ObjC: Fixes crashes from use of ImmutableMap.entrySet().
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=237300208

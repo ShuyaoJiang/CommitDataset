@@ -1,0 +1,12 @@
+Fill gaps on primary promotion
+
+When a primary is promoted, it could have gaps in its history due to
+concurrency and in-flight operations when it was serving as a
+replica. This commit fills the gaps in the history of the promoted shard
+after all operations from the previous term have drained, and future
+operations are blocked. This commit does not handle replicating the
+no-ops that fill the gaps to any remaining replicas, that is the
+responsibility of the primary/replica sync that we are laying the ground
+work for.
+
+Relates #24945

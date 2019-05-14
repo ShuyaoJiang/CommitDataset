@@ -1,0 +1,9 @@
+Build: Fix repos.mavenLocal casing (#29289)
+
+The sysprop repos.mavenLocal may be used to add the local .m2 maven
+repository for testing snapshots of locally build dependencies.
+Unfortunately this has to be checked in two different places (they cannot
+be shared, due to buildSrc being built essentially as a separate
+project), and the casing of the string sysprop lookups did not align.
+This commit fixes BuildPlugin's checking of repos.mavenLocal to use the
+correct casing (camelCase, to match the gradle dsl element).

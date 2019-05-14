@@ -1,0 +1,5 @@
+Make ShardSearchTarget optional when parsing ShardSearchFailure (#27078)
+
+Turns out that `ShardSearchTarget` is nullable, hence its fields may not be printed out as part of `ShardSearchFailure#toXContent`, in which case `fromXContent` cannot parse it back. We would previously try to create the object with all of its fields set to null, but `Index` complains about it in the constructor. Also made sure that this code path is covered by our unit tests in `ShardSearchFailureTests`.
+
+Closes #27055

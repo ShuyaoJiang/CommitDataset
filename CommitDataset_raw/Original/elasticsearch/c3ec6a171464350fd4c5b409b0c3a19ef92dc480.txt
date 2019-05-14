@@ -1,0 +1,24 @@
+Honor masking of systemd-sysctl.service
+
+During package install on systemd-based systems, some sysctl settings
+should be set (e.g. vm.max_map_count).
+
+In some environments, changing sysctl settings plainly does not work;
+previously a global environment variable named
+ES_SKIP_SET_KERNEL_PARAMETERS was introduced to skip calling sysctl, but
+this causes trouble for:
+ - configuration management systems, which usually cannot apply an env
+   var when running a package manager
+ - package upgrades, which will not have the env var set any more, and
+   thus leaving the package management system in a bad state (possibly
+   half-way upgraded, can be very hard to recover)
+
+This removes the env var again and instead of calling systemd-sysctl
+manually, tells systemd to restart the wrapper unit - which itself can
+be masked by system administrators or management tools if it is known
+that sysctl does not work in a given environment.
+
+The restart is not silent on systems in their default configuration, but
+is ignored if the unit is masked.
+
+Relates #24234

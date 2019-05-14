@@ -1,0 +1,8 @@
+Avoid randomization bug in FeatureAwareTests
+
+We compute a random version and later try to compute the version prior
+that random version. If the random version is the earliest version in
+our list of versions then it, by definition, does not have a previous
+version. Yet trying to find its previous is someting we do and so the
+test fails. This commit adds a version check to the randomization so
+that we do not select the earliest version in our list.

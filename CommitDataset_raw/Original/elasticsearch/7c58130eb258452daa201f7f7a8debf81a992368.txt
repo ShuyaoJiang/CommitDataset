@@ -1,0 +1,5 @@
+Wipe security index using its concrete name (elastic/x-pack-elasticsearch#2011)
+
+We were catching IndexNotFoundException, which was hiding the fact that delete index and update aliases APIs don't accept aliases anymore. Now that the exception changed this problem popped up. We now rather call get index providing .security as index name, then delete the concrete indices returned in the response.
+
+Original commit: elastic/x-pack-elasticsearch@18f64f9a41705c8fc8816494bcb84aea5acdf9dd

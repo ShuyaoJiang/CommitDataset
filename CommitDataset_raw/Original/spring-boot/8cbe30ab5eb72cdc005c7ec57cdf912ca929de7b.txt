@@ -1,0 +1,17 @@
+Ensure that Jersey and Jackson honour JAXB annotations
+
+By default Jersey configures Jackson to use both Jackson annotations
+and JAXB annotations when introspective types for (de)serialization.
+However, the changes made in 5776d6a8 mean that Jersey no longer uses
+its default ObjectMapper configuration and uses the auto-configured
+ObjectMapper instead. This had the unwanted side-effect of leaving
+Jersey with an ObjectMapper that only uses Jackson annotations and
+ignores JAXB annotations.
+
+This commit updates JerseyAutoConfiguration so that it will add the
+JaxbAnnotationIntrospector to the auto-configured ObjectMapper for
+both serialization and deserialization. It uses
+AnnotationIntrospectorPair to ensure retain any existing
+introspectors.
+
+Closes gh-6310

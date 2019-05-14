@@ -1,0 +1,13 @@
+Replace UniqueName with Constant and ConstantPool
+
+- Proposed fix for #1824
+
+UniqueName and its subtypes do not allow getting the previously registered instance.  For example, let's assume that a user is running his/her application in an OSGi container with Netty bundles and his server bundle.  Whenever the server bundle is reloaded, the server will try to create a new AttributeKey instance with the same name.  However, Netty bundles were not reloaded at all, so AttributeKey will complain that the name is taken already (by the previously loaded bundle.)
+
+To fix this problem:
+
+- Replaced UniqueName with Constant, AbstractConstant, and ConstantPool.  Better name and better design.
+
+- Sctp/Udt/RxtxChannelOption is not a ChannelOption anymore.  They are just constant providers and ChannelOption is final now.  It's because caching anything that's from outside of netty-transport will lead to ClassCastException on reload, because ChannelOption's constant pool will keep all option objects for reuse.
+
+- Signal implements Constant because we can't ensure its uniqueness anymore by relying on the exception raised by UniqueName's constructor.

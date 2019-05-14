@@ -1,0 +1,16 @@
+Avoid inaccessible object exception replacing set
+
+Motivation:
+
+When attempting to set the selectedKeys fields on the selector
+implementation, JDK 9 can throw an inaccessible object exception.
+
+Modications:
+
+Catch and log this exception as an possible course of action if the
+sun.nio.ch package is not exported from java.base.
+
+Result:
+
+The selector replacement will fail gracefully as an expected course of
+action if the sun.nio.ch package is not exported from java.base.

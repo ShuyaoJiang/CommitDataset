@@ -1,0 +1,10 @@
+Test: Do not remove xpack templates when cleaning (#31642)
+
+At the end of every `ESRestTestCase` we clean the cluster which includes
+deleting all of the templates. If xpack is installed it'll automatically
+recreate a few templates every time they are removed. Which is slow.
+
+This change stops the cleanup from removing the xpack templates. It cuts
+the time to run the docs tests more than in half and it probably saves a
+bit more time on other tests as well.
+

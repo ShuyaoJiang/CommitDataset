@@ -1,0 +1,21 @@
+Add runApplication() Kotlin top level function
+
+Since Kotlin extensions do not apply to static
+methods, this commit introduces a runApplication()
+Kotlin top level function that acts as a Kotlin
+shortcut for SpringApplication.run().
+
+This shortcut avoids to require using non-idiomatic
+code like SpringApplication.run(FooApplication::class.java)
+and provides a runApplication<FooApplication>() alternative
+(as well as an array of KClass based alternative when
+multiple classes need to be passed as parameter).
+
+It is possible to customize the application with the
+following syntax:
+
+runApplication<FooApplication>() {
+    setEnvironment(environment)
+}
+
+See gh-10511

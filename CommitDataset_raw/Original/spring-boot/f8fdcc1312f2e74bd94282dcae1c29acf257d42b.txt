@@ -1,0 +1,13 @@
+Include value of java.io.tmpdir in message when createTempFile fails
+
+If java.io.tmpdir is configured to a directory that does not exist,
+calls to File.createTempFile will fail with an IOException with the
+message "The system cannot find the path specified". Unfortunately,
+the path the was specified is not included in the message.
+
+Rather than trying to automatically create the directory in what may
+be a misconfigured location, we now include the value of
+java.io.tmpdir in our own exception's message. Hopefully this will
+help users to figure out what they've done wrong.
+
+Closes gh-3307

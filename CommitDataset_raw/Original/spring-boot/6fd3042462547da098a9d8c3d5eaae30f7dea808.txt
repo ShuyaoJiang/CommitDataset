@@ -1,0 +1,19 @@
+Align servlet container error handling with executable jar/war behavior
+
+Previously, when an exception was thrown by a Controller in an
+application deployed to a servlet container the exception that was
+handled would be Spring Framework’s NestedServletException rather than
+the exception thrown by the application. Furthermore, when an exception
+was thrown or the response was used to send an error, the
+javax.servlet.error.request_uri request attribute would not be set. This
+differed from the behaviour in an executable jar/war where the exception
+would be the one thrown by the application, and the request_uri
+attribute would be set.
+
+This commit updates ErrorPageFilter, which is only involved in a servlet
+container, to unwrap a NestedServletException so that it’s the
+application’s exception that’s handled, and to set the request_uri
+attribute in the event of an exception being thrown or an error being
+sent.
+
+Closes gh-3249

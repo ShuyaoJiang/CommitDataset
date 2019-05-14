@@ -1,0 +1,3 @@
+Fixes compile errors in Eclipse due to generics
+
+PersistentTasksCustomMetadata was using a generic param named `Params`. This conflicted with the imported interface `ToXContent.Params`. The java compiler was preferring the generic param over the interface so everything was fine but Eclipse apparently prefers the interface int his case which was screwing up the Hierarchy and causing compile errors in Eclipse. This changes fixes it by renaming the Generic param to `P`

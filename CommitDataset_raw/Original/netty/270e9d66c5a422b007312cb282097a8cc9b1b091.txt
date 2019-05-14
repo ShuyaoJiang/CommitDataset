@@ -1,0 +1,20 @@
+Fixes in QueryStringDecoder
+
+Motivation:
+
+QueryStringDecoder has several problems:
+- doesn't decode correctly path part with `+` (plus) sign in it,
+- doesn't cut a `fragment` (after `#`) from query string (see RFC 3986),
+- doesn't work correctly with encoding,
+- treat `%%` as a percent character escaping (it's don't described in RFC).
+
+Modifications:
+
+- leave `+` chars in a `path` part of uri string,
+- ignore `fragment` part (after `#`),
+- correctly work with encoding.
+- don't treat `%%` as escaping for the `%`.
+
+Result:
+
+Fixed issues from #6745.

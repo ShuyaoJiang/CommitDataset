@@ -1,0 +1,10 @@
+Use the primary_term field to identify parent documents (#27469)
+
+This change stops indexing the `_primary_term` field for nested documents
+to allow fast retrieval of parent documents. Today we create a docvalues
+field for children to ensure we have a dense datastructure on disk. Yet,
+since we only use the primary term to tie-break on when we see the same
+seqID on indexing having a dense datastructure is less important. We can
+use this now to improve the nested docs performance and it's memory footprint.
+
+Relates to #24362

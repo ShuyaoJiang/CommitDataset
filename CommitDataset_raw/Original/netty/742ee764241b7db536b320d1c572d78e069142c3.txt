@@ -1,0 +1,10 @@
+RedisDecoder infinite loop
+
+Motivation:
+RedisDecoder can get into an infinite loop while decoding bulk strings if the final \r and \n to indicate the end of content are split on ByteBuf boundaries.
+
+Modifications:
+- We should break out of the decode loop if remainingBulkLength is 0 and we don't have enough data to read EOL
+
+Result:
+No more infinite loop in RedisDecoder#decodeBulkStringContent.

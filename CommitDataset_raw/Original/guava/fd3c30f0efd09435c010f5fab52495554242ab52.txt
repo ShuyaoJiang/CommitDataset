@@ -1,0 +1,17 @@
+Make it more difficult to get StackOverflowErrors from hooking chains of futures together with setFuture
+
+There are two ways such an SOE can occur given a chain of AbstractFutures strung together with setFuture
+1 when the 'innermost' future completes, the sequence of directExecutor listeners will all execute inline, recursively
+2 when the 'outermost' future is cancelled, AbstractFuture.cancel() propagates cancellation to the future that has been assigned to it via setFuture since this is 'inline' we can run out of stack
+
+The first one can be solved by modifying the way we execute listeners and detecting this case explicitly
+
+The second one would technically allow for the same solution but a number of users depend on their cancel methods actually getting called so we need to limit this solution to TrustedFuture subclasses and mark TrustedFuture.cancel final.  I can break this change into a separate CL but i thought it might be easier to review altogether, let me know.
+
+This of course doesn't solve every way you could get such a StackOverflowError, just a few potentially common ones.
+
+(This may help with problems like https://github.com/google/guava/issues/2254)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=131312174

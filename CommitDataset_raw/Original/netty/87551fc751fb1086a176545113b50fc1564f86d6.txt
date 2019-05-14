@@ -1,0 +1,14 @@
+Remove memory copy when checksum non heap backed ByteBuf implementations using Snappy
+
+Motivation:
+
+We should try to minimize memory copies whenever possible.
+
+Modifications:
+
+- Refactor ByteBufChecksum to work with heap and direct ByteBuf always
+- Remove memory copy in Snappy by let Crc32c extend ByteBufChecksum
+
+Result:
+
+Less memory copies when using Snappy

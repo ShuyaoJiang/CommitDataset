@@ -1,0 +1,20 @@
+Linearizability checker memory reduction (#40149)
+
+The cache used in linearizability checker now uses approximately 6x less
+memory by changing the cache from a set of (bits, state) tuples into a
+map from bits -> { state }.
+
+Each combination of states is kept once only, building on the
+assumption that the number of state permutations is small compared to
+the number of bits permutations. For those histories that are difficult
+to check we will have many bits combinations that use the same state
+permutations.
+
+We end up now using approximately 15 bytes per entry compared to 101
+bytes before, ie. a 6x improvement, allowing us to linearizability check
+significantly longer histories.
+
+Re-enabled linearizability checker in CoordinatorTests, hoping above
+ensures we no longer run out of memory.
+
+Resolves #39437

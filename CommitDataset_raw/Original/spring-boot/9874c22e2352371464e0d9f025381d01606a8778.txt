@@ -1,0 +1,12 @@
+Fix HAL browser endpoint redirect and entry point with custom servlet path
+
+Previously, the HAL browser endpoint did not consider the dispatcher
+servlet’s path (server.servlet-path) when redirecting to browser.html
+or when updating the API entry point in the served HTML.
+
+This commit moves to using ServletUriComponentsBuilder to build the URI
+for the redirect and the path for the entry point. In the interests of
+simplicity the logic that sometimes redirected and sometimes forwarded
+the request has been changed so that it will always perform a redirect.
+
+Closes gh-6586

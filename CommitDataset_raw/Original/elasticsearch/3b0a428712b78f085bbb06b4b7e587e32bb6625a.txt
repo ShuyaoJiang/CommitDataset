@@ -1,0 +1,11 @@
+Use ephemeral ports in Wildfly tests
+
+The Wildfly tests previously needed hardcoded ports which would
+sometimes already be in use leading to Wildfly test failures because the
+server could not bind during startup. We had to wait until some upstream
+changes (wildfly/wildfly#9943) and (wildfly/wildfly-core#2390) were
+released before we could use ephemeral ports in these tests. These
+changes are released now so this commit changes the Wildfly tests to use
+ephemeral ports when starting Wildfly.
+
+Relates #28040

@@ -1,0 +1,17 @@
+Use a local temp directory in logging system tests
+
+Previously, the tests for Boot’s various logging systems used the
+JVM’s default temp directory as the location of the spring.log file.
+It is suspected that this was causing intermittent CI failures when
+multiple Boot builds were running in parallel and tests were checking
+for the presence of the spring.log file in the shared temp directory.
+
+This commit updates AbstractLoggingSystemTests to configure a local
+temp directory for the duration of the tests, thereby hopefully
+eliminating failures caused by concurrent builds sharing the same
+directory.
+
+The previous attempt at fixing the intermittent CI failures (504de8a)
+has been removed as part of this commit as it did not fix the problem.
+
+Closes gh-1864

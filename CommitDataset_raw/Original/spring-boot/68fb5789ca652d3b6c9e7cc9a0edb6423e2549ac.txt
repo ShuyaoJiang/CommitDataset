@@ -1,0 +1,12 @@
+Create one SpringApplicationAdminMXBeanRegistrar per context hierarchy
+
+Previously, one SpringApplicationAdminMXBeanRegistrar was created
+per context. When there was more then one context this would result
+in a javax.management.InstanceAlreadyExistsException being thrown
+as an attempt was made to register the MBean more than once.
+
+This commit updates SpringApplicationAdminJmxAutoConfiguration so
+that the registrar is only created when there's no such existing bean
+in the context hierarchy.
+
+Closes gh-6378

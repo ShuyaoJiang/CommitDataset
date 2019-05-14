@@ -1,0 +1,9 @@
+Ignore .writing files in Integration samples tests
+
+Previously, a temporary .writing file could be found and an attempt made to
+access its contents. If the temporary file was deleted between it being found
+and its contents being read, the test would fail with a FileNotFoundException.
+
+This commit updates the test to ignore .writing files so that it will only
+examine the contents of the final file once Integration has finished
+writing it an atomically moved it to its final location.

@@ -1,0 +1,24 @@
+Don't trigger IOException at ChunkedStream.isEndOfInput()
+
+Related: #3368
+
+Motivation:
+
+ChunkedWriteHandler checks if the return value of
+ChunkedInput.isEndOfInput() after calling ChunkedInput.close().
+
+This makes ChunkedStream.isEndOfInput() trigger an IOException, which is
+originally triggered by PushBackInputStream.read().
+
+By contract, ChunkedInput.isEndOfInput() should not raise an IOException
+even when the underlying stream is closed.
+
+Modifications:
+
+Add a boolean flag that keeps track of whether the underlying stream has
+been closed or not, so that ChunkedStream.isEndOfInput() does not
+propagate the IOException from PushBackInputStream.
+
+Result:
+
+Fixes #3368

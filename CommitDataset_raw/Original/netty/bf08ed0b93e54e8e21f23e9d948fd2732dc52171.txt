@@ -1,0 +1,14 @@
+fix failure logging of value on channel option set
+
+Motivation:
+
+The code accidentally passes channel twice instead of value, resulting in logs like:
+Failed to set channel option 'SO_SNDBUF' with value '[id: 0x2c5b2eb4]' for channel '[id: 0x2c5b2eb4]'
+
+Modifications:
+
+Pass value instead of channel where it needs to be.
+
+Result:
+
+Failed to set channel option 'SO_SNDBUF' with value '0' for channel '[id: 0x9bd3c5b8]'

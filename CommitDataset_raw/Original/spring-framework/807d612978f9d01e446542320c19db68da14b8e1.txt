@@ -1,0 +1,63 @@
+Determine FactoryBean object type via generics
+
+For the particular use case detailed in SPR-8514, with this change we
+now attempt to determine the object type of a FactoryBean through its
+generic type parameter if possible.
+
+For (a contrived) example:
+
+@Configuration
+public MyConfig {
+    @Bean
+    public FactoryBean<String> fb() {
+        return new StringFactoryBean("foo");
+    }
+}
+
+The implementation will now look at the <String> generic parameter
+instead of attempting to instantiate the FactoryBean in order to call
+its #getObjectType() method.
+
+This is important in order to avoid the autowiring lifecycle issues
+detailed in SPR-8514.  For example, prior to this change, the following
+code would fail:
+
+@Configuration
+public MyConfig {
+    @Autowired Foo foo;
+
+    @Bean
+    public FactoryBean<String> fb() {
+        Assert.notNull(foo);
+        return new StringFactoryBean("foo");
+    }
+}
+
+The reason for this failure is that in order to perform autowiring,
+the container must first determine the object type of all configured
+FactoryBeans.  Clearly a chicken-and-egg issue, now fixed by this
+change.
+
+And lest this be thought of as an obscure bug, keep in mind the use case
+of our own JPA support: in order to configure and return a
+LocalContainerEntityManagerFactoryBean from a @Bean method, one will
+need access to a DataSource, etc -- resources that are likely to
+be @Autowired across @Configuration classes for modularity purposes.
+
+Note that while the examples above feature methods with return
+types dealing directly with the FactoryBean interface, of course
+the implementation deals with subclasses/subinterfaces of FactoryBean
+equally as well.  See ConfigurationWithFactoryBeanAndAutowiringTests
+for complete examples.
+
+There is at least a slight risk here, in that the signature of a
+FactoryBean-returing @Bean method may advertise a generic type for the
+FactoryBean less specific than the actual object returned (or than
+advertised by #getObjectType for that matter). This could mean that an
+autowiring target may be missed, that we end up with a kind of
+autowiring 'false negative' where FactoryBeans are concerned. This is
+probably a less common scenario than the need to work with an autowired
+field within a FactoryBean-returning @Bean method, and also has a clear
+workaround of making the generic return type more specific.
+
+Issue: SPR-8514

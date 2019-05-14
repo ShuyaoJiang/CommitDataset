@@ -1,0 +1,12 @@
+Reduce log level to DEBUG when @TELs isn't present
+
+The default set of TestExecutionListeners is sufficient in most
+integration testing scenarios; however, the TestContextManager
+nonetheless logs an INFO message if the @TestExecutionListeners
+annotation is not present on an integration test class.
+
+In order to avoid flooding the logs with messages about the absence of
+@TestExecutionListeners, this commit reduces the log level for such
+messages from INFO to DEBUG.
+
+Issue: SPR-8645

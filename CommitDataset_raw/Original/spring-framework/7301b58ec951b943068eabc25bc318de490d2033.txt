@@ -1,0 +1,16 @@
+Improve info on use of @Controller's with aop proxying
+
+Before this change, issues surrounding the use of @Controller's in
+combination with AOP proxying, resulted in an IllegalArgumentException
+when trying to invoke the controller method.
+
+This change detects such cases proactively and reports them with a
+clear recommendation to use class-based proxying when it comes to
+@Controller's. This is the most optimcal approach for controllers
+in many respects, also allows @MVC annotations to remain on the
+class.
+
+The documentation has also been updated to have a specific section
+on @Controller's and AOP proxying providing the same advice.
+
+Issue:SPR-11281

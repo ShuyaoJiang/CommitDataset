@@ -1,0 +1,5 @@
+Fix flakiness in authenticateWithChunkedStreaming().
+
+We were prefering to return the networkResponse before the request
+had completely failed. Instead we should return the network response
+only on failure, and only for APIs that return failed responses.

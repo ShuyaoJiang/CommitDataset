@@ -1,0 +1,13 @@
+Use default simple types with MongoMappingContext
+
+Change the auto-configure MongoMappingContext to use the
+SimpleTypesHolder instance `Set` that's produced by a CustomConversions
+bean, which we in turn now default, too.
+
+This update is necessary as `CustomConversions` registers converters by
+inspecting the classpath (to automatically detect Java 8, JodaTime etc.)
+and by that rendering the types for which we find converters for as
+simple ones, i.e. non-entities.
+
+Fixes gh-6881
+Closes gh-6882

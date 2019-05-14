@@ -1,0 +1,8 @@
+Fix the UNIX sockets sample to use HTTP/2
+
+It turns out that the NIO dumpsterfire harms us again here. The Channels APIs
+synchronize whenever reading or writing to a stream if the channel implements
+SelectableChannel. If both the input stream and the output stream are on the
+same channel, then it is impossible to read and write concurrently.
+
+Fixes: https://github.com/square/okhttp/issues/4419

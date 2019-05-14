@@ -1,0 +1,45 @@
+[Zen2] Introduce VotingTombstone class (#35832)
+
+Today voting tombstones are stored in CoordinationMetaData as
+Set<DiscoveryNode>.
+DiscoveryNode is not a lightweight object and have a lot of fields.
+It also has toXContent method, but no fromXContent method and the
+output of toXContent is not enough to re-create DiscoveryNode
+object.
+And votingTombstone set should be persisted as a part of MetaData.
+On the other hand, the only thing required from the tombstone is the
+nodeId.
+This PR adds VotingTombstone class for voting tombstones, which
+consists of two fields for now - nodeId and nodeName. It could be
+extended/shrank in the future if needed.
+This PR also resolves TODO's related to the voting tombstones xcontent
+story.
+Example of CoordinationMetaData.toXContent with voting tombstones:
+
+{
+  "term": 1,
+  "last_committed_config": [
+    "fkwLdOBvXSlgRTBfgNAL",
+    "tmQiPGHvUxXzPkkCDSJo",
+    "HhOmtQBZAThpHIGWhxpz",
+    "qZHWGpoDNPYRNIiqKsDl"
+  ],
+  "last_accepted_config": [
+    "lhqacKmriwhHGFZcvqbx",
+    "MYysmBuROkvJRlDcusyd"
+  ],
+  "voting_tombstones": [
+    {
+      "node_id": "McjbZbRkEz",
+      "node_name": "pdKIWeNJUO"
+    },
+    {
+      "node_id": "cpXkVibGwo",
+      "node_name": "UnCvFgdVsc"
+    },
+    {
+      "node_id": "EylRNOztbc",
+      "node_name": "ohOhkbMWZX"
+    }
+  ]
+}

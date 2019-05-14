@@ -1,0 +1,18 @@
+Find CORS config by HandlerMethod
+
+Before this change AbstractHandlerMethodMapping used a map from Method
+to CorsConfiguration. That works for regular @RequestMapping methods.
+However frameworks like Spring Boot and Spring Integration may
+programmatically register the same Method under multiple mappings,
+i.e. adapter/gateway type classes.
+
+This change ensures that CorsConfiguraiton is indexed by HandlerMethod
+so that we can store CorsConfiguration for different handler instances
+even when the method is the same.
+
+In order for to make this work, HandlerMethod now provides an
+additional field called resolvedFromHandlerMethod that returns the
+original HandlerMethod (with the String bean name). This makes it
+possible to  perform reliable lookups.
+
+Issue: SPR-11541

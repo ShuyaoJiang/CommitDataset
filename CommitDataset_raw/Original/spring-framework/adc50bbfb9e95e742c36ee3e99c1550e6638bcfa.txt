@@ -1,0 +1,14 @@
+Add handler method parameter and result converters
+
+This commit introduces the following changes:
+ - Publisher -> Observable/Stream/etc. conversion is now managed
+    in a dedicated ConversionService instead of directly in
+    RequestBodyArgumentResolver and ResponseBodyResultHandler
+ - More isolated logic that decides if the stream should be
+    serialized as a JSON array or not
+ - Publisher<ByteBuffer> are now handled by regular
+   ByteBufferEncoder and ByteBufferDecoder
+ - Handle Publisher<Void> return value properly
+ - Ensure that the headers are properly written even for response
+   without body
+ - Improve JsonObjectEncoder to autodetect JSON arrays

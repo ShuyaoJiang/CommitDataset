@@ -1,0 +1,15 @@
+Optimize and clean up LoggingHandler
+
+- Use ': ' instead of '(...)' for simpler string concatenation and prettier presentation
+- Optimize the overall performance of format*() methods
+- All format*() methods are now expected to encode the channel information by themselves so that StringBuilder instances are created less often.
+- Use a look-up table for generating per-row prefixes
+- Hid formatByteBuf(), formatByteBufHolder(), and formatNonByteBuf() from user because a user can always override format(ctx, eventName, arg).  For example, to disable hexdump:
+
+    protected void format(ChannelHandlerContext ctx, String eventName, Object arg) {
+        if (arg instanceof ByteBuf) {
+            super.format(ctx, eventName, arg.toString());
+        } else {
+            super.format(ctx, eventName, arg);
+        }
+    }

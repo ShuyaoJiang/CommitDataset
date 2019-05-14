@@ -1,0 +1,11 @@
+Store ObjectProvider rather than their Streams to allow reuse
+
+Generally speaking, methods on configuration classes will only be called once
+and, therefore, it should be safe to hold a reference to a Stream for later
+one-time usage. However, there are some scenarios in Spring Fu where functional
+registration results in an attempt being made to use a Stream more than use.
+
+This commit protects against multiple use by storing the ObjectProvider and
+getting a new ordered Stream each time it's needed.
+
+Closes gh-14467

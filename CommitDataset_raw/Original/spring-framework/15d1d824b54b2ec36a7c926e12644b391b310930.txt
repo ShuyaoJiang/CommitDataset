@@ -1,0 +1,18 @@
+Return null correctly from MutablePropertySources#get
+
+Prior to this commit, MutablePropertySources#get(String) would throw
+IndexArrayOutOfBoundsException if the named property source does not
+actually exist. This is a violation of the PropertySource#get contract
+as described in its Javadoc.
+
+The implementation now correctly checks for the existence of the named
+property source, returning null if non-existent and otherwise returning
+the associated PropertySource.
+
+Other changes
+
+ - Rename PropertySourcesTests => MutablePropertySourcesTests
+ - Polish MutablePropertySourcesTests for style, formatting
+ - Refactor MutablePropertySources for consistency
+
+Issue: SPR-9179

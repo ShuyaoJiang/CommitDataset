@@ -1,0 +1,12 @@
+Move CharArrays to core lib (#32851)
+
+This change cleans up some methods in the CharArrays class from x-pack, which
+includes the unification of char[] to utf8 and utf8 to char[] conversions that
+intentionally do not use strings. There was previously an implementation in
+x-pack and in the reloading of secure settings. The method from the reloading
+of secure settings was adopted as it handled more scenarios related to the
+backing byte and char buffers that were used to perform the conversions. The
+cleaned up class is moved into libs/core to allow it to be used by requests
+that will be migrated to the high level rest client.
+
+Relates #32332

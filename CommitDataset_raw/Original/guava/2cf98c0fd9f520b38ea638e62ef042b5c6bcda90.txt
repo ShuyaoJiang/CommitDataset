@@ -1,0 +1,11 @@
+Fix a race:
+If one input fails at nearly the same time and with the same exception as the *first* failure, we sometimes log the exception, even though it's already propagated into the output.
+The problem is that the first failure lets subsequent failures proceed before it registers itself in seenExceptions.
+It does register itself with setException(), but we don't have full atomicity because we have two sources of truth.
+(This is why we have a problem only when the first failure is involved: Other failures atomically manipulate seenExceptions.)
+The solution is for whichever caller initializes seenExceptions to propagate it with the value from setException().
+This is a little messy but hopefully not too bad.
+(It comes with a small bonus: It happens to avoid allocating seenExceptions entirely if there is only one failure.)
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=95568611

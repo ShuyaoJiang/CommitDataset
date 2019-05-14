@@ -1,0 +1,17 @@
+Perform best effort to retrieve DataSourceProxy
+
+Prior to this commit, `DataSourceJmxConfiguration` with tomcat
+`DataSource`, it can only find `DataSourceProxy` if the given
+`DataSource` is a direct child of it.  Since it uses `instanceof`, it
+could not find `DataSourceProxy` if the `DataSource` is
+wrapped(delegated) or proxied.
+
+This is because `DataSourceProxy#unwrap()` always returns null; thus
+cannot use this method to directly obtain `DataSourceProxy`.
+
+In this commit, updated the check logic to perform the best effort to
+retrieve `DataSourceProxy`. If given `DataSource` is wrapped or proxied
+by spring, tries to unwrap or get target datasource recursively to find
+`DataSourceProxy`.
+
+See gh-15206

@@ -1,0 +1,12 @@
+Allow excluding folder names when scanning for dangling indices (#34349)
+
+ES is scanning for dangling indices on every cluster state update. For this, it lists the subfolders of
+the indices directory to determine which extra index directories exist on the node where there's no
+corresponding index in the cluster state. These are potential targets for dangling index import. On
+certain machine types, and with large number of indices, this subfolder listing can be horribly slow.
+This means that every cluster state update will be slowed down by potentially hundreds of
+milliseconds. One of the reasons for this poor performance is that Files.isDirectory() is a relatively
+expensive call on some OS and JDK versions. There is no need though to do all these isDirectory
+calls for folders which we know we are going to discard anyhow in the next step of the dangling
+indices logic. This commit allows adding an exclusion predicate to the availableIndexFolders
+methods which can dramatically speed up this method when scanning for dangling indices.

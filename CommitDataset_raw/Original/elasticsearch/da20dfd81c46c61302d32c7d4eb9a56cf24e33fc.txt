@@ -1,0 +1,11 @@
+Add cluster-wide shard limit warnings (#34021)
+
+In a future major version, we will be introducing a soft limit on the
+number of shards in a cluster based on the number of nodes in the
+cluster. This limit will be configurable, and checked on operations
+which create or open shards and issue a warning if the operation would
+take the cluster over the limit.
+
+There is an option to enable strict enforcement of the limit, which
+turns the warnings into errors.  In a future release, the option will be
+removed and strict enforcement will be the default (and only) behavior.

@@ -1,0 +1,13 @@
+Fix possible leaks in Http2ServerDowngraderTest
+
+Motivation:
+
+We need to ensure we release all ReferenceCounted objects during tests to not leak.
+
+Modifications:
+
+Fix possible leaks by calling release()
+
+Result:
+
+No more leaks in tests.

@@ -1,0 +1,6 @@
+Fix serialization bug in ShardFollowTask after cutting this class over to
+extend from ImmutableFollowParameters.
+
+Prior to #38910 readVInt and writeVInt was used, #38910 accidentally
+changed ShardFollowTask to use readOptionalVInt / writeVOptionalVInt.
+This changes changes ShardFollowTask back to use vint.

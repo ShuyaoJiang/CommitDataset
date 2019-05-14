@@ -1,0 +1,11 @@
+HTTP/2 Weighted Fair Queue Byte Distributor
+
+Motivation:
+PriorityStreamByteDistributor uses a homegrown algorithm which distributes bytes to nodes in the priority tree. PriorityStreamByteDistributor has no concept of goodput which may result in poor utilization of network resources. PriorityStreamByteDistributor also has performance issues related to the tree traversal approach and number of nodes that must be visited. There also exists some more proven algorithms from the resource scheduling domain which PriorityStreamByteDistributor does not employ.
+
+Modifications:
+- Introduce a new ByteDistributor which uses elements from weighted fair queue schedulers
+
+Result:
+StreamByteDistributor which is sensitive to priority and uses a more familiar distribution concept.
+Fixes https://github.com/netty/netty/issues/4462

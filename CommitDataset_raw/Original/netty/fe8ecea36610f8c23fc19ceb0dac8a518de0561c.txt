@@ -1,0 +1,14 @@
+Http2FrameLogger avoid hex dump of the ByteBufs when log disabled
+
+Motivation:
+
+Currentry logger create hex dump even if log write will not apply.
+It's unecessary GC overhead.
+
+Modifications:
+
+Restore optimization from #3492
+
+Result:
+
+Fixes #7025

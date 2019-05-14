@@ -1,0 +1,22 @@
+ Remove dangerous `ByteBufStreamInput` methods (#27076)
+
+This commit removes the `ByteBufStreamInput` `readBytesReference` and
+`readBytesRef` methods. These methods are zero-copy which means that
+they retain a reference to the underlying netty buffer. The problem is
+that our `TcpTransport` is not designed to handle zero-copy. The netty
+implementation sets the read index past the current message once it has
+been deserialized, handled, and mostly likely dispatched to another
+thread. This means that netty is free to release this buffer. So it is
+unsafe to retain a reference to it without calling `retain`. And we
+cannot call `retain` because we are not currently designed to handle
+reference counting past the transport level.
+
+This should not currently impact us as we wrap the `ByteBufStreamInput`
+in `NamedWriteableAwareStreamInput` in the `TcpTransport`. This stream
+essentially delegates to the underling stream. However, in the case of
+`readBytesReference` and `readBytesRef` it leaves thw implementations
+to the standard `StreamInput` methods. These methods call the read byte
+array method which delegates to `ByteBufStreamInput`. The read byte
+array method on `ByteBufStreamInput` copies so it is safe. The only
+impact of this commit should be removing methods that could be dangerous
+if they were eventually called due to some refactoring.

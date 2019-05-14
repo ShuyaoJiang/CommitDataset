@@ -1,0 +1,13 @@
+Handle the possibility of HTTP/0.9 with a better error message
+
+Motivation
+
+RFC 1945 (see section 3.1) says that request lines may not have a version in which case the request is assumed to be HTTP/0.9. We don't necessarily want to support that but the existing Exception should indicate the possibility of the request being HTTP/0.9 and give the user a chance to track it down.
+
+Modifications
+
+Indicate in the Exception's message that the request is possibly HTTP/0.9.
+
+Result
+
+Fixes #6739

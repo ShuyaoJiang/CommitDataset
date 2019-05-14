@@ -1,0 +1,13 @@
+Add PathPatternRegistry
+
+This commit adds the new `PathPatternRegistry`, which  holds a
+sorted set of `PathPattern`s and allows for searching/adding patterns
+
+This registry is being used in `HandlerMapping` implementations and
+separates path pattern parsing/matching logic from the rest. Directly
+using `PathPattern` instances should improve the performance of those
+`HandlerMapping` implementations, since the parsing and generation of
+pattern variants (trailing slash, suffix patterns, etc) is done only
+once.
+
+Issue: SPR-14544

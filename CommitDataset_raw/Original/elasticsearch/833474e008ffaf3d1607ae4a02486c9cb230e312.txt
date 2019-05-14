@@ -1,0 +1,10 @@
+Simplify CcrRetentionLeaseIT#testForgetFollower
+
+This test was more complicated than necessary, where we were capturing
+requests to prevent removal of retention leases, so that our forget
+follower request could remove the retention leases instead. Instead, a
+pause is enough to ensure that the retention leases are not re-added
+after we remove them by the forget follower request. This commit
+simplifies this test, and should remove some spurious failures.
+
+Closes #39850

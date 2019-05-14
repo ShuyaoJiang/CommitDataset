@@ -1,0 +1,17 @@
+Cleanup DefaultHttp2FrameReader about verifyUnknownFrame
+
+Motivation:
+
+In previous PR about handling unknwon frame in the middle of header
+block, I didn't notice and re-use about checking is processing header
+. And I added a redundant method for same functionality.
+I think that the redundant method would lead to some misleading
+situation.
+
+Modifications:
+
+Removed redundant code on DefaultHttp2FrameReader
+
+Result:
+
+The code is more readable

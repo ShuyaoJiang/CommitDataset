@@ -1,0 +1,14 @@
+Clear global resources reference from HttpResources
+
+When used as global Netty resources, ReactorResourceFactory creates and
+sets those resources on Reactor's HttpResources directly.
+
+When that ReactorResourceFactory bean is destroyed, those resources are
+disposed but HttpResources still holds a reference to those and may try
+to use them again.
+
+This commit uses HttpResources to clear those resources and its
+references to it, when the ReactorResourceFactory is treating those as
+global.
+
+Issue: SPR-17199

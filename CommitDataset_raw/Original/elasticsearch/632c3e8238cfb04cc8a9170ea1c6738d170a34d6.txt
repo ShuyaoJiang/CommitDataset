@@ -1,0 +1,10 @@
+SQL: Fix running `gradle run` from top-level directory (elastic/x-pack-elasticsearch#3329)
+
+When running `gradle run` at the top level (at least with Gradle 4.4) it
+attempts to run multiple instances of the server, causing the run to fail since
+they can't both bind to 9200/9300.
+
+This renames the tasks for the `qa` directories to be `runqa` and the task for
+the `cli` directory to be `runcli`.
+
+Original commit: elastic/x-pack-elasticsearch@734ab8e1321d077b095ef2aae73fef6c1aafb0f5

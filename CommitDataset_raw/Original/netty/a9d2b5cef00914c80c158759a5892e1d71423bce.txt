@@ -1,0 +1,13 @@
+Skip empty buffers and not pass these to BIO_write
+
+Motivation:
+
+When BIO_write is called with an empty buffer it will return 0 for which we call ERR_clear_error(). This is not neccessary as we should just skip these buffers. This eliminates a lot of overhead.
+
+Modifications:
+
+Skip empty src buffers when call unwrap(...).
+
+Result:
+
+Less overhead for unwrap(...) when called with empty buffers.

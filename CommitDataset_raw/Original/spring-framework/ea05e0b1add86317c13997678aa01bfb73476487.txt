@@ -1,0 +1,12 @@
+Improve @SessionAttributes support during redirect
+
+Before this change attributes listed with @SessionAttributes would not
+be saved in the session when there was a redirect and the controller
+method declared a parameter of type RedirectAttributes.
+
+This change ensures it's the "default" model that is always the one
+checked for @SessionAttributes under all circumstances since
+RedirectAttributes is really only meant to provide String values to
+insert into or append to the the redirect URL.
+
+Issue: SPR-12542

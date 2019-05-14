@@ -1,0 +1,13 @@
+Avoid sending duplicate remote failed shard requests (#31313)
+
+Today if a write replication request fails, we will send a shard-failed
+message to the master node to fail that replica. However, if there are
+many ongoing write replication requests and the master node is busy, we
+might overwhelm the cluster and the master node with many shard-failed
+requests.
+
+This commit tries to minimize the shard-failed requests in the above
+scenario by caching the ongoing shard-failed requests.
+
+This issue was discussed at
+https://discuss.elastic.co/t/half-dead-node-lead-to-cluster-hang/113658/25.

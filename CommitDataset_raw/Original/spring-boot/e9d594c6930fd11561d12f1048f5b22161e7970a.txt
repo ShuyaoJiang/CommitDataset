@@ -1,0 +1,13 @@
+Add conditional processing option for unhelpful FactoryBeans
+
+OnBeanCondition has some issues with FactoryBean object types where
+the FactoryBean is not generic (i.e. you have to instantiate it to
+get its object type). This is a known issue (see tests in
+ConditionalOnMissingBeanTests), but we can provide some help for
+library authors who know the type in advance. The approach we have
+taken here is to check the BeanDefinition for an attribute called
+"factoryBeanObjectType" (OnBeanCondition.FACTORY_BEAN_OBJECT_TYPE)
+which, if it exists, can be used as a tie-breaker. Its value should
+be a Class<?> instance.
+
+Fixes gh-921

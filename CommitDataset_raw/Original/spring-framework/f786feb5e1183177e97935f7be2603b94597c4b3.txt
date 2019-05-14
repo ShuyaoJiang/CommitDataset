@@ -1,0 +1,12 @@
+Ensure correct recognition for start of match-the-rest path elements
+
+Without this change the /{*foobar} and /** path elements were
+not correctly enforcing that the first character they encounter
+must be a separator. This problem was introduced when adjusting
+the generated path element chains for these constructs. Originally
+the generated chain included a SeparatorPathElement but in order for
+these to match 'nothing' (i.e. /foo matches /foo/{*foobar}) the separator
+path element was removed, so the separator enforcement needed moving
+into the CaptureTheRestPathElement and WildcardTheRestPathElement.
+
+Issue: SPR-14544

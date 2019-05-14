@@ -1,0 +1,11 @@
+Name Snapshot Data Blobs by UUID (#40652)
+
+* Name Snapshot Data Blobs by UUID
+
+* There is no functional reason why we need incremental naming for these files but
+  * As explained in #38941 it is a possible source of corrupting the repository
+  * It wastes API calls for the list operation
+  * Is just needless complication
+* Since we store the exact names of the data blobs in all the metadata anyway, we can make this change without any BwC considerations
+  * Even on the worst case scenario of a downgrade the functionality would continue working since the incremental names wouldn't conflict with the uuids and the number parsing for finding the next incremental name suppresses the exception when encountring a non-numeric value after the double underscore prefix
+

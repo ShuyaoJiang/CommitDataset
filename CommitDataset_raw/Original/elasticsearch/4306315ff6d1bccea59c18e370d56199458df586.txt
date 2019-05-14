@@ -1,0 +1,15 @@
+Throw useful error on bad docs snippets (#25389)
+
+You can continue a test started in a previous snippet by marking the
+next snippet with `// TEST[continued]`. The trouble is, if you mark the
+first snippet in a file with `// TEST[continued]` you'd get difficult
+to predict behavior because you'd continue the test started in another
+file. This will usually create a test that fails the build but it isn't
+easy to track down what you did wrong. This commit catches this
+scenario up front and fails the build with a useful error message.
+
+Similarly, if you put `// TEST[continued]` directly after a
+`// TESTSETUP` section then the docs tests will fail to run but the
+error message did not point you to the `// TEST[continued]` snippet.
+This commit catches this scenario up front as well and fails the build
+with a useful error message.

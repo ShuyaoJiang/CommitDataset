@@ -1,0 +1,7 @@
+SearchWhileCreatingIndexIT: remove usage of _only_nodes
+
+the only nodes preference was used as a replacement of `_primary` which was removed. Sadly, it's not the same as we also check that it makes sense - i.e., that the given node has a shard copy. Since the test uses indices with >1 shards, the primaries may be spread to multiple nodes. Using one (like it currently does) will fail for some primaries. Using all will probably end up hitting all nodes.
+
+This commit removed the `_only_nodes` usage in favor a simple search
+
+Relates to #26791

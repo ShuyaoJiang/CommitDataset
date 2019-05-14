@@ -1,0 +1,12 @@
+inherit [index.lifecycle.date] from rolled-over time (#30853)
+
+Indices that are rolled over preserve their origin index.lifecycle.date
+as the time the index was created. Although this is also fine, it would
+make more sense to start the timer for moving to the warm phase from the
+time it was rolled over so that we capture the time elapsed from the
+latest data, as opposed to when the index was created.
+
+This commit adds an extra step within the RolloverAction that
+extracts the index.creation_date of the newly created index from the RolloverStep
+and sets that as the index.lifecycle.date of the rolled-over index that is
+waiting for its next phase.

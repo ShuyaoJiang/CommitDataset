@@ -1,0 +1,16 @@
+Pass InputStream when creating XContent parser (#28754)
+
+* Pass InputStream when creating XContent parser
+
+Rather than passing the raw `BytesReference` in when creating the xcontent
+parser, this passes the StreamInput (which is an InputStream), this allows us to
+decouple XContent from BytesReference.
+
+This also removes the use of `commons.Booleans` so it doesn't require more
+external commons classes.
+
+Related to #28504
+
+* Undo boolean removal
+
+* Enhance deprecation javadoc

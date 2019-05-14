@@ -1,0 +1,13 @@
+Harmonize log configuration
+
+Prior to this commit, the codebase was using a mix of log4j.xml
+and log4j.properties for test-related logging configuration. This
+can be an issue as log4j takes the xml variant first when looking
+for a default bootstrap configuration.
+
+In practice, some modules declaring the properties variant were
+taking the xml variant configuration from another module.
+
+The general structure of the configuration has also been
+harmonized to provide a standard console output as well as an
+easy way to enable trace logs for the current module.

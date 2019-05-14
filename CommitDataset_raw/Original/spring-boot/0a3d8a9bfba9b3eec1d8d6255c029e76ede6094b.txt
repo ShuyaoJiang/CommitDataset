@@ -1,0 +1,15 @@
+Merge branch '1.1.x' and fix failure caused by XML response
+
+Spring 4.1 has added support for XML HTTP message conversion using
+Jackson. This was resulting in the response being sent back as XML
+rather than JSON. Jackson's XML support doesn't cope well with lists
+when it's being asked to deserialize to a Map [1] which is what the
+test was doing.
+
+This commit updates the test to indicate that it only accepts
+application/json, thereby ensuring that the response can be correctly
+deserialized into a Map.
+
+Fixes gh-1715
+
+[1] https://github.com/FasterXML/jackson-dataformat-xml/issues/122

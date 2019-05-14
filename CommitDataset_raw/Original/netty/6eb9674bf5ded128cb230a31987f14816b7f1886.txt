@@ -1,0 +1,13 @@
+Replace finalizer() usage in Recycler.WeakOrderQueue with ObjectCleaner usage.
+
+Motivation:
+
+We recently introduced ObjectCleaner which can be used to ensure some cleanup action is done once an object becomes weakable reachable. We should use this in Recycler.WeakOrderQueue to reduce the overhead of using a finalizer() (which will cause the GC to process it two times).
+
+Modifications:
+
+Replace finalizer() usage with ObjectCleaner
+
+Result:
+
+Fixes [#7343]

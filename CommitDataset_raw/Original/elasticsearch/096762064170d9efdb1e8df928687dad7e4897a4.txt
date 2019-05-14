@@ -1,0 +1,11 @@
+ActiveShardCount should not fail when closing the index (#35936)
+
+The ActiveShardCount is used by cluster state observers to wait for a 
+given number of shards to be active before returning to the caller. The 
+current implementation does not work when an index is closed while an 
+observer is waiting on shards to be active. In this case, a NPE is thrown 
+and the observer is never notified that the shards won't become active.
+
+This commit fixes the ActiveShardCount.enoughShardsActive() so that it 
+does not fail when an index is closed, similarly to what is done when an 
+index is deleted.

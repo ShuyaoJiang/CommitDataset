@@ -1,0 +1,15 @@
+Add version check for JDK9 and beyond.
+
+Motivation:
+
+Netty's platform dependent parts should know about JDK9.
+
+Modifications:
+
+JDK9 introduce Runtime$Version Runtime.version() which has an int major()
+method that always return the major Java version. I call that method to
+get the Java major version.
+
+Result:
+
+Netty will recognize all future JDK versions.

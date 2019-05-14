@@ -1,0 +1,10 @@
+[#2370] Periodically check for not alive Threads and free up their ThreadPoolCache
+
+Motivation:
+At the moment we create new ThreadPoolCache whenever a Thread tries either allocate or release something on the PooledByteBufAllocator. When something is released we put it then in its ThreadPoolCache. The problem is we never check if a Thread is not alive anymore and so we may end up with memory that is never freed again if a user create many short living Threads that use the PooledByteBufAllocator.
+
+Modifications:
+Periodically check if the Thread is still alive that has a ThreadPoolCache assinged and if not free it.
+
+Result:
+Memory is freed up correctly even for short living Threads.

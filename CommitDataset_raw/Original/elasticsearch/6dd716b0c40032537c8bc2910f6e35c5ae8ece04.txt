@@ -1,0 +1,25 @@
+Replace version with reader cache key in IndicesRequestCache (#34189)
+
+Today we use the version of a DirectoryReader as a component of the key
+of IndicesRequestCache. This usage is perfectly fine since the version
+is advanced every time a new change is made into IndexWriter. In other
+words, two DirectoryReaders with the same version should have the same
+content. However, this invariant is only guaranteed in the context of a
+single IndexWriter because the version is reset to the committed version
+value when IndexWriter is re-opened.
+
+Since #33473, each IndexShard may have more than one IndexWriter, and
+using the version of a DirectoryReader as a part of the cache key can
+cause IndicesRequestCache to return stale cached values. For example, in
+#27650, we rollback the engine (i.e., re-open IndexWriter), index new
+documents, refresh, then make a count request, but the search layer
+mistakenly returns the count of the DirectoryReader of the previous
+IndexWriter because the current DirectoryReader has the same version of
+the old DirectoryReader even their documents are different. This is
+possible because these two readers come from different IndexWriters.
+
+This commit replaces the the version with the reader cache key of
+IndexReader as a component of the cache key of IndicesRequestCache.
+
+Closes #27650
+Relates #33473

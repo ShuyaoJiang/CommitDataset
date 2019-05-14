@@ -1,0 +1,8 @@
+Fixed a bug that prevents pipelines to load that use stored scripts after a restart.
+
+The bug was caused because the ScriptService had no reference to a ClusterState instance,
+because it received the ClusterState after the PipelineStore. This only is the case
+after a restart.
+
+A bad side effect is that during a restart, any pipeline to be loaded after the pipeline that uses a stored script,
+was never loaded, which caused many pipeline to be missing in bulk / index request api calls.

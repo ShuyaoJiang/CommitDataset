@@ -1,0 +1,35 @@
+[Zen2] PersistedState interface implementation (#35819)
+
+Today GatewayMetaState is capable of atomically storing MetaData to
+disk. We've also moved fields that are needed to be persisted in Zen2
+from ClusterState to ClusterState.MetaData.CoordinationMetaData.
+
+This commit implements PersistedState interface.
+
+version and currentTerm are persisted as a part of Manifest.
+GatewayMetaState now implements both ClusterStateApplier and
+PersistedState interfaces. We started with two descendants
+Zen1GatewayMetaState and Zen2GatewayMetaState, but it turned
+out to be not easy to glue it.
+GatewayMetaState now constructs previousClusterState (including
+MetaData) and previousManifest inside the constructor so that all
+PersistedState methods are usable as soon as GatewayMetaState
+instance is constructed. Also, loadMetaData is renamed to
+getMetaData, because it just returns
+previousClusterState.metaData().
+Sadly, we don't have access to localNode (obtained from 
+TransportService in the constructor, so getLastAcceptedState
+should be called, after setLocalNode method is invoked.
+Currently, when deciding whether to write IndexMetaData to disk,
+we're comparing current IndexMetaData version and received
+IndexMetaData version. This is not safe in Zen2 if the term has changed.
+So updateClusterState now accepts incremental write
+method parameter. When it's set to false, we always write
+IndexMetaData to disk.
+Things that are not covered by GatewayMetaStateTests are covered
+by GatewayMetaStatePersistedStateTests.
+This commit also adds an option to use GatewayMetaState instead of
+InMemoryPersistedState in TestZenDiscovery. However, by default
+InMemoryPersistedState is used and only one test in PersistedStateIT
+used GatewayMetaState. In order to use it for other tests, proper
+state recovery should be implemented.

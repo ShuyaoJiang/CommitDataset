@@ -1,0 +1,13 @@
+Unify ServerProperties X-Forwarded-For support
+
+Add a new `server.use-forward-headers` property which can be used to
+switch on X-Forwarded-For header support in all supported embedded
+servlet containers.
+
+This commit reverts the decision to enable `RemoteIpValve` with Tomcat
+by default (gh-3782) and requires that either `user-forward-headers` is
+set to true or that `server.tomcat.protocol-header` or
+`server.tomcat.remote-ip-header` are set.
+
+See gh-4018
+See gh-3782

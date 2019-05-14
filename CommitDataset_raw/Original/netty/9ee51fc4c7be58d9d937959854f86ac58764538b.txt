@@ -1,0 +1,12 @@
+Fix the regression caused by f31c630c8cc15c4de1cc7e45b6c5c8053d5bcb75
+
+f31c630c8cc15c4de1cc7e45b6c5c8053d5bcb75 was causing
+SocketGatheringWriteTest to fail because it does not take the case where
+an empty buffer exists in a gathering write.
+
+When there is an empty buffer in a gathering write, the number of
+buffers returned by ChannelOutboundBuffer.nioBuffer() and the actual
+number of write attemps can differ.
+
+To remove the write requests correctly, a byte transport must use
+ChannelOutboundBuffer.removeBytes()

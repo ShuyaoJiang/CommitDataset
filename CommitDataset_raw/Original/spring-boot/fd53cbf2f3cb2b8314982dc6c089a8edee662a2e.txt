@@ -1,0 +1,16 @@
+Stop JPA and a custom Flyway bean from causing a startup failure
+
+Previously, if an application used JPA and declared its own Flyway bean,
+startup would fail. The custom Flyway bean would switch off
+auto-configuration of the FlywayMigrationInitializer bean but the
+context’s entity manager factory beans would still be configured to
+depend on the migration initialiser.
+
+This commit splits the post-processor that configures the dependencies
+into two. One that configures the dependency on the Flyway bean and
+one that configures the dependency on the FlywayMigrationInitializer
+bean. When to auto-configuration of the FlywayMigrationInitializer is
+switched off, the auto-configuration of the latter dependency is also
+switched off.
+
+Closes gh-4079

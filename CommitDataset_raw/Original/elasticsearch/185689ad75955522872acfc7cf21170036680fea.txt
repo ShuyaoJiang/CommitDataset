@@ -1,0 +1,11 @@
+Build: Remove pom generation for plugin zip files (#32180)
+
+In 1.x and 2.x, plugins were published to maven and the plugin
+installer downloaded them from there. This was later changed to install
+from the download service, and in 5.0 plugin zips were no longer
+published to maven. However, the build still currently produces an
+unused pom file. This is troublesome in the special case when the main
+jar of a plugin needs to be published (and thus needs a pom file of
+the same name).
+
+closes #31946

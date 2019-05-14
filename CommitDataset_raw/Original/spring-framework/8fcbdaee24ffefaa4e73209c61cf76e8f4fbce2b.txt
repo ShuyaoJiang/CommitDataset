@@ -1,0 +1,10 @@
+Handle receive timeout in JmsInvokerClientInterceptor
+
+JmsInvokerClientInterceptor defines a receiveTimeout field but does not
+handle such timeout. This commit adds an additional callback that throws
+an RemoteTimeoutException instead.
+
+Sub-classes can override the onReceiveTimeout to throw a different
+exception or return a fallback RemoteInvocationResult.
+
+Issue: SPR-12731

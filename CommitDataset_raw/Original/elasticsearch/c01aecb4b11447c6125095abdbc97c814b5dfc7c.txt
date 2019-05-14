@@ -1,0 +1,7 @@
+[Zen2] Do not probe non-master nodes back (#36160)
+
+Today if a node `A` sends a peers request to another node `B` then `B` will
+react by sending a peers request back to `A`. However if `A` is not
+master-eligible then this reaction is pointless and fails with an exception
+saying `non-master-eligible node found`, adding noise to the logs. This change
+suppresses this response to non-master-eligible nodes.

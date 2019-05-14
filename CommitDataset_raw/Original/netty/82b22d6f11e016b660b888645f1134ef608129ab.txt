@@ -1,0 +1,10 @@
+findNextPositivePowerOfTwo out of bounds
+
+Motivation:
+Some usages of findNextPositivePowerOfTwo assume that bounds checking is taken care of by this method. However bounds checking is not taken care of by findNextPositivePowerOfTwo and instead assert statements are used to imply the caller has checked the bounds. This can lead to unexpected non power of 2 return values if the caller is not careful and thus invalidate any logic which depends upon a power of 2.
+
+Modifications:
+- Add a safeFindNextPositivePowerOfTwo method which will do runtime bounds checks and always return a power of 2
+
+Result:
+Fixes https://github.com/netty/netty/issues/5601

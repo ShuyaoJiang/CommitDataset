@@ -1,0 +1,15 @@
+Ensure SSLErrorTest also works with boringssl
+
+Motivation:
+
+boringssl uses different messages for the ssl alerts which are all uppercase. As we try to match case as well this fails in SSLErrorTest as we expect lower-case.
+
+This test was introduced by 9b7fb2f3620449c8cfafa62fd294cb82600f043a.
+
+Modifications:
+
+Ensure we first translate everything to lower-case before doing the assert.
+
+Result:
+
+SSLErrorTest also pass when boringssl is used.

@@ -1,0 +1,19 @@
+Handle partially decoded elements while streaming Json array
+
+Motivation:
+
+'insideString' and 'openBraces' need a proper handling when streaming
+Json array over multiple writes and an element decoding was started but
+not completed.
+Related to #6969
+
+Modifications:
+
+If the idx is reset:
+- 'insideString' has to be reset to 'false' in order to indicate that
+  array element will be decoded from the beginning
+- 'openBraces' has to be reset to '1' to indicate that Json array
+  decoding is in progress.
+
+Result:
+Json array is properly decoded when in streaming mode

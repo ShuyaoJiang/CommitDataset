@@ -1,0 +1,17 @@
+Fix PlatformDependent.newAtomic*FieldUpdater type safety
+
+Motivation:
+
+* newAtomicIntegerFieldUpdater and newAtomicLongFieldUpdater take a
+class<?> so they're too lax
+* newAtomicReferenceFieldUpdater takes a Class<U> so it's too strict
+and can only be passe a rawtype parameter when dealing w/ generic
+classes
+
+Modifications:
+
+Take a Class<? super T> parameter instead.
+
+Result:
+
+Better type safety and generics support.

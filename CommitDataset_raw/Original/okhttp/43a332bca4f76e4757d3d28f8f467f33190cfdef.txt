@@ -1,0 +1,12 @@
+Fail gracefully on a 401 response code with no WWW-Authenticate header.
+
+This is more lenient than necessary; the HTTP spec says this:
+  10.4.2 401 Unauthorized
+     The request requires user authentication. The response MUST include a
+     WWW-Authenticate header field (section 14.47) containing a challenge
+     applicable to the requested resource.
+
+Not throwing will still cause the request to fail, since the 401
+response code triggers an IOException. But this type of failure is
+more recoverable and allows the caller to inspect the headers and
+response body.

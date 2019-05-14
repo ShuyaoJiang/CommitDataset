@@ -1,0 +1,10 @@
+Security: fix TokenMetaData equals and hashcode (#30347)
+
+The TokenMetaData equals method compared byte arrays using `.equals` on
+the arrays themselves, which is the equivalent of an `==` check. This
+means that a seperate byte[] with the same contents would not be
+considered equivalent to the existing one, even though it should be.
+
+The method has been updated to use `Array#equals` and similarly the
+hashcode method has been updated to call `Arrays#hashCode` instead of
+calling hashcode on the array itself.

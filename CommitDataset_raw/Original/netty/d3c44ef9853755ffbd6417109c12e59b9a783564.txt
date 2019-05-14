@@ -1,0 +1,15 @@
+Update Http2SecurityUtil cipher suites
+
+Motivation:
+Mozilla's Server Side cipher suite recommendations have been updated [1].
+
+[1] https://wiki.mozilla.org/Security/Server_Side_TLS#Modern_compatibility
+
+Modifications:
+- Update Http2SecurityUtil to exclude older ciphers.
+- Remove support for DHE ciphersuites because they are now Intermediate and BoringSSL dropped support for these ciphers [2]
+
+[2] https://boringssl.googlesource.com/boringssl/+/7e06de5d2d1b53c57c0c81e8d6ba4122b64cf626
+
+Result:
+Updated default ciphers for HTTP/2.

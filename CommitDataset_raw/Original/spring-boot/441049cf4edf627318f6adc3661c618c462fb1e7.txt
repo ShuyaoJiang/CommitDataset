@@ -1,0 +1,11 @@
+Auto-detect JMS sessionTransacted flag
+
+If a JtaTransactionManager is present, it is associated with the
+auto-created JmsListenerContainerFactory. However, if no such transaction
+manager is present, local transaction support is not enabled.
+
+This gives a default situation where the message is acknowledged even
+before the listener is invoked. We now make sure to turn on local JMS
+transactions if no JtaTransactionManager is present.
+
+Fixes gh-3393

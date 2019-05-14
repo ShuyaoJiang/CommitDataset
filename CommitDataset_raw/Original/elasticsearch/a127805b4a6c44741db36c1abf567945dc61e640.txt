@@ -1,0 +1,18 @@
+[Zen2] Simulate scheduling delays (#34181)
+
+Today we schedule tasks (both immediate and future ones) exactly when
+requested. In fact it is more realistic to allow for a small amount of delay in
+the scheduling of tasks, and this helps to exercise more interleavings of
+actions and therefore to improve test coverage.
+
+This change adds to the DeterministicTaskQueue the ability to add a random
+delay to the scheduling of tasks.
+
+This change also provides more explicit timeouts for stabilisation in the
+CoordinatorTests.
+
+Using the randomised scheduling feature in the CoordinatorTests also found a
+situation in which we could become a leader, then a candidate, and then a
+leader again very quickly, causing a clash of the _BECOME_MASTER_ and
+_FINISH_ELECTION_ tasks. We change their behaviour to not consider these
+duplicates to be problematic.

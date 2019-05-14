@@ -1,0 +1,10 @@
+Fix health endpoint security
+
+Commit b02aba4 has renamed `management.security.role` to
+`management.security.roles`. Unfortunately, the `HealthMvcEndpoint`
+was still looking at the old property.
+
+This commit makes sure that the proper key is used and any custom
+role is applied rather than an unconditional `ADMIN` role.
+
+See gh-6540

@@ -1,0 +1,6 @@
+Fixing build breakage with GroovyScriptFactoryTests.
+The problem was that the Messenger object was not being proxed (assertTrue(AopUtils.isAopProxy(messenger)) was returning false).  The cause for this seemed to be that the
+pointcut was malformed / out of date, reading execution(* org.springframework.scripting.Messenger.*(..)), when the groovy Messenger class is actually declared in the org.springframework.scripting.groovy package.
+I tried updating the fully-qualified package name in the pointcut expression, and this caused AspectJ matching errors saying that there was not such type that matches that FQ name.
+So as a final resort, I removed the full-qualification entirely and went with execution(* *..Messenger.*(..)).  All tests pass now, but it raises the question, why was AJ having matching errors?  Is it because
+the pointcut matching is being done before the groovy class is loaded?  There could be a potential bug here.

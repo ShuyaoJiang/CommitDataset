@@ -1,0 +1,8 @@
+[Test] Fix IndicesClientDocumentationIT (#27899)
+
+The last operation executed in IndicesClientDocumentationIT.testCreate()
+ is an asynchronous index creation. Because nothing waits for its
+ completion, on slow machines the index can sometimes be created after
+ the testCreate() test is finished, and it can fail the following test.
+
+ Closes #27754

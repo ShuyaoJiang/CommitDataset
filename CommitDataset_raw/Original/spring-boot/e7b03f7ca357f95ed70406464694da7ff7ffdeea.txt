@@ -1,0 +1,13 @@
+Don't auto-configure MultipartConfigElement when using Commons FileUpload
+
+Previously, when a user had declared a custom MultipartResolver bean
+that is a CommonsMultipartResolver, part resolution would fail. The
+failure was occurring as the servlet container was consuming the parts
+before CommonsMultipartResolver had a chance to read them. This was
+happening because a MultipartConfigElement was being auto-configured.
+
+This commit updates the multipart auto-configuration so that a
+MultipartConfigElement is not auto-configured when there is a
+CommonsMultipartResolver bean in the context.
+
+Closes gh-7735

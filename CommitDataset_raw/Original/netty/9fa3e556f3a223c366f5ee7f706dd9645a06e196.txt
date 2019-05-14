@@ -1,0 +1,10 @@
+Adjust Content-Length header when encoding Full Responses
+
+Motivation:
+If a full HttpResponse with a Content-Length header is encoded by the HttpContentEncoder subtypes the Content-Length header is removed and the message is set to Transfer-Encoder: chunked. This is an unnecessary loss of information about the message content.
+
+Modifications:
+- If a full HttpResponse has a Content-Length header, the header is adjusted after encoding.
+
+Result:
+Complete messages continue to have the Content-Length header after encoding.

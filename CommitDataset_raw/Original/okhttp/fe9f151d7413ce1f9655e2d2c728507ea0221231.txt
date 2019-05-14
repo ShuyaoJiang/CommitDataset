@@ -1,0 +1,9 @@
+Split ConnectionPool API from implementation
+
+Our 'Internal' trampoline really gets in the way with this one. Just
+move the actual implementation code into its own type so there isn't
+as much indirection.
+
+Unfortunately we can't easily make RealConnectionPool extend from
+ConnectionPool because otherwise we'd be open to any user-provided
+connection pools and our API isn't that complete yet.

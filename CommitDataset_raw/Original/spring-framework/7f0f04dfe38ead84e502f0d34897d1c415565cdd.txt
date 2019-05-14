@@ -1,0 +1,20 @@
+Support annotations on interfaces in AnnotatedElementUtils
+
+This commit introduces support in AnnotatedElementUtils for finding
+annotations declared on interfaces at the type level.
+
+NB: this commit does not include support for finding annotations
+declared on interface methods.
+
+In order to maintain backward compatibility with @Transactional
+annotation attribute processing, a new getAnnotationAttributes() method
+has been added to AnnotatedElementUtils that provides a flag to control
+whether interfaces should be searched.
+SpringTransactionAnnotationParser and JtaTransactionAnnotationParser
+have been updated accordingly to ensure that interfaces are not
+unintentionally searched in the @Transactional resolution process.
+
+This commit also introduces additional tests and updates TODOs for
+SPR-12738.
+
+Issue: SPR-12944, SPR-12738

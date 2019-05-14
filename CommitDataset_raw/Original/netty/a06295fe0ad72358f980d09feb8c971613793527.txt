@@ -1,0 +1,3 @@
+Correctly fix problem in ByteToMessageDecoder and ReplayingDecoder which could let to have a released buffer passed to the decode methods.
+
+This fixes #1664 and revert also the original commit which was meant to fix it 3b1881b523e61496d9bc50e44927f7b58fa449e6 . The problem with the original commit was that it could delay handlerRemove(..) calls and so mess up the order or forward bytes to late.

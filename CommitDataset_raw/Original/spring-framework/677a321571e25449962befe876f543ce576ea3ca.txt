@@ -1,0 +1,15 @@
+Support primary TxMgrs and DataSources in the TCF
+
+Prior to this commit, the transaction manager and data source look-up
+algorithms in the Spring TestContext Framework were not capable of
+retrieving 'primary' beans of those types, even though 'primary' beans
+are supported in production as well as for injecting dependencies into
+test instances. Specifically, if there was more than one transaction
+manager or data source bean and one of them was flagged as 'primary',
+the retrieveTransactionManager() and retrieveDataSource() methods in
+TestContextTransactionUtils would simply return null for such beans.
+
+This commit updates TestContextTransactionUtils by adding support for
+looking up primary transaction managers and data sources.
+
+Issue: SPR-13891

@@ -1,0 +1,13 @@
+ServerBootstrap.handler(...) will add handler before Channel is registered.
+
+Motivation:
+
+If you set a ChannelHandler via ServerBootstrap.handler(...) it is added to the ChannelPipeline before the Channel is registered. This will lead to and IllegalStateException if a user tries to access the EventLoop in the ChannelHandler.handlerAdded(...) method.
+
+Modifications:
+
+Delay the adding of the ChannelHandler until the Channel was registered.
+
+Result:
+
+No more IllegalStateException.

@@ -1,0 +1,17 @@
+[Rollup] Only allow aggregating on multiples of configured interval (#32052)
+
+We need to limit the search request aggregations to whole multiples
+of the configured interval for both histogram and date_histogram.
+Otherwise, agg buckets won't overlap with the rolled up buckets
+and the results will be incorrect.
+
+For histogram, the validation is very simple: request must be >= the config,
+and modulo evenly.
+
+Dates are more tricky.
+- If both request and config are fixed dates, we can convert to millis
+and treat them just like the histo
+- If both are calendar, we make sure the request is >= the config with
+a static lookup map that ranks the calendar values relatively.  All
+calendar units are "singles", so they are evenly divisible already
+- We disallow any other combination (one fixed, one calendar, etc)

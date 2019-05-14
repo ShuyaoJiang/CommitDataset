@@ -1,0 +1,21 @@
+Return the correct Future from FixedChannelPool.release()
+
+Motivation:
+
+The behaviour of the FixedChannelPool.release was inconsistent with the
+SimpleChannelPool implementation, in that given promise is returned.
+
+In the FixedChannelPool implementation a new promise was return and
+this meant that the completion of that promise can be different.
+Specifically on releasing a channel to a closed pool, the parameter
+promise is failed with an IllegalStateException but the returned one
+will have been successful (as it was completed by call to super
+.release)
+
+Modification:
+
+Return the given promise as the result of FixedChannelPool.release
+
+Result:
+
+Returned promise will reflect the result of the release operation.

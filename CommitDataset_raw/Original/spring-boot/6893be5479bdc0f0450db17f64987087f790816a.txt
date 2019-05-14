@@ -1,0 +1,12 @@
+Make sure that RabbitMQ metrics are configured early
+
+The ConnectionFactory can be used early in user configuration to
+configure an `Exchange`. Such connection may not hold the proper
+MetricCollector and can be cached, leading to missed metrics
+information.
+
+This commit moves the configuration of RabbitMQ metrics to a
+BeanPostProcessor so that the proper MetricCollector is configured
+before any connection is created.
+
+Closes gh-12855

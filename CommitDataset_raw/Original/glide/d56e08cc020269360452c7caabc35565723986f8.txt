@@ -1,0 +1,9 @@
+Allow modifying RequestBuilders after calling into().
+
+Fixes an issue where setting options on the generated GlideRequest after
+having used it to load one image would throw an exception because the
+internal RequestOptions object was locked when the first load was 
+started. Now we apply autoClone() to make sure that the options object
+for the first load isn’t modified by subsequent changes to options, but
+also allowing those changes to occur.
+

@@ -1,0 +1,13 @@
+Improve error reporting in ScriptTemplateView
+
+This commit introduces a new ScriptRenderException in order to:
+ - Print in the resulting error page the reason of the script failure
+ - Not print the whole stacktrace in the logs
+
+The ScriptRenderException thrown in ScriptTemplateView#renderMergedOutputModel()
+is wrapped into a ServletException in order to avoid printing 2 times the messages in
+the logs (throwing directly a ScriptRenderException would make it wrapped in a
+NestedServletException that contains a getMessage() override not needed in this
+context)
+
+Issue: SPR-13488

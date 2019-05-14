@@ -1,0 +1,18 @@
+OkBuffer API sketch.
+
+I'm unhappy with java.io:
+ * No timeouts.
+ * Every layer needs to copy bytes around. Always copying bytes.
+ * Features like mark/reset and available() are clumsy.
+ * Its awkard in mixed text/binary protocols like HTTP because
+   character decoding is separate and takes over the stream.
+
+Unfortunately java.nio isn't better, just different:
+ * It's complex.
+ * Buffers are fixed size.
+ * No built-in buffer pooling.
+ * Features like mark/reset/position are clumsy.
+
+This is an obnoxious attempt at a 3rd I/O interface, mostly
+inspired by InputStream and OutputStream, but using growable
+buffers instead of byte arrays as the core data container.

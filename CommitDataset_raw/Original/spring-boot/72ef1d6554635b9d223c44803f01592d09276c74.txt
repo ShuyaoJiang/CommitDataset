@@ -1,0 +1,27 @@
+Update ErrorPageFilter so it won’t try to forward a committed response
+
+In some scenarios, the ErrorPageFilter will want to forward the request
+to an error page but the response has already been committed. One common
+cause of this is when the filter’s running on WAS. WAS calls
+flushBuffer() (which commits the response), upon a clean exit from a
+servlet’s service method.
+
+Previously, the filter would attempt the forward, even if the response
+was committed. This would result in an IllegalStateException and a
+possibly incomplete response that may also have an incorrect status
+code.
+
+This commit updates the ErrorPageFilter to check to see if the response
+has already been committed before it attempts to forward the request to
+the error page. If the response has already been committed, the filter
+logs an error and allows the container’s normal handling to kick in.
+This prevents an IllegalStateException from being thrown.
+
+This commit also updates the response wrapper to keep track of when
+sendError has been called. Now, when flushBuffer is called, if
+sendError has been called, the wrapper calls sendError on the wrapped
+response. This prevents the wrapper from suppressing an error when the
+response is committed before the request handling returns to the error
+page filter.
+
+Closes gh-1575

@@ -1,0 +1,9 @@
+[TEST] Changed how stash dumps are logged in yaml tests in case of failures
+
+Currently if a yaml test has a teardown and a test is failing then
+a stash dump of a request in the teardown is logged instead of
+a stash dump of a request in the test itself.
+
+By handling the logging of stash dumps separately for setup, tests and
+teardown yaml sections we shouldn't miss the stash dump of request/response
+that is actually causing the yaml test to fail.

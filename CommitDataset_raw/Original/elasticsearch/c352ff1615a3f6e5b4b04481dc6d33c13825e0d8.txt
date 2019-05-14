@@ -1,0 +1,6 @@
+Share common parser in some AcknowledgedResponses (#31169)
+
+Several AcknowledgedResponse implementations only parse the boolean acknowledged
+flag and then create an instance of their class using that flag. This can be
+simplified by adding this basic parser to the superclass, provide a common
+helper method and call the appropriate ctor in the fromXContent methods.

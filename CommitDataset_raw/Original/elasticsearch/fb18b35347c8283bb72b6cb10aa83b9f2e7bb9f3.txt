@@ -1,0 +1,5 @@
+Add default methods to DocValueFormat (#36480)
+
+The different `DocValueFormat` implementors throw `UnsupportedOperationException` for methods that they don't support. That is perfectly fine, and quite common as not all implementors support all of the possible formats. This makes it hard though to trace back which implementors support which formats as they all implement the same methods.
+
+This commit introduces default methods in the `DocValueFormat` interface so that all methods throw `UnsupportedOperationException` by default. This way implementors can override only the methods that they specifically support.

@@ -1,0 +1,11 @@
+Fix caching issues with map property sources
+
+Update `SpringIterableConfigurationPropertySource` so that the cache
+key from a `MapPropertySource` is invalidated when the map contents
+changes.
+
+Prior to this commit, the actual keys of the map were used as the key.
+This meant that if the underlying map changed, they key wouldn't be
+invalidated because it ultimately pointed to the same object instance.
+
+See gh-13344

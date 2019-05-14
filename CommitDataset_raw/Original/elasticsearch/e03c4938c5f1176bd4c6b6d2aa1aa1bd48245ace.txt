@@ -1,0 +1,13 @@
+GET aliases should 404 if aliases are missing
+
+Previously the HEAD and GET aliases endpoints were misaigned in
+behavior. The HEAD verb would 404 if any aliases are missing while the
+GET verb would not if any aliases existed. When HEAD was aligned with
+GET, this broke the previous usage of HEAD to serve as an existence
+check for aliases. It is the behavior of GET that is problematic here
+though, if any alias is missing the request should 404. This commit
+addresses this by modifying the behavior of GET to behave in this
+way. This fixes the behavior for HEAD to also 404 when aliases are
+missing.
+
+Relates #25043

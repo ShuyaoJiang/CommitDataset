@@ -1,0 +1,21 @@
+Prevent closed context from being refreshed again by an HTTP request
+
+Prior to this commit, EmbeddedWebApplicationContext would perform its
+close processing and then stop the embedded container. This could
+lead to the closed context's dispatcher servlet handling an HTTP
+request and refreshing the context again. This opened up two
+possibilities that we need to avoid:
+
+1. Another HTTP request could be received by the dispatcher servlet
+   while the context is still being refreshed. This could lead to the
+   context being used before its refreshed. I believe this could be
+   the cause of the current modification exception described in
+   gh-3239 and SPR-13123.
+2. It can lead to a race during shutdown as the shutdown hook's
+   attempt to close the context races with the refresh initiated by
+   the HTTP request. This is possible as the shutdown hook bypasses
+   the sychronization on startupShutdownMonitor that would normally
+   prevent refresh and close from occurring in parallel. This race
+   can lead to a deadlock as described in gh-4130
+
+Closes gh-4130

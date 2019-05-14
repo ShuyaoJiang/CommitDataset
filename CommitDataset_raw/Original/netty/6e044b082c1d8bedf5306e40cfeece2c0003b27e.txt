@@ -1,0 +1,13 @@
+Proper shutdown of HTTP2 encoder when channelInactive
+
+Motivation:
+
+The problem is described in https://github.com/grpc/grpc-java/issues/605. Basically, when using `StreamBufferingEncoder` there is a chance of creating zombie streams that never get closed.
+
+Modifications:
+
+Change `Http2ConnectionHandler`'s `channelInactive` handling logic to shutdown the encoder/decoder before shutting down the active streams.
+
+Result:
+
+Fixes https://github.com/grpc/grpc-java/issues/605

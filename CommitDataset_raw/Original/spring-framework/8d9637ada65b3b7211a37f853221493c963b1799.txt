@@ -1,0 +1,18 @@
+Provide JdbcTemplate in tx base classes in the TCF
+
+Since Spring 2.5, the abstract transactional base classes in the
+TestContext framework have defined and delegated to a protected
+SimpleJdbcTemplate instance variable; however, SimpleJdbcTemplate has
+deprecated since Spring 3.1. Consequently, subclasses of
+AbstractTransactionalJUnit4SpringContextTests and
+AbstractTransactionalTestNGSpringContextTests that use this instance
+variable suffer from seemingly unnecessary deprecation warnings.
+
+This commit addresses this issue by introducing a protected JdbcTemplate
+instance variable in abstract transactional base classes to replace the
+use of the existing SimpleJdbcTemplate. Furthermore, the existing
+simpleJdbcTemplate instance variable has been deprecated, and utility
+methods in the affected base classes now delegate to JdbcTestUtils
+instead of the now deprecated SimpleJdbcTestUtils.
+
+Issue: SPR-8990

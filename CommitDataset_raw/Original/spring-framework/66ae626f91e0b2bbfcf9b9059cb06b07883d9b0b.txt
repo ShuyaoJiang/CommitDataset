@@ -1,0 +1,9 @@
+Only register Date converters with global format
+
+Change JodaTimeFormatterRegistrar and DateFormatterRegistrar to only
+register converters for the Date and Calendar types when a global format
+has been defined. This means that the ObjectToObject converter will
+handle String->Date conversion using the deprecated Date(String)
+constructor (as was the case with Spring 3.1).
+
+Issue: SPR-10105

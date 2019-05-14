@@ -1,0 +1,13 @@
+Not use Unpooled to allocate buffers in Base64 but use a ByteBufAllocator
+
+Motivation:
+
+We should not use Unpooled to allocate buffers for performance reasons.
+
+Modifications:
+
+Allow to pass in ByteBufAllocate which is used to allocate buffers or use the allocate of the src buffer.
+
+Result:
+
+Better performance if the PooledByteBufAllocator is used.

@@ -1,0 +1,16 @@
+Ensure TokenFilters only produce single tokens when parsing synonyms (#34331)
+
+A number of tokenfilters can produce multiple tokens at the same position.  This
+is a problem when using token chains to parse synonym files, as the SynonymMap
+requires that there are no stacked tokens in its input.
+
+This commit ensures that when used to parse synonyms, these tokenfilters either produce
+a single version of their input token, or that they throw an error when mappings are 
+generated.  In indexes created in elasticsearch 6.x deprecation warnings are emitted in place 
+of the error. 
+
+* asciifolding and cjk_bigram produce only the folded or bigrammed token
+* decompounders, synonyms and keyword_repeat are skipped
+* n-grams, word-delimiter-filter, multiplexer, fingerprint and phonetic throw errors
+
+Fixes #34298

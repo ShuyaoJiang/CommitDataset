@@ -1,0 +1,8 @@
+Do not disable TLSv1.3 by default
+
+This adjusts TLS protocol selection logic to leave TLSv1.3 enabled if
+it's enabled in the underlying TLS stack. Prior to this change,
+TLSv1.3 was disabled unless the user of okhttp explicitly enabled it
+via a custom ConnectionSpec.
+
+Fixes #2867

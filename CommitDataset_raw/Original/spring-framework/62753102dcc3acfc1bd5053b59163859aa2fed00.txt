@@ -1,0 +1,12 @@
+Ensure a consistent netty version
+
+Currently there are clashes between io.netty:netty-common:4.1.0.Beta7 and
+io.netty:netty-all:4.1.0.CR3 which can cause errors in the build related
+to "VerifyError: Bad type on operand stack".
+
+One solution would be to exclude the jars that duplicate the classes.
+However, this can be fragile since additional dependencies may be added
+that bring in the dependency transitively.
+
+This commit locks the version for any artifiact with the group "io.nettty"
+to ensure the correct version of netty is used.

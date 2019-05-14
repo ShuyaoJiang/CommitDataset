@@ -1,0 +1,5 @@
+WrapperQueryBuilder should also rewrite the parsed query.
+
+Failing to do so can cause other errors later on during query execution.
+For example if  `WrapperQueryBuilder` wraps a `GeoShapeQueryBuilder` that fetches the shape from an index then it will skip the shape fetching
+and fail later with the error that no shapes have been fetched.

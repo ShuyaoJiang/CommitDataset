@@ -1,0 +1,34 @@
+Provide test auto-configuration for Spring REST Docs
+
+This commit introduces a new annotation, @AutoConfigureRestDocs,
+which can be used to enable auto-configuration of Spring REST Docs.
+The auto-configuration removes the need to use Spring REST Docs' JUnit
+rule and will automatically configure MockMvc. Combined with the new
+auto-configuration for MockMvc it allows a test class to be free of
+boilerplate configuration:
+
+@RunWith(SpringRunner.class)
+@WebMvcTest
+@AutoConfigureRestDocs(outputDir = "target/generated-snippets",
+        uriScheme = "https", uriHost = "api.example.com",
+        uriPort = 443)
+public class ExampleDocumentationTests {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @Test
+    public void documentIndex() {
+        // …
+    }
+
+}
+
+For more advanced customization a RestDocsMockMvcConfigurationCustomizer
+bean can be used.
+
+If a RestDocumentationResultHandler is found in the context, it will
+be passed to the ConfigurableMockMvcBuilder's alwaysDo method as part
+of its customization.
+
+Closes gh-5563

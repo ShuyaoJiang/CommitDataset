@@ -1,0 +1,25 @@
+Ensure that Jackson and GSON are auto-configured by @AutoConfigureJsonTesters
+
+Previously, @AutoConfigureJsonTesters only imported
+JsonTestersAutoConfiguration and relied on something else pulling in
+the Jackson and GSON auto-configuration upon which it depends. This
+worked with @JsonTest which imported those auto-configurations. It
+did not work with @SpringBootTest which would use
+@EnableAutoConfiguration and the ordering was then wrong and
+JsonTestersAutoConfiguration would be processed before the Jackson
+and GSON auto-configurations had a chance to create the beans that
+JsonTestersAutoConfiguration needs.
+
+This commit updates the spring.factories configuration for
+JsonTestersAutoConfiguration so that it imports
+JacksonAutoConfiguration and GsonAutoConfiguration.
+Appropriate @AutoConfigureAfter has also been added to
+JsonTestersAutoConfiguration to ensure that it is considered after
+JacksonAutoConfiguration and GsonAutoConfiguration.
+
+Lastly, ExampleJsonApplication and associated classes have been moved
+into an app sub-package to prevent its component scanning from
+pulling in JsonTestersAutoConfiguration as if it were user
+configuration.
+
+Closes gh-9515

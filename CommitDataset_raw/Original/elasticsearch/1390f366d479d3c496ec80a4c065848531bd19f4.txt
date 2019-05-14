@@ -1,0 +1,10 @@
+[CCR] Only auto follow indices when all primary shards have started (#35814)
+
+This change adds an extra check that verifies that all primary shards
+have been started of an index that is about to be auto followed.
+
+If not all primary shards have been started for an index
+then the next auto follow run will try to follow to auto follow
+this index again.
+
+Closes #35480

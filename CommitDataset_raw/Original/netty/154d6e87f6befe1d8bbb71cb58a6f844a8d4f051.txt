@@ -1,0 +1,20 @@
+Fix varargs parameter logging in LocationAwareSlf4JLogger (#8834)
+
+Motivation
+
+As pointed out by @91he in
+https://github.com/netty/netty/pull/8595#issuecomment-459181794, there
+is a remaining bug in LocationAwareSlf4JLogger following the updates
+done in #8595. The logging methods which take a varargs message
+parameter array should format using MessageFormatter.arrayFormat rather
+than MessageFormatter.format.
+
+Modifications
+
+Change varargs param methods in LocationAwareSlf4JLogger to use
+MessageFormatter.arrayFormat and extend unit test to cover these cases.
+
+Results
+
+Correct log output when logging messages with > 2 parameters when using
+LocationAwareSlf4JLogger.

@@ -1,0 +1,12 @@
+Handle scoped proxy properly in MBeanExporter
+
+Previously, if a bean has a scoped proxy and is annotated to be exposed
+to the JMX domain, both the scoped proxy and the target instance were
+exposed in the JMX domain, resulting in a duplicate entries. Worse, if
+such bean defines an explicit name, the application wouldn't start
+because of a name conflict.
+
+This commit deals explicitely with scoped proxy and make sure to only
+expose the relevant bean.
+
+Issue: SPR-12529

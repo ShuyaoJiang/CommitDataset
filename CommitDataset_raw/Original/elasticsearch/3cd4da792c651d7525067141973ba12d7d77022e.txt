@@ -1,0 +1,9 @@
+Remove snapshot conditional for bwc snapshots (#28657)
+
+The build.snapshot flag used by the main build was being propagated down
+into the bwc snapshot builds, which is not correct. The bwc subprojects
+are always meant to be snapshot builds, or null if they do not
+exist. Marking these builds as non snapshots threw the release off as it
+was looking for -SNAPSHOT builds.
+
+Relates #28641

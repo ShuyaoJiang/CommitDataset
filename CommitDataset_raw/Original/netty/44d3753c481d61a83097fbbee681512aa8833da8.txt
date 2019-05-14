@@ -1,0 +1,13 @@
+Fix NPE exception when using invalid cipher during building SslContext. (#8171)
+
+Motivation:
+
+We missed to do a null check before trying to destroy the OpenSslSessionContext, which could lead to a NPE.
+
+Modifications:
+
+Add null check and tests.
+
+Result:
+
+Fix https://github.com/netty/netty/issues/8170.

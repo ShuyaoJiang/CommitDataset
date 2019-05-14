@@ -1,0 +1,13 @@
+minor enhancements to serializingexecutor
+
+* only acquire/release the lock once per call to execute (inline the top half
+  of startQueueWorker into callers). the bytecode of startQueueWorker is long
+  enough that it probably doesn't get inlined and thus things like hotspot lock
+  coarsening probably aren't trigerring.
+* only allocate the queue worker once, and repurpose it for the lock
+
+This leads to a small bit of redundancy in execute/executeFirst/suspend, however, due to the needed control flow in the caller, i am not sure if it is very avoidable.  Also, it does allow us to avoid some redundant checks (e.g. no need to check queue size if we just added an item)
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=152848537

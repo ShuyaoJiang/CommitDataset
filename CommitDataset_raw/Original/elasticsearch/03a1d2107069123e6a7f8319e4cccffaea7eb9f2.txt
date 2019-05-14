@@ -1,0 +1,5 @@
+SnapshotShardsService Simplifications (#38025)
+
+* Instead of replacing the `shardSnapshots` field, we mutate it, explicitly removing entries from it in only a single spot
+* Decreased the amount of indirection by moving all logic for starting a snapshot's newly discovered shard tasks into `startNewShards` (saves us two maps (keyed by snapshot) and iterations over them)
+

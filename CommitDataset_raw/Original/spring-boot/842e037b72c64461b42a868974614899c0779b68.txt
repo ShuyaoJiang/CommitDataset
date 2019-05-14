@@ -1,0 +1,15 @@
+Add some tests for profile behaviour
+
+Ordering: profiles are applied in order (from the active profiles
+list in the Environment), with the last one winning as far as
+property values goes. This *does* mean that a profile activated
+inside application.yml is applied last and hence takes precedence.
+It's debatable whether that is the right semantics, but that's
+what it is for now.
+
+Re gh-342: a profile added via SpringApplication also takes
+precedence over one added on the command line. Also debatable
+but at least it's predictable.
+
+Naming: a profile adds "#<profile>" to the end of a property source
+name (no more, no less)

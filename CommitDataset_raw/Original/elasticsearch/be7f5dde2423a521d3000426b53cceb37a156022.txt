@@ -1,0 +1,3 @@
+Disallow logger methods with Object parameter (#28969)
+
+Log4j2 provides a wide range of logging methods. Our code typically only uses a subset of them. In particular, uses of the methods trace|debug|info|warn|error|fatal(Object) or trace|debug|info|warn|error|fatal(Object, Throwable) have all been wrong, leading to not properly logging the provided message. To prevent these issues in the future, the corresponding Logger methods have been blacklisted.

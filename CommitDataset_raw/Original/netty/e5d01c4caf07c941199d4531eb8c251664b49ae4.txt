@@ -1,0 +1,10 @@
+HTTP/2 HEADERS stream dependency fix
+
+Motivation:
+The DefaultHttp2ConnectionDecoder has the setPriority call after the Http2FrameListener is notified of the change. The setPriority call has additional verification logic and may even create the dependency stream and so it must be before the Http2FrameListener is notified.
+
+Modifications:
+The DefaultHttp2ConnectionDecoder should treat the setPriority call in the same for the HEADERS and PRIORITY frame (call it before notifying the listener).
+
+Result:
+Http2FrameListener should see correct state when a HEADERS frame has a stream dependency that has not yet been created yet.  Fixes https://github.com/netty/netty/issues/3572.

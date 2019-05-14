@@ -1,0 +1,13 @@
+Customize Couchbase's socket connect timeout
+
+Our Windows build is failing currently because the couchbase server does
+not handle a socket connection within a second (the default). This commit
+adds a property to customize this option and set it to 10 sec in the
+sample.
+
+While investigating this issue, it turns out that while
+`CouchbaseConfiguration` is public, it is not really possible to extend
+it in user's configuration. This commit fixes this problem and add a test
+that demonstrates how it can be used.
+
+Closes gh-5657

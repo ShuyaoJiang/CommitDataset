@@ -1,0 +1,21 @@
+Always supply test class to ContextLoaders in TCF
+
+Prior to this commit, the following methods in ContextLoaderUtils
+treated a composed @ContextConfiguration annotation (i.e., a custom
+annotation that is meta-annotated with @ContextConfiguration) as the
+"declaring class" instead of the actual test class.
+
+- resolveContextConfigurationAttributes()
+- resolveContextHierarchyAttributes()
+
+As a consequence, if @ContextConfiguration is used as a
+meta-annotation, the meta-annotated class is stored as the
+"declaringClass" in ContextConfigurationAttributes. Thus, when a
+ContextLoader (or SmartContextLoader) attempts to detect default
+resource locations or configuration classes, it does so for the
+composed annotation class instead of for the declaring test class.
+
+This commit ensures that ContextLoaders are supplied the declaring test
+class instead of the composed annotation class in such use cases.
+
+Issue: SPR-11455

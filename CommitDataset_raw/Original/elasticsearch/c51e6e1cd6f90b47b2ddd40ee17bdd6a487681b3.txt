@@ -1,0 +1,18 @@
+Remove unnecessary directory push/pop from scripts
+
+This commit proposes removing an unnecessary directory push/pop from the
+X-Pack scripts. It is not clear exactly why these were added, the
+original change was almost three years ago in
+elastic/x-pack@ea9ba7cdd0560cefd53c5d142d98d6c60d4f64b2 but
+unfortunately the commit message does not elucidate the exact the
+problem, nor is there an associated pull request. This change has
+propogated into all of the X-Pack scripts yet still the reasons are
+unclear. The little that we can glean from the commit message is that
+there was a problem with the default paths if the script was executed
+outside of the Elasticsearch home. It seems that such issues have been
+addressed by the recent introduction of elasticsearch-env so maybe we
+can simplify these scripts here?
+
+Relates elastic/x-pack-elasticsearch#2125
+
+Original commit: elastic/x-pack-elasticsearch@9548c47743024e480bc70a660ad0f28c48e2651b

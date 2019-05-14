@@ -1,0 +1,18 @@
+Ensure error is sent before Writer or OutputStream is used
+
+Previously, ErrorPageFilter's ErrorResponseWrapper would delaying
+sending an error back to the client. In cases where the response's
+Writer or OutputStream was accessed and flushed or closed, this could
+lead to the wrong response status being sent.
+
+This commit updates ErrorResponseWrapper so that it will send any
+capture error to the client before returning the response's Writer or
+OutputStream. This ensures that closing the Writer or OutputStream
+does not cause the response to be committed with the default response
+status rather than the previously captured error status.
+
+Such responses will now include the correct status, but will not be
+forwarded to the error controller. Such forwarding is not possible
+due to the response already having been committed.
+
+Closes gh-11814

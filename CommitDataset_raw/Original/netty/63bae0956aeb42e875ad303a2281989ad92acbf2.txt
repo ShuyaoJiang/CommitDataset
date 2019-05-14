@@ -1,0 +1,13 @@
+Ensure ThreadDeathWatcher and GlobalEventExecutor will not cause classloader leaks.
+
+Motivation:
+
+ThreadDeathWatcher and GlobalEventExecutor may create and start a new thread from various other threads and so inherit the classloader. We need to ensure we not inherit to allow recycling the classloader.
+
+Modifications:
+
+Use Thread.setContextClassLoader(null) to ensure we not hold a strong reference to the classloader and so not leak it.
+
+Result:
+
+Fixes [#7290].

@@ -1,0 +1,12 @@
+Allow non-public @Transactional test methods
+
+Prior to this commit, the TransactionalTestExecutionListener required
+@Transactional test methods to be public; however, neither TestNG nor
+JUnit 5 require that @Test methods are public. Consequently, non-public
+transactional test methods silently run *without* a transaction.
+
+This commit removes the 'public' restriction on transactional test
+methods by setting the 'publicMethodsOnly' flag in
+AnnotationTransactionAttributeSource to false.
+
+Issue: SPR-14000

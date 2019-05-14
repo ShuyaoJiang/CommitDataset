@@ -1,0 +1,14 @@
+Switch order of multipart Content-Type directives
+
+Since SPR-15205, the `FormHttpMessageConverter` is adding a `charset`
+directive to the `Content-Type` request header in order to help servers
+understand which charset is being used to encode headers of each part.
+
+As reported in SPR-17030 and others, some servers are not parsing
+properly such header values and assume that `boundary` is the last
+directive in the `Content-Type` header.
+
+This commit reorders the charset information right before the boundary
+declaration to get around those issues.
+
+Issue: SPR-17030

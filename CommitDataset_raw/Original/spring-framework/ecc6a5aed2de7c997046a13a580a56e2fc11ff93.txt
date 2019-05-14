@@ -1,0 +1,8 @@
+Improve SimpleStreamingClientHttpRequest performance
+
+Ensure that NonClosingOutputStream calls with a byte array call the
+corresponding methods of the underlying OutputStream rather than
+relying on the default NonClosingOutputStream implementation, which
+writes one bte at a time. This significantly improves performance.
+
+Issues: SPR-9530

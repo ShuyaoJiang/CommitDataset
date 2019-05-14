@@ -1,0 +1,11 @@
+HttpObjectDecoder half close behavior
+
+Motivation:
+In the event an HTTP message does not include either a content-length or a transfer-encoding header [RFC 7230](https://tools.ietf.org/html/rfc7230#section-3.3.3) states the behavior must be treated differently for requests and responses. If the channel is half closed then the HttpObjectDecoder is not invoking decodeLast and thus not checking if messages should be sent up the pipeline.
+
+Modifications:
+- Add comments to clarify regular decode default case.
+- Handle the ChannelInputShutdownEvent in the HttpObjectDecoder and evaluate if messages need to be generated.
+
+Result:
+Messages are generated on half closed, and comments clarify existing logic.

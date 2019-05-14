@@ -1,0 +1,15 @@
+Makes `EmptyByteBuf#hashCode` and `AbstractByteBuf#hashCode` consistent (#7870)
+
+Motivation:
+The `AbstractByteBuf#equals` method doesn't take into account the
+class of buffer instance. So the two buffers with different classes
+must have the same `hashCode` values if `equals` method returns `true`.
+But `EmptyByteBuf#hashCode` is not consistent with `#hashCode`
+of the empty `AbstractByteBuf`, that is violates the contract and
+can lead to errors.
+
+Modifications:
+Return `1` in `EmptyByteBuf#hashCode`.
+
+Result:
+Consistent behavior of `EmptyByteBuf#hashCode` and `AbstractByteBuf#hashCode`.

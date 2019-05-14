@@ -1,0 +1,13 @@
+Remove aliases resolution limitations when security is enabled (#31952)
+
+Resolving wildcards in aliases expression is challenging as we may end
+up with no aliases to replace the original expression with, but if we
+replace with an empty array that means _all which is quite the opposite.
+Now that we support and serialize the original requested aliases,
+whenever aliases are replaced we will be able to know what was
+initially requested. `MetaData#findAliases` can then be updated to not
+return anything in case it gets empty aliases, but the original aliases
+were not empty. That means that empty aliases are interpreted as _all
+only if they were originally requested that way.
+
+Relates to #31516

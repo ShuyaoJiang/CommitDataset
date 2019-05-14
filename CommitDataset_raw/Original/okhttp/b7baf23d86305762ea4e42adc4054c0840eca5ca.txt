@@ -1,0 +1,25 @@
+Fix for issue #1589: Vary caching on Android
+
+Keep the embedded OkHttp on Android working with Vary headers:
+
+Vary headers were broken with android.net.http.HttpResponseCache:
+the OkHttp caching requires a networkResponse to check the vary
+headers and it was not being provided, leading to a
+NullPointerException. Further changes were needed to actually
+retain the request headers needed for the vary check itself.
+
+Support for other stacks using the RequestCache has been
+dropped for requests that include Vary headers.
+
+To avoid regressions the existing ResponseCacheTest has been
+changed to use the real cache. Previously, the use of
+InMemoryResponseCache was hiding the Vary problem.
+
+The ResponseCacheTest is now run with an AndroidShimResponseCache
+to prove the tests work with real cases. The case without the shim
+is covered with the CacheTest. ResponseCacheTest has been updated
+to include many tests from CacheTest that were missing.
+
+Switching the test to a real cache revealed a problem in the
+JavaApiConverter and bad headers, which has been fixed by
+making Headers.Builder.addLenient(String, String) accessible.

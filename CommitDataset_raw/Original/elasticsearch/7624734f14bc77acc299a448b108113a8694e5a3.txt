@@ -1,0 +1,13 @@
+Added wait_for_metadata_version parameter to cluster state api. (#35535)
+
+The `wait_for_metadata_version` parameter will instruct the cluster state
+api to only return a cluster state until the metadata's version is equal or
+greater than the version specified in `wait_for_metadata_version`. If  
+the specified `wait_for_timeout` has expired then a timed out response 
+is returned. (a response with no cluster state and wait for timed out flag set to true)
+In  the case metadata's version is equal or higher than  `wait_for_metadata_version`
+then the api will immediately return.
+
+This feature is useful to avoid external components from constantly
+polling the cluster state to whether somethings have changed in the
+cluster state's metadata.

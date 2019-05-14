@@ -1,0 +1,13 @@
+Use additional properties instead of default args
+
+SpringApplication (and the builder) now do not accept default
+command line args because the override semantics were wrong -
+you need to be able to override them with everything, including
+system properties and external properties (per profile).
+
+Also implements new semantics for profiles - you can add
+additional profiles in the Java API and they will not be
+squashed by command line or system properties entries for
+spring.profiles.active.
+
+[Fixes #58989906] [bs-336] DefaultArgs -> DefaultProperties

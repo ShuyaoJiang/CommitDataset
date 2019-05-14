@@ -1,0 +1,19 @@
+[PkiRealm] Invalidate cache on role mappings change (#31510)
+
+PkiRealm caches successful authentications and provides ways to
+invalidate the cache. But in some scenario's the cache was not being
+invalidated on role mapping change.
+PkiRealm does not inform role mapper to be notified for cache
+refresh on role mapping updates.
+The logic in `TransportClearRealmCacheAction#nodeOperation`
+which gets invoked for refreshing cache on realms, considers null or
+empty realm names in the request as clear cache on all realms. When
+LDAP realm is not present then it clears cache for all realms so it
+works fine, but when LDAP realm is configured then role mapper
+sends a request with LDAP realm names and so the cache is cleared
+only for those realms.
+
+This commit resolves the issue by registering PkiRealm with role
+mapper for cache refresh. PkiRealm implements CachingRealm and as it
+does not extend CachingUsernamePasswordRealm, have modified the
+interface method `refreshRealmOnChange` to accept CachingRealm.

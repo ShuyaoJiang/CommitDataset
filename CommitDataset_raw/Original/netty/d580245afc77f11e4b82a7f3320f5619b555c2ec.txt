@@ -1,0 +1,19 @@
+DefaultHttp2Connection.close Reentrant Modification
+
+Motivation:
+The DefaultHttp2Conneciton.close method accounts for active streams being iterated and attempts to avoid reentrant modifications of the underlying stream map by using iterators to remove from the stream map. However there are a few issues:
+
+- While iterating over the stream map we don't prevent iterations over the active stream collection
+- Removing a single stream may actually remove > 1 streams due to closed non-leaf streams being preserved in the priority tree which may result in NPE
+
+Preserving closed non-leaf streams in the priority tree is no longer necessary with our current allocation algorithms, and so this feature (and related complexity) can be removed.
+
+Modifications:
+- DefaultHttp2Connection.close should prevent others from iterating over the active streams and reentrant modification scenarios which may result from this
+- DefaultHttp2Connection should not keep closed stream in the priority tree
+  - Remove all associated code in DefaultHttp2RemoteFlowController which accounts for this case including the ReducedState object
+  - This includes fixing writability changes which depended on ReducedState
+- Update unit tests
+
+Result:
+Fixes https://github.com/netty/netty/issues/5198

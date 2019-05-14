@@ -1,0 +1,10 @@
+Make NioSocketChannelTest more bullet-proof
+
+Motivation:
+I had the NioSocketChannelTest.testFlushCloseReentrance() fail sometimes on one of my linux installation. This change let it pass all the time.
+
+Modification:
+Set the SO_SNDBUF to a small value to force split writes
+
+Result:
+Test is passing all the time where it was sometimes fail before.

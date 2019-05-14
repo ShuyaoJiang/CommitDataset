@@ -1,0 +1,13 @@
+Update Netty4ClientHttpRequestFactory buffer size
+
+Before this change, the maxRequestSize property was used (incorrectly)
+to limit both the size of the request and response. The change:
+
+- removes maxRequestSize and therefore no longer places limits on the
+size of the request thus matching to AbstractBufferingClientHttpRequest
+which is the base class for other buffering client implementations.
+
+- adds maxResponseSize property required to create Netty's
+HttpObjectAggregator for aggregating responses.
+
+Issue: SPR-12623

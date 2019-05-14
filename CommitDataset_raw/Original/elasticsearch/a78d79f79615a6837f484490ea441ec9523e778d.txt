@@ -1,0 +1,27 @@
+Fix alias resolution runtime complexity. (#40263)
+
+A user reported that the same query that takes ~900ms when querying an index
+pattern only takes ~50ms when only querying indices that have matches. The
+query is a date range query and we confirmed that the `can_match` phase works
+as expected. I was able to reproduce this issue locally with a single node: with
+900 1-shard indices, a query to an index pattern that matches all indices runs
+in ~90ms while a query to the only index that has matches runs in 0-1ms.
+
+This ended up not being related to the `can_match` phase but to the cost of
+resolving aliases when querying an index pattern that matches lots of indices.
+In that case, we first resolve the index pattern to a list of concrete indices
+and then for each concrete index, we check whether it was matched through an
+alias, meaning we might have to apply alias filters. Unfortunately this second
+per-index operation runs in linear time with the number of matched concrete
+indices, which means that alias resolution runs in O(num_indices^2) overall.
+So queries get exponentially slower as an index pattern matches more indices.
+
+I reorganized alias resolution into a one-step operation that runs in linear
+time with the number of matches indices, and then a per-index operation that
+runs in linear time with the number of aliases of this index. This makes alias
+resolution run is O(num_indices * num_aliases_per_index) overall instead. When
+testing the scenario described above, the `took` went down from ~90ms to ~10ms.
+It is still more than the 0-1ms latency that one gets when only querying the
+single index that has data, but still much better than what we had before.
+
+Closes #40248

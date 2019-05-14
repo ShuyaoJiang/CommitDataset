@@ -1,0 +1,5 @@
+Improve the utilization of subpage pools
+
+.. by avoiding the overly frequent removal of a subpage from a pool
+
+This change makes sure that the unused subpage is not removed when there's no subpage left in the pool.  If the last subpage is removed from the pool, it is very likely that the allocator will create a new subpage very soon again, so it's better not remove it.

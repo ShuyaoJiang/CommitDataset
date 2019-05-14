@@ -1,0 +1,12 @@
+Fix NPE in InboundHttp2ToHttpAdapter
+
+Motiviation:
+
+At the moment an NPE is thrown if someone tries to use the InboundHttp2ToHttpAdapter.
+
+Modifications:
+- Ensure the status was null in "InboundHttp2ToHttpAdapter::onPushPromiseRead" before calling "HttpConversionUtil.parseStatus" methods.
+- Fix setting status to OK in "InboundHttp2ToHttpAdapter::onPushPromiseRead".
+
+Result:
+Fixes [#7214].

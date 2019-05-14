@@ -1,0 +1,79 @@
+Adds a new auto-interval date histogram (#28993)
+
+* Adds a new auto-interval date histogram
+
+This change adds a new type of histogram aggregation called `auto_date_histogram` where you can specify the target number of buckets you require and it will find an appropriate interval for the returned buckets. The aggregation works by first collecting documents in buckets at second interval, when it has created more than the target number of buckets it merges these buckets into minute interval bucket and continues collecting until it reaches the target number of buckets again. It will keep merging buckets when it exceeds the target until either collection is finished or the highest interval (currently years) is reached. A similar process happens at reduce time.
+
+This aggregation intentionally does not support min_doc_count, offest and extended_bounds to keep the already complex logic from becoming more complex. The aggregation accepts sub-aggregations but will always operate in `breadth_first` mode deferring the computation of sub-aggregations until the final buckets from the shard are known. min_doc_count is effectively hard-coded to zero meaning that we will insert empty buckets where necessary.
+
+Closes #9572
+
+* Adds documentation
+
+* Added sub aggregator test
+
+* Fixes failing docs test
+
+* Brings branch up to date with master changes
+
+* trying to get tests to pass again
+
+* Fixes multiBucketConsumer accounting
+
+* Collects more buckets than needed on shards
+
+This gives us more options at reduce time in terms of how we do the
+final merge of the buckeets to produce the final result
+
+* Revert "Collects more buckets than needed on shards"
+
+This reverts commit 993c782d117892af9a3c86a51921cdee630a3ac5.
+
+* Adds ability to merge within a rounding
+
+* Fixes nonn-timezone doc test failure
+
+* Fix time zone tests
+
+* iterates on tests
+
+* Adds test case and documentation changes
+
+Added some notes in the documentation about the intervals that can bbe
+returned.
+
+Also added a test case that utilises the merging of conseecutive buckets
+
+* Fixes performance bug
+
+The bug meant that getAppropriate rounding look a huge amount of time
+if the range of the data was large but also sparsely populated. In
+these situations the rounding would be very low so iterating through
+the rounding values from the min key to the max keey look a long time
+(~120 seconds in one test).
+
+The solution is to add a rough estimate first which chooses the
+rounding based just on the long values of the min and max keeys alone
+but selects the rounding one lower than the one it thinks is
+appropriate so the accurate method can choose the final rounding taking
+into account the fact that intervals are not always fixed length.
+
+Thee commit also adds more tests
+
+* Changes to only do complex reduction on final reduce
+
+* merge latest with master
+
+* correct tests and add a new test case for 10k buckets
+
+* refactor to perform bucket number check in innerBuild
+
+* correctly derive bucket setting, update tests to increase bucket threshold
+
+* fix checkstyle
+
+* address code review comments
+
+* add documentation for default buckets
+
+* fix typo

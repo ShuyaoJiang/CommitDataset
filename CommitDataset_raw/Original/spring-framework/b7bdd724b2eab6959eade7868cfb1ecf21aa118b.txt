@@ -1,0 +1,13 @@
+Simplify use of headers for SockJsClient requests
+
+Before this change, XhrTransport implementations had to be configured
+with the headers to use for HTTP requests other than the initial
+handshake.
+
+After this change the handshake headers passed to SockJsClient by
+default are used for all other HTTP requests related to the SockJS
+connection (e.g. info request, xhr send/receive). A property on
+SockJsClient allows restricting the headers to use for other HTTP
+requests to a subset of the handshake headers.
+
+Issue: SPR-13254

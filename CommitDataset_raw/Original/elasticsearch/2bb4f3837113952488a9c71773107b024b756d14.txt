@@ -1,0 +1,7 @@
+Add write*Blob option to replace existing blob (#31729)
+
+Adds a new parameter to the BlobContainer#write*Blob methods to specify whether the existing file
+should be overridden or not. For some metadata files in the repository, we actually want to replace
+the current file. This is currently implemented through an explicit blob delete and then a fresh write.
+In case of using a cloud provider (S3, GCS, Azure), this results in 2 API requests instead of just 1.
+This change will therefore allow us to achieve the same functionality using less API requests.

@@ -1,0 +1,16 @@
+Stop ActiveMQ pooled connection factory when context is closed
+
+Previously, ActiveMQ's pooled connection factory was not closed as
+part of the application context being closed. This would leave
+non-daemon threads running which could cause shutdown to hang unless
+the JVM itself was shutting down (in which case a shutdown hook would
+stop the pool).
+
+This commit configures each pooled connection factory bean with a
+custom destroy method so that the pool is stopped as part of the
+application context being closed. To allow the destroy method to only
+be declared when the connection factory is pooled, the bean method
+has been split into two; one for pooled and one for non-pooled. This
+is a partial backport of the changes made in bedf2edf.
+
+Closes gh-4748

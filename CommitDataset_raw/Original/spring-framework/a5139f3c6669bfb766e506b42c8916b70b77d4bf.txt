@@ -1,0 +1,19 @@
+Support searches for multiple merged composed annotations
+
+Prior to this commit it was possible to search for the 1st merged
+annotation above an annotated element. It was also possible to search
+for annotation attributes aggregated from all annotations above an
+annotated element; however, it was impossible to search for all
+composed annotations above an annotated element and have the results as
+synthesized merged annotations instead of a multi-map of attributes.
+
+This commit introduces a new findAllMergedAnnotations() method in
+AnnotatedElementUtils that finds all annotations of the specified type
+within the annotation hierarchy above the supplied element. For each
+such annotation found, it merges that annotation's attributes with
+matching attributes from annotations in lower levels of the annotation
+hierarchy and synthesizes the results back into an annotation of the
+specified type. All such merged annotations are collected and returned
+as a set.
+
+Issue: SPR-13486

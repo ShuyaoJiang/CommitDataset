@@ -1,0 +1,13 @@
+Avoid unnecessary call to ByteBuf.isReadable() from ByteToMessageDecoder
+
+Motivation:
+
+This will avoid one unncessary method invokation which will slightly improve performance.
+
+Modifications:
+
+Instead of calling isReadable we just check for the value of readableBytes()
+
+Result:
+
+Nothing functionally speaking change.

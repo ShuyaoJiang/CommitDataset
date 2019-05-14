@@ -1,0 +1,8 @@
+[TEST] Put options that enable assertions earlier on command line (#29395)
+
+This change moves the -ea and -esa options that enable assertions for
+test nodes before the cluster-specific JVM arguments on the Java command
+line.  This opens up the possibility for the cluster-specific JVM
+arguments to disable assertions for one particular package or class,
+which can be useful in BWC testing where incorrect assertions cannot be
+removed from released versions of the product.

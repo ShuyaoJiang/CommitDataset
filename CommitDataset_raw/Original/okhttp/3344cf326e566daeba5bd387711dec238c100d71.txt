@@ -1,0 +1,8 @@
+Recover from failures while writing a POST body.
+
+This introduces failure recovery in the output stream. It means
+we should be able to recover from any kind of failure that could
+be triggered by aggressive connection pooling.
+
+The recovery buffer is 8 KiB. I anticipate this should be more
+than enough to detect that an HTTP post is going to a black hole.

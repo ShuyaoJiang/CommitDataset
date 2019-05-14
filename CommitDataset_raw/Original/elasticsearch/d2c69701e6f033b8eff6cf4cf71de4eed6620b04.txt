@@ -1,0 +1,19 @@
+Fix SocketPermission in test framework for alpha2 bump
+
+It was using the wrong version, which can cause errors like
+
+```
+  1> java.security.AccessControlException: access denied ("java.net.SocketPermission" "[0:0:0:0:0:0:0:1]:34221" "connect,resolve")
+  1> 	at java.security.AccessControlContext.checkPermission(AccessControlContext.java:472) ~[?:1.8.0_111]
+  1> 	at java.security.AccessController.checkPermission(AccessController.java:884) ~[?:1.8.0_111]
+  1> 	at java.lang.SecurityManager.checkPermission(SecurityManager.java:549) ~[?:1.8.0_111]
+  1> 	at java.lang.SecurityManager.checkConnect(SecurityManager.java:1051) ~[?:1.8.0_111]
+  1> 	at sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:625) ~[?:?]
+  1> 	at org.apache.http.impl.nio.reactor.DefaultConnectingIOReactor.processSessionRequests(DefaultConnectingIOReactor.java:273) ~[httpcore-nio-4.4.5.jar:4.4.5]
+  1> 	at org.apache.http.impl.nio.reactor.DefaultConnectingIOReactor.processEvents(DefaultConnectingIOReactor.java:139) ~[httpcore-nio-4.4.5.jar:4.4.5]
+  1> 	at org.apache.http.impl.nio.reactor.AbstractMultiworkerIOReactor.execute(AbstractMultiworkerIOReactor.java:348) ~[httpcore-nio-4.4.5.jar:4.4.5]
+  1> 	at org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager.execute(PoolingNHttpClientConnectionManager.java:192) ~[httpasyncclient-4.1.2.jar:4.1.2]
+1> at org.apache.http.impl.nio.client.CloseableHttpAsyncClientBase$1.run(CloseableHttpAsyncClientBase.java:64) ~[httpasyncclient-4.1.2.jar:4.1.2]
+```
+
+When running tests

@@ -1,0 +1,15 @@
+Untangle Engine Constructor logic (#28245)
+
+Currently we have a fairly complicated logic in the engine constructor logic to deal with all the 
+various ways we want to mutate the lucene index and translog we're opening.
+
+We can:
+1) Create an empty index
+2) Use the lucene but create a new translog
+3) Use both
+4) Force a new history uuid in all cases.
+
+This leads complicated code flows which makes it harder and harder to make sure we cover all the 
+corner cases. This PR tries to take another approach. Constructing an InternalEngine always opens 
+things as they are and all needed modifications are done by static methods directly on the 
+directory, one at a time.

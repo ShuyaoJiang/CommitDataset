@@ -1,0 +1,36 @@
+Refactor metrics to expose richer feature set
+
+Main user-facing interface is still Counter/GaugeService but the
+back end behind that has more options. The Default*Services write
+metrics to a MetricWriter and there are some variants of that, and
+also variants of MetricReader (basic read-only actions).
+
+MetricRepository is now a combination of MetricReader, MetricWriter
+and some more methods that make it a bit more repository like.
+
+There is also a MultiMetricReader and a MultiMetricRepository for
+the common case where metrics are stored in related (often open
+ended) groups. Examples would be complex metrics like histograms
+and "rich" metrics with averages and statistics attached (which
+are both closed) and "field counters" which count the occurrences
+of values of a particular named field or slot in an incoming message
+(e.g. counting Twitter hastags, open ended).
+
+In memory and redis implementations are provided for the repositories.
+Generally speaking the in memory repository should be used as a
+local buffer and then scheduled "exports" can be executed to copy
+metric values accross to a remote repository for aggregation.
+There is an Exporter interface to support this and a few implementations
+dealing with different strategies for storing the results (singly or
+grouped).
+
+Codahale metrics are also supported through the MetricWriter interface.
+Currently implemented through a naming convention (since Codahale has
+a fixed object model this makes sense): metrics beginning with "histogram"
+are Histograms, "timer" for Timers, "meter" for Meters etc.
+
+Support for message driven metric consumption and production are provided
+through a MetricWriterMessageHandler and a MessageChannelMetricWriter.
+
+No support yet for pagination in the repositories, or for HATEOAS style
+HTTP endpoints.

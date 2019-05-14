@@ -1,0 +1,22 @@
+Do not prefer empty MAC address
+
+Motivation:
+
+When comparing MAC addresses searching for the best MAC address, if
+locally-administered address (e.g., from a Docker container) is compared
+against an empty MAC address, the empty MAC address will be marked as
+preferred. In cases this is the only available MAC address, this leaves
+Netty using a random machine ID instead of using a perfectly valid
+machine ID from the locally-adminstered address.
+
+Modifications:
+
+This commit modifies the MAC address logic so that the empty MAC address
+is not preferred over a locally-administered address. This commit also
+simplifies the comparison logic here.
+
+Result:
+
+Empty MAC addresses will not be preferred over locally-administered
+addresses thus permitting the default machine ID to be the
+locally-adminstered MAC address if it is the only available MAC address.

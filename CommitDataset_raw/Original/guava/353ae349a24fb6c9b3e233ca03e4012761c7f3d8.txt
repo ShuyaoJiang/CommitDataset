@@ -1,0 +1,14 @@
+Rewrite AbstractFuture to fix the following issues
+
+1. set,setException and cancel are all potentially blocking methods
+2. using AbstractQueuedSynchronizer is overkill for a future
+3. the lack of a setFuture method leads to a lot of repetitive code
+4. abstract future is fat
+5. timed get() calls will always succeed if the future is done when the blocked thread wakes up, even if the deadline has passed.
+
+The approach is to directly implement the interface using Unsafe and LockSupport.
+
+ExecutionListBenchmark is written to essentially generate as much thread contention as possible... im not sure how useful it is.  Also, the more i try to run multithreaded (micro) caliper benchmarks the less confident i am that any of the data is reliable.  The main point is that the future is definitely much smaller and also faster in most scenarios.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=80505365

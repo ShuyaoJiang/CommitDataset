@@ -1,0 +1,12 @@
+Rewrite bridge implementation in DefaultChannelHandlerContext
+
+This commit splits bridge into two parts.  One is NextBridgeFeeder,
+which provides ByteBuf and MessageBuf that are local to the context
+whose next*Buffer() has been invoked on.  The other is a thread-safe
+queue that stores the data fed by NextBridgeFeeder.feed().
+
+By splitting the bridge into the two parts, the data pushed by a handler
+is not lost anymore when the next handler who provided the next buffer
+is removed from the pipeline.
+
+- Fixes #1272

@@ -1,0 +1,4 @@
+Make sure handlerAdded() is called before forwarding the buffer content of the removed handler
+
+- Added a test case that reproduces the problem in ReplayingDecoderTest
+- Call newHandler.handlerAdded() *before* oldHandler.handlerRemoved() to ensure newHandlerAdded() is called before forwarding the buffer content of the old handler in replace0().

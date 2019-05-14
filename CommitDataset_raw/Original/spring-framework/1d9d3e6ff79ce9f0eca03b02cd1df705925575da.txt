@@ -1,0 +1,10 @@
+Fix false negative test failure in ResourceTests
+
+Prior to changes in commit 57851de88e84006afc104c4f22eb2fbaf2e0d3d1,
+AbstractResource#getFilename threw IllegalStateException unless
+overridden by a subclass. Following that change, this method now throws
+null instead, but ResourceTests#testAbstractResourceExceptions had not
+been updated to reflect, resulting in a false negative failure. This has
+now been fixed.
+
+Issue: SPR-9043

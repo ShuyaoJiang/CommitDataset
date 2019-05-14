@@ -1,0 +1,10 @@
+Fix a bug where HttpObjectDecoder generates two LastHttpContent consecutively
+
+Motivation:
+When an HttpResponseDecoder decodes an invalid chunk, a LastHttpContent instance is produced and the decoder enters the 'BAD_MESSAGE' state, which is not supposed to produce a message any further.  However, because HttpObjectDecoder.invalidChunk() did not clear this.message out to null, decodeLast() will produce another LastHttpContent message on a certain situation.
+
+Modification:
+Do not forget to null out HttpObjectDecoder.message in invalidChunk(), and add a test case for it.
+
+Result:
+No more consecutive LastHttpContent messages produced by HttpObjectDecoder.

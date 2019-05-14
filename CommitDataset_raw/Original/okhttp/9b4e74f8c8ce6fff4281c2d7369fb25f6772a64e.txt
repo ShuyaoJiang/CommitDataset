@@ -1,0 +1,9 @@
+A Pipe.
+
+This is something we need to implement HttpURLConnection atop the native
+OkHttp API. The application thread wants to be active, writing to its
+OutputStream. But in OkHttp's API, this work wants to happen in the
+RequestBody.writeTo() callback. To make this work we give the HttpUrlConnection
+OutputStream the sink end of the pipe, and the RequestBody the source end
+of the pipe. It's a bit of plumbing, but the benefit is that backpressure,
+timeouts, and failures will propagate as expected.

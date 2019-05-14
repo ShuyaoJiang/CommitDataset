@@ -1,0 +1,16 @@
+Allow directly present @BootstrapWith to override meta annotations
+
+Prior to this commit, if a test class was meta-annotated with multiple
+@BootstrapWith declarations that registered different
+TestContextBootstrapper implementations, such a configuration would
+result in an IllegalStateException, and there was no way to override
+this behavior.
+
+This commit addresses this shortcoming by relaxing the explicit
+TestContextBootstrapper resolution in BootstrapUtils so that a directly
+present @BootstrapWith annotation will now override declarations of
+@BootstrapWith that are meta-present. In other words, if @BootstrapWith
+is used as a meta-annotation, it can be overridden directly on the test
+class via an explicit, local declaration of @BootstrapWith.
+
+Issue: SPR-17006

@@ -1,0 +1,16 @@
+Relax fault detector in some disruption tests (#38101)
+
+Today we use `AbstractDisruptionTestCase` to test the behaviour of things like
+master elections in the presence of cluster disruptions. These tests have
+rather enthusiastic fault detection settings, detecting a fault if a single
+ping fails, with a one-second timeout. Furthermore there are some tests that
+assert the identity of the master remains unchanged during some disruption, and
+these assertions fail rather often thanks to the overly sensitive fault
+detector.
+
+However in a number of these tests the fault detector need not be this
+sensitive. This commit moves some such tests into their own test suite and uses
+more sensible fault-detection settings to avoid the kind of master instability
+that is causing CI failures.
+
+Closes #37699

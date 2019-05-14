@@ -1,0 +1,11 @@
+Skip bad request REST test on pre-6.0
+
+This commit adds a skip for the bad request REST test on pre-6.0
+nodes. Previously, a request for /_(.*) where $1 is not an existing
+endpoint would return a 404. This is because the request would be
+treated as a get index request for an index named _$1. However, an index
+can never start with "_" so logic was added to detect this and return a
+400 instead as this should be treated as a bad request. During the
+mixed-cluster BWC tests, a node running pre-6.0 code will still return a
+404 though. Therefore, this test needs to skipped in such a
+mixed-cluster scenario.

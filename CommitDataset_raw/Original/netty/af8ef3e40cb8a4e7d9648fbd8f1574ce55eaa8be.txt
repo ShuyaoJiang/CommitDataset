@@ -1,0 +1,13 @@
+Correctly release debugData and notify the promise when goAway was already sent
+
+Motivation:
+
+Commit 908464f161385361c450826bb1242c06f78d931e also introduced a change to guard against re-entrance but failed to correctly handle the debugData and promise.
+
+Modifications:
+
+Release debugData and correctly notify the promise.
+
+Result:
+
+No more buffer leak and promise is always notified.

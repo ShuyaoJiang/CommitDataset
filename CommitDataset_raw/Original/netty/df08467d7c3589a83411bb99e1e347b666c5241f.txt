@@ -1,0 +1,13 @@
+Fix possible NPE introduced by a137291ad161c970259d9a5d7cc206c026f08ee7 when using SslProvider.OPENSSL and init via files or OpenSslX509KeyManagerFactory (#8126)
+
+Motivation:
+
+a137291ad161c970259d9a5d7cc206c026f08ee7 introduced a way to get the most speed out of OpenSSL by not only caching keymaterial but pre-compute these. The problem was we missed to check for null before doing an instanceof check and then a cast which could lead to a NPE as we tried to cast null to Exception and throw it.
+
+Modifications:
+
+Add null check and unit test.
+
+Result:
+
+No more NPE when keymaterial was not found for requested alias.

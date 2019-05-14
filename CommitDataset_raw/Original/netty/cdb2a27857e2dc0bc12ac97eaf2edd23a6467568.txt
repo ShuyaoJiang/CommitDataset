@@ -1,0 +1,22 @@
+Add TCP_FASTOPEN_CONNECT epoll option
+
+Motivation:
+
+Linux kernel 4.11 introduced a new socket option,
+TCP_FASTOPEN_CONNECT, that greatly simplifies making TCP Fast Open
+connections on client side. Usually simply setting the flag before
+connect() call is enough, no more changes are required.
+
+Details can be found in kernel commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=19f6d3f3
+
+Modifications:
+
+TCP_FASTOPEN_CONNECT socket option was added to EpollChannelOption
+class.
+
+Result:
+
+Netty clients can easily make TCP Fast Open connections. Simply
+calling option(EpollChannelOption.TCP_FASTOPEN_CONNECT, true) in
+client bootstrap is enough (given recent enough kernel).

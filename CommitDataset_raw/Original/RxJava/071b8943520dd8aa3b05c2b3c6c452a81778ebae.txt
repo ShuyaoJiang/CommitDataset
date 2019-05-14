@@ -1,0 +1,16 @@
+Fix concurrency bug in ScheduledObserver
+
+This is a followup to https://github.com/Netflix/RxJava/commit/1fa6ae3be23200c787cc1c25c0bb8cac99ae0d17 that fixed one issue (concurrency) and created another (broke Rx contract by allowing concurrent execution of onNext).
+
+I have reverted back to the previous implementatio and then attempted to fix the concurrency issue again.
+
+I think it ended up being a simple fix … just re-ordering the `enqueue` method to remove the race-condition between the logic protected by the AtomicInteger and adding to the queue.
+
+It's not an atomic operation (adding then processing) so we need to just add to the queue and treat it as an async data structure and keep the AtomicInteger portion to only protecting the "process or not process" logic.
+
+```java
+        // this must happen before 'counter' is used to provide synchronization between threads
+        queue.offer(notification);
+```
+
+This may still have issues but it's now working in all of my concurrency tests (the ones that broken with the original and then my modified version). The tests are not easy to build unit tests out of as they require running for many seconds and non-deterministically causing a race condition so I have not yet spend the time to try and figure out a deterministic unit test hence them not being committed.

@@ -1,0 +1,220 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (icu4j-LICENSE.txt, icu4j-NOTICE.txt, super-csv-LICENSE.txt, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.xpack.core.ml.filestructurefinder:  
+
+1.1. Rename type FieldStats with FieldStats
+
+1.2. Rename type FieldStatsTests with FieldStatsTests
+
+1.3. Add a class for file structure tests. It allows to:
+
+	Create test instance;
+	Create test file structure;
+	Get instance reader;
+	Do parse instance;
+	Get file structure tests to X content params
+
+2. Changes to package org.elasticsearch.xpack.ml.filestructurefinder:  
+
+2.1. Rename type DelimitedLogStructureFinder with DelimitedFileStructureFinder
+
+2.2. Add a class for delimited file structure finder factory. It allows to:
+
+	Instantiate delimited file structure finder factory;
+	Make similar;
+	Can find format;
+	Can create  from sample;
+	Create explanation list from sample
+
+2.3. Add a class for delimited file structure finder factory tests. It allows to:
+
+	Handle test can create csv from sample given csv;
+	Handle test can create csv from sample given tsv;
+	Handle test can create csv from sample given semi colon delimited;
+	Handle test can create csv from sample given pipe delimited;
+	Handle test can create csv from sample given text;
+	Handle test can create tsv from sample given tsv;
+	Handle test can create tsv from sample given semi colon delimited;
+	Handle test can create tsv from sample given pipe delimited;
+	Handle test can create tsv from sample given text;
+	Handle test can create semi colon delimited from sample given semi colon delimited;
+	Handle test can create semi colon delimited from sample given pipe delimited;
+	Handle test can create semi colon delimited from sample given text;
+	Handle test can create pipe delimited from sample given pipe delimited;
+	Handle test can create pipe delimited from sample given text
+
+2.4. Add a class for delimited file structure finder tests. It allows to:
+
+	Handle test create configs given complete csv;
+	Handle test create configs given complete csv and column names override;
+	Handle test create configs given complete csv and has header row override;
+	Handle test create configs given csv with incomplete last record;
+	Handle test create configs given csv with trailing nulls;
+	Handle test create configs given csv with trailing nulls and overridden time field;
+	Handle test create configs given csv with trailing nulls except header;
+	Handle test create configs given csv with trailing nulls except header and column names override;
+	Handle test create configs given csv with time last column;
+	Handle test find header from sample given header in sample;
+	Handle test find header from sample given header not in sample;
+	Handle test levenshtein distance;
+	Handle test levenshtein compare rows;
+	Handle test line has unescaped quote;
+	Handle test row contains duplicate non empty values
+
+2.5. Rename type FieldStatsCalculator with FieldStatsCalculator
+
+2.6. Rename type FieldStatsCalculatorTests with FieldStatsCalculatorTests
+
+2.7. Add an interface declaration  for file structure finder. It allows to:
+
+	Get sample messages;
+	Get structure
+
+2.8. Add an interface declaration  for file structure finder factory. It allows to:
+
+	Can find format;
+	Can create  from sample;
+	Create explanation list from sample
+
+2.9. Add a class for file structure finder manager. It allows to:
+
+	Instantiate file structure finder manager  with scheduler scheduled executor service;
+	Find file structure;
+	Find charset;
+	Make best structure finder;
+	Get sample file
+
+2.10. Add a class for file structure finder manager tests. It allows to:
+
+	Handle setup;
+	Handle shutdown scheduler;
+	Handle test find charset given character widths;
+	Handle test find charset given binary;
+	Handle test make best structure given nd json;
+	Handle test make best structure given nd json and delimited override;
+	Handle test make best structure given xml;
+	Handle test make best structure given xml and text override;
+	Handle test make best structure given csv;
+	Handle test make best structure given csv and json override;
+	Handle test make best structure given text;
+	Handle test make best structure given text and delimited override;
+	Handle test find file structure timeout
+
+2.11. Rename type LogStructureTestCase with FileStructureTestCase
+
+2.12. Rename type LogStructureUtils with FileStructureUtils
+
+2.13. Add a class for file structure utils tests. It allows to:
+
+	Test file structure utils tests more likely given text;
+	Test file structure utils tests more likely given keyword;
+	Handle test guess timestamp given single sample single field;
+	Handle test guess timestamp given single sample single field and consistent time field override;
+	Handle test guess timestamp given single sample single field and impossible time field override;
+	Handle test guess timestamp given single sample single field and consistent time format override;
+	Handle test guess timestamp given single sample single field and impossible time format override;
+	Handle test guess timestamp given samples with same single time field;
+	Handle test guess timestamp given samples with one single time field different format;
+	Handle test guess timestamp given samples with different single time field;
+	Handle test guess timestamp given single sample many fields one time format;
+	Handle test guess timestamp given samples with many fields same single time format;
+	Handle test guess timestamp given samples with many fields same time field different time format;
+	Handle test guess timestamp given samples with many fields same single time format distraction before;
+	Handle test guess timestamp given samples with many fields same single time format distraction after;
+	Handle test guess timestamp given samples with many fields inconsistent time fields;
+	Handle test guess timestamp given samples with many fields inconsistent and consistent time fields;
+	Handle test guess mapping given nothing;
+	Handle test guess mapping given keyword;
+	Handle test guess mapping given text;
+	Handle test guess mapping given ip;
+	Handle test guess mapping given double;
+	Handle test guess mapping given long;
+	Handle test guess mapping given date;
+	Handle test guess mapping given boolean;
+	Handle test guess mapping given array;
+	Handle test guess mapping given object;
+	Handle test guess mapping given object and non object;
+	Handle test guess mappings and calculate field stats;
+	Handle test make ingest pipeline definition given structured without timestamp;
+	Handle test make ingest pipeline definition given structured with timestamp;
+	Handle test make ingest pipeline definition given semi structured;
+	Guess mapping;
+	Make top hits
+
+2.14. Add a class for grok pattern creator tests. It allows to:
+
+	Handle test build field name;
+	Handle test populate prefaces and epilogues given timestamp;
+	Handle test populate prefaces and epilogues given email address;
+	Handle test append best grok match for strings given timestamps and log levels;
+	Handle test append best grok match for strings given numbers in brackets;
+	Handle test append best grok match for strings given negative numbers without break;
+	Handle test append best grok match for strings given hex numbers;
+	Handle test append best grok match for strings given hostnames with numbers;
+	Handle test append best grok match for strings given email addresses;
+	Handle test append best grok match for strings given uris;
+	Handle test append best grok match for strings given paths;
+	Handle test append best grok match for strings given kv pairs;
+	Handle test create grok pattern from examples given named logs;
+	Handle test create grok pattern from examples given catalina logs;
+	Handle test create grok pattern from examples given multi timestamp logs;
+	Handle test find full line grok pattern given apache combined logs;
+	Handle test adjust for punctuation given common prefix;
+	Handle test adjust for punctuation given no common prefix;
+	Handle test validate full line grok pattern given valid;
+	Handle test validate full line grok pattern given invalid
+
+2.15. Add a class for text log file structure finder. It allows to:
+
+	Make text log file structure finder;
+	Instantiate text log file structure finder  with sample messages list, file structure and file structure;
+	Get sample messages;
+	Get structure;
+	Most likely timestamp;
+	Get weight for match;
+	Find difference  between two highest weights;
+	Create multi line message start regex
+
+2.16. Add a class for text log file structure finder factory. It allows to:
+
+	Can find format;
+	Can create  from sample;
+	Create explanation list from sample
+
+2.17. Add a class for text log file structure finder factory tests. It allows to:
+
+	Handle test can create from sample given text
+
+2.18. Rename type TextLogStructureFinderTests with TextLogFileStructureFinderTests
+
+2.19. Rename type TimestampFormatFinderTests with TimestampFormatFinderTests
+
+2.20. Add a class for xml file structure finder. It allows to:
+
+	Make xml file structure finder;
+	Make doc builder factory;
+	Instantiate xml file structure finder  with sample messages list, file structure and file structure;
+	Get sample messages;
+	Get structure;
+	Handle num newlines in;
+	Convert doc;
+	Add node  to map
+
+2.21. Rename type XmlLogStructureFinderFactory with XmlFileStructureFinderFactory
+
+2.22. Add a class for xml file structure finder factory tests. It allows to:
+
+	Handle test can create from sample given xml;
+	Handle test can create from sample given csv;
+	Handle test can create from sample given tsv;
+	Handle test can create from sample given semi colon delimited;
+	Handle test can create from sample given pipe delimited;
+	Handle test can create from sample given text
+
+2.23. Add a class for xml file structure finder tests. It allows to:
+
+	Handle test create configs given good xml
+

@@ -1,0 +1,13 @@
+Prevent throttled indices to be searched through wildcards by default (#34354)
+
+Today if a wildcard, date-math expression or alias expands/resolves
+to an index that is search-throttled we still search it. This is likely
+not the desired behavior since it can unexpectedly slow down searches
+significantly.
+
+This change adds a new indices option that allows `search`, `count`
+and `msearch` to ignore throttled indices by default. Users can
+force expansion to throttled indices by using `ignore_throttled=true`
+on the rest request to expand also to throttled indices.
+
+Relates to #34352

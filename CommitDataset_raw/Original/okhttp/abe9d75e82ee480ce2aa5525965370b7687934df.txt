@@ -1,0 +1,5 @@
+Fix problems with DeflaterSink.
+
+We weren't checking Deflater.needsInput() in the deflate loop. This is
+necessary on the RI, which returns 0 even when a subsequent call will
+deflate data.

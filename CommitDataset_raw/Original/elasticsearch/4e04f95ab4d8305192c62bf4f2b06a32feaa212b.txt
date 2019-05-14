@@ -1,0 +1,11 @@
+Fix issue where pages aren't released (#27459)
+
+This is related to #27422. Right now when we send a write to the netty
+transport, we attach a listener to the future. When you submit a write
+on the netty event loop and the event loop is shutdown, the onFailure
+method is called. Unfortunately, netty then tries to notify the listener
+which cannot be done without dispatching to the event loop. In this
+case, the dispatch fails and netty logs and error and does not tell us.
+
+This commit checks that netty is still not shutdown after sending a
+message. If netty is shutdown, we complete the listener.

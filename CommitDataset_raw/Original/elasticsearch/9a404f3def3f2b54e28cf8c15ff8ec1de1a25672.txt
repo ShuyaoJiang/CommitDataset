@@ -1,0 +1,12 @@
+Include fallback settings when checking dependencies (#33522)
+
+Today when checking settings dependencies, we do not check if fallback
+settings are present. This means, for example, that if
+cluster.remote.*.seeds falls back to search.remote.*.seeds, and
+cluster.remote.*.skip_unavailable and search.remote.*.skip_unavailable
+depend on cluster.remote.*.seeds, and we have set search.remote.*.seeds
+and search.remote.*.skip_unavailable, then validation will fail because
+it is expected that cluster.ermote.*.seeds is set here. This commit
+addresses this by also checking fallback settings when validating
+dependencies. To do this, we adjust the settings exist method to also
+check for fallback settings, a case that it was not handling previously.

@@ -1,0 +1,10 @@
+Correct unit test flaw introduced in 54c9ecf682eeafaaf7c826903c60f1c783b84dea
+
+Motivation:
+54c9ecf682eeafaaf7c826903c60f1c783b84dea introduced a unit tests which attempted to exclude addresses which resolved to loop back addresses from an assert statement. This was done with a static check for localhost but depending on machine configuration it is possible for other interfaces to be resolved.
+
+Modifications:
+- Use InetAddress#isLoopbackAddress() instead of string match on localhost
+
+Result:
+DnsNameResolverTest#testNameServerCache is more reliable.

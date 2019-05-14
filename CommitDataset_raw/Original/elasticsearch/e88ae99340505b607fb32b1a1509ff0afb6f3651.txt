@@ -1,0 +1,7 @@
+Remove NOREPLACE for /etc/elasticsearch in rpm and deb (#37839)
+
+The /etc/elasticsearch directory is currently configured as a config
+file with noreplace. However, the directory itself is not config, and
+can lead to an entire /etc/elasticsearch.rpmsave directory in some
+situations. This commit fixes the ospackage config to not specify those
+file bits for the directory itself, but only the files underneath it.

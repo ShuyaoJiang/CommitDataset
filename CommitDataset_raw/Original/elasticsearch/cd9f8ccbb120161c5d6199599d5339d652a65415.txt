@@ -1,0 +1,7 @@
+Use unwrapped cause to determine if node is closing (#39723)
+
+We need to unwrap and use the actual cause when determining if the node
+with primary shard is shutting down because TransportService will throw
+a TransportException wrapped in a SendRequestTransportException.
+
+Relates #39584

@@ -1,0 +1,17 @@
+Support wildcards in has_privileges API (elastic/x-pack-elasticsearch#1454)
+
+The has_privileges API now supports wildcards.
+The semantics are that the user must have a superset of the wildcard being checked.
+
+---------------------
+Role | Check | Result
+---------------------
+*    | foo*  | true
+f*   | foo*  | true
+foo* | foo*  | true
+foo* | foo?  | true
+foo? | foo?  | true
+foo? | foo*  | false
+foo  | foo*  | false
+
+Original commit: elastic/x-pack-elasticsearch@817550db17c40969c163388a3855636cc99a56dc

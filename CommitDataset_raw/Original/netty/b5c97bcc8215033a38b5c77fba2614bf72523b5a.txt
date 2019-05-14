@@ -1,0 +1,13 @@
+Use the length of MAC address as the last property to compare to get the best MAC address
+
+Motivation:
+
+Some operating systems like Windows 7 uses a valid globally unique EUI-64 MAC address for a virtual device (e.g. 00:00:00:00:00:00:00:E0), and because it's usually longer than the legit MAC-48 address, we should not use the length of MAC address when two MAC addresses are of the same quality.  Instead, we should compare the INET address of the NICs before comparing the length of the MAC addresses.
+
+Modification:
+
+Compare the length of MAC addresses as a last resort.
+
+Result:
+
+Correct MAC address detection in Windows with IPv6 enabled.

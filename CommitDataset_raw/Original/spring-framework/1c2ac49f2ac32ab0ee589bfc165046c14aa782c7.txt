@@ -1,0 +1,12 @@
+Add weak ETag support in ShallowEtagHeaderFilter
+
+This commit adds weak ETag support in ShallowEtagHeaderFilter.
+This improves the behavior of the filter in tow ways:
+
+* weak ETags in request headers such as `W/"0badc0ffee"` will be
+compared with a "weak comparison" (matching both weak and strong ETags
+of the same value)
+* when enabled with the "writeWeakETag" init param, the filter will
+write weak Etags in its HTTP responses
+
+Issue: SPR-13778

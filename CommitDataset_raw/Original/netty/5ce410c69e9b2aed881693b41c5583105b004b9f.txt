@@ -1,0 +1,18 @@
+Future compatibility with TLS ALPN
+
+Motivation:
+
+According to TLS ALPN draft-05, a client sends the list of the supported
+protocols and a server responds with the selected protocol, which is
+different from NPN.  Therefore, ApplicationProtocolSelector won't work
+with ALPN
+
+Modifications:
+
+- Use Iterable<String> to list the supported protocols on the client
+  side, rather than using ApplicationProtocolSelector
+- Remove ApplicationProtocolSelector
+
+Result:
+
+Future compatibility with TLS ALPN

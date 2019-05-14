@@ -1,0 +1,15 @@
+Improve context hierarchy handling in Actuator endpoints
+
+Previously, a number of Actuator endpoints ignored a context hierarchy
+or assumed that it would always be linear. This commit reworks the
+affected endpoints so that the no longer assume a linear hierarchy.
+
+A side-effect of a non-linear hierarchy is that there may be multiple
+different beans with the same name (in a linear hierarchy, a bean
+with the same name as one in an ancestor context, replaces that bean).
+The affected endpoints have also been updated so that, when bean names
+are used as keys, those keys are grouped by application context. This
+prevents a bean in one context from accidentially overwriting a bean
+in another context.
+
+Closes gh-11019

@@ -1,0 +1,16 @@
+Reinstate Bitronix's default server ID, provide property to override it
+
+Previously, Bitronix's server ID was hard-coded to be
+spring-boot-jta-bitronix. This created the possibility of multiple
+transaction managers performing recovery on each other's behalf as
+they would be unable to identify their own XIDs due to the common
+server ID.
+
+This commit reinstates the default (which is the IP address of the
+machine on which Bitronix is running), and introduces a new
+property, spring.jta.transaction-manager-id, that can be used to
+configure the id for both Atomikos and Bitronix. A cautionary note
+has also been added to the documentation for Atomikos and Bitronix
+explaining the need to configure this property.
+
+Closes gh-1548

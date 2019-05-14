@@ -1,0 +1,25 @@
+Revise @DisabledIf support for JUnit Jupiter
+
+- Extracted stand-alone DisabledIfCondition from the SpringExtension
+  so that the condition is only evaluated when necessary.
+
+- Simplified implementation of DisabledIfCondition.
+
+- Overhauled and extended logging in DisabledIfCondition.
+
+- DisabledIfCondition now throws an IllegalStateException if @DisabledIf
+  is not present on the test element or if the expression does not
+  evaluate to a String or Boolean.
+
+- Each generated ConditionEvaluationResult now includes the actual
+  expression in the default reason.
+
+- @DisabledIf is now auto-configured to be evaluated by the
+  DisabledIfCondition since it is now meta-annotated with
+  @ExtendWith(DisabledIfCondition.class)
+
+- Overhauled documentation for @DisabledIf and provided standard
+  examples as well as an @DisabledOnMac annotation to demonstrate
+  support for custom composed annotations.
+
+Issue: SPR-14614

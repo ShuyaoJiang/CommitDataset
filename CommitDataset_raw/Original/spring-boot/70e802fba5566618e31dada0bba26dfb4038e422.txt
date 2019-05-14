@@ -1,0 +1,14 @@
+Use name from @SpyBean to disambiguate multiple candidates
+
+Previously, @SpyBean's name attribute was not used when determining
+the name of the bean to spy upon. When there were multiple candidates,
+none of which were primary, this would lead to a failure to find the
+bean to spy upon. This behaviour is also inconsistent with @MockBean
+which does use the name attribute to identify the bean to mock.
+
+This commit updates MockitoPostProcessor to use the name attribute,
+when set, to identify the bean that should be spied upon. For
+consistency with @MockBean it is always used when set. When not set
+the previous logic will continue to be used.
+
+Closes gh-8315

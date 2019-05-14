@@ -1,0 +1,14 @@
+Support comments in statements in RDbPopulator
+
+Prior to this commit, executing an SQL script via
+ResourceDatabasePopulator would fail if a statement in the script
+contained a line comment within the statement.
+
+This commit ensures that standard SQL comments (i.e., any text beginning
+with two hyphens and extending to the end of the line) are properly
+omitted from the statement before executing it.
+
+In addition, multiple adjacent whitespace characters within a statement,
+but outside a literal, are now collapsed into a single space.
+
+Issue: SPR-10075

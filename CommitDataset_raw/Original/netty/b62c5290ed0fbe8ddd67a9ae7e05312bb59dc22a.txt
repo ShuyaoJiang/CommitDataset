@@ -1,0 +1,22 @@
+Let SniHandler accept Mapping as well as DominaNameMapping
+
+Related: #4470 #4473
+
+Motivation:
+
+A user might want to:
+
+- implement dynamic mapping from hostname to SslContext
+- server large number of domain names whose SslContext can be
+  initialized lazily and destroyed when unused
+
+Modifications:
+
+- Let SniHandler accept Mapping<String, SslContext> as well as
+  DomainNameMapping
+- Make the default constructor of SslContext so that a user can create
+  his or her own SslContext wrapper
+
+Result:
+
+Flexibility

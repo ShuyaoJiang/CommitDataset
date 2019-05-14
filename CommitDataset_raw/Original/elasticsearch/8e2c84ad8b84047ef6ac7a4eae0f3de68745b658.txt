@@ -1,0 +1,5 @@
+Clean up XPackInfoResponse class and related tests (#35547)
+
+Response classes in Elasticsearch (and xpack) only need to implement ToXContent, which is needed to print their output put in the REST layer and return the response in json (or others) format. On the other hand, response classes that are added to the high-level REST client, need to do the opposite: parse xcontent and create a new object based on that.
+
+This commit removes the parsing code from the XPackInfoResponse server variant, and the toXContent portion from the corresponding client variant. It also removes a client specific test class that looks redundant now that we have a single test class for both classes.

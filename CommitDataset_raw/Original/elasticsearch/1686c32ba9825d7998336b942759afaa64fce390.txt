@@ -1,0 +1,15 @@
+SQL: Rename SQL type DATE to DATETIME (#37395)
+
+* SQL: Rename SQL data type DATE to DATETIME
+
+SQL data type DATE has only the date part (e.g.: 2019-01-14)
+without any time information. Previously the SQL type DATE was
+referring to the ES DATE which contains also the time part along
+with TZ information. To conform with SQL data types the data type
+`DATE` is renamed to `DATETIME`, since it includes also the time,
+as a new runtime SQL `DATE` data type will be introduced down the road,
+which only contains the date part and meets the SQL standard.
+
+Closes: #36440
+
+* Address comments

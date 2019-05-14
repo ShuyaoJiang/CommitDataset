@@ -1,0 +1,9 @@
+Support ordered interceptors in RestTemplate
+
+This commit sorts `ClientHttpRequestInterceptor`s when those are set in
+`InterceptingHttpAccessor` (which `RestTemplate` extends from).
+
+Interceptors can now be annotated with `@Order` or implements `Ordered`
+to reflect their order of execution for each request.
+
+Issue: SPR-13971

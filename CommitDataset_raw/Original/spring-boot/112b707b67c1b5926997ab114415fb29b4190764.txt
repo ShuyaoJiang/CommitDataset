@@ -1,0 +1,11 @@
+Ensure that MongoClient is not created with a null credentials list
+
+Mongo’s 2.x driver allowed the credentials list to be null, however
+the 3.x driver requires an empty list instead. The behaviour of the 2.x
+driver is the same whether the client is created with a null credential
+list or an empty credential list.
+
+This commit aligns with the requirements of the 3.x driver by ensuring
+that we never pass in a null credential list when creating the client.
+
+Closes gh-4076

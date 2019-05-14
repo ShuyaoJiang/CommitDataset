@@ -1,0 +1,15 @@
+Test: Add internalClusterTest to xpack modules (elastic/x-pack-elasticsearch#3730)
+
+This commit reenables running ITs in xpack by adding an internalClusterTest to xpack modules that contain ESIntegTestCase tests. The new task allows us to run these independently of rest integ tests, which are disabled for xpack modules because installing the bundled plugins directly is not quite the same as installing via the meta plugin. Some tests (ML) are moved to their own qa module to accommodate the need for a real cluster. A couple tests (monitoring and upgrade) have been marked as AwaitsFix.
+
+Commits that have been folded into this commit:
+* Move ML IT tests to qa/ml-native-tests
+* Add internalClusterTest task and disable rest integ tests for xpack
+modules. Also tweak ML tests and get upgrade tests working
+* Adding the keystore and security back to the ml native tests
+* Fixing native integ test
+* Fix last ML test, add awaits fix to monitoring and upgrade tests
+* cleanup PR
+* fix checkstyle
+
+Original commit: elastic/x-pack-elasticsearch@3c0ed6fd3be2eaf57b561dce52c362c9d32c07a9

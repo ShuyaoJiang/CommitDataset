@@ -1,0 +1,13 @@
+Not try to allocate out of the PoolChunkList that contains only full PoolChunks
+
+Motivation:
+
+When doing a normal allocation in PoolArena we also tried to allocate out of the PoolChunkList that only contains completely full PoolChunks. This makes no sense as these are full anyway so an allocation will never work here and just gives a perf hit as we need to walk the whole list of PoolChunks in the list.
+
+Modifications:
+
+Not try to allocate from PoolChunkList that only contains full PoolChunks
+
+Result:
+
+Faster allocation times when a new PoolChunk must be created.

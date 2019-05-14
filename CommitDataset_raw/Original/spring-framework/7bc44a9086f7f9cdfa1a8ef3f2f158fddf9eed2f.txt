@@ -1,0 +1,10 @@
+Set Gradle Daemon JVM args compatible with JDK 9
+
+This commit adds the following to gradle.properties in order to execute
+the Gradle daemon on JDK 9, since Gradle's DaemonParameters
+automatically sets the MaxPermSize JVM argument, which is no longer
+supported on JDK 9.
+
+org.gradle.jvmargs=-XX:MaxMetaspaceSize=1024m -Xmx1024m
+
+Issue: SPR-12549

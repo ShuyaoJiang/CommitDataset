@@ -1,0 +1,42 @@
+Delete shard store files before restoring a snapshot (#27476)
+
+Pull request #20220 added a change where the store files
+that have the same name but are different from the ones in the
+snapshot are deleted first before the snapshot is restored.
+This logic was based on the `Store.RecoveryDiff.different`
+set of files which works by computing a diff between an
+existing store and a snapshot.
+
+This works well when the files on the filesystem form valid
+shard store, ie there's a `segments` file and store files
+are not corrupted. Otherwise, the existing store's snapshot
+metadata cannot be read (using Store#snapshotStoreMetadata())
+and an exception is thrown
+(CorruptIndexException, IndexFormatTooOldException etc) which
+is later caught as the begining of the restore process
+(see RestoreContext#restore()) and is translated into
+an empty store metadata (Store.MetadataSnapshot.EMPTY).
+
+This will make the deletion of different files introduced
+in #20220 useless as the set of files will always be empty
+even when store files exist on the filesystem. And if some
+files are present within the store directory, then restoring
+a snapshot with files with same names will fail with a
+FileAlreadyExistException.
+
+This is part of the #26865 issue.
+
+There are various cases were some files could exist in the
+ store directory before a snapshot is restored. One that
+Igor identified is a restore attempt that failed on a node
+and only first files were restored, then the shard is allocated
+again to the same node and the restore starts again (but fails
+ because of existing files). Another one is when some files
+of a closed index are corrupted / deleted and the index is
+restored.
+
+This commit adds a test that uses the infrastructure provided
+by IndexShardTestCase in order to test that restoring a shard
+succeed even when files with same names exist on filesystem.
+
+Related to #26865

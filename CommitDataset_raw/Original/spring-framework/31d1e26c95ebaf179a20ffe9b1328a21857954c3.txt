@@ -1,0 +1,12 @@
+Use List<T> instead of Supplier<Stream<T>>
+
+This commit changes all methods that return `Supplier<Stream<T>` to
+return `List<T>` instead. This includes the HandlerStrategies, but also
+BodyInserter.Context, BodyExtractor.Context, and ServerResponse.Context.
+
+The reason for this change is that most of the strategies have some sort
+of order, where more specific message readers - for instance - come
+before generic ones. Such an ordering can only be enforced through a
+List.
+
+Issue: SPR-15578

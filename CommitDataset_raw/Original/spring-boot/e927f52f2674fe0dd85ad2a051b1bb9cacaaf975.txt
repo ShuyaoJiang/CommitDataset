@@ -1,0 +1,17 @@
+Don’t use findAvailableTcpPort to allocate Undertow a random port
+
+Using findAvailableTcpPort is prone to failure when another process
+starts using the available port before Undertow starts. This commit
+changes UndertowEmbeddedServletContainerFactory to pass the value of
+zero down into Undertow where it will ultimately be passed to a
+ServerSocket which will then use the underlying OS’s support for binding
+to an available port.
+
+Undertow doesn’t provide an API for getting the port(s) on which it’s
+listening. Previously, reflection was being used to access the listener
+configuration but, when a random port is used, this configuration would
+return zero rather than the actual port. The reflective logic has been
+updated to look at Undertow’s channels from which the underlying
+ServerSocket can be accessed and the local port retrieved
+
+Closes gh-2584

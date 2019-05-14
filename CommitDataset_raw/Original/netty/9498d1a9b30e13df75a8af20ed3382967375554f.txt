@@ -1,0 +1,14 @@
+Allow to create a JdkSslContext from an existing JDK SSLContext. Related to [#5095] and [#4929]
+
+Motivation:
+
+Sometimes a user only has access to a preconfigured SSLContext but still would like to use our ssl sub-system. For this situations it would be very useful if the user could create a JdkSslContext instance from an existing SSLContext.
+
+Modifications:
+
+- Create new public constructors in JdkSslContext which allow to wrap an existing SSLContext and make the class non-abstract
+- Mark JdkSslServerContext and JdkSslClientContext as deprecated as the user should not directly use these.
+
+Result:
+
+It's now possible to create an JdkSslContext from an existing SSLContext.

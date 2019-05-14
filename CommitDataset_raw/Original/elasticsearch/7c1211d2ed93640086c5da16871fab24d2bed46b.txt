@@ -1,0 +1,14 @@
+Scripting: Add StatefulFactoryType as optional intermediate factory in script contexts (#24974)
+
+ScriptContexts currently understand a FactoryType that can produce
+instances of the script InstanceType. However, for search scripts, this
+does not work as we have the concept of LeafSearchScript that is created
+per lucene segment. This commit effectively renames the existing
+SearchScript class into SearchScript.LeafFactory, which is a new,
+optional, class that can be defined within a ScriptContext.
+LeafSearchScript is effectively renamed back into SearchScript. This
+change allows the model of stateless factory -> stateful factory ->
+script instance to continue, but in a generic way that any script
+context may take advantage of.
+
+relates #20426

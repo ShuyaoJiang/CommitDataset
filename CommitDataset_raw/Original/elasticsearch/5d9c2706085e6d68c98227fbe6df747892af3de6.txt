@@ -1,0 +1,12 @@
+Token API supports the client_credentials grant (#33106)
+
+This change adds support for the client credentials grant type to the
+token api. The client credentials grant allows for a client to
+authenticate with the authorization server and obtain a token to access
+as itself. Per RFC 6749, a refresh token should not be included with
+the access token and as such a refresh token is not issued when the
+client credentials grant is used.
+
+The addition of the client credentials grant will allow users
+authenticated with mechanisms such as kerberos or PKI to obtain a token
+that can be used for subsequent access.

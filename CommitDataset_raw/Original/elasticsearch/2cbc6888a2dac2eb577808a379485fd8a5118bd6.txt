@@ -1,0 +1,10 @@
+HLRC: Fix strict setting exception handling (#37247)
+
+The LLRC's exception handling for strict mode was previously throwing an
+exception the HLRC assumed was an error response. This is not the case
+if the result is valid in strict mode, as it will return the proper
+response wrapped in an exception with warnings. This commit fixes the
+HLRC such that it no longer spews if it encounters a strict LLRC
+response.
+
+Closes #37090

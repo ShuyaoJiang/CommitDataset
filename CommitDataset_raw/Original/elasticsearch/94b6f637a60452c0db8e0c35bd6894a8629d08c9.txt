@@ -1,0 +1,15 @@
+Improve error if Indices Permission is too complex (elastic/x-pack-elasticsearch#4239)
+
+If a user has roles that grant access to a large number of disparate
+index patterns, then the resulting Automaton can become large and
+too costly to determinise. This happens rarely, and is usually a sign
+of a poorly implemented security model, so we have no immediate plans
+to change the implementation. However the resulting error message is
+not clear and does not provide sufficient information for users to
+resolve the underlying problem.
+
+This commit catches the underlying exception and provides a more
+specific error message, with DEBUG logging of the offending index
+patterns.
+
+Original commit: elastic/x-pack-elasticsearch@532be70efcde63df8f96d62bce343a21662c2278

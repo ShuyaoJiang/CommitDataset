@@ -1,0 +1,13 @@
+Fix NPE in OpenSslPrivateKeyMethodTest.destroy() when BoringSSL is not used
+
+Motivation:
+
+4079189f6bd3e2c26ec443f24a204ffe144f1ada introduced OpenSslPrivateKeyMethodTest which will only be run when BoringSSL is used. As the assumeTrue(...) also guards the init of the static fields we need to ensure we only try to destroy these if BoringSSL is used as otherwise it will produce a NPE.
+
+Modifications:
+
+Check if BoringSSL is used before trying to destroy the resources.
+
+Result:
+
+No more NPE when BoringSSL is not used.

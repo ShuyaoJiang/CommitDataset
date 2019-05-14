@@ -1,0 +1,9 @@
+Only allow binder recursion with Maps
+
+Refine the binder recursion rules introduced in commit f337323819 so
+they only apply to Maps. Recursive List and Array binding is now no
+longer allowed. Prior to this commit, binding a List that contained a
+reference to itself would fail with a `StackOverflowException` if the
+underlying property source was not iterable.
+
+Fixes gh-10702

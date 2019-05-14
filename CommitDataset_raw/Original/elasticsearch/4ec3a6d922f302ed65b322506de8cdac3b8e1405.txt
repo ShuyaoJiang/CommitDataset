@@ -1,0 +1,10 @@
+Ensure either success or failure path for SearchOperationListener is called (#37467)
+
+Today we have several implementations of executing SearchOperationListener
+in SearchService. While all of them seem to be safe at least on, the one that
+executes scroll searches can cause illegal execution of SearchOperationListener
+that can then in-turn trigger assertions in ShardSearchStats. This change
+adds a SearchOperationListenerExecutor that uses try-with blocks to ensure
+listeners are called in a safe way.
+
+Relates to #37185

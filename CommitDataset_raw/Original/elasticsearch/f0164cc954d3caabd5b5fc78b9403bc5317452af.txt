@@ -1,0 +1,8 @@
+Stop sourcing scripts during installation/removal (#28918)
+
+Previously we allowed a lot of customization of Elasticsearch during
+package installation (e.g., the username and group). This customization
+was achieved by sourcing the env script (e.g.,
+/etc/sysconfig/elasticsearch) during installation. Since we no longer
+allow such flexibility, we do not need to source these env scripts
+during package installation and removal.

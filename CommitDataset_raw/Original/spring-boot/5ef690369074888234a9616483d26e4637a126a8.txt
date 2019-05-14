@@ -1,0 +1,19 @@
+Make EmbeddedVelocityToolboxView work in servlet container deployments
+
+EmbeddedVelocityToolboxView is used with both embedded containers and
+when a Spring Boot application is deployed to a servlet container. It
+process the ServletContext to intercept calls to getResource so that it
+can load Velocity’s toolbox.xml file from within an executable jar.
+Previously, when it created the proxy, it didn’t specify the ClassLoader
+to use. This resulted in the proxy being created using the ClassLoader
+that loaded the Class that is being proxied. This fails when the
+application is deployed to a ServletContainer as the ClassLoader that
+loaded the ServletContext implementation is the container’s ClassLoader
+and it cannot see the classes that are specific to the web application.
+
+This commit updates EmbeddedVelocityToolboxView to specify the
+ClassLoader to use when creating the proxy. It specifies its own
+ClassLoader thereby ensuring that the proxy creation can load
+application-specific classes.
+
+Fixes gh-4967

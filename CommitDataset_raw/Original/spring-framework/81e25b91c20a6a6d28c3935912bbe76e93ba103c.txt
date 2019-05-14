@@ -1,0 +1,18 @@
+Respect @Configuration(value) for @Imported classes
+
+Prior to this commit, @Configuration classes included via @Import (or
+via automatic registration of nested configuration classes) would
+always be registered with a generated bean name, regardless of whether
+the user had specified a 'value' indicating a customized bean name, e.g.
+
+    @Configuration("myConfig")
+    public class AppConfig { ... }
+
+Now this bean name is propagated as intended in all cases, meaning that
+in the example above, the resulting bean definition of type AppConfig
+will be named "myConfig" regardless how it was registered with the
+container -- directly against the application context, via component
+scanning, via @Import, or via automatic registration of nested
+configuration classes.
+
+Issue: SPR-9023

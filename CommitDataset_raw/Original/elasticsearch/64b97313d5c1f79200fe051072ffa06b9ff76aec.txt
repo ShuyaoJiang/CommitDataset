@@ -1,0 +1,19 @@
+[CCR] Make cross cluster replication work with security (#30239)
+
+If security is enabled today with ccr then the follow index api will
+fail with the fact that system user does not have privileges to use
+the shard changes api. The reason that system user is used is because
+the persistent tasks that keep the shards in sync runs in the background
+and the user that invokes the follow index api only start those background
+processes.
+
+I think it is better that the system user isn't used by the persistent
+tasks that keep shards in sync, but rather runs as the same user that
+invoked the follow index api and use the permissions that that user has.
+This is what this PR does, and this is done by keeping track of
+security headers inside  the persistent task (similar to how rollup does this).
+
+This PR also adds a cluster ccr priviledge that allows a user to follow
+or unfollow an index. Finally if a user that wants to follow an index,
+it needs to have read and monitor privileges on the leader index and
+monitor and write privileges on the follow index.

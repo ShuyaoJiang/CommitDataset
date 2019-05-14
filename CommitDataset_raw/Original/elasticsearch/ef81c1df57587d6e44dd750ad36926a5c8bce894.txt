@@ -1,0 +1,8 @@
+Ensure to release translog snapshot in primary-replica resync (#32045)
+
+Previously we create a translog snapshot inside the resync method, 
+and that snapshot will be closed by the resync listener. However, if 
+the resync method throws an exception before the resync listener 
+is initialized, the translog snapshot won't be released.
+
+Closes #32030

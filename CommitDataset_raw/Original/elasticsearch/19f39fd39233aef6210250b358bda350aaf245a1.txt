@@ -1,0 +1,3 @@
+Persistent Tasks: remove task restart on failure (#815)
+
+If a persistent task throws an exception, the persistent tasks framework will no longer try to restart the task. This is a temporary measure to prevent threshing the cluster with endless restart attempt. We will revisit this in the future version to make the restart process more robust. Please note, however, that if node executing the task goes down, the task will still be restarted on another node.

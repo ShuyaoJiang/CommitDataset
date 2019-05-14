@@ -1,0 +1,9 @@
+Add a limit for graph phrase query expansion (#34031)
+
+Today query parsers throw TooManyClauses exception when a query creates
+too many clauses. However graph phrase queries do not respect this limit.
+This change adds a protection against crazy expansions that can happen when
+building a graph phrase query. This is a temporary copy of the fix available
+in https://issues.apache.org/jira/browse/LUCENE-8479 but not merged yet.
+This logic will be removed when we integrate the Lucene patch in a future
+release.

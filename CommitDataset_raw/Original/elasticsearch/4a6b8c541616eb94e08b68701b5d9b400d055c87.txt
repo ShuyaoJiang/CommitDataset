@@ -1,0 +1,9 @@
+Relax history check in ShardFollowTaskReplicationTests (#39162)
+
+The follower won't always have the same history as the leader for its
+soft-deletes retention can be different. However, if some operation
+exists on the history of the follower, then the same operation must
+exist on the leader. This change relaxes the history check in
+ShardFollowTaskReplicationTests.
+
+Closes #39093

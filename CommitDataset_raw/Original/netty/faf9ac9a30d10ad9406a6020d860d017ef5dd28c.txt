@@ -1,0 +1,15 @@
+[#2680] NioSocketChannelOutboundBuffer.nioBuffers() / EpollSocketChannelOutboundBuffer.memoryAddresses() should always return non-null array as stated in javadocs
+
+Motivation:
+
+At the moment NioSocketChannelOutboundBuffer.nioBuffers() / EpollSocketChannelOutboundBuffer.memoryAddresses() returns null if something is contained in the ChannelOutboundBuffer which is not a ByteBuf. This is a problem for two reasons:
+  1 - In the javadocs we state that it will never return null
+  2 - We may do a not optimal write as there may be things that could be written via gathering writes
+
+Modifications:
+
+Change NioSocketChannelOutboundBuffer.nioBuffers() /  EpollSocketChannelOutboundBuffer.memoryAddresses() to never return null but have it contain all ByteBuffer that were found before the non ByteBuf. This way we can do a gathering write and also conform to the javadocs.
+
+Result:
+
+Better speed and also correct implementation in terms of the api.

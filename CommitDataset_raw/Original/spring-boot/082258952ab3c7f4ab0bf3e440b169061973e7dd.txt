@@ -1,0 +1,12 @@
+Fall back to JVM's class path when finding jars with static resources
+
+Previously, StaticResourceJars would only find jars with
+META-INF/resources content if it had been loaded by a URLClassLoader.
+This is not the case on Java 9 and, as a result, static content in
+META-INF/resources of any jars on the class path was not found.
+
+This commit updates StaticResourceJars to fall back to using the
+JVM's class path to find static resource jars when it was loaded by
+a ClassLoader that is not a URLClassLoader.
+
+Closes gh-10455

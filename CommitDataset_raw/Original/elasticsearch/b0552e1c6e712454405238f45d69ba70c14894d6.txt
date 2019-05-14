@@ -1,0 +1,9 @@
+[Security] Handle cache expiry in token service (elastic/x-pack-elasticsearch#3565)
+
+* [Security] Handle cache expiry in token service
+
+The keyCache on TokenService.KeyAndCache has a 60 minute expiry.
+If the token service was idle for more than 60 minutes, the current
+key would be expired and it would then fail to generate user tokens.
+
+Original commit: elastic/x-pack-elasticsearch@fd98130a27cf1d92227bdf7b55948b9023d8798c

@@ -1,0 +1,14 @@
+Fix testRefreshingMultipleTimesWithinWindowSucceeds (#39701)
+
+Previously all the threads were writing the received tokens to a
+HashSet. In cases with many threads, sometimes (1 every ~25 tests)
+calling size() on the HashSet returned 2 even though it seemed to
+contain only one String and there was no evidence from logging that
+threadSecurityClient.refreshToken() ever returned a different
+access or refresh token.
+
+This commit changes the test to use a ConcurrentHashMap instead,
+checking that we only received one pair of access token/refresh token
+eventually. It also adds a check so that we won't take into consideration
+tokens that are returned after 30s, hence not in the concurrent refresh
+time window.

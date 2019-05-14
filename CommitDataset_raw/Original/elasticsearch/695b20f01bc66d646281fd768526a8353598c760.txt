@@ -1,0 +1,11 @@
+Enforce retention leases require soft deletes (#39922)
+
+If a primary on 6.7 and a replica on 5.6 are running more than 5 minutes
+(retention leases background sync interval), the retention leases
+background sync will be triggered, and it will trip 6.7 node due to the
+illegal checkpoint value. We can fix the problem by making the returned
+checkpoint depends on the node version. This PR, however, chooses to
+enforce retention leases require soft deletes, and make retention leases
+sync noop if soft deletes is disabled instead.
+
+Closes #39914

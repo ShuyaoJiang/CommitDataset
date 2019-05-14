@@ -1,0 +1,20 @@
+Avoid inifinite recursion in UndertowServerHttpRequest
+
+Undertow does not provide a way to check if data is available to read
+but instead we have to try to read and see if any data is returned.
+This makes it impossible to implement checkOnDataAvailable without
+trying to read and that can lead to infinite recursion like this:
+
+...
+UndertowServerHttpRequest$RequestBodyPublisher.checkOnDataAvailable(UndertowServerHttpRequest.java:156)
+AbstractListenerReadPublisher.changeToDemandState(AbstractListenerReadPublisher.java:177)
+AbstractListenerReadPublisher.access$900(AbstractListenerReadPublisher.java:47)
+AbstractListenerReadPublisher$State$4.onDataAvailable(AbstractListenerReadPublisher.java:319)
+AbstractListenerReadPublisher.onDataAvailable(AbstractListenerReadPublisher.java:85)
+UndertowServerHttpRequest$RequestBodyPublisher.checkOnDataAvailable(UndertowServerHttpRequest.java:156)
+
+This commit prevent the call to checkOnDataAvailable() when switching
+states from READING->DEMAND which implies we exited the readAndPublish
+loop because there was no more data to read.
+
+Issue: SPR-16545

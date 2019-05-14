@@ -1,0 +1,14 @@
+Fix SecurityException when HDFS Repository used against HA Namenodes (#27196)
+
+* Sense HA HDFS settings and remove permission restrictions during regular execution.
+
+This PR adds integration tests for HA-Enabled HDFS deployments, both regular and secured. 
+The Mini HDFS fixture has been updated to optionally run in HA-Mode. A new test suite has 
+been added for reproducing the effects of a Namenode failing over during regular repository 
+usage. Going forward, the HDFS Repository will still be subject to its self imposed permission 
+restrictions during normal use, but will no longer restrict them when running against an HA 
+enabled HDFS cluster. Instead, the plugin will rely on the provided security policy and not 
+further restrict the permissions so that the transparent operation to failover to a different 
+Namenode in the client does not raise security exceptions. Additionally, we are now testing the 
+secure mode with SASL based wire encryption of data between Elasticsearch and HDFS. This 
+includes a missing library (commons codec) in order to support this change.

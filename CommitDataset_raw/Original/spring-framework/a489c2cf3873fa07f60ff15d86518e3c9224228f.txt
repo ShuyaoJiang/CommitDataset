@@ -1,0 +1,16 @@
+Add StompCodec
+
+Previously, the broker relay's TCP client used Reactor's built in
+delimited codec as part of its parsing of STOMP frames. \0 was used as
+the delimiter. This worked for most STOMP frames but, crucially,
+not for frames with a body that contained \0: when such a frame was
+received it would be truncated.
+
+This commit adds a custom codec that parses STOMP frames more
+intelligently. It honours the content-length header allowing it to
+correctly parse frames with a body that contains \0. The codec largely
+delegates to two new classes: StompEncoder and StompDecoder. For
+consistency, code that previously used StompMessageConverter has been
+reworked to use these new encoder and decoder classes.
+
+Issue: SPR-10818

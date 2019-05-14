@@ -1,0 +1,13 @@
+Flush LZ4FrameEncoder buffer when channel flush() is received.
+
+Motivation:
+
+LZ4FrameEncoder maintains an internal buffer of incoming data compress, and only writes out compressed data when a size threshold is reached. LZ4FrameEncoder does not override the flush() method, and thus the only way to flush data down the pipeline is via more data or close the channel.
+
+Modifications:
+
+Override the flush() function to flush on demand. Also overrode the allocateBuffer() function so we can more accurately size the output buffer (instead of needing to potatntially realloc via buffer.ensureWritable()).
+
+Result:
+
+Implementation works as described.

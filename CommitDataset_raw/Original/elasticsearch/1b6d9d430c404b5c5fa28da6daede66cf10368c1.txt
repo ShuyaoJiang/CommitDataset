@@ -1,0 +1,29 @@
+Watcher: Load for watch for execution as late as possible (elastic/x-pack-elasticsearch#2151)
+
+When a watch is executed currently, it gets passed an in-memory
+watch object, that was loaded, before the execution started.
+
+This means there is a window of time, where an old watch could still
+be executing, then a watch gets loaded for execution, then the old watch
+execution finishes and updates the watch status and thus reindexes the
+watch.
+
+Now the watch, that got loaded for execution, executes and tries to
+store its watch status, but fails, because the version of the watch
+has changed.
+
+This commit changes the point in time where the watch is loaded. Now
+this only happens, while a watch is in its protected execution block,
+and thus we can be sure, that there is no other execution of the watch
+happening.
+
+This will primarily impact watches, that execute often, but their
+runtime is longer than the configured interval between executions.
+
+Side fix: Removed some duplicate testing method and moved into 
+WatcherTestUtils, fixed a tests with a ton of if's with random booleans
+into separate tests.
+
+relates elastic/x-pack-elasticsearch#395
+
+Original commit: elastic/x-pack-elasticsearch@bf393023d7ad46064544a4aadf40e3e9a5261b32

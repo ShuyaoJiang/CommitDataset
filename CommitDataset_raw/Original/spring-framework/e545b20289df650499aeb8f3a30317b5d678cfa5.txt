@@ -1,0 +1,7 @@
+Make AbstractResponseBodySubscriber.onWritePossible thread-safe
+
+When there are simultaneous invocations of onWritePossible, only the
+first one should succeed. This can happens when
+AbstractResponseBodySubscriber.onNext and
+WriteListener.onWritePossible() are called respectively by the
+application and the web container.

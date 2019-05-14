@@ -1,0 +1,21 @@
+Introduce retention lease background sync (#38262)
+
+This commit introduces a background sync for retention leases. The idea
+here is that we do a heavyweight sync when adding a new retention lease,
+and then periodically we want to background sync any retention lease
+renewals to the replicas. As long as the background sync interval is
+significantly lower than the extended lifetime of a retention lease, it
+is okay if from time to time a replica misses a sync (it will still have
+an older version of the lease that is retaining more data as we assume
+that renewals do not decrease the retaining sequence number). There are
+two follow-ups that will come after this commit. The first is to address
+the fact that we have not adapted the should periodically flush logic to
+possibly flush the retention leases. We want to do something like flush
+if we have not flushed in the last five minutes and there are renewed
+retention leases since the last time that we flushed. An additional
+follow-up will remove the syncing of retention leases when a retention
+lease expires. Today this sync could be invoked in the background by a
+merge operation. Rather, we will move the syncing of retention lease
+expiration to be done under the background sync. The background sync
+will use the heavyweight sync (write action) if a lease has expired, and
+will use the lightweight background sync (replication action) otherwise.

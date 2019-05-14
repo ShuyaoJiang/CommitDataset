@@ -1,0 +1,13 @@
+Fixed JMH ByteBuf benchmark to avoid dead code elimination
+
+Motivation:
+
+The JMH doc suggests to use BlackHoles to avoid dead code elimination hence would be better to follow this best practice.
+
+Modifications:
+
+Each benchmark method is returning the ByteBuf/ByteBuffer to avoid the JVM to perform any dead code elimination.
+
+Result:
+
+The results are more reliable and comparable to the others provided by other ByteBuf benchmarks (eg HeapByteBufBenchmark)

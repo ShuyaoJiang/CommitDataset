@@ -1,0 +1,44 @@
+Permission for restricted indices (#37577)
+
+This grants the capability to grant privileges over certain restricted
+indices (.security and .security-6 at the moment).
+It also removes the special status of the superuser role.
+
+IndicesPermission.Group is extended by adding the `allow_restricted_indices`
+boolean flag. By default the flag is false. When it is toggled, you acknowledge
+that the indices under the scope of the permission group can cover the
+restricted indices as well. Otherwise, by default, restricted indices are ignored
+when granting privileges, thus rendering them hidden for authorization purposes.
+This effectively adds a confirmation "check-box" for roles that might grant
+privileges to restricted indices.
+
+The "special status" of the superuser role has been removed and coded as
+any other role:
+```
+new RoleDescriptor("superuser",
+    new String[] { "all" },
+    new RoleDescriptor.IndicesPrivileges[] {
+        RoleDescriptor.IndicesPrivileges.builder()
+            .indices("*")
+            .privileges("all")
+            .allowRestrictedIndices(true)
+// this ----^
+            .build() },
+            new RoleDescriptor.ApplicationResourcePrivileges[] {
+                RoleDescriptor.ApplicationResourcePrivileges.builder()
+                    .application("*")
+                    .privileges("*")
+                    .resources("*")
+                    .build()
+            },
+            null, new String[] { "*" },
+    MetadataUtils.DEFAULT_RESERVED_METADATA,
+    Collections.emptyMap());
+```
+In the context of the Backup .security work, this allows the creation of a
+"curator role" that would permit listing (get settings) for all indices
+(including the restricted ones). That way the curator role would be able to 
+ist and snapshot all indices, but not read or restore any of them.
+
+Supersedes #36765
+Relates #34454

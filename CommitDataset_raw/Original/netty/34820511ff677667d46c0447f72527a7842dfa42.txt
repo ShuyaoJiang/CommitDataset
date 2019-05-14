@@ -1,0 +1,20 @@
+Second HTTP overhaul
+
+- Rename message types for clarity
+  - HttpMessage -> FullHttpMessage
+  - HttpHeader -> HttpMessage
+  - HttpRequest -> FullHttpRequest
+  - HttpResponse -> FulllHttpResponse
+  - HttpRequestHeader -> HttpRequest
+  - HttpResponseHeader -> HttpResponse
+- HttpContent now extends ByteBufHolder; no more content() method
+- Make HttpHeaders abstract, make its header access methods public, and
+  add DefaultHttpHeaders
+- Header accessor methods in HttpMessage and LastHttpContent are
+  replaced with HttpMessage.headers() and
+  LastHttpContent.trailingHeaders(). Both methods return HttpHeaders.
+- Remove setters wherever possible and remove 'get' prefix
+- Instead of calling setContent(), a user can either specify the content
+  when constructing a message or write content into the buffer.
+  (e.g. m.content().writeBytes(...))
+- Overall cleanup & fixes

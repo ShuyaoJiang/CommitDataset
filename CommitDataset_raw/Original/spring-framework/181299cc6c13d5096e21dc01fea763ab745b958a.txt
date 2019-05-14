@@ -1,0 +1,16 @@
+Improve ex msg when locations & classes are declared in test hierarchy
+
+Prior to this commit, if both locations and classes were declared via
+@ContextConfiguration at differing levels in a test class hierarchy,
+the exception message stated that neither of the default context
+loaders was able to load an ApplicationContext from the merged context
+configuration, but the message didn't explain why.
+
+This commit adds an explicit check for such scenarios and provides a
+more informative exception message similar to the following:
+
+"Neither X nor Y supports loading an ApplicationContext from
+[MergedContextConfiguration ...]: declare either 'locations' or
+'classes' but not both."
+
+Issue: SPR-12060

@@ -1,0 +1,19 @@
+Reduce max javac memory to 512mb (#28783)
+
+With this commit we reduce the maximum amount of memory that the javac
+compiler can use from 1g to 512mb. While the build would succeed even
+with 256mb, it influences compile time slightly negatively.
+
+We have measured that the runtime overhead stays tolerable by running
+the following command five times under repeatable conditions (i.e. we
+execute `./gradlew clean`, then drop the caches and TRIM the disk):
+
+```
+./gradlew compileGroovy compileJava compileJava9Java\
+ compileTestGroovy compileTestJava compileGroovy
+```
+
+The results in seconds (as reported by Gradle) are:
+
+* 1gb: avg: 253s, min: 252s, max: 256s
+* 512mb: avg: 257s, min: 256s, max: 259s

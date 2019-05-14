@@ -1,0 +1,22 @@
+Remove Request Batching in Merge
+
+Removing the batching until we can find a correct way to do it.
+
+The performance impact of this change is seen here:
+
+Benchmark                                          (size)   Mode   Samples          1.x    No Request Batching
+r.o.OperatorMergePerf.merge1SyncStreamOfN               1  thrpt         5  4585554.607    4666745.314 102%
+r.o.OperatorMergePerf.merge1SyncStreamOfN            1000  thrpt         5    51273.033      39922.246 78%
+r.o.OperatorMergePerf.merge1SyncStreamOfN         1000000  thrpt         5       47.515         37.634 79%
+r.o.OperatorMergePerf.mergeNAsyncStreamsOfN             1  thrpt         5    90901.735      93454.726 103%
+r.o.OperatorMergePerf.mergeNAsyncStreamsOfN          1000  thrpt         5        5.407          4.910 91%
+r.o.OperatorMergePerf.mergeNSyncStreamsOf1              1  thrpt         5  4181618.767    4173322.551 100%
+r.o.OperatorMergePerf.mergeNSyncStreamsOf1            100  thrpt         5   422193.599     408972.130 97%
+r.o.OperatorMergePerf.mergeNSyncStreamsOf1           1000  thrpt         5    36886.812      36448.978 99%
+r.o.OperatorMergePerf.mergeNSyncStreamsOfN              1  thrpt         5  4815945.720    4887943.643 101%
+r.o.OperatorMergePerf.mergeNSyncStreamsOfN           1000  thrpt         5       43.926         39.027 89%
+r.o.OperatorMergePerf.mergeTwoAsyncStreamsOfN           1  thrpt         5    72578.046      70412.656 97%
+r.o.OperatorMergePerf.mergeTwoAsyncStreamsOfN        1000  thrpt         5     3260.024       3064.403 94%
+r.o.OperatorMergePerf.oneStreamOfNthatMergesIn1         1  thrpt         5  4678858.201    4808504.588 103%
+r.o.OperatorMergePerf.oneStreamOfNthatMergesIn1      1000  thrpt         5    34407.547      36364.476 106%
+r.o.OperatorMergePerf.oneStreamOfNthatMergesIn1   1000000  thrpt         5       31.312         32.261 103%

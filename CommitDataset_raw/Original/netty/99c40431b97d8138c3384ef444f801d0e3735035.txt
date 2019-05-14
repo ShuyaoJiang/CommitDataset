@@ -1,0 +1,19 @@
+Use InetSocketAddress.getHostName() instead of getHostString()
+
+Related: #3478
+
+Motivation:
+
+DefaultNameResolver uses InetSocketAddress.getHostString() instead of
+getHostName(). Because Netty uses the DefaultNameResolver by default and
+getHostString() is available only since Java 7, a user cannot use Netty
+on Java 6 anymore.
+
+Modifications:
+
+Use InetSocketAddress.getHostName() which is practically same and also
+is available in Java 6.
+
+Result:
+
+Netty 4.1 runs on Java 6 again.

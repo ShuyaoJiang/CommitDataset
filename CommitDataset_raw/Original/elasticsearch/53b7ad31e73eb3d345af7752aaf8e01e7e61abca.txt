@@ -1,0 +1,18 @@
+Use short name for invoking wrapper script
+
+When starting a node in standalone tests, we sometimes use a wrapper
+script as opposed to starting Elasticsearch directly (this is used for
+backgrounding). On Windows, the path to this wrapper script can be
+exceptionally long, exceeding the length of a batch script that cmd.exe
+will invoke without whining. This commit replaces using the full path
+name for this wrapper script by the short name for the wrapper script.
+
+Additionally, the data, configuration, and jvm.options paths can also
+end up being too long so we shorten those too. Care has to be taken with
+the data directory because we usually rely on the node creating it on
+startup but doing that will not be compatible with getting the short
+name as that requires the directory already existing. Therefore, we
+create that directory on-demand immediately before actually resolving
+the short name.
+
+Relates #26444

@@ -1,0 +1,36 @@
+Clean up the examples
+
+Motivation:
+
+The examples have not been updated since long time ago, showing various
+issues fixed in this commit.
+
+Modifications:
+
+- Overall simplification to reduce LoC
+  - Use system properties to get options instead of parsing args.
+  - Minimize option validation
+  - Just use System.out/err instead of Logger
+  - Do not pass config as parameters - just access it directly
+  - Move the main logic to main(String[]) instead of creating a new
+    instance meaninglessly
+    - Update netty-build-21 to make checkstyle not complain
+  - Remove 'throws Exception' clause if possible
+- Line wrap at 120 (previously at 80)
+- Add an option to enable SSL for most examples
+- Use ChannelFuture.sync() instead of await()
+- Use System.out for the actual result. Use System.err otherwise.
+- Delete examples that are not very useful:
+  - applet
+  - websocket/html5
+  - websocketx/sslserver
+  - localecho/multithreaded
+- Add run-example.sh which simplifies launching an example from command
+  line
+- Rewrite FileServer example
+
+Result:
+
+Shorter and simpler examples.  A user can focus more on what it actually
+does than miscellaneous stuff.  A user can launch an example very
+easily.

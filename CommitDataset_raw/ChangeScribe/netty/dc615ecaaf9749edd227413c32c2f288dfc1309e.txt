@@ -1,0 +1,222 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. 
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.example.http.websocketx.client:  
+
+1. Changes to package io.netty.example.http.websocketx.server:  
+
+1. Changes to package io.netty.handler.codec.compression:  
+
+1. Changes to package io.netty.handler.codec.http.websocketx:  
+
+1.1. Add a class for utf 8 frame validator. It allows to:
+
+	Channel read;
+	Check UTF 8 string;
+	Handle exception caught
+
+2. Changes to package io.netty.handler.codec.http.websocketx.extensions:  
+
+2.1. Add an interface declaration  for web socket client extension
+
+2.2. Add a class for web socket client extension handler. It allows to:
+
+	Instantiate web socket client extension handler  with extension handshaker;
+	Write ctx channel handler context;
+	Channel read
+
+2.3. Add a class for web socket client extension handler test. It allows to:
+
+	Handle test main success;
+	Handle test fallback success;
+	Test all success;
+	Handle test if main and fallback use RSV 1 will fail
+
+2.4. Add an interface declaration  for web socket client extension handshaker. It allows to:
+
+	Handle new request data;
+	Get handshake extension
+
+2.5. Add an interface declaration  for web socket extension. It allows to:
+
+	Get rsv;
+	Handle new extension encoder;
+	Handle new extension decoder
+
+2.6. Add a class for web socket extension data. It allows to:
+
+	Instantiate web socket extension data  with parameters map;
+	Name web socket extension data;
+	Get parameters
+
+2.7. Add a class for web socket extension decoder
+
+2.8. Add a class for web socket extension encoder
+
+2.9. Add a class for web socket extension util. It allows to:
+
+	Check if web socket extension util is websocket upgrade;
+	Extract extensions;
+	Append extension;
+	Instantiate web socket extension util
+
+2.10. Add an interface declaration  for web socket server extension. It allows to:
+
+	Handle new reponse data
+
+2.11. Add a class for web socket server extension handler. It allows to:
+
+	Instantiate web socket server extension handler  with extension handshaker;
+	Channel read;
+	Write ctx channel handler context;
+	Handle operation complete
+
+2.12. Add a class for web socket server extension handler test. It allows to:
+
+	Handle test main success;
+	Handle test compatible extension together success;
+	Handle test none extension matching success
+
+2.13. Add an interface declaration  for web socket server extension handshaker. It allows to:
+
+	Get handshake extension
+
+3. Changes to package io.netty.handler.codec.http.websocketx.extensions.compression:  
+
+3.1. Add a class for deflate decoder. It allows to:
+
+	Instantiate deflate decoder  with extension filter;
+	Get extension decoder filter;
+	Append frame tail;
+	Handle new rsv;
+	Decode ctx channel handler context;
+	Handle handler removed;
+	Channel inactive;
+	Handle cleanup
+
+3.2. Add a class for deflate encoder. It allows to:
+
+	Instantiate deflate encoder  with extension filter;
+	Get extension encoder filter;
+	Get rsv;
+	Remove frame tail;
+	Encode ctx channel handler context;
+	Handle handler removed;
+	Handle cleanup
+
+3.3. Add a class for deflate frame client extension handshaker test. It allows to:
+
+	Handle test webkit deflate frame data;
+	Handle test deflate frame data;
+	Handle test normal handshake;
+	Handle test failed handshake
+
+3.4. Add a class for deflate frame server extension handshaker test. It allows to:
+
+	Handle test normal handshake;
+	Handle test webkit handshake;
+	Handle test failed handshake
+
+3.5. Add a class for per frame deflate decoder. It allows to:
+
+	Instantiate per frame deflate decoder;
+	Instantiate per frame deflate decoder  with extension filter;
+	Accept inbound message;
+	Handle new rsv;
+	Append frame tail
+
+3.6. Add a class for per frame deflate decoder test. It allows to:
+
+	Handle test compressed frame;
+	Handle test normal frame;
+	Handle test compressed empty frame;
+	Handle test decompression skip
+
+3.7. Add a class for per frame deflate encoder. It allows to:
+
+	Instantiate per frame deflate encoder;
+	Instantiate per frame deflate encoder  with extension filter;
+	Accept outbound message;
+	Get rsv;
+	Remove frame tail
+
+3.8. Add a class for per frame deflate encoder test. It allows to:
+
+	Handle test compressed frame;
+	Handle test already compressed frame;
+	Handle test framemented frame;
+	Handle test compression skip
+
+3.9. Add a class for per message deflate client extension handshaker test. It allows to:
+
+	Handle test normal data;
+	Handle test custom data;
+	Handle test normal handshake;
+	Handle test custom handshake;
+	Handle test decoder no client context
+
+3.10. Add a class for per message deflate decoder. It allows to:
+
+	Instantiate per message deflate decoder;
+	Instantiate per message deflate decoder  with extension filter;
+	Accept inbound message;
+	Handle new rsv;
+	Append frame tail;
+	Decode ctx channel handler context
+
+3.11. Add a class for per message deflate decoder test. It allows to:
+
+	Handle test compressed frame;
+	Handle test normal frame;
+	Handle test fragmented frame;
+	Handle test multi compressed payload within frame;
+	Handle test decompression skip for binary frame;
+	Handle test selectivity decompression skip;
+	Skip web socket frame;
+	Handle test illegal state when decompression in progress;
+
+3.12. Add a class for per message deflate encoder. It allows to:
+
+	Instantiate per message deflate encoder;
+	Instantiate per message deflate encoder  with extension filter;
+	Accept outbound message;
+	Get rsv;
+	Remove frame tail;
+	Encode ctx channel handler context
+
+3.13. Add a class for per message deflate encoder test. It allows to:
+
+	Handle test compressed frame;
+	Handle test already compressed frame;
+	Handle test framemented frame;
+	Handle test compression skip for binary frame;
+	Handle test selectivity compression skip;
+	Skip web socket frame;
+	Handle test illegal state when compression in progress;
+
+3.14. Add a class for per message deflate server extension handshaker test. It allows to:
+
+	Handle test normal handshake;
+	Handle test custom handshake
+
+3.15. Add a class for web socket client compression handler. It allows to:
+
+	Instantiate web socket client compression handler
+
+3.16. Add a class for web socket server compression handler. It allows to:
+
+	Instantiate web socket server compression handler
+
+3.17. Add a class for web socket server compression handler test. It allows to:
+
+	Handle test normal success;
+	Handle test client window size success;
+	Handle test client window size unavailable;
+	Handle test server window size success;
+	Handle test server window size disable;
+	Handle test server no context;
+	Handle test client no context;
+	Handle test server window size disable then fallback
+

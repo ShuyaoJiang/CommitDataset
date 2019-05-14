@@ -1,0 +1,9 @@
+Add power of two downsampling for GIFs.
+
+Although this may substantially reduce memory usage decoding large
+GIFs, two significant limitations remain:
+
+1. The pointers into the color table are not downsampled, so we
+still allocate a byte per pixel in the original image.
+2. Our downsampling algorithm is naive (rounding) and works
+poorly with GIFs with partial frames.

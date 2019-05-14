@@ -1,0 +1,25 @@
+Refactor WebSocket int. tests to work w/ Jetty 9.3
+
+Recent builds of Jetty 9.3 require that Jetty's own ServletContext
+implementation be supplied to WebSocketServerFactory's init() method.
+Otherwise, the Jetty server will fail to start with the exception
+message: "Not running on Jetty, WebSocket support unavailable".
+
+This commit refactors AbstractWebSocketIntegrationTests,
+AbstractSockJsIntegrationTests, and all WebSocketTestServer
+implementations in order to support this new requirement.
+
+Specifically:
+
+- WebSocketTestServer defines a new getServletContext() method;
+  TomcatWebSocketTestServer, UndertowTestServer, and
+  JettyWebSocketTestServer have all been updated to return the
+  ServletContext created by the embedded server.
+
+- The setup() methods in AbstractWebSocketIntegrationTests and
+  AbstractSockJsIntegrationTests have been updated so that the
+  WebApplicationContext is supplied the appropriate ServletContext,
+  after deployConfig() has been invoked on the WebSocketTestServer but
+  before the WebApplicationContext is refreshed.
+
+Issue: SPR-13162

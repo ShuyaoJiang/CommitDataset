@@ -1,0 +1,15 @@
+Allow to offload / customize key signing operations when using BoringSSL. (#8943)
+
+Motivation:
+
+BoringSSL allows to customize the way how key signing is done an even offload it from the IO thread. We should provide a way to plugin an own implementation when BoringSSL is used.
+
+Modifications:
+
+- Introduce OpenSslPrivateKeyMethod that can be used by the user to implement custom signing by using ReferenceCountedOpenSslContext.setPrivateKeyMethod(...)
+- Introduce static methods to OpenSslKeyManagerFactory which allows to create a KeyManagerFactory which supports to do keyless operations by let the use handle everything in OpenSslPrivateKeyMethod.
+- Add testcase which verifies that everything works as expected
+
+Result:
+
+A user is able to customize the way how keys are signed.

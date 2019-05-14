@@ -1,0 +1,14 @@
+SQL: Allow sorting of groups by aggregates (#38042)
+
+Introduce client-side sorting of groups based on aggregate
+functions. To allow this, the Analyzer has been extended to push down
+to underlying Aggregate, aggregate function and the Querier has been
+extended to identify the case and consume the results in order and sort
+them based on the given columns.
+The underlying QueryContainer has been slightly modified to allow a view
+of the underlying values being extracted as the columns used for sorting
+might not be requested by the user.
+
+The PR also adds minor tweaks, mainly related to tree output.
+
+Close #35118

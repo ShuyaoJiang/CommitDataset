@@ -1,0 +1,18 @@
+SQL: Run fewer tests against multiple nodes (elastic/x-pack-elasticsearch#3625)
+
+Rather than run every SQL test against multiple nodes we instead run a
+subset of the tests simply for speed. The subset is both small but
+exercises the CLI, JDBC, and REST interface and a few special "these
+might be different in against multiple nodes" cases.
+
+This drops the run time from of `gradle clean check` of these tests from
+```
+BUILD SUCCESSFUL in 4m 49s
+```
+
+To:
+```
+BUILD SUCCESSFUL in 2m 49s
+```
+
+Original commit: elastic/x-pack-elasticsearch@dcd99bcd82f7e7ba42b442fcd4f9f472025022b8

@@ -1,0 +1,12 @@
+Remove assertion in testDocStats on deletedDocs counter (#32914)
+
+testDocStats test is flaky and sometimes it's failing on jenkins and
+failure is not reproducible locally. The reason for this failure is in
+timing. If the number of deleted documents is greater than 33% of inserted
+documents, Lucene will schedule segments to merge if TieredMergePolicy is
+used (it's not the case for LogMergePolicy, but ES is only using
+TieredMergePolicy). If this merge is performed before stats are
+retrieved - we will get 0 for "deleted" counter.
+So basically this counter could be either 0 or numOfDeletedDocs at this point,
+but this is the too loose assertion and we decided to remove it at all.
+Closes #32766

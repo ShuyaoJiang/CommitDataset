@@ -1,0 +1,10 @@
+Remove Custom Listeners from SnapshotsService (#37629)
+
+* Remove Custom Listeners from SnapshotsService
+
+Motivations:
+    * Shorten the code some more
+    * Use ActionListener#wrap to get easy to reason about behavior in failure scenarios
+    * Remove duplication in the logic of handling snapshot completion listeners (listeners removing themselves and comparing snapshots to their targets)
+        * Also here, move all listener handling into `SnapshotsService` and remove custom listener class by putting listeners in a map
+

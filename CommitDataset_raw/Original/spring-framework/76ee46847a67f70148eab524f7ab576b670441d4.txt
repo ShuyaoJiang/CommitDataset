@@ -1,0 +1,33 @@
+Selectively force encoding in CharacterEncodingFilter
+
+Prior to this commit, setting the `forceEncoding` option would force
+encoding on both requests and responses.
+
+This commit adds two new setters and a new constructor to differentiate
+both options: forcing the encoding on the request and/or on the
+response.
+
+You can now define this filter programmatically using those options or
+update your servlet XML configuration like:
+
+```
+<filter>
+  <filter-name>characterEncodingFilter</filter-name>
+  <filter-class>o.sf.web.filter.CharacterEncodingFilter</filter-class>
+  <init-param>
+     <param-name>encoding</param-name>
+     <param-value>UTF-8</param-value>
+  </init-param>
+  <init-param>
+    <param-name>forceRequestEncoding</param-name>
+    <param-value>true</param-value>
+  </init-param>
+  <init-param>
+    <param-name>forceResponseEncoding</param-name>
+    <param-value>false</param-value>
+  </init-param>
+</filter>
+
+```
+
+Issue: SPR-14240

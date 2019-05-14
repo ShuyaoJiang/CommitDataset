@@ -1,0 +1,10 @@
+Use port 0 InternalTestCluster nodes (#27859)
+
+We currently have a complicated port assignment scheme to make sure that the nodes span off by the internal test cluster will be assigned fixed port ranges that will also not collide between clusters. The port ranges need to be fixed in advance so that the nodes will be able to find each other via `UnicastZenPing`.
+
+This approach worked well for the last few years but we are now at a point that our testing has grown beyond it and we exceed the 5 reusable ranges per JVM. This means that nodes are not always assigned the first 5 ports in their range which causes cluster formation issues. On top of that, most of the clusters that are span up don't even rely on `UnicastZenPing` but rather `MockZenPings` that uses in memory maps for discovery (with the down side that they are not influenced by network disruption simulations).
+
+This PR changes `InternalTestCluster` to use port 0 as a fixed assignment. This will allow the OS to manage ports and will ensure we don't have collisions. For tests that need to simulate network disruptions (and thus can't use `MockZenPings`), a new `UnicastHostProvider` is introduced that is based on the current state of the test cluster. Since that is only resolved at run time, it is aware of the port assignments of the OS.
+
+Closes #27818
+Closes #27762

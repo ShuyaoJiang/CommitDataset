@@ -1,0 +1,16 @@
+Tests: Disable watcher in ServerTransportFilterIntegrationTests
+
+These tests are starting their own nodes and do not use the testing
+trigger schedule class.
+
+There are occasional test failure due to a race condition where watcher
+is in the process of being started, but cannot be shut down properly,
+because starting up was not finished when the shut down was called for.
+
+These filter tests do not rely on watcher, so we can disable them for
+now, but we still need to fix a race condition in starting/stopping
+watcher.
+
+relates elastic/x-pack-elasticsearch#1422
+
+Original commit: elastic/x-pack-elasticsearch@f13bb7a6fb99b5c5d4d8bc981f6c85dd9d505071

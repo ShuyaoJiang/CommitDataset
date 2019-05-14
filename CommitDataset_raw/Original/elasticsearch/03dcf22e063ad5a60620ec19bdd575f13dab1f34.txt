@@ -1,0 +1,8 @@
+Move caching of the size of a directory to `StoreDirectory`. (#30581)
+
+In spite of the existing caching, I have seen a number of nodes hot threads
+where one thread had been spending all its cpu on computing the size of a
+directory. I am proposing to move the computation of the size of the directory
+to `StoreDirectory` in order to skip recomputing the size of the directory if
+no changes have been made. This should help with users that have read-only
+indices, which is very common for time-based indices.

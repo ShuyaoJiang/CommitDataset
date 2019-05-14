@@ -1,0 +1,14 @@
+More efficient encoding of range fields. (#26470)
+
+This PR removes the vInt that precedes every value in order to know how long
+they are. Instead the query takes an enum that tells how to compute the length
+of values: for fixed-length data (ip addresses, double, float) the length is a
+constant while longs and integers use a variable-length representation that
+allows the length to be computed from the encoded values.
+
+Also the encoding of ints/longs was made a bit more efficient in order not to
+waste 3 bits in the header. As a consequence, values between -8 and 7 can now
+be encoded on 1 byte and values between -2048 and 2047 can now be encoded on 2
+bytes or less.
+
+Closes #26443

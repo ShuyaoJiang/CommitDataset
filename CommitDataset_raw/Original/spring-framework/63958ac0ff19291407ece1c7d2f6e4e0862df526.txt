@@ -1,0 +1,8 @@
+Fix concurrent test failure
+
+Since ListenableFuture callbacks are invoked after the future is set,
+we cannot rely on callbacks having taken place right after a call
+to future.get(). This change adds a CountdownLatch to detect when
+the callbacks were invoked.
+
+Issue: SPR-12538

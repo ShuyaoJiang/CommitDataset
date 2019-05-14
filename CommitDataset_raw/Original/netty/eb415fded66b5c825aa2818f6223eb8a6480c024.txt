@@ -1,0 +1,18 @@
+V4.1 Fix "=" character in HttpPostRequestDecoder
+
+Motivation
+Issue #3004 shows that "=" character was not supported as it should in
+the HttpPostRequestDecoder in form-data boundary.
+
+Modifications:
+Add 2 methods in StringUtil
+- split with maxPart argument: String split with max parts only (to prevent multiple '='
+to be source of extra split while not needed)
+- substringAfter: String part after delimiter (since first part is not
+needed)
+Use those methods in HttpPostRequestDecoder.
+Change and the HttpPostRequestDecoderTest to check using a boundary
+beginning with "=".
+
+Results:
+The fix implies more stability and fix the issue.

@@ -1,0 +1,8 @@
+JDBC metadata integration with security (elastic/x-pack-elasticsearch#2806)
+
+I realized that we weren't running our DatabaseMetaData tests. One thing led to another and I made these changes:
+1. Got the DatabaseMetaData tests running in all three of our QA projects.
+2. Fixed the SecurityCatalogFilter to work with `SqlGetIndicesAction`. It worked before, but only for requests that were a `SqlAction` as well as `SqlGetIndicesAction`.
+3. Added security test for the JDBC DatabaseMetaData requests. These mirror exactly the security tests that we use for `SHOW TABLES` and `DESCRIBE` but cover the JDBC actions.
+
+Original commit: elastic/x-pack-elasticsearch@7026d83c06d4c6a18132436516eda363bcaca14f

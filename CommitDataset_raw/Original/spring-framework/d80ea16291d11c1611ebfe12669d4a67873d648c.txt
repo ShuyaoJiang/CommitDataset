@@ -1,0 +1,14 @@
+Fix JasperReport tests to ignore missing fonts
+
+Add 'jasperreports.properties' to ignore missing fonts in order that
+tests pass on Linux.
+
+The upgraded JasperReports 5.0.4 throws a JRFontNotFoundException when
+a report font is not found. This caused Spring MVC tests to fail since
+the example reports used the 'Arial' font which is not shipped with most
+Linux distributions.
+
+An alternative fix would have been to package fonts with the reports
+using JasperReports font extension support.
+
+Issue: SPR-10438

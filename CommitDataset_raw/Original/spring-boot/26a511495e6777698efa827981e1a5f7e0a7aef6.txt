@@ -1,0 +1,14 @@
+Allow the user to opt-out of anonymous access restrictions for /health
+
+By default, when /health is accessed anonymously, the details are
+stripped, i.e. the response will only indicate UP or DOWN. Furthermore
+the response is cached for a configurable period to prevent a denial
+of service attack.
+
+This commit adds a configuration property,
+endpoints.health.restrict-anonymous-access, that can be set to false
+to allow full anonymous access to /health. When full access is
+allowed, the details will be included in the response and the response
+will not be cached.
+
+Closes gh-1977

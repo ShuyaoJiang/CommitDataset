@@ -1,0 +1,5 @@
+Revised naming for prototype inner beans to avoid excessive unique name calculation
+
+Restored original singleton-only adaptInnerBeanName behavior, avoiding endless unique name calculation for every single prototype instance. Non-named inner BeanDefinition objects now suffixed with an identity hex code analogous to non-named XML bean definitions, largely avoiding naming collisions to begin with. After SPR-11246, post-processors can deal with unstable classes per bean name, so occasional collisions aren't a hard problem anymore.
+
+Issue: SPR-11545

@@ -1,0 +1,14 @@
+CompositeByteBuf nioBuffer doesn't always alloc (#8176)
+
+In nioBuffer(int,int) in CompositeByteBuf , we create a sub-array of nioBuffers for the components that are in range, then concatenate all the components in range into a single bigger buffer.
+However, if the call to nioBuffers() returned only one sub-buffer, then we are copying it to a newly-allocated buffer "merged" for no reason.
+
+Motivation:
+
+Profiler for Spark shows a lot of time spent in put() method inside nioBuffer(), while usually no copy of data is required.
+
+Modification:
+This change skips this last step and just returns a duplicate of the single buffer returned by the call to nioBuffers(), which will in most implementation not copy the data
+
+Result:
+No copy when the source is only 1 buffer

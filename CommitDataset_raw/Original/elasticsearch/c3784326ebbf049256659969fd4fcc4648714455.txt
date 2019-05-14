@@ -1,0 +1,21 @@
+Refactor field expansion for match, multi_match and query_string query (#25726)
+
+This commit changes the way we handle field expansion in `match`, `multi_match` and `query_string` query.
+ The main changes are:
+
+- For exact field name, the new behavior is to rewrite to a matchnodocs query when the field name is not found in the mapping.
+
+- For partial field names (with `*` suffix), the expansion is done only on `keyword`, `text`, `date`, `ip` and `number` field types. Other field types are simply ignored.
+
+- For all fields (`*`), the expansion is done on accepted field types only (see above) and metadata fields are also filtered.
+
+- The `*` notation can also be used to set `default_field` option on`query_string` query. This should replace the needs for the extra option `use_all_fields` which is deprecated in this change.
+
+This commit also rewrites simple `*` query to matchalldocs query when all fields are requested (Fixes #25556). 
+
+The same change should be done on `simple_query_string` for completeness.
+
+`use_all_fields` option in `query_string` is also deprecated in this change, `default_field` should be set to `*` instead.
+
+Relates #25551
+ 

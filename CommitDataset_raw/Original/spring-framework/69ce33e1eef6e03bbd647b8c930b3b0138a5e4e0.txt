@@ -1,0 +1,12 @@
+Add WebClient and its WebResponseExtractor API
+
+This commit adds the `WebClient`, which relies on several parts of our
+infrastructure:
+* a `ClientHttpRequestFactory` to drive the underlying client library
+* a `HttpRequestBuilder` builder API to create the client request
+* a `WebResponseExtractor` to extract the "low-level"
+`ClientHttpResponse` into a higher level representation such as a
+decoded body
+
+The `WebResponseExtractors` helper class contains many extractor
+implementations all based on the `Flux`/`Mono` composition API.

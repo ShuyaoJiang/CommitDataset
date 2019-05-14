@@ -1,0 +1,13 @@
+[ML] Autodetect should receive events from the earliest valid timestamp (elastic/x-pack-elasticsearch#3570)
+
+When events are searched to be passed to the autodetect process, they
+are currently calculated based on the latest record timestamp, when
+a job opens, and `now` when the process is updated.
+
+This commit changes both to be consistent and based on the earliest
+valid timestamp for the job. The earliest valid timestamp is the
+latest record timestamp minus the job latency.
+
+Relates elastic/x-pack-elasticsearch#3016
+
+Original commit: elastic/x-pack-elasticsearch@7f882ea0531ccb2a965c9d5e98cfab6cd199c56f

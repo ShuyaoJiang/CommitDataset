@@ -1,0 +1,7 @@
+Add escape hatch for ClassLoader.findResource() for invalid path
+
+The source of the exception is in sun.misc (so hard to track down precisely)
+but it's clear that the LaunchedJarURLClassLoader needs to be more
+defensive and return null from findResource() if it can't find it.
+
+Fixes gh-486

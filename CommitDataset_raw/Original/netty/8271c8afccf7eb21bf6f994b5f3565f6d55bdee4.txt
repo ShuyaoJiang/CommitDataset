@@ -1,0 +1,14 @@
+Remove explicit flushes from HTTP2 encoders, decoders & flow-controllers
+
+Motivation:
+
+Allow users of HTTP2 to control when flushes occur so they can optimize network writes.
+
+Modifications:
+
+Removed explicit calls to flush in encoder, decoder & flow-controller
+Connection handler now calls flush on read-complete to enable batching writes in response to reads
+
+Result:
+
+Much less flushing occurs for normal HTTP2 request and response patterns.

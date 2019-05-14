@@ -1,0 +1,12 @@
+[ML] Make datafeeds run-as the user who created/updated them (elastic/x-pack-elasticsearch#3254)
+
+This is the ML equivalent of what was done for Watcher in elastic/x-pack-elasticsearch#2808.
+
+For security reasons, ML datafeeds should not run as the _xpack
+user.  Instead, they record the security headers from the request
+to create/update them, and reuse these when performing the search
+to retrieve data for analysis.
+
+Relates elastic/x-pack-elasticsearch#1071
+
+Original commit: elastic/x-pack-elasticsearch@29f85de404a8afb26d9f43cfe1fbef103446ea5f

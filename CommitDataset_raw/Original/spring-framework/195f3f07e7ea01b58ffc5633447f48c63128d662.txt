@@ -1,0 +1,12 @@
+ResponseEntityResultHandler overwrites headers
+
+Prior to this commit, controller handlers (regular and exception
+handlers as well) would not overwrite existing HTTP response headers on
+the exchange. This would lead to situations where Content-Type values
+set during the initial handling phase would not be overwritten when
+handling an error later on.
+
+This commit aligns the implementation of that result handler on the
+Spring MVC one in that regard.
+
+Issue: SPR-17082

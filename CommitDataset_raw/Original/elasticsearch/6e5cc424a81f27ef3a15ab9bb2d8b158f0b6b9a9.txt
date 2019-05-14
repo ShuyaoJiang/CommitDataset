@@ -1,0 +1,17 @@
+Switch indices read-only if a node runs out of disk space (#25541)
+
+Today when we run out of disk all kinds of crazy things can happen
+and nodes are becoming hard to maintain once out of disk is hit.
+While we try to move shards away if we hit watermarks this might not
+be possible in many situations. Based on the discussion in #24299
+this change monitors disk utilization and adds a flood-stage watermark
+that causes all indices that are allocated on a node hitting the flood-stage
+mark to be switched read-only (with the option to be deleted). This allows users to react on the low disk
+situation while subsequent write requests will be rejected. Users can switch
+individual indices read-write once the situation is sorted out. There is no
+automatic read-write switch once the node has enough space. This requires
+user interaction.
+
+The flood-stage watermark is set to `95%` utilization by default.
+
+Closes #24299

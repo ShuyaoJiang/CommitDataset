@@ -1,0 +1,7 @@
+[ILM] refactor ExplainLifecycleRequest to enforce indices (#35753)
+
+Previously, it was possible to initialize a request
+that does not include any indices. This results in undefined
+behavior when generating the URL path to send to ES. By
+enforcing indices to be defined, users will be more explicit
+about the intention.

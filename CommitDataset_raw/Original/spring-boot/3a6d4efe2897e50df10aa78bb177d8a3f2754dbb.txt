@@ -1,0 +1,10 @@
+Reverse order of active profiles before processing
+
+This change harmonizes the profile ordering between spring.profiles.active
+(where last one already wins) and SpringApplication.setAdditionalProfiles()
+(where the first one has been winning in 1.0.x). Last one wins is the
+correct strategy since it mimics a map merge, and also matches the behaviour
+of file ordering already defined in spring.config.location and
+spring.config.name.
+
+Fixes gh-645

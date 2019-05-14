@@ -1,0 +1,8 @@
+Teach MockWebServer to throttle the request body.
+
+We use a single throttle for both request and response. This is
+sufficient for all of our current needs.
+
+This breaks API compatibility with previous custom dispatchers.
+Dispatchers that override peekSocketPolicy() must now override
+peek() instead.

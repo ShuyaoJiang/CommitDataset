@@ -1,0 +1,11 @@
+Handle null header value property
+
+When using an Apache Http components based infrastructure, a null header
+value is handled as the empty string. The exact same infrastructure using
+HttpURLConnection generates a header with no colon. This is actually not
+proper HTTP and some components fail to read such request.
+
+We now make sure to call HttpURLConnection#addRequestProperty with the
+empty String for a null header value.
+
+Issue: SPR-13225

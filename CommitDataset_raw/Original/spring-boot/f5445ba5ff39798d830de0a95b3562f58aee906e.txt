@@ -1,0 +1,14 @@
+Remove OnValidatorAvailableCondition as it is now redundant
+
+Previously, Hibernate Validator would fail to initialize if it was
+on the classpath but an EL implementation was not.
+OnValidatorAvailableCondition protected against this scenario by
+initializing the validator.
+
+The Hibernate Validator shortcoming was addressed in eb222209
+(gh-7598). As a result, checking for the precences of the
+ValidationProvider META-INF/services resource is now sufficient to
+auto-configure validation. This commit removes
+OnValidatorAvailableCondition as it is no longer necessary.
+
+Closes gh-8110

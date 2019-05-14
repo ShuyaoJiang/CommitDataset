@@ -1,0 +1,18 @@
+Tweak reindex cancel logic and add many debug logs (#25256)
+
+I'm still trying to hunt down rare failures in the cancelation tests
+for reindex and friends. Here is the latest:
+https://elasticsearch-ci.elastic.co/job/elastic+elasticsearch+5.x+multijob-unix-compatibility/os=ubuntu/876/console
+
+It doesn't show much, other than that one of the tasks didn't kill
+itself when asked to cancel.
+
+So I'm going a bit crazy with debug logging so that the next time this
+comes up I can trace exactly what happened.
+
+Additionally, this tweaks the logic around how rethrottles were
+performed around cancel. Previously we set the `requestsPerSecond`
+to `0` when we cancelled the task. That was the "old way" to set them
+to inifity which was the intent. This switches that from `0` to
+`Float.MAX_VALUE` which is the "new way" to set the `requestsPerSecond`
+to infinity. I don't know that this is much better, but it feels better.

@@ -1,0 +1,15 @@
+Use the ByteBufAllocator when copy a ReadOnlyByteBufferBuf and so also be able to release it without the GC when the Cleaner is present.
+
+Motivation:
+
+In ReadOnlyByteBufferBuf.copy(...) we just allocated a ByteBuffer directly and wrapped it. This way it was not possible for us to free the direct memory that was used by the copy without the GC.
+
+Modifications:
+
+- Ensure we use the allocator when create the copy and so be able to release direct memory in a timely manner
+- Add unit test
+- Depending on if the to be copied buffer is direct or heap based we also allocate the same type on copy.
+
+Result:
+
+Fixes [#7103].

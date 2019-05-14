@@ -1,0 +1,11 @@
+Look up connection using the right cluster alias when releasing contexts (#38570)
+
+Whenever phase failure is raised in AbstractSearchAsyncAction, we go and
+release search contexts of shards that successfully returned their
+results, prior to notifying the listener of the failure. In case we are
+executing a CCS request, it's important to look-up the connection to
+send the release context request to.
+
+This commit makes sure that the lookup takes the cluster alias into
+account. We used to use `null` at all times instead which is not correct
+and was not caught as any exception is caught without re-throwing it.

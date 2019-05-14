@@ -1,0 +1,21 @@
+Feed only a single SSL record to SSLEngine.unwrap()
+
+Motivation:
+
+Some SSLEngine implementations violate the contract and raises an
+exception when SslHandler feeds an input buffer that contains multiple
+SSL records to SSLEngine.unwrap(), while the expected behavior is to
+decode the first record and return.
+
+Modification:
+
+- Modify SslHandler.decode() to keep the lengths of each record and feed
+  SSLEngine.unwrap() record by record to work around the forementioned
+  issue.
+- Rename unwrap() to unwrapMultiple() and unwrapNonApp()
+- Rename unwrap0() to unwrapSingle()
+
+Result:
+
+SslHandler now works OpenSSLEngine from finagle-native.  Performance
+impact remains unnoticeable.  Slightly better readability. Fixes #2116.

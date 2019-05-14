@@ -1,0 +1,15 @@
+Extend JVM options to support multiple versions
+
+JDK 9 has removed JVM options that were valid in JDK 8 (e.g., GC logging
+flags) and replaced them with new flags that are not available in JDK
+8. This means that a single JVM options file can no longer apply to JDK
+8 and JDK 9, complicating development, complicating our packaging story,
+and complicating operations. This commit extends the JVM options syntax
+to specify the range of versions the option applies to. If the running
+JVM matches the range of versions, the flag will be used to start the
+JVM otherwise the flag will be ignored.
+
+We implement this parser in Java for simplicity, and with this we start
+our first step towards a Java launcher.
+
+Relates #27675

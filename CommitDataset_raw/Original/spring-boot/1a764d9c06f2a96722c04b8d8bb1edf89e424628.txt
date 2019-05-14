@@ -1,0 +1,11 @@
+Default Tomcat to not save SESSIONS.ser file
+
+Update TomcatEmbeddedServletContainerFactory so that session data isn't
+serialized by default. Prior to this commit the SESSIONS.ser file would
+either be written to `/tmp` or into `baseDir` (if one was set).
+
+By not saving session data we align Tomcat with the other embedded
+servlet containers and reduce the risk of sensitive information being
+left in `/tmp`.
+
+Fixes gh-4156

@@ -1,0 +1,6 @@
+Adds rollover action to index lifecycle plugin (#3266)
+
+This action will rollover an index when executed if the provided conditions are met.
+Users may specify the maximum age, maximum index size in bytes or maximum index size in number of documents as conditions for rollover.
+
+When the action executes it firsts checks the local cluster state to find out if the alias exists on the index. If the alias does not exist then the index was either rolled over by a previous run or something else has rolled over the index so the action can be marked as completed. If the index still has the alias set the action will make a rollover index request using the Client. When that request returns and the listener is called the action will only be marked as complete if the response indicates the index was rolled over. If the index was not rolled over (because the conditions are not yet met) the action is not marked as complete and will be re-evaluated on the next call to execute.

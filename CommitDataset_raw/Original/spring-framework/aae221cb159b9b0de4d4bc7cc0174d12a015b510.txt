@@ -1,0 +1,17 @@
+Fix SpEL compilation of constructor invocation
+
+The argument processing for compiling constructor references
+was very basic and this fix removes that and ensures the
+comprehensive logic written for method argument processing
+(under SPR-12328) is now used for both method and constructor
+argument handling. This fixes the reported issue and ensures
+varargs constructor references can be compiled.
+
+This also includes a couple of small fixes for the secondary
+testcase reported in SPR-12326. The first is to ensure the
+right root context object is used when it is passed
+to getValue() indirectly through the evaluation context.
+The final fix is to ensure correct boxing of primitives is
+done when a method is called upon a primitive.
+
+Issue: SPR-12326

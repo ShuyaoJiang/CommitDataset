@@ -1,0 +1,23 @@
+Make results of handler proxy tests reproducible
+
+Motivation:
+
+`ProxyHandlerTest` relies on random values to run tests: first to
+shuffle collection of test items and lately to set configuration
+flag for `AUTO_READ`. While the purpose of randomization is clear,
+it's still impossible to reproduce the same sequence of test cases
+when something went wrong. For `AUTO_READ` it's even impossible
+to tell what flag was set when the particular test failed.
+
+Modifications:
+
+* Test runner now log seed values that was used for shuffling,
+  so you can take one and put in your tests to "freeze" them
+  while debugging (pretty common approach with randomized tests)
+
+* `SuccessItemTest` is split into 2 different use cases:
+  for AUTO_READ flag set to "on" and "off"
+
+Result:
+
+You can reproduce specific tests results now.

@@ -1,0 +1,9 @@
+Allow modifying HandshakeInterceptor list
+
+The getter in TransportHandlingSockJsService now returns a mutable
+List. The immutable wrapper doesn't make sense since it's possible
+anyway to modify the list by creating a new list and calling the
+setter again. It's also consistent with the same field on
+WebSocketHttpRequestHandler.
+
+This is related to work for SPR-12845.

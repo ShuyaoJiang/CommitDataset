@@ -1,0 +1,19 @@
+Adds API to assign or change the policy for an index (#31277)
+
+* Adds API to assign or change the policy for an index
+
+This api will change `index.lifecycle.name` for all indexes in the
+provided pattern as long as they are not currently in the shrink action.
+
+Later changes will loosen this restriction so an index is only reject
+if it is currently in the shrink action AND the diff between the old
+and new policy includes changes to the shrink action.
+
+Also later changes will detect if the current step is not present in
+the new policy and move the index onto the next available step
+
+* Changes name to SetPolicyForIndexAction
+
+Also changes all related Classes and api endpoints
+
+* fixes tests

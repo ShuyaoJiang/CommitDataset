@@ -1,0 +1,14 @@
+Loosen setup mode restrictions for upgrade tests (elastic/x-pack-elasticsearch#1927)
+
+This commit is related to elastic/x-pack-elasticsearch#1896. Currently setup mode means that the
+password must be set post 6.0 for using x-pack. This interferes with
+upgrade tests as setting the password fails without a properly
+upgraded security index.
+
+This commit loosens two aspects of the security.
+
+1. The old default password will be accept in setup mode (requests
+from localhost).
+2. All request types can be submitted in setup mode.
+
+Original commit: elastic/x-pack-elasticsearch@8a2a5770385ea6bf84a63352543479fa0abfd898

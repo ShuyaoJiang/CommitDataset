@@ -1,0 +1,10 @@
+Use the underlying connection version for CCS connections  (#28093)
+
+Previously this would default to the version of the remote Node.
+However, if the remote cluster was mixed-version (e.g. it was part way through a
+rolling upgrade), then the TransportService may have negotiated a connection
+version that is not identical to connected Node's version.
+
+This mismatch would cause the Stream and the (Remote)Connection to report
+different version numbers, which could cause data to be sent over the wire
+using an incorrect serialization version.

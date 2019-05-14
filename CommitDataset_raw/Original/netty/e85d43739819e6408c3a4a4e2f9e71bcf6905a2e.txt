@@ -1,0 +1,14 @@
+[#5597] Not try to double release empty buffer in Unpooled.wrappedBuffer(...)
+
+Motivation:
+
+When Unpooled.wrappedBuffer(...) is called with an array of ByteBuf with length >= 2 and the first ByteBuf is not readable it will result in double releasing of these empty buffers when release() is called on the returned buffer.
+
+Modifications:
+
+- Ensure we only wrap readable buffers.
+- Add unit test
+
+Result:
+
+No double release of buffers.

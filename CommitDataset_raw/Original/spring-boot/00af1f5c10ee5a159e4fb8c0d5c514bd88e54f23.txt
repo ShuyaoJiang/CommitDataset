@@ -1,0 +1,11 @@
+Flag main MbeanExporter `@Primary`
+
+When the actuator is enabled, Spring Boot provides two `MBeanExporter`
+bean definitions: a general purpose one and a dedicated one for Actuator
+endpoints.
+
+This commit flag the general purpose one `@Primary` so that component
+can safely inject it by type if necessary. In particular, this fix the
+doc of the `JmxMetricWriter`.
+
+Closes gh-4007

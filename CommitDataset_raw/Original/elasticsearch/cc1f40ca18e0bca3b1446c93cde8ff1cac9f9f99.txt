@@ -1,0 +1,17 @@
+Fix cluster health wait conditions in rolling restart tests
+
+In the rolling upgrade tests, there is a test to create an index with
+replica shards and ensure that in the mixed cluster environment, the
+cluster health is green before any other tests are executed.  However,
+there were two problems with this.  First, if the replica shard was
+residing on the restarted node, then delayed allocation will kick in and
+cause the cluster health request to timeout after 1m.  The fix to this
+was to drastically lower the delayed allocation setting.  Second, if the
+primary exists on the higher version node, then the replica cannot be
+assigned to the lower version node because recovery cannot happen from
+lower lucene versions.  The fix here was to wait for the cluster health
+to be yellow instead of green in the mixed cluster environment.  In the
+fully upgraded cluster, the cluster health check waits for a green
+cluster as before.
+
+Closes #25185

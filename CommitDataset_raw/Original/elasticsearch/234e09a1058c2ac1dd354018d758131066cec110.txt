@@ -1,0 +1,5 @@
+Fix UpdateMappingIntegrationIT test failures
+
+The mappings can be submitted wrapped in a type object or not. They need to be returned in the same way as they were submitted. When applying field filters, we need to make sure that the format is preserved. MappingMetaData#getSourceAsMap removes the root level if it's the type object, which would make us overwrite the original mappings with filtered mappings but without the original root object.
+
+Closes #27678

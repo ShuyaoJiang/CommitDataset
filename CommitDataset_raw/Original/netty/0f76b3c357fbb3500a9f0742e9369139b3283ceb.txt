@@ -1,0 +1,7 @@
+Remove unnecessary code from HttpObjectDecoder and re-enable all HTTP tests
+
+- Since Netty 4, HTTP decoder does not generate a full message at all.  Therefore, there's no need to keep separate states for the content smaller than maxChunkSize.
+- maxChunkSize must be greater than 0. Setting it to 0 should not disable chunked encoding. We have a dedicated flag for that.
+- Uncommented the tests that were commented out for an unknown reason, with some fixes.
+- Added more tests for HTTP decoder.
+- Removed the Ignore annotation on some tests.

@@ -1,0 +1,29 @@
+Add processor to generate configuration meta-data
+
+Adds an annotation processor to generates a JSON meta-data file at
+compile time from @ConfigurationProperties items. Each meta-data file
+can include an array or 'properties' and 'groups'.
+
+A 'property' is a single item that may appear in a Spring Boot
+'application.properties' file with a given value. For example,
+'server.port' and 'server.context-path' are properties. Each property
+may optionally include 'type' and 'description' attributes to provide
+the data type (e.g. `java.lang.Integer`, `java.lang.String`) and
+some short documentation (taken from the field javadoc) about what the
+property is for. For consistency, the type of a primitive is translated
+to its wrapper counterpart, i.e. `boolean` becomes `java.lang.Boolean`.
+
+A 'group' provides a higher level grouping of properties. For example
+the 'server.port' and 'server.context-path' properties are in the
+'server' group.
+
+Both 'property' and 'group' items may additional have 'sourceType' and
+'sourceMethod' attributes to indicate the source that contributed them.
+
+Users may use `META-INF/additional-spring-configuration-metadata.json`
+to manually provide additionally meta-data that is not covered by
+@ConfigurationProperties objects. The contents of this file will be
+read and merged with harvested items. The complete meta-data file is
+finally written to `META-INF/spring-configuration-metadata.json`.
+
+See gh-1001

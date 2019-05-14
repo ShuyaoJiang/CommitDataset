@@ -1,0 +1,14 @@
+DefaultSocks5CommandRequest incorrectly rejects SOCKS5 commands with dstPort=0
+
+Motivation:
+
+According to SOCKS 5 spec, dstPort = 0 is a valid value in case of UDP ASSOCIATE.
+
+Modifications:
+
+- Allow 0 as port.
+- Add unit tests.
+
+Result:
+
+Fixes [#7156].

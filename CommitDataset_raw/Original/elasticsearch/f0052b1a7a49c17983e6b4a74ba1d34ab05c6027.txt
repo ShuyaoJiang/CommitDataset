@@ -1,0 +1,13 @@
+Add hybridfs store type
+
+With this commit we introduce a new store type `hybridfs` that is a
+hybrid between `mmapfs` and `niofs`. This store type chooses different
+strategies to read Lucene files based on the read access pattern (random
+or linear) in order to optimize performance.
+
+This store type has been available in earlier versions of Elasticsearch
+as `default_fs`. We have chosen a different name now in order to convey
+the intent of the store type instead of tying it to the fact whether it
+is the default choice.
+
+Relates #36668

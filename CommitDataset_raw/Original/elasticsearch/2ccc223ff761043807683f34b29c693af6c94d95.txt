@@ -1,0 +1,9 @@
+Fix Version based BWC and set correct minCompatVersion (#24732)
+
+Approaching the release of 6.0 we need to sort out the usage of
+`Version#minimumCompatibilityVersion` which was still set to 5.0.0.
+Now this change moves it to the latest released version of 5.x (5.4 at this point)
+to ensure we are compatible with the latest minor of the previous major. This change
+also removes all the `_UNRELEASED` from the versions that where released and drops versions
+that were never released and are not expected to be released (bugfixes in minors that are not
+the latest in the previous major).

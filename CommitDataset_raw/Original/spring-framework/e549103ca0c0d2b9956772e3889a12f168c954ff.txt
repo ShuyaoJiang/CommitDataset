@@ -1,0 +1,12 @@
+Remove Jackson dependency from TransportHandler hierarchy
+
+Prior to this change, AbstractHttpReceivingTransportHandler had a direct
+dependency on a Jacckson Exception (checking that exception in a catch
+clause). This can cause issues for applications that don't have that
+dependency.
+
+This commit removes that direct dependency, still logging the
+appropriate log messages using a parent exception (IOException) and
+reflection.
+
+Issue: SPR-11963

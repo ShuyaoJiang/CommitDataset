@@ -1,0 +1,14 @@
+Move generic unix classes/interfaces out of epoll package
+
+Motivation:
+
+As we plan to have other native transports soon (like a kqueue transport) we should move unix classes/interfaces out of the epoll package so we
+introduce other implementations without breaking stuff before the next stable release.
+
+Modifications:
+
+Create a new io.netty.channel.unix package and move stuff over there.
+
+Result:
+
+Possible to introduce other native impls beside epoll.

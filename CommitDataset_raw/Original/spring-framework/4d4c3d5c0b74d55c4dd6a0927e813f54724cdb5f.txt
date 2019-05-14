@@ -1,0 +1,13 @@
+Replace bindToHttpHandler with bindToWebHandler
+
+This commit replaces the option to bind the WebTestClient to an
+HttpHandler to bind to a WebHandler instead.
+
+This allows testing below the WebFlux level such as WebFilter,
+WebHandler, or WebSession scenarios, but still a level above
+HttpHandler so that WebTestClient is in charge of creating the
+ServerWebExchange and expose consistently the
+WebTestClient#MockServerSpec setup across all "mock" server bindToXxx
+options.
+
+Issue: SPR-15570

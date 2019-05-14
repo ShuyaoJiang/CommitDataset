@@ -1,0 +1,19 @@
+Fix @RequestBody(required=false) support
+
+Prior to this commit, requests with an empty body and no Content-Type
+header set would fail with a HttpMediaTypeNotSupportedException when
+mapped to a Controller method argument annotated with
+@RequestBody(required=false).
+In those cases, the server implementation considers with an
+"application/octet-stream" content type and polls messageconverters for
+conversion. If no messageconverter is able to process this request, a
+HttpMediaTypeNotSupportedException is thrown.
+
+This change makes sure that such exceptions are not thrown if the
+incoming request has:
+* no body
+* no content-type header
+
+In this case, a null value is returned.
+
+Issue: SPR-13147

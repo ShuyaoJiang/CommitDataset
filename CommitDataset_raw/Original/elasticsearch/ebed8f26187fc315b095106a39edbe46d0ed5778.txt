@@ -1,0 +1,8 @@
+[Rollup] Fix FullClusterRestart test
+
+We need to wait for the job to fully initialize and start before
+we can attempt to stop it.  If we don't, it's possible for the stop
+API to be called before the persistent task is fully loaded and it'll
+throw an exception.
+
+Closes #32773

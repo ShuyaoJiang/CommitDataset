@@ -1,0 +1,11 @@
+Exact match for groupId excludes
+
+Previous to this commit, any groupId starting with one of the
+configured exclude would be excluded as well. This potentially
+leads to unintentional dependency filtering: for example the
+GroupIdFilter with an exclusion of "org.springframework"
+also removes "org.springframework.boot" dependencies.
+
+Add MatchingGroupIdFilter that uses an exact match instead.
+
+See #649

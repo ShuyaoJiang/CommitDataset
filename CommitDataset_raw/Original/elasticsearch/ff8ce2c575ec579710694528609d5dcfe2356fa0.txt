@@ -1,0 +1,3 @@
+Fsync state file before exposing it (#30929)
+
+With multiple data paths, we write the state files for index metadata to all data paths. We only properly fsync on the first location, though. For other locations, we possibly expose the file before its contents is properly fsynced. This can lead to situations where, after a crash, and where the first data path is not available anymore, ES will see a partially-written state file, preventing the node to start up.

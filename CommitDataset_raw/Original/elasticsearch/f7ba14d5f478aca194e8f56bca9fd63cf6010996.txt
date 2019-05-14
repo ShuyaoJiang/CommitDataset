@@ -1,0 +1,11 @@
+Make sure _forcemerge respects `max_num_segments`. (#32291)
+
+An upcoming [Lucene change](https://issues.apache.org/jira/browse/LUCENE-7976)
+will make TieredMergePolicy respect the maximum merged segment size all the
+time, meaning it will possibly not respect the `max_num_segments` parameter
+anymore if the shard is larger than the maximum segment size.
+
+This change makes sure that `max_num_segments` is respected for now in order
+to give us time to think about how to integrate this change, and also to delay
+it until 7.0 as this might be a big-enough change for us to wait for a new
+major version.

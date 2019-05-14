@@ -1,0 +1,9 @@
+Fix path stripper in JolokiaEndpoint to account for management.contextPath
+
+When the user sets management.contextPath=/admin the Jolokia
+endpoint gets mapped to /admin/jolokia, but that the path stripper it uses
+internally makes a false assumption about the form of the request path.
+The fix is simple (just use a smarter search for the endpoint path in the
+request path).
+
+Fixes gh-642

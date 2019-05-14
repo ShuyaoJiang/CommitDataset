@@ -1,0 +1,7 @@
+Fix exception when GIF can't be decoded
+
+We get a GifHeader object, but it has 0 frames
+which eventually causes a divide by zero
+exception. Since the real problem is that we
+couldn't decode the gif, we check in the decoder
+if the decode failed and then simply return null.

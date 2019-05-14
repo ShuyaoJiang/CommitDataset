@@ -1,0 +1,14 @@
+Allow efficient writing of CompositeByteBuf when using native epoll transport.
+
+Motivation:
+
+There were no way to efficient write a CompositeByteBuf as we always did a memory copy to a direct buffer in this case. This is not needed as we can just write a CompositeByteBuf as long as all the components are buffers with a memory address.
+
+Modifications:
+
+- Write CompositeByteBuf which contains only direct buffers without memory copy
+- Also handle CompositeByteBuf that have more components then 1024.
+
+Result:
+
+More efficient writing of CompositeByteBuf.

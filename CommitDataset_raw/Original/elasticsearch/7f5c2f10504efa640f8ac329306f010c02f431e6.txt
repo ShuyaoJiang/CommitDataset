@@ -1,0 +1,7 @@
+[CCR] Validate follower index historyUUIDs (#34078)
+
+The follower index shard history UUID will be fetched from the indices stats api when the shard follow task starts and will be provided with the bulk shard operation requests. The bulk shard operations api will fail if the provided history uuid is unequal to the actual history uuid.
+
+No longer record the leader history uuid in shard follow task params, but rather use the leader history UUIDs directly from follower index's custom metadata. The resume follow api will remain to fail if leader index shard history UUIDs are missing.
+
+Closes #33956

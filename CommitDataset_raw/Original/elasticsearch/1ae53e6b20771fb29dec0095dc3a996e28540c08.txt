@@ -1,0 +1,8 @@
+TEST: Disable merges in testRebuildLocalCheckpointTracker (#36625)
+
+In this test, we keep track of a list of index commits then verify that
+we reload exactly every operation from the safe commit. If a background
+merge is triggered, then we might have a new index commit which is not
+recorded in the tracking list. This change disables merges in the test.
+
+Closes #36470

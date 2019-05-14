@@ -1,0 +1,15 @@
+Stop disabling explicit GC
+
+The problem here is simple: when using direct buffers as in NIO, the JDK
+relies on explict GC invocataions to trigger cleaning up direct buffers;
+if such GCs do not occur and the direct buffer limit is reached, the JVM
+will throw an out of memory exception. With explicit GCs disabled, the
+JVM is neutered from explicitly cleaning up direct buffers in the act of
+reserving a new direct buffer and instead relies on a GC occurring for
+another reason. If such a GC never occurs, the JVM will OOM. This commit
+removes disabling of explicit GCs. Note that these explicit GCs only
+occur as a last ditch effort before going OOM when the JVM is trying to
+reserve more direct memory. This is a known issue, see for example:
+JDK-8142537.
+
+Relates #25759

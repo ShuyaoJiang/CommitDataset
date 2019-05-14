@@ -1,0 +1,14 @@
+Throw UnknownHostException not IllegalArgumentException for bad host chars
+
+Before this change HttpURLConnection would parse the bad ASCII
+characters like \u0001, but fail when setting them in the host
+header.
+
+After this change HttpURLConnection throws UnknownHostException.
+Earlier versions of OkHttp would escape the bad characters, but
+this behavior has not been retained.
+
+Fix for issue #1833.
+
+This change involves a behavior change for HttpUrl, and consequently
+HttpURLConnectionImpl.

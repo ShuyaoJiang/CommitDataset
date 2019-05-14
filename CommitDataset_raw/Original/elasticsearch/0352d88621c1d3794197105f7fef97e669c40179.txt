@@ -1,0 +1,10 @@
+Get Mapping API to honour allow_no_indices and ignore_unavailable (#31507)
+
+Get Mapping currently throws index not found exception (and returns
+404 status code) from the REST layer whenever an index was specified
+and no indices have been returned. We should not have this logic in the
+REST layer though as only our index resolver should decide whether we
+need to throw exceptions or not based on provided indices and corresponding
+indices options.
+
+Closes #31485

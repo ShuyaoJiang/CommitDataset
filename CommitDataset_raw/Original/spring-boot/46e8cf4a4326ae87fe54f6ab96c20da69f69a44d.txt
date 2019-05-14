@@ -1,0 +1,16 @@
+Test that a broken factory bean does not break resetting of mocks
+
+Previously, ResetMocksTestExecutionListener used getBean(name) to
+retrieve each instantiated singleton. When the instantiated singleton
+was a factory bean, this would cause getObject on the factory bean to
+be called. If the factory bean was unable to produce its object, for
+example due to test slicing excluding something, an exception would
+be thrown.
+
+The previous commit updated ResetMocksTestsExecutionListener to
+use getSingleton(name) rather than getBean(name).  This will retrieve
+the factory bean itself rather than causing the factory bean to
+attempt to create an object. This commit updates the tests to verify
+the new behaviour.
+
+Closes gh-7270

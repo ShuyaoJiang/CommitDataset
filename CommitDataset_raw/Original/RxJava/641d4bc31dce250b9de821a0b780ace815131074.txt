@@ -1,0 +1,9 @@
+Ensuring Runnables posted with delay to a Handler are removed when unsubscribed.
+
+This patch ensures the delayed runnables posted to a Handler are properly
+removed when Subscription.unsubscribe() is called on the Observable.
+
+The original code returns the subscription from schedule() but is not used
+by the callers who instead add the Worker itself as a subsciption.
+
+Signed-off-by: David Marques <dpsmarques@gmail.com>

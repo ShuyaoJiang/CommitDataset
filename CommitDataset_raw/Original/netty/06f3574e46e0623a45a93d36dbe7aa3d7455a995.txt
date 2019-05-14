@@ -1,0 +1,17 @@
+Don't calculate max direct memory twice in PlatformDependent
+
+Motivation:
+
+I'm not sure if trivial changes like this are interesting :-) But I
+noticed that the PlatformDependent.maxDirectMemory0() method is called
+twice unnecessarily during static initialization (on the default path at
+least).
+
+Modifications:
+
+Use constant MAX_DIRECT_MEMORY already set to the same value instead of
+calling maxDirectMemory0() again.
+
+Result:
+
+A surely imperceivable reduction in operations performed at startup.

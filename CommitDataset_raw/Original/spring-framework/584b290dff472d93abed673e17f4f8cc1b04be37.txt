@@ -1,0 +1,11 @@
+Introduce method to allow a pattern to partially consume a path
+
+With this change there is a new getPathRemaining() method on
+PathPattern objects. It is called with a path and returns
+the path remaining once the path pattern in question has
+matched as much as it can of that path. For example if the
+pattern is /fo* and the path is /foo/bar then getPathRemaining
+will return /bar. This allows for a set of pathpatterns
+to work together in sequence to match a complete entire path.
+
+Issue: SPR-15336

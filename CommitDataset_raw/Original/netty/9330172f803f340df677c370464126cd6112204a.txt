@@ -1,0 +1,7 @@
+Introduce a native transport for linux using epoll ET
+
+This transport use JNI (C) to directly make use of epoll in Edge-Triggered mode for maximal performance on Linux. Beside this it also support using TCP_CORK and produce less GC then the NIO transport using JDK NIO.
+It only builds on linux and skip the build if linux is not used. The transport produce a jar which contains all needed .so files for 32bit and 64 bit. The user only need to include the jar as dependency as usually
+to make use of it and use the correct classes.
+
+This includes also some cleanup of @trustin

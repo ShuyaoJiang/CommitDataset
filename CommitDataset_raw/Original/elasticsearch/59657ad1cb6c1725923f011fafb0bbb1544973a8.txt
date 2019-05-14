@@ -1,0 +1,14 @@
+Lazy initialize checkpoint tracker bit sets
+
+This local checkpoint tracker uses collections of bit sets to track
+which sequence numbers are complete, eventually removing these bit sets
+when the local checkpoint advances. However, these bit sets were eagerly
+allocated so that if a sequence number far ahead of the checkpoint was
+marked as completed, all bit sets between the "last" bit set and the bit
+set needed to track the marked sequence number were allocated. If this
+sequence number was too far ahead, the memory requirements could be
+excessive. This commit opts for a different strategy for holding on to
+these bit sets and enables them to be lazily allocated.
+
+Relates #27179
+

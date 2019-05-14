@@ -1,0 +1,8 @@
+Use removeTask instead of finishTask in PersistentTasksClusterService (#29055)
+
+The method `PersistentTasksClusterService.finishTask()` has been
+modified since it was added and does not use any `removeOncompletion`
+flag anymore. Its behavior is now similar to `removeTask()` and can be
+replaced by this one. When a non existing task is removed, the cluster
+state update task will fail and its `source` will still indicate
+`finish persistent task`/`remove persistent task`.

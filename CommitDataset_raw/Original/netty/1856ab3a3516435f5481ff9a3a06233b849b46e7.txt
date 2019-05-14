@@ -1,0 +1,15 @@
+Make DnsNameResolverTest.testQueryMx() more robust
+
+Motivation:
+
+DNS servers seem to reply with ServFail(2) response code when it is
+busy.
+
+Modifications:
+
+- Retry when response code is ServFail instead of failing the test
+- Try all DNS servers instead of retrying twice only
+
+Result:
+
+testQueryMx() is less likely to fail due to public DNS server problems

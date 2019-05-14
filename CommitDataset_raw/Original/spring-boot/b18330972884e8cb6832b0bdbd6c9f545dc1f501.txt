@@ -1,0 +1,18 @@
+Stop a BeanPostProcessor from preventing config of packages to scan
+
+Previously, if a BeanPostProcessor bean was declared in a configuration
+class that depended on the persistence context, packages to scan would
+not be configured on the LocalContainerEntityManagerFactoryBean. This
+was due to the BeanPostProcessor bean triggering the early instantiation
+of the LCEMFB before EntityScanBeanPostProcessor, the BeanPostProcessor,
+that applies the @EntityScan configuration, had been given a chance to
+configure it.
+
+This commit updates EntityScanBeanPostProcessor to implement Ordered
+with an order of zero. This ensures that its ordering is predictable
+and that it will be driven before any unordered BeanPostProcessor. This
+means that, unless the user has specifically ordered their
+BeanPostProcessor to run before EntityScanBeanPostProcessor, 
+LCEMFB’s packages to scan will be configured as expected.
+
+Fixes gh-2478

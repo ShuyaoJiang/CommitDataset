@@ -1,0 +1,11 @@
+Introduce NioTransport into framework for testing (#24262)
+
+This commit introduces a nio based tcp transport into framework for
+testing.
+
+Currently Elasticsearch uses a simple blocking tcp transport for
+testing purposes (MockTcpTransport). This diverges from production
+where our current transport (netty) is non-blocking.
+
+The point of this commit is to introduce a testing variant that more
+closely matches the behavior of production instances.

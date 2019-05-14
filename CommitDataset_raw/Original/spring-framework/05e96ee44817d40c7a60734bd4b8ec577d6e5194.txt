@@ -1,0 +1,16 @@
+Cache provider related exceptions handling
+
+This commit adds the necessary infrastructure to handle exceptions
+thrown by a cache provider in both Spring's and JCache's caching
+abstractions.
+
+Both interceptors can be configured with a CacheErrorHandler that
+defines several callbacks on typical cache operations. In particular,
+handleCacheGetError can be implemented in such a way that an
+exception thrown by the provider is handled as a cache miss by the
+caching abstraction.
+
+The handler can be configured with both CachingConfigurer and the
+XML namespace (error-handler property)
+
+Issue: SPR-9275

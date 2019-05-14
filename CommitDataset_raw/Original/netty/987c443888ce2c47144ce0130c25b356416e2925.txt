@@ -1,0 +1,13 @@
+Use ByteBufAllocator used by the ReferenceCountedOpenSslEngine when build key-material. (#7952)
+
+Motivation:
+
+When we build the key-material we should use the ByteBufAllocator used by the ReferenceCountedOpenSslEngine when possible.
+
+Modifications:
+
+Whenever we have access to the ReferenceCountedOpenSslEngine we use its allocator.
+
+Result:
+
+Use correct allocator

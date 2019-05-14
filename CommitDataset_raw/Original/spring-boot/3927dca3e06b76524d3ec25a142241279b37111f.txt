@@ -1,0 +1,11 @@
+Tolerate files being briefly left open by FileWritingMessageHandler
+
+When the context is closed, FileWritingMessageHandler is stopped and
+it closes its output files. However, it appears to do so in a manner
+which means that they may be closed after the call to close the
+context is completed. This causes problems on Windows as files that
+are still open cannot be deleted.
+
+This commit adds a workaround to SampleIntegrationApplicationTests
+so that it makes up to 10 attempts each 0.5s apart to clean up the
+input and output directories.

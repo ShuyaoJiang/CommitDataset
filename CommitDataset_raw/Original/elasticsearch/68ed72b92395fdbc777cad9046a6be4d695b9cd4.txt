@@ -1,0 +1,9 @@
+Handle scheduler exceptions (#38014)
+
+Scheduler.schedule(...) would previously assume that caller handles
+exception by calling get() on the returned ScheduledFuture.
+schedule() now returns a ScheduledCancellable that no longer gives
+access to the exception. Instead, any exception thrown out of a
+scheduled Runnable is logged as a warning.
+
+This is a continuation of #28667, #36137 and also fixes #37708.

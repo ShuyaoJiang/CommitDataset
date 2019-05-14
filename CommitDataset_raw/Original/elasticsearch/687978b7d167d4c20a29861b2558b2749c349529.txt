@@ -1,0 +1,16 @@
+Reject all requests that have an unconsumed body (#37504)
+
+This commit removes some leniency from REST handling where we move to
+reject all requests that have a body where the body is not used during
+the course of handling the request. For example,
+
+DELETE /index
+{
+  "query" : {
+    "term" :  {
+      "field" : "value"
+    }
+  }
+}
+
+is now rejected.

@@ -1,0 +1,12 @@
+Source-incompatible: RequestBody.contentLength() throws IOException
+
+This is a binary-compatible change, but code that currently calls
+RequestBody.contentLength() doesn't necessarily catch or declare
+IOException, and will need to with this change.
+
+MultipartBuilder is most impacted by this change; previously the
+length was computed eagerly; now it's not computed at all.
+Applications that require the previous behavior should fully
+buffer the request bodies and use that to compute the length.
+
+Closes https://github.com/square/okhttp/issues/1141

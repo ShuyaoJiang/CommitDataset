@@ -1,0 +1,15 @@
+Ignore performance-sensitive tests by default
+
+Make use of the new JUnit functionality introduced in the previous
+commit to 'Assume' that perfomance- and timing-sensitive tests should
+run only when TestGroup.PERFORMANCE is selected, i.e. when
+-PtestGroups="performance" has been provided at the Gradle command line.
+
+The net effect is that these tests are now ignored by default, which
+will result in far fewer false-negative CI build failures due to
+resource contention and other external factors that cause slowdowns.
+
+We will set up a dedicated performance CI build to run these tests on
+an isolated machine, etc.
+
+Issue: SPR-9984

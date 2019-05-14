@@ -1,0 +1,8 @@
+Move connection listener to ConnectionManager (#32956)
+
+This is a followup to #31886. After that commit the
+TransportConnectionListener had to be propogated to both the
+Transport and the ConnectionManager. This commit moves that listener
+to completely live in the ConnectionManager. The request and response
+related methods are moved to a TransportMessageListener. That listener
+continues to live in the Transport class.

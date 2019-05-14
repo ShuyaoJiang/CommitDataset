@@ -1,0 +1,14 @@
+Use SpringBootContextLoader for tests annotated with @WebMvcTest
+
+Previously, tests annotated with @WebMvcTest would use Spring
+Framework’s WebDelegatingSmartContextLoader. This meant that
+SpringApplication was not used to create the application context. One
+effect of this was that Spring Boot’s logging system was not initialized
+and large quantities of debug log output was produced due to Logback’s
+default behaviour.
+
+This commit updates WebMvcTestContextBootstrapper so that it uses
+SpringBootContextLoader. This aligns the behaviour of @WebMvcTest
+with the behaviour of @SpringBootTest and @DataJpaTest.
+
+Closes gh-5847

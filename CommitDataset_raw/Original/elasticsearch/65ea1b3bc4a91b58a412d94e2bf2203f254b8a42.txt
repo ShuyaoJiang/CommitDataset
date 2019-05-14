@@ -1,0 +1,22 @@
+Tests: Remove unneeded classes, fix AwaitsFix watcher tests (elastic/x-pack-elasticsearch#2139)
+
+Fix TemplateTransformMappingTests to work, even if date rolls over
+during execution.
+
+Reenable test in BootStrapTests, was forgotten.
+
+Remove the SecurityF/MonitoringF/WatcherF classes, as there is a gradle
+command to easily start elasticsearch with xpack
+
+Remove HasherBenchmark, as it is not a test and relies on RandomContext
+that is not available anymore (also I think a JMH benchmark would be
+needed here).
+
+Remove ManualPublicSmtpServersTester, was not usable anymore.
+
+Remove OldWatcherIndicesBackwardsCompatibilityTests, now in dedicated
+rolling upgrade tests.
+
+Remove unused EvalCron class.
+
+Original commit: elastic/x-pack-elasticsearch@100fa9e9b04c41906593e36251bc83c261fcd42f

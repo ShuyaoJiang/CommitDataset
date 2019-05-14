@@ -1,0 +1,7 @@
+Abort early on finding duplicate snapshot name in internal structures (#29634)
+
+Adds a check in BlobstoreRepository.snapshot(...) that prevents duplicate snapshot names and fails 
+the snapshot before writing out the new index file. This ensures that you cannot end up in this
+situation where the index file has duplicate names and cannot be read anymore .
+
+Relates to #28906

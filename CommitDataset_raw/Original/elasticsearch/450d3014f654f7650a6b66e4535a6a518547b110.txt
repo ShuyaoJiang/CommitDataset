@@ -1,0 +1,14 @@
+[TEST] Fix testLimitConcurrentShardRequests failure
+
+With #36221 we introduced shards counting to address a rare failure.
+This caused a worse problem in this test when replicas were allocated
+and shards failures were randomly returned. The latch has to take into
+account additional attempts caused by the shard failures, which means
+that in order for run to be called, performPhaseOnShard will be called
+(numShards + numFailures) times.
+
+To address this, we need to decide upfront which shard is going to fail,
+making sure that at least one shards is successful otherwise the whole
+request fails.
+
+Closes #37074

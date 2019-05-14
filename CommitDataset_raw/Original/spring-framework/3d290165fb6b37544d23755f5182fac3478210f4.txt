@@ -1,0 +1,13 @@
+Find exact matches in WebJarsResourceResolver
+
+Prior to this commit, resolving resources from webjars using the
+`WebJarAssetLocator.getFullPath` could lead to multiple candidates,
+since this method is trying to find *any* resource matching that path
+under the given webjar location.
+
+This commit replaces that call with
+`WebJarAssetLocator.getFullPathExact`, which avoids those multiple
+matches and only resolves resources if the given path is exact.
+
+Issue: SPR-15526
+(cherry picked from commit e2aa117ff9)

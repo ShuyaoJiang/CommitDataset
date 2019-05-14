@@ -1,0 +1,12 @@
+Security: propagate auth result to listeners (#36900)
+
+After #30794, our caching realms limit each principal to a single auth
+attempt at a time. This prevents hammering of external servers but can
+cause a significant performance hit when requests need to go through a
+realm that takes a long time to attempt to authenticate in order to get
+to the realm that actually authenticates. In order to address this,
+this change will propagate failed results to listeners if they use the
+same set of credentials that the authentication attempt used. This does
+prevent these stalled requests from retrying the authentication attempt
+but the implementation does allow for new requests to retry the
+attempt.

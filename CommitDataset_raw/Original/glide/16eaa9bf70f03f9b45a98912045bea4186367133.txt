@@ -1,0 +1,17 @@
+Reset DiskLruCachWrapper outside of IOException catch block in clear().
+
+DiskLruCache can close the disk cache but throw anyway in delete(), 
+which previously left the disk cache in an unrecoverable state until the
+application was restarted. By always nulling out the disk cache variable
+we allow for future attempts at opening the disk cache even if closing
+it throws. 
+
+This particular case was caused by a bug in DiskLruCache where it would
+throw on an empty directory if the cache were deleted outside the app
+while the app was still running, but broadly speaking it seems like a 
+bad idea to allow our disk cache to get into a state where the app must
+be killed for it to function again, even if we might partially ignore
+a clear disk cache command (which wouldn’t be retried or recovered in 
+the previous implementation anyway).
+
+Fixes #2465.

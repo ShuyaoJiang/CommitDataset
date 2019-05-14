@@ -1,0 +1,15 @@
+Flexible registration of additional PublicMetrics
+
+This commit permits the use of several PublicMetrics instances by
+default. Previously, only one PublicMetrics service could be specified
+and a user configuration would remove all the defaulting.
+
+VanillaPublicMetrics now takes a collection of PublicMetrics and
+invokes them in sequence to build the final collection of metrics.
+The system-related metrics have been moved to SystemPublicMetrics and
+are registered by default.
+
+Also updated the documentation to mention this feature and how it
+could be fully overridden.
+
+Fixes gh-1094

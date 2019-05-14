@@ -1,0 +1,14 @@
+Fix IllegalReferenceCountException when using Http2MultiplexCodec and a DefaultHttp2GoAwayFrame with a non empty ByteBuffer is received. (#7894)
+
+Motivation:
+
+We incorrectly called frame.release() in onHttp2GoAwayFrame which could lead to IllegalReferenceCountExceptions.  The call of release() is inappropriate because the fireChannelRead() in onHttp2Frame() will handle it.
+
+Modifications:
+
+- Not call frame.release()
+- Add a unit test
+
+Result:
+
+Fxies https://github.com/netty/netty/issues/7892.

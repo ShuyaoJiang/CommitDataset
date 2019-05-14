@@ -1,0 +1,13 @@
+Bug fix for HttpPostMultipartRequestDecoder part decoding with an invalid charset not reported as an ErrorDataDecoderException
+
+Motivation:
+
+The current HttpPostMultipartRequestDecoder can decode multipart/form-data parts with a Content-Type that specifies a charset. When this charset is invalid the Charset.forName() throws an unchecked UnsupportedCharsetException. This exception is not catched by the decoder. It should actually be rethrown as an ErrorDataDecoderException, because the developer using the API would expect this validation failure to be reported as such.
+
+Modifications:
+
+Add a catch block for UnsupportedCharsetException and rethrow it as an ErrorDataDecoderException.
+
+Result:
+
+UnsupportedCharsetException are now rethrown as ErrorDataDecoderException.

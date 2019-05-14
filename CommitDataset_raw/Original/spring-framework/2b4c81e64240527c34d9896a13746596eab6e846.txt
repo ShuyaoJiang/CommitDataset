@@ -1,0 +1,10 @@
+Fix memory leak in ConcurrentReferenceHashMap
+
+Update ConcurrentReferenceHashMap to protect against references that
+have been garbage collected but for some reason do not appear as a
+`pollForPurge` result.
+
+Also added purgeUnreferencedEntries() method to allow for programmatic
+cleanup.
+
+Issue: SPR-11440

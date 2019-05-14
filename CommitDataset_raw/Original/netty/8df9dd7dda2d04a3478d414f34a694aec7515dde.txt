@@ -1,0 +1,13 @@
+Work around the system configuration issue that causes NioSocketChannelTest to fail
+
+Motivation:
+
+On some ill-configured systems, InetAddress.getLocalHost() fails.  NioSocketChannelTest calls java.net.Socket.connect() and it internally invoked InetAddress.getLocalHost(), which causes the test failures in NioSocketChannelTes on such an ill-configured system.
+
+Modifications:
+
+Use NetUtil.LOCALHOST explicitly.
+
+Result:
+
+NioSocketChannelTest should not fail anymore.

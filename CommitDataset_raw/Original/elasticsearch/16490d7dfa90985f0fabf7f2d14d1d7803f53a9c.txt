@@ -1,0 +1,10 @@
+TEST: Update settings should go through cluster state (#29682)
+
+Today we update index settings directly via IndexService instead of the
+cluster state in IndexServiceTests. However, those changes will be lost
+if there is a cluster state update. In general, we should update index
+settings via client and limit the direct usage in only special tests.
+
+This commit replaces direct usages by the updateSettings api of client.
+
+Closes #24491

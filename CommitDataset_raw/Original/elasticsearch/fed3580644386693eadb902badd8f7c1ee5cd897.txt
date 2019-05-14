@@ -1,0 +1,9 @@
+Remove String interning from `o.e.index.Index`. (#40350)
+
+`Index` interns its name and uuid. My guess is that the main goal is to avoid
+having duplicate strings in the representation of the cluster state. However
+I doubt it helps much given that we have many other objects in the cluster state
+that we don't try to reuse, and interning has some cost. When looking into
+ #40263 my profiler pointed to string interning because of the `Index` object
+that is created in `QueryShardContext` as one of the bottlenecks of the
+`can_match` phase.

@@ -1,0 +1,5 @@
+Don't hold a lock on the connection when writing settings. (#3867)
+
+This breaks our concurrency rules. Fortunately it's only academic; only
+MockWebServer ever writes settings, and it only does so in very specialized
+tests.

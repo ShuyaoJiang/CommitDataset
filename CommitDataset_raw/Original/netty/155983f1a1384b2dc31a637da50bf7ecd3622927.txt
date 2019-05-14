@@ -1,0 +1,12 @@
+DNS move JDK DNS resolution out of DnsServerAddresses static initialization
+
+Motivation:
+DnsServerAddresses loads the default DNS servers used for DNS resolution in a static initialization block. This is subject to blocking and may cause unexpected delays. We can move this initialization to DefaultDnsServerAddressStreamProvider where it is more expected to load the JDK's default configuration.
+
+Modifications:
+- Move all the static initialization from DnsServerAddresses to DefaultDnsServerAddressStreamProvider
+- Deprecate static methods in DnsServerAddresses which have moved to DefaultDnsServerAddressStreamProvider
+- Remove usage of deprecated methods in DnsServerAddresses
+
+Result:
+Usage of JDK's blocking DNS resolver is not required to use resolver-dns.

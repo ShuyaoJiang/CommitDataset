@@ -1,0 +1,14 @@
+Correctly produce ssl alert when certificate validation fails on the client-side when using native SSL implementation. (#8949)
+
+Motivation:
+
+When the verification of the server cert fails because of the used TrustManager on the client-side we need to ensure we produce the correct alert and send it to the remote peer before closing the connection.
+
+Modifications:
+
+- Use the correct verification mode on the client-side by default.
+- Update tests
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8942.

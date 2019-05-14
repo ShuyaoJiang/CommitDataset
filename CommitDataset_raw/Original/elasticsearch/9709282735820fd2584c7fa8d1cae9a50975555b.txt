@@ -1,0 +1,14 @@
+Don't disable tasks based on the plugin (#36045)
+
+Some times the test fixtures plugin did not correctly disable tasks
+from the build plugin as it should.
+The plugin manager and tasks both use domain name collections so
+the previus conde should have worked.
+I did not have trime to track it down, but suspect there's some race
+condition in Gradle causing this. The plugin manager is still incubating.
+Since the tasks are on the cp even if the plugin is not applyed, we
+don't really  need to involve the plugin at all.
+
+Closes #36041
+
+

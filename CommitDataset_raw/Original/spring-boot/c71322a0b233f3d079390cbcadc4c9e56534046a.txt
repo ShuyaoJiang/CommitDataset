@@ -1,0 +1,8 @@
+Add a BatchConfigurer so the transaction manager can adapt to JPA
+
+Autoconfiguration ordering has to be adjusted so that a DataSource is
+available before an EntityManagerFactory is ever needed. Previously
+the autoconfigs were accidentally loaded in the right order, but after
+the change to BatchAutoConfiguration the order has to be explicit.
+
+Fixes gh-189

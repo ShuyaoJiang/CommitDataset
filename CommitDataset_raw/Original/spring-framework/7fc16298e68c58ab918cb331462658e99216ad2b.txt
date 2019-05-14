@@ -1,0 +1,5 @@
+Fixed potential race condition in concurrent calling of autowired methods on a prototype bean
+
+Autowired methods might have been skipped on subsequent creation of further bean instances due to the 'skip' flag set to false outside of the synchronized block, with another thread entering the block and setting the flag to true in the meantime.
+
+Issue: SPR-9806

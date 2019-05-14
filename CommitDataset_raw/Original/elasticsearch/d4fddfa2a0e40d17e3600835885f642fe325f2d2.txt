@@ -1,0 +1,18 @@
+Remove log4j dependency from elasticsearch-core (#28705)
+
+* Remove log4j dependency from elasticsearch-core
+
+This removes the log4j dependency from our elasticsearch-core project. It was
+originally necessary only for our jar classpath checking. It is now replaced by
+a `Consumer<String>` so that the es-core dependency doesn't have external
+dependencies.
+
+The parts of #28191 which were moved in conjunction (like `ESLoggerFactory` and
+`Loggers`) have been moved back where appropriate, since they are not required
+in the core jar.
+
+This is tangentially related to #28504
+
+* Add javadocs for `output` parameter
+
+* Change @code to @link

@@ -1,0 +1,17 @@
+Require explicit path mappings for @RequestMapping methods
+
+Prior to this commit, handler methods in Spring MVC controllers were
+not required to provide explicit path mappings via @RequestMapping (or
+any of its specializations such as @GetMapping). Such handler methods
+were effectively mapped to all paths. Consequently, developers may have
+unwittingly mapped all requests to a single handler method.
+
+This commit addresses this by enforcing that @RequestMapping methods
+are mapped to an explicit path. Note, however, that this is enforced
+after type-level and method-level @RequestMapping information has been
+merged.
+
+Developers wishing to map to all paths should now add an explicit path
+mapping to "/**" or "**".
+
+Closes gh-22543

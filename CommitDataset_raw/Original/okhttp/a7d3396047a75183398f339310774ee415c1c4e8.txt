@@ -1,0 +1,14 @@
+Teach OkHttp to lookup the X509TrustManagerFactory.
+
+Right now there's problems with our ability to confirm certificate pins with
+root certificates because we don't actually know which certificate authority
+was used.
+
+This unblocks that work.
+
+This code is particularly fragile and gross. There's no API to get the
+TrustManager from an SSLSocketFactory. We can potentially change the way
+that we compute the initial SSLSocketFactory, but this approach is most
+general.
+
+This is motivated by https://github.com/square/okhttp/issues/1699

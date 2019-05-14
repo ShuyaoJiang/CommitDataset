@@ -1,0 +1,8 @@
+Keep commits and translog up to the global checkpoint (#27606)
+
+We need to keep index commits and translog operations up to the current 
+global checkpoint to allow us to throw away unsafe operations and
+increase the operation-based recovery chance. This is achieved by a new
+index deletion policy.
+
+Relates #10708

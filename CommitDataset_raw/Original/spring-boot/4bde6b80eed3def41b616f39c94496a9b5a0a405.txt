@@ -1,0 +1,13 @@
+Refactor YAML profile to deal with "!" profiles
+
+Drop `SpringProfileDocumentMatcher` and replace it with two new
+implementations that restrict when YAML documents are loaded. YAML
+sections are now restricted both on the specific profile that is being
+loaded, and the profiles that are currently accepted.
+
+The `PropertySourceLoader` interface has been refined to include a
+predicate that determines when a profile is accepted. The
+`ConfigFileApplicationListener` simply delegates the predicate logic to
+the `Environment`.
+
+Fixes gh-8011

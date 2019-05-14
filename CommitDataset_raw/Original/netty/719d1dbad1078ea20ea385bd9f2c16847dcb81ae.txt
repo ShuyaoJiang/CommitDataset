@@ -1,0 +1,24 @@
+Replace infinite Iterable/Iterator with dedicated types
+
+Related: #4065
+
+Motivation:
+
+DnsNameResolver was using a special Iterable/Iterator implementation
+that yields an infinite stream of DNS server addresses. However, this
+seems to cause confusion.
+
+Modifications:
+
+- Make DnsServerAddresses an abstract class with an abstract stream()
+  method that returns DnsServerAddressStream
+- Add DnsServerAddressStream that yields DNS server address infinitely
+- Remove DnsServerResolver(Group) constructors that accept only a single
+  server address, which wasn't very useful in practice
+- Extract the DnsServerAddresses implementations to top level
+- DnsServerAddresses.defaultAddresses() now returns DnsServerAddresses.
+  - Add DnsServerAddresses.defaultAddressList() instead
+
+Result:
+
+Less confusion and more explicitness

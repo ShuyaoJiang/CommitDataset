@@ -1,0 +1,7 @@
+Add periodic flush count to flush stats (#29360)
+
+Currently, a flush stats contains only the total flush which is the sum
+of manual flush (via API) and periodic flush (async triggered when the
+uncommitted translog size is exceeded the flush threshold). Sometimes,
+it's useful to know these two numbers independently. This commit tracks
+and returns a periodic flush count in a flush stats.

@@ -1,0 +1,13 @@
+Fix race in clear scroll (#31259)
+
+Here is the problem: if two threads are racing and one hits a failure
+freeing a context and the other succeeded, we can expose the value of
+the has failure marker to the succeeding thread before the failing
+thread has had a chance to set the failure marker. This is a problem if
+the failing thread counted down the expected number of operations, then
+be put to sleep by a gentle lullaby from the OS, and then the other
+thread could count down to zero. Since the failing thread did not get to
+set the failure marker, the succeeding thread would respond that the
+clear scroll succeeded and that makes that thread a liar. This commit
+addresses by first setting the failure marker before we potentially
+expose its value to another thread.

@@ -1,0 +1,15 @@
+Fix multi level nested sort (#32204)
+
+The parent filter for nested sort should always match **all** parents regardless
+of the child queries. It is used to find the boundaries of a single parent and we use
+the child query to match all the filters set in the nested tree so there is no need to
+repeat the nested filters.
+With this change we ensure that we build bitset filters
+only to find the root docs (or the docs at the level where the sort applies) that can be reused
+among queries.
+
+Closes #31554
+Closes #32130
+Closes #31783
+
+Co-authored-by: Dominic Bevacqua <bev@treatwell.com>

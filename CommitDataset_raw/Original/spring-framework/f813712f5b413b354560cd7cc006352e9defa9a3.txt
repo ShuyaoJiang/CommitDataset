@@ -1,0 +1,7 @@
+Consistent use of @Nullable across the codebase (even for internals)
+
+Beyond just formally declaring the current behavior, this revision actually enforces non-null behavior in selected signatures now, not tolerating null values anymore when not explicitly documented. It also changes some utility methods with historic null-in/null-out tolerance towards enforced non-null return values, making them a proper citizen in non-null assignments.
+
+Some issues are left as to-do: in particular a thorough revision of spring-test, and a few tests with unclear failures (ignored as "TODO: NULLABLE") to be sorted out in a follow-up commit.
+
+Issue: SPR-15540

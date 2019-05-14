@@ -1,0 +1,7 @@
+Add workaround for Undertow WebSocket client sending illegal Origin
+
+Undertow’s WebSocket client sends an illegal Origin header – it does
+not include the scheme, e.g. it’ll send “localhost” rather than
+“http://localhost”. This commit works around the problem by allowing
+access to the SockJS endpoints from any origin, thereby disabling
+OriginHandlerInterceptor’s checking of the Origin header.

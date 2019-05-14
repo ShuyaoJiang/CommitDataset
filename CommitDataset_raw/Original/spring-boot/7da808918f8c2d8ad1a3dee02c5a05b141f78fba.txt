@@ -1,0 +1,8 @@
+Fix Flyway and Liquibase JPA 'depends-on' setup
+
+Ensure that FlywayAutoConfiguration and LiquibaseAutoConfiguration occur
+after HibernateJpaAutoConfiguration so that the DependsOnPostProcessor
+condition can correctly check for a LocalContainerEntityManagerFactory
+bean.
+
+Fixes gh-3437

@@ -1,0 +1,13 @@
+Fix test failures related to file corruption (#36530)
+
+* Fix CorruptFileIT to also take last DV generation into account
+
+We currently only prune old .liv generations. With soft_deletes it's important
+to also prune DV generations.
+
+* Fix CorruptionUtils to skip the footer bytes after the checksum is read.
+
+Today we read a broken checksum since we also checksum the 8 footer bytes that include
+the checksum algorithm and the footer magic.
+
+Closes #36526

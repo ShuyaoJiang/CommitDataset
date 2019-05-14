@@ -1,0 +1,13 @@
+Ensure SslHandler.sslCloseFuture() is notified in all cases.
+
+Motivation:
+
+The SslHandler.sslCloseFuture() may not be notified when the Channel is closed before a closify_notify is received.
+
+Modifications:
+
+Ensure we try to fail the sslCloseFuture() when the Channel is closed.
+
+Result:
+
+Correctly notify the ssl close future.

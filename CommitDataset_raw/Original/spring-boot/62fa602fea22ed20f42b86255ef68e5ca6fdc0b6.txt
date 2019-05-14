@@ -1,0 +1,18 @@
+Polish maven repositories definition
+
+Previously, Maven repositories definition was specified in a profile that
+is active by default. It means that as soon as any profile is enabled by
+the user, said profile is no longer enabled. This has the nasty
+consequences of having copy/paste in several places to make sure our own
+profiles still have the proper repositories definition.
+
+This commit creates a single "repositories" profile that is always active
+unless a given property is explicitely specified. This allows to remove
+the duplication and make things more consistent.
+
+Some Gradle-specific repositories were also hard-coded in two modules
+without any profile at all, meaning they were polluting the build of
+anybody using it. While the impacted modules are gradle specific, that
+repository has been shared in the new "repositories" profile as well.
+
+Closes gh-6031

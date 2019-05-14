@@ -1,0 +1,8 @@
+Fix AggregationFactories.Builder equality and hash regarding order (#34005)
+
+Fixes the equals and hash function to ignore the order of aggregations to ensure equality after serialization
+and deserialization. This ensures storing configs with aggregation works properly.
+
+This also addresses a potential issue in caching when the same query contains aggregations but in 
+different order. 1st it will not hit in the cache, 2nd cache objects which shall be equal might end up twice in 
+the cache.

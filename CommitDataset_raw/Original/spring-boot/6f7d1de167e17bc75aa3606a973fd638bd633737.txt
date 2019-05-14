@@ -1,0 +1,12 @@
+Remove redundant logic from OAuth2MethodSecurityConfiguration
+
+Previously, OAuth2MethodSecurityConfiguration set the
+PermissionEvaluator on the expression evaluator by looking in the
+context for a PermissionEvaluator bean. This is unnecessary as
+GlobalMethodSecurityConfiguration already does the same thing and does
+so after the post-processor in OAuth2MethodSecurityConfiguration has
+run. This commit removes the redundant logic and adds tests to check
+that both the PermissionEvaluator and the RoleHierarchy are set use
+beans in the context.
+
+Closes gh-7979

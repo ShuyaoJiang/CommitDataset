@@ -1,0 +1,368 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. 
+ This change set is mainly composed of:  
+
+1. Changes to package org.elasticsearch.common.io.stream:  
+
+1. Changes to package org.elasticsearch.integration:  
+
+1.1. Add a class for kibana system role integ tests. It allows to:
+
+	Get config users;
+	Get config users roles;
+	Handle test create index delete in kibana index
+
+2. Changes to package org.elasticsearch.test:  
+
+2. Changes to package org.elasticsearch.xpack.core:  
+
+2. Changes to package org.elasticsearch.xpack.core.security.action.privilege:  
+
+2.1. Add an interface declaration  for application privileges request. It allows to:
+
+	Get application names
+
+2.2. Add an object creator class for delete privileges action. It allows to:
+
+	Instantiate delete privileges action;
+	Handle new response
+
+2.3. Add a class for delete privileges request. It allows to:
+
+	Instantiate delete privileges request;
+	Set refresh policy;
+	Get refresh policy;
+	Validate delete privileges request;
+	Handle application;
+	Get application;
+	Get application names;
+	Get privileges;
+	Handle privileges;
+	Read  from stream input;
+	Write  to stream output
+
+2.4. Add a class for delete privileges request builder. It allows to:
+
+	Instantiate delete privileges request builder  with elasticsearch client, delete privileges action and delete privileges action;
+	Get privileges;
+	Get application
+
+2.5. Add a class for delete privileges request tests. It allows to:
+
+	Handle test serialization;
+	Handle test validation;
+	Assert validation failure
+
+2.6. Add a class for delete privileges response. It allows to:
+
+	Instantiate delete privileges response;
+	Instantiate delete privileges response  with found collection;
+	Convert delete privileges response to X content;
+	Get found;
+	Read  from stream input;
+	Write  to stream output
+
+2.7. Add a class for delete privileges response tests. It allows to:
+
+	Handle test serialization
+
+2.8. Add an object creator class for get privileges action. It allows to:
+
+	Instantiate get privileges action;
+	Handle new response
+
+2.9. Add a class for get privileges request. It allows to:
+
+	Instantiate get privileges request;
+	Validate get privileges request;
+	Handle application;
+	Get application;
+	Get application names;
+	Handle privileges;
+	Get privileges;
+	Read  from stream input;
+	Write  to stream output
+
+2.10. Add a class for get privileges request builder. It allows to:
+
+	Instantiate get privileges request builder  with elasticsearch client, get privileges action and get privileges action;
+	Get privileges;
+	Get application
+
+2.11. Add a class for get privileges request tests. It allows to:
+
+	Handle test serialization;
+	Handle test validation;
+	Get request
+
+2.12. Add a class for get privileges response. It allows to:
+
+	Instantiate get privileges response  with privileges descriptor;
+	Instantiate get privileges response  with privileges collection;
+	Get privileges;
+	Read  from stream input;
+	Write  to stream output
+
+2.13. Add a class for get privileges response tests. It allows to:
+
+	Handle test serialization
+
+2.14. Add an object creator class for put privileges action. It allows to:
+
+	Instantiate put privileges action;
+	Handle new response
+
+2.15. Add a class for put privileges request. It allows to:
+
+	Instantiate put privileges request;
+	Validate put privileges request;
+	Get refresh policy;
+	Set refresh policy;
+	Get privileges;
+	Set privileges;
+	Get application names;
+	Convert put privileges request to string;
+	Read  from stream input;
+	Write  to stream output
+
+2.16. Add a class for put privileges request builder. It allows to:
+
+	Instantiate put privileges request builder  with elasticsearch client, put privileges action and put privileges action;
+	Parse privilege;
+	Get source;
+	Check privilege name
+
+2.17. Add a class for put privileges request builder tests. It allows to:
+
+	Handle test build request with multiple elements;
+	Get descriptor;
+	Handle test privilege name validation of multiple element;
+	Handle test application name validation of multiple element;
+	Handle test infer application name and privilege name
+
+2.18. Add a class for put privileges request tests. It allows to:
+
+	Handle test serialization;
+	Handle test validation;
+	Get descriptor;
+	Assert validation failure;
+	Get request
+
+2.19. Add a class for put privileges response. It allows to:
+
+	Instantiate put privileges response;
+	Instantiate put privileges response  with created map;
+	Get created;
+	Convert put privileges response to X content;
+	Write  to stream output;
+	Read  from stream input
+
+2.20. Add a class for put privileges response tests. It allows to:
+
+	Handle test serialization
+
+3. Changes to package org.elasticsearch.xpack.core.security.action.role:  
+
+3.1. Add a class for put role request tests. It allows to:
+
+	Handle test validation of application privileges;
+	Handle test serialization;
+	Handle test serialization between V 64 and V 66;
+	Handle test serialization V 60 and V 32;
+	Assert indices serialized restricted;
+	Assert successful validation;
+	Assert validation error;
+	Build request  with application privilege;
+	Build random request
+
+4. Changes to package org.elasticsearch.xpack.core.security.action.user:  
+
+4.1. Add a class for has privileges request tests. It allows to:
+
+	Handle test serialization V 64 or later;
+	Handle test serialization V 63;
+	Handle test validate null privileges;
+	Handle test validate empty privileges;
+	Handle test validate no wildcard application privileges;
+	Serialize original has privileges request;
+	Handle random request
+
+5. Changes to package org.elasticsearch.xpack.core.security.authz.permission:  
+
+5.1. Add a class for application permission tests. It allows to:
+
+	Get store privilege;
+	Handle test check simple permission;
+	Handle test none permission;
+	Handle test resource matching;
+	Handle test action matching;
+	Handle test does not match across applications;
+	Handle test matching with wildcard application names;
+	Handle test merged permission checking;
+	Handle test inspect permission contents;
+	Get action privilege;
+	Handle composite privilege;
+	Build permission;
+
+6. Changes to package org.elasticsearch.xpack.core.security.authz.privilege:  
+
+6.1. Add a class for application privilege. It allows to:
+
+	Instantiate application privilege;
+	Instantiate application privilege  with name set;
+	Get application;
+	Get patterns;
+	Validate application name;
+	Validate application name or wildcard;
+	Validate privilege name;
+	Check if application privilege is valid privilege name;
+	Validate privilege or action name;
+	Get name set;
+	Resolve name set;
+	Resolve names set;
+	Convert application privilege to string;
+	Hash code;
+	Check if application privilege equals
+
+6.2. Add a class for application privilege descriptor tests. It allows to:
+
+	Handle test equals and hash code;
+	Handle test serialization;
+	Handle test X content generation and parsing;
+	Handle test parse X content with default names;
+	Handle test parse X content without using default names;
+	Handle random privilege
+
+6.3. Add a class for application privilege tests. It allows to:
+
+	Handle test validation of application name;
+	Handle test validation of privilege name;
+	Handle test none privilege;
+	Handle test get privilege by name;
+	Assert privilege equals;
+	Get descriptor;
+	Handle test equals and hash code;
+	Create privilege;
+	Get privilege name;
+	Assert validation failure;
+	Assert no exception;
+	Handle random privilege
+
+6.4. Add an interface declaration  for conditional cluster privilege. It allows to:
+
+	Get category;
+	Get privilege;
+	Get request predicate;
+	Convert conditional cluster privilege to X content;
+
+6.5. Add a class for conditional cluster privileges tests. It allows to:
+
+	Handle test serialization;
+	Handle test generate and parse X content;
+	Build security privileges;
+
+6.6. Add a class for manage application privileges tests. It allows to:
+
+	Handle test serialization;
+	Handle test generate and parse X content;
+	Handle test equals and hash code;
+	Handle test privilege;
+	Handle test request predicate;
+	Handle test security for get all application privileges;
+	Clone original manage application privileges;
+	Build privileges;
+
+7. Changes to package org.elasticsearch.xpack.core.security.authz.store:  
+
+7. Changes to package org.elasticsearch.xpack.core.security.client:  
+
+7. Changes to package org.elasticsearch.xpack.ml.action:  
+
+7. Changes to package org.elasticsearch.xpack.security.action.privilege:  
+
+7.1. Add a class for transport delete privileges action. It allows to:
+
+	Instantiate transport delete privileges action  with action filters, native privilege store, transport service and transport service;
+	Execute task
+
+7.2. Add a class for transport get privileges action. It allows to:
+
+	Instantiate transport get privileges action  with action filters, native privilege store, transport service and transport service;
+	Execute task
+
+7.3. Add a class for transport put privileges action. It allows to:
+
+	Instantiate transport put privileges action  with action filters, native privilege store, transport service and transport service;
+	Execute task
+
+8. Changes to package org.elasticsearch.xpack.security.action.user:  
+
+8. Changes to package org.elasticsearch.xpack.security.authc.esnative:  
+
+8. Changes to package org.elasticsearch.xpack.security.authz:  
+
+8. Changes to package org.elasticsearch.xpack.security.authz.store:  
+
+8.1. Add a class for native privilege store. It allows to:
+
+	Instantiate native privilege store  with settings, client, security index manager and security index manager;
+	Get privileges;
+	Check if native privilege store is single privilege match;
+	Check if native privilege store has wildcard;
+	Get privilege name query;
+	Get application name query;
+	Check if native privilege store is empty;
+	Get privilege;
+	Put privileges;
+	Handle inner put privilege;
+	Delete privileges;
+	Handle clear roles cache;
+	Process  on response;
+	Process  on failure;
+	Build privilege;
+	Name native privilege store from doc id;
+	Convert native privilege store to doc id
+
+8.2. Add a class for native privilege store tests. It allows to:
+
+	Handle setup;
+	Execute action;
+	Handle cleanup;
+	Handle test get single privilege by name;
+	Handle test get missing privilege;
+	Handle test get privileges by application name;
+	Handle test get privileges by wildcard application name;
+	Handle test get privileges by star application name;
+	Handle test get all privileges;
+	Handle test put privileges;
+	Handle test delete privileges;
+	Build hits;
+	Assert result
+
+9. Changes to package org.elasticsearch.xpack.security.rest.action:  
+
+9. Changes to package org.elasticsearch.xpack.security.rest.action.privilege:  
+
+9.1. Add a class for rest delete privileges action. It allows to:
+
+	Instantiate rest delete privileges action  with settings, rest controller, X pack license state and X pack license state;
+	Get name;
+	Handle inner prepare request
+
+9.2. Add a class for rest get privileges action. It allows to:
+
+	Instantiate rest get privileges action  with settings, rest controller, X pack license state and X pack license state;
+	Get name;
+	Handle inner prepare request;
+	Get group by application name
+
+9.3. Add a class for rest put privileges action. It allows to:
+
+	Instantiate rest put privileges action  with settings, rest controller, X pack license state and X pack license state;
+	Get name;
+	Handle inner prepare request;
+	Execute put privileges request builder
+
+10. Changes to package org.elasticsearch.xpack.security.rest.action.user:  
+

@@ -1,0 +1,13 @@
+Use request contentType/encoding in ServletServetHttpRequest/Response
+
+ServletServerHttpRequest now falls back on the contentType and the
+the characterEncoding of the ServletRequest, if the headers of the
+incoming request don't specify one. Similary ServletServerHttpResponse
+sets the contentType and the characterEncoding of the ServletResponse
+if not already set.
+
+This allows using the CharacterEncodingFilter to set a character
+encoding where the request doesn't specify one and have it be used
+in HttpMessageConverter's.
+
+SPR-9096

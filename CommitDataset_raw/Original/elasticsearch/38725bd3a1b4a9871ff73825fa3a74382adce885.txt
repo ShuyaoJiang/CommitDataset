@@ -1,0 +1,12 @@
+Build: Pick default test jvms for macOS (#35789)
+
+In #35259 we switched the default number of VMs to fork for unit tests to
+the number of physical CPU cores. But because we could only get an accurate
+count on machines with a normal `/proc` filesystem, macOS machine did not
+pick up the new default. Given that macOS is a huge portion of developer
+machines, we'd like to get the right default there. This does that.
+
+It also moves the default-finding process from happening once per testing
+task to happening once at startup. This seems like a good choice in general,
+but a very good choice for macOS because we have to run a command to list
+the count.

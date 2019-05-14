@@ -1,0 +1,15 @@
+[TEST] Fix error if named pipe already connected (elastic/x-pack-elasticsearch#2423)
+
+On Windows a named pipe server must call ConnectNamedPipe() before using
+a named pipe.  However, if the client has already connected then this
+function returns a failure code, with detailed error code
+ERROR_PIPE_CONNECTED.  The server must check for this, as it means the
+connection will work fine.  The Java test that emulates what the C++
+would do in production did not have this logic.
+
+This was purely a test problem.  The C++ code used in production already
+does the right thing.
+
+relates elastic/x-pack-elasticsearch#2359
+
+Original commit: elastic/x-pack-elasticsearch@e162887f281b74ccd8c20c8a3ccf3675b7857601

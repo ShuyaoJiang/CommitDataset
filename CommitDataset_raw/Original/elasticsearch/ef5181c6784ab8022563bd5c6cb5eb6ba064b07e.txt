@@ -1,0 +1,5 @@
+Allow to enable pings for specific remote clusters (#34753)
+
+When we connect to remote clusters, there may be a few more routers/firewalls in-between compared to when we connect to nodes in the same cluster. We've experienced cases where firewalls drop connections completely and keep-alives seem not to be enough, or they are not properly configured. With this commit we allow to enable application-level pings specifically from CCS nodes to the selected remote nodes through the new setting `cluster.remote.${clusterAlias}.transport.ping_schedule`.  The new setting is similar `transport.ping_schedule` but it does not affect intra-cluster communication, pings are only sent to specific remote cluster when specifically enabled, as they are disabled by default.
+
+Relates to #34405

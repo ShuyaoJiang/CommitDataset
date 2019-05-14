@@ -1,0 +1,13 @@
+Store NativeDatagramPacketArray directly in the EpollEventLoop
+
+Motivation:
+
+We can store the NativeDatagramPacketArray directly in the EpollEventLoop. This removes the need of using FastThreadLocal.
+
+Modifications:
+
+- Store NativeDatagramPacketArray directly in the EpollEventLoop (just as we do with IovArray as well).
+
+Result:
+
+Less FastThreadLocal usage and more consistent code.

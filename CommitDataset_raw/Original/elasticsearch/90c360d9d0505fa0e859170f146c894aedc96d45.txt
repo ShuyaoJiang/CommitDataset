@@ -1,0 +1,15 @@
+Watcher: Replace YAML tests needing to wait for watch execution (elastic/x-pack-elasticsearch#3995)
+
+In order to check for the REST tests if triggering of watches with
+security enabled works as expected, we have to add a watch and wait for
+its background execution. In the REST tests the only wait is to wait for
+this with a timeout. If the timeout is reached but the watch has not
+been executed yet, the test will fail.
+
+This commit replaces the YAML with a java based REST test, so that
+helper methods like assertBusy() can be used and waiting for a watch to
+be executed now works as expected.
+
+relates elastic/x-pack-elasticsearch#3753
+
+Original commit: elastic/x-pack-elasticsearch@fc39636ef779e88dd68e0db61401f845b3af8258

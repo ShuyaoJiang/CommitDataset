@@ -1,0 +1,18 @@
+Disable HTTP Range support for InputStreamResource
+
+Prior to this commit, the `AbstractMessageConverterMethodProcessor`
+would fail to convert `InputStreamResource` to `ResourceRegion` as
+expected, since the content length cannot be read without consuming the
+stream. This is enforced by the `HttpRange` class.
+
+Now the method processor would still try to output HTTP range response
+headers to provide range support information. This step is using the
+resource content length and reads the input stream, leading to
+exceptions such as "IllegalStateException: InputStream has already been
+read".
+
+This commit improves the return type detection and excludes early
+`InputStreamResource` return types. With those types, HTTP range support
+is now completely disabled.
+
+Issue: SPR-16754

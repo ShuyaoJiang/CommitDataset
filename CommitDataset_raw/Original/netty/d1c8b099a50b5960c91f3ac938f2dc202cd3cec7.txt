@@ -1,0 +1,13 @@
+Correct release buffers in RedisEncoderTest
+
+Motivation:
+
+RedisEncoderTest did not release all buffers correctly which could lead to leaks.
+
+Modifications:
+
+Call ByteBuf.release() after buffer is read.
+
+Result:
+
+No more leaks in RedisEncoderTest.

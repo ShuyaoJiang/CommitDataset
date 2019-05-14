@@ -1,0 +1,12 @@
+Allow efficient can_match phases on frozen indices (#35431)
+
+This change adds a special caching reader that caches all relevant
+values for a range query to rewrite correctly in a can_match phase
+without actually opening the underlying directory reader. This
+allows frozen indices to be filtered with can_match and in-turn
+searched with wildcards in a efficient way since it allows us to
+exclude shards that won't match based on their date-ranges without
+opening their directory readers.
+
+Relates to #34352
+Depends on #34357

@@ -1,0 +1,16 @@
+Configure SnakeYAML so the timestamp-like strings do not become Dates
+
+By default, SnakeYAML will convert a timestamp-like string into a
+java.util.Date. This differs to properties file-based configuration
+where the values are always strings. Dates are problematic as the
+round trip (string -> Date -> string) can change the value. For example,
+“2015-01-27” becomes “Tue Jan 27 00:00:00 GMT 2015”.
+
+This commit updates YamlPropertySourceLoader to use a Yaml with a
+custom Resolver subclass that suppresses the addition of the implicit
+resolver for timestamps. Supressing the addition of the unwanted
+resolver, rather than overriding addImplicitResolvers and registering
+the resolvers that we do want, ensures that we get all of the other
+default Resolvers in their default order.
+
+Fixes gh-2422

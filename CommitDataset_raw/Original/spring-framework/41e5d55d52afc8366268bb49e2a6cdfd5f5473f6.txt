@@ -1,0 +1,14 @@
+Fix bridge method detection for class hierarchies
+
+Prior to this change, @Autowired injection against an instance of a
+subclass having different visibility than its superclass would fail
+if the @Autowired method is declared only in the superclass. This is due
+to an apparent change in the rules around bridge method generation
+between Java 5 and Java 6, and possibly even varying across compiler
+vendors.
+
+Now, BridgeMethodResolver is used consistently when detecting
+@Autowired, @Inject and @Resource metadata to bypass these bridge
+methods if they exist.
+
+Issue: SPR-7900

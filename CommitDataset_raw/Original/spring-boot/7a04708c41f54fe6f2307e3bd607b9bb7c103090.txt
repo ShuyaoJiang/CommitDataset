@@ -1,0 +1,17 @@
+Make sure the HealthMvcEndpoint is thread-safe
+
+Previously, HealthMvcEndpoint stored the cached Health and its last
+access time in two separate fields. Neither field was volatile and
+no synchronization was used. This meant that there were potential
+visibility problems. In a possible worst case scenario one field may
+see the updated access time but an old health so it would incorrectly
+believe that the old health was up-to-date and return it.
+
+This commit reworks the endpoint to store the cached health and the
+time at which it was created in a single, volatile field. This ensures
+that the cached health and its creation time will be visible across
+threads. Note that a race between threads when the cache is stale is
+still possible. This race may result in multiple calls to the
+delegate but these should be harmless.
+
+Closes gh-9454

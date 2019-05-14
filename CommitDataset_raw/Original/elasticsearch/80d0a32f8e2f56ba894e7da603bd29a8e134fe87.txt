@@ -1,0 +1,11 @@
+ScriptService: Replace max compilation per minute setting with max compilation rate (#26399)
+
+The current script service has a script compilation limit for a one
+minute window. This is set to a small default value of 15. Instead of
+increasing that default value, this commit introduces a new setting 
+that allows to configure a rate per time unit, so that the script service can deal with bursts better.
+
+The new setting is named `script.max_compilations_rate`,
+requires a nonnegative number and a positive time value.
+
+The default is `75/5m`, which is equivalent to the existing 15 per minute.

@@ -1,0 +1,17 @@
+Restore support for spring.datasource.type
+
+This commit restores the support of "spring.datasource.type". If this
+property is set to an unsupported `DataSource` implementation, we now
+properly create it again, rather than ignoring it because its value did
+not match any value we support.
+
+Since Spring Boot 1.4 now redirects `DataSource` implementation settings
+to dedicated namespaces, the documentation has been updated to explicitly
+mention how one can create such arrangement for an unsupported
+implementation.
+
+As a convenience, `DataSourceProperties` can initialize a
+`DataSourceBuilder` based on its internal state, making it very easy for
+anyone to create a `DataSource` from a `DataSourceProperties` instance.
+
+Closes gh-6695

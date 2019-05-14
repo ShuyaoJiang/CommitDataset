@@ -1,0 +1,16 @@
+Prevent duplicate resource enumeration form loader
+
+Fix LaunchedURLClassLoader to only enumerate resources from the
+rootLoader and the URLs.
+
+Commit cd2c189 (Support javaagent instrumentation with loader) added
+a parent classloader and used filtering in the loadClass() method
+to ensure classes were loaded from the appropriate location. The change
+in parent means that locally packaged resources are found twice, once
+from the parent, and once from the self archive URL.
+
+LaunchedURLClassLoader now overrides getResource and getResources to
+filter out the parent classloader and instead only add resources from
+the root classloader and the URLs.
+
+Issue: #56232870

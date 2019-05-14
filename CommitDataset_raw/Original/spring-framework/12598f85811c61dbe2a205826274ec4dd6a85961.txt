@@ -1,0 +1,17 @@
+Fix issue w/ use of UrlPathHelper's urlDecode property
+
+Before this change the getPathWithinServletMapping method of
+UrlPathHelper could not work properly when a default servlet mapping
+(i.e. "/") was used in combination with urlDecode=false. The fact that
+the getServletPath() method of HttpServletRequest always returns a
+decoded path was getting in the way.
+
+Although there is no way to check Servlet mappings through the Servlet
+API, this change aims to detect the given scenario and returns the full
+path following the context path thus avoiding URL decoding.
+
+Note that the same can be achieved by setting urlDecode=false and
+alwaysUseFullPath=true. However this change ensures that urlDecode
+works properly without having to know that.
+
+Issue: SPR-11101

@@ -1,0 +1,7 @@
+Watcher: Ensure trigger service pauses execution (#30363)
+
+When the watcher service pauses execution due to a cluster state update,
+the trigger service and its engines also need to pause properly instead
+of keeping going. This is also important when the .watches index is 
+deleted, so that watches don't stay in a triggered mode.
+

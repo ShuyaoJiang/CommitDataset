@@ -1,0 +1,13 @@
+Directly write CompositeByteBuf if possible without memory copy. Related to [#2719]
+
+Motivation:
+
+In linux it is possible to write more then one buffer withone syscall when sending datagram messages.
+
+Modifications:
+
+Not copy CompositeByteBuf if it only contains direct buffers.
+
+Result:
+
+More performance due less overhead for copy.

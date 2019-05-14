@@ -1,0 +1,21 @@
+Automated g4 rollback of changelist 97776570.
+
+*** Reason for rollback ***
+
+Broke tests.
+
+*** Original change description ***
+
+Eagerly check for an appropriate exceptionClass constructor during calls to Futures.getChecked.
+This way, callers that pass a bad exceptionClass find out unconditionally instead of only when their Future fails.
+
+We hope for bad exceptionClass parameters to soon be caught at compile time: []
+API Review: https://docs.google.com/document/d/1hUeO_1OJY_xIAHN089p5d9as1uX4M62MBlbkiLyiJbk/edit
+
+To keep performance acceptable, cache a set of classes with appropriate constructors.
+Use Clas...
+
+***
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=97787294

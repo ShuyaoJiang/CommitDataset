@@ -1,0 +1,9 @@
+Rollups for Elasticsearch (elastic/x-pack-elasticsearch#4002)
+
+This adds a new Rollup module to XPack, which allows users to configure periodic "rollup jobs" to pre-aggregate data.  That data is then available later for search through a special RollupSearch API, which mimics the DSL and functionality of regular search.
+
+Rollups are used to drastically reduce the on-disk footprint of metric-based data (e.g. timestamped document with numeric and keyword fields).  It can also be used to speed up aggregations over large datasets, since the rolled data will be considerably smaller and fewer documents to search.
+
+The PR adds seven new endpoints to interact with Rollups; create/get/delete job, start/stop job, a capabilities API similar to field-caps, and a Rollup-enabled search.
+
+Original commit: elastic/x-pack-elasticsearch@dcde91aacfa52d2985e3948cb64392061e2b10c1

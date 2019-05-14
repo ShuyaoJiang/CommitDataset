@@ -1,0 +1,13 @@
+Ensure we only call ReferenceCountUtil.safeRelease(...) in finalize() if the refCnt() > 0
+
+Motivation:
+
+We need to ensure we only call ReferenceCountUtil.safeRelease(...) in finalize() if the refCnt() > 0 as otherwise we will log a message about IllegalReferenceCountException.
+
+Modification:
+
+Check for a refCnt() > 0 before try to release
+
+Result:
+
+No more IllegalReferenceCountException produced when run finalize() on OpenSsl* objects that where explicit released before.

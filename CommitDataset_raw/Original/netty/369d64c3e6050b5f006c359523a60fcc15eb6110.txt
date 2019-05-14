@@ -1,0 +1,14 @@
+Always follow cnames even if a matching A or AAAA record was found. (#7919)
+
+Motivation:
+
+At the moment if you do a resolveAll and at least one A / AAAA record is present we will not follow any CNAMEs that are also present. This is different to how the JDK behaves.
+
+Modifications:
+
+- Allows follow CNAMEs.
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/7915.

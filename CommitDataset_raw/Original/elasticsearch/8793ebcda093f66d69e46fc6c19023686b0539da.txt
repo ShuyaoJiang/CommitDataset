@@ -1,0 +1,8 @@
+Limit num hits when reading Lucene changes (#30908)
+
+Today we don't limit the number of hits when reading changes from Lucene
+index. If the index and the requesting seq# range both are large, the
+searcher may consume a huge amount of memory.
+
+This commit uses a fixed size batch with search_after to avoid the
+problem.

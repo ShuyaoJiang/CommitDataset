@@ -1,0 +1,20 @@
+Add explicit message when `noexec` prevents library loading.
+
+Motivation:
+
+Docker's `--tmpfs` flag mounts the temp volume with `noexec` by default,
+resulting in an UnsatisfiedLinkError.  While this is good security
+practice, it is a surprising failure from a seemingly innocuous flag.
+
+Modifications:
+
+Add a best-effort attempt in `NativeLibraryLoader` to detect when temp
+files beng loaded cannot be executed even when execution permissions
+are set, often because the `noexec` flag is set on the volume.
+
+Requires numerous additional exclusions to the Animal Sniffer config
+for Java7 POSIX permissions manipulation.
+
+Result:
+
+Fixes [#6678].

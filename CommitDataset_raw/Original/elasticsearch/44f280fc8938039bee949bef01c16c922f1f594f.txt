@@ -1,0 +1,8 @@
+Force execution of fetch tasks (#31974)
+
+Forces fetch tasks to queue even in the event that the queue is
+already full. The reasoning is that fetch tasks may only be follow-up
+to query tasks, so the number of additional fetch tasks that may enter
+the threadpool is expected to be reasonable.
+
+Closes #29442

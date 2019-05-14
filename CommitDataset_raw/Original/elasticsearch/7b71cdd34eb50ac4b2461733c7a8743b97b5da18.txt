@@ -1,0 +1,8 @@
+Fix Gradle 4.3.1 compatibility for logging (#27382)
+
+The build currently does not work with Gradle 4.3.1 as the Gradle team stopped publishing the gradle-logging dependency to jcenter, starting with 4.3.1 (not sure why). There are two options:
+
+- Add the repository managed by Gradle team (https://repo.gradle.org/gradle/libs-releases-local) to our build
+- Use an older version (4.3) of the dependency when running with Gradle 4.3.1.
+
+Not to depend on another external repo, I've chosen solution 2. Note that this solution could break on future versions, but as this is a compileOnly dependency, and the interface we use has been super stable since forever, I don't envision this to be an issue (and easily detected by a breaking build).

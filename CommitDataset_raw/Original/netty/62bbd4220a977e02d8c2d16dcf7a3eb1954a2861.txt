@@ -1,0 +1,10 @@
+Fix JVM segfault during JNI call. Part of [#2647]
+
+Motivation:
+Currently when Native.writev(...) is used it is possible to see a JVM segfault because the offset is updated to early.
+
+Modification:
+Only update the offset once it is safe to do so.
+
+Result:
+No more segfault

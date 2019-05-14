@@ -1,0 +1,18 @@
+Prevent ErrorPageFilter from being used if SBServletInitializer is used
+
+Previously, the configuration class that produces the ErrorPageFilter
+bean was an inner class of SpringBootServletInitializer. As a result,
+whenever SpringBootServletInitializer was subclasses, the
+ErrorPageFilter would be used. This adversely affected applications
+running as an executable war file and those deployed to a container
+with error page filter registration disabled.
+
+This commit makes ErrorPageFilterConfiguration a top-level class so
+that it is no longer always found via SpringBootServletInitializer.
+The test that verifies that error page filter registration can be
+disabled has been updated to more accurately simulate the behaviour
+when an application is deployed as a war to a standalone container.
+A test that mimics the behaviour of an application run as an
+executable war has also been added.
+
+Closes gh-8477

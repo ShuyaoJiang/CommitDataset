@@ -1,0 +1,7 @@
+Defensive initialization of AsyncXMLInputFactory
+
+Aalto's InputFactoryImpl already disables loading of external entities
+by default (property "javax.xml.stream.isSupportingExternalEntities").
+This commit goes further by applying the same defensive measures as we
+do elsewhere for XMLInputFactory, which disables DTD completely.
+Arguably there is no good reason to enable that by default in WebFlux.

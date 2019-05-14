@@ -1,0 +1,14 @@
+Cater for empty response bodies when performing response compression.
+
+Motivation:
+RFC 2616, 4.3 Message Body states that:
+All 1xx (informational), 204 (no content), and 304 (not modified) responses MUST NOT include a
+message-body. All other responses do include a message-body, although it MAY be of zero length.
+
+Modifications:
+HttpContentEncoder was previously modified to cater for HTTP 100 responses. This check is enhanced to
+include HTTP 204 and 304 responses.
+
+Result:
+Empty response bodies will not be modified to include the compression footer. This footer messed with Chrome's
+response parsing leading to "hanging" requests.

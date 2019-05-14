@@ -1,0 +1,9 @@
+ApplicationContextInitializers now listen for ContextRefreshedEvent
+
+The AutoConfigurationReportLoggingInitializer wasn't working in
+non-GenericApplicationContext becasue teh BeanFatcory wasn't available
+for registering its listener during initialization. Instead of
+relying on that rather fragile state I decided to give any
+ApplicationContextInitializer that was itself an ApplicationListener
+an explicit callback with a ContextRefreshedEvent, and move that
+interface up a level in the logging initializer. Works much better.

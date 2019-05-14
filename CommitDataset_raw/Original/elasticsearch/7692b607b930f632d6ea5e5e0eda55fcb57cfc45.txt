@@ -1,0 +1,6 @@
+Fix ClusterDisruptionIT#testAckedIndexing (#37853)
+
+* Stop threads before logging the list of exceptions
+* For the broken case of concurrent iteration in the finally block and the threads not having shut down,
+use `CopyOnWriteArrayList` to have concurrency safe iteration
+* Closes #37810

@@ -1,0 +1,16 @@
+Don't replace all 'connection' headers when sending h2c upgrade request (#7824)
+
+Motivation:
+
+There may be meaningful 'connection' headers that exist on a request
+that is used to attempt a HTTP/1.x upgrade request that will be
+clobbered.
+
+Modifications:
+
+HttpClientUpgradeHandler uses the `HttpHeaders.add` instead of
+`HttpHeaders.set` when adding the 'upgrade' field.
+
+Result:
+
+Fixes #7823, existing 'connection' headers are preserved.

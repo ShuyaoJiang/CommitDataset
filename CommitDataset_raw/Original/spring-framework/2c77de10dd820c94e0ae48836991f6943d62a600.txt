@@ -1,0 +1,9 @@
+Fix X-Forwarded-* behavior in ServletUriComponentsBuilder
+
+When using ServletUriComponentsBuilder.fromRequest, this change
+makes sure that:
+* the default port is used when the "X-Forwarded-Host" header is set
+and no port is defined in that header value
+* to use the scheme defined in the "X-Forwarded-Proto" header if set
+
+Issue: SPR-11872

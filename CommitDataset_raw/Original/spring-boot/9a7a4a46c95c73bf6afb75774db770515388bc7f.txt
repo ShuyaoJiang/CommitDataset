@@ -1,0 +1,9 @@
+Don't cause early FactoryBean instantiation
+
+Update ConfigurationPropertiesBindingPostProcessor to use
+`getBeansOfType` with `allowEagerInit=false` rather than `getBean`.
+
+This prevents FactoryBeans from being instantiated early when their
+type is not known.
+
+Fixed gh-1365

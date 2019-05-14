@@ -1,0 +1,5 @@
+Build: Fork javac to avoid GC overhead (#26047)
+
+Compiling all of elasticsearch classes in one jvm, which is shared with
+all of the loaded classes of gradle, can trip gc overhead limits. This
+commit re-enables forking javac.

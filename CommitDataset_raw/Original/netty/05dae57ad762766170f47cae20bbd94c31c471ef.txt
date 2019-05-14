@@ -1,0 +1,13 @@
+Ensure cancelled scheduled tasks can be GC'ed ASAP
+
+Motivation:
+
+Prior we used a purge task that would remove previous canceled scheduled tasks from the internal queue. This could introduce some delay and so use a lot of memory even if the task itself is already canceled.
+
+Modifications:
+
+Schedule removal of task from queue via EventLoop if cancel operation is not done in the EventLoop Thread or just remove directly if the Thread that cancels the scheduled task is in the EventLoop.
+
+Result:
+
+Faster possibility to GC a canceled ScheduledFutureTask.

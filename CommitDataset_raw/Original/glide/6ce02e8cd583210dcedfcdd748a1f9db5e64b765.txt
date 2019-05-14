@@ -1,0 +1,11 @@
+Cache bitmaps in lru and mutables in memory
+
+Removes requirement not to use memory cache on
+devices that use bitmap recycling because ref
+counting prevents us from recyling a bitmap that
+is being used for something else (either by
+another view or by a cache). Also removes
+requirement to pass in bitmap to be recycled to
+photo manager, though adds the requirement that
+views call acquire and release as they use and
+release bitmaps

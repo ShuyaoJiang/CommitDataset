@@ -1,0 +1,10 @@
+Servlet context document root not found when running as exploded WAR
+
+* Added additional search in
+AbstractEmbeddedServletContainerFactory.getValidDocumentRoot() to
+detect a /WEB-INF/ directory in the code archive
+* If the code archive is in /WEB-INF/** then we assume it is
+safe to serve content from / (exposes the loader classes
+but nothing sensitive from the app)
+
+[Fixes #54345578]

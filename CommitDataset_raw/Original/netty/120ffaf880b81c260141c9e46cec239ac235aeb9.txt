@@ -1,0 +1,22 @@
+Use separate query ID space for different DNS servers
+
+Related: #3972
+
+Motivation:
+
+DnsNameResolver limits the number of concurrent in-progress DNS queries
+to 65536 regardless the number of DNS servers it communicates with. When
+the number of available DNS servers are more than just one, we end up
+using much less (65536 / numDnsServers) query IDs per DNS server, which
+is non-optimal.
+
+Modifications:
+
+- Replace the query ID and context management with
+  DnsQueryContextManager
+  - Eash DNS server gets its own query ID space
+
+Result:
+
+Much bigger query ID space, and thus there's less chance of getting the
+'query ID space exhaustion' error

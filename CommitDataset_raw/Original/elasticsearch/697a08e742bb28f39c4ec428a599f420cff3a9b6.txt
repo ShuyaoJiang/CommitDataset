@@ -1,0 +1,15 @@
+[ML] Refactor so ML doesn't require PersistentTasksService at startup (elastic/x-pack-elasticsearch#3682)
+
+At present the PersistentTasksService is created inside the ML plugin.
+This is undesirable, as other plugins will use persistent tasks in the
+near future.
+
+This change refactors the startup code so that the PersistentTasksService
+no longer needs to be passed to any constructors for ML components.
+
+A future change will still be required to actually move the initialization
+of the PersistentTasksClusterService, PersistentTasksService and
+PersistentTasksExecutorRegistry out of the ML plugin, but following this
+change it should be fairly simple.
+
+Original commit: elastic/x-pack-elasticsearch@3c2a8e020e31960437f7bdf5555d6da33cce96c2

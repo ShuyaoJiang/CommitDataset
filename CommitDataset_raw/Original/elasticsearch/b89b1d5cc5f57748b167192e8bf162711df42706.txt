@@ -1,0 +1,9 @@
+PkiAuthenticationTests & SslIntegrationTests shouldn't hard code local host
+
+The test uses the bound address to determine how to speak to the node via http.
+It currently takes the port but hard codes the host to `localhost`. This can lead
+to mismatches where a port for ipv6 is used but localhost resolves to ipv4
+
+relates elastic/x-pack-elasticsearch#3382
+
+Original commit: elastic/x-pack-elasticsearch@e97363a52140829f08df742fb59cdde485d86bf1

@@ -1,0 +1,17 @@
+Add support for "authorization_realms" (#33262)
+
+Authorization Realms allow an authenticating realm to delegate the task
+of constructing a User object (with name, roles, etc) to one or more
+other realms.
+
+E.g. A client could authenticate using PKI, but then delegate to an LDAP
+realm. The LDAP realm performs a "lookup" by principal, and then does
+regular role-mapping from the discovered user.
+
+This commit includes:
+- authorization_realm support in the pki, ldap, saml & kerberos realms
+- docs for authorization_realms
+- checks that there are no "authorization chains"
+   (whereby "realm-a" delegates to "realm-b", but "realm-b" delegates to "realm-c")
+
+Authorization realms is a platinum feature.

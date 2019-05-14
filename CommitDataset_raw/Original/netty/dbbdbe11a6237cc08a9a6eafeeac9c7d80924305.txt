@@ -1,0 +1,12 @@
+Decouple Unix from Linux in Native Transport
+
+Motivation:
+transport-native-epoll is designed to be specific to Linux. However there is native code that can be extracted out and made to work on more Unix like distributions. There are a few steps to be completely decoupled but the first step is to extract out code that can run in a more general Unix environment from the Linux specific code base.
+
+Modifications:
+- Move all non-Linux specific stuff from Native.java into the io.netty.channel.unix package.
+- io.netty.channel.unix.FileDescriptor will inherit all the native methods that are specific to file descriptors.
+- io_netty_channel_epoll_Native.[c|h] will only have code that is specific to Linux.
+
+Result:
+Code is decoupled and design is streamlined in FileDescriptor.

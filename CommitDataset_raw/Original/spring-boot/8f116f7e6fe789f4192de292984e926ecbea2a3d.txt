@@ -1,0 +1,20 @@
+Align ordering of BootJar and BootWar archive entries
+
+Previously, the ordering of the entries in an archive produced by
+BootJar was different to the ordering of the entries in an archive
+produced by BootWar. The latter placed application classes before
+any nested jars, whereas the former was the other way around.
+
+This commit updates BootJar to use the same ordering as BootWar and
+adds tests to verify that the ordering is the following:
+
+1. Loader classes
+2. Application classes (BOOT-INF/classes or WEB-INF/classes)
+3. Nested jars (BOOT-INF/lib or WEB-INF/lib)
+4. Provided nested jars in a war (WEB-INF/lib-provided)
+
+The tests also verify that the position of a library is not affected
+by it requiring unpacking.
+
+See gh-11695
+See gh-11696

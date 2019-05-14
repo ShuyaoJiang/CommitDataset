@@ -1,0 +1,18 @@
+More complete OpenSslEngine SSLSession implementation
+
+Motivation:
+
+The current SSLSession implementation used by OpenSslEngine does not support various operations and so may not be a good replacement by the SSLEngine provided by the JDK implementation.
+
+Modifications:
+
+- Add SSLSession.getCreationTime()
+- Add SSLSession.getLastAccessedTime()
+- Add SSLSession.putValue(...), getValue(...), removeValue(...), getValueNames()
+- Add correct SSLSession.getProtocol()
+- Ensure OpenSSLEngine.getSession() is thread-safe
+- Use optimized AtomicIntegerFieldUpdater when possible
+
+Result:
+
+More complete OpenSslEngine SSLSession implementation

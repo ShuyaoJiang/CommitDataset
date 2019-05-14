@@ -1,0 +1,13 @@
+Ensure we call promise.setUncancellable() before trying to process in DefaultHttp2StreamChannel.
+
+Motivation:
+
+We should call promise.setUncancellable() in DefaultHttp2StreamChannel.Unsafe impl to detect if the operation was cancelled.
+
+Modifications:
+
+Add promise.setUncancellable() calls
+
+Result:
+
+More correct handling of cancelled promises

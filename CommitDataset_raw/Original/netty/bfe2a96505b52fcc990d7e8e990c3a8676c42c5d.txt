@@ -1,0 +1,8 @@
+Fix AssertionError from AsyncSocketChannel.beginRead()
+
+An AssertionError is triggered by a ByteBuf when beginRead() attempts to
+access the buffer which has been freed already.  This commit ensures the
+buffer is not freed before performing an I/O operation.
+
+To determine if the buffer has been freed, UnsafeByteBuf.isFreed() has
+been added.

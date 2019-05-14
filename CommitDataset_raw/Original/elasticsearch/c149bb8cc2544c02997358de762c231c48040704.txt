@@ -1,0 +1,10 @@
+Support 'include_type_name' in RestGetIndicesAction (#37149)
+
+This change adds support for the 'include_type_name' parameter for the
+indices.get API. This parameter, which defaults to `false` starting in 7.0,
+changes the response to not include the indices type names any longer.
+
+If the parameter is set in the request, we additionally emit a deprecation
+warning since using the parameter should be only temporarily necessary while
+adapting to the new response format and we will remove it with the next major
+version.

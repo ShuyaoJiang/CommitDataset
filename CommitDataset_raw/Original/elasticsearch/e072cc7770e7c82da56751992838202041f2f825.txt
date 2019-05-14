@@ -1,0 +1,18 @@
+Begin replacing static index tests with full restart tests (#24846)
+
+These tests spin up two nodes of an older version of Elasticsearch,
+create some stuff, shut down the nodes, start the current version,
+and verify that the created stuff works.
+
+You can run `gradle qa:full-cluster-restart:check` to run these
+tests against the head of the previous branch of Elasticsearch
+(5.x for master, 5.4 for 5.x, etc) or you can run
+`gradle qa:full-cluster-restart:bwcTest` to run this test against
+all "index compatible" versions, one after the other. For master
+this is every released version in the 5.x.y version *and* the tip
+of the 5.x branch.
+
+I'd love to add more to these tests in the future but these
+currently just cover the functionality of the `create_bwc_index.py`
+script and start to cover the assertions in the
+`OldIndexBackwardsCompatibilityIT` test.

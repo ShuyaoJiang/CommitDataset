@@ -1,0 +1,11 @@
+Introduce SqlSettings for handling per-client configuration
+
+To avoid leaking client information across the entire code-base, client
+settings like TimeZone or pagination are stored in
+SqlSession>SqlSettings which are available as a ThreadLocal (during
+analysis) so that components that need them, can pick them up.
+
+Since ES internally uses Joda, the date/time functionality relies on Joda,
+whenever possible to match the behavior.
+
+Original commit: elastic/x-pack-elasticsearch@20f41e2bb37316a0107726d78c835b0661b131b0

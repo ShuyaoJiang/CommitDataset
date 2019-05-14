@@ -1,0 +1,5 @@
+Fix recently intorduced bug in ChannelSendOperator
+
+WriteBarrier acts as Subscription to both completionSubscriber and
+writeSubscriber so the request method needs to be careful not to
+pass on the request outside of readyToWrite or writeSubscriber checks.

@@ -1,0 +1,16 @@
+Configures HTTP2 pipeline with more proper way
+
+Motivation:
+
+When we use pipeline.replace and we still had ongoing inbound, then
+there will be some problem that inbound message would go to wrong
+handlers. So we add handler first, and remove self after add, so that
+the next handler will be the correct one.
+
+Modifications:
+
+Uses remove after addAfter instead of replace.
+
+Result:
+
+Fixed #6881

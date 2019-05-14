@@ -1,0 +1,9 @@
+Change NullPointerTester to work for Stream parameters.
+
+The default-generated proxy for Stream instance will throw ClassCastException if the method/constructor calls collect(), which is common.
+
+The reason for the exception is that stream.collect() return R, which the proxy has no idea  that is'a List<T>, or ImmutableList<T> or whatever. That type is unknown because of erasure.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=145114911

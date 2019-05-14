@@ -1,0 +1,12 @@
+[ML] Ensure datafeed runs on time (elastic/x-pack-elasticsearch#2471)
+
+The datafeed runs on frequency-aligned intervals behind
+query_delay. Currently, when a real-time run is triggered,
+we subtract query_delay from now and then we take the aligned
+interval. This results into running frequency + query_delay
+behind now. The fix involves simply adding the query_delay
+into the time real-time runs occur.
+
+Relates elastic/x-pack-elasticsearch#2426
+
+Original commit: elastic/x-pack-elasticsearch@61ceaaca8f83835acfe266909ab7e7fca9e62e42

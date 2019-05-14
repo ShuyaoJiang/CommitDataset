@@ -1,0 +1,13 @@
+[ML] Better handling of errors if native controller dies (elastic/x-pack-elasticsearch#2141)
+
+If the native controller dies or is killed then requests to open jobs
+now immediately return with an error that says what the problem is.
+The error that is logged also now clearly records the problem.
+
+Previously open job requests would time out if the native controller
+was not running, and logged errors were not easy to understand without
+in-depth knowledge of the ML code.
+
+relates elastic/x-pack-elasticsearch#2140
+
+Original commit: elastic/x-pack-elasticsearch@fc7f074d4a2db05a9b11c1ad038490c87c72bfdf

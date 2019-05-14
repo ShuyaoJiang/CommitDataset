@@ -1,0 +1,12 @@
+Fix handling of invalid error trace parameter
+
+If a request contains an invalid error trace parameter, we send a error
+on the channel. This should immediately abort any additional processing
+of the request but instead we march on, dispatch the request and
+subsequently send another message on the channel. The problem here is
+this means two writes on the channel which leads to the request being
+released twice ultimately raising in illegal reference count
+exception. This commit addresses this by performing an early return in
+the case that the request contained an invalid error trace parameter.
+
+Relates #25785

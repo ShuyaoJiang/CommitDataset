@@ -1,0 +1,17 @@
+Enable Animal Sniffer checking of spring-boot-loader-tools
+
+Previously, Animal Sniffer checking of spring-boot-loader-tools
+was disabled as it failed with an NPE. This has been fixed in
+Animal Sniffer 1.15.
+
+This commit upgrades Animal Sniffer to 1.15 and adds the necessary
+annotations to suppress failures for safe usage of sun.* and Java 7
+APIs.
+
+Note that UsesUnsafeJava has been copied from spring-boot and made
+package-private. This retains the clearer intent of the custom
+annotation (versus @IgnoreJRERequirement) while avoiding the change
+in the build order that would be necessary for
+spring-boot-loader-tools to use the annotation from spring-boot.
+
+Closes gh-5284

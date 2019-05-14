@@ -1,0 +1,12 @@
+Cross Cluster Search: preserve remote status code (#30976)
+
+In case an error is returned when calling search_shards on a remote
+cluster, which will lead to throwing an exception in the coordinating
+ node, we should make sure that the status code returned by the
+ coordinating node is the same as the one returned by the remote
+ cluster. Up until now a 500 - Internal Server Error was always
+ returned. This commit changes this behaviour so that for instance if an
+ index is not found, which causes an 404, a 404 is also returned by the
+ coordinating node to the client.
+
+ Closes #27461

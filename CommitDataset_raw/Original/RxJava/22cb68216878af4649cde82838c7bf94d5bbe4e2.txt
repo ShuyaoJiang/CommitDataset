@@ -1,0 +1,7 @@
+Common approach for IllegalArgumentException on subscribe methods
+
+As brought up in https://github.com/Netflix/RxJava/issues/278 there were inconsistencies in how arguments were being validated on subscribe methods.
+
+All arguments to subscribe are now validated correctly at the beginning of method invocation and IllegalArgumentException thrown if null arguments are injected.
+
+According to Rx Guideline 6.5 a null argument is considered "a catastrophic error occurs that should bring down the whole program anyway" and thus we immediately throw. A null argument should be caught immediately in development and has nothing to do with subscribe invocation which is what guideline 6.5 is talking about (since a null Observer can't have onError called on it anyways).

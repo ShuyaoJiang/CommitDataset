@@ -1,0 +1,11 @@
+Add ErrorWrapperEmbeddedServletContainerFactory for error pages in WARs
+
+Error pages are a feature of the servlet spec but there is no Java API for
+registering them in the spec. This filter works around that by accepting error page
+registrations from Spring Boot's EmbeddedServletContainerCustomizer (any beans
+of that type in the context will be applied to this container).
+
+In addition the ErrorController interface was enhanced to provide callers
+the option to suppress logging.
+
+Fixes gh-410

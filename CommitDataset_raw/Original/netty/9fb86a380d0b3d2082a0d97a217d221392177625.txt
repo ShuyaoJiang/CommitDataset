@@ -1,0 +1,12 @@
+NIO/EPOLL readPending set to false incorrectly
+
+Motivation:
+441aa4c5756b975e8ee1dccbe2902633e0f587e8 introduced a bug in transport-native-epoll where readPending is set to false before a read is attempted, but this should happen before fireChannelRead is called. The NIO transport also only sets the readPending variable to false on the first read in the event loop. This means that if the user only calls read() on the first channelRead(..) the select loop will still listen for read events even if the user does not call read() on subsequent channelRead() or channelReadComplete() in the same event loop run. If the user only needs 2 channelRead() calls then by default they will may get 14 more channelRead() calls in the current event loop, and then 16 more when the event loop is woken up for a read event. This will also read data off the TCP stack and allow the peer to queue more data in the local RECV buffers.
+
+Modifications:
+- readPending should be set to false before each call to channelRead()
+- make NIO readPending set to false consistent with EPOLL
+
+Result:
+NIO and EPOLL transport set readPending to false at correct times which don't read more data than intended by the user.
+Fixes https://github.com/netty/netty/issues/5082

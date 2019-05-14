@@ -1,0 +1,14 @@
+Adjust tests to also pass when using BoringSSL (#7946)
+
+Motivation:
+
+Some of the tests failed when using BoringSSL as some protocol / cipher combinations are not supported and it uses a different alert when the cert is not valid yet.
+
+Modification:
+
+- Remove protocol / cipher combos that are not supported by BoringSSL
+- Test for different alert when using BoringSSL
+
+Result:
+
+Not test failures when using BoringSSL.

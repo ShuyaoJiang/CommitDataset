@@ -1,0 +1,7 @@
+use LinkedList to buffer the sequence’s items
+
+LinkedList has guaranteed constant insertion time when appending to the end of the list, whereas ArrayList takes O(1) amortized, since a reallocation might be necessary to insert further items. Since no capacity was specified for the buffer, on Hotspot this would cause the array to reallocate after the first 10 insertions, on Android after the first insertion (since Android’s ArrayList uses a default capacity of zero.)
+
+Since the buffer is copied to an ArrayList before emission, subscriber performance when working with the list should remain unaffected.
+
+Refs #1141

@@ -1,0 +1,12 @@
+Correct the root context path used with Undertow
+
+Undertow, like Tomcat, uses "" for the context path of the root
+context. Previously, the Undertow deployment was being configured with
+"/" for the root context. This was leading to a silent failure in
+AsyncContextImpl.dispatch when it failed to look up the deployment
+manager for the current request.
+
+This commit updates UndertowEmbeddedServletContainerFactory to use the
+correct context path (an empty String) for the root context.
+
+Fixes gh-2365

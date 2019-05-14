@@ -1,0 +1,46 @@
+Improve unknown status codes handling by WebClient
+
+Prior to this commit, `WebClient` would throw `IllegalArgumentException`
+when receiving an HTTP response with an unknown HTTP status code.
+
+This commit is a follow up of SPR-16748 (supporting non-standard HTTP
+status codes on the reactive `ClientHttpResponse`), and is mirroring
+SPR-15978 (supporting non-standard HTTP status codes in `RestTemplate`).
+
+With this change, `WebClient` now tolerates unknown status codes in some
+cases, while not offering that choice as a first class citizen:
+`HttpStatus` is still the preferred way to deal with HTTP status codes.
+
+Here's how `WebClient` will behave when fetching the full response:
+
+```
+// Given a remote endpoint returning a "123" HTTP status code
+Mono<ClientResponse> result = this.webClient.get()
+				.uri("/status/123")
+				.exchange();
+
+// will still throw an IllegalArgumentException
+HttpStatus status = result.block().statusCode();
+
+// is safe and will return 123
+int statusCode = result.block().rawStatusCode();
+```
+
+Resolving directly the response body with `retrieve()` is different.
+
+```
+// will send an error signal with a UnknownHttpStatusCodeException
+Mono<String> result = this.webClient.get()
+				.uri("/status/123")
+				.retrieve()
+				.bodyToMono(String.class);
+```
+
+In general, `WebClient` will provide high-level support
+for well-known HTTP status codes, like error handling with
+`WebClient.ResponseSpec#onStatus`.
+
+For such support with unknown status codes, it is better to rely
+on lower level constructs such as `ExchangeFilterFunction`.
+
+Issue: SPR-16819

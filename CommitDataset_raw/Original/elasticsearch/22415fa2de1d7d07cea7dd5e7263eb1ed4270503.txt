@@ -1,0 +1,11 @@
+[ML] Fix character set finder bug with unencodable charsets (#33234)
+
+Some character sets cannot be encoded and this was tripping
+up the binary data check in the ML log structure character
+set finder.
+
+The fix is to assume that if ICU4J identifies that some bytes
+correspond to a character set that cannot be encoded and those
+bytes contain zeroes then the data is binary rather than text.
+
+Fixes #33227

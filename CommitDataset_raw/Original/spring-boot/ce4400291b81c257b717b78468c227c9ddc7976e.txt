@@ -1,0 +1,13 @@
+Upgrade to Liquibase 3.3.0
+
+This commit updates Spring Boot to Liquibase 3.3.0 and makes the
+necessary changes to Boot's PackageScanClassResolver.
+
+Previously, when a class found by the scan could not be loaded a
+warning message was logged. This commit lowers these to debug level,
+bringing them into line with logging that the standard Liquibase
+implementation does. It also avoids a warning always being logged at
+startup due to Liquibase's WatchCommand$DynamicContentHandler which
+depends on Jetty (an optional dependency of Liquibase).
+
+Closes gh-1382

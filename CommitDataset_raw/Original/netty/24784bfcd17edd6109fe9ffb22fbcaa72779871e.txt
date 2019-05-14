@@ -1,0 +1,15 @@
+Change hosts file resolver to be case-insensitive
+
+Motivation:
+
+Resolving hosts via the /etc/hosts file should be case-insensitive, e.g. localhost and LOCALHOST refer to the same host, this is the same that is applied to dns queries.
+
+Modifications:
+
+Store hosts Map with lowercase keys, lookup the keys as lowercase
+Add to unit test for the hosts file parser to use an UPPERCASE file entry
+Add unit test for DefaultHostsFileEntriesResolver to resolve both localhost and LOCALHOST
+
+Result:
+
+host resolution for local hosts file should match the rules applied to "getent hosts" or "ping"

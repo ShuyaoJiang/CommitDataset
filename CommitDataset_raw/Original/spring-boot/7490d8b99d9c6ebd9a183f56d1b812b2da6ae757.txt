@@ -1,0 +1,10 @@
+Make JSON-B auto-config back off when no implementation is available
+
+Previously, the JSON-B auto-configuration would be enabled when the JSON-B API was
+on the classpath. This led to a failure if there was no implementation available.
+
+The JSON-B API loads an implementation using the service loader. This commit updates
+the auto-configuration to be conditional on the presence of a
+META-INF/services/javax.json.bind.spi.JsonbProvider file on the classpath.
+
+Closes gh-14675

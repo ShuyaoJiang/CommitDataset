@@ -1,0 +1,7 @@
+[Security] BulkShardRequest may have multiple indices (elastic/x-pack-elasticsearch#2742)
+
+If a bulk update references aliases rather than concrete indices,
+it is possible that a single shard level request could have multiple distinct "index names", potentially including "date math".
+Those names will resolve to the same concrete index, but they might have different privileges.
+
+Original commit: elastic/x-pack-elasticsearch@34cfd11df8c3b16a59695c41b112f5791744f7ec

@@ -1,0 +1,12 @@
+Preserve the order of nested documents in the Lucene index (#34225)
+
+Today we reverse the initial order of the nested documents when we
+index them in order to ensure that parents documents appear after
+their children. This means that a query will always match nested documents
+in the reverse order of their offsets in the source document.
+Reversing all documents is not needed so this change ensures that parents
+documents appear after their children without modifying the initial order
+in each nested level. This allows to match children in the order of their
+appearance in the source document which is a requirement to efficiently
+implement #33587. Old indices created before this change will continue
+to reverse the order of nested documents to ensure backwark compatibility.

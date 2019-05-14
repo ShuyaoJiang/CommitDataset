@@ -1,0 +1,14 @@
+Remove the offset and size fields from RegularImmutableList.
+
+These seemed to be designed to create a faster sublist(), but our base
+implementation of sublist seems likely to be quite similar in performance.
+Plus by eliminating these fields we:
+
+* eliminate a preconditions check and extra field reads on each call to  get(int)
+* save 8 bytes for the fields (and maybe more for alignment on some platforms)
+
+This design seems to be from the very first version of RegularImmutableList and there don't appear to be benchmarks covering ImmutableList.get(),  so this change is somewhat speculative.  I'm curious what your thoughts are.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=133794845

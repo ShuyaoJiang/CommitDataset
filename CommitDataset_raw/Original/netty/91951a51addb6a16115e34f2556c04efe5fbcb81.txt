@@ -1,0 +1,14 @@
+Ensure calling ReferenceCountedSslEngine.unwrap(...) / wrap(...) can be called after it was closed
+
+Motivation:
+
+The JDK implementation of SSLEngine allows to have unwrap(...) / wrap(...) called even after closeInbound() and closeOutbound() were called. We need to support the same in ReferenceCountedSslEngine.
+
+Modification:
+
+- Allow calling ReferenceCountedSslEngine.unwrap(...) / wrap(...) after the engine was closed
+- Modify unit test to ensure correct behaviour.
+
+Result:
+
+Implementation works as expected.

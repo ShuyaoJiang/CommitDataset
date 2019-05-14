@@ -1,0 +1,7 @@
+Now that LocalChannel#releaseInboundBuffers is only called from the EventLoop (eb4d317b9d64f3945a209804fec4c3fe695f4f9f) it should clear readInProgress and drain/release the queue. Otherwise if a read event is pending (doBeginRead) was called we may later call channelRead or channelReadComplete after we have closed the channel.
+
+Modifications:
+LocalChannel#releaseInboundBuffers should always clear/release the queue and set readInProgress to false
+
+Result:
+LocalChannel queue is more reliably cleaned up.

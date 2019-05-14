@@ -1,0 +1,16 @@
+SQL: Fix issue with optimization on queries with ORDER BY/LIMIT (#40256)
+
+Previously, when a trival plain `SELECT` or a trivial `SELECT` with
+aggregations has also an `ORDER BY` or a `LIMIT` or both, then the
+optimization to convert it to a `LocalRelation` was skipped resulting
+in exception thrown. E.g.::
+```
+SELECT 'foo' FROM test LIMIT 10
+```
+or
+```
+SELECT 'foo' FROM test GROUP BY 1 ORDER BY 1
+```
+
+Fixes: #40211
+

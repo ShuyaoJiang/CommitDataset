@@ -1,0 +1,8 @@
+ignore 409 conflict in reindex responses (#39543)
+
+The reindex family of APIs (reindex, update-by-query, delete-by-query) can
+sometimes return responses that have an error status code (409 Conflict in this
+case) but still have a body in the usual BulkByScrollResponse format. When the
+HLRC tries to handle such responses, it blows up because it tris to parse it
+expecting the error format that errors in general use. This change prompts the
+HLRC to parse the response using the expected BulkByScrollResponse format.

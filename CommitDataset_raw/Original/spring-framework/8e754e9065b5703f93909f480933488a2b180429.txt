@@ -1,0 +1,6 @@
+SPR-9498: don't make assumptions about equality if ConversionService has failed
+
+The failure of the conversion service is not fatal, but the check that
+was in there (line 248) was inadequate to detect the cases that could
+already be handled by the default property editors.  This code path
+was also not tested anywhere in spring-beans tests until now.

@@ -1,0 +1,10 @@
+SslHandler avoid calling wrap/unwrap when unnecessary
+
+Motivation:
+The SSLEngine wrap and unwrap methods can be called in a way that has no side effects, but this could involve costly validation and allocation. The SslHandler should avoid calling into these methods if possible.
+
+Modifications:
+- wrapNonAppData should provide additional status which can be used by wrap to breakout early if possible
+
+Result:
+SslHandler invokes the SSLEngine less.

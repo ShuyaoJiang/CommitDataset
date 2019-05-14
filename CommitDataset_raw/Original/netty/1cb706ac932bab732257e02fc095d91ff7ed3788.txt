@@ -1,0 +1,14 @@
+HTTP/2 HPACK Header Name Validation and Trailing Padding
+
+Motivation:
+The HPACK code currently disallows empty header names. This is not explicitly forbidden by the HPACK RFC https://tools.ietf.org/html/rfc7541. However the HTTP/1.x RFC https://tools.ietf.org/html/rfc7230#section-3.2 and thus HTTP/2 both disallow empty header names, and so this precondition check should be moved from the HPACK code to the protocol level.
+HPACK also requires that string literals which are huffman encoded must be treated as an encoding error if the string has more than 7 trailing padding bits https://tools.ietf.org/html/rfc7541#section-5.2, but this is currently not enforced.
+
+Result:
+- HPACK to allow empty header names
+- HTTP/1.x and HTTP/2 header validation should not allow empty header names
+- Enforce max of 7 trailing padding bits
+
+Result:
+Code is more compliant with the above mentioned RFCs
+Fixes https://github.com/netty/netty/issues/5228

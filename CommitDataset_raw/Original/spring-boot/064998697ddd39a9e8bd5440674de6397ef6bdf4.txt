@@ -1,0 +1,12 @@
+Ensure CLI adds @EnableAutoConfiguration in an appropriate place
+
+Up to now we have been treating the *first* class to be compiled
+as the "main" application and adding @EnableAutoConfiguration. This
+isn't always appropriate (e.g. if it's a test case), so now we
+look for an appropriate annotation before falling back to the old
+behaviour.
+
+In addition ensures classes with a field of type Reactor trigger
+the reactor auto imports.
+
+See gh-969

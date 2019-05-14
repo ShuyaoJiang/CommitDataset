@@ -1,0 +1,9 @@
+Test: fix skip check for EllipticCurveSSLTests (elastic/x-pack-elasticsearch#3771)
+
+This change fixes the skip check for the EllipticCurveSSLTests. The skip check that is in the test
+was added to proctect against failures on JVMs that do not support EC ciphers such as the packaged
+openjdk in some linux distributions. The old skip check did not execute until the cluster was up
+so the test would still fail with errors such as no cipher suites in common. This change moves the
+check into a before class method that checks availability.
+
+Original commit: elastic/x-pack-elasticsearch@5550ca4e1e9b361b1b1300df2227ae0f3083b584

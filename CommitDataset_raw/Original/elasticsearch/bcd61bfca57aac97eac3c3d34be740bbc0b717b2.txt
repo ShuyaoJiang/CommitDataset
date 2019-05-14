@@ -1,0 +1,7 @@
+Fix off-by-one error in shard changes action test
+
+This commit fixes an off-by-one error in the shard changes action test
+for getting operations between two sequence numbers. The off-by-one
+error arises because sequence numbers are indexed from zero, so if N
+documents are indexed then the maximum sequence number starting from
+zero would be N - 1.

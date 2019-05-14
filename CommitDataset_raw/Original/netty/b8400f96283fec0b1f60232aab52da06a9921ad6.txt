@@ -1,0 +1,13 @@
+[#5553] SimpleChannelPool#notifyConnect() may leak Channels
+
+Motivation:
+
+The SimpleChannelPool#notifyConnect() method will leak Channels if the user cancelled the Promise in between.
+
+Modifications:
+
+Release the channel if the Promise was complete before.
+
+Result:
+
+No more channel leaks.

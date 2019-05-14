@@ -1,0 +1,11 @@
+KQueue write filter initial state (#7738)
+
+Motivation:
+KQueue implementations current have inconsistent behavior with Epoll implementations with respect to asynchronous sockets and connecting. In the Epoll transport we attempt to connect, if the connect call does not synchornously fail/succeed we set the EPOLLOUT which will be triggered by the kernel if the connection attempt succeeds or an error occurs. The connect API provides no way to asynchronously communicate an error so the Epoll implementation fires a EPOLLOUT event and puts the connect status in getsockopt(SO_ERROR). KQueue provides the same APIs but different behavior. If the EVFILT_WRITE is not enabled and the EVFILT_READ is enabled before connect is called, and there is an error the kernel may fire the EVFILT_READ filter and provide the Connection Refused error via read(). This is even true if we set the EVFILT_WRITE filter after calling connect because connect didn't synchornously complete. After the error has been delievered via read() a call to getsockopt(SO_ERROR) will return 0 indicating there is no error. This means we cannot rely upon the KQueue based kernel to deliver connection errors via the EVFILT_WRITE filter in the same way that the linux kernel does with the EPOLLOUT flag.
+ce241bd introduced a change which depends upon the behavior of the EVFILT_WRITE being set and may prematurely stop writing to the OS as a result, becaues we assume the OS will notify us when the socket is writable. However the current work around for the above described behavior is to initialize the EVFILT_WRITE to true for connection oriented protocols. This leads to prematurely exiting from the flush() which may lead to deadlock.
+
+Modifications:
+- KQueue should check when an error is obtained from read() if the connectPromise has not yet been completed, and if not complete it with a ConnectException
+
+Result:
+No more deadlock in KQueue due to asynchronous connect workaround.

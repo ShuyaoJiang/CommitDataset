@@ -1,0 +1,20 @@
+Add a media type class to OkHttp.
+
+This allows us and our users to parse out the charset of
+a content type, so we can cleanly create Readers and Strings
+for content of any type.
+
+This is similar to Guava's MediaType but with many differences.
+
+* Guava's MediaType parses all parameters independently. We don't.
+  We may later want to support this lazily for users like MimeCraft.
+
+* Guava uses a custom Tokenizer; we use regular expressions.
+
+* Guava includes a registry of common media types; we don't.
+
+* Guava supports media queries and building media types; we don't.
+
+Applications that need advanced features should probably use
+Guava's MediaType class. My goal here was to get everything we
+need in a small amount of code.

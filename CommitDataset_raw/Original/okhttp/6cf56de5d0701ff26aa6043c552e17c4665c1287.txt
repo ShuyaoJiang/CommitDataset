@@ -1,0 +1,32 @@
+Return HttpResponseCache to previous (e.g. KitKat) behavior
+
+This change required to handle this Android scenario:
+
+When this version of OkHttp is packaged into Android in a future
+release (in com.android.okhttp...) there is a possibility that
+an older version of OkHttp bundled with application
+(in com.squareup.okhttp...) will pick up the newer HttpResponseCache
+via ResponseCache.getDefault(). It will attempt to use the get() / put()
+methods. Commit e2599be9e073f1be8e929597c358e2664ab0c9a9 was
+intended to restore HttpResponseCache get() and put() and avoid the
+UnsupportedOperationException that would be thrown.
+
+Unfortunately, it didn't quite do it:
+
+In KitKat and older versions OkHttp, in HttpResponseCache the behavior
+was to ignore any calls to put(URI, URLConnection) including
+any HttpURLConnection/HttpsURLConnection that wasn't its own
+(i.e. only ones from com.android.okhttp would be cached). The previous
+fix to HttpResponseCache re-introduced get()/put() but didn't implement
+the necessary instanceof checks.
+
+Jesse also informs me that coexistance with other implementations
+of HttpURLConnection is not required (since OkHttp replaces the
+HTTP implementation on the desktop). I have also since discovered
+that HttpResponseCache didn't implement the cache-control logic
+required to follow the letter of the Java API anyway, which means
+that HttpResponseCache is not suitable for use in cases where
+the Http(s)URLConnection implementation expects a fully compliant
+implementation.
+
+Also addressed nits from e2599be9e073f1be8e929597c358e2664ab0c9a9.

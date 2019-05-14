@@ -1,0 +1,10 @@
+Fail fast on getKeyFromServer() failure
+
+Update `ResourceServerTokenServicesConfiguration` to fail fast if the
+`getKeyFromServer()` call fails. Since the key is part of the singleton
+`JwtAccessTokenConverter` bean there is not real way to refresh without
+restarting the application.
+
+A hard failure seems preferable to an inconsistent state.
+
+Closes gh-8924

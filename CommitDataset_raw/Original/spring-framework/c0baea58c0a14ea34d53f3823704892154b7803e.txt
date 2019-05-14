@@ -1,0 +1,10 @@
+Fix issue with generic @RequestBody arguments
+
+The original commit c9b7b1 ensured the ability to read parameterized
+type @RequestBody arguments via GenericHttpMessageConverter (e.g.
+application/json and List<String>). However, it also affected the
+ability to read @RequestBody arguments that happen are parameterized
+but aren't treated as such (e.g. application/x-www-form-urlencoded and
+MultiValueMap<String, String>). This commit corrects the issue.
+
+Issue: SPR-9570

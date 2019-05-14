@@ -1,0 +1,411 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.springframework.boot.actuate.autoconfigure.cloudfoundry:  
+
+1.1. Add a class for cloud foundry web endpoint discoverer. It allows to:
+
+	Instantiate cloud foundry web endpoint discoverer  with application context, parameter value mapper, endpoint media types, endpoint path mappers list, invoker advisors collection, filters collection and filters collection;
+	Check if cloud foundry web endpoint discoverer is extension exposed;
+	Check if cloud foundry web endpoint discoverer is health endpoint extension;
+	Check if cloud foundry web endpoint discoverer is cloud foundry health endpoint extension
+
+2. Changes to package org.springframework.boot.actuate.autoconfigure.cloudfoundry.reactive:  
+
+2.1. Rename type ReactiveCloudFoundrySecurityInterceptor with CloudFoundrySecurityInterceptor
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.cloudfoundry.servlet:  
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint:  
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint.jmx:  
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint.web.jersey:  
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint.web.reactive:  
+
+3. Changes to package org.springframework.boot.actuate.autoconfigure.endpoint.web.servlet:  
+
+3. Changes to package org.springframework.boot.actuate.endpoint:  
+
+3.1. Add a class for abstract exposable endpoint. It allows to:
+
+	Instantiate abstract exposable endpoint  with endpoint id, operations collection and operations collection;
+	Get endpoint id;
+	Check if abstract exposable endpoint is enable by default;
+	Get operations
+
+3.2. Add an interface declaration  for endpoints supplier. It allows to:
+
+	Get endpoints
+
+3.3. Add an interface declaration  for exposable endpoint. It allows to:
+
+	Get endpoint id;
+	Check if exposable endpoint is enable by default;
+	Get operations
+
+4. Changes to package org.springframework.boot.actuate.endpoint.annotation:  
+
+4.1. Add a class for abstract discovered endpoint. It allows to:
+
+	Instantiate abstract discovered endpoint  with endpoint discoverer, endpoint id, operations collection and operations collection;
+	Get endpoint bean;
+	Get was discovered by;
+	Convert abstract discovered endpoint to string;
+	Append fields
+
+4.2. Add a class for abstract discovered operation. It allows to:
+
+	Instantiate abstract discovered operation  with discovered operation method, operation invoker and operation invoker;
+	Get operation method;
+	Get type;
+	Invoke invocation context;
+	Convert abstract discovered operation to string;
+	Append fields
+
+4.3. Add an interface declaration  for discovered endpoint. It allows to:
+
+	Get was discovered by;
+	Get endpoint bean
+
+4.4. Add a class for discovered operation method. It allows to:
+
+	Instantiate discovered operation method  with method, operation type, annotation attributes and annotation attributes;
+	Get produces media types
+
+4.5. Add a class for discovered operation method tests. It allows to:
+
+	Create when annotation attributes is null should throw exception;
+	Get produces media types should return media types;
+	Handle example
+
+4.6. Add a class for discovered operations factory. It allows to:
+
+	Instantiate discovered operations factory  with parameter value mapper, invoker advisors collection and invoker advisors collection;
+	Create operations;
+	Create operation;
+	Apply advisors;
+
+4.7. Add a class for discoverer endpoint filter. It allows to:
+
+	Instantiate discoverer endpoint filter  with discoverer class;
+	Match discovered endpoint
+
+5. Changes to package org.springframework.boot.actuate.endpoint.invoke:  
+
+5.1. Add a class for missing parameters exception. It allows to:
+
+	Instantiate missing parameters exception  with missing parameters set;
+	Get missing parameters
+
+5.2. Add an interface declaration  for operation invoker. It allows to:
+
+	Invoke invocation context
+
+5.3. Add an interface declaration  for operation invoker advisor. It allows to:
+
+	Apply endpoint id
+
+5.4. Add an interface declaration  for operation parameter. It allows to:
+
+	Get name;
+	Get type;
+	Check if operation parameter is mandatory
+
+5.5. Add an interface declaration  for operation parameters. It allows to:
+
+	Check if operation parameters has parameters;
+	Get parameter count;
+	Check if operation parameters has mandatory parameter;
+	Get operation parameters;
+	Get stream
+
+5.6. Add a class for parameter mapping exception. It allows to:
+
+	Instantiate parameter mapping exception  with operation parameter, cause throwable and cause throwable;
+	Get parameter;
+	Get value
+
+5.7. Add an interface declaration  for parameter value mapper. It allows to:
+
+	Map parameter value
+
+6. Changes to package org.springframework.boot.actuate.endpoint.invoke.convert:  
+
+6.1. Add a class for conversion service parameter value mapper. It allows to:
+
+	Instantiate conversion service parameter value mapper;
+	Instantiate conversion service parameter value mapper  with conversion service;
+	Map parameter value
+
+6.2. Rename type IsoOffsetDateTimeConverter with IsoOffsetDateTimeConverter
+
+6.3. Rename type IsoOffsetDateTimeConverterTests with IsoOffsetDateTimeConverterTests
+
+7. Changes to package org.springframework.boot.actuate.endpoint.invoke.reflect:  
+
+7.1. Add a class for operation method. It allows to:
+
+	Instantiate operation method  with method, operation type and operation type;
+	Get method;
+	Get operation type;
+	Get parameters;
+	Convert operation method to string
+
+7.2. Add a class for operation method parameter. It allows to:
+
+	Instantiate operation method parameter  with parameter;
+	Get name;
+	Get type;
+	Check if operation method parameter is mandatory;
+	Convert operation method parameter to string
+
+7.3. Add a class for operation method parameter tests. It allows to:
+
+	Get name should return name;
+	Get type should return type;
+	Check if operation method parameter tests is mandatory when no annotation should return true;
+	Check if operation method parameter tests is mandatory when nullable annotation should return false;
+	Handle example
+
+7.4. Add a class for operation method parameters. It allows to:
+
+	Instantiate operation method parameters  with method, parameter name discoverer and parameter name discoverer;
+	Get operation parameters;
+	Get parameter count;
+	Get operation method parameters;
+	Get iterator;
+	Get stream
+
+7.5. Add a class for operation method parameters tests. It allows to:
+
+	Create when method is null should throw exception;
+	Create when parameter name discoverer is null should throw exception;
+	Create when parameter name discoverer returns null should throw exception;
+	Check if operation method parameters tests has parameters when has parameters should return true;
+	Check if operation method parameters tests has parameters when has no parameters should return false;
+	Get parameter count should return parameter count;
+	Handle iterator should iterate operation parameters;
+	Handle stream should stream operation parameters;
+	Assert parameters;
+	Get example;
+	Get example no params
+
+7.6. Add a class for operation method tests. It allows to:
+
+	Create when method is null should throw exception;
+	Create when operation type is null should throw exception;
+	Get method should return method;
+	Get operation type should return operation type;
+	Get parameters should return parameters;
+	Get example
+
+7.7. Add a class for reflective operation invoker. It allows to:
+
+	Instantiate reflective operation invoker  with operation method, parameter value mapper and parameter value mapper;
+	Invoke invocation context;
+	Validate required parameters;
+	Check if reflective operation invoker is missing;
+	Resolve arguments;
+	Resolve argument;
+	Convert reflective operation invoker to string
+
+8. Changes to package org.springframework.boot.actuate.endpoint.invoker.cache:  
+
+8.1. Add a class for caching operation invoker advisor. It allows to:
+
+	Instantiate caching operation invoker advisor  with endpoint id time to live function;
+	Apply endpoint id;
+	Check if caching operation invoker advisor has mandatory parameter
+
+8.2. Rename type CachingOperationInvokerTests with CachingOperationInvokerTests
+
+9. Changes to package org.springframework.boot.actuate.endpoint.jmx:  
+
+9.1. Add an interface declaration  for exposable jmx endpoint
+
+9.2. Add a class for jackson jmx operation response mapper. It allows to:
+
+	Instantiate jackson jmx operation response mapper  with object mapper;
+	Map response type;
+	Map response
+
+9.3. Add a class for jmx endpoint exporter. It allows to:
+
+	Instantiate jmx endpoint exporter  with M bean server, endpoint object name factory, jmx operation response mapper, endpoints collection and endpoints collection;
+	Set bean class loader;
+	Handle after properties set;
+	Destroy jmx endpoint exporter;
+	Register jmx endpoint exporter;
+	Register exposable jmx endpoint;
+	Handle unregister;
+	Get endpoint description
+
+9.4. Add an interface declaration  for jmx endpoints supplier
+
+9.5. Add an interface declaration  for jmx operation parameter. It allows to:
+
+	Get name;
+	Get type;
+	Get description
+
+9.6. Add a class for m bean info factory. It allows to:
+
+	Instantiate m bean info factory  with jmx operation response mapper;
+	Get M bean info;
+	Get description;
+	Get M bean operations;
+	Get M bean operation;
+	Get signature;
+	Get M bean parameter;
+	Get impact;
+	Get type
+
+9.7. Add a class for m bean info factory tests. It allows to:
+
+	Get M bean info should return M bean info;
+	Get M bean info when read operation should have info impact;
+	Get M bean info when write operation should have action impact;
+	Get M bean info when delete operation should have action impact;
+	Get M bean info should use jmx operation response mapper;
+	Get M bean should map operation parameters;
+	Handle mock parameter
+
+9.8. Add a class for test exposable jmx endpoint. It allows to:
+
+	Instantiate test exposable jmx endpoint  with operations;
+	Instantiate test exposable jmx endpoint  with operations collection;
+	Get endpoint id;
+	Check if test exposable jmx endpoint is enable by default;
+	Get operations
+
+9.9. Add a class for test jmx operation. It allows to:
+
+	Instantiate test jmx operation;
+	Instantiate test jmx operation  with operation type;
+	Instantiate test jmx operation  with invoke function;
+	Instantiate test jmx operation  with parameters list;
+	Get type;
+	Invoke invocation context;
+	Get name;
+	Get output type;
+	Get description;
+	Get parameters
+
+9.10. Add a class for test jmx operation response mapper. It allows to:
+
+	Map response;
+	Map response type
+
+10. Changes to package org.springframework.boot.actuate.endpoint.jmx.annotation:  
+
+10.1. Add a class for discovered jmx endpoint. It allows to:
+
+	Instantiate discovered jmx endpoint  with endpoint discoverer, endpoint id, operations collection and operations collection
+
+10.2. Add an object creator class for jmx endpoint discoverer. It allows to:
+
+	Instantiate jmx endpoint discoverer  with application context, parameter value mapper, invoker advisors collection, filters collection and filters collection;
+	Create endpoint;
+	Create operation;
+	Create operation key
+
+11. Changes to package org.springframework.boot.actuate.endpoint.web:  
+
+11.1. Add a class for endpoint media types tests. It allows to:
+
+	Create when produced is null should throw exception;
+	Create when consumed is null should throw exception;
+	Get endpoint media types tests;
+
+11.2. Add an interface declaration  for exposable web endpoint
+
+11.3. Add a class for link tests. It allows to:
+
+	Create when href is null should throw exception;
+	Get href should return href;
+	Check if link tests is templated when contains placeholder should return true;
+	Check if link tests is templated when contains no placeholder should return false
+
+11.4. Add a class for web endpoint response tests. It allows to:
+
+	Create web endpoint response tests with no params should return 200;
+	Create web endpoint response tests with status should return status;
+	Create web endpoint response tests with body should return body;
+	Create web endpoint response tests with body and status should return status and body
+
+11.5. Add an interface declaration  for web endpoints supplier
+
+11.6. Add a class for web operation request predicate. It allows to:
+
+	Instantiate web operation request predicate  with web endpoint http method, consumes collection, produces collection and produces collection;
+	Get path;
+	Get http method;
+	Get consumes;
+	Produces web operation request predicate;
+	Check if web operation request predicate equals;
+	Hash code;
+	Convert web operation request predicate to string
+
+11.7. Add a class for web operation request predicate tests. It allows to:
+
+	Handle predicates with identical paths are equal;
+	Handle predicates with different paths are not equal;
+	Handle predicates with identical paths with variables are equal;
+	Handle predicates where one has A path and the other has A variable are not equal;
+	Handle predicates with single path variables in the sample place are equal;
+	Handle predicates with multiple path variables in the sample place are equal;
+	Predicate web operation request predicate tests with path
+
+12. Changes to package org.springframework.boot.actuate.endpoint.web.annotation:  
+
+12.1. Add an object creator class for base configuration. It allows to:
+
+	Get endpoint delegate;
+	Get endpoint media types;
+	Get web endpoint discoverer;
+	Get property placeholder configurer
+
+12.2. Add a class for discovered web endpoint. It allows to:
+
+	Instantiate discovered web endpoint  with endpoint discoverer, endpoint id, operations collection and operations collection;
+	Get root path
+
+12.3. Add a class for discovered web operation. It allows to:
+
+	Instantiate discovered web operation  with endpoint id, discovered operation method, operation invoker, web operation request predicate and web operation request predicate;
+	Get id;
+	Check if discovered web operation has selector;
+	Dash name;
+	Blocking method;
+	Check if discovered web operation is blocking;
+	Get request predicate;
+	Append fields
+
+12.4. Add a class for request predicate factory. It allows to:
+
+	Instantiate request predicate factory  with endpoint media types;
+	Get request predicate;
+	Get path;
+	Check if request predicate factory has selector;
+	Slash name;
+	Get consumes;
+	Produces discovered operation method;
+	Check if request predicate factory produces resource;
+	Check if request predicate factory consumes request body;
+	Determine http method
+
+12.5. Add an object creator class for web endpoint discoverer. It allows to:
+
+	Instantiate web endpoint discoverer  with application context, parameter value mapper, endpoint media types, endpoint path mappers list, invoker advisors collection, filters collection and filters collection;
+	Create endpoint;
+	Create operation;
+	Create operation key
+
+13. Changes to package org.springframework.boot.actuate.health:  
+
+13. Changes to package sample.actuator.customsecurity:  
+

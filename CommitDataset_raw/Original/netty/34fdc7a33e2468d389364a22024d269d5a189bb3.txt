@@ -1,0 +1,25 @@
+Skip invalid hostnames when construct default dns servers to use.
+
+Motivation:
+
+When the hostname portion can not be extracted we should just skip the server as otherwise we will produce and exception when trying to create the InetSocketAddress.
+
+This was happing when trying to run the test-suite on a system and using java7:
+
+java.lang.IllegalArgumentException: hostname can't be null
+	at java.net.InetSocketAddress.checkHost(InetSocketAddress.java:149)
+	at java.net.InetSocketAddress.<init>(InetSocketAddress.java:216)
+	at io.netty.util.internal.SocketUtils$10.run(SocketUtils.java:171)
+	at io.netty.util.internal.SocketUtils$10.run(SocketUtils.java:168)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at io.netty.util.internal.SocketUtils.socketAddress(SocketUtils.java:168)
+	at io.netty.resolver.dns.DefaultDnsServerAddressStreamProvider.<clinit>(DefaultDnsServerAddressStreamProvider.java:74)
+	at io.netty.resolver.dns.DnsServerAddressesTest.testDefaultAddresses(DnsServerAddressesTest.java:39)
+
+Modifications:
+
+Skip if hostname can not be extracted.
+
+Result:
+
+No more java.lang.ExceptionInInitializerError.

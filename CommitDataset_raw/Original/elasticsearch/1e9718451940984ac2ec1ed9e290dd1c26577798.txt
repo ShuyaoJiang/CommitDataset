@@ -1,0 +1,6 @@
+Automatically close releasables after test (#24687)
+
+This moves the releasing logic to the base test, so that individual test cases don't need
+to worry about releasing the aggregators.  It's not a big deal for individual aggs,
+but once tests start using sub-aggs, it can become tricky to free (without double-freeing)
+all the aggregators.

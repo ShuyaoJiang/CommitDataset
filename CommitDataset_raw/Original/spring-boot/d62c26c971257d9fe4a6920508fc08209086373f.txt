@@ -1,0 +1,26 @@
+Ensure that preinitialization has completed before run returns
+
+Previously, background preinitialization was started in response to
+an ApplicationEnvironmentPreparedEvent and would complete at an
+undetermined time later. This opened a window where SpringApplication
+run could return and background preinitialization could still be
+in progress. If, within this window, something attempted to configure
+the logging system, an IO failure could occur as logging on the
+background preinitialization thread would attempt to use resources
+that had been closed.
+
+This commit updates BackgroundPreinitializer so that it waits for
+preinitialization to have completed when it receives an application
+ready or application failed event. This prevents SpringApplication
+run from returning while preinitialization is still in progress,
+closing the window described above.
+
+With info level logging enabled it appears that background
+preinitialization consistently completes before the application ready
+event is published. As a result, waiting should have no adverse effect
+on performance in normal circumstances. With logging configured such
+that background preinitialization outputs a large volume of log
+messages (enabling trace logging for the root logger, for example), it
+will be slowed down sufficiently for waiting to be necessary.
+
+Closes gh-5669

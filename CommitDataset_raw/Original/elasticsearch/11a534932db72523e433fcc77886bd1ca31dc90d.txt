@@ -1,0 +1,7 @@
+Simplify Translog#closeOnTragicEvent (#29413)
+
+This commit simplifies the invocations to
+Translog#closeOnTragicEvent. This method already catches all possible
+exceptions and suppresses the non-AlreadyClosedExceptions into the
+exception that triggered the invocation. Therefore, there is no need for
+callers to do this same logic (which would never execute).

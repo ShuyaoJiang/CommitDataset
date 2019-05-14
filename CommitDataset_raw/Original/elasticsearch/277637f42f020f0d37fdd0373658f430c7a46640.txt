@@ -1,0 +1,10 @@
+Do not set SO_LINGER on server channels (#26997)
+
+Right now we are attempting to set SO_LINGER to 0 on server channels
+when we are stopping the tcp transport. This is not a supported socket
+option and throws an exception. This also prevents the channels from
+being closed.
+
+This commit 1. doesn't set SO_LINGER for server channges, 2. checks
+that it is a supported option in nio, and 3. changes the log message
+to warn for server channel close exceptions.

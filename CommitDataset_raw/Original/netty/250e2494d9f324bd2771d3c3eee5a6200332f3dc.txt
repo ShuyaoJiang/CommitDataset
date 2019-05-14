@@ -1,0 +1,14 @@
+Only call handlerRemoved(...) if handlerAdded(...) was called during adding the handler to the pipeline. (#8684)
+
+Motivation:
+
+Due a race in DefaultChannelPipeline / AbstractChannelHandlerContext it was possible to have only handlerRemoved(...) called during tearing down the pipeline, even when handlerAdded(...) was never called. We need to ensure we either call both of none to guarantee a proper lifecycle of the handler.
+
+Modifications:
+
+- Enforce handlerAdded(...) / handlerRemoved(...) semantics / ordering
+- Add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8676 / https://github.com/netty/netty/issues/6536 .

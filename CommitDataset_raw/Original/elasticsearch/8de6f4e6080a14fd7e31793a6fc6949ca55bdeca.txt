@@ -1,0 +1,10 @@
+Fix secure repository-hdfs tests on JDK 9
+
+The secure repository-hdfs tests fail on JDK 9 because some Hadoop code
+reaches into sun.security.krb5. This commit adds the necessary flags to
+open the java.security.jgss module. Note that these flags are actually
+needed at runtime as well when using secure repository-hdfs. For now we
+will punt on how best to help users obtain this when running on JDK 9
+with this plugin.
+
+Relates #25205

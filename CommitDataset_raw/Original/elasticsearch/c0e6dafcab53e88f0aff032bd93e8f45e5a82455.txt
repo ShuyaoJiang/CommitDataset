@@ -1,0 +1,3 @@
+CombinedDeletionPolicy can't assert it has no commits when creating an index
+
+This is an appealing assertion, but there scenarios where it can happen under normal operations. For example, when an index is created it may run into an exception when the lucene files have already been created. The master will try to assign the shard to another node (it's empty, so no need to look for data) but if there is no other node, it will reassign it to the same node. At that point the deletion will get a list of existing commits (which it will typically delete).

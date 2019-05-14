@@ -1,0 +1,8 @@
+Delay instantiation of DataSource as late as possible
+
+Unfortunately it still has to happen in a @PostConstruct (otherwise
+JPA never sees the schema in time), but we can delay a bit by not
+using @Autowired. Appears to fix the Spring Cloud problem
+(https://github.com/spring-cloud/spring-cloud-config/issues/105).
+
+Fixes gh-2658

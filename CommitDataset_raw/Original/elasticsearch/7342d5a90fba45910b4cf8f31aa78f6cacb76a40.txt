@@ -1,0 +1,20 @@
+Address some CCR REST test case flakiness (#38975)
+
+The CCR REST tests that rely on these assertions are flaky. They are
+flaky since the introduction of recovery from the remote.
+
+The underlying problem is this: these tests are making assertions about
+the number of operations read by the shard following task. However, with
+recovery from remote, we no longer have guarantees that the assumptions
+these tests were relying on hold. Namely, these tests were assuming that
+the only way that a document could land in the follower index is via the
+shard following task. With recovery from remote, there is another way,
+which is via the files that are copied over during the recovery
+phase. Most of the time this will not be a problem because with the
+small number of documents that we are indexing in these tests, it is
+usally not the case that a flush would occur and so there would not be
+any documents in the files copied over. However, a flush can occur any
+time at which point all of the indexed documents could end up in a safe
+commit and copied over during recovery from remote. This commit modifies
+these assertions to ones that are not prone to this issue, yet still
+validate the health of the follower shard.

@@ -1,0 +1,9 @@
+Wrap Dockerfile yum operations in retries (#40349)
+
+While yum does retry retrieving files 10 times by default [1], slow
+network fetches, governed by `minrate` cause immediate aborts without
+getting retried.
+
+Wrap yum commands in a 10 iteration retry loop.
+
+[1] http://man7.org/linux/man-pages/man5/yum.conf.5.html

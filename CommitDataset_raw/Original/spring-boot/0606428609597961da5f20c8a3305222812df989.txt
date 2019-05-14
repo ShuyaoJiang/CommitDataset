@@ -1,0 +1,11 @@
+Allow default profile to also be set in properties
+
+Update `ConfigFileApplicationListener` so that active profiles set in
+properties files that overlap with `spring.profiles.default` can still
+be set.
+
+Prior to this commit if `spring.profiles.active` happened to specify
+a profile name that was also in `spring.profiles.default` it would
+not get applied.
+
+Fixes gh-6833

@@ -1,0 +1,5 @@
+Fix TrampolineScheduler NullPointerException
+
+I tried for about 30 minutes to replicate the NPE reported in https://github.com/ReactiveX/RxJava/issues/1702 but couldn't.
+It makes sense reading the code that an unsubscribe could trigger an NPE though so I'm fixing it as per recommendation of @DylanSale even though I can't replicate.
+I confirmed that the items are being put in the queue BEFORE the wip variable is incremented, so that concurrency seems okay.

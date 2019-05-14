@@ -1,0 +1,12 @@
+Treat Maven artifacts with bundle packaging as jars
+
+Previously, LocalM2Resource used the pom's packaging configuration to
+determine the suffix of the file that it should look for, e.g. if
+the pom's packaging was jar, it would look for a file with a .jar
+suffix in artifactExists(). This logic fails for artifacts with bundle
+packaging as it would look for a .bundle file rather than a .jar file,
+fail to find the file, and incorrectly report that the artifact does not
+exist.
+
+This commit updates LocalM2Resource to look for a file with a .jar
+suffix when the packaging configuration in the pom is bundle.

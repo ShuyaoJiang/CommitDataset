@@ -1,0 +1,10 @@
+Allow word_delimiter_graph_filter to not adjust internal offsets (#36699)
+
+This commit adds an adjust_offsets parameter to the word_delimiter_graph token filter, defaulting
+to true. Most of the time you'd want sub-tokens emitted by this filter to have offsets that are
+adjusted to their real position in the token stream; however, some token filters can change the 
+length or starting position of a token (eg trim) without changing their offset attributes, and this 
+can lead to word_delimiter_graph emitting illegal offsets. Setting adjust_offsets to false in these 
+cases will allow indexing again.
+
+Fixes #34741, #33710

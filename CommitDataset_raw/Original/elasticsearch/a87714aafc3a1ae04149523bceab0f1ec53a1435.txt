@@ -1,0 +1,17 @@
+Settings: Introduce settings updater for a list of settings (#28338)
+
+This introduces a settings updater that allows to specify a list of
+settings. Whenever one of those settings changes, the whole block of
+settings is passed to the consumer.
+
+This also fixes an issue with affix settings, when used in combination
+with group settings, which could result in no found settings when used
+to get a setting for a namespace.
+
+Lastly logging has been slightly changed, so that filtered settings now
+only log the setting key.
+
+Another bug has been fixed for the mock log appender, which did not
+work, when checking for the exact message.
+
+Closes #28047

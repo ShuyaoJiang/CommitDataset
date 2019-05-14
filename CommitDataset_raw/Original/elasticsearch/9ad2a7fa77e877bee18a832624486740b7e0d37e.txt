@@ -1,0 +1,28 @@
+Fix expected next step being incorrect when executing async action (#34313)
+
+This fixes an issue where an incorrect expected next step is used when checking
+to execute `AsyncActionStep`s after a cluster state step.
+
+It fixes this scenario:
+
+- `ExecuteStepsUpdateTask` executes a `ClusterStateWaitStep` or
+  `ClusterStateActionStep` successfully
+- The next step is also a `ClusterStateWaitStep`, so it loops
+- The `ClusterStateWaitStep` has a next stepkey (which gets set to the
+  `nextStepKey` in the code)
+- The `ClusterStateWaitStep` fails the condition, meaning that it will have to
+  wait longer
+- The `nextStepKey` is now incorrect though, because we did not advance the
+  index's step, and it's not `null` (which is another safe value if there is no
+  step after the `ClusterStateWaitStep`)
+
+This fixes the problem by resetting the nextStepKey to null if the condition is
+not met, since we are not going to advance the step metadata in this
+case (thereby skipping the `maybeRunAsyncAction` invocation).
+
+This commit also tightens up and enhances much of the ILM logging. A lot of
+logging was missing the index name (making it hard to debug in the presence of
+multiple indices) and a lot was using the wrong logging level (DEBUG is now
+actually readable without being a wall of text).
+
+Resolves #34297

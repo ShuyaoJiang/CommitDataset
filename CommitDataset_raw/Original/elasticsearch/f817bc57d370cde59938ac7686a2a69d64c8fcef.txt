@@ -1,0 +1,15 @@
+[Security] Multi Index Expression alias wildcard exclusion (#34144)
+
+The Security plugin authorizes actions on indices. Authorization
+happens on a per index/alias basis. Therefore a request with a
+Multi Index Expression (containing wildcards) has to be
+first evaluated in the authorization layer, before the request is
+handled. For authorization purposes, wildcards in expressions will
+only be expanded to indices/aliases that are visible by the authenticated
+user. However, this "constrained" evaluation has to be compatible with
+the expression evaluation that a cluster without the Security plugin
+would do. Therefore any change in the evaluation logic
+in any of these sites has to be mirrored in the other site.
+
+This commit mirrors the changes in core from #33518 that allowed
+for Multi Index Expression in the Get Alias API, loosely speaking.

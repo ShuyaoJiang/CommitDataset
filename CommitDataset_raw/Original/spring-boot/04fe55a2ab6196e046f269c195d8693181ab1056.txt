@@ -1,0 +1,11 @@
+Improve portability by using type instead of which in the launch script
+
+Previously, the launch script used which to determine the availability
+of start-stop-daemon. which isn’t available by default on all OSs.
+For example, it’s not available by default on CentOS 5.
+
+This commit updates the launch script to use type when determining if
+start-stop-daemon is available. This improves the portability of the
+script and makes the use of type consistent throughout the script.
+
+Closes gh-4925

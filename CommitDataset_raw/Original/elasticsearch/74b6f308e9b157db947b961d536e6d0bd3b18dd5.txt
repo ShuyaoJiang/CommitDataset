@@ -1,0 +1,11 @@
+SQL: Fix issue with complex expression as args of PERCENTILE/_RANK (#37102)
+
+When the arguements of PERCENTILE and PERCENTILE_RANK can be folded,
+the `ConstantFolding` rule kicks in and calls the `replaceChildren()`
+method on `InnerAggregate` which is created from the aggregation rules
+of the `Optimizerz. `InnerAggregate` in turn, cannot implement the method
+as the logic of creating a new `InnerAggregate` instance from a list of
+`Expression`s resides in the Optimizer. So, instead, `ConstantFolding`
+should be applied before any of the aggregations related rules.
+
+Fixes: #37099

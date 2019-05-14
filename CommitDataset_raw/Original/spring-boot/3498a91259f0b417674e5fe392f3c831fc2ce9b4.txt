@@ -1,0 +1,12 @@
+Close Database to reset Connection's auto commit property
+
+Previously, LiquibaseEndpoint closed the JdbcConnection but did not
+close the Database. When using a connection pool, this could leave the
+underlying SQL Connection with its auto commit property set to false.
+
+This commit updates LiquibaseEndpoint to close the Database. This
+ensures that it resets that Connection's auto commit property to the
+value that it had when the Database was configured to use the
+Connection.
+
+See gh-13559

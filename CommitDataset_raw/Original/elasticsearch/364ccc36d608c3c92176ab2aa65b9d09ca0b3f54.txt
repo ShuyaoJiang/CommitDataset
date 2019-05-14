@@ -1,0 +1,7 @@
+Fix global checkpoint listeners test
+
+This commit fixes a global checkpoint listeners test wherein we were
+expecting an executor to have been used even if there were no
+listeners. This is silliness, so this commit adjusts the assertion to
+verify that the executor never fires if there are no listeners, and
+fires exactly once if there is one or more listeners.

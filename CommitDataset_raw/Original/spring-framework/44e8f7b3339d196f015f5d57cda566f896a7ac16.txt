@@ -1,0 +1,9 @@
+Revert "Support {/var} syntax in UriComponentsBuilder"
+
+This reverts commit a57d42829ccd680b49faac18cb75bb3852554539 after the
+realization of a weaknesses with the proposed approach.
+
+For example if a path segment contains both a /-prefixed and a regular
+URI variable, there is no way to split that into a sequence of path
+and path segments. The solution will have to be on the side of
+UriComponents at the time of encoding.

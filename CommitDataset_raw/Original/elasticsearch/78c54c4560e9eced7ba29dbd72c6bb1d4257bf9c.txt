@@ -1,0 +1,50 @@
+Balance shards for an index more evenly across multiple data paths (#26654)
+
+* Balance shards for an index more evenly across multiple data paths
+
+When a node has multiple data paths configured, and is assigned all of the
+shards for a particular index, it's possible now that all shards will be
+assigned to the same path (see #16763).
+
+This change keeps the same behavior around determining the "best" path for a
+shard based on space, however, it enforces limits for the number of shards on a
+path for an index from the single-node perspective. For example:
+
+Assume you had a node with 4 data paths, where `/path1` has a tremendously high
+amount of disk space available compared to the other paths. If you create an
+index with 5 primary shards, the previous behavior would be to assign all 5
+shards to `/path1`.
+
+This change would enforce a limit of 2 shards to each data path for that
+particular node, so you would end up with the following distribution:
+
+- `/path1` - 2 shards (because it has the most usable space)
+- `/path2` - 1 shard
+- `/path3` - 1 shard
+- `/path4` - 1 shard
+
+Note, however, that this limit is only enforced at the local node level for
+simplicity in implementation, so if you had multiple nodes, the "limit" for the
+node is still 2, so assuming you had enough nodes that there was only 2 shards
+for this index assigned to this node, they would still both be assigned to
+`/path1`.
+
+* Switch from ObjectLongHashMap to regular HashMap
+
+* Remove unneeded Files.isDirectory check
+
+* Skip iterating directories when not necessary
+
+* Add message to assert
+
+* Implement different (better) ranking for node paths
+
+This is the method we discussed
+
+* Remove unused pathHasEnoughSpace method
+
+* Use findFirst instead of .get(0);
+
+* Update for master merge to fix compilation
+
+Settings.putArray -> Settings.putList

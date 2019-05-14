@@ -1,0 +1,7 @@
+Painless: Fix Bug with Duplicate PainlessClasses (#32110)
+
+When building the PainlessMethods and PainlessFields they stored a reference to a 
+PainlessClass. This reference was prior to "freezing" the PainlessClass so the data was 
+both incomplete and mutable. This has been replaced with a target java class instead 
+since the PainlessClass is accessible through a java class now and it requires no special 
+modifications to get around a chicken and egg issue.

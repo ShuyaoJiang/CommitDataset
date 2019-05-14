@@ -1,0 +1,9 @@
+Die with dignity while merging
+
+If an out of memory error is thrown while merging, today we quietly
+rewrap it into a merge exception and the out of memory error is
+lost. Instead, we need to rethrow out of memory errors, and in fact any
+fatal error here, and let those go uncaught so that the node is torn
+down. This commit causes this to be the case.
+
+Relates #27265

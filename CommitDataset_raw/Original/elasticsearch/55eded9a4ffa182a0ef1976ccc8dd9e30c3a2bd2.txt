@@ -1,0 +1,10 @@
+More lenient socket binding in LDAP tests (#39864)
+
+The LDAP tests attempt to bind all interfaces,
+but if for some reason an interface can't be bound
+the tests will stall until the suite times out.
+
+This modifies the tests to be a bit more lenient and allow
+some binding to fail so long as at least one succeeds.
+This allows the test to continue even in more antagonistic
+environments.

@@ -1,0 +1,14 @@
+SQL: Fix issue with wrong NULL optimization (#37124)
+
+Logical operators OR and AND as well as conditional functions
+(COALESCE, LEAST, GREATEST, etc.) cannot be folded to NULL if one
+of their children is NULL as is the case for most of the functions.
+Therefore, their nullable() implementation cannot return true. On
+the other hand they cannot return false as if they're wrapped within
+an IS NULL or IS NOT NULL expression, the expression will be folded
+to false and true respectively leading to wrong results.
+
+Change the signature of nullable() method and add a third value UKNOWN
+to handle these cases.
+
+Fixes: #35872

@@ -1,0 +1,12 @@
+Relax enforcement of UTF-8 and use the body charset for decoding.
+
+Consumers wanting well-behaved endponts should override or add to their `toBody` charset enforcement:
+
+```java
+String charset = Utils.parseCharset(body.mimeType());
+if (!"UTF-8".equalsIgnoreCase(charset)) {
+  throw new ConversionException("Invalid charset " + charset + ". Must be UTF-8");
+}
+```
+
+Closes #163.

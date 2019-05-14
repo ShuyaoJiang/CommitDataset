@@ -1,0 +1,12 @@
+Core: Drop settings member from AbstractComponent (#35083)
+
+Drops the `Settings` member from `AbstractComponent`, moving it from the
+base class on to the classes that use it. For the most part this is a
+mechanical change that doesn't drop `Settings` accesses. The one
+exception to this is naming threads where it switches from an invocation
+that passes `Settings` and extracts the node name to one that explicitly
+passes the node name.
+
+This change doesn't drop the `Settings` argument from
+`AbstractComponent`'s ctor because this change is big enough as is.
+We'll do that in a follow up change.

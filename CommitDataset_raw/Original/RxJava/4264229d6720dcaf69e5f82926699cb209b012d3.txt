@@ -1,0 +1,3 @@
+Correct synchronization guard in groupByUntil
+
+Can't see how `synchronized (key) { ... }` could have been correct here; `key` will hardly ever be the same instance for different invocations of `keySelector`, and the comment on line 73 clearly states `gate` to be the guard for `map`.

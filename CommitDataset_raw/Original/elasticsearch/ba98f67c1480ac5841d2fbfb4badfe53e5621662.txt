@@ -1,0 +1,5 @@
+Only create final MatrixStatsResults on final reduction (#38130)
+
+MatrixStatsResults is the "final" result object, and runs an additional
+computation in it's ctor to calculate covariance, etc.  This means
+it should only run on the final reduction instead of on every reduce.

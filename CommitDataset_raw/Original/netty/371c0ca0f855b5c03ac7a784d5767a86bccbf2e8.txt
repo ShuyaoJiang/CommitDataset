@@ -1,0 +1,14 @@
+Eliminate unnessary wrapping when call ByteBuf.asReadOnly() in some cases
+
+Motivation:
+
+We can eliminate unnessary wrapping when call ByteBuf.asReadOnly() in some cases to reduce indirection.
+
+Modifications:
+
+- Check if asReadOnly() needs to create a new instance or not
+- Add test cases
+
+Result:
+
+Less object creation / wrapping.

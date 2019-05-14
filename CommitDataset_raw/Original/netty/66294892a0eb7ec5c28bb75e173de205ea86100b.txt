@@ -1,0 +1,13 @@
+CompositeByteBuf.nioBuffers(...) must not return an empty ByteBuffer array
+
+Motivation:
+
+CompositeByteBuf.nioBuffers(...) returns an empty ByteBuffer array if the specified length is 0. This is not consistent with other ByteBuf implementations which return an ByteBuffer array of size 1 with an empty ByteBuffer included.
+
+Modifications:
+
+Make CompositeByteBuf.nioBuffers(...) consistent with other ByteBuf implementations.
+
+Result:
+
+Consistent and correct behaviour of nioBufffers(...)

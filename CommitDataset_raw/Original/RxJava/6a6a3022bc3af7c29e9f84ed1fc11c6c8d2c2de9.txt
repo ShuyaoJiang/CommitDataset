@@ -1,0 +1,5 @@
+Remove explicit StackOverflow check as its a VirtualMachineError. (#4391)
+
+Looks like [the linked comment][1] was misinterpreted (but not in a way that affected the implementation) as Scala considered StackOverflowError as non-fatal but RxJava always considered it fatal. As such, its explicit check was redundant.
+
+ [1]: https://github.com/ReactiveX/RxJava/issues/748#issuecomment-32471495

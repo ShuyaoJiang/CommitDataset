@@ -1,0 +1,7 @@
+Remove freeInboundBuffer() and freeOutboundBuffer() which has no value
+
+- Fixes #1308
+
+freeInboundBuffer() and freeOutboundBuffer() were introduced in the early days of the new API when we did not have reference counting mechanism in the buffer. A user did not want Netty to free the handler buffers had to override these methods.
+
+However, now that we have reference counting mechanism built into the buffer, a user who wants to retain the buffers beyond handler's life cycle can simply return the buffer whose reference count is greater than 1 in newInbound/OutboundBuffer().

@@ -1,0 +1,10 @@
+Correct usages of internalNioBuffer
+
+Motivation:
+There are numerous usages of internalNioBuffer which hard code 0 for the index when the intention was to use the readerIndex().
+
+Modifications:
+- Remove hard coded 0 for the index and use readerIndex()
+
+Result:
+We are less susceptible to using the wrong index, and don't make assumptions about the ByteBufAllocator.

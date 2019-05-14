@@ -1,0 +1,13 @@
+Correctly handle user home directory with spaces when construct javaagent argument
+
+Motivation:
+
+When the user home and so the path to the local maven repository contains spaces it currently fails to run the tests (at least on windows).
+
+Modifications:
+
+Put double quotes around the ${settings.localRepository}
+
+Result:
+
+Be able to run build and tests even when user home path has spaces in it.

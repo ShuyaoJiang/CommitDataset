@@ -1,0 +1,177 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package org.springframework.web.socket.sockjs:  
+
+1. Changes to package org.springframework.web.socket.sockjs.transport:  
+
+1.1. Add an interface declaration  for transport handler. It allows to:
+
+	Initialize sock js service config;
+	Get transport type;
+	Check session type;
+	Handle request
+
+1.2. Rename type TransportTypeTests with TransportTypeTests
+
+2. Changes to package org.springframework.web.socket.sockjs.transport.handler:  
+
+2.1. Add a class for abstract http receiving transport handler. It allows to:
+
+	Check session type;
+	Handle request;
+	Handle request internal;
+	Handle read error;
+	Read messages;
+	Get response status
+
+2.2. Add a class for abstract http sending transport handler. It allows to:
+
+	Handle request;
+	Handle request internal;
+	Get content type;
+	Get frame format;
+	Get callback param
+
+2.3. Add a class for default sock js service. It allows to:
+
+	Instantiate default sock js service  with task scheduler;
+	Instantiate default sock js service  with task scheduler, handler and handler;
+	Instantiate default sock js service  with task scheduler, handler overrides collection and handler overrides collection;
+	Get default transport handlers;
+	Set servlet context
+
+2.4. Add a class for http receiving transport handler tests. It allows to:
+
+	Read messages xhr;
+	Read messages bad content;
+	Read messages no session;
+	Delegate message exception;
+	Handle request;
+	Handle request and expect failure
+
+2.5. Add a class for http sending transport handler tests. It allows to:
+
+	Handle setup;
+	Handle request xhr;
+	Handle request xhr streaming;
+	Handle html file transport;
+	Handle event source transport;
+	Frame formats
+
+2.6. Add a class for sock js web socket handler. It allows to:
+
+	Instantiate sock js web socket handler  with sock js service config, web socket handler, web socket server sock js session and web socket server sock js session;
+	Get sub protocols;
+	Get sock js config;
+	Handle after connection established;
+	Handle text message;
+	Handle after connection closed;
+	Handle transport error
+
+2.7. Add a class for web socket transport handler. It allows to:
+
+	Instantiate web socket transport handler  with handshake handler;
+	Get transport type;
+	Get handshake handler;
+	Set servlet context;
+	Start web socket transport handler;
+	Stop web socket transport handler;
+	Check if web socket transport handler is running;
+	Check session type;
+	Create session;
+	Handle request;
+	Do handshake
+
+2.8. Add a class for xhr polling transport handler. It allows to:
+
+	Get transport type;
+	Get content type;
+	Get frame format;
+	Check session type;
+	Create session
+
+3. Changes to package org.springframework.web.socket.sockjs.transport.session:  
+
+3.1. Add a class for abstract http sock js session. It allows to:
+
+	Instantiate abstract http sock js session  with sock js service config, ws handler, attributes map and attributes map;
+	Get uri;
+	Get handshake headers;
+	Get principal;
+	Get local address;
+	Get remote address;
+	Set accepted protocol;
+	Get accepted protocol;
+	Get message cache;
+	Check if abstract http sock js session is active;
+	Set text message size limit;
+	Get text message size limit;
+	Set binary message size limit;
+	Get binary message size limit;
+	Get extensions;
+	Handle initial request;
+	Handle successive request;
+	Disable shallow etag header filter;
+	Handle request internal;
+	Send message internal;
+	Handle flush cache;
+	Disconnect close status;
+	Reset request;
+	Write frame internal
+
+3.2. Rename type AbstractSockJsSessionTests with AbstractSockJsSessionTests
+
+3.3. Add a class for polling sock js session. It allows to:
+
+	Instantiate polling sock js session  with sock js service config, ws handler, attributes map and attributes map;
+	Handle request internal;
+	Handle flush cache;
+	Write frame
+
+3.4. Add a class for streaming sock js session. It allows to:
+
+	Instantiate streaming sock js session  with sock js service config, ws handler, attributes map and attributes map;
+	Get prelude;
+	Handle request internal;
+	Handle flush cache
+
+3.5. Add a class for stub sock js service config. It allows to:
+
+	Get stream bytes limit;
+	Set stream bytes limit;
+	Get heartbeat time;
+	Set heartbeat time;
+	Get task scheduler;
+	Set task scheduler;
+	Get message codec;
+	Set message codec;
+	Get http message cache size;
+	Set http message cache size
+
+3.6. Rename type TestSockJsSession with TestSockJsSession
+
+3.7. Add a class for web socket server sock js session. It allows to:
+
+	Instantiate web socket server sock js session  with sock js service config, web socket handler, attributes map and attributes map;
+	Get uri;
+	Get handshake headers;
+	Get principal;
+	Get local address;
+	Get remote address;
+	Get accepted protocol;
+	Set text message size limit;
+	Get text message size limit;
+	Set binary message size limit;
+	Get binary message size limit;
+	Get extensions;
+	Get native session;
+	Initialize delegate session;
+	Check if web socket server sock js session is active;
+	Handle message;
+	Send message internal;
+	Write frame internal;
+	Disconnect close status
+

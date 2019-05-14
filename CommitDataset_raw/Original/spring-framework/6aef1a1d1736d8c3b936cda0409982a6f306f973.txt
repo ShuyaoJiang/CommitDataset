@@ -1,0 +1,11 @@
+Fix ResourceUrlProvider path check in getForRequestUrl
+
+Prior to this change, getForRequestUrl implementation would only work
+for applications with a non-empty servlet path. So web applications
+mapped to "/" would trigger a IllegalStateException while checking the
+current request against the request path within the current mapping.
+
+This change relaxes this and only check that the path within mapping is
+within the request URL.
+
+Issue: SPR-12158

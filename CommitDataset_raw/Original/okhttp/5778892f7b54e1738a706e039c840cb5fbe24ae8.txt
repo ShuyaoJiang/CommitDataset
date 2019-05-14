@@ -1,0 +1,7 @@
+Don't explode if removing an absent file fails.
+
+We still got the desired result: the file is gone. This bug has existed in
+OkHttp's DiskLruCache for a long time, but it was masked by the fact that
+our cleanup callable was being run with a Future, and we never asked that
+Future whether it succeeded or failed. When we changed to call execute(),
+the problem became unmasked.

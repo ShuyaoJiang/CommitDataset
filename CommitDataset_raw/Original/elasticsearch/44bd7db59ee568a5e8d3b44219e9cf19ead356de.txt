@@ -1,0 +1,10 @@
+[TEST] Pass a clientSSLContext in LdapTestCase
+
+If we don't explicitly sett the client SSLSocketFactory when
+creating an InMemoryDirectoryServer and setting its SSL config, it
+will result in using a TrustAllTrustManager(that extends
+X509TrustManager) which is not allowed in a FIPS 140 JVM.
+Instead, we get the SSLSocketFactory from the existing SSLContext
+and pass that to be used.
+
+Resolves #37013

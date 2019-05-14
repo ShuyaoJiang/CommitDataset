@@ -1,0 +1,13 @@
+Small performance improvements
+
+Modifications:
+
+- Added a static modifier for CompositeByteBuf.Component.
+This class is an inner class, but does not use its embedded reference to the object which created it. This reference makes the instances of the class larger, and may keep the reference to the creator object alive longer than necessary.
+- Removed unnecessary boxing/unboxing operations in HttpResponseDecoder, RtspResponseDecoder, PerMessageDeflateClientExtensionHandshaker and PerMessageDeflateServerExtensionHandshaker
+A boxed primitive is created from a String, just to extract the unboxed primitive value.
+- Removed unnecessary 3 times calculations in DiskAttribute.addContent(...).
+- Removed unnecessary checks if file exists before call mkdirs() in NativeLibraryLoader and PlatformDependent.
+Because the method mkdirs() has this check inside.
+- Removed unnecessary `instanceof AsciiString` check in StompSubframeAggregator.contentLength(StompHeadersSubframe) and StompSubframeDecoder.getContentLength(StompHeaders, long).
+Because StompHeaders.get(CharSequence) always returns java.lang.String.

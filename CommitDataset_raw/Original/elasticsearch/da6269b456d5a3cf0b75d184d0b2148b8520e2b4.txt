@@ -1,0 +1,19 @@
+RestoreService should update primary terms when restoring shards of existing indices (#38177)
+
+When restoring shards of existing indices, the RestoreService also 
+restores the values of primary terms stored in the snapshot index 
+metadata. The primary terms are not updated and could potentially 
+conflict with current index primary terms if the restored primary terms 
+are lower than the existing ones.
+
+This situation is likely to happen with replicated closed indices 
+(because primary terms are increased when the index is transitioning 
+from open to closed state, and the snapshotted primary terms are the
+ one at the time the index was opened) (see #38024) and maybe also 
+with CCR.
+
+This commit changes the RestoreService so that it updates the primary 
+terms using the maximum value between the snapshotted values and 
+the existing values.
+
+Related to #33888

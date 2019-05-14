@@ -1,0 +1,19 @@
+Add support for providing absolute start time to SearchRequest (#37142)
+
+We have recently added support for providing a local cluster alias to a
+SearchRequest through a package protected constructor. When executing
+cross-cluster search requests with local reduction on each cluster, the
+CCS coordinating node will have to provide such cluster alias to each
+remote cluster, as well as the absolute start time of the search action
+in milliseconds from the time epoch, to be used when evaluating date
+math expressions both while executing queries / scripts as well as when
+resolving index names.
+
+This commit adds support for providing the start time together with the
+cluster alias. It is a final member in the search request, which will
+only be set when using cross-cluster search with local reduction (also
+known as alternate execution mode). When not provided, the coordinating
+node will determine the current time and pass it through (by calling
+`System.currentTimeMillis`).
+
+Relates to #32125

@@ -1,0 +1,20 @@
+Introduce LocaleContextResolver in WebFlux
+
+This commit introduces LocaleContextResolver interface, which is used
+at ServerWebExchange level to resolve Locale, TimeZone and other i18n
+related informations.
+
+It follows Spring MVC locale resolution patterns with a few differences:
+ - Only LocaleContextResolver is supported since LocaleResolver is less
+   flexible
+ - Support is implemented in the org.springframework.web.server.i18n
+   package of spring-web module rather than in spring-webflux in order
+   to be able to leverage it at ServerWebExchange level
+
+2 implementations are provided:
+ - FixedLocaleContextResolver
+ - AcceptHeaderLocaleContextResolver
+
+It can be configured with both functional or annotation-based APIs.
+
+Issue: SPR-15036

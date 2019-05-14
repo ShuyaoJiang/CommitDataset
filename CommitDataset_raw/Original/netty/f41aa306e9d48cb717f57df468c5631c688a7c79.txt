@@ -1,0 +1,13 @@
+Remove multiple calls to recordLeakNonRefCountingOperation() in AdvancedLeakAwareByteBuf.forEachByteDesc
+
+Motivation:
+
+AdvancedLeakAwareByteBuf.forEachByteDesc(...) called recordLeakNonRefCountingOperation() two times which resulted in incorrect leak detection reports.
+
+Modifications:
+
+Remove duplicated call to recordLeakNonRefCountingOperation()
+
+Result:
+
+Correct leak detection results

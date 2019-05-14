@@ -1,0 +1,5 @@
+Network: Remove http.enabled setting (#29601)
+
+This commit removes the http.enabled setting. While all real nodes (started with bin/elasticsearch) will always have an http binding, there are many tests that rely on the quickness of not actually needing to bind to 2 ports. For this case, the MockHttpTransport.TestPlugin provides a dummy http transport implementation which is used by default in ESIntegTestCase.
+
+closes #12792

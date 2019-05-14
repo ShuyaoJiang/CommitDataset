@@ -1,0 +1,11 @@
+Fix issue in ContentNeogitatingViewResolver
+
+The following commit in 3.2.3 had a side effect on CNVR:
+https://github.com/SpringSource/spring-framework/commit/aaded7e30b06cc70a354856a2288acd04045b673
+
+It appears that CNVR doesn't treat a request for "*/*" differently
+from a request that does not request content types. Both should be
+interpreted as "any content type is acceptable". This fix ensures
+that CNVR treats these two cases the same way.
+
+Issue: SPR-10683

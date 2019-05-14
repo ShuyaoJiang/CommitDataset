@@ -1,0 +1,10 @@
+Http2FrameCodec WindowUpdate bug
+
+Motivation:
+Http2FrameCodec increases the initialWindowSize when the user attempts to increase the connection flow control window. The initialWindowSize should only be touched as a result of a SETTINGS frame, and otherwise may result in flow control getting out of sync with our peer.
+
+Modifications:
+- Http2FrameCodec shouldn't update the initialWindowSize when a WindowUpdateFrame is written on the connection channel
+
+Result:
+More correct WindowUpdate processing.

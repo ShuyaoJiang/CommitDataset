@@ -1,0 +1,11 @@
+Stabilize Flux.interval emissions in integration tests
+
+After this commit the use of interval in tests is combined with
+take(n).onBackpressureBuffer(n) to ensure emissions don't fail if the
+fixed rate is exceeded (e.g. on slow CI server).
+
+Tests that verify N number of items followed by verifyOnComplete()
+should set the number of emissions to N.
+
+Tests that verify N number of items followed by thenCancel() should
+set the number of buffered to an arbitrary number greater than N.

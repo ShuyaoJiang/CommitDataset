@@ -1,0 +1,16 @@
+Created RTSPEncoder and RTSPDecoder which are now common for both requests and responses to be able to handle both types of messages on the same channel.
+
+Keep RTSPRequestEncoder, RTSPRequestDecoder, RTSPResponseEncoder and
+RTSPResponseDecoder for backwards compatibility but they now just extends
+the generic encoder/decoder and are markes as deprecated.
+
+Renamed the decoder test, because the decoder is now generic. Added
+testcase for when ANNOUNCE request is received from server.
+
+Created testcases for encoder.
+
+Mark abstract base classes RTSPObjectEncoder and RTSPObjectDecoder as
+deprecated, that functionality is now in RTSPEncoder and RTSPDecoder.
+
+Added annotation in RtspHeaders to suppress warnings about deprecation, no need when
+whole class is deprecated.

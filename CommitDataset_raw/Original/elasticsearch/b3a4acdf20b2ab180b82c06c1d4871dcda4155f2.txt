@@ -1,0 +1,15 @@
+Limit user to single concurrent auth per realm (#30794)
+
+This commit reworks the way our realms perform caching in order to
+limit each principal to a single ongoing authentication per realm. In
+other words, this means that multiple requests made by the same user
+will not trigger more that one authentication attempt at a time if no
+entry has been stored in the cache. If an entry is present in our
+cache, there is no restriction on the number of concurrent
+authentications performed for this user.
+
+This change enables us to limit the load we place on an external system
+like an LDAP server and also preserve resources such as CPU on
+expensive operations such as BCrypt authentication.
+
+Closes #30355

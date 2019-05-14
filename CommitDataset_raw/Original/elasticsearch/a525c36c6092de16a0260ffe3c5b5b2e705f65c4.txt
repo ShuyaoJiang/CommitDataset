@@ -1,0 +1,26 @@
+[Kerberos] Add Kerberos authentication support (#32263)
+
+This commit adds support for Kerberos authentication with a platinum
+license. Kerberos authentication support relies on SPNEGO, which is
+triggered by challenging clients with a 401 response with the
+`WWW-Authenticate: Negotiate` header. A SPNEGO client will then provide
+a Kerberos ticket in the `Authorization` header. The tickets are
+validated using Java's built-in GSS support. The JVM uses a vm wide
+configuration for Kerberos, so there can be only one Kerberos realm.
+This is enforced by a bootstrap check that also enforces the existence
+of the keytab file.
+
+In many cases a fallback authentication mechanism is needed when SPNEGO
+authentication is not available. In order to support this, the
+DefaultAuthenticationFailureHandler now takes a list of failure response
+headers. For example, one realm can provide a
+`WWW-Authenticate: Negotiate` header as its default and another could
+provide `WWW-Authenticate: Basic` to indicate to the client that basic
+authentication can be used in place of SPNEGO.
+
+In order to test Kerberos, unit tests are run against an in-memory KDC
+that is backed by an in-memory ldap server. A QA project has also been
+added to test against an actual KDC, which is provided by the krb5kdc
+fixture.
+
+Closes #30243

@@ -1,0 +1,11 @@
+Reduce flakiness and document reasons for flakiness
+
+Android has been receiving reports of some tests being flaky
+on what are probably lower-spec devices.
+
+This introduces delays into tests where sockets are being
+poisoned after the entire response body has been written to
+them *and* where there are follow-up requests.
+
+This change also improves the documentation for the problematic
+SocketPolicy values.

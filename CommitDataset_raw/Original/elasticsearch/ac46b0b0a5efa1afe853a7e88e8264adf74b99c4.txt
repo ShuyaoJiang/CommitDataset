@@ -1,0 +1,14 @@
+[ML] Include closing jobs in node capacity check (elastic/x-pack-elasticsearch#2034)
+
+Closing jobs can still use some or all of the threads that communicate
+with the C++ process - the number of threads used will decrease as the
+close progresses, but at the beginning of the closure all are still in
+use.  Therefore, to prevent the risk of EsRejectedExecution exceptions
+for the autodetect communications threadpool, closing jobs need to be
+considered when checking that enough threads exist to start a new
+process.  An explicit check produces a much more understandable error
+message than an EsRejectedExecution exception.
+
+relates elastic/x-pack-elasticsearch#1364
+
+Original commit: elastic/x-pack-elasticsearch@845bfe01884d2f55a7f522b48169e2d5138d250f

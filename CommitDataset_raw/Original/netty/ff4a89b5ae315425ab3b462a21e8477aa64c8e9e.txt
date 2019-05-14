@@ -1,0 +1,10 @@
+[#2414] Fix RuntimeException during modify events via EpollEventLoop
+
+Motivation:
+We are currently try to modify the events via EpollEventLoop even when the channel was closed before and so the fd was set to -1. This fails with a RuntimeException in this case.
+
+Modification:
+Always check if the Channel is still open before try to modify the events.
+
+Result:
+No more RuntimeException because of a not open channel

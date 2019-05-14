@@ -1,0 +1,18 @@
+Docs: Use the default distribution to test docs (#31251)
+
+This switches the docs tests from the `oss-zip` distribution to the
+`zip` distribution so they have xpack installed and configured with the
+default basic license. The goal is to be able to merge the
+`x-pack/docs` directory into the `docs` directory, marking the x-pack
+docs with some kind of marker. This is the first step in that process.
+
+This also enables `-Dtests.distribution` support for the `docs`
+directory so you can run the tests against the `oss-zip` distribution
+with something like
+```
+./gradlew -p docs check -Dtests.distribution=oss-zip
+```
+
+We can set up Jenkins to run both.
+
+Relates to #30665

@@ -1,0 +1,8 @@
+Move TransportMessageListener to TransportService (#40284)
+
+Currently the TransportMessageListener is applied and used in the
+Transport class. However, local requests and responses never make it to
+this class. This PR moves the listener add/remove methods to the
+TransportService. After this change the Transport can only have one
+listener set with it. This one listener is the TransportService, which
+will then propogate the events to the external listeners.

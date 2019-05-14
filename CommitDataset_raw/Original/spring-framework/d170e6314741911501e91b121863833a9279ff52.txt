@@ -1,0 +1,31 @@
+Generate OSGi manifests using bundlor-plugin
+
+ - Apply custom-built Gradle 'bundlor' plugin
+
+   This plugin wraps the existing bundlor ant task. Sources available
+   at https://github.com/SpringSource/gradle-plugins.
+
+ - Use existing template.mf files
+
+   The bundlor plugin allows for 'inlining' bundlor templates directly
+   within build.gradle using the 'importTemplate' property, but opting
+   for now to keep the template.mf files separate.
+
+ - Exclude spring-aspects from bundlor processing
+
+   It appears that the bundlor plugin somehow interferes with iajc
+   compilation of aspects, resulting in compiler errors. Bundlor
+   has been disabled for this project for the time being.
+
+ - Fail the build on any bundlor warning
+
+   The gradle bundlor plugin defaults to failing the build if there are
+   any warnings when processing template.mf files. This helps to ensure
+   that template.mf files don't drift too far from actual dependency
+   declarations. This behavior can be modified by setting
+
+      bundlor {
+          failOnWarnings = false
+      }
+
+   in the build script.

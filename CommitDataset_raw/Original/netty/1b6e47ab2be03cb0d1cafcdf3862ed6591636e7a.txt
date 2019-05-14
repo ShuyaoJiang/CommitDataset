@@ -1,0 +1,16 @@
+Fix incorrectly encoded empty SOCKS5 address (#8292)
+
+Motivation:
+
+If you encode a SOCKS5 message like new DefaultSocks5CommandResponse(FAILURE, DOMAIN, "", 0)
+you correctly get a result of 05010003000000.
+But if the bndAddr is null, for example like new DefaultSocks5CommandResponse(FAILURE, DOMAIN)
+the encoded result is 0501000301000000 which means the domain name has a length of one and consists of a 0-byte.
+
+Modification:
+
+With this commit it is also correctly encoded as a string of 0 length.
+
+Result:
+
+Correctly encode empty SOCKS5 address 

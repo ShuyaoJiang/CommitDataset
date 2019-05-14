@@ -1,0 +1,9 @@
+SQL: Fix translation of math functions to painless (#35910)
+
+`SIGN` and `RADIANS` where wrongly overriding `mathFunction()`.
+Converted `mathFunction()` to private in `MathFunction` since it
+shouldn't be overriden, as it uses the assigned `MathOperation`
+to get the funtion name for painless scripts.
+
+Fixes: #35654
+

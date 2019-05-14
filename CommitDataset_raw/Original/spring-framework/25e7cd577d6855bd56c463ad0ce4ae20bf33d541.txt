@@ -1,0 +1,14 @@
+Handle AsyncListener.onComplete in Servlet adapter
+
+Typically the Mono<Void> from the HttpHandler also reflects the
+completion of the request and response body processors and at that
+point invoking AsyncContext#complete() from HandlerResultSubscriber
+should be sufficient.
+
+This commit explicitly propagates the AsyncListener.onComplete event
+to the request and response body processors for added safety.
+Technically as mentioned those processors should have completed but
+depending on how the controller is written there is a possibility
+the body processors may not have completed.
+
+Issue: SPR-14772

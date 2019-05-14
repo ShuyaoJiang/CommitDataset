@@ -1,0 +1,10 @@
+Server HttpMessage[Reader|Writer] in WebFlux fn
+
+This commit introduces support for the server-side methods on
+HttpMessageReader and HttpMessageWriter. It does so by introducing an
+Optional ServerHttpRequest in BodyInserter.Context, and an Optional
+ServerHttpResponse in BodyExtractor.Context. On the client-side, these
+optionals return Optional.empty(); on the server-side, they return the
+respective server-side messages.
+
+Issue: SPR-15370

@@ -1,0 +1,13 @@
+[#5297] Ensure calling NioEventLoop.pendingTasks() and EpollEventLoop.pendingTasks() will not produce livelock
+
+Motivation:
+
+SingleThreadEventExecutor.pendingTasks() will call taskQueue.size() to get the number of pending tasks in the queue. This is not safe when using MpscLinkedQueue as size() is only allowed to be called by a single consumer.
+
+Modifications:
+
+Ensure size() is only called from the EventLoop.
+
+Result:
+
+No more livelock possible when call pendingTasks, no matter from which thread it is done.

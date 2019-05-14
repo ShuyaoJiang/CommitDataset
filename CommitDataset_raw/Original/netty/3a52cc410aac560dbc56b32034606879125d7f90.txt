@@ -1,0 +1,30 @@
+Add some of the metrics mentioned in #718
+
+use single static initialization of available metrics monitor registries
+
+* This changes the original implementation to work in a similar way to
+how slf4j selects and loads an implementation.
+* Uses a single static instance so intialization is done only once.
+* Doesn't throw IllegalStateException if multiple implementations are
+found on the classpath. It instead selects and uses the first
+implementation returned by iterator()
+* Class left as an iterable to keep the API the same
+
+add yammer metrics to examples to allow them to publish metrics
+
+publish the number of threads used in an EventLoopGroup see issue #718
+
+* seems like the better place to put this because it sets the default
+thread count if the MultithreadEventLoopGroup uses super(0,...)
+* It also happens to be the common parent class amongst all the
+MultiThreadedEventLoopGroup implementations
+* Count is reported for
+io.netty.channel.{*,.local,.socket.aio,.socket.nio}
+
+fix cosmetic issues pointed out in pull request and updated notice.txt
+
+see https://github.com/netty/netty/pull/780
+
+count # of channels registered in single threaded event loop
+
+measure how many times Selector.select return before SELECT_TIME

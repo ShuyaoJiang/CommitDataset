@@ -1,0 +1,18 @@
+Generalize BWC logic (#28505)
+
+Generalizing BWC building so that there is less code to modify for a release. This ensures we do not
+need to think about what major or minor version is in the gradle code. It follows the general rules of the
+elastic release structure. For more information on the rules, see the VersionCollection's javadoc.
+
+This also removes the additional bwc snapshots that will never be released, such as 6.0.2, which were
+being built and tested against every time we ran bwc tests.
+
+Additionally, it creates 4 new projects that correspond to the different types of snapshots that may exist
+for a given version. Its possible to now run those individual tasks to work out bwc logic whereas
+previously it was impossible and the entire suite of bwc tests had to be run to work out any logic
+changes in the build tools' bwc project. Please note that if the project does not make sense for the 
+version that is current, that an error will be thrown from that individual project if an attempt is made to 
+run it.
+
+This should allow for automating the version bumps as well, since it removes all the hardcoded version
+logic from the configs.

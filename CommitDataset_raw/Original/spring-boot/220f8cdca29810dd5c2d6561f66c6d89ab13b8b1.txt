@@ -1,0 +1,11 @@
+Order WelcomePageHandlerMapping at lower precedence
+
+This commit orders the `WelcomePageHandlerMapping` at
+`Ordered.LOWEST_PRECEDENCE -1` in order to give a chance to other
+mappings to handle the incoming requests.
+
+In this case, developers might provide a custom `ViewController` or
+custom `HandlerMapping` for the `"/"` path and we should not override
+that opinion.
+
+Closes gh-12335

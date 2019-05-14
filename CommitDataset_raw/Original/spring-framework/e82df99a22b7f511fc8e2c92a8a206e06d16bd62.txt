@@ -1,0 +1,28 @@
+Add SockJS client
+
+This change adds a new implementation of WebSocketClient that can
+connect to a SockJS server using one of the SockJS transports
+"websocket", "xhr_streaming", or "xhr". From a client perspective
+there is no implementation difference between "xhr_streaming" and
+"xhr". Just keep receiving and when the response is complete,
+start over. Other SockJS transports are browser specific
+and therefore not relevant in Java ("eventsource", "htmlfile" or
+iframe based variations).
+
+The client loosely mimics the behavior of the JavaScript SockJS client.
+First it sends an info request to find the server capabilities,
+then it tries to connect with each configured transport, falling
+back, or forcing a timeout and then falling back, until one of the
+configured transports succeeds.
+
+The WebSocketTransport can be configured with any Spring Framework
+WebSocketClient implementation (currently JSR-356 or Jetty 9).
+
+The XhrTransport currently has a RestTemplate-based and a Jetty
+HttpClient-based implementations. To use those to simulate a large
+number of users be sure to configure Jetty's HttpClient executor
+and maxConnectionsPerDestination to high numbers. The same is true
+for whichever underlying HTTP library is used with the RestTemplate
+(e.g. maxConnPerRoute and maxConnTotal in Apache HttpComponents).
+
+Issue: SPR-10797

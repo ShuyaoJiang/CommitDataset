@@ -1,0 +1,16 @@
+Avoid RS.getObject(index, Object.class) as it breaks MySQL on Java 7
+
+Previously, when running on Java 7+, the JDBC query driven by
+DataSourceHealthIndicator resulted in a call to
+ResultSet.getObject(index, Object.class). When using MySQL's JDBC
+driver this failed with an SQLException with the message "Conversion
+not supported for type java.lang.Object". The problem does not occur
+on Java 6 as the overload of getObject that takes a type does not
+exist; ResultSet.getObject(index) is called instead and MySQL happily
+returns whatever type it deems to be appropriate for the column.
+
+This commit updates DataSourceHealthIndicator so that
+ResultSet.getObject(index) will always be used, irrespective of the
+version of Java that Boot is running on.
+
+Closes #1306

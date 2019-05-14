@@ -1,0 +1,7 @@
+`IndexShard.routingEntry` should only be updated once all internal state is ready (#26776)
+
+The routing entry is used by external components to check whether the shard is ready to perform as primary. Most notably, the peer recovery source handler delays recoveries until the shard routing entry says the shard is ready. 
+
+When a shard is promoted to primary, we currently update the shard's routing entry before we finish all the work relating to the promotion. This can cause recoveries to fail later on because the `GlobalCheckpointTracker` isn't set (yet) to primary mode. 
+
+This commit fixes this issue by updating the routing entry last.

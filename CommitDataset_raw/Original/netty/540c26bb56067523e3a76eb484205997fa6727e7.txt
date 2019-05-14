@@ -1,0 +1,13 @@
+HTTP/2 Ensure default settings are correctly enforced and interfaces clarified
+
+Motivation:
+The responsibility for retaining the settings values and enforcing the settings constraints is spread out in different areas of the code and may be initialized with different values than the default specified in the RFC. This should not be allowed by default and interfaces which are responsible for maintaining/enforcing settings state should clearly indicate the restrictions that they should only be set by the codec upon receipt of a SETTINGS ACK frame.
+
+Modifications:
+- Encoder, Decoder, and the Headers Encoder/Decoder no longer expose public constructors that allow the default settings to be changed.
+- Http2HeadersDecoder#maxHeaderSize() exists to provide some bound when headers/continuation frames are being aggregated. However this is roughly the same as SETTINGS_MAX_HEADER_LIST_SIZE (besides the 32 byte octet for each header field) and can be used instead of attempting to keep the two independent values in sync.
+- Encoding headers now enforces SETTINGS_MAX_HEADER_LIST_SIZE at the octect level. Previously the header encoder compared the number of header key/value pairs against SETTINGS_MAX_HEADER_LIST_SIZE instead of the number of octets (plus 32 bytes overhead).
+- DefaultHttp2ConnectionDecoder#onData calls shouldIgnoreHeadersOrDataFrame but may swallow exceptions from this method. This means a STREAM_RST frame may not be sent when it should for an unknown stream and thus violate the RFC. The exception is no longer swallowed.
+
+Result:
+Default settings state is enforced and interfaces related to settings state are clarified.

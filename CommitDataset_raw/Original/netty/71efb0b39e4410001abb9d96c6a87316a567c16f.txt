@@ -1,0 +1,13 @@
+Do not replace System.err during Slf4JLoggerFactory construction
+
+Motivation:
+
+Replacing System.err during Slf4JLoggerFactory construction is problematic as another class may optain the System.err reference before we set it back to the original value.
+
+Modifications:
+
+Remove code that temporary replaced System.err.
+
+Result:
+
+Fixes [#6212].

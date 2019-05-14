@@ -1,0 +1,16 @@
+Report non-matching outer class conditions
+
+Update ConditionEvaluationReport so that, whenever a negative outcome
+is added for a source, any existing outcomes for inner classes of that
+source are updated with a non-matching outcome that indicates that the
+outer configuration did not match.
+
+Conditions are evaluated in two phases; PARSE_CONFIGURATION first and
+REGISTER_BEAN second. If a parent class’s conditions match in
+PARSE_CONFIGURATION then its inner classes will have their
+PARSE_CONFIGURATION conditions evaluated. If they all match, the inner
+class will be reported as a positive match in the auto-configuration
+report even if the outer class does not match as a result of the
+subsequent evaluation of a REGISTER_BEAN condition.
+
+Fixes gh-2122

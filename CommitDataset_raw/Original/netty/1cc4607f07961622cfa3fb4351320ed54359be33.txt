@@ -1,0 +1,10 @@
+AppendableCharSequence not to depend upon IndexOutOfBoundsException for resize
+
+Motivation:
+AppendableCharSequence depends upon IndexOutOfBoundsException to trigger a resize operation under the assumption that the resize operation will be rare if the initial size guess is good. However if the initial size guess is not good then the performance will be more unpredictable and likely suffer.
+
+Modifications:
+- Check the position in AppendableCharSequence#append to determine if a resize is necessary
+
+Result:
+More predictable performance in AppendableCharSequence#append.

@@ -1,0 +1,7 @@
+Advance max_seq_no before add operation to Lucene (#38879)
+
+Today when processing an operation on a replica engine (or the 
+following engine), we first add it to Lucene, then add it to translog, 
+then finally marks its seq_no as completed. If a flush occurs after step1,
+but before step-3, the max_seq_no in the commit's user_data will be
+smaller than the seq_no of some documents in the Lucene commit.

@@ -1,0 +1,13 @@
+Support [] array ref syntax in SpEL T() construct
+
+Prior to this change, SpEL would not allow the use of '[]' in
+expressions like the following:
+
+    T(foo.Bar[])
+
+This commit updates TypeReference and InternalSpelExpressionParser to
+support this syntax, avoiding the need for workarounds like:
+
+    new foo.bar[0].class
+
+Issue: SPR-9203

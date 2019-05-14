@@ -1,0 +1,10 @@
+Revert "Add PooledSlicedByteBuf and PooledDuplicatedByteBuf"
+
+Motivation:
+Currently the "derived" buffer will only ever be recycled if the release call is made on the "derived" object, and the "wrapped" buffer ends up being "fully released" (aka refcount goes to 0). From my experience this is not the common use case and thus the "derived" buffers will not be recycled.
+
+Modifications:
+- revert https://github.com/netty/netty/pull/3788
+
+Result:
+Less complexity, and less code to create new objects in majority of cases.

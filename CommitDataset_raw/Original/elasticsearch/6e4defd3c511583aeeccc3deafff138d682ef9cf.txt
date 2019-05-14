@@ -1,0 +1,7 @@
+Relax Overly Strict Assertion in TransportShardBulkAction (#40940)
+
+* Remove Overly Strict Assertion in TransportShardBulkAction
+
+* In #39793 this assertion was added under the assumption that no exceptions would be thrown in this method, which turned out not to be correct and at the very least `org.elasticsearch.index.shard.IndexShardClosedException` can be thrown by `org.elasticsearch.index.shard.IndexShard.sync`
+* Closes #40933
+

@@ -1,0 +1,7 @@
+[Monitoring] HttpExportBulk shouldn't bother setting payload to null (elastic/x-pack-elasticsearch#4287)
+
+This avoid setting the payload to `null` when sending it to the remote
+monitoring cluster. The payload will be GCed when this overall object is
+GCed, which should be very soon anyway.
+
+Original commit: elastic/x-pack-elasticsearch@04f63c4150607eb88d0f2cc93d757a29c3e64da9

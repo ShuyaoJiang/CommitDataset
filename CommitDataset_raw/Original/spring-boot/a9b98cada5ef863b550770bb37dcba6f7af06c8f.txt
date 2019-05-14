@@ -1,0 +1,11 @@
+Allow loading from package names without dots
+
+Update BeanDefinitionLoader to support loading from package names that
+do not contain dots.
+
+Prior to this commit `new BeanDefinitionLoader(registry, "somepackage")`
+would fail because "somepackage" exists and is a resource but does not
+contain valid XML. Somewhat surprisingly the InputStream returned by
+the resource actually contains the listing of files in the package.
+
+Fixes gh-6126

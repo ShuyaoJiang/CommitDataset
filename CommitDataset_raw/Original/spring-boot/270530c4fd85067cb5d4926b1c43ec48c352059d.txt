@@ -1,0 +1,14 @@
+Fix class loading problems when CLI extensions are installed
+
+Previously, CLI extensions where installed into the CLI's lib
+directory which meant that they were on the class path of the app
+class loader. Following the change to an executable jar's packaging,
+this meant that they could not see classes in the CLI and a
+ClassNotFoundException would result.
+
+This commit updates the CLI to install extensions into lib/ext and
+load commands using a new ClassLoader that has all of the jars in
+lib/ext on its class path and that uses the launch class loader as
+its parent.
+
+Closes gh-6615

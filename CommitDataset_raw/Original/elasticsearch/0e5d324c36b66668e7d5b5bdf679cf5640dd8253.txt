@@ -1,0 +1,9 @@
+Prevent `can_match` requests from sending to incompatible nodes (#25705)
+
+With cross cluster search we can potentially proxy `can_match` requests
+to nodes that don't have the endpoint. This might not cause any problem
+from a functional perspecitve but will cause ugly error messages on
+the target node. This commit will cause an IAE if we try to talk to an
+incompatible node via a proxy.
+
+Relates to #25704

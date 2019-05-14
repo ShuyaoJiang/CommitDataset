@@ -1,0 +1,16 @@
+Prevent NPE when attempting to set client key material with no alias (#8378)
+
+Motivation:
+
+It is possible that a client is unable to locate a certificate alias given the list of issuers and key types. In this case the X509KeyManager
+will return a null which when past to the OpenSslKeyMaterialProvider implementation may produce a NPE. If no matching alias could be found we should not
+call OpenSslKeyMaterialProvider at all which is also consistent what OpenJDK does.
+
+Modifications:
+
+- Add null check before calling OpenSslKeyMaterialProvider
+- Add unit test.
+
+Result:
+
+No more NPE caused by passing null as client alias.

@@ -1,0 +1,14 @@
+Improve handling of missed heartbeats
+
+Previously, when a broker heartbeat was mnissed, the STOMP connection
+would be left in a semi-disconnected state such that, for example, the
+read and write idle callbacks would still be active, even though
+the underlying TCP connection had been nulled out.
+
+As part of disconnecting the STOMP connection, this commit closes the
+underlying TCP connection when a heartbeat's missed which cancels the
+read and write idle callbacks. It also now copes with the underlying
+TCP connection being null when sending a heartbeat to the broker. This
+protects again a race condition between the write idle callback being
+fired, such that a heartbeat needs to be sent, and the connection
+being nulled out due to it being closed.

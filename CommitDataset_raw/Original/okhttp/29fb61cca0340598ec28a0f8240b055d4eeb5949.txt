@@ -1,0 +1,9 @@
+Improve cache strategy.
+
+This renames ResponseStrategy to CacheStrategy and cleans up
+the code that calls into it.
+
+This fixes a bug where we were incorrectly reporting stats
+when the caller was requesting only-if-cached. In those cases
+we were tracking stats before applying that constraint. Tests
+for these cases have been added

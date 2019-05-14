@@ -1,0 +1,10 @@
+Update JarURLConnection to support jar:file://… URLs
+
+Previously, JarURLConnection would fail when created with a URL that
+began with jar:file:// as the double-slash is not included in jarFile.getUrl().getFile().
+
+This commit updates JarURLConnection to normalise the value return from
+url.getFile() to remove a double-slash when present.
+
+Fixes gh-5287
+Closes gh-5289

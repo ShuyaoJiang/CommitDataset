@@ -1,0 +1,14 @@
+Rewrite ImmutableSortedMultiset.Builder on Android to avoid using TreeMultiset, which allocates a ton of objects and also uses a ton of code.
+
+The strategy we use is a little modified from how we changed ImmutableSortedMap: on every expansion, we sort and deduplicate the elements that have been added to the builder.
+
+(modest reduction in bytes allocated, significant reduction in objects allocated, significant constant factor increase)
+
+Effects on ImmutableSortedMultisetProGuard:
+142818 bytes => 110301 bytes
+86 classes => 58 classes
+702 methods => 498 methods
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=154893300

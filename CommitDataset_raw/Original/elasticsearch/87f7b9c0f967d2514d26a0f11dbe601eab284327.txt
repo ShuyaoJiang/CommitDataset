@@ -1,0 +1,12 @@
+Speed up rejected execution contains node name test
+
+This commit addresses slowness in the test that a rejected execution
+contains the node name. The slowness came from setting the count on a
+countdown latch too high (two in the case of the search thread pool)
+where there would never be a second countdown on the latch. This means
+that when then test node is shutting down, closing the node would have
+to wait a full ten seconds before forcefully terminating the thread
+pool. This commit fixes the issue so that the node can close
+immediately, shaving ten seconds off the run time of the test.
+
+Relates #27663

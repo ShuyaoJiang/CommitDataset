@@ -1,0 +1,13 @@
+Ensure media types are used consistently across endpoint mappings
+
+Previously, the media types that are consumed and produced by
+endpoints were configured in the web stack-specific configuration.
+Furthermore, these configured media types were not used for the
+discovery "endpoint" that links to all the available endpoints.
+
+This commit introduces EndpointMediaTypes that is configred in a
+single, central location and then used to configure the consumed and
+produced media types for endpoints exposed via WebFlux, Web MVC, and
+Jersey as well as the discovery "endpoint" provided by each.
+
+Closes gh-10659

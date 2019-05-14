@@ -1,0 +1,8 @@
+Fix Race in Concurrent Snapshot Delete and Create (#37612)
+
+* The repo id was determined wrong when the delete picked up on an in progress snapshot
+  * NOTE: This solution is still a best-effort fix and there's a slight chance of running into concurrency issues here
+when multiple create and delete requests for the same snapshot name are happening concurrently, but these require a sequence
+of multiple cluster state updates between the changed method reading the genId and submitting its cluster state update task
+* Added test reproduced the issue reliably in about 50% of runs
+* Closes #37581

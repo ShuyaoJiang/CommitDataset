@@ -1,0 +1,18 @@
+Added QueryStringDecoder.rawPath() and rawQuery()
+
+Motivation:
+
+Before this commit, it is impossible to access the path component of the
+URI before it has been decoded.  This makes it impossible to distinguish
+between the following URIs:
+
+/user/title?key=value
+/user%2Ftitle?key=value
+
+The user could already access the raw uri value, but they had to calculate
+pathEndIdx themselves, even though it might already be cached inside
+QueryStringDecoder.
+
+Result:
+
+The user can easily and efficiently access the undecoded path and query.

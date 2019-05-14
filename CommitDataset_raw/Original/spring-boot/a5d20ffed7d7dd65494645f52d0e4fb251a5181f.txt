@@ -1,0 +1,11 @@
+Avoid NPE when creating method tag for WebFlux req with non-standard method
+
+Previously, a NullPointerException would occur when WebFluxTags
+attempted to create a method Tag for a request with a non-standard
+method.
+
+This commit updates WebFluxTags to use getMethodValue(), which will
+never return null, rather than getMethod(), which may return null,
+when determining the tag's value for the given request.
+
+Closes gh-13596

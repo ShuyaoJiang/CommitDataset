@@ -1,0 +1,21 @@
+Uncomment buffer leak tests in DataBufferUtils
+
+Following a response on
+https://github.com/reactor/reactor-core/issues/1634 apparently
+FluxSink is respecting doOnDiscard but there is a race condition
+in DataBufferUtils with file reading.
+
+This commit makes two changes:
+1) Add more checks for onDispose to detect cancellation signals
+as well as to deal with potentially concurrent such signal.
+2) Do not close the channel through the Flux.using callback but
+rather allow the current I/O callback to take place and only then
+close the channel or else the buffer is left hanging.
+
+Despite this tests still can fail due to a suspected issue in Reactor
+itself with the doOnDiscard callback for FluxSink. That's tracked under
+the same issue https://github.com/reactor/reactor-core/issues/1634
+and for now the use of DefaultDataBufferFactory is enforced as a
+workaround until the issue is resolved.
+
+See gh-22107

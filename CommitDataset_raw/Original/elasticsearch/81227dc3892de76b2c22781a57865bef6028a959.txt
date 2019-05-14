@@ -1,0 +1,12 @@
+[Authz] Allow update settings action for system user (#34030)
+
+When the cluster.routing.allocation.disk.watermark.flood_stage watermark
+is breached, DiskThresholdMonitor marks the indices as read-only. This
+failed when x-pack security was present as system user does not have the privilege
+for update settings action("indices:admin/settings/update").
+This commit adds the required privilege for the system user. Also added missing
+debug logs when access is denied to help future debugging.
+An assert statement is added to catch any missed privileges required for
+system user.
+
+Closes #33119

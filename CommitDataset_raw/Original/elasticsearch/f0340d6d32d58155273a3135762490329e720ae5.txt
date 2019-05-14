@@ -1,0 +1,15 @@
+[Zen2] Storage layer WriteStateException propagation (#36052)
+
+Currently, we only log that WriteStateException has occurred, in
+GatewayMetaState.
+
+This PR goal is to re-throw WriteStateException to upper layers.
+If dirty flag is set to false, we wrap WriteStateException in
+UncheckedIOException, we prefer unchecked exception not to add
+explicit throws in the multitude of layers.
+If dirty flag is set to true - the world is broken. And we need to
+halt the JVM. Instead of explicit halting in GatewayMetaState, we
+prefer to throw IOError, which will be subsequently handled by
+ElasticsearchUncaughtExceptionHandler and JVM will be halted.
+
+This PR also adds tests for WriteStateException.

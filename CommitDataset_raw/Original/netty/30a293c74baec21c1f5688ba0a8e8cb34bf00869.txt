@@ -1,0 +1,18 @@
+[#4204] Broken support of SCTP_INIT_MAXSTREAMS in *SctpServerChannel
+
+Motivation:
+
+The SCTP_INIT_MAXSTREAMS property is ignored on NioSctpServerChannel / OioSctpServerChannel.
+
+Modifications:
+
+- Correctly use the netty ChannelOption
+- Ensure getOption(...) works
+- Add testcase.
+
+Result:
+
+SCTP_INIT_MAXSTREAMS works.
+
+Conflicts:
+	transport-sctp/src/main/java/io/netty/channel/sctp/DefaultSctpServerChannelConfig.java

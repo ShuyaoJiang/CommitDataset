@@ -1,0 +1,17 @@
+Stop ThreadLocalRandom's initial seed generation immediately on interruption
+
+Motivation:
+
+ThreadLocalRandomTest reveals that ThreadLocalRandom's initial seed generation loop becomes tight if the thread is interrupted.
+We currently interrupt ourselves inside the wait loop, which will raise an InterruptedException again in the next iteration, resulting in infinite (up to 3 seconds) exception construction and thread interruptions.
+
+Modification:
+
+- When the initial seed generator thread is interrupted, break out of the wait loop immediately.
+- Log properly when the initial seed generation failed due to interruption.
+- When failed to generate the initial seed, interrupt the generator thread just in case the SecureRandom implementation handles it properly.
+- Make the initial seed generator thread daemon and handle potential exceptions raised due to the interruption.
+
+Result:
+
+No more tight loop on interruption.  More robust generator thread termination. Fixes #2412

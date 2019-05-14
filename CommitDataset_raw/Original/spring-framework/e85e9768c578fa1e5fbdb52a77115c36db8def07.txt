@@ -1,0 +1,14 @@
+Fail if multiple @BootstrapWith's are present
+
+Prior to this commit it was possible for two @BootstrapWith annotations
+to be 'present' on a test class -- for example, via competing custom
+composed annotations. However, only one of the annotations will ever be
+used to bootstrap the TestContext Framework. Thus, in such scenarios
+one of the annotations will be silently ignored.
+
+This commit introduces a check for such scenarios. BootstrapUtils'
+resolveTestContextBootstrapper() method now throws an
+IllegalStateException if more than one @BootstrapWith annotation is
+'present' on a given test class.
+
+Issue: SPR-12602

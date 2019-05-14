@@ -1,0 +1,17 @@
+Exclude Java agent jars from class path of launching class loader
+
+ExecutableArchiveLauncher creates a ClassLoader that is used by the
+Launcher to load an application’s classes. During the creation of this
+ClassLoader URLs from another ClassLoader are copied over. This was
+resulting in Java agents that are added to the system class loader
+via the -javaagent launch option being available on both the system
+class loader and the created class loader. Java agents are intended to
+always be loaded by the system class loader. Making them available on
+another class loader breaks this model.
+
+This commit updates ExecutableArchiveLauncher so that it skips the URLs
+of any Java agents (found by examining the JVM’s input arguments) when
+copying URLs over to the new classloader, thereby ensuring that Java
+agents are only ever loaded by the system class loader.
+
+Fixes #863

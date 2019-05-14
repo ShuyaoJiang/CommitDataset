@@ -1,0 +1,37 @@
+Refactor SQL script support
+
+This commit continues the work in the previous commit as follows:
+
+ - Introduced an exception hierarchy for exceptions related to SQL
+   scripts, with ScriptException as the base.
+
+ - CannotReadScriptException and ScriptStatementFailedException now
+   extend ScriptException.
+
+ - Introduced ScriptParseException, used by ScriptUtils.splitSqlScript().
+
+ - DatabasePopulatorUtils.execute() now explicitly throws a
+   DataAccessException.
+
+ - Polished Javadoc in ResourceDatabasePopulator.
+
+ - Overhauled Javadoc in ScriptUtils and documented all constants.
+
+ - Added missing @author tags for original authors in ScriptUtils and
+   ScriptUtilsTests.
+
+ - ScriptUtils.splitSqlScript() now asserts preconditions.
+
+ - Deleted superfluous methods in ScriptUtils and changed method
+   visibility to private or package private as appropriate.
+
+ - Deleted the ScriptStatementExecutor introduced in the previous
+   commit; ScriptUtils.executeSqlScript() now accepts a JDBC Connection;
+   JdbcTestUtils, AbstractTransactionalJUnit4SpringContextTests, and
+   AbstractTransactionalTestNGSpringContextTests now use
+   DatabasePopulatorUtils to execute a ResourceDatabasePopulator instead
+   of executing a script directly via ScriptUtils.
+
+ - Introduced JdbcTestUtilsIntegrationTests.
+
+Issue: SPR-9531

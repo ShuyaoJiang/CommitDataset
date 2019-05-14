@@ -1,0 +1,22 @@
+AbstractByteBuf forEach minimize byte code
+
+Motivation:
+The default limit for the maximum amount of bytes that a method will be inlined is 35 bytes. AbstractByteBuf#forEach and AbstractByteBuf#forEachDesc comprise of method calls which are more than this maximum default threshold and may prevent or delay inlining for occuring. The byte code for these methods can be reduced to allow for easier inlining. Here are the current byte code sizes:
+
+AbstractByteBuf::forEachByte (24 bytes)
+AbstractByteBuf::forEachByte(int,int,..) (14 bytes)
+AbstractByteBuf::forEachByteAsc0 (71 bytes)
+AbstractByteBuf::forEachByteDesc (24 bytes)
+AbstractByteBuf::forEachByteDesc(int,int,.) (24 bytes)
+AbstractByteBuf::forEachByteDesc0 (69 bytes)
+
+Modifications:
+- Reduce the code for each method in the AbstractByteBuf#forEach and AbstractByteBuf#forEachDesc call stack
+
+Result:
+AbstractByteBuf::forEachByte (25 bytes)
+AbstractByteBuf::forEachByte(int,int,..) (25 bytes)
+AbstractByteBuf::forEachByteAsc0 (29 bytes)
+AbstractByteBuf::forEachByteDesc (25 bytes)
+AbstractByteBuf::forEachByteDesc(int,int,..) (27 bytes)
+AbstractByteBuf::forEachByteDesc0 (29 bytes)

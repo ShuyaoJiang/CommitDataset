@@ -1,0 +1,5 @@
+Fix composite aggregation when after term is missing in the shard (#27936)
+
+This change fixes a bug when a keyword term in the `after` key is not present in the shard.
+In this case the global ord of the document values are compared with the insertion point of the
+`after` keyword and values that are equal to the insertion point should be considered "after" the top value.

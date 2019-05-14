@@ -1,0 +1,11 @@
+Fix the issue with classes that should only be included in the failureaccess artifact being included in the main Guava jar.
+
+It appears (thanks to @michaelhixson on https://github.com/google/guava/issues/3302) that the issue is with the maven-bundle-plugin (which does OSGi stuff). Presumably because Guava was declaring that it exports com.google.common.* (and doesn't exclude com.google.common.util.concurrent.internal), it was pulling those class files in from the dependency. It was also pointed out by @talios in that issue that failureaccess doesn't include OSGi metadata to export that package.
+
+This change should fix both of those issues, but we're going to need to release a failureaccess 1.0.1 and then guava 27.0.1.
+
+RELNOTES=Fixes an issue where classes that should only be included in failureaccess (Guava's one dependency) were also being included in the main Guava jar.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=218884985

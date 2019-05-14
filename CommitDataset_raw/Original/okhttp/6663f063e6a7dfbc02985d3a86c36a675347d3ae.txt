@@ -1,0 +1,6 @@
+The WebSocketWriter is single-threaded. (#3571)
+
+We were synchronizing to permit multiple writer threads. But that was a carry-over
+from the previous design where we supported multiple writer threads. With the
+current implementation only one thread writes at a time. This synchronization
+was not necessary.

@@ -1,0 +1,10 @@
+Wait for mapping in testReadRequestsReturnLatestMappingVersion (#37886)
+
+If the index request is executed before the mapping update is applied on
+the IndexShard, the index request will perform a dynamic mapping update.
+This mapping update will be timeout (i.e, ProcessClusterEventTimeoutException)
+because the latch is not open. This leads to the failure of the index
+request and the test. This commit makes sure the mapping is ready
+before we execute the index request.
+
+Closes #37807

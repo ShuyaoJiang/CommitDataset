@@ -1,0 +1,23 @@
+Add exceptions for CONNACK's return code for MQTT 3.1 specification
+
+Motivation:
+
+http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html#connack
+In MQTT 3.1, MQTT server must send a CONNACK with return code if CONNECT
+request contains an invalid client identifier or an unacceptable protocol
+version. The return code is one of MqttConnectReturnCode.
+But, MqttDecoder throws DecoderException when CONNECT request contains
+invalid value without distinguish situations. This makes it difficult
+for codec-mqtt users to send a response with return code to clients.
+
+Modifications:
+
+Added exceptions for client identifier rejected and unacceptable
+protocol version. MqttDecoder will throw those exceptions instead of
+DecoderException.
+
+Result:
+
+Users of codec-mqtt can distinguish which is invalid when CONNECT
+contains invalid client identifier or invalid protocol version. And, users can
+send CONNACK with return code to clients.

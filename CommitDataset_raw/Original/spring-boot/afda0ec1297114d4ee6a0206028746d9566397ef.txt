@@ -1,0 +1,11 @@
+Default Hibernate DDL auto to none with Flyway/Liquibase
+
+This commit adds a strategy interface to specific if a given DataSource
+has its schema managed. The Hibernate auto-configuration uses it to set
+it to "none" if a mechanism to initialize the DataSource is
+found and "create-drop" otherwise.
+
+Both Flyway and Liquibase implements that strategy interface and
+register it in the context accordingly.
+
+Closes gh-9262

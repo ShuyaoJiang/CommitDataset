@@ -1,0 +1,10 @@
+SslContext to support TLS/SSL protocols
+
+Motivation:
+SslContext and SslContextBuilder do not support a way to specify the desired TLS protocols. This currently requires that the user extracts the SSLEngine once a context is built and manually call SSLEngine#setEnabledProtocols(String[]). Something this critical should be supported at the SslContext level.
+
+Modifications:
+- SslContextBuilder should accept a list of protocols to configure for each SslEngine
+
+Result:
+SslContext consistently sets the supported TLS/SSL protocols.

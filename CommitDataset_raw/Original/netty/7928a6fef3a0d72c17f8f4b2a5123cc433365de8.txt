@@ -1,0 +1,12 @@
+NioDatagramChannel invalid usage of internalNioBuffer
+
+Motivation:
+NioDatagramChannel attempts to unpack a AddressedEnvelope and unconditionally uses internalNioBuffer. However if the ByteBuf is a CompositeByteBuf with more than 1 components, the write will fail and throw an exception.
+
+Modifications:
+- NioDatagramChannel should check the nioBufferCount before attempting
+to use internalNioBuffer
+
+Result:
+No more failure to write UDP packets on NIO when a CompositeByteBuf is
+used.

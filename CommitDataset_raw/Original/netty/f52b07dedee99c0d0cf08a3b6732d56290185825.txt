@@ -1,0 +1,21 @@
+Fix HTTP version and Host header in HttpProxyHandler
+
+Motivation:
+
+  The current implementation does not comply with RFC2817 on two points:
+
+  - The HTTP version required to support the CONNECT method is 1.1,
+    but the current implementation specifies 1.0.
+
+  - The HOST header should hold the name or address of the Target Host,
+    but the current implementation uses the proxy address instead.
+
+Modifications:
+
+  - Specify HTTP version 1.1,
+  - The HOST header is now set using the Target Host's name (or address,
+    if it is resolved).
+
+Result:
+
+  The CONNECT request is RFC2817-compliant.

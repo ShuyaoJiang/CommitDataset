@@ -1,0 +1,9 @@
+Consistent handling of 4xx/5xx status codes in WebClient
+
+This commit changes the handling of 4xx/5xx status codes in the
+WebClient to the following simple rule: if there is no way for the user
+to get the response status code, then a WebClientException is returned.
+If there is a way to get to the status code, then we do not return an
+exception.
+
+Issue: SPR-15486

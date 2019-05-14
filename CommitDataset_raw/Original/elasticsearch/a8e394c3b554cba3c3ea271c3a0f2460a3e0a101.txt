@@ -1,0 +1,22 @@
+[ML] Fix race condition between multiple job deletion and immediate recreation (elastic/x-pack-elasticsearch#1793)
+
+If multiple job deletion requests were sent in quick succession, there was a
+race condition that meant they could both get through the check to enforce
+one active deletion request at a time.  Then, if the job was immediately
+recreated after the first deletion request returned, the second, still running,
+deletion request could interfere with it and delete the aliases that the put
+job request created.
+
+This problem can be avoided by using the "ask forgiveness, not permission"
+idiom when checking if the job is already being deleted at the beginning of
+each deletion request.
+
+Additionally, now even force delete requests will wait for a certain amount
+of time for a prior delete request to complete.  This is to avoid the same
+race conditions.  However, force delete requests will eventually start an
+(unsafe) parallel delete to provide a get-out in case a delete request
+completely dies.
+
+relates elastic/x-pack-elasticsearch#1765
+
+Original commit: elastic/x-pack-elasticsearch@b5c8f26a0e894c62e76ea95bd127b474d138b90d

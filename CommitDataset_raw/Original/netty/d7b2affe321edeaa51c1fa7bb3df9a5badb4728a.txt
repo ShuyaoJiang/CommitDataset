@@ -1,0 +1,26 @@
+Add HAProxy protocol decoder
+
+Motivation:
+
+The proxy protocol provides client connection information for proxied
+network services. Several implementations exist (e.g. Haproxy, Stunnel,
+Stud, Postfix), but the primary motivation for this implementation is to
+support the proxy protocol feature of Amazon Web Services Elastic Load
+Balancing.
+
+Modifications:
+
+This commit adds a proxy protocol decoder for proxy protocol version 1
+as specified at:
+
+  http://haproxy.1wt.eu/download/1.5/doc/proxy-protocol.txt
+
+The foundation for version 2 support is also in this commit but it is
+explicitly NOT supported due to a lack of external implementations to
+test against.
+
+Result:
+
+The proxy protocol decoder can be used to send client connection
+information to inbound handlers in a channel pipeline from services
+which support the proxy protocol.

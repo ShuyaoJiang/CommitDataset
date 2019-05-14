@@ -1,0 +1,13 @@
+Improve LDAP auto-configuration
+
+Auto-configuration of LDAP's `LdapTemplate` is currently a part of
+`LdapDataAutoConfiguration` which is conditional of presence of
+`LdapRepository` (i.e. Spring Data LDAP). This arrangement isn't ideal
+since the `LdapTemplate` is a part of Spring LDAP project, and therefore
+should not be tied to Spring Data LDAP.
+
+This commit improves and simplifies LDAP auto-configuration by moving
+`LdapTemplate` configuration to `LdapAutoConfiguration`. Consequently,
+`LdapDataAutoConfiguration` is not needed anymore and is removed.
+
+See gh-13136

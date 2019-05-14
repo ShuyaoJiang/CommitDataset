@@ -1,0 +1,5 @@
+Deprecate types in create index requests. (#37134)
+
+From #29453 and #37285, the include_type_name parameter was already present and defaulted to false. This PR makes the following updates:
+* Add deprecation warnings to RestCreateIndexAction, plus tests in RestCreateIndexActionTests.
+* Add a typeless 'create index' method to the Java HLRC, and deprecate the old typed version. To do this cleanly, I created new CreateIndexRequest and CreateIndexResponse objects that differ from the existing server ones.

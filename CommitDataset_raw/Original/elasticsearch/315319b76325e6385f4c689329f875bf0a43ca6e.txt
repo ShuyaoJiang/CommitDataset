@@ -1,0 +1,9 @@
+Remove assertion about deviation when casting to a float. (#25806)
+
+We cannot guarantee that the result of computations will be in the float range,
+since it depends on the data and how scores are computed. We already use doubles
+as intermediate representations and cast to a float as a final step, which is
+the right thing to do. Small doubles will just be rounded to zero, there is not
+much we can or should do about it.
+
+Closes #25330

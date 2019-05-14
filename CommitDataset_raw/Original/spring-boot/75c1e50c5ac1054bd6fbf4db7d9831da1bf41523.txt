@@ -1,0 +1,26 @@
+Improve type determination for factory beans during condition evaluation
+
+Previously, BeanTypeRegistry did not correctly determine the type
+that would be created by a factory bean if that factory bean was
+returned from a bean method with arguments on a configuration class
+found via component scanning.
+
+The key difference is that bean definitions for bean methods on
+configuration classes found via component scanning use ASM-based
+metadata rather than reflection-based metadata. The ASM-based method
+data does not provide direct access to the Method that will create the
+bean. In this case, BeanTypeRegistry was falling back to looking for
+a method with the matching name and no arguments. Therefore, if
+the bean method had any arguments it would fail to find the method
+and would, therefore, be unable to determine the type of bean
+produced by the factory bean.
+
+This commit updates BeanTypeRegistry to use logic that is very similar
+to Spring Framework's ConstructorResolver's
+resolveFactoryMethodIfPossible method to locate the method that will
+produce the factory bean. It looks for a single method with
+the required name with any number of arguments. If it finds multiple
+methods with the required name and different arguments it returns
+null, just as ConstructorResolver does.
+
+Closes gh-6755

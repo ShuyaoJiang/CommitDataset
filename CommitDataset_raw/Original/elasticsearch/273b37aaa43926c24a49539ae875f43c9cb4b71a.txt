@@ -1,0 +1,16 @@
+Make the ingest-geoip databases even lazier to load (#36679)
+
+Today we try to load the ingest-geoip databases lazily. Currently they
+are loaded as soon as any pipeline that uses an ingest-geoip processor
+is created. This is not lazy enough. For example, we could only load the
+databases the first time that they are actually used. This would ensure
+that we load the minimal set of data to support an in-use pipeline
+(instead of *all* of the data). This can come up in a couple of
+ways. One is when a subset of the database is used (e.g., the city
+database versus the country database versus the ASN database). Another
+is when the plugins are installed on non-ingest nodes (e.g., master-only
+nodes); we would never use the database in this case yet they are
+currently being loaded occupying ~60 MB of the heap. This commit makes
+the ingest-geoip databases as lazy as possible.
+
+Co-authored-by: Martijn van Groningen <martijn.v.groningen@gmail.com>

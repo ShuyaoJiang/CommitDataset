@@ -1,0 +1,18 @@
+Allow to disable SSL client authentication on the management port
+
+When server and management are at different ports, and when server
+requires TLS client authentication, then there is no simple method to
+disable TLS client authentication for management port.
+
+This commit adds an additional "none" option to ssl.client-auth.
+
+Example:
+
+    server.port=8080
+    server.ssl.enabled=true
+    server.ssl.client-auth=need
+    management.server.port=8081
+    management.server.ssl.enabled=true
+    management.server.ssl.client-auth=none
+
+See gh-14985

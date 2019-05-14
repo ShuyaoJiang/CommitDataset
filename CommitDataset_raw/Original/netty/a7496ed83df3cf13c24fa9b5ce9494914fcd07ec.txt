@@ -1,0 +1,11 @@
+FlowControlHandlerTest synchronization issues
+
+Motivation:
+2b6525856868ab1788db957ff8af8eb22b42c774 only partially addressed the synchronization issues that are present in FlowControlHandlerTest. A few tests are attempting to validate state changes made across an EventLoop thread and the JUnit thread but are not properly synchronized.
+
+Modifications:
+- Ensure that conditions which verify expectations set in another thread have synchronization gates to ensure the event has actually occurred.
+- Remove the message counter verification in favor of using individual CountDownLatch objects
+
+Result:
+FLowControlHanderTest has less race conditions which may lead to test failures.

@@ -1,0 +1,13 @@
+Avoiding OperatorObserveOn from calling subscriber.onNext(..) after unsubscribe().
+
+The OperatorObserveOn operator uses a scheduler to cancel subscriptions as well
+as to deliver the objects passing through it's onNext(..) in the right context.
+
+Calling unsubscribe will schedule the actual unsubscription while not making sure
+that the child subscriber will no longer receive calls to onNext(..) after
+unsubscribe() returns.
+
+This fix makes sure that after unsubscribe() returns no more onNext(..) calls will be
+made on the child subscribers.
+
+Signed-off-by: David Marques <dpsmarques@gmail.com>

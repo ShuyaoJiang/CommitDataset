@@ -1,0 +1,12 @@
+Let SocksProxy use the same definition of localhost as MockWebServer.
+
+This fixes SocksProxyTest failing on some systems. The problem was that
+MockWebServer is listening on InetAddress.getByName("localhost") but
+SocksProxy was trying to connect to InetAddress.getLoopbackAddress().
+This is not guaranteed to work, for example on recent AOSP, "localhost"
+resolves to 127.0.0.1 but getLoopbackAddress() is ::1 (IPv6).
+
+This CL makes the simplest change to make the two consistent so that
+SocksProxyTest passes. In the long run, OkHttp may want to consider
+using getLoopbackAddress().getHostname() everywhere instead of hard
+coding the hostname "localhost" at all.

@@ -1,0 +1,7 @@
+Maybe die before failing engine (#28973)
+
+Today we check for a few cases where we should maybe die before failing
+the engine (e.g., when a merge fails). However, there are still other
+cases where a fatal error can be hidden from us (for example, a failed
+index writer commit). This commit modifies the mechanism for failing the
+engine to always check for a fatal error before failing the engine.

@@ -1,0 +1,10 @@
+Remove usages of CharSequence in Sets (#35501)
+
+The javadocs of the CharSequence interface state that not all of its
+implementations define the general contracts of the Object#equals and
+Object#hashCode methods, therefore it is dangerous to use different CharSequence
+instances as elements in a set or as keys in a map. While we probably mostly use
+Strings in sets, in some places this is not enforced. To prevent this from
+accidentally happening, this change replaces all occurances of Set<CharSequence>
+which are currently mostly used in the completion suggester code with the more
+concrete usage of Set<String>.

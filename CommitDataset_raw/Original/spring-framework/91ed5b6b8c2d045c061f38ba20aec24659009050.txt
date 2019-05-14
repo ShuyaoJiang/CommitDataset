@@ -1,0 +1,14 @@
+SpEL: ensure correct object used for nested #this references
+
+Before this commit the object that #this would refer to in
+nested expressions within projection/selection clauses was always
+the root context object. This was incorrect as it should be the
+element being projected/selected over. This commit introduces
+a scope root context object which is set upon entering a new
+scope (like when entering a projection or selection). Any
+object. With this change this kind of expression now behaves:
+
+where #this is the element of list1. Unqualified references
+are also resolved against this scope root context object.
+
+Issues: SPR-10417, SPR-12035, SPR-13055

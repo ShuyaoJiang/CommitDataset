@@ -1,0 +1,10 @@
+Reduce garbage created when loading fat jars
+
+Refactor fat jar loader classes so that less `char[]` instances are
+created. This is primarily achieved by adding a new `StringSequence`
+class that can chop up Strings without needing to copy the underlying
+array. Since Java 8, calls to `String.subString(...)` always copy the
+underlying char array. For many of the operations that we need, this
+is unnecessary.
+
+Fixes gh-11405

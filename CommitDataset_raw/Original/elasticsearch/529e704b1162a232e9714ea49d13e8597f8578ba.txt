@@ -1,0 +1,10 @@
+Unify http channels and exception handling (#31379)
+
+This is a general cleanup of channels and exception handling in http.
+This commit introduces a CloseableChannel that is a superclass of
+TcpChannel and HttpChannel. This allows us to unify the closing logic
+between tcp and http transports. Additionally, the normal http channels
+are extracted to the abstract server transport.
+
+Finally, this commit (mostly) unifies the exception handling between nio
+and netty4 http server transports.

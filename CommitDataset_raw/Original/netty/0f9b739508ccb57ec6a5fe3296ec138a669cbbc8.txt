@@ -1,0 +1,15 @@
+AggregatedFullHttpMessage.replace should also copy a decoder result
+
+Motivation:
+
+HttpObjectAggregator yields full HTTP messgaes (AggregatedFullHttpMessages) that don't respect decoder result when copied/replaced.
+
+Modifications:
+
+Copy the decoding result over to a new instance produced by AggregatedFullHttpRequest.replace or AggregatedFullHttpResponse.replace .
+
+Result:
+
+DecoderResult is now copied over when an original AggregatedFullHttpMessage is being replaced (i.e., AggregatedFullHttpRequest.replace or AggregatedFullHttpResponse.replace is being called).
+
+New unit tests are passing on this branch but are failing on master.

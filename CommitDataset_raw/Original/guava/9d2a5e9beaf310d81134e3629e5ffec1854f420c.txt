@@ -1,0 +1,24 @@
+Make degree(node) on directed networks O(1) instead of O(D), at the cost of a teensy bit of memory (a self loop counter). In actuality it doesn't seem to take up any extra memory, perhaps due to how the object is padded/aligned. Additionally, this CL makes iterating through incidentEdges() slightly faster on directed networks if no self-loops are present. In the undirected case, adding and removing self-loop edges is now slightly faster.
+
+Note: this CL makes it so that every call to *degree(node) is O(1), as explained here:
+
+degree(node)
+directed graphs: we store a map that combines predecessors + successors
+undirected graphs: easy
+directed networks: now O(1) :P see description above
+undirected networks: easy
+
+outDegree(node)
+directed graphs: we store an explicit successor count
+undirected graphs: same as degree(node)
+directed networks: easy, we store an out edges map
+undirected networks: same as degree(node)
+
+inDegree(node)
+directed graphs: we store an explicit predecessor count
+undirected graphs: same as degree(node)
+directed networks: easy, we store an in edges map
+undirected networks: same as degree(node)
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=125754834

@@ -1,0 +1,5 @@
+LoadTimeWeaverAware beans are consistently being created early for JPA weaving to work reliably
+
+Reverted change for @Bean methods that declare FactoryBean as their return type: The effects of trying to create the FactoryBean to find out about its implementation type are too far-reaching. It's better to recommend declaring a specific return type in the method signature if you want the container to specifically react to your implementation type.
+
+Issue: SPR-9857

@@ -1,0 +1,22 @@
+Fix performance regression in FastThreadLocal microbenchmark. Fixes #4402
+
+Motivation:
+
+As reported in #4402, the FastThreadLocalBenchmark shows that the JDK ThreadLocal
+is actually faster than Netty's custom thread local implementation.
+
+I was looking forward to doing some deep digging, but got disappointed :(.
+
+Modifications:
+
+The microbenchmark was not using FastThreadLocalThreads and would thus always hit the slow path.
+I updated the JMH command line flags, so that FastThreadLocalThreads would be used.
+
+Result:
+
+FastThreadLocalBenchmark shows FastThreadLocal to be faster than JDK's ThreadLocal implementation,
+by about 56% in this particular benchmark. Run on OSX El Capitan with OpenJDK 1.8u60.
+
+Benchmark                                    Mode  Cnt      Score      Error  Units
+FastThreadLocalBenchmark.fastThreadLocal    thrpt   20  55452.027 ±  725.713  ops/s
+FastThreadLocalBenchmark.jdkThreadLocalGet  thrpt   20  35481.888 ± 1471.647  ops/s

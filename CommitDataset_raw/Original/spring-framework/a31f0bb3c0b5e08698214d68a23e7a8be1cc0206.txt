@@ -1,0 +1,18 @@
+Fix compilation of expressions using instanceof and primitives
+
+Prior to this commit the SpEL compiler would generate bad bytecode
+if the left hand operand of an instanceof was a primitive or
+if the right hand operand was a primitive type reference.
+With the fixes primitives on the left hand side are now
+correctly boxed and special handling is in place for when the
+right hand side is a primitive type reference. Using a primitive
+type reference on the right always causes the instanceof
+check to return false.
+
+Additionally a guard has been added such that compilation is
+not allowed when the right hand side of an expression
+is not a type reference. If it is, for example, a variable
+reference that evaluates to a type reference then that
+cannot be expressed in bytecode so compilation is not performed.
+
+Issue: SPR-14250

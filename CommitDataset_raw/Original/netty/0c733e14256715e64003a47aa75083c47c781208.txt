@@ -1,0 +1,13 @@
+[#2363] Correctly null out SelectionKey[] when selectAgain
+
+Motivation:
+
+The prefix fix of #2363 did not correctly handle the case when selectAgain is true and so missed to null out entries.
+
+Modifications:
+
+Move the i++ from end of loop to beginning of loop
+
+Result:
+
+Entries in the array will be null out so allow to have these GC'ed once the Channel close

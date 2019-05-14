@@ -1,0 +1,16 @@
+CCS: skip empty search hits when minimizing round-trips (#40098)
+
+When minimizing round-trips, each cluster returns its own independent
+search response. In case sort by field and/or field collapsing were
+requested, when one cluster has no results to return, the information
+about the field that sorting was based on (SortField array) as well as
+the field (and the values) that collapsing was performed on are missing
+in the search response. That causes problems as we can't build the
+proper `TopDocs` instance which would need to be either `TopFieldDocs`
+or `CollapseTopFieldDocs`. The merge routine expects that all the top
+docs are of the same exact type which can't be guaranteed. Given that
+the problematic results are empty, hence have no impact on the final
+results, we can simply skip them.
+
+Relates to #32125
+Closes #40067

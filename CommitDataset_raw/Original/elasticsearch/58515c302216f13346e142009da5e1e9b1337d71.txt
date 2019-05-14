@@ -1,0 +1,7 @@
+Fix merging of text field mapper (#40627)
+
+On mapping updates the `text` field mapper does not update
+the field types for the underlying prefix and phrase fields.
+In practice this shouldn't be considered as a bug but we have
+an assert in the code that check that field types in the mapper service
+are identical to the ones present in field mappers.

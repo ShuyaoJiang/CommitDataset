@@ -1,0 +1,12 @@
+Zero length data frames should apply flow control.
+
+Motivation:
+A downstream consumer of Netty failed as emitting zero-length http2 data frames in a unit test resulted in assertion errors in Http2LocalFlowController. Since zero-length frames are valid, an assertion that http2 data frame length must be positive is invalid.
+
+Modifications:
+
+Assertions of data length in Http2LocalFlowController now permit zero.
+
+Result:
+
+Those running netty with assertions on can now emit zero length http2 data frames.

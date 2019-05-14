@@ -1,0 +1,10 @@
+SQL: Ban PrintWriter#println in CLI (elastic/x-pack-elasticsearch#4118)
+
+`PrintWriter#println` doesn't pay attention to the terminal
+configuration that we specify so it breaks tests on Windows. If we
+instead always use `PrintWriter#print('\n')` then the tests work
+properly on windows *and* the CLI actually works properly on Windows.
+
+relates elastic/x-pack-elasticsearch#4109
+
+Original commit: elastic/x-pack-elasticsearch@ac17e691c8a7d369c2e0a576a464c7c2e019eea5

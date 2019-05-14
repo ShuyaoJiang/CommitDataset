@@ -1,0 +1,14 @@
+Ensure ObjectCleaner will also be used when FastThreadLocal.set is used.
+
+Motivation:
+
+e329ca1 introduced the user of ObjectCleaner in FastThreadLocal but we missed the case to register our cleaner task if FastThreadLocal.set was called only.
+
+Modifications:
+
+- Use ObjectCleaner also when FastThreadLocal.set is used.
+- Add test case.
+
+Result:
+
+ObjectCleaner is always used.

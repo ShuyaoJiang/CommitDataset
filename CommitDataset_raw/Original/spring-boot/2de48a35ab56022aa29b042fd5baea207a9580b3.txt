@@ -1,0 +1,16 @@
+Make /error the error page in child context as well as parent
+
+If user set the management.port *and* the management.context-path
+then the /error path was in the wrong place because formerly it
+was implemented (in this case) by an MvcEndpoint. If we
+switch it to a regular @Controller (which are now supported in the
+child context if there is one) then it won't disappear under the
+management.context-path.
+
+Also use lazy request matching in ignores as well as secure paths.
+The problem was that the ignores were constructed eagerly from the
+actuator paths before they were available (the EndpointHandlerMapping
+needs to be lazily accessed to avoid a security-induced bean creation
+cascade).
+
+Fixes gh-4624

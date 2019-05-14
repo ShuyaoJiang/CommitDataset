@@ -1,0 +1,8 @@
+Return cached segments stats if `include_unloaded_segments` is true (#39698)
+
+Today we don't return segments stats for closed indices which makes it
+hard to tell how much memory such an index would require. With this change
+we return the statistics if requested by setting `include_unloaded_segments` to
+true on the rest request.
+
+Relates to #39512

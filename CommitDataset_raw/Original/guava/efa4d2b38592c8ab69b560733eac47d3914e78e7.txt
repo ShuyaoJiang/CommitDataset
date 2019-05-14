@@ -1,0 +1,14 @@
+remove the queuedListeners lock from both ServiceManager and AbstractService.
+
+The original idea of splitting the queuedListeners queue into one queue per listenerInstance didn't pan out because it didn't actually solve the issue of not holding a lock while submitting the listener to the executor.  So this is a different strategy.
+
+I pulled all the listener execution logic into a new class called ListenerQueue which is analogous to ExecutionList (not sure about the name though...) which cleaned up both AbstractService and ServiceManager.
+
+The approach is two-fold
+1. do not remove a listener from the queue of listeners until it has definitely been submitted to its executor
+2. ensure that submitting a listener to its executor happens no more than one time (using a lock).
+
+N.B. we are still vulnerable to a weird or buggy executor implementation. If calling execute(runnable) runs for a long time without calling runnable.run then we can still deadlock.  I don't believe we can actually solve this problem without giving up on the ordering guarantees.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=44709344

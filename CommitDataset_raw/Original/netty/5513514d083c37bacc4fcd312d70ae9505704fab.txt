@@ -1,0 +1,13 @@
+Take readerIndex into account when write to BIO.
+
+Motivation:
+
+We should take the readerIndex into account whe write into the BIO. Its currently not a problem as we slice before and so the readerIndex is always 0 but we should better not depend on this as this will break easily if we ever refactor the code and not slice anymore.
+
+Modifications:
+
+Take readerIndex into acount.
+
+Result:
+
+More safe and correct use.

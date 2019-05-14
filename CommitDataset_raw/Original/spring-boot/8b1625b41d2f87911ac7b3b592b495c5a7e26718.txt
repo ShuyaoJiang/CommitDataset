@@ -1,0 +1,10 @@
+Short circuit binding if possible
+
+Update the `Binder` to short circuit potentially expensive bean binding
+if there are no known child properties. The shortcut can only be applied
+when all used `ConfigurationPropertySources` return a non empty
+`containsDescendantOf` result. This should be the case for most
+Spring Boot applications, the exception being any apps that are running
+in a security restricted environment.
+
+Fixes gh-9023

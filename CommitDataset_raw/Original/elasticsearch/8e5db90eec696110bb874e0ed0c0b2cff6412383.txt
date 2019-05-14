@@ -1,0 +1,8 @@
+Never corrupt fully deleted segments in tests (#36741)
+
+Today we might corrupt a fully deleted segment which is then pruned
+once a snapshot is taken. This causes random test failures in CorruptedFileIT.
+This change hardens the selection of files to corrupt and removes some fragile
+code preventing fully deleted segments to be taken into account.
+
+Closes #36526

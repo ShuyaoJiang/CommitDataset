@@ -1,0 +1,18 @@
+Safely encode Strings to ASCII
+
+(Ported @luciferous's changes against 3.10)
+
+Motivation:
+
+The current implementation of the encoder writes each character of the
+String as a single byte to the buffer, however not all characters are
+mappable to a single byte.
+
+Modifications:
+
+If a character is outside the ASCII range, it's converted to '?'.
+
+Result:
+
+A safer encoder for String to ASCII, which substitutes unmappable
+characters with'?'.

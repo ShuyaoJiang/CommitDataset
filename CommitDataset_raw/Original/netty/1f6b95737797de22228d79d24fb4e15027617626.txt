@@ -1,0 +1,13 @@
+Ensure we retain the original hostname when connect to a remote peer when using epoll transport.
+
+Motivation:
+
+We should retain the original hostname when connect to a remote peer so the user can still query the origin hostname if getHostString() is used.
+
+Modifications:
+
+Compute a InetSocketAddress from the original remote address and the one returned by the Os.
+
+Result:
+
+Same behavior when using epoll transport and nio transport.

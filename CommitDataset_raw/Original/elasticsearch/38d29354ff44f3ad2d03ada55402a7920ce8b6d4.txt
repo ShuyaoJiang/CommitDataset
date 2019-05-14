@@ -1,0 +1,17 @@
+Avoid double term construction in DfsPhase (#38716)
+
+DfsPhase captures terms used for scoring a query in order to build global term statistics across
+multiple shards for more accurate scoring. It currently does this by building the query's `Weight`
+and calling `extractTerms` on it to collect terms, and then calling `IndexSearcher.termStatistics()`
+for each collected term. This duplicates work, however, as the various `Weight` implementations 
+will already have collected these statistics at construction time.
+
+This commit replaces this round-about way of collecting stats, instead using a delegating
+IndexSearcher that collects the term contexts and statistics when `IndexSearcher.termStatistics()`
+is called from the Weight.
+
+It also fixes a bug when using rescorers, where a `QueryRescorer` would calculate distributed term
+statistics, but ignore field statistics.  `Rescorer.extractTerms` has been removed, and replaced with
+a new method on `RescoreContext` that returns any queries used by the rescore implementation.
+The delegating IndexSearcher then collects term contexts and statistics in the same way described
+above for each Query.

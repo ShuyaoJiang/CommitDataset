@@ -1,0 +1,11 @@
+Fix possible assertion failure in IndicesQueryCache.close (#38714)
+
+The assertion that the stats2 map is empty in
+IndicesQueryCache.close has been observed to
+fail very occasionally in internal cluster tests.
+
+The likely cause is a cross-thread visibility
+problem for a count variable.  This change
+makes that count volatile.
+
+Relates #37117

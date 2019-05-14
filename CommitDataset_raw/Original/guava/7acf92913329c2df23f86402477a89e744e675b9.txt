@@ -1,0 +1,6 @@
+Add a mechanism to ForwardingWrapperTester for when the forwarded interface contains methods that are defined to 'return this'.  In this case straight delegation doesn't work since the wrapped methods should return the forwarding object and not the delegate object.
+
+The strategy is to detect this situation by inspecting the return value of the forwarded method and if it is assignable to the interface type then we allow the forwarding method to return either the return value of the delegate or the wrapper itself.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=48461760

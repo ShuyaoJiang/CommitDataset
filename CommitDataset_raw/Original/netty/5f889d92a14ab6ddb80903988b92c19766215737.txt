@@ -1,0 +1,5 @@
+Fix buffer leaks in Bzip2Decoder(Test)
+
+If decompression fails, the buffer that contains the decompressed data
+is not released.  Bzip2DecoderTest.testStreamCrcError() also does not
+release the partial output Bzip2Decoder produces.

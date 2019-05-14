@@ -1,0 +1,15 @@
+Move methods for decode hex dump into StringUtil
+
+Motivation:
+
+PR #6811 introduced a public utility methods to decode hex dump and its parts, but they are not visible from netty-common.
+
+Modifications:
+
+1. Move the `decodeHexByte`, `decodeHexDump` and `decodeHexNibble` methods into `StringUtils`.
+2. Apply these methods where applicable.
+3. Remove similar methods from other locations (e.g. `HpackHex` test class).
+
+Result:
+
+Less code duplication.

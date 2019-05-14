@@ -1,0 +1,13 @@
+Simplify analysis of `bool` queries. (#29430)
+
+This change tries to simplify the extraction logic of boolean queries by
+concentrating the logic into two methods: one that merges results for
+conjunctions, and another one for disjunctions. Other concerns, like the impact
+of prohibited clauses or how an `UnsupportedQueryException` should be treated
+are applied on top of those two methods.
+
+This is mostly a code reorganization, it doesn't change the result of query
+extraction except in the case that a query both has required clauses and a
+minimum number of `SHOULD` clauses that is greater than 1, which we now
+rewrite into a pure conjunction. For instance `(+A B C)~1` is rewritten into
+`(+A +(B C))` prior to extraction.

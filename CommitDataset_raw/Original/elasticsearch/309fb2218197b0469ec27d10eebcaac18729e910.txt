@@ -1,0 +1,8 @@
+Build: forked compiler max memory matches jvmArgs (#33138)
+
+This commit removes the setting of the fork options maximum memory size
+in our build plugin and instead adds the value in the gradle.properties
+file to be alongside the value set in jvmArgs.
+
+This change is necessary when using parallel compilation as 512m is not
+sufficient for parallel compilation on some machines.

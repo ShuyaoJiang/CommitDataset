@@ -1,0 +1,8 @@
+Fix illegal cast of the "low cardinality" optimization of the `terms` aggregation. (#27543)
+
+The GlobalOrdinalsStringTermsAggregator.LowCardinality aggregator casts global
+values to `GlobalOrdinalMapping`, even though the implementation of global
+values is different when a `missing` value is configured.
+
+This commit adds a new API that gives access to the ordinal remapping in order
+to fix this problem.

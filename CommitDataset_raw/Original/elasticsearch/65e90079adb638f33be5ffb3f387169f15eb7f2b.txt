@@ -1,0 +1,37 @@
+Open engine should keep only starting commit (#28228)
+
+Keeping unsafe commits when opening an engine can be problematic because
+these commits are not safe at the recovering time but they can suddenly
+become safe in the future. The following issues can happen if unsafe
+commits are kept oninit.
+
+1. Replica can use unsafe commit in peer-recovery. This happens when a
+replica with a safe commit c1 (max_seqno=1) and an unsafe commit c2
+(max_seqno=2) recovers from a primary with c1(max_seqno=1). If a new
+document (seqno=2) is added without flushing, the global checkpoint is
+advanced to 2; and the replica recovers again, it will use the unsafe
+commit c2 (max_seqno=2 <= gcp=2) as the starting commit for sequenced
+based recovery even the commit c2 contains a stale operation and the
+document (with seqno=2) will not be replicated to the replica.
+
+2. Min translog gen for recovery can go backwards in peer-recovery. This
+happens when a replica with a safe commit c1 (local_checkpoint=1,
+recovery_translog_gen=1) and an unsafe commit c2 (local_checkpoint=2,
+recovery_translog_gen=2). The replica recovers from a primary, and keeps
+c2 as the last commit, then sets last_translog_gen to 2. Flushing a new
+commit on the replica will cause exception as the new last commit c3
+will have recovery_translog_gen=1. The recovery translog generation of a
+commit is calculated based on the current local checkpoint. The local
+checkpoint of c3 is 1 while the local checkpoint of c2 is 2.
+
+3. Commit without translog can be used for recovery. An old index, which
+was created before multiple-commits is introduced (v6.2), may not have a
+safe commit. If that index has a snapshotted commit without translog and
+an unsafe commit, the policy can consider the snapshotted commit as a
+safe commit for recovery even the commit does not have translog.
+
+These issues can be avoided if the combined deletion policy keeps only
+the starting commit onInit.
+
+Relates #27804
+Relates #28181

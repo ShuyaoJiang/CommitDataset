@@ -1,0 +1,8 @@
+Suppress tests broken by CL 164180554's emulator upgrade to API level 15.
+
+It seems like that particular version of Android might not GC as aggressively (perhaps specifically for variables in the current method that have been nulled out, perhaps specifically when GC isn't strictly required -- I don't know).
+The tests pass under the newest emulator, though, so I don't think there's a bug for us to report. Hopefully it's just a quirk of GC and not some strange way that some versions of Android are actually retaining a reference (not that we could necessarily do anything about it, anyway).
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=164593083

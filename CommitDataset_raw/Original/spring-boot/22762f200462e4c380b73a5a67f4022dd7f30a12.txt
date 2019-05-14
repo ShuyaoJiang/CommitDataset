@@ -1,0 +1,14 @@
+Adjust @PropertySource handling so @Conditionals are accounted for
+
+User can now do this, for instance:
+
+    @Configuration
+    @PropertySource("classpath:my.properties")
+    public class MainConfiguration {}
+
+    @Configuration
+    @PropertySource("classpath:foo.properties")
+    @Profile("foo")
+    public class FooConfiguration {}
+
+and the "foo" properties ar eonly loaded in the "foo" profile.

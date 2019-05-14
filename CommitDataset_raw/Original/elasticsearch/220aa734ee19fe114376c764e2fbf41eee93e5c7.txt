@@ -1,0 +1,26 @@
+Migrate actions to plugin core (elastic/x-pack-elasticsearch#3424)
+
+This commit hacks up the xpack repo in such a way that it moves all
+actions that the transport client uses to plugin core. It also moves
+any classes that those actions use to plugin core, with a few
+exceptions. I tried to split up any classes that pulled in server side
+logic into the client, but that was not always 100% possible. Consider
+this commit a guide, and since I do not know the codebase for each
+plugin, consider it a best guess for what should be moved. A few other
+things were merged in below.
+
+This commit extracts the parts of Condition and AlwaysCondition that are
+needed by classes that will be moved into the client package. The only
+odd thing here is that since there are two parent classes (Condition and
+AlwaysCondition) it was not possible to make AlwaysConditionInteral
+extend from AlwaysCondition and still parse a ConditionInternal object,
+which is what the ConditionFactory expects.
+
+This commit removes the use of internal users in the User class, and
+instead moves them to Authentication, where they are used.
+
+[insert obligatory chuck norris karate image here]
+
+ref elastic/x-pack-elasticsearch#2925
+
+Original commit: elastic/x-pack-elasticsearch@42d0b72209463d126c338cebb1a5dace38f79e6a

@@ -1,0 +1,8 @@
+Fix failing NettyReactiveWebServerFactoryTests
+
+NettyReactiveWebServerFactoryTests.portInUseExceptionIsThrownWhenPortIsAlreadyInUse
+started failing on CI following this change in reactor netty:
+https://github.com/reactor/reactor-netty/commit/e6634c27f6e847b7a6998a1f642c0b7efdf0c610
+Instead of a `BindException`, a `NativeIoException` is thrown. Since that Exception
+is for internal use only, we throw a generic `WebServerException`
+instead of the `PortInUseException`.

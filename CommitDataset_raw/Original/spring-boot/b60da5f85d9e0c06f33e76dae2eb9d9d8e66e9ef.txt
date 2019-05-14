@@ -1,0 +1,9 @@
+Allow early ServletRequest Autowiring
+
+Update `EmbeddedWebApplicationContext` so that Servlet related
+resolvable dependencies are registered in `postProcessBeanFactory`.
+
+This allows a `ServletReqest` to be autowired into an early initialized
+bean and brings parity with WAR based deployments.
+
+Closes gh-14990

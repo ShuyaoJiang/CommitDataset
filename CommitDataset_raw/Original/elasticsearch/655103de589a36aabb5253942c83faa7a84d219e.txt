@@ -1,0 +1,11 @@
+Increase timeout for testAddNewReplicas
+
+We flush quite often in testAddNewReplicas to create the safe index
+commit with gaps in sequence numbers. This test is failing recently
+because CI is too slow to complete 5 small flushes in 10 seconds.
+
+This commit increases timeout for this test and also ensures to always
+terminate the background indexing. The latter is to eliminate unrelated
+failures if this test fails again.
+
+Closes #37183

@@ -1,0 +1,11 @@
+Improve empty request body handling
+
+The check for an empty request body InputStream is now in the base
+class AbstractMessageConverterMethodArgumentResolver shared for
+all arguments that involve reading with an HttpMessageConverter --
+@RequestBody, @RequestPart, and HttpEntity.
+
+When an empty body is detected any configured RequestBodyAdvice is
+given a chance to select a default value or leave it as null.
+
+Issue: SPR-12778, SPR-12860, SPR-12861

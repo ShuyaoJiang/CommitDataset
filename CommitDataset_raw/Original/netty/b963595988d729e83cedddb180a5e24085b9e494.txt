@@ -1,0 +1,16 @@
+Fix handling of non direct backed PemEncoded.
+
+Motivation:
+
+The private key and certificate that are passed into #serKeyMaterial() could be PemEncoded in which case the #toPEM() methods return the identity of the value.
+
+That in turn will fail in the #toBIO() step because the underlying ByteBuf is not necessarily direct.
+
+Modifications:
+
+- Use toBIO(...) which also works with non direct PemEncoded values
+- Add unit test.
+
+Result:
+
+Correct handling of PemEncoded.

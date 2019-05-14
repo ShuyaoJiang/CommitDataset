@@ -1,0 +1,8 @@
+Decouple MultiValueMode. (#31075)
+
+Currently this class takes care of moth selecting the relevant value, and
+replacing missing values if any. This is fine for sorting, which always needs
+to do both at the same time, but we also have a number of aggregations and
+script utils that need to retain information about missing values so this change
+proposes to decouple selection of the relevant value and replacement of missing
+values.

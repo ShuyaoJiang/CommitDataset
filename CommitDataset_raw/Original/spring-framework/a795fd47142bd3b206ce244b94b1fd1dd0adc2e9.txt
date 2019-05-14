@@ -1,0 +1,15 @@
+Add support for URI templates in redirectedUrl() & forwardedUrl()
+
+Prior to this commit, the redirectedUrl() and forwardedUrl() methods in
+MockMvcResultMatchers supported fully constructed URLs and URLs
+containing Ant-style path patterns. However, URI templates were not
+supported for these result matchers even though the request path can be
+built using URL templates -- for example, via the get() and post()
+methods in MockMvcRequestBuilders.
+
+This commit addresses this shortcoming by allowing users to supply a
+URL template instead of a fully constructed URL to redirectedUrl() and
+forwardedUrl(). To populate the URL template, template variables may be
+supplied to redirectedUrl() and forwardedUrl() as var-args.
+
+Issue: SPR-14790

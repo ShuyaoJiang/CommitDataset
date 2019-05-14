@@ -1,0 +1,13 @@
+Correctly parse package-prefix if the jni lib is contained in a path that matches the library name.
+
+Motivation:
+
+We used strstr to find the path to the library, which fails if the library is contained in a directory that also matches the library name.
+
+Modifications:
+
+- Introduce netty_unix_util_strstr_last which will return a pointer which points to the last accourance and so not fails if the direct also matches the library name.
+
+Result:
+
+Be able to load the library in all cases.

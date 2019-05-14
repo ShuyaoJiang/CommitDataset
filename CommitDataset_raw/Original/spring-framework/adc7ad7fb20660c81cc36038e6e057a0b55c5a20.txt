@@ -1,0 +1,11 @@
+Fix detection of the @SendTo annotation
+
+Previously, the default reply destination could not be discovered if the
+@JmsListener annotation was placed on a bean that is eligible for
+proxying as the proxy method is used internally and does not reveal
+an annotation placed on the implementation.
+
+This commit makes sure to resolve the most specific method when
+searching that annotation.
+
+Issue: SPR-12513

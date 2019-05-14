@@ -1,0 +1,20 @@
+Remove default JUL handler to prevent duplicate console logging
+
+By default, JUL configures a single root handler. That handler is a
+ConsoleHandler. Previously, we removed all root handlers from JUL but
+this is problematic in environments where other handlers are
+registered with JUL and those handlers need to be retained.
+0679d436 attempted to fix the problem by leaving the root handlers in
+place and only adding and removing the bridge handler. This resulted
+in log output from Tomcat (and anything else that uses JUL) being
+duplicated.
+
+This commit makes another attempt at tackling the problem. It attempts
+to detect JUL's default configuration (a single root handler that's a
+ConsoleHandler) and only removes the handler if it appears to be from
+the default configuration. For environments where default JUL
+configuration is being used, this will prevent duplicate logging and
+for environments where custom JUL configuration is being used, this
+will prevent that configuration from being undone.
+
+Closes gh-8933

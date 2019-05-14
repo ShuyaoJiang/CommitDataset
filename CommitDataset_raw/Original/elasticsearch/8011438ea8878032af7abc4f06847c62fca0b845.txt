@@ -1,0 +1,6 @@
+Use correct source of randomness
+
+This fixes a failure of InternalTestClusterTests#testBeforeTest which checks
+that the cluster is set up the same when starting from the same seed. Trappily,
+using ESTestCase#randomIntBetween() is no good, we have to use
+InternalTestCluster#random via RandomNumbers#randomIntBetween() instead.

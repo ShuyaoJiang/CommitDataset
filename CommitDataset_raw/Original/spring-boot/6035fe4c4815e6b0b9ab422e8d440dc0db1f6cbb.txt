@@ -1,0 +1,15 @@
+Make it easier to run JUnit tests against a subset of the class path
+
+Due to `@ConditionalOnClass` and `@ConditionalOnMissingClass`, the
+behaviour of many auto-configuration classes is dependant on the
+contents of the class path, yet we do not have a lightweight way of
+testing such classes against a specific class path.
+
+This commit introduces FilteredClassPathRunner, a JUnit Runner that
+runs a class’s tests using a filtered class path. A
+`@ClassPathExclusions` annotation on a test class can be used to
+filter entries from the project’s default class path, thereby allowing
+a configuration class’s behaviour in the presence or absence of
+certain classes to be tested more easily.
+
+Closes gh-5359

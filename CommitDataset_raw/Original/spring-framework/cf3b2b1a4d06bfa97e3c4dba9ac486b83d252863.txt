@@ -1,0 +1,17 @@
+Simplify test includes & excludes in Gradle build
+
+This commit aligns our include and exclude filters for test classes
+with Gradle's standard patterns. Specifically, our patterns now end
+with ".class" instead of ".*".
+
+The aforementioned change makes the exclusion of inner classes
+unnecessary. Thus, patterns for test classes ending with "TestCase" or
+"TestSuite" have been deleted.
+
+Furthermore, the include and exclude patterns previously used in the
+spring-test module made it impossible for the
+FailingBeforeAndAfterMethodsTests class in the 'testng' package to ever
+be executed by the build. This has been addressed by renaming our JUnit
+and TestNG variants of FailingBeforeAndAfterMethodsTests and moving the
+TestNG variant into the 'junit' package so that it can be picked with
+our standard include pattern for JUnit-based tests.

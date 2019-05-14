@@ -1,0 +1,10 @@
+SSLEngineTest issue introduced by d8e6fbb9c3656663f41797a15f38bb25fdcab834
+
+Motivation:
+d8e6fbb9c3656663f41797a15f38bb25fdcab834 attempted to account for the JDK not throwing the expected SSLHandshakeException by allowing a SSLException to also pass the test. However in some situations the SSLException will not be the top level exception and the Throwable must be unwrapped to see if the root cause is an SSLException.
+
+Modifications:
+- Unwrap exceptions thrown by the JDK's SSLEngine to check for SSLException.
+
+Result:
+SSLEngineTest (and derived classes) are more reliable.

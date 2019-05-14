@@ -1,0 +1,14 @@
+Construct LOCALHOST4 and LOCALHOST6 object with hostname "localhost"
+
+Motivation:
+
+When resolving localhost on Windows where the hosts file does not contain a localhost entry by default, the resulting InetAddress object returned by the resolver does not have the hostname set so that getHostName returns the ip address 127.0.0.1. This behaviour is inconsistent with Windows where the hosts file does contain a localhost entry and with Linux in any case. It breaks at least some unit tests.
+
+Modifications:
+
+Create the LOCALHOST4 and LOCALHOST6 objects with hostname localhost in addition to the address.
+Add unit test domain localhost to DnsNameResolverTest to check the resolution of localhost with ipv4 at least.
+
+Result:
+
+The resolver returns a InetAddress object for localhost with the hostname localhost in all cases.

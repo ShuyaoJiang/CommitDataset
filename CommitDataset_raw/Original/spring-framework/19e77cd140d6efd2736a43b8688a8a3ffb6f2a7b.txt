@@ -1,0 +1,18 @@
+Remove use of Boolean constructors
+
+Codacy warns us that there are several references to Boolean
+constructors in the tests. Direct usage of the Boolean constructor is
+discouraged and even deprecated in Java 9 [1]. Boolean constructor use
+can easily be replaced with the constant instances.
+
+This commit contains the following changes:
+
+ - replace references to Boolean constructors with boolean constants in
+   JSP tag tests
+ - update the copyright year where necessary
+ - BooleanComparatorTests is intentionally left unchanged as it should
+   also work with the non-constant instances correctly
+
+ [1] http://download.java.net/java/jdk9/docs/api/java/lang/Boolean.html#Boolean-boolean-
+
+Issue: SPR-15076

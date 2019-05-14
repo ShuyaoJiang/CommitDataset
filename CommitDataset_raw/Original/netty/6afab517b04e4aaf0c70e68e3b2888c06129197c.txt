@@ -1,0 +1,13 @@
+Guard against calling PoolThreadCache.free() multiple times. (#8108)
+
+Motivation:
+
+5b1fe611a637c362a60b391079fff73b1a4ef912 introduced the usage of a finalizer as last resort for PoolThreadCache. As we may call free() from the FastThreadLocal.onRemoval(...) and finalize() we need to guard against multiple calls as otherwise we will corrupt internal state (that is used for metrics).
+
+Modifications:
+
+Use AtomicBoolean to guard against multiple calls of PoolThreadCache.free().
+
+Result:
+
+No more corruption of internal state caused by calling PoolThreadCache.free() multuple times.

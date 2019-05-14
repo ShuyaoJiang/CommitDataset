@@ -1,0 +1,12 @@
+Ensure KeyStoreWrapper decryption exceptions are handled (#32464)
+
+* Ensure decryption related exceptions are handled
+
+This commit ensures that all possible Exceptions in
+KeyStoreWrapper#decrypt() are handled. More specifically, in the
+case that a wrong password is used for secure settings, calling readX
+on the DataInputStream that wraps the CipherInputStream can throw an
+IOException. It also adds a test for loading a KeyStoreWrapper with
+a wrong password.
+
+Resolves #32411 

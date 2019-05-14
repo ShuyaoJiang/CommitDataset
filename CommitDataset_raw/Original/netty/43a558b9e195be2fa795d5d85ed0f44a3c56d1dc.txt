@@ -1,0 +1,11 @@
+ChannelOutboundBuffer bytes before writable accessor
+
+Motiviation:
+There are currently no accessors which provide visbility into how many bytes must be written in order for a writability change to occur. This feature would be useful for codecs which intent to control how many bytes are queued at any given time.
+
+Modifications:
+- add bytesBeforeUnWritable() which will give the number of bytes before the buffer (and associated channel) transitions to not writable
+- add bytesBeforeWritable() which will give the number of bytes that must be drained from the queue until the channel becomes writable.
+
+Result:
+More visibility into writability for the ChannelOutboundBuffer.

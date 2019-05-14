@@ -1,0 +1,76 @@
+Introduce reserved default profile support
+
+AbstractEnvironment and subclasses now register a reserved default
+profile named literally 'default' such that with no action on the part
+of the user, beans defined against the 'default' profile will be
+registered - if no other profiles are explicitly activated.
+
+For example, given the following three files a.xml, b.xml and c.xml:
+
+    a.xml
+    -----
+    <beans> <!-- no 'profile' attribute -->
+        <bean id="a" class="com.acme.A"/>
+    </beans>
+
+    b.xml
+    -----
+    <beans profile="default">
+        <bean id="b" class="com.acme.B"/>
+    </beans>
+
+    c.xml
+    -----
+    <beans profile="custom">
+        <bean id="c" class="com.acme.C"/>
+    </beans>
+
+bootstrapping all of the files in a Spring ApplicationContext as
+follows will result in beans 'a' and 'b', but not 'c' being registered:
+
+    ApplicationContext ctx = new GenericXmlApplicationContext();
+    ctx.load("a.xml");
+    ctx.load("b.xml");
+    ctx.load("c.xml");
+    ctx.refresh();
+    ctx.containsBean("a"); // true
+    ctx.containsBean("b"); // true
+    ctx.containsBean("c"); // false
+
+whereas activating the 'custom' profile will result in beans 'a' and
+'c', but not 'b' being registered:
+
+    ApplicationContext ctx = new GenericXmlApplicationContext();
+    ctx.load("a.xml");
+    ctx.load("b.xml");
+    ctx.load("c.xml");
+    ctx.getEnvironment().setActiveProfiles("custom");
+    ctx.refresh();
+    ctx.containsBean("a"); // true
+    ctx.containsBean("b"); // false
+    ctx.containsBean("c"); // true
+
+that is, once the 'custom' profile is activated, beans defined against
+the the reserved default profile are no longer registered. Beans not
+defined against any profile ('a') are always registered regardless of
+which profiles are active, and of course beans registered
+against specific active profiles ('c') are registered.
+
+The reserved default profile is, in practice, just another 'default
+profile', as might be added through calling env.setDefaultProfiles() or
+via the 'spring.profiles.default' property.  The only difference is that
+the reserved default is added automatically by AbstractEnvironment
+implementations.  As such, any call to setDefaultProfiles() or value set
+for the 'spring.profiles.default' will override the reserved default
+profile.  If a user wishes to add their own default profile while
+keeping the reserved default profile as well, it will need to be
+explicitly redeclared, e.g.:
+
+    env.addDefaultProfiles("my-default-profile", "default")
+
+The reserved default profile(s) are determined by the value returned
+from AbstractEnvironment#getReservedDefaultProfiles().  This protected
+method may be overridden by subclasses in order to customize the
+set of reserved default profiles.
+
+Issue: SPR-8203

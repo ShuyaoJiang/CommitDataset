@@ -1,0 +1,16 @@
+Added UDP multicast (with caveats: no ipv6, getInterface, getNetworkI… (#9006)
+
+…nterface, block or loopback-mode-disabled operations).
+
+
+Motivation:
+
+Provide epoll/native multicast to support high load multicast users (we are using it for a high load telecomm app at my day job).
+
+Modification:
+
+Added support for (ipv4 only) source specific and any source multicast for epoll transport. Some caveats (beyond no ipv6 support initially - there’s a bit of work to add in join and leave group specifically around SSM, as ipv6 uses different data structures for this): no support for disabling loop back mode, retrieval of interface and block operation, all of which tend to be less frequently used.
+
+Result:
+
+Provides epoll transport multicast for IPv4 for common use cases. Understand if you’d prefer to hold off until ipv6 is included but not sure when I’ll be able to get to that.

@@ -1,0 +1,5 @@
+GroupBy & Time Gap Fixes
+
+I ran head-on into the "time gap" (https://github.com/Netflix/RxJava/issues/844) issue while working on a stream processing use case (and new 'pivot' operator I'm writing).
+This is a solution. It's still not ideal as the Javadocs of BufferUntilSubscriber mention, but this is working better than nothing and does not require blocking threads.
+A better solution will come as part of the back pressure work where BufferUntilSubscriber will evolve to have a bounded buffer.

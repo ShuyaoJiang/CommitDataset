@@ -1,0 +1,14 @@
+Docs: Skip xpack snippet tests if no xpack (#31619)
+
+Skips tests the require xpack if we run the doc build without xpack. So
+this should work:
+```
+./gradlew -p docs check -Dtests.distribution=oss-zip
+```
+
+This is implemented by detecting parts of the doc that look like:
+```
+[testenv="basic"]
+```
+
+Relates to #30665

@@ -1,0 +1,8 @@
+Tie-break shard path decision based on total number of shards on path (#27039)
+
+Right now if the number of shards for a particular index is equal across the
+data paths, we tie-break on space. This changes to tie-break first on the total
+number of shards for each path, and then, if that is the same, on the usable
+bytes.
+
+Relates to #26654 (it's a follow-up)

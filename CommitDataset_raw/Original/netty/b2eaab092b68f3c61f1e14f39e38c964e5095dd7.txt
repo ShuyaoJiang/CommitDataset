@@ -1,0 +1,56 @@
+Optimize Hpack and AsciiString hashcode and equals (#8902)
+
+Motivation:
+
+While looking at hpack header-processing hotspots I noticed some low
+level too-big-to-inline methods which can be shrunk.
+
+Modifications:
+
+Reduce bytecode size and/or runtime operations used for the following
+methods:
+
+PlatformDependent0.equals(byte[], ...)
+PlatformDependent0.equalsConstantTime(byte[], ...)
+PlatformDependent0.hashCodeAscii(byte[],int,int)
+PlatformDependent.hashCodeAscii(CharSequence)
+
+Result:
+
+Existing benchmarks show decent improvement
+
+Before
+
+Benchmark                     (size)   Mode  Cnt         Score         Error  Units
+HpackUtilBenchmark.newEquals   SMALL  thrpt    5  17200229.374 ± 1701239.198  ops/s
+HpackUtilBenchmark.newEquals  MEDIUM  thrpt    5   3386061.629 ±   72264.685  ops/s
+HpackUtilBenchmark.newEquals   LARGE  thrpt    5    507579.209 ±   65883.951  ops/s
+
+After
+
+Benchmark                     (size)   Mode  Cnt         Score         Error  Units
+HpackUtilBenchmark.newEquals   SMALL  thrpt    5  29221527.058 ± 4805825.836  ops/s
+HpackUtilBenchmark.newEquals  MEDIUM  thrpt    5   6556251.645 ±  466115.199  ops/s
+HpackUtilBenchmark.newEquals   LARGE  thrpt    5    879828.889 ±  148136.641  ops/s
+
+Before
+
+Benchmark                          (size)  Mode  Cnt     Score     Error  Units
+PlatformDepBench.unsafeBytesEqual       4  avgt   10     4.263 ±   0.110  ns/op
+PlatformDepBench.unsafeBytesEqual      10  avgt   10     5.206 ±   0.133  ns/op
+PlatformDepBench.unsafeBytesEqual      50  avgt   10     8.160 ±   0.320  ns/op
+PlatformDepBench.unsafeBytesEqual     100  avgt   10    13.810 ±   0.751  ns/op
+PlatformDepBench.unsafeBytesEqual    1000  avgt   10    89.077 ±   7.275  ns/op
+PlatformDepBench.unsafeBytesEqual   10000  avgt   10   773.940 ±  24.579  ns/op
+PlatformDepBench.unsafeBytesEqual  100000  avgt   10  7546.807 ± 110.395  ns/op
+
+After
+
+Benchmark                          (size)  Mode  Cnt     Score     Error  Units
+PlatformDepBench.unsafeBytesEqual       4  avgt   10     3.337 ±   0.087  ns/op
+PlatformDepBench.unsafeBytesEqual      10  avgt   10     4.286 ±   0.194  ns/op
+PlatformDepBench.unsafeBytesEqual      50  avgt   10     7.817 ±   0.123  ns/op
+PlatformDepBench.unsafeBytesEqual     100  avgt   10    11.260 ±   0.412  ns/op
+PlatformDepBench.unsafeBytesEqual    1000  avgt   10    84.255 ±   2.596  ns/op
+PlatformDepBench.unsafeBytesEqual   10000  avgt   10   591.892 ±   5.136  ns/op
+PlatformDepBench.unsafeBytesEqual  100000  avgt   10  6978.859 ± 285.043  ns/op

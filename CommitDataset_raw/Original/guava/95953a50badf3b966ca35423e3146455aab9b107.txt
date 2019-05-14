@@ -1,0 +1,12 @@
+Make all AbstractFutures behave like TrustedFutures under GWT.
+
+I'm doing this for two reasons:
+
+1. Exceptions are almost certainly disproportionately expensive under GWT. But mostly...
+
+2. I can get away with under GWT, where there are very few users of util.concurrent. (This is technically a violation of our compatibility policy, but I suspect we've played a little fast and loose with it when it comes to GWT before. Plus, util.concurrent is likely to be even less used outside Google than it is inside, and it gained GWT support only in Guava 19. And to top that off, I hope to remove Future.get() entirely from GWT, so this CL will be the least of users' worries :))
+
+Also, update a comment in ImmediateFuture.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=117746555

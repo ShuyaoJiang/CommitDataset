@@ -1,0 +1,49 @@
+Upgrade to JUnit 4.11 snapshot in support of JDK7
+
+Class#getDeclaredMembers returns arbitrary results under JDK7. This
+results in non-deterministic execution of JUnit test methods, often
+revealing unintended dependencies between methods that rely on a
+specific order to succeed.
+
+JUnit 4.11 contains support for predictable test ordering [1], but at
+the time of this commit, JUnit 4.11 has not yet been released.
+Therefore we are testing against a snapshot version [2], which has been
+uploaded to repo.springsource.org [3] for easy access. Note that this
+artifact may be removed when JUnit 4.11 goes GA.
+
+ - Care has been taken to ensure that spring-test's compile-time
+   dependency on JUnit remains at 4.10. This means that the spring-test
+   pom.xml will continue to have an optional <dependency> on JUnit
+   4.10, instead of the 4.11 snapshot.
+
+ - For reasons not fully understood, the upgrade to the 4.11 snapshot
+   of junit-dep caused NoSuchMethodErrors around certain Hamcrest
+   types, particularly CoreMatchers and Matchers. import statements
+   have been updated accordingly throughout affected test cases.
+
+ - Runtime errors also occurred around uses of JUnit @Rule and
+   ExpectedException. These have been reverted to use simpler
+   mechanisms like @Test(expected) in the meantime.
+
+ - Some test methods with order-based dependencies on one another have
+   been renamed in order to fall in line with JUnit 4.11's new method
+   ordering (as opposed to actually fixing the inter-test
+   dependencies). In other areas, the fix was as simple as adding a
+   tearDown method and cleaning up state.
+
+ - For no apparent reason, the timeout in AspectJAutoProxyCreatorTests'
+   testAspectsAndAdvisorNotAppliedToPrototypeIsFastEnough method begins
+   to be exceeded. Prior to this commit the timeout value was 3000 ms;
+   on the CI server under Linux/JDK6 and JDK7, the test begins taking
+   anywhere from 3500-5500 ms with this commit. It is presumed that
+   this is an incidental artifact of the upgrade to JUnit 4.11. In any
+   case, there are no changes to src/main in this commit, so this
+   should not actually represent a performance risk for Spring
+   Framework users. The timeout has been increased to 6000 ms to
+   accommodate this situation.
+
+[1]: https://github.com/KentBeck/junit/pull/293
+[2]: https://github.com/downloads/KentBeck/junit/junit-dep-4.11-SNAPSHOT-20120805-1225.jar
+[3]: https://repo.springsource.org/simple/ext-release-local/junit/junit-dep/4.11.20120805.1225
+
+Issue: SPR-9783

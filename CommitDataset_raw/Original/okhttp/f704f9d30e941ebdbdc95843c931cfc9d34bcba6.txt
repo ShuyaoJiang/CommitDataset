@@ -1,0 +1,11 @@
+OkHttpsURLConnection.setSSLSocketFactory(null): throw.
+
+OkHttpsURLConnection extends javax.net.ssl.HttpsURLConnection.
+The super class documentation says that setSSLSocketFactory(null)
+throws IllegalArgumentException, but this implementation didn't
+do that.
+
+This CL fixed OkHttpsURLConnection.setSSLSocketFactory(null) to
+throw, as specified.
+
+Test: not done locally, relying on Travis.

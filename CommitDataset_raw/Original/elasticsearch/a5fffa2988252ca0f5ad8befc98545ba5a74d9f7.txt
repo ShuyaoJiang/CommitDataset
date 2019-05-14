@@ -1,0 +1,5 @@
+relax the assertion about the existence of MAX_UNSAFE_AUTO_ID_TIMESTAMP_COMMIT_ID in the user commit data
+
+Since #24149 we started storing the maxUnsafeAutoIdTimestamp in the lucene commit. The assertions in that PR were built on the assumption that recovering a primary always ends up committing lucene. That is sadly [not true](https://github.com/elastic/elasticsearch/blob/a72eaa8e0f5c0f305c507c5fcd918fed7c1bf6bf/core/src/main/java/org/elasticsearch/index/engine/InternalEngine.java#L313).
+
+Closes #24809

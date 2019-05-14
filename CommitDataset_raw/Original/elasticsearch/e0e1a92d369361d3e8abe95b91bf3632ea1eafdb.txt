@@ -1,0 +1,11 @@
+Revert "Adjust CombinedDeletionPolicy for multiple commits (#27456)"
+
+The commit looks harmless, unfortunately it can break the engine flush
+scheduler and the translog rolling. Both `uncommittedOperations` and
+`uncommittedSizeInBytes` are currently calculated based on the minimum
+required generation for recovery rather than the translog generation of
+the last index commit. This is not correct if other index commits are
+reserved for snapshotting even though we are keeping the last index
+commit only.
+
+This reverts commit e95d18ec23e9a25cc4b6b2cc3a665c7e5427c2db.

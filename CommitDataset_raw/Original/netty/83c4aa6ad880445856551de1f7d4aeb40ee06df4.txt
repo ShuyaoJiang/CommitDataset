@@ -1,0 +1,10 @@
+HTTP/2 Writes GO_AWAY on channelInactive
+
+Motivation:
+Http2ConnectionHandler inherits from ByteToMessageDecoder. ByteToMessageDecoder.channelInactive will attempt to decode any remaining data by calling the abstract decode method. If the Http2ConnectionHandler is in server mode, and no data has been exchanged yet, it will try to treat this data as an invalid connection preface and write a GO_AWAY. This is noisy in the logs and creates an illusion that there is a protocol violation when there has not been.
+
+Modifications:
+- If the channel is inactive the connection preface decode should not be executed.
+
+Result:
+Log files don't include misleading error messages related to connection preface errors.

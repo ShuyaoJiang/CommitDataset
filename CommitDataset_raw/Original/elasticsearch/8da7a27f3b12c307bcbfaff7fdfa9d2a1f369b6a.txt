@@ -1,0 +1,5 @@
+ Deprecate types in the put mapping API. (#37280)
+
+From #29453 and #37285, the `include_type_name` parameter was already present and defaulted to false. This PR makes the following updates:
+- Add deprecation warnings to `RestPutMappingAction`, plus tests in `RestPutMappingActionTests`.
+- Add a typeless 'put mappings' method to the Java HLRC, and deprecate the old typed version. To do this cleanly, I opted to create a new `PutMappingRequest` object that differs from the existing server one.

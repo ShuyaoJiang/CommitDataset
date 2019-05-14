@@ -1,0 +1,12 @@
+Include transitive file dependencies during Gradle repackaging
+
+Previously, ProjectLibraries only considered a configuration's
+direct file dependencies. This meant that a transitive file
+dependency that should have been pulled in via a project dependency
+was not included in the repackaged jar's lib directory.
+
+ProjectLibraries has been updated to walk down the tree of project
+dependencies and create libraries for any file dependencies that
+are found.
+
+Fixes gh-1368

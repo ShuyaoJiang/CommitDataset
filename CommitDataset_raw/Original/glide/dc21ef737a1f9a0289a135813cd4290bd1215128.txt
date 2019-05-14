@@ -1,0 +1,11 @@
+Avoid throwing in EmptyModelLoader
+
+A ModelLoader for a given data type may depend on another ModelLoader
+for that data type. If no such ModelLoader is registered, prior to this
+change, Glide would throw an exception and fail the request. This change
+allows the ModelLoader with the missing dependency to fail, rather than
+throw, allowing Glide to move on to another ModelLoader that may
+succeed.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=111701943

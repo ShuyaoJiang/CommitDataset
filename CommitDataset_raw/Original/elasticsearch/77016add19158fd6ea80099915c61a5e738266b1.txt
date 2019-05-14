@@ -1,0 +1,13 @@
+Store phase steps for index in PolicyStepsRegistry (#32926)
+
+* Store phase steps for index in PolicyStepsRegistry
+
+This changes the way that steps are retrieved from `PolicyStepsRegistry` to
+store the steps on a per-index basis (in memory for now, though that will change
+in subsequent PRs). These steps are rebuilt as the index changes phases.
+
+This also fixes a bug where an action with the same phase and name was not being
+considered changed (and thus updated) in the compiled steps list. These are now
+correctly considered as "upsert" diffs.
+
+Relates to #29823

@@ -1,0 +1,11 @@
+Optimize ConfigurationPropertyName
+
+This commit changes the iteration order when checking for element
+equality. This is based on the educated guess that child elements
+will likely differ while parents will probably be the same.
+
+E.g. comparing "spring.banner.charset" with "spring.banner.location"
+will now first check "charset" against "location" and thus saves some
+cycles for elements that will be the same.
+
+See gh-15782

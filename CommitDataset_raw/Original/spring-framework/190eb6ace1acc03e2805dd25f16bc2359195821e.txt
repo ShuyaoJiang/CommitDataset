@@ -1,0 +1,17 @@
+Set ETag header with VersionResourceResolver
+
+Prior to this change, VersionResourceResolver and VersionStrategy would
+resolve static resources using version strings. They assist
+ResourceHttpRequestHandler with serving static resources. The
+RequestHandler itself can be configured with HTTP caching strategies to
+set Cache-Control headers.
+
+In order to have a complete strategy with Cache-Control and ETag
+response headers, developers can't reuse that version string information
+and have to rely on other mechanisms (like ShallowEtagHeaderFilter).
+
+This commit makes VersionResourceResolver use that version string to set
+it as a request attribute, which will be used by the
+ResourceHttpRequestHandler to write an ETag response header.
+
+Issue: SPR-13382

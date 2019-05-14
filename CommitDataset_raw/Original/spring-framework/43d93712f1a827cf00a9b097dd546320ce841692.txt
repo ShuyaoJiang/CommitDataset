@@ -1,0 +1,10 @@
+Remove isStreaming flag from AbstractHttpSockJsSession
+
+This change removes the need for the isStreaming field from the base
+class AbstractHttpSockJsSession. This field was used to account for
+differences between polling vs streaming SockJS sessions without having
+to expose to sub-classes private fields that are otherwise protected
+from concurrent access by the base class. The change manages to delegate
+to sub-classes without providing direct access to protected fields.
+
+Issue: SPR-12427

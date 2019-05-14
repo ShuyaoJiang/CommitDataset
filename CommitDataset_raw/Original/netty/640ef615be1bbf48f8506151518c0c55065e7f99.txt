@@ -1,0 +1,19 @@
+Allow to configure SslHandler to wait for close_notify response before closing the Channel and fix racy flush close_notify timeout scheduling.
+
+Motivation:
+
+SslHandler closed the channel as soon as it was able to write out the close_notify message. This may not be what the user want as it may make sense to only close it after the actual response to the close_notify was received in order to guarantee a clean-shutdown of the connection in all cases.
+
+Beside this closeNotifyFlushTimeoutMillis is volatile so may change between two reads. We need to cache it in a local variable to ensure it not change int between. Beside this we also need to check if the flush promise was complete the schedule timeout as this may happened but we were not able to cancel the timeout yet. Otherwise we will produce an missleading log message.
+
+Modifications:
+
+- Add new setter / getter to SslHandler which allows to specify the behavior (old behavior is preserved as default)
+- Added unit test.
+- Cache volatile closeNotifyTimeoutMillis.
+- Correctly check if flush promise was complete before we try to forcibly close the Channel and log a warning.
+- Add missing javadocs.
+
+Result:
+
+More clean shutdown of connection possible when using SSL and fix racy way of schedule close_notify flush timeouts and javadocs.

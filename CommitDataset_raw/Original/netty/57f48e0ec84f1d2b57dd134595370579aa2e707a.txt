@@ -1,0 +1,13 @@
+Fixed FingerprintTrustManagerFactory constructor
+
+Motivation:
+
+When constructing a FingerprintTrustManagerFactory from an Iterable of Strings, the fingerprints were correctly parsed but never added to the result array. The constructed FingerprintTrustManagerFactory consequently fails to validate any certificate.
+
+Modifications:
+
+I added a line to add each converted SHA-1 certificate fingerprint to the result array which then gets passed on to the next constructor.
+
+Result:
+
+Certificate fingerprints passed to the constructor are now correctly added to the array of valid fingerprints. The resulting FingerprintTrustManagerFactory object correctly validates certificates against the list of specified fingerprints.

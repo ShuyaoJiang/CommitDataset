@@ -1,0 +1,13 @@
+Http2MultiplexCodec now propagates SETTINGS and GOAWAY frames in pipeline.
+
+Motivation:
+
+Allow the observation of SETTINGS frame by other handlers in the pipeline. For my particular use case this allows me to observe the value of MAX_CONCURRENT_STREAMS for a ChannelPool abstraction that supports HTTP/2 multiplexing. Beside this also forward GOAWAY frames.
+
+Modification:
+
+Always forward SETTINGS and GOAWAY frames
+
+Result:
+
+Settings / Goaway can now be observed in the parent channel. Previously it was not possible (to my knowledge) to capture the settings when using Http2MultiplexCodec.

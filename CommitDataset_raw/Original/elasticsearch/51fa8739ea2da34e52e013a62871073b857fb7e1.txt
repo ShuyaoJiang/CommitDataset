@@ -1,0 +1,12 @@
+Reindex: Fold "with all deps" project into reindex (#30154)
+
+This folds the `:qa:smoke-test-reindex-with-all-modules` project into
+`:modules:reindex` by declaring the reindex's integration testing
+cluster requires the `parent-join` and `lang-painless` plugins and then
+moving all of the integration tests that depended on parent-join and
+painless into reindex.
+
+It saves us one cluster start up during the build at the cost of a
+little of the reindex module's "purity". Since the reindex module *does*
+have unit tests that test scripting without painless I'm fairly ok with
+that.

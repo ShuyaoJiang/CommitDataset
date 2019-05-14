@@ -1,0 +1,9 @@
+Defer SQL initialization to fit with JPA better
+
+Added 2 new spring.datasource.* properties ("data" like
+"schema", and "deferDdl" like the "spring.jpa.hibernate.*"
+flag). The SQL scripts are then run separately and the "data"
+ones are triggered by a new DataSourceInitializedEvent,
+which is also published by the Hibernate DDL schema export.
+
+Fixes gh-1006

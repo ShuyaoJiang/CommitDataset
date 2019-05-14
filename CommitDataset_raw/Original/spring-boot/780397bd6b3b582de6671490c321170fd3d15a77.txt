@@ -1,0 +1,18 @@
+Fix for wildcard recursive classpath handling
+
+Previous fix for handling wildcard entries in a classpath
+imposed a new problem in a case where entry is a directory
+with a jar files but also contains a lot of nested directories.
+
+For example entry "./*" resulted for scanning whole disk starting
+from "/". In case of default hadoop classpath, it scanned everything
+under hadoop's installation. On some cases this deep scan was hidden
+and was revealed by NPE's for file access exceptions.
+
+When we want to support wildcard entries we only want to get
+jar files from that directory, while boot itself have a need
+to travel recursively to find classfiles from an expoded archive.
+
+We handle this case by using recursive(true by default) flag in
+ExplodedArchive and this flag is set to false in PropertiesLauncher
+if we match wildcard.

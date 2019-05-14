@@ -1,0 +1,10 @@
+Expose whether or not the global checkpoint updated (#32659)
+
+It will be useful for future efforts to know if the global checkpoint
+was updated. To this end, we need to expose whether or not the global
+checkpoint was updated when the state of the replication tracker
+updates. For this, we add to the tracker a callback that is invoked
+whenever the global checkpoint is updated. For primaries this will be
+invoked when the computed global checkpoint is updated based on state
+changes to the tracker. For replicas this will be invoked when the local
+knowledge of the global checkpoint is advanced from the primary.

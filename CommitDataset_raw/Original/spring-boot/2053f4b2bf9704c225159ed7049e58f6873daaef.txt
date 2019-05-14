@@ -1,0 +1,10 @@
+Clear JAVA_OPTS in CLI tests; avoid permsize config error with Java 8
+
+When a Java 8 JVM is launched with -XX:MaxPermSize a warning message
+is output indicating that the option will be ignored. This causes the
+CLI tests that assert that no error output has been produced to fail.
+
+This commit updates the CLI's integration test harness to remove
+JAVA_OPTS from the environment of the CLI process. This prevents any
+unwanted max perm size configuration from leaking into that
+environment and breaking the build.

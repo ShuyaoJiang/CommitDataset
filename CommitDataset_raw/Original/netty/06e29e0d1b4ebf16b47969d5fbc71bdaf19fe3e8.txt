@@ -1,0 +1,12 @@
+HTTP/2 codec may not always call Http2Connection.onStreamRemoved
+
+Motivation:
+Http2Connection.onStreamRemoved is not always called if Http2Connection.onStreamAdded is called. This is problematic as users may rely on the onStreamRemoved method to be called to release ByteBuf objects and do other cleanup.
+
+Modifications:
+- Http2Connection.close will remove all streams existing streams and prevent new ones from being created
+- Http2ConnectionHandler will call the new close method in channelInactive
+
+Result:
+Http2Connection.onStreamRemoved is always called when Http2Connection.onStreamRemoved is called to preserve the Http2Connection guarantees.
+Fixes https://github.com/netty/netty/issues/4838

@@ -1,0 +1,14 @@
+Allow auto-reload of log4j2 config
+
+Log4j2 can auto-reload its configuration file as long as the reference
+to a `java.io.File` is provided in the `ConfigurationSource`. Previously,
+we always created such `ConfigurationSource` with only the URL regardless
+of its type.
+
+Detect when the configuration URL points to a File and create the
+`ConfigurationSource` accordingly.
+
+The `spring-boot-sample-actuator-log4j2` has been updated to reload the
+logging configuration every 30 sec if necessary.
+
+Fixes gh-3024, gh-3030

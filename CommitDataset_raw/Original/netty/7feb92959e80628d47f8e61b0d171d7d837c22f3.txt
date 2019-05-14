@@ -1,0 +1,14 @@
+Improve performance of Base64.decode and encode methods.
+
+Motivation:
+
+The decode and encode method uses getByte(...) and setByte(...) in loops which can be very expensive because of bounds / reference-count checking. Beside this it also slows-down a lot when paranoid leak-detection is enabled as it will track each access.
+
+Modifications:
+
+- Pack bytes into int / short and so reduce operations on the ByteBuf
+- Use ByteProcessor to reduce getByte calls.
+
+Result:
+
+Better performance in general. Also when you run the build with -Pleak the handler module will build in 1/4 of the time it took before.

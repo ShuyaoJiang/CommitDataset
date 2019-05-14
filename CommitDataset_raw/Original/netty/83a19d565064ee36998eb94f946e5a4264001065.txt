@@ -1,0 +1,83 @@
+Optimistically update ref counts
+
+Motivation:
+Highly retained and released objects have contention on their ref
+count.  Currently, the ref count is updated using compareAndSet
+with care to make sure the count doesn't overflow, double free, or
+revive the object.
+
+Profiling has shown that a non trivial (~1%) of CPU time on gRPC
+latency benchmarks is from the ref count updating.
+
+Modification:
+Rather than pessimistically assuming the ref count will be invalid,
+optimistically update it assuming it will be.  If the update was
+wrong, then use the slow path to revert the change and throw an
+execption.  Most of the time, the ref counts are correct.
+
+This changes from using compareAndSet to getAndAdd, which emits a
+different CPU instruction on x86 (CMPXCHG to XADD).  Because the
+CPU knows it will modifiy the memory, it can avoid contention.
+
+On a highly contended machine, this can be about 2x faster.
+
+There is a downside to the new approach.  The ref counters can
+temporarily enter invalid states if over retained or over released.
+The code does handle these overflow and underflow scenarios, but it
+is possible that another concurrent access may push the failure to
+a different location.  For example:
+
+Time 1 Thread 1: obj.retain(INT_MAX - 1)
+Time 2 Thread 1: obj.retain(2)
+Time 2 Thread 2: obj.retain(1)
+
+Previously Thread 2 would always succeed and Thread 1 would always
+fail on the second access.  Now, thread 2 could fail while thread 1
+is rolling back its change.
+
+====
+
+There are a few reasons why I think this is okay:
+
+1. Buggy code is going to have bugs.  An exception _is_ going to be
+   thrown.  This just causes the other threads to notice the state
+   is messed up and stop early.
+2. If high retention counts are a use case, then ref count should
+   be a long rather than an int.
+3. The critical section is greatly reduced compared to the previous
+   version, so the likelihood of this happening is lower
+4. On error, the code always rollsback the change atomically, so
+   there is no possibility of corruption.
+
+Result:
+Faster refcounting
+
+```
+BEFORE:
+
+Benchmark                                                                                             (delay)    Mode      Cnt         Score    Error  Units
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                            1  sample  2901361       804.579 ±  1.835  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                           10  sample  3038729       785.376 ± 16.471  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                          100  sample  2899401       817.392 ±  6.668  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                         1000  sample  3650566      2077.700 ±  0.600  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                        10000  sample  3005467     19949.334 ±  4.243  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                          1  sample   456091        48.610 ±  1.162  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                         10  sample   732051        62.599 ±  0.815  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                        100  sample   778925       228.629 ±  1.205  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                       1000  sample   633682      2002.987 ±  2.856  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                      10000  sample   506442     19735.345 ± 12.312  ns/op
+
+AFTER:
+Benchmark                                                                                             (delay)    Mode      Cnt         Score    Error  Units
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                            1  sample  3761980       383.436 ±  1.315  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                           10  sample  3667304       474.429 ±  1.101  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                          100  sample  3039374       479.267 ±  0.435  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                         1000  sample  3709210      2044.603 ±  0.989  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_contended                                        10000  sample  3011591     19904.227 ± 18.025  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                          1  sample   494975        52.269 ±  8.345  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                         10  sample   771094        62.290 ±  0.795  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                        100  sample   763230       235.044 ±  1.552  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                       1000  sample   634037      2006.578 ±  3.574  ns/op
+AbstractReferenceCountedByteBufBenchmark.retainRelease_uncontended                                      10000  sample   506284     19742.605 ± 13.729  ns/op
+
+```

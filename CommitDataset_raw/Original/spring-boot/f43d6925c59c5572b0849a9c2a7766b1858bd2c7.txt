@@ -1,0 +1,15 @@
+Apply spring.jackson.* config to HypermediaAutoConfiguration’s ObjectMapper
+
+Previously, HypermediaAutoConfiguration would trigger the creation of
+an ObjectMapper bean named _halObjectMapper. This bean did not have the
+spring.jackson.* configuration applied to it, however its presence
+would revent JacksonAutoConfiguration from creating its
+ObjectMapper. This left the user with an ObjectMapper that did not
+honour the spring.jackson.* configuration.
+
+This commit updates HypermediaAutoConfiguration to use the
+Jackson2ObjectMapperBuilder that may have been created by
+JacksonAutoConfiguration. If the builder exists it is used to configure
+the _halObjectMapper bean.
+
+Fixes gh-1949

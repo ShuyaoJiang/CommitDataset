@@ -1,0 +1,10 @@
+Remove HTTP max content length leniency (#29337)
+
+I am not sure why we have this leniency for HTTP max content length, it
+has been there since the beginning
+(5ac51ee93feab6c75fcbe979b9bb338962622c2e) with no explanation of its
+source. That said, our philosophy today is different than the philosophy
+of the past where Elasticsearch would be quite lenient in its handling
+of settings and today we aim for predictability for both users and
+us. This commit removes leniency in the parsing of
+http.max_content_length.

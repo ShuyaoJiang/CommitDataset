@@ -1,0 +1,13 @@
+Correctly run all pending tasks for EmbeddedChannel when the Channel was closed.
+
+Motivation:
+
+When a user called ctx.close() and used the EmbeddedChannel we did not correctly run all pending tasks which means channelInactive was never called.
+
+Modifications:
+
+Ensure we run all pending tasks after all operations that may change the Channel state and are part of the Channel.Unsafe impl.
+
+Result:
+
+Fixes [#6894].

@@ -1,0 +1,10 @@
+[ML] Prevent ML node attributes being set directly (elastic/x-pack-elasticsearch#2725)
+
+ML uses node attributes to ensure that the master node knows how many
+ML jobs may be allocated to each node.  This change prevents a user
+messing up the way these attributes are used by setting them differently
+using node.attr.* entries in their elasticsearch.yml.
+
+This covers the "very short term" change outlined in elastic/x-pack-elasticsearch#2649
+
+Original commit: elastic/x-pack-elasticsearch@9c381801d9ffc799fcf3d241efb2b1f3d2da69d4

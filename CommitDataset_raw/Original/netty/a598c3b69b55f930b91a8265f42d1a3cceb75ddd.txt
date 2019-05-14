@@ -1,0 +1,13 @@
+Enforce sane upper limit for TTL in DefaultDnsCache. (#7907)
+
+Motivation:
+
+In b47fb817991b42ec8808c7d26538f3f2464e1fa6 we limited the max supported delay to match what our internal implementat can support. Because of this it was possible that DefaultDnsCache produced an IllegalArgumentException when it tried to schedule a expiration > 3 years.
+
+Modifications:
+
+Limit the max supported TTL to 2 years which is safe for all our EventLoop implementations.
+
+Result:
+
+No more exceptions when adding records to the cache with a huge TTL.

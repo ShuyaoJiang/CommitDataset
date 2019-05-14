@@ -1,0 +1,13 @@
+Optimizing KObjectHashMap hashIndex()
+
+Motivation:
+
+The IntObjectHashMap benchmarks show the Agrona collections to be faster on put, lookup, and remove. One major difference is that we're using 2 modulus operations each time we increment the position index while iterating.  Agrona uses a mask instead.
+
+Modifications:
+
+Modified the KObjectHashMap to use masking rather than modulus when wrapping the position index. This requires that the capacity be a power of 2.
+
+Result:
+
+Improved performance of IntObjectHashMap.

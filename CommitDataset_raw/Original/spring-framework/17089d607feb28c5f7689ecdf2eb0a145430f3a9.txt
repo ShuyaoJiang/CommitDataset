@@ -1,0 +1,25 @@
+Allow RedirectAttributes on ExceptionHandlers
+
+Prior to this commit, `@ExceptionHandler` methods could not be injected
+with `RedirectAttributes` arguments. This would make it impossible to
+handle an error by redirecting to another view and add flashmap
+attributes, to be included in the model when the next view is called.
+
+Here is an example:
+
+```
+@ExceptionHandler(MyException.class)
+public String handleException(MyException ex, RedirectAttributes
+    redirectAttributes) {
+
+  redirectAttributes.addFlashAttribute("errorMessage",
+      "This is an error message");
+  return "redirect:/";
+}
+```
+
+This commit adds a new `RedirectAttributesMethodArgumentResolver`
+instance in the list of pre-configured `HandlerMethodArgumentResolver`
+in `ExceptionHandlerExceptionResolver`.
+
+Issue: SPR-14651

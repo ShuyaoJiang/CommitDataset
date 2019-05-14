@@ -1,0 +1,8 @@
+Allow system privilege to execute proxied actions (#37508)
+
+Currently all proxied actions are denied for the `SystemPrivilege`.
+Unfortunately, there are use cases (CCR) where we would like to proxy
+actions to a remote node that are normally performed by the
+system context. This commit allows the system context to perform
+proxy actions if they are actions that the system context is normally
+allowed to execute.

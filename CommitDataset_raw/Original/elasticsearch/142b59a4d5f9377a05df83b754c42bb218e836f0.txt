@@ -1,0 +1,8 @@
+[ML] Use the correct timeout for the process context lock (elastic/x-pack-elasticsearch#2935)
+
+This change should have been made in elastic/x-pack-elasticsearch#2913.  Now we hold the process
+context lock throughout the job close procedure, the timeout for trying
+to lock it should be the timeout used for job open/close rather than the
+timeout for connecting named pipes.
+
+Original commit: elastic/x-pack-elasticsearch@79672b082588e0dcc5248d481a41ca91b593c67f

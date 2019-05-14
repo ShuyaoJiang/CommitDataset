@@ -1,0 +1,10 @@
+SslHander wrap conditional direct buffer allocation
+
+Motivation:
+The SslHandler currently forces the use of a direct buffer for the input to the SSLEngine.wrap(..) operation. This allocation may not always be desired and should be conditionally done.
+
+Modifications:
+- Use the pre-existing wantsDirectBuffer variable as the condition to do the conversion.
+
+Result:
+- An allocation of a direct byte buffer and a copy of data is now not required for every SslHandler wrap operation.

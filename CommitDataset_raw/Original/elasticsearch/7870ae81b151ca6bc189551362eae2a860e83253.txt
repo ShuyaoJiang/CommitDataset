@@ -1,0 +1,12 @@
+[ML] Prevent stack overflow while copying ML jobs and datafeeds (#36370)
+
+ML jobs and datafeeds wrap collections into their unmodifiable
+equivalents in their constructor. However, the copying builder
+does not make a copy of some of those collections resulting
+in wrapping those again and again. This can eventually result
+to stack overflow.
+
+This commit addressed this issue by copying the collections in
+question in the copying builder constructor.
+
+Closes #36360

@@ -1,0 +1,12 @@
+Start animatable resources after setting the resource in ImageViewTarget
+
+After 90b3b9f054072a7c3625926caa150277352b92dd we have a case where a
+GifDrawable may load a frame synchronously when it’s started. If the
+GifDrawable was started before it was attached to a View (and gets a 
+non-null Callback) and the GifDrawable had a frame pending, then the
+GifDrawable would stop itself in the start() call, causing the 
+drawable not to animate. We can avoid this scenario by changing the 
+order in which we start animated drawables and set them on views so that
+we only start the drawable after its set on the View.
+
+Fixes #2541

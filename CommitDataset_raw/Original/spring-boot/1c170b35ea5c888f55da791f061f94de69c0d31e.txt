@@ -1,0 +1,25 @@
+Improve handling of connection failures in remote debug tunnel
+
+Previously, if an application had been started without remote
+debugging enabled, an attempt to connect to it via
+RemoteSpringApplication and the HTTP tunnel would result in the
+application being hammered by connection attempts for 30 seconds.
+
+This commit updates the tunnel server to respond with Service
+Unavailable (503) when a connection attempt is made and the JVM
+does not have remote debugging enabled. When the client receives a
+503 response, it now logs a warning message describing the possible
+problem before closing the connection.
+
+The client has also been updated to provide improved diagnostics when
+a connection to the tunnel server cannot be established, for example
+because the remote URL is incorrect, or the remote application isn't
+running.
+
+Lastly, the client has been updated so that it continues to accept
+connections when a connection to the server is closed. This allows
+the user to correct a problem with the remote application, such as
+restarting it with remote debugging enabled, without having to also
+restart the process that's running RemoteSpringApplication.
+
+Closes gh-5021

@@ -1,0 +1,3 @@
+[Geo] Decouple geojson parse logic from ShapeBuilders
+
+This is the first step to supporting WKT (and other future) format(s). The ShapeBuilders are quite messy and can be simplified by decoupling the parse logic from the build logic. This commit refactors the parsing logic into its own package separate from the Shape builders. It also decouples the GeoShapeType into a standalone enumerator that is responsible for validating the parsed data and providing the appropriate builder. This future-proofs the code making it easier to maintain and add new shape types.

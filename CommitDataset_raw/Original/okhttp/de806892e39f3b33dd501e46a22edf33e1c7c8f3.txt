@@ -1,0 +1,21 @@
+Small web socket optimizations. (#3841)
+
+* Eliminate redundant boolean.
+
+* Force batch web socket emissions to underlying sink.
+
+Write directly into the sink's buffer so that we can ensure there are no accidental emissions to the buffered sink's underlying sink. Since we always call flush() or emit() at the end of these methods anyway, accidental intermediate emissions don't have any performance value.
+
+* Private.
+
+* Remove unused constants.
+
+* Initialize byte arrays for masking only when needed.
+
+* Move frame byte read count to locals.
+
+* Re-use Buffer instances for control and message frames.
+
+* Remove test dependency on implementation code.
+
+Previously the test used logic that was part of the code under test to validate behavior. This means that a bug would be missed as the behavior would be present in the actual and expected data. By using golden binary hex values, we are insulated from this.

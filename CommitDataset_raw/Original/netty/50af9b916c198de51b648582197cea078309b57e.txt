@@ -1,0 +1,36 @@
+Eliminate memory copy in ByteToMessageDecoder whenever possible
+
+Motivation:
+
+Currently when there are bytes left in the cumulation buffer we do a byte copy to produce the input buffer for the decode method. This can put quite some overhead on the impl.
+
+Modification:
+
+- Use a CompositeByteBuf to eliminate the byte copy.
+- Allow to specify if a CompositeBytebug should be used or not as some handlers can only act on one ByteBuffer in an efficient way (like SslHandler :( ).
+
+Result:
+
+Performance improvement as shown in the following benchmark.
+
+Without this patch:
+[xxx@xxx ~]$ ./wrk-benchmark
+Running 5m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    20.19ms   38.34ms   1.02s    98.70%
+    Req/Sec   241.10k    26.50k  303.45k    93.46%
+  1153994119 requests in 5.00m, 155.84GB read
+Requests/sec: 3846702.44
+Transfer/sec:    531.93MB
+
+With the patch:
+[xxx@xxx ~]$ ./wrk-benchmark
+Running 5m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    17.34ms   27.14ms 877.62ms   98.26%
+    Req/Sec   252.55k    23.77k  329.50k    87.71%
+  1209772221 requests in 5.00m, 163.37GB read
+Requests/sec: 4032584.22
+Transfer/sec:    557.64MB

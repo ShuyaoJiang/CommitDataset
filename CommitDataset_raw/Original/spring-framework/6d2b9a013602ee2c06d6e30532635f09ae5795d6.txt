@@ -1,0 +1,13 @@
+Throw exception if TxMgr cannot be retrieved for @Transactional test
+
+Prior to this commit, a @Transactional integration test would silently
+be executed without a transaction if the transaction manager could not
+be retrieved from the application context -- for example, it no such
+bean was defined or if multiple beans were present but none satisfied
+the qualifier.
+
+This commit addresses this issue by throwing an IllegalStateException
+if the PlatformTransactionManager cannot be retrieved for a
+@Transactional test.
+
+Issue: SPR-13895

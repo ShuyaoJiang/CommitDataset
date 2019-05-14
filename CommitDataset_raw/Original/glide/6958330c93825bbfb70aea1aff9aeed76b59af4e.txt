@@ -1,0 +1,19 @@
+Clean up GifDrawable resources more reliably.
+
+Each time we call get() on a drawable resource, we
+get a new Drawable. We call get() repeatedly on
+resources when they are retrieved from either the
+set of active resources or the in memory cache.
+Each time we create a new GifDrawable it holds on
+to one or two temporary Bitmaps outside it's
+shared state to render the current frame and obey
+the dispose_previous method. This change means we
+more aggressively cleanup those resources when
+we think each Drawable is no longer being used.
+The side affect is that we may reset back to
+the beginning of the Drawable in some
+circumstances.
+
+Cleanup in in memory resources makes it less
+likely that frames would be retrieved from
+in memory, so this also works toward #207.

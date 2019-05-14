@@ -1,0 +1,18 @@
+Avoid infinite loop in HTTP/2 distributor toString()
+
+Motivation:
+
+Although effectively unused, the toString() of
+WeightedFairQueueByteDistributor.State is useful for debugging. It
+accidentally had an infinite loop, as it would recurse infinitely
+between a parent and its child, which makes it less useful for
+debugging.
+
+Modifications:
+
+Prune the infinite loop by using the parent's streamId instead of the
+parent's toString().
+
+Result:
+
+Faster, less stack-overflowing toString()

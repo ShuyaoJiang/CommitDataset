@@ -1,0 +1,25 @@
+[ML] Allow datafeed to start when job is opening (elastic/x-pack-elasticsearch#1611)
+
+The goal of this change is to allow datafeeds to start
+when the job is in the opening state. This makes the API
+more async and it allows clients like the ML UI to open a
+job and start its datafeed without having to manage the
+complexity of dealing with timeouts due to the job taking
+time to open due to restoring a large state.
+
+In order to achieve this, this commit does a number of things:
+
+  - accepts a start datafeed request when the job is opening
+  - adds logic to the DatafeedManager to wait before running the
+  datafeed task until the job is opened
+  - refactord the datafeed node selection logic into its own class
+  - splitd selection issues in critical and non-critical with regard
+  to creating the datafeed task
+  - refactord the unit tests to make simpler to write & understand
+  - adds unit tests for added and modified functionality
+  - changes the response when the datafeed cannot be started to
+  be a conflict exception
+
+relates elastic/x-pack-elasticsearch#1535
+
+Original commit: elastic/x-pack-elasticsearch@c83196155d93d522d25ae19fcdea121bbabf7945

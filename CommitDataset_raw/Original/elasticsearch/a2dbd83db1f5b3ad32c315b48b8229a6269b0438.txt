@@ -1,0 +1,10 @@
+Allow Integ Tests to run in a FIPS-140 JVM (#31989)
+
+* Complete changes for running IT in a fips JVM
+
+- Mute :x-pack:qa:sql:security:ssl:integTest as it
+  cannot run in FIPS 140 JVM until the SQL CLI supports key/cert.
+- Set default JVM keystore/truststore password in top level build
+  script for all integTest tasks in a FIPS 140 JVM
+- Changed top level x-pack build script to use keys and certificates
+  for trust/key material when spinning up clusters for IT

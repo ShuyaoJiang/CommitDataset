@@ -1,0 +1,13 @@
+Correctly handle wildcard address when bind to socket and using native transport
+
+Motivation:
+
+When a wildcard address is used to bind a socket and ipv4 and ipv6 are usable we should accept both (just like JDK IO/NIO does).
+
+Modifications:
+
+Detect wildcard address and if so use in6addr_any
+
+Result:
+
+Correctly accept ipv4 and ipv6

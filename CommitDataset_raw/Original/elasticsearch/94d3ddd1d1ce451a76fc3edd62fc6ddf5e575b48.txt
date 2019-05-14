@@ -1,0 +1,13 @@
+Fix handling of points_only with term strategy in geo_shape (#31766)
+
+Fixes 2 issues that together cause errors during index creation
+with geo_shapes that use the term strategy. The term strategy changes
+the default for points_only parameter, but this wasn't taken into
+account during serialization. So, setting the term strategy would add
+`"points_only": true` to serialization. At the same time if the term
+strategy would also cause the `points_only` setting to be not marked as
+a processed element during parsing, which would cause index creation to
+fail with the error: `Mapping definition for [location] has unsupported`
+`parameters:  [points_only : true]`.
+
+Fixes #31707

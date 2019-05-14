@@ -1,0 +1,9 @@
+SQL: Fix merging of incompatible multi-fields (#39560)
+
+Fix bug in IndexResolver that caused conflicts in multi-field types to
+be ignored up (causing the query to fail later on due to mapping
+conflicts).
+The issue was caused by the multi-field which forced the parent creation
+before checking its validity across mappings
+
+Fix #39547

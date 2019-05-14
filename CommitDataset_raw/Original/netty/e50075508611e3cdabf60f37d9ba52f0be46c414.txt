@@ -1,0 +1,11 @@
+Remove double comparing of content out of the DefaultHttp2GoAwayFrame.equals()
+
+Motivation:
+In `DefaultHttp2GoAwayFrame.equals()` a content compared twice: explicitly and in the `super` method.
+
+Modifications:
+Remove explicit content comparision.
+Make `hashCode()` consistent with `equals()`.
+
+Result:
+A `DefaultHttp2GoAwayFrame.equals()` work faster.

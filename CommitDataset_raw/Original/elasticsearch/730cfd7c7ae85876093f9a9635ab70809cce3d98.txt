@@ -1,0 +1,12 @@
+Watcher: Remote WatcherClientProxy/ClientProxy class (elastic/x-pack-elasticsearch#1561)
+
+This commit removes ClientProxy and WatcherClientProxy classes. They
+were added in times, where there were issues with guice and circular
+dependencies. However there is no guice anymore and on top of that
+the classes do not add any value.
+
+We can switch to use a regular client, but have to make sure that
+the InternalClient is injected in all the transport actions as those
+is able to query data, when security is enabled.
+
+Original commit: elastic/x-pack-elasticsearch@763a79b2f7f5e2744cc3f7a7db50c4ede7a13333

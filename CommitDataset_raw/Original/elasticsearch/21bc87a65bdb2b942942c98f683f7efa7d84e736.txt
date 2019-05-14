@@ -1,0 +1,11 @@
+Use readFully() to read bytes from CipherInputStream (#28515)
+
+Changes how data is read from CipherInputStream
+
+ Instead of using `read()` and checking that the bytes read are what we 
+expect, use `readFully()` which will read exactly the number of bytes
+while keep reading until the end of the stream or throw an
+`EOFException` if not all bytes can be read.
+
+This approach keeps the simplicity of using CipherInputStream while
+working as expected with both JCE and BCFIPS Security Providers

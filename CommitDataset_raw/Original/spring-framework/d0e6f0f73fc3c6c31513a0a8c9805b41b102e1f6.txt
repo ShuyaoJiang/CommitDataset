@@ -1,0 +1,13 @@
+Change GenericConversionService to better handle enum
+
+Prior to this commit, given an enum which implements some interface,
+GenericConversionService would select the String -> Enum converter even
+if a converter for String -> SomeInterface was registered.  This also
+affected converters that were registered for String ->
+SomeBaseInterface, when SomeInterface extended SomeBaseInterface.
+
+This change modifies the behavior of the private method
+getClassHierarchy() by placing Enum.class as late as possible, pretty
+much the same way as Object.class is handled.
+
+Issue: SPR-12050

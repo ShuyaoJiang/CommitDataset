@@ -1,0 +1,11 @@
+Clean up allowPartialSearchResults serialization (#37911)
+
+When serializing allowPartialSearchResults to the shards through ShardSearchTransportRequest, we use an optional boolean field, though
+the corresponding instance member is declared `boolean` which can never
+be null. We also have an assert to verify that the incoming search
+request provides a non-null value for the flag, and a comment explaining
+that null should be considered a bug.
+
+This commit makes the allowPartialSearchResults method in
+ShardSearchRequest return a `boolean` rather than a `Boolean` and
+changes the serialization from optional to non optional, in a bw comp manner.

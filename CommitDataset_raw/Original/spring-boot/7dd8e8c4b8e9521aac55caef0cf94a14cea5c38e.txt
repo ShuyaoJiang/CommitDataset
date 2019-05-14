@@ -1,0 +1,12 @@
+Honour spring.profiles.include even when .active has not been set
+
+393cfe50 expanded the scope of spring.profiles.include so that it
+could be used in any property source, and not just in a configuration
+file. However, it did so in such a way that it would only take effect
+when used outside of a configuration file if spring.profiles.active
+was also set.
+
+This commit updates ConfigFileApplicationListener so that included
+profiles are activated when spring.profiles.active has not be set.
+
+Closes gh-8244

@@ -1,0 +1,21 @@
+Fixed default OpenSsl cipher suites
+
+Motivation:
+
+The default enabled cipher suites of the OpenSsl engine are not set to
+SslUtils#DEFAULT_CIPHER_SUITES. Instead all available cipher suites are
+enabled. This should happen only as a fallback.
+
+Modifications:
+
+Moved the line in the static initializer in OpenSsl which adds the
+SslUtils#DEFAULT_CIPHER_SUITES to the default enabled cipher suites up
+before the fallback.
+
+Result:
+
+The default enabled cipher suites of the OpenSsl engine are set to the
+available ones of the SslUtils#DEFAULT_CIPHER_SUITES.
+The default enabled cipher suites of the OpenSsl engine are only set to
+all available cipher suites if no one of the
+SslUtils#DEFAULT_CIPHER_SUITES is supported.

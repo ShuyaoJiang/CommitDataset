@@ -1,0 +1,23 @@
+Log listener Throwables in default promise
+
+Motivation:
+
+The logging statements in i.n.u.c.DefaultPromise do not emit the
+caught Throwable when a Throwable is thrown while a listener is being
+notified of completed or progressed operations.
+
+Modifications:
+
+This issue arises because the logging message has a single placeholder
+but is passing two additional arguments, the second one being the
+caught Throwable that is thus quietly not logged. We address this by
+modifying the logging statements to ensure the caught Throwable is
+logged. In this case, the preferred approach is to use the logger
+override that accepts a message and a Throwable parameter since logger
+implementations might have special handling for this case.
+
+Result:
+
+Log messages from i.n.u.c.DefaultPromise when a Throwable is thrown
+while notifying a listener of completed or progressed operations will
+contain the caught Throwable.

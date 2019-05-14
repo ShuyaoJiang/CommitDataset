@@ -1,0 +1,17 @@
+Apply root to URIs directly rather than relying on expansion
+
+Previously, TestRestTemplate applied the root URI to URIs by
+converting them to a String and then passing the String to the
+RestTemplate delegate. Being a String, meant that the URI passed
+through RestTemplate's standard URI template expansion processing
+using the configured UriTemplateHandler. While this caused the root
+URI to be applied, it also had the unwanted side-effect of
+encoding the URI for a second time.
+
+This commit updates TestRestTemplate so that, when configured with a
+RootUriTemplateHandler, it applies the root URI directly and then
+passes a modified URI to the RestTemplate delegate. Being a URI means
+that no template expansion is performed and the possible double
+encoding is avoided.
+
+Closes gh-8163

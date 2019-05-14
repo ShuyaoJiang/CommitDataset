@@ -1,0 +1,7 @@
+Add a clear method to image loader
+
+Also don't cancel load tasks. We incur the gc
+penalty early on, so though cancelling might save
+some cpu work, it causes more gcing and worse
+performance early on because we toss the allocated
+bitmap rather than storing and reusing it. 

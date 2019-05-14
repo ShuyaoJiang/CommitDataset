@@ -1,0 +1,15 @@
+ByteBufUtil to not pool direct memory by default
+
+Motivation:
+ByteBufUtil by default will cache DirectByteBuffer objects, and the
+associated direct memory (up to 64k). In combination with the Recycler which may
+cache up to 32k elements per thread may lead to a large amount of direct
+memory being retained per EventLoop thread. As traffic spikes come this
+may be perceived as a memory leak because the memory in the Recycler
+will never be reclaimed.
+
+Modifications:
+- By default we shouldn't cache DirectByteBuffer objects.
+
+Result:
+Less direct memory consumption due to caching DirectByteBuffer objects.

@@ -1,0 +1,15 @@
+Fix #6969: Do not reset the states while streaming Json array
+
+Motivation:
+
+Calling JsonObjectDecoder#reset while streaming Json array over multiple
+writes causes CorruptedFrameException to be thrown.
+
+Modifications:
+
+While streaming Json array and if the current readerIndex has been reset,
+ensure that the states will not be reset.
+
+Result:
+
+Fixes #6969

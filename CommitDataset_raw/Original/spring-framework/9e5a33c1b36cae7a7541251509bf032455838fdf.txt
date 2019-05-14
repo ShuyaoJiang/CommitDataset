@@ -1,0 +1,31 @@
+Add a ResourceResolver implementation for WebJars
+
+Prior to this commit, WebJars users needed to use versioned links within
+templates for WebJars resources, such as `/jquery/1.2.0/jquery.js`.
+This can be rather cumbersome when updating libraries - all references
+in templates need to be updated.
+
+One could use version-less links in templates, but needed to add a
+specific MVC Handler that uses webjars.org's webjar-locator library.
+While this approach makes maintaing templates easier, this makes HTTP
+caching strategies less optimal.
+
+This commit adds a new WebJarsResourceResolver that search for resources
+located in WebJar locations. This ResourceResolver is automatically
+registered if the "org.webjars:webjars-locator" dependency is present.
+
+Registering WebJars resource handling can be done like this:
+
+```java
+@Override
+protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+  registry.addResourceHandler("/webjars/**")
+          .addResourceLocations("classpath:META-INF/resources/webjars")
+          .resourceChain(true)
+              .addResolver(new WebJarsResourceResolver());
+}
+```
+
+Issue: SPR-12323
+
+polish

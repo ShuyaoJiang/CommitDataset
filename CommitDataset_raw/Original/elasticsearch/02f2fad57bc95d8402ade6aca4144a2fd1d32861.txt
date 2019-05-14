@@ -1,0 +1,31 @@
+Add a task to run forbiddenapis using cli (#32076)
+
+* Add a task to run forbiddenapis using cli
+
+Add a task that offers an equivalent check to the forbidden APIs plugin,
+but runs it using the forbiddenAPIs CLI instead.
+
+This isn't wired into precommit first, and doesn't work for projects
+that require specific signatures, etc. It's meant to show how this can
+be used. The next step is to make a custom task type and configure it
+based on the project extension from the pugin and make some minor
+adjustments to some build scripts as we can't  bee 100% compatible with
+that at least due to how additional signatures are passed.
+
+Notes:
+- there's no `--target` for the CLI version so we have to pass in
+specific bundled signature names
+- the cli task already wires to `runtimeJavaHome`
+- no equivalent for `failOnUnsupportedJava = false` but doesn't seem to
+be a problem. Tested with Java 8 to 11
+- there's no way to pass additional signatures as URL, these will have
+to be on the file system, and can't be resources on the cp unless we
+rely on how forbiddenapis is implemented and mimic them as boundled
+signatures.
+- the average of 3 runs is 4% slower using the CLI for :server.
+( `./gradlew clean :server:forbiddenApis` vs `./gradlew clean
+:server:forbiddenApisCli`)
+- up-to-date checks don't work on the cli task yet, that will happen
+with the custom task.
+
+See also: #31715

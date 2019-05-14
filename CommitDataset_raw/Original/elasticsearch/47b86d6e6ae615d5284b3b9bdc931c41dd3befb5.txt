@@ -1,0 +1,14 @@
+[CCR] Changed AutoFollowCoordinator to keep track of certain statistics (#33684)
+
+The following stats are being kept track of:
+1) The total number of times that auto following a leader index succeed.
+2) The total number of times that auto following a leader index failed.
+3) The total number of times that fetching a remote cluster state failed.
+4) The most recent 256 auto follow failures per auto leader index
+   (e.g. create_and_follow api call fails) or cluster alias
+   (e.g. fetching remote cluster state fails).
+
+Each auto follow run now produces a result that is being used to update
+the stats being kept track of in AutoFollowCoordinator.
+
+Relates to #33007

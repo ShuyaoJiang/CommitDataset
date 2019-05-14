@@ -1,0 +1,12 @@
+Fix HTTP/2 bug where we were using SPDY/3 style header concatenation.
+
+When multiple headers have the same value in SPDY/3, they are concantenated
+and separated by \u0000.
+
+When multiple headers have the same value in HTTP/2, they are each written
+independently.
+
+This fixes the problem and rearranges the code to share less behavior than
+previously. It gets us closer to being able to drop SPDY/3.
+
+Closes https://github.com/square/okhttp/issues/1906

@@ -1,0 +1,14 @@
+Fix OutOfBoundsExceptio in ResourceUrlEncodingFilter
+
+Prior to this change, the `ResourceUrlEncodingFilter` would try to
+lookup resources URLs as soon as the given URL would be longer than the
+expected context+servlet prefix path. This can lead to
+OutOfBoundsExceptions when the provided URL does not start with that
+prefix and still has the required length.
+
+This commit makes sure that all candidate URLs for resources lookup are
+prefixed with the cached servlet and context path. This underlines the
+fact that the `ResourceUrlEncodingFilter` does not support relative URLs
+for now and delegates to the native servlet implementation in that case.
+
+Issue: SPR-13861

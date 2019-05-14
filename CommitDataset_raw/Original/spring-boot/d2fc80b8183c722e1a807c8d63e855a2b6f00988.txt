@@ -1,0 +1,20 @@
+Allow custom dependency metadata to be used with the CLI
+
+Add support for a new annotation, @GrabMetadata, that can be used
+to provide the coordinates of one or more properties files, such as
+the one published by Spring IO Platform, as a source of dependency
+metadata. For example:
+
+@GrabMetadata("com.example:metadata:1.0.0")
+
+The referenced properties files must be in the format
+group:module=version.
+
+Limitations:
+
+ - Only a single @GrabMetadata annotation is supported
+ - The referenced properties file must be accessible in one of the
+   default repositories, i.e. it cannot be accessed in a repository
+   that's added using @GrabResolver
+
+Closes #814

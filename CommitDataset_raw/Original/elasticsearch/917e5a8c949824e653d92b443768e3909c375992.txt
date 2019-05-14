@@ -1,0 +1,4 @@
+TESTS: Fix Random Fail in MockTcpTransportTests (#33061)
+
+* `foobar.txGet()` appears to return before `serviceB.stop()` returns, causing `ServiceB.close()` to run concurrently with the `stop` call and running into a race codition
+* Closes #32863

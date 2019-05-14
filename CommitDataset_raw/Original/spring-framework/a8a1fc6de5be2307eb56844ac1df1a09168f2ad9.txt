@@ -1,0 +1,11 @@
+Earlier processing of forwarded headers
+
+Forwarded headers are now processed before ServerWebExchange is created
+through ForwardedHeaderTransformer which has the same logic as the
+ForwardedHeaderFilter but works on the request only.
+
+ForwardedHeaderFilter is deprecated as of 5.1 but if registered it is
+removed from the list of filters and ForwardedHeaderTransformer is used
+instead.
+
+Issue: SPR-17072

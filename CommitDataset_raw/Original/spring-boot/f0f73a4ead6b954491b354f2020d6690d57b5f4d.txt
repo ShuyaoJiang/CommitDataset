@@ -1,0 +1,10 @@
+Current directory (lodaer.path=.) pathology workaround
+
+It turns out that loader.path=. was pathological and before this
+change ended up making the classpath empty (loader.path=.,lib/
+would have fixed it). With this change the old behaviour is still
+supported, but if the only user-supplied path entry is "." (or
+empty) then it is now kept, and translates into the root of the
+current archive if running as "java -jar ...".
+
+Fixes gh-270

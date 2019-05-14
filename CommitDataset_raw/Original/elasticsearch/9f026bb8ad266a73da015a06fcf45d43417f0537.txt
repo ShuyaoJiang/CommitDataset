@@ -1,0 +1,9 @@
+Reduce object creation in Rounding class (#38061)
+
+This reduces objects creations in the rounding class (used by aggs) by properly
+creating the objects only once. Furthermore a few unneeded ZonedDateTime objects
+were created in order to create other objects out of them. This was
+changed as well.
+
+Running the benchmarks shows a much faster performance for all of the
+java time based Rounding classes.

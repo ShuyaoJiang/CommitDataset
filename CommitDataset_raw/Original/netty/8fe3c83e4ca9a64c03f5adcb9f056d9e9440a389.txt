@@ -1,0 +1,14 @@
+[#5104] Fix possible deadlock in DefaultChannelPipeline
+
+Motivation:
+
+When a user has multiple EventLoops in an EventLoopGroup and calls pipeline.add* / remove* / replace from an EventLoop that belongs to another Channel it is possible to deadlock if the other EventLoop does the same.
+
+Modification:
+
+- Only ensure the actual modification takes place in a synchronized block and not wait until the handlerAdded(...) / handlerRemoved(...) method is called. This is ok as we submit the task to the executor while still holding the look and so ensure correct order of pipeline modifications.
+- Ensure if an AbstractChannelHandlerContext is put in the linked-list structure but the handlerAdded(...) method was not called we skip it until handlerAdded(...) was called. This is needed to ensure handlerAdded(...) is always called first.
+
+Result:
+
+Its not possible to deadlock when modify the DefaultChannelPipeline.

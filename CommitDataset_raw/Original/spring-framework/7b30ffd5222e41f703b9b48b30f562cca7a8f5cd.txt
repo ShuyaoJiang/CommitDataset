@@ -1,0 +1,16 @@
+Work around Servlet dependency in content negotiation
+
+Before this change the PathExtensionContentNegotiationStrategy accessed
+the ServletContext via request.getServletContext, which is Servlet 3
+specific. To work around it, there is now a Servlet-specific sub-class
+that accepts a ServletContext as a constructor argument.
+
+The ContentNegotiationManagerFactoryBean is now ServletContextAware and
+if it has a ServletContext it creates the Servlet-specific sub-class
+of PathExtensionContentNegotiationStrategy.
+
+The ContentNegotiationManagerFactoryBean is now also used in several
+places internally -- MVC namespace, MVC Java config, and the
+ContentNegotiatingViewResolver -- to reduce duplication.
+
+Issue: SPR-9826

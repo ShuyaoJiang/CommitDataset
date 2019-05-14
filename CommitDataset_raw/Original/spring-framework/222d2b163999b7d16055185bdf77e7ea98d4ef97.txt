@@ -1,0 +1,15 @@
+Fix unnecessary required spring-context-support dep
+
+Prior to this commit, a project using compile time weaving upgrading to
+4.1 was forced to add spring-context-support and the jcache API in order
+to build. This problem is not new really: spring-aspects holds all
+aspects provided by the framework and they all are evaluated when
+compiling. 4.1 just happens to define a new aspect that requires extra
+dependencies.
+
+This commit uses a new annotation of AspectJ 1.8.3. When @RequiredTypes
+is added on an aspect, it is evaluated only if the classes defined on the
+annotation are actually present. If they are not, the aspect is disabled
+and does not break the build.
+
+Issue: SPR-12163

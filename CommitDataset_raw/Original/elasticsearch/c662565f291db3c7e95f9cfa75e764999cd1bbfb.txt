@@ -1,0 +1,25 @@
+Access SSL contexts using names instead of Settings (#30953)
+
+Historically we have loaded SSL objects (such as SSLContext,
+SSLIOSessionStrategy) by passing in the SSL settings, constructing a
+new SSL configuration from those settings and then looking for a
+cached object that matches those settings.
+
+The primary issue with this approach is that it requires a fully
+configured Settings object to be available any time the SSL context
+needs to be loaded. If the Settings include SecureSettings (such as
+passwords for keys or keystores) then this is not true, and the cached
+SSL object cannot be loaded at runtime.
+
+This commit introduces an alternative approach of naming every cached
+ssl configuration, so that it is possible to load the SSL context for
+a named configuration (such as "xpack.http.ssl"). This means that the
+calling code does not need to have ongoing access to the secure
+settings that were used to load the configuration.
+
+This change also allows monitoring exporters to use SSL passwords
+from secure settings, however an exporter that uses a secure SSL setting
+(e.g. truststore.secure_password) may not have its SSL settings updated
+dynamically (this is prevented by a settings validator).
+Exporters without secure settings can continue to be defined and updated
+dynamically.

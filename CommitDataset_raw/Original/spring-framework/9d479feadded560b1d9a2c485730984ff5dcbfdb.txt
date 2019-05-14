@@ -1,0 +1,14 @@
+Add naming strategy for @MVC request mappings.
+
+This change adds a strategy for assigning a default name to an
+@RequestMapping controller method. The @RequestMapping annotation
+itself now has a name attribute allowing the explicit assignment
+of a mapping name.
+
+This is mainly intended for use in EL expressions in views. The
+RequestContext class now provides a getMvcUrl method that internally
+delegates to MvcUriComponents to look up the handler method.
+
+See the Javadoc of MvcUriComponents.fromMappingName.
+
+Issue: SPR-5779

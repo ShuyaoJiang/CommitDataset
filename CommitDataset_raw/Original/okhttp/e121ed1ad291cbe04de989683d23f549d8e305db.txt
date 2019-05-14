@@ -1,0 +1,13 @@
+Start using CertificateAuthorityCouncil in CertificatePinner.
+
+The wiring is definitely a bit more awkward than I would like. The
+CertificateAuthorityCountil is a non-public class, and this change
+sneaks an instance into the CertificatePinner that couples it to
+the OkHttp client's SSLSocketFactory.
+
+A nicer solution is to expose CertificateAuthorityCouncil as a public
+API type, and add it to Address.java. Unfortunately that's currently
+pretty awkward, especially because I'm not ready to commit to the
+name CertificateAuthorityCouncil or its API.
+
+Closes: https://github.com/square/okhttp/issues/1699

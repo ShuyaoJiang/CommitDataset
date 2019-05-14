@@ -1,0 +1,13 @@
+Update version number, factor out common config, plus a few nits, specifically:
+* 15.0-SNAPSHOT is the new release target
+* Plugin-management for commonly configured plugins moved into the parent.
+* Dependency management into the parents (for version and scope)
+* Make findbugs/javax.inject from provided to default (compile) scope, but mark optional.
+* Move Resources and sources paths into parent leaving exceptions in children.
+* Add a few helper comments for maintenance.
+* Add exclusions from Truth and Caliper to force use of guava being built.
+
+There are a few ways this could be locked down more, plugin versions implicitly pulled, etc., but not really necessary - just the ones we explicitly use and configure are important. There are other checks we could do, including pulling in errorprone or checkstyle to help developers building locally submit conformant patches, but this is a further evolution that can wait.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=43918640

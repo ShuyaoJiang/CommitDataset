@@ -1,0 +1,13 @@
+Do not rewrite relative links with FixedVersionStrategy
+
+Prior to this change, the resource handling FixedVersionStrategy would
+be applied on all links that match the configured pattern. This is
+problematic for relative links and can lead to rewritten links such as
+"/fixedversion/../css/main.css" which breaks.
+
+This commit prevents that Strategy from being applied to such links.
+Of course, one should avoid to use that VersionStrategy with relative
+links, but this change aims at not breaking existing links even if it
+means not prefixing the version as expected.
+
+Issue: SPR-13727

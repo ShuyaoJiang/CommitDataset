@@ -1,0 +1,5 @@
+Fix indices options parsing from REST in delete index API (#25709)
+
+When parsing indices options from REST, we parse the optional parameters that are supported at REST (ignore_unavailable, allow_no_indices and expand_wildcards) and we provide the API default values for all the other (internal) options so that they are set to the new indices options while parsing. The `ignoreAliases` option was forgotten though, which means that whenever you pass in any index option at REST to the delete index API, you get to delete aliases like it was supported before (as ignoreAliases gets set to false like in all the other APIs).
+
+Added unit tests for IndicesOptions parsing from REST parameters, and yaml tests for the delete index API.

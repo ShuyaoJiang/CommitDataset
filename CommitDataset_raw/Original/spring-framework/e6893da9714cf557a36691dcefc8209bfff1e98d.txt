@@ -1,0 +1,12 @@
+Remove use of CompositeByteBuf in NettyDataBuffer
+
+Prior to this commit, NettyDataBuffer had a optimization in
+write(ByteBuf...), where it used a CompositeByteBuf to hold the original
+and the parameter buffer.
+Unfortunately, this procedure has nasty consequences when splicing
+buffers (see https://stackoverflow.com/a/48111196/839733).
+
+As of this commit, NettyDataBuffer stopped using CompositeByteBuf, and
+ simply does ByteBuf.write().
+
+Issue: SPR-16351

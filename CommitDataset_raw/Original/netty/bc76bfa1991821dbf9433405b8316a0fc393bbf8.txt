@@ -1,0 +1,28 @@
+Consolidating HTTP/2 stream state
+
+Motivation:
+
+Http2Stream has several methods that provide state information. We need
+to simplify how state is used and consolidate as many of these fields as
+possible.
+
+Modifications:
+
+Since we already have a concept of a stream being active or inactive,
+I'm now separating the deactivation of a stream from the act of closing
+it.  The reason for this is the case of sending a frame with
+endOfStream=true. In this case we want to close the stream immediately
+in order to disallow further writing, but we don't want to mark the
+stream as inactive until the write has completed since the inactive
+event triggers the flow controller to cancel any pending writes on the
+stream.
+
+With deactivation separated out, we are able to eliminate most of the
+additional state methods with the exception of `isResetSent`.  This is
+still required because we need to ignore inbound frames in this case (as
+per the spec), since the remote endpoint may not yet know that the
+stream has been closed.
+
+Result:
+
+Fixes #3382

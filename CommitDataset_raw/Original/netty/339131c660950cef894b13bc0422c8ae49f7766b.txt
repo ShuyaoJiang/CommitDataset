@@ -1,0 +1,13 @@
+DefaultChannelPipeline.estimatorHandle needs to be volatile
+
+Motivation:
+
+DefaultChannelPipeline.estimatorHandle needs to be volatile as its accessed from different threads.
+
+Modifications:
+
+Make DefaultChannelPipeline.estimatorHandle volatile and correctly init it via CAS
+
+Result:
+
+No more race.

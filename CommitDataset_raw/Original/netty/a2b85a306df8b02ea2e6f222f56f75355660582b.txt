@@ -1,0 +1,13 @@
+Fix NPE that was encounter by debugger (will never happen in real code). (#8992)
+
+Motivation:
+
+We synchronize on the chunk.arena when produce the String returned by PoolSubpage.toString() which may raise a NPE when chunk == null. Chunk == null for the head of the linked-list and so a NPE may raised by a debugger. This NPE can never happen in real code tho as we never access toString() of the head.
+
+Modifications:
+
+Add null checks and so fix the possible NPE
+
+Result:
+
+No NPE when using a debugger and inspect the PooledByteBufAllocator.

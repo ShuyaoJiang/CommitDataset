@@ -1,0 +1,14 @@
+Add NoSuchBeanDefinitionException failure analyzer
+
+Add a `FailureAnalyzer` that handles the case where the context does
+not start because no candidate bean was found for an `InjectionPoint`.
+
+The implementation inspects the auto-configuration report for beans
+that are candidate and output the condition(s) that lead to such beans
+to be discarded on startup. If a whole auto-configuration class is
+disabled (or excluded), its beans are inspected and candidates are
+extracted in a similar way.
+
+This works for both injection by type and by name.
+
+Closes gh-6612

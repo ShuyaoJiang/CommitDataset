@@ -1,0 +1,15 @@
+Integrate with @TestPropertySource
+
+Spring 4.2 has a @TestPropertySource which has some of the features of
+@IntegrationTest. This change adds @TestPropertySource to the @IntegrationTest
+annotation, so that (for instance) the cache key for the context includes
+properties for the test.
+
+Since @IntegrationTest has slightly different semantics I do not propose to
+deprecate it. Users can use it or @TestPropertySource, the main difference being that
+with @IntegrationTest the Spring Boot context loader is aware of the annotation
+and it will set sensible defaults for server.port and spring.jmx.enabled.
+
+There are some reflection hacks to overcome the usual fortifications of Spring Test.
+
+Fixes gh-1697

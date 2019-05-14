@@ -1,0 +1,11 @@
+Import Map.Entry almost everywhere.
+
+Qualified types make @Nullable annotations more complicated: If we're using a type annotation, the "@Nullable" has to come between "Map." and "Entry" rather than before the whole thing. That means diffs between the mainline, presuming that it supports type annotations, and the backport, presuming that it doesn't. It's not entirely clear that that's how things will work out, but I can't experiment until I fix the problem, and I figure I might as well submit the fix, given that I think we generally like doing this, at least with Multiset.Entry isn't in play? But it's not very hard to handle the problem as it comes up, either, if this CL is too much.
+
+(Naturally, the same problem will exist for other types. But this CL fixes the most common problem.)
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=175999659

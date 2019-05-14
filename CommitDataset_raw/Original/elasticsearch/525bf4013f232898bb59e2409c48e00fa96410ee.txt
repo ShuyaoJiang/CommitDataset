@@ -1,0 +1,5 @@
+Fix Deadlock from Thread.suspend in Test (#39261)
+
+* The lambda invoked by the `lockedExecutor` eventually gets JITed (which runs a static initializer that we will suspend in with a very tiny chance).
+   * Fixed by creating the `Runnable` in the main test thread and using the same instance in all threads
+* Closes #35686

@@ -1,0 +1,12 @@
+Core: Handle security manager permission for deprecation log rolling (#37281)
+
+When the deprecation log is written to within scripting support code
+like ScriptDocValues, it runs under the reduces privileges of scripts.
+Sometimes this can trigger log rolling, which then causes uncaught
+security errors, as was handled in #28485. While doing individual
+deprecation handling within each deprecation scripting location is
+possible, there are a growing number of deprecations in scripts.
+
+This commit wraps the logging call within the deprecation logger use a
+doPrivileged block, just was we would within individual logging call
+sites for scripting utilities.

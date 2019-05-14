@@ -1,0 +1,17 @@
+codec-http: HttpClientUpgradeHandler can handle streamed responses
+
+Motivation:
+
+We want to reject the upgrade as quickly as possible, so that we can
+support streamed responses.
+
+Modifications:
+
+Reject the upgrade as soon as we inspect the headers if they're wrong,
+instead of waiting for the entire response body.
+
+Result:
+
+If a remote server doesn't know how to use the http upgrade and tries to
+responsd with a streaming response that never ends, the client doesn't
+buffer forever, but can instead pass it along.  Fixes #5954

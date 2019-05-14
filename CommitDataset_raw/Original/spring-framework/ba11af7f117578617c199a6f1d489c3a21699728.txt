@@ -1,0 +1,28 @@
+Improve broker relay's shutdown and availability events
+
+Previously, when the broker relay was shut down, the TCP client was
+closed and the relay sessions were left to find out about the
+shutdown as a result of their TCP connections being closed. This led
+to problems where an attempt could be made to use a session that was,
+in fact, in the process of being shut down.
+
+This commit updates the broker relay to explicitly close each of its
+relay sessions as part of its stop processing.
+As part of the broker relay being shut down explicitly close each of
+its relay sessions. It does so before closing the TCP client so that
+the relay sessions know that they are  disconnected before their TCP
+connections are closed.
+
+The broker relay's publishing of availability events has also been
+improved. Prior to this commit, availability events were published
+based on the availability of any relay session. For example, this
+meant that a successfully established client relay session would
+result in an event being published indicating that the broker's
+available even if the system relay session was yet to be established.
+This commit updates the relay so that broker availability events are
+only published by the system relay session. This allows application
+code the use these events as an accurate indication of the
+availability of the broker. Clients that are interested in the
+broker's availability can find out through the use of heart beats or
+through the receipt of an ERROR frame in response to an attempt to
+communnicate with the broker.

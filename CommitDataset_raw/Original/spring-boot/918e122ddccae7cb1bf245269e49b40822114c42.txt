@@ -1,0 +1,28 @@
+Fix remote DevTools' support for adding and removing classes
+
+Previously, remote DevTools only correctly supported modifying
+existing classes. New classes that were added would be missed, and
+deleted classes could cause a failure as they would be found by
+component scanning but hidden by RestartClassLoader.
+
+This commit introduces a DevTools-specific ResourcePatternResolver
+that is installed as the application context's resource loader. This
+custom resolver is aware of the files that have been added and
+deleted and modifies the result returned from getResource and
+getResources accordingly.
+
+New intergration tests have been introduced to verify DevTools'
+behaviour. The tests cover four scenarios:
+
+- Adding a new controller
+- Removing an existing controller
+- Adding a request mapping to a controller
+- Removing a request mapping from a controller
+
+These four scenarios are tested with:
+
+- DevTools updating a local application
+- DevTools updating a remote application packaged in a jar file
+- DevTools updating a remote application that's been exploded
+
+Closes gh-7379

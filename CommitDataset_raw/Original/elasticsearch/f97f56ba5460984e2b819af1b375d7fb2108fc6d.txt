@@ -1,0 +1,9 @@
+SQL: Throw exceptions on errors (elastic/x-pack-elasticsearch#3066)
+
+Instead of returning "error response" objects and then translating them
+into SQL exceptions this just throws the SQL exceptions directly. This
+means the CLI catches exceptions and prints out the messages which isn't
+ideal if this were hot code but it isn't and this is a much simpler way
+of doing things.
+
+Original commit: elastic/x-pack-elasticsearch@08431d394137917a4b93899c3ef537027a98bc29

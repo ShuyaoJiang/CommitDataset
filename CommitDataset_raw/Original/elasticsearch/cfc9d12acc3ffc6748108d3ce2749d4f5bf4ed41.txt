@@ -1,0 +1,13 @@
+[TEST] test against scaled value instead of fixed epsilon in MovAvgIT
+
+When comparing doubles, fixed epsilons can fail because the absolute
+difference in values may be quite large, even though the relative
+difference is tiny (e.g. with two very large numbers).
+
+Instead, we can scale epsilon by the absolute value of the expected
+value.  This means we are looking for a diff that is epsilon-percent
+away from the value, rather than just epsilon.
+
+This is basically checking the relative error using junit's assertEqual.
+
+Closes #29456, unmutes the test

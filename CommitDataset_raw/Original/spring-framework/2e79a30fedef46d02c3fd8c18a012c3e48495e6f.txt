@@ -1,0 +1,12 @@
+Properly expand URI vars with regex
+
+Before this commit UriComponents was capable of expanding URI vars that
+may have contained a regular expressions (as supported with
+@RequestMapping for example). However if the regular expressions
+contained any nested "{}" the expand did not work correctly.
+
+This commit sanitizes a URI template source removing any content
+between nested "{}" prior to expanding. This works since we only care
+about the URI variable name.
+
+Issue: SPR-13311

@@ -1,0 +1,31 @@
+Roll back CL 23327883's very broken FeatureSpecificTestSuiteBuilder optimization.
+(We don't clone the tests, so we run all methods against the same target class (the last to be initialized).)
+Fix up newly failing tests (except for CompactIntegerListTest, for which I've filed a bug).
+Most are problems with the tests themselves:
+- Test suppressions weren't being carried over to tests of the reserialized collections.
+- Map values() collections were universally assumed to permit null queries.
+- EnumSet was asserted to fail fast on concurrent modification.
+- Many ConcurrentModificationException tests advanced the iterator past the end of size-zero or size-one collections.
+- It's not possible to create an empty collection that contains null. Empty collections don't contain anything :)
+- (Bi)MapGenerator.create is passed an Object[] containing Entry objects, not an Entry[].
+- (Bi)MapGenerator.create is passed an Object[] containing Entry objects, not an Entry[].
+- StandardImplForwardingNavigableMap.keySet() returned a SortedSet instead of a NavigableSet.
+- StandardImplForwardingNavigableMap implemented lastEntry and descendingSet in terms of one another (using the standard* methods).
+- Tests of null SortedMultiset values fail when run against a nullsFirst() comparator because the nulls are outside the submultiset ranges tested.
+- NavigableSets.synchronizedNavigableSet(SafeTreeSet) does not allow null queries.
+- Tables.transformValues().cellSet() permits remove operations.
+- collect/testing SmallTests needed their timeout increased.
+- CompactIntegerListTest didn't specify all the mutation operations it supports.
+A few are fixed by improvements to production code that arguably aren't strictly "bug fixes":
+- ConcurrentHashMultiset.removeAll(collectionContainingNull) threw NPE.
+- Maps.unmodifiableNavigableMap().subSet/headSet/tailSet returned a SortedSet instead of a NavigableSet.
+- NavigableMaps.unmodifiableNavigableMap().keySet() returned a SortedSet instead of a NavigableSet.
+- RegularContiguousSet.contains/containsAll threw NPE (which the EmptyContiguousSet equivalents did not).
+- WellBehavedMap.entrySet().remove(null) threw NPE instead of returning false. (The fix removes the need for Sets.transform.)
+A few more are real bugs:
+- TreeMultiset.add(null) succeeded even for comparators that do not permit null.
+- TreeMultiset.remove(null) failed even for comparators that permit null.
+- TreeMultiset iterators couldn't remove null elements.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=28001960

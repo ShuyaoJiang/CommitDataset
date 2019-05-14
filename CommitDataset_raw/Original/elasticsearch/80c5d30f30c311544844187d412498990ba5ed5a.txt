@@ -1,0 +1,11 @@
+XContentBuilder to handle BigInteger and BigDecimal (#32888)
+
+Although we allow to index BigInteger and BigDecimal into a keyword
+field, source filtering on these fields would fail
+as XContentBuilder was not able to deserialize BigInteger and BigDecimal
+to json.
+
+This modifies XContentBuilder to allow to handle BigInteger and
+BigDecimal.
+
+Closes #32395

@@ -1,0 +1,10 @@
+PlatformDependent ASCII hash code broken on big endian machines
+
+Motivation:
+PlatformDependent has a hash code algorithm which utilizes UNSAFE for performance reasons. This hash code algorithm must also be consistent with CharSequence objects that represent a collection of ASCII characters. In order to make the UNSAFE versions and CharSequence versions the endianness should be taken into account. However the big endian code was not correct in a few places.
+
+Modifications:
+- Correct bugs in PlatformDependent class related to big endian ASCII hash code computation
+
+Result:
+Fixes https://github.com/netty/netty/issues/5925

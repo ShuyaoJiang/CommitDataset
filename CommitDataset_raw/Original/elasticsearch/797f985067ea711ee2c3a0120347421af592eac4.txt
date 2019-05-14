@@ -1,0 +1,17 @@
+Add version to handshake requests (#36171)
+
+Currently our handshake requests do not include a version. This is
+unfortunate as we cannot rely on the stream version since it is not the
+sending node's version. Instead it is the minimum compatibility version.
+The handshake request is currently empty and we do nothing with it. This
+should allow us to add data to the request without breaking backwards
+compatibility.
+
+This commit adds the version to the handshake request. Additionally, it
+allows "future data" to be added to the request. This allows nodes to craft
+a version compatible response. And will properly handle additional data in
+future handshake requests. The proper handling of "future data" is useful
+as this is the only request where we do not know the other node's version.
+
+Finally, it renames the TcpTransportHandshaker to
+TransportHandshaker.

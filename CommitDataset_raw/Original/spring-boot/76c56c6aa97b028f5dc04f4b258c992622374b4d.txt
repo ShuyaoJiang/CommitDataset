@@ -1,0 +1,15 @@
+Add placeholder resolution to @PropertySource processing
+
+Previously the core Spring processing of @PropertySource would
+resolve placeholders in the location attribute, but the pre-loading
+of the property source by Spring Boot didn't do that. Now implemented
+using Environment.resolvePlaceholders() (N.B. at a time when the only
+Environment entries available are system properties and OS env vars).
+
+E.g.
+
+	@Configuration
+	@PropertySource("classpath:/${source.location}.properties")
+	protected static class WithPropertySourcePlaceholders {
+           ...
+	}

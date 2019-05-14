@@ -1,0 +1,7 @@
+Init global checkpoint after copy commit in peer recovery (#40823)
+
+Today a new replica of a closed index does not have a safe commit
+invariant when its engine is opened because we won't initialize the
+global checkpoint on a recovering replica until the finalize step. With
+this change, we can achieve that property by creating a new translog
+with the global checkpoint from the primary at the end of phase 1.

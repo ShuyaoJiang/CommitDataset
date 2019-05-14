@@ -1,0 +1,15 @@
+Don't ignore maxCapacity if it's not a power of 2
+
+Motivation:
+
+This fixes bug #2848 which caused Recycler to become unbounded and cache infinite number of objects with maxCapacity that's not a power of two. This can result in general sluggishness of the application and OutOfMemoryError.
+
+Modifications:
+
+The test for maxCapacity has been moved out of test to check if the buffer has filled. The buffer is now also capped at maxCapacity and cannot grow over it as it jumps from one power of two to the other.
+
+Additionally, a unit test was added to verify maxCapacity is honored even when it's not a power of two.
+
+Result:
+
+With these changes the user is able to use a custom maxCapacity number and not have it ignored. The unit test assures this bug will not repeat itself.

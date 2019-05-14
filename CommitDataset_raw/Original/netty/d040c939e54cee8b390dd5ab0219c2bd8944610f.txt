@@ -1,0 +1,10 @@
+UnixResolverDnsServerAddressStreamProviderTest failure
+
+Motivation:
+InetSocketAddress#getHostName() may attempt a reverse lookup which may lead to test failures because the expected address will not match.
+
+Modifications:
+- Use InetSocketAddress#getHostString() which will not attempt any lookups and instead return the original String
+
+Result:
+UnixResolverDnsServerAddressStreamProviderTest is more reliable.

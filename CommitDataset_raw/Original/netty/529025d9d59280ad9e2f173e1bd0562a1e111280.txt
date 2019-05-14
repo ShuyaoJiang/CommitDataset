@@ -1,0 +1,13 @@
+Allow to use oldest Channel out of the Simple / FixedChannelPool on acquire
+
+Motivation:
+
+We previously used pollLast() to retrieve a Channel from the queue that backs SimpleChannelPool. This could lead to the problem that some Channels are very unfrequently used and so when these are used the connection was already be closed and so could not be reused.
+
+Modifications:
+
+Allow to configure if the last recent used Channel should be used or the "oldest".
+
+Result:
+
+More flexible usage of ChannelPools

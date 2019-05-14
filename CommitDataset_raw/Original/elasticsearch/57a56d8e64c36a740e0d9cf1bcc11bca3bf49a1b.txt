@@ -1,0 +1,18 @@
+Fix test concurrent remote connection updates
+
+This test has a race condition. The action listener used to listen for
+connections has a guard against being executed twice. However, this
+listener can be executed twice. After on success is invoked the test
+starts to tear down. At this point, the threads the test forked will
+terminate and the remote cluster connection will be closed. However, a
+thread forked to the management thread pool by the remote cluster
+connection can still be executing and try to continue connecting. This
+thread will be cancelled when the remote cluster connection is closed
+and this leads to the action listener being invoked again. To address
+this, we explicitly check that the reason that on failure was invoked
+was cancellation, and we assert that the listener was already previously
+invoked. Interestingly, this issue has always been present yet a recent
+change (#28667) exposed errors that occur on tasks submitted to the
+thread pool and were silently being lost.
+
+Relates #28695

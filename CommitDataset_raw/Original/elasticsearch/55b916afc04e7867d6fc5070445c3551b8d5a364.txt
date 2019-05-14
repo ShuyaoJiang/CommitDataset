@@ -1,0 +1,6 @@
+Ensure task metadata not null in follow test (#37993)
+
+This commit fixes a potential race in the IndexFollowingIT. Currently it
+is possible that we fetch the task metadata, it is null, and that throws
+a null pointer exception. Assertbusy does not catch null pointer
+exceptions. This commit assertions that the metadata is not null.

@@ -1,0 +1,18 @@
+Avoid setting the Accept-Encoding header to identify by default.
+
+The Accept-Encoding header was added to ensure that we receive content
+length headers in responses. The Performance section of 
+HttpUrlConnection’s documentation https://goo.gl/o2jeUM) indicates that
+unless Accept-Encoding is set to ‘identity’, the content length of the
+response will be cleared. In practice this appears to be incorrect for
+all API levels that Glide v4 supports (14+) and content length is
+always populated. 
+
+Passing in ‘identity’ as the encoding header is problematic because
+it disables the default compression in HttpUrlConnection and some 
+servers disregard the header and provide compressed data anyway. There’s
+not much point in adding extra complexity to Glide to handle compressed
+data if the ‘identity’ header isn’t actually required to get valid
+content lengths for images.
+
+Fixes #2132.

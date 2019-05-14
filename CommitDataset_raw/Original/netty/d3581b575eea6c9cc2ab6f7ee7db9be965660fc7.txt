@@ -1,0 +1,10 @@
+UnixResolverDnsServerAddressStreamProvider should allow for empty /etc/resolver dir
+
+Motivation:
+UnixResolverDnsServerAddressStreamProvider currently throws an exception if /etc/resolver exists but it empty. This shouldn't be an exception and can be tolerated as if there is no contribution from /etc/resolver.
+
+Modifications:
+- Treat /etc/resolver as present and empty the same as not being present
+
+Result:
+UnixResolverDnsServerAddressStreamProvider initialization can tolerate empty /etc/resolver directory.

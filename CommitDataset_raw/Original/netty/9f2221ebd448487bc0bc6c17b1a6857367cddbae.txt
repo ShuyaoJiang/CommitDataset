@@ -1,0 +1,19 @@
+CompositeByteBuf optimizations and new addFlattenedComponents method (#8939)
+
+
+Motivation:
+
+The CompositeByteBuf discardReadBytes / discardReadComponents methods are currently quite inefficient, including when there are no read components to discard. We would like to call the latter more frequently in ByteToMessageDecoder#COMPOSITE_CUMULATOR.
+
+In the same context it would be beneficial to perform a "shallow copy" of a composite buffer (for example when it has a refcount > 1) to avoid having to allocate and copy the contained bytes just to obtain an "independent" cumulation.
+
+Modifications:
+
+- Optimize discardReadBytes() and discardReadComponents() implementations (start at first comp rather than performing a binary search for the readerIndex).
+- New addFlattenedComponents(boolean,ByteBuf) method which performs a shallow copy if the provided buffer is also composite and avoids adding any empty buffers, plus unit test.
+- Other minor optimizations to avoid unnecessary checks.
+
+Results:
+
+discardReadXX methods are faster, composite buffers can be easily appended without deepening the buffer "tree" or retaining unused components.
+

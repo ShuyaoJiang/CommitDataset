@@ -1,0 +1,11 @@
+Always pass test class to ActiveProfilesResolver
+
+Prior to this commit, if @ActiveProfiles were used as a meta-annotation
+on a composed annotation, then the composed annotation's class would be
+passed to the ActiveProfilesResolver.resolve() method instead of the
+test class, which breaks the contract for ActiveProfilesResolver.
+
+This commit addresses this issue by ensuring that the actual test class
+is always passed to ActiveProfilesResolver.resolve().
+
+Issue: SPR-11467

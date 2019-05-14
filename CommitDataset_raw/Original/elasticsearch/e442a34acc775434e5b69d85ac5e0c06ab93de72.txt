@@ -1,0 +1,8 @@
+Build: Fix meta plugin integ test installation (#28286)
+
+Integ test clusters should use the plugin method of ClusterConfiguration
+to install plugins. Without it, meta plugins install based on the name
+of the project directory, rather than the actual configured plugin name.
+This commit fixes that, and also corrects the distribution used to be
+the default integ-test-zip, to match that of PluginBuildPlugin. This
+ensures plugins are tested in isolation by default.

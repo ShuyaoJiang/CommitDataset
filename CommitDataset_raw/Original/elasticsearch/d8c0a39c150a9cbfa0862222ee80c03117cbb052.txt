@@ -1,0 +1,9 @@
+Remove vestiges of animal sniffer (#31178)
+
+We no longer need animal sniffer because we use JDK functionality
+(introduced in JDK 9) to target older versions of the JDK for
+compilation. This functionality means that the JDK handles the problem
+of ensuring that we do not use JDK APIs from the version that we are
+compiling from that are not available in the version that we are
+compiling to. A previous commit removed this for the REST client (where
+we target JDK 7) but a few traces were left behind.

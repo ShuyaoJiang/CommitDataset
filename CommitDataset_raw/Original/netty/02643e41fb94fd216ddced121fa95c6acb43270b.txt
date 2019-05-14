@@ -1,0 +1,5 @@
+Fix a bug where ChannelOutboundBuffer.removeBytes() throws ClassCastException
+
+When a ChannelOutboundBuffer contains ByteBufs followed by a FileRegion,
+removeBytes() will fail with a ClassCastException.  It should break the
+loop instead.

@@ -1,0 +1,17 @@
+Allow TokenFilterFactories to rewrite themselves against their preceding chain (#33702)
+
+We currently special-case SynonymFilterFactory and SynonymGraphFilterFactory, which need to 
+know their predecessors in the analysis chain in order to correctly analyze their synonym lists. This
+special-casing doesn't work with Referring filter factories, such as the Multiplexer or Conditional
+filters. We also have a number of filters (eg the Multiplexer) that will break synonyms when they
+appear before them in a chain, because they produce multiple tokens at the same position.
+
+This commit adds two methods to the TokenFilterFactory interface.
+
+* `getChainAwareTokenFilterFactory()` allows a filter factory to rewrite itself against its preceding
+  filter chain, or to resolve references to other filters. It replaces `ReferringFilterFactory` and
+  `CustomAnalyzerProvider.checkAndApplySynonymFilter`, and by default returns `this`.
+* `getSynonymFilter()` defines whether or not a filter should be applied when building a synonym
+  list `Analyzer`. By default it returns `true`.
+
+Fixes #33609 

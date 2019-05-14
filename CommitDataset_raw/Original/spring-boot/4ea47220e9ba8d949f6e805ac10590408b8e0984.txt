@@ -1,0 +1,13 @@
+Match nested paths for insensitive actuators
+
+Update `ManagementWebSecurityAutoConfiguration` to match nested path
+for insensitive actuators.
+
+Prior to this commit, when Spring Security was on the classpath
+nested paths were considered sensitive (even if the actuator
+endpoint was not sensitive). i.e. when setting
+`endpoints.env.sensitive=false` `/env` could be accessed without
+authentication but `/env/user` could not.
+
+Fixes gh-7868
+Closes gh-7881

@@ -1,0 +1,8 @@
+Special Handling of java.lang.Error and OnErrorNotImplemented
+
+- https://github.com/Netflix/RxJava/issues/748#issuecomment-32471495
+- https://github.com/Netflix/RxJava/issues/771
+- https://github.com/Netflix/RxJava/issues/789
+
+- SynchronizedObserver is for synchronization, not error handling or contract enforcements, that's the job of SafeSubscriber
+- Removed some unit tests that were asserting unsubscribe behavior that relied on SynchronizedObserver. They were testing something they are not responsible for.

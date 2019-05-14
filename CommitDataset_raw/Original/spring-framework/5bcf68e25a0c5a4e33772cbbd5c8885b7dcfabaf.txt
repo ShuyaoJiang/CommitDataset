@@ -1,0 +1,32 @@
+Use ExtendedBeanInfo on an as-needed basis only
+
+Prior to this change, CachedIntrospectionResults delegated to
+ExtendedBeanInfo by default in order to inspect JavaBean
+PropertyDescriptor information for bean classes.
+
+Originally introduced with SPR-8079, ExtendedBeanInfo was designed to
+go beyond the capabilities of the default JavaBeans Introspector in
+order to support non-void returning setter methods, principally to
+support use of builder-style APIs within Spring XML. This is a complex
+affair, and the non-trivial logic in ExtendedBeanInfo has led to various
+bugs including regressions for bean classes that do not declare
+non-void returning setters.
+
+This commit takes advantage of the new BeanInfoFactory mechanism
+introduced in SPR-9677 to take ExtendedBeanInfo out of the default code
+path for CachedIntrospectionResults. Now, the new
+ExtendedBeanInfoFactory class will be detected and instantiated (per its
+entry in the META-INF/spring.beanInfoFactories properties file shipped
+with the spring-beans jar). ExtendedBeanInfoFactory#supports is invoked
+for all bean classes in order to determine whether they are candidates
+for ExtendedBeanInfo introspection, i.e. whether they declare non-void
+returning setter methods.
+
+If a class does not declare any such non-standard setter methods (the
+99% case), then CachedIntrospectionResults will fall back to the
+default JavaBeans Introspector. While efforts have been made to fix any
+bugs with ExtendedBeanInfo, this change means that EBI will not pose
+any future risk for bean classes that do not declare non-standard
+setter methods, and also means greater efficiency in general.
+
+Issue: SPR-9723, SPR-9677, SPR-8079

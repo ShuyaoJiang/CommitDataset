@@ -1,0 +1,7 @@
+TemplateUpgradeService should only run on the master (#27294)
+
+The `TemplateUpgradeService` allows plugins to register a call back that mutates index templates upon recovery. This is handy for upgrade logic that needs to make sure that an existing index template is updated once the cluster is upgraded to a new version of the plugin (and ES).
+
+Currently, the service has complicated logic to decide which node should perform the upgrade. It will prefer the master node, if it is of the highest version of the cluster and otherwise it will fall back to one of the non-coordinating nodes which are on the latest version. While this attempts to make sure that new nodes can assume their template version is in place (but old node still need to be able to operate under both old and new template), it has an inherent problem in that the master (on an old version) may not be able to process the put template request with the new template - it may miss certain features.
+
+This PR changes the logic to be simpler and always rely on the current master nodes. This comes at the price that new nodes need to operate both with old templates and new. That price is small as they need to operate with old indices regardless of the template. On the flip side we reduce a lot of complexity in what can happen in the cluster.

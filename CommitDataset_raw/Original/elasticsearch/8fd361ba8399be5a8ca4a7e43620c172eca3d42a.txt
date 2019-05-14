@@ -1,0 +1,9 @@
+SQL: Fix type and value in SYS TYPES (elastic/x-pack-elasticsearch#3979)
+
+The type of BUFFER_LENGTH needs to be an integer (not NULL) and unsigned
+indicate the opposite of signed.
+Change isSigned from Object to primitive
+Since all the consumer of isSigned expect a primitive, an Object is just causing troubles by being null.
+Update description table
+
+Original commit: elastic/x-pack-elasticsearch@8e1960bdb5e74e240379ea952a44b9b4dffa4711

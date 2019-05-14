@@ -1,0 +1,10 @@
+Refactor SubscriptionRegistry
+
+The SubscriptionRegistry and implementations are now in a package
+together with SimpleBrokerWebMessageHandler and primarily support
+with matching subscriptions to messages. Subscriptions can contain
+patterns as supported by AntPathMatcher.
+
+StopmWebSocketHandler no longer keeps track of subscriptions and simply
+ignores messages without a subscription id, since it has no way of
+knowing broker-specific destination semantics for patterns.

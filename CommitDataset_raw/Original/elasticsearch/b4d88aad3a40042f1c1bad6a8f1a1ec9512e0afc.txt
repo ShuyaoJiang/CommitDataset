@@ -1,0 +1,8 @@
+Move top-level pipeline aggs out of QuerySearchResult (#40319)
+
+As part of #40177 we have added top-level pipeline aggs to
+`InternalAggregations`. Given that `QuerySearchResult` holds an
+`InternalAggregations` instance, there is no need to keep on setting
+top-level pipeline aggs separately. Top-level pipeline aggs can then
+always be transported through `InternalAggregations`. Such change is
+made in a backwards compatible manner.

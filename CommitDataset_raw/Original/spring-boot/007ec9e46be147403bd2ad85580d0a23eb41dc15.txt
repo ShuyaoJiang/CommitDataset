@@ -1,0 +1,14 @@
+Make SecurityFilterAutoConfig work when SecurityAutoConfig is disabled
+
+Previously, disabling SecurityAutoConfiguration could cause
+SecurityFilterAutoConfiguration to fail if Spring Security’s filter
+chain bean existing in the context. SecurityFilterAutoConfiguration
+relies on SecurityProperties which is created by
+SecurityAutoConfiguration. When SecurityAutoConfiguration is disabled,
+there’s no SecurityProperties bean so SecurityFilterAutoConfiguration
+would fail due to the missing dependency.
+
+This commit updates SecurityFilterAutoConfiguration to create a
+SecurityProperties bean if one does not already exist.
+
+Closes gh-4525

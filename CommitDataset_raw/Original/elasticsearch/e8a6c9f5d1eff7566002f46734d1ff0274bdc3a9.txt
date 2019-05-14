@@ -1,0 +1,21 @@
+[Rollup] Delegate GetJobs to master (elastic/x-pack-elasticsearch#4247)
+
+If a job is deleted and then GetJobs API is immediately called,
+it is possible for a job to be returned in the response.  This is likely
+due to the GetJobs API being executed on a node with a slightly
+stale cluster state which shows the job as still existing.
+
+So we delegate to the master node so the list of jobs/tasks is current.
+After routing to the master, we need to check if the rollup job
+is in the PersistentTask's CS.  A job can be acknowledged canceled,
+removed from the CS, but the allocated task is still alive.  So we
+first check the CS to make sure it's really there before going to the
+allocated task to get the status.
+
+As extra precaution, when running local to the task, we also make
+sure the task isn't canceled before including it in the response.
+
+relates elastic/x-pack-elasticsearch#4041 
+
+
+Original commit: elastic/x-pack-elasticsearch@3b6fb65e128661b640bf5e66f4c6dd58c41411d0

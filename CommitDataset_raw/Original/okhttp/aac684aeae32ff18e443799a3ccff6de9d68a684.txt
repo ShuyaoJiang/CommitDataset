@@ -1,0 +1,14 @@
+Retain interrupted state when throwing InterruptedIOException
+
+The drawbacks seem small; the callsite needs to handle interruption anyway
+because the thread is prone to interruption.
+
+And the upside is that a single interrupt should now be sufficient to break
+out an in-flight OkHttp call.
+
+Note that although we're fixing this, thread interruption is not well tested
+in OkHttp. Most users should prefer Call.cancel(), which is well tested and
+doesn't rely on the caller to know which threads OkHttp is using to make
+the actual HTTP request.
+
+Closes: https://github.com/square/okhttp/issues/3945

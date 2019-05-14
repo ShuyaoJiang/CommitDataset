@@ -1,0 +1,20 @@
+Fix ResourceUrlEncodingFilter lifecycle
+
+Prior to this commit, the `ResourceUrlEncodingFilter` would wrap the
+response and keep a reference to the request. When
+`HttpServletResponse.encodeURL` is later called during view rendering,
+the filter looks at the request and extracts context mapping information
+in order to resolve resource paths in views.
+
+This approach is flawed, when the filter is used with JSPs - if the
+request is forwarded to the container by the `InternalResourceView`,
+the request information is overwritten by the container. When the view
+is being rendered, the information available in the request is outdated
+and does not allow to correctly compute that context mapping
+information.
+
+This commit ensures that that information is being extracted from the
+request as soon as the `ResourceUrlProvider` is set as a request
+attribute.
+
+Issue: SPR-17421

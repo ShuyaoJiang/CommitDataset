@@ -1,0 +1,11 @@
+DefaultHttp2RemoteFlowController not allocating all available bytes
+
+Motivation:
+DefaultHttp2RemoteFlowController's allocation algorithm may not allocate all bytes that are available in the connection window. If the 'fair share' based upon weight is not fully used by sibling nodes it was not correctly re-distributed to other sibilings which may be able to utilize part / all of that share.
+
+Modifications:
+- Add a unit test which demonstrates the issue.
+- Modify the allocation algorithm to ensure all available bytes are allocated.
+
+Result:
+Fixes https://github.com/netty/netty/issues/4266

@@ -1,0 +1,10 @@
+HtmlUnitRequestBuilder decodes parameter names
+
+Previously HtmlUnitRequestBuilder did not decode parameter names. This
+means if a parameter like row[0] was submittted it would be encoded as
+row%5B0%5D When the HttpServletRequest was created the parameter name would
+not be decoded so the parameter name row[0] would not be found.
+
+This commit ensures that HTTP parameter names are decoded.
+
+Issue SPR-14177

@@ -1,0 +1,14 @@
+Add AsyncHandlerMethodReturnValueHandler
+
+Before this change HandlerMethodReturnValueHandler's were invoked in a
+specific order (type-based, annotation-based, custom). However handlers
+that deal with asynchronous return value handling need to always be
+considered first. This affects custom handlers in particular since they
+are normally ordered last.
+
+This change introduces an AsyncHandlerMethodReturnValueHandler
+sub-interface with a single method to determine if the return value is
+asynchronous and if it is to look for a matching handler only among
+those that are of type AsyncHandlerMethodReturnValueHandler.
+
+Issue: SPR-13083

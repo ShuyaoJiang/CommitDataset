@@ -1,0 +1,16 @@
+Add SameSite support in WebFlux SESSION cookies
+
+This commit adds support for the "SameSite" attribute in response
+cookies. As explained in rfc6265bis, this attribute can be used to limit
+the scope of a cookie so that it can't be attached to a request unless
+it is sent from the "same-site".
+
+This feature is currently supported by Google Chrome and Firefox, other
+browsers will ignore this attribute.
+
+This feature can help prevent CSRF attacks; this is why this commit adds
+this attribute by default for SESSION Cookies in WebFlux.
+
+See: https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis
+
+Issue: SPR-16418

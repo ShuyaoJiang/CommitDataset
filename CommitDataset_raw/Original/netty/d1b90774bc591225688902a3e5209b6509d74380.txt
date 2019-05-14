@@ -1,0 +1,42 @@
+Clean up MpscLinkedQueue, fix its leak, and make it work without Unsafe
+
+Motivation:
+
+MpscLinkedQueue has various issues:
+- It does not work without sun.misc.Unsafe.
+- Some field names are confusing.
+  - Node.tail does not refer to the tail node really.
+  - The tail node is the starting point of iteration. I think the tail
+    node should be the head node and vice versa to reduce confusion.
+- Some important methods are not implemented (e.g. iterator())
+- Not serializable
+- Potential false cache sharing problem due to lack of padding
+- MpscLinkedQueue extends AtomicReference and thus exposes various
+  operations that mutates the internal state of the queue directly.
+
+Modifications:
+
+- Use AtomicReferenceFieldUpdater wherever possible so that we do not
+  use Unsafe directly. (e.g. use lazySet() instead of putOrderedObject)
+- Extend AbstractQueue to implement most operations
+- Implement serialization and iterator()
+- Rename tail to head and head to tail to reduce confusion.
+- Rename Node.tail to Node.next.
+- Fix a leak where the references in the removed head are not cleared
+  properly.
+- Add Node.clearMaybe() method so that the value of the new head node
+  is cleared if possible.
+- Add some comments for my own educational purposes
+- Add padding to the head node
+  - Add FullyPaddedReference and RightPaddedReference for future reuse
+- Make MpscLinkedQueue package-local so that a user cannot access the
+  dangerous yet public operations exposed by the superclass.
+  - MpscLinkedQueue.Node becomes MpscLinkedQueueNode, a top level class
+
+Result:
+
+- It's more like a drop-in replacement of ConcurrentLinkedQueue for the
+  MPSC case.
+- Works without sun.misc.Unsafe
+- Code potentially easier to understand
+- Fixed leak (related: #2372)

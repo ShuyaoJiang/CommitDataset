@@ -1,0 +1,16 @@
+Ensure that spring.data.rest.* configuration takes effect
+
+Previously, RepositoryRestMvcBootConfiguration was not annotated with
+@Configuration. This meant that it was processed in lite mode.
+Crucially, in lite mode, there’s no proxying so each call to the
+config() @Bean method from within other @Bean methods resulted in the
+creation of a new RepositoryRestConfiguration instance. Furthermore, as
+each of these instances wasn’t a Spring bean the configuration
+properties were not applied.
+
+This commit updates RepositoryRestMvcBootConfiguration to annotate it
+with @Configuration so that it’s no longer processed in lite mode. It
+also updates the unit tests and the Spring Data REST sample to verify
+that the baseUri can be configured using application.properties.
+
+Fixes gh-1675

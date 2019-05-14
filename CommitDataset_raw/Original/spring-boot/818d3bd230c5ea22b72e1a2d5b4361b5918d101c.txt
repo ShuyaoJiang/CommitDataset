@@ -1,0 +1,12 @@
+VcapApplicationListener Boolean Credentials
+
+Previously, the VcapApplicationListener would discard any service
+credential value that wasn't a String, Number, Map, Collection, or
+null.  This was particularly a problem for services that exposed a
+value as a JSON boolean.  This change takes booleans in the credential
+payload into account, converting them to Strings so that they will
+pass through the properties system properly.  There's no real downside
+to this as Spring will coerce them back into Booleans if needed, by
+the application.
+
+Fixes gh-3237

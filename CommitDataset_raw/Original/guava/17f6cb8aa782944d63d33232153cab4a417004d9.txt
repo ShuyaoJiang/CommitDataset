@@ -1,0 +1,12 @@
+Extracted part of NullPointerTester and Stub into NullValues;
+Added code to call default constructor if all else failed;
+
+Some potential incompatibility from previous version:
+1. Use ImmutableList.of() in place of Collections.emptyList(), ImmutableSet.of() in place of Collections.emptySet(). I don't anticipate issues here.
+2. Use ImmutableSortedSet.of() in place of new TreeSet(). mutable -> immutable.
+3. Use a Comparator that always returns 0, instead of reverseOrder() which requires T extends Comparable.
+
+If this sounds reasonable, I'll send it through global TAP queue to make sure it doesn't break builds.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=27791649

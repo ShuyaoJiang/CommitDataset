@@ -1,0 +1,8 @@
+Search: Simply SingleFieldsVisitor (#34052)
+
+`SingleFieldsVisitor` is meant to load a single stored field but it
+manages to be quite complex to reason about because it inherits from our
+"basic" `FieldsVisitor` which is designed to load many fields. This
+breaks that inheritance and adds logic to `SingleFieldsVisitor` so it can
+be properly stand alone. While this amounts to more lines of code they
+ought to be significantly easier to reason about.

@@ -1,0 +1,19 @@
+[ML] Respect datafeed frequency when less or equal than query_delay (elastic/x-pack-elasticsearch#4168)
+
+In order to deal with the most anticipated scenario, when datafeed
+frequency is greater than the query_delay, we add the query_delay
+to the frequency in order to determine the next time we will trigger
+a real-time run. For example, if frequency is 10s and query_delay 1s,
+we make sure to trigger the real-time run at a 10s + 1s = 11s offset.
+
+However, this is not correct in the case the frequency is less or
+equal to the query_delay. For example, if frequency is 1s and
+query_delay is 10s. we would also end up triggering at 11s offset.
+But the right behaviour would be to trigger every second while
+ensuring we are searching for up to 10seconds ago.
+
+This commit fixes this issue.
+
+relates elastic/x-pack-elasticsearch#4167
+
+Original commit: elastic/x-pack-elasticsearch@f6058851678ed35a5ce36cb3ca70caa9f3d7dcae

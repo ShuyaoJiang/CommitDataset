@@ -1,0 +1,16 @@
+Fix issue in UriTemplate parsing
+
+The recent commit 971f04 replaced the use of a NAMES_PATTERN regex in
+favor of direct parsing in order to deal with nested curly braces.
+
+The change also incorrectly replicated this logic which removes a
+trailing slash after Pattern quoting (and not before):
+
+https://github.com/spring-projects/spring-framework/blob/cca037a74df9b87f99858154b47696a9eccf69c8/spring-web/src/main/java/org/springframework/web/util/UriTemplate.java#L207-L210
+
+After some more investigation there doesn't appear to be any scenario
+where the quoted pattern would end with a trailing slash. It should
+always end with \E (end of quote) or a ")" (end of group). Nor are
+there any failing tests so this commit removes the logic altogether.
+
+Issue: SPR-13705

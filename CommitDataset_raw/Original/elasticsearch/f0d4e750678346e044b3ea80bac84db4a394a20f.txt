@@ -1,0 +1,10 @@
+[ML][TEST] Fix failing test testPersistJobOnGracefulShutdown_givenTimeAdvancedAfterNoNewData (#40363)
+
+Ensure that there is at least a 1s delay between the time that state
+is persisted by each of the two jobs in the test.
+
+Model snapshot IDs use the current time in epoch seconds to
+distinguish themselves, hence snapshots will be overwritten
+by another if it occurs in the same 1s window.
+
+Closes #40347

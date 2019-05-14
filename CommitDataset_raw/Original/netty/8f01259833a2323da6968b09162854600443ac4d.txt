@@ -1,0 +1,22 @@
+HpackDecoder treats invalid pseudo-headers as stream level errors
+
+Motivation:
+
+The HTTP/2 spec dictates that invalid pseudo-headers should cause the
+request/response to be treated as malformed (8.1.2.1), and the recourse
+for that is to treat the situation as a stream error of type
+PROTOCOL_ERROR (8.1.2.6). However, we're treating them as a connection
+error with the connection being immediately torn down and the HPACK
+state potentially being corrupted.
+
+Modifications:
+
+The HpackDecoder now throws a StreamException for validation failures
+and throwing is deffered until the end of of the decode phase to ensure
+that the HPACK state isn't corrupted by returning early.
+
+Result:
+
+Behavior more closely aligned with the HTTP/2 spec.
+
+Fixes #8043.

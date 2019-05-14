@@ -1,0 +1,11 @@
+Update HttpHeaders.getAccept method
+
+Some servlet containers (iPlanet) parse the Accept header and return
+multiple values from request.getHeader("Accept"). The HttpHeaders
+getAccept method has been updated to accommodate that hopefully
+without causing any other issues.
+
+The extra functionality is in effect only if we find only one
+MediaType and there is more than one value for the 'Accept' header.
+
+Issue: SPR-9655

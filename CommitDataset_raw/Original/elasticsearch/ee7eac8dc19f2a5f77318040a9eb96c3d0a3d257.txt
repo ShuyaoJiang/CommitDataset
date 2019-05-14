@@ -1,0 +1,13 @@
+`MockTcpTransport` to connect asynchronously (#28203)
+
+The method `initiateChannel` on `TcpTransport` is explicit in that
+channels can be connect asynchronously. All production implementations
+do connect asynchronously. Only the blocking `MockTcpTransport`
+connects in a synchronous manner. This avoids testing some of the
+blocking code in `TcpTransport` that waits on connections to complete.
+Additionally, it requires a more extensive method signature than
+required for other transports.
+
+This commit modifies the `MockTcpTransport` to make these connections
+asynchronously on a different thread. Additionally, it simplifies that
+`initiateChannel` method signature.

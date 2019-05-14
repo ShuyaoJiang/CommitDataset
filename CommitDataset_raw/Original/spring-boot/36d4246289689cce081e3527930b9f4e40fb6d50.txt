@@ -1,0 +1,10 @@
+Add opt-in support for registering a shutdown hook to shut down logging
+
+This commit adds a new property, logging.register-shutdown-hook, that
+when set to true, will cause LoggingApplicationListener to register
+a shutdown hook the first time it initializes a logging system. When
+the JVM exits, the shutdown hook shuts down each of the supported
+logging systems, ensuring that all of their appenders have been
+flushed and closed.
+
+Closes gh-4026

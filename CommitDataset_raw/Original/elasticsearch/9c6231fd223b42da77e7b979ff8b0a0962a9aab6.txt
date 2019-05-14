@@ -1,0 +1,11 @@
+Use non-ILM template setting up watch history template & ILM disabled (#39325)
+
+When ILM is disabled and Watcher is setting up the templates and policies for
+the watch history indices, it will now use a template that does not have the
+`index.lifecycle.name` setting, so that indices are not created with the
+setting.
+
+This also adds tests for the behavior, and changes the cluster state used in
+these tests to be real instead of mocked.
+
+Resolves #38805

@@ -1,0 +1,13 @@
+Avoid inifinite recursion in UndertowServerHttpResponse
+
+Undertow does not provide a way to check if we can write so with the
+current implementation of isWritePossible, deep recursion can occur
+when writing slows down. We now use a flag to keep track of write
+ChannelListener callbacks.
+
+This commit also addresses a related issue in
+AbstractListenerWriteProcessor that went undected since #3c2d186
+where after a large (single) buffer that is not written fully, the
+completion signal is processed before the all data is written.
+
+Issue: SPR-16702

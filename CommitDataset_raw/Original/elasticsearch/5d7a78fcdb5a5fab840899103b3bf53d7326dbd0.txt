@@ -1,0 +1,11 @@
+Use PlainListenableActionFuture for CloseFuture (#26242)
+
+Right now we use a custom future for the CloseFuture associated with a
+channel. This is because we need special unwrapping logic to ensure that
+exceptions from a future failure are a certain type (opposed to an
+UncategorizedException). However, the current version is limiting
+because we can only attach one listener.
+
+This commit changes the CloseFuture to extend the
+PlainListenableActionFuture. This change allows us to attach multiple
+listeners.

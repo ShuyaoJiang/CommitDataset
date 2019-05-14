@@ -1,0 +1,10 @@
+SQL: Improve error message when unable to translate to ES query DSL (#37129)
+
+Improve error message returned to the client when an SQL statement
+cannot be translated to a ES query DSL. Cases:
+
+1. WHERE clause evaluates to FALSE => No results returned
+1. Missing FROM clause => Local execution, e.g.: SELECT SIN(PI())
+3. Special SQL command => Only valid of SQL iface, e.g.: SHOW TABLES
+
+Fixes: #37040

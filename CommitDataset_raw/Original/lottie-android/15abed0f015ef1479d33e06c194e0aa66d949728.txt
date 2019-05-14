@@ -1,0 +1,9 @@
+Fix precomps that are time stretched and longer than their parent
+
+It is possible to create an composition and then precomp it into a
+shorter composition but time stretch it down to fit the new shorter
+duration. In this case, at the end of the animation, the progress
+for the precomped layer will be > 1 because its frames extend
+past the end of the original composition. This fixes a keyframe
+from clipping at 1 to clipping at its actual end duration which
+may be > 1.

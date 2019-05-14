@@ -1,0 +1,18 @@
+Add WeightedAvg metric aggregation (#31037)
+
+Adds a new single-value metrics aggregation that computes the weighted 
+average of numeric values that are extracted from the aggregated 
+documents. These values can be extracted from specific numeric
+fields in the documents.
+
+When calculating a regular average, each datapoint has an equal "weight"; it
+contributes equally to the final value.  In contrast, weighted averages
+scale each datapoint differently.  The amount that each datapoint contributes 
+to the final value is extracted from the document, or provided by a script.
+
+As a formula, a weighted average is the `∑(value * weight) / ∑(weight)`
+
+A regular average can be thought of as a weighted average where every value has
+an implicit weight of `1`.
+
+Closes #15731

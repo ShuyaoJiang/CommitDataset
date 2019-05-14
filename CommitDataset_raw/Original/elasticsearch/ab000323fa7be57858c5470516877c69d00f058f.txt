@@ -1,0 +1,14 @@
+Allow extension of CapturingTransport by subclasses (#33012)
+
+Today, CapturingTransport#createCapturingTransportService creates a transport
+service with a connection manager with reasonable default behaviours, but
+overriding this behaviour in a consumer is a litle tricky. Additionally, the
+default behaviour for opening a connection duplicates the content of the
+CapturingTransport#openConnection() method.
+
+This change removes this duplication by delegating to openConnection() and
+introduces overridable nodeConnected() and onSendRequest() methods so that
+consumers can alter this behaviour more easily.
+
+Relates #32246 in which we test the mechanisms for opening connections to
+unknown (and possibly unreachable) nodes.

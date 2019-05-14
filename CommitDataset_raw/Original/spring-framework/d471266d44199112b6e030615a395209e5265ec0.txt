@@ -1,0 +1,30 @@
+@Feature methods accept @Value-annotated params
+
+Previously errors were being raised when trying to inject @Value
+annotated paramaters such as:
+
+@Feature
+public FeatureSpec feature(@Value("#{environment['foo']}") String foo) {
+    return new FeatureSpec(foo);
+}
+
+This is not so much because dependency resolution of @Value-annotated
+types was failing, but rather because the 'early bean reference'
+proxying mechanism was throwing an exception if any final type was
+detected as a parameter. This is of course because final types are
+non-subclassable by CGLIB.  On review, however, it's obvious that
+certain final types must be allowed for injection.  @Value injection
+is an obvious one, but the rarer case of a Spring bean of type String
+or int is another.
+
+The explicit guard against final types as parameters to @Feature methods
+has been removed. Final types are still checked for, however, and if
+found, no proxing is attempted.  The dependency is immediately resolved
+against the current BeanFactory and injected into the @Feature method.
+
+This means that @Value injection, @Qualifier injection, etc all work
+as expected, but does mean that premature bean instantiation may occur
+if a user unwittingly injects non-String, non-primitive final bean types
+as @Feature method parameters.
+
+Issue: SPR-7974

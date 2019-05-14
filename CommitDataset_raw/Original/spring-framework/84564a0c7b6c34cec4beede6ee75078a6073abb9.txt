@@ -1,0 +1,10 @@
+Rework @PropertySource early parsing logic
+
+Rework the @PropertySource parsing logic recently changed in commit
+7c608886 to deal with the same source appearing on a @Configuration
+class and an @Import class.
+
+Processing now occurs in a single sweep, with any previously added
+sources being converted to a CompositePropertySource.
+
+Issue: SPR-12115

@@ -1,0 +1,16 @@
+Fix handling of non-auto read for ByteToMessageDecoder and SslHandler
+
+Motivation:
+
+Our automatically handling of non-auto-read failed because it not detected the need of calling read again by itself if nothing was decoded. Beside this handling of non-auto-read never worked for SslHandler as it always triggered a read even if it decoded a message and auto-read was false.
+
+This fixes [#3529] and [#3587].
+
+Modifications:
+
+- Implement handling of calling read when nothing was decoded (with non-auto-read) to ByteToMessageDecoder again
+- Correctly respect non-auto-read by SslHandler
+
+Result:
+
+No more stales and correctly respecting of non-auto-read by SslHandler.

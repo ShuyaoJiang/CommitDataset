@@ -1,0 +1,11 @@
+[TEST] wait until reindex tasks ready for rethrottle (#26250)
+
+When slices is set as auto, there's an additional network call
+needed for the reindex tasks to know how to rethrottle. Sometimes
+the rethrottle action happens before the reindex task is fully
+initialized, so in the test we wait for the task to be ready.
+
+This commit also adds some safeguards to ensure that
+cancel and rethrottle operations are handled correctly
+
+Closes #26192

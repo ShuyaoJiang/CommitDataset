@@ -1,0 +1,12 @@
+Refactor AssertThrows to support Throwable
+
+Prior to this commit, AssertThrows in the spring-test module only
+supported Exception; however, there are legitimate test cases where the
+subject under test (SUT) may potentially throw a subclass of Throwable.
+
+This commit refactors AssertThrows so that it supports exceptions of
+type Throwable instead of the limiting support for Exception.
+Furthermore, AssertThrows has been refactored to use generics (e.g.,
+Class<? extends Throwable> instead of merely Class).
+
+Issue: SPR-6362

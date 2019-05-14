@@ -1,0 +1,14 @@
+Watcher: Ensure reloading happens based on watch index instead of alias (elastic/x-pack-elasticsearch#1544)
+
+The cluster state listener to decide if watcher should be reloaded was
+assuming that no aliases could be used and thus wrongly could trigger
+a reload, which could have lead to wrong test results.
+
+During debugging I also added a reason for reloading and fixed another
+wrong test assumption.
+
+Also the listener does not rely on previous cluster state, but stores this
+in instance variable, as we need to compare with local state and not the
+previous cluster state.
+
+Original commit: elastic/x-pack-elasticsearch@582783a66d0792d82554517f5666c532a3468dad

@@ -1,0 +1,8 @@
+Add a soft limit for the number of requested doc-value fields (#26574)
+
+Requesting to many docvalue_fields in a search request can potentially be costly
+because it might incur a per-field per-document seek. This change introduces a
+soft limit on the number of fields that can be retrieved. The setting can be
+changed per index using the `index.max_docvalue_fields_search` setting.
+
+Relates to #26390

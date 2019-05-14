@@ -1,0 +1,11 @@
+HTTP to HTTP/2 translation errors (round 2)
+
+Motivation:
+Commit 0d8ce23c83ad7fa67245c721ba4d47437458ddfc failed to fix the Host header processing. Host is not a URI but is instead defined in https://tools.ietf.org/html/rfc3986#section-3.2.2 as host        = IP-literal / IPv4address / reg-name
+
+Modifications:
+- Host should not be treated as a URI.
+- We should be more explicit about required fields, and unexpected input by throwing exceptions.
+
+Result:
+Translation from HTTP/1.x to HTTP/2 is more correct.

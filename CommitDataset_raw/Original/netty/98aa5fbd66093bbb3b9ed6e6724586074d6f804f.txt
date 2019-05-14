@@ -1,0 +1,20 @@
+CompositeByteBuf tidy-up (#8784)
+
+Motivation
+
+There's some miscellaneous cleanup/simplification of CompositeByteBuf
+which would help make the code a bit clearer.
+
+Modifications
+
+- Simplify web of constructors and addComponents methods, reducing
+duplication of logic
+- Rename `Component.freeIfNecessary()` method to just `free()`, which is
+less confusing (see #8641)
+- Make loop in addComponents0(...) method more verbose/readable (see
+https://github.com/netty/netty/pull/8437#discussion_r232124414)
+- Simplify addition/subtraction in setBytes(...) methods
+
+Result
+
+Smaller/clearer code

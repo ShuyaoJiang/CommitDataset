@@ -1,0 +1,21 @@
+Watcher: Fix proxy scheme to default to HTTP (elastic/x-pack-elasticsearch#3844)
+
+This fixes a regression introduced in Elasticsearch 6.0, when switching
+from HttpURLConnection to the Apache HTTP Client.
+
+In the old implementation there was no way to specify if you wanted to use HTTP
+or HTTPS for your proxy, only HTTP. If people needed to use HTTPs, they
+could just use the CONNECT feature of the proxy.
+
+The new implementation used the scheme of the request that was about to
+be sent out as the proxy scheme to be used. So if the request was HTTPS
+but the proxy server was HTTP this created a problem.
+
+This commit changes the default scheme to be just HTTP, so that then the
+standard CONNECT procecure is taken care off.
+
+Without a real proxy server this is super hard to test. I have verified
+this with the following test against a tinyproxy running on port 8888,
+but I do not have a great idea how to test this in a unit testable way using a real proxy.
+
+Original commit: elastic/x-pack-elasticsearch@f68e72d8f1a81d53791c4e7d2e0d23bb881a6c26

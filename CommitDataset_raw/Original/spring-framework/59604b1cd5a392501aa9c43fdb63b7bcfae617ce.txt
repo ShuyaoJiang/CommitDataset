@@ -1,0 +1,10 @@
+Unwrap TypeVariables before calling .equals()
+
+Update ResolvableType to unwrap Serialization wrapped TypeVariables
+before calling the equals method.
+
+This protects against the recent change in OpenJDK 8 (build 124)
+which changed the TypeVariableImpl equals method such that it only
+matches against other TypeVariableImpl instances.
+
+Issue: SPR-11342

@@ -1,0 +1,4 @@
+Performance fix. Reduce deprecation calls for the same bulk request (#37415)
+
+DeprecationLogger has warning de-duplication logic but it is expensive to run as it involves parsing existing warning headers. This PR changes the upstream bulk indexing code to do its own "event thinning" rather than relying on DeprecationLogger's trimming.
+Closes #37411

@@ -1,0 +1,10 @@
+Http2ConnectionHandler.BaseBuilder exception cleanup
+
+Motivation:
+Http2ConnectionHandler.BaseBuilder is constructing objects which have 'close' methods, but is not calling these methods in the event of an exception.
+
+Modifications:
+- Objects which implement 'close' should have this method called if an exception is thrown and the build operation can not complete normally.
+
+Result:
+Objects are closed even if the build process encounters an error.

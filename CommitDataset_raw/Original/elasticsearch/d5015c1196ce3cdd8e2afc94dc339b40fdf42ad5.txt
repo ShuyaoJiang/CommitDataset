@@ -1,0 +1,10 @@
+IntervalQueryBuilderTests#testNonIndexedFields test fix (#40418)
+
+This test checks that interval queries constructed against a field with no indexed
+positions will throw exceptions. It uses a randomly-build IntervalsSourceProvider
+against a fixed set of fields; however, the random source builder can occasionally
+provide a source with a fixed field, meaning that even if the top-level query asks
+for a set of intervals over a non-indexed field, the source will delegate to another
+field, and no exception will be thrown.
+
+This commit changes the test to always use a simple Match provider.

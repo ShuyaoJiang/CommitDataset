@@ -1,0 +1,11 @@
+Throw UOE from compressible bytes stream reset
+
+A compressible bytes output stream is a stream output which supports a
+reset method. However, compressible bytes output streams are unusual in
+that the current implementation sometimes supports a reset (if the
+stream is not compressed) and sometimes does not support a rest (if the
+stream is compressed). This inconsistent behavior is puzzling and
+instead we should simply always throw an unsupported operation
+exception.
+
+Relates #27564

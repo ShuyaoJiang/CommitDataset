@@ -1,0 +1,25 @@
+Translate SQLTimeoutException to QueryTimeoutException
+
+SPR-7680 added QueryTimeoutException to Spring's DataAccessException
+hierarchy, but did not integrate it into the
+SQLExceptionSubclassTranslator; it was added mainly to accomodate users
+defining their own custom exception translators.
+
+However, it does make sense to translate any SQLTimeoutException to this
+new QueryTimeoutException type, and this commit makes that change. It
+does represent a slight backward-incompatibility, given that
+QueryTimeoutException extends TransientDataAccessException, whereas
+SQLExceptionSubclassTranslator previously returned the more specific
+TransientDataAccessResourceException for any SQLTimeoutException.
+
+It is expected that this incompatibily will be very low-impact, i.e. not
+affecting many (if any) users. In any case, a major release (Spring 3.2)
+is the right time to introduce such a change, and the migration path is
+straightforward: any users depending on catching
+TransientDataAccessResourceException in the case of query timeouts
+should update those catch blocks to expect QueryTimeoutException
+instead. Care should also be taken to ensure correctness of existing
+catch blocks expecting TransientDataAccessException, as these blocks
+will now catch QueryTimeoutException as well.
+
+Issue: SPR-9376, SPR-7680

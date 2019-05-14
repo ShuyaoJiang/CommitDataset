@@ -1,0 +1,18 @@
+Build: Fail if any libs depend on non-core libs (#29336)
+
+Fails the build if any subprojects of `:libs` have dependencies in `:libs`
+except for `:libs:elasticsearch-core`.
+
+Since we now have three places where we resolve project substitutions
+I've added `dependencyToProject` to `project.ext` in all projects. It
+resolves both `project` style dependencies and "external" style (like
+"org.elasticsearch:elasticsearch-core:${version}") dependencies to
+`Project`s using the `projectSubstitutions`. I use this new function all
+three places where resovle project substitutions.
+
+Finally this pulls `apply plugin: 'elasticsearch.build'` out of
+`libs/*/build.gradle` and into a subprojects clause in
+`libs/build.gradle`. I do this entirely so that I can call
+`tasks.precommit.dependsOn checkDependencies` without waiting for the
+subprojects to be evaluated or worrying about whether or not they have
+`precommit` set up in a normal way.

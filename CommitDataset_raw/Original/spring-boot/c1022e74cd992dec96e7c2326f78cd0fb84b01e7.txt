@@ -1,0 +1,8 @@
+Add CachingMetadataReaderFactoryPostProcessor earlier in context lifecyle
+
+An initializer that adds a BeanDefinitionRegistryPostProcessor which
+in turn adds bean definitions has to be very careful to run early.
+Otherwise, other initializers that want to influence the bean
+definitions added never get a chance.
+
+Closes gh-14907

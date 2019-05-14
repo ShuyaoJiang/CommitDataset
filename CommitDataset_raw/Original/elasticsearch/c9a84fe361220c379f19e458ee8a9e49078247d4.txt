@@ -1,0 +1,13 @@
+SQL: Handle null literal for AND and OR in `WHERE` (#35236)
+
+Change `nullable()` logic of AND and OR to false since in the Optimizer
+we cannot fold to null as we might be handling and expression in the
+SELECT clause.
+
+Introduce folding of null for AND and OR expressions in PruneFilter()
+since we now know that we are in HAVING or WHERE clause and we
+can fold `null` to `false`
+
+Fixes: #35088
+
+Co-authored-by: Costin Leau <costin.leau@gmail.com>

@@ -1,0 +1,9 @@
+Simplify MultiSnapshot#SeqNoset (#27547)
+
+Today, we maintain two sets in a SeqNoSet: ongoing sets and completed
+sets. We can remove the completed sets and use only the ongoing sets by
+releasing the internal bitset of a CountedBitSet when all its bits are
+set. This behaves like two sets but simpler. This commit also makes
+CountedBitSet as a drop-in replacement for BitSet.
+
+Relates #27268

@@ -1,0 +1,17 @@
+Tests: Replace YAML tests with ESTestRestCase to be able to wait for … (elastic/x-pack-elasticsearch#3252)
+
+* Tests: Replace YAML tests with ESTestRestCase to be able to wait for events
+
+The YAML tests did not have any possibility to wait for the watches to
+be created. A hard ten second timeout was used, that could not be
+aborted, by simulating a sleep when waiting for a number of nodes that
+never occured in the cluster.
+
+This commit replaces those waiting YAML tests with ESRestTestCases, that
+use `assertBusy()` to exit early once the watches have been added. Also
+this increases the wait time if needed, as these tests tend to fail on
+CI.
+
+relates elastic/x-pack-elasticsearch#3217
+
+Original commit: elastic/x-pack-elasticsearch@74b9945d88f1d294832083a0e1ae403e622a0c4d

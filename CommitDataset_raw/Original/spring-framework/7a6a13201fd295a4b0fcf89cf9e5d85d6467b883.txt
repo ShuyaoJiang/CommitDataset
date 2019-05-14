@@ -1,0 +1,11 @@
+Fix Animal Sniffer
+
+Jasper Reports’ transitive dependency on spring-context (via
+castor-xml which is a new dependency in 6.0.3) was being mapped by
+Gradle to a dependency on the spring-context project. For reasons that
+I do not fully understand this was causing -source and -javadoc jars
+to be added to the project's compile classpath which is used by the
+Animal Sniffer Ant task. When the task runs these jars do not exist
+which causes it to fail. This commit fixes the problem by adding an
+exclusion of org.springframework:spring-context to the Jasper Reports
+dependencies in spring-context-support and spring-webmvc.

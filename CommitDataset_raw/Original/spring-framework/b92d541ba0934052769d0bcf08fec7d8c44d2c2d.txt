@@ -1,0 +1,20 @@
+Add contextPath support for reactive web applications
+
+This commit introduces support for running multiple HttpHandler's under
+distinct context paths which effectively allows running multiple
+applications on the same server. ContextPathIntegrationTests contains
+an example of two applications with different context paths.
+
+In order to support this the HttpHandler adapters for all supported
+runtimes now have a common base class HttpHandlerAdapterSupport
+which has two constructor choices -- one with a single HttpHandler and
+another with a Map<String, HttpHandler>.
+
+Note that in addition to the contextPath under which an HttpHandler is
+configured there may also be a "native" contextPath under which the
+native runtime adapter is configured (e.g. Servlet containers). In such
+cases the contextPath is a combination of the native contextPath and
+the contextPath assigned to the HttpHandler. See for example
+HttpHandlerAdapterSupportTests.
+
+Issue: SPR-14726

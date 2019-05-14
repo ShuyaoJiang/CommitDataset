@@ -1,0 +1,25 @@
+Enhances exists queries to reduce need for `_field_names` (#26930)
+
+* Enhances exists queries to reduce need for `_field_names`
+
+Before this change we wrote the name all the fields in a document to a `_field_names` field and then implemented exists queries as a term query on this field. The problem with this approach is that it bloats the index and also affects indexing performance.
+
+This change adds a new method `existsQuery()` to `MappedFieldType` which is implemented by each sub-class. For most field types if doc values are available a `DocValuesFieldExistsQuery` is used, falling back to using `_field_names` if doc values are disabled. Note that only fields where no doc values are available are written to `_field_names`.
+
+Closes #26770
+
+* Addresses review comments
+
+* Addresses more review comments
+
+* implements existsQuery explicitly on every mapper
+
+* Reinstates ability to perform term query on `_field_names`
+
+* Added bwc depending on index created version
+
+* Review Comments
+
+* Skips tests that are not supported in 6.1.0
+
+These values will need to be changed after backporting this PR to 6.x

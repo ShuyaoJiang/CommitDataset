@@ -1,0 +1,15 @@
+[RCI] Add IndexShardOperationPermits.asyncBlockOperations(ActionListener<Releasable>) (#34902)
+
+The current implementation of asyncBlockOperations() can be used to
+execute some code once all indexing operations permits have been acquired,
+ then releases all permits immediately after the code execution. This
+ immediate release is not suitable for treatments that need to keep all
+ permits over multiple execution steps.
+
+This commit adds a new asyncBlockOperations() that exposes a Releasable,
+ making it possible to acquire all permits and only release them all
+ when needed by closing the Releasable. The existing blockOperations() 
+method has been modified to delegate permit acquisition/releasing to this new
+method.
+
+Relates to #33888

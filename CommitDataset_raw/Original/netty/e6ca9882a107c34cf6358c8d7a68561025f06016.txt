@@ -1,0 +1,20 @@
+Add support for abstract domain sockets
+
+Motivation:
+
+Because of java custom UTF encoding, it was previously impossible to use
+nul-bytes in domain socket names, which is required for abstract domain
+sockets.
+
+Modifications:
+
+- Pass the encoded string byte array to the native code
+- Modify native code accordingly to work with nul-bytes in the the
+array.
+- Move the string encoding to UTF-8 in java code.
+
+Result:
+
+Unix domain socket addresses will work properly if they contain nul-
+bytes. Address encoding for these addresses changes from UTF-8-like to
+real UTF-8.

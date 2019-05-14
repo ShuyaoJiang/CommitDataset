@@ -1,0 +1,5 @@
+Give the logstash_admin role cluster:monitor/main privilege (elastic/x-pack-elasticsearch#4318)
+
+This is required so the Logstash Centralized Configuration Management UI in Kibana may make the GET / request to Elasticsearch and retrieve the cluster UUID. It then uses this cluster UUID to make a call to a Kibana Monitoring API to retrieve a list of pipelines from Monitoring. In order for the Kibana Monitoring API request to succeed, the logged-in user needs to have the built-in monitoring_user role anyway, so we give this role the cluster:monitor/main privilege.
+
+Original commit: elastic/x-pack-elasticsearch@bf6ad5c1dfe7ba15685282617abba6586e1431ec

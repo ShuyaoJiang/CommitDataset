@@ -1,0 +1,10 @@
+Fix SockJS origin check
+
+This commit introduces the following changes:
+ - Requests without Origin header are not rejected anymore
+ - Disable Iframe when allowedOrigins is not empty and not equals to *
+ - The Iframe is not cached anymore in order to have a reliable origin check
+ - allowedOrigins must not be null or empty
+ - allowedOrigins format is now validated (should be * or start by http(s)://)
+
+Issue: SPR-12660

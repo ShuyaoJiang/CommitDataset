@@ -1,0 +1,8 @@
+Fix building AD URL from domain name (#31849)
+
+The steps to read the settings and build URLs happen in a non-obvious
+order, which meant that we would build the default URL (from the
+domain name, and port) before we'd actually read the port settings.
+This would cause the URL to always have a port of `0`.
+
+Relates: bccf988

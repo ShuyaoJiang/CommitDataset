@@ -1,0 +1,6 @@
+Fix NDCG for empty search results (#29267)
+
+Fixes and edge case where DiscountedCumulativeGain can return NaN as
+result of the quality metric calculation. This can happen when the
+search result set is empty and normalization is used. We should return 0
+in this case. Also adding related unit tests to the other two metrics.

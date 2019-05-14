@@ -1,0 +1,33 @@
+Reduce bytecode size of PlatformDependent0.equals.
+
+Motivation:
+
+PP0.equals has a bytecode size of 476. This is above the default inlining threshold of OpenJDK.
+
+Modifications:
+
+Slightly change the method to reduce the bytecode size by > 50% to 212 bytes.
+
+Result:
+
+The bytecode size is dramatically reduced, making the method a candidate for inlining.
+The relevant code in our application (gRPC) that relies heavily on equals comparisons,
+runs some ~10% faster. The Netty JMH benchmark shows no performance regression.
+
+Current 4.1:
+
+PlatformDependentBenchmark.unsafeBytesEqual      10  avgt   20     7.836 ±   0.113  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual      50  avgt   20    16.889 ±   4.284  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual     100  avgt   20    15.601 ±   0.296  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual    1000  avgt   20    95.885 ±   1.992  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual   10000  avgt   20   824.429 ±  12.792  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual  100000  avgt   20  8907.035 ± 177.844  ns/op
+
+With this change:
+
+PlatformDependentBenchmark.unsafeBytesEqual      10  avgt   20      5.616 ±   0.102  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual      50  avgt   20     17.896 ±   0.373  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual     100  avgt   20     14.952 ±   0.210  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual    1000  avgt   20     94.799 ±   1.604  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual   10000  avgt   20    834.996 ±  17.484  ns/op
+PlatformDependentBenchmark.unsafeBytesEqual  100000  avgt   20   8757.421 ± 187.555  ns/op

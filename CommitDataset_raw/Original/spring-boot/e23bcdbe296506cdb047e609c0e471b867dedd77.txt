@@ -1,0 +1,19 @@
+Update OSX Java 1.6 compatibility fix for plugins
+
+Change the initial fix for OSX Java 1.6 compatibility by removing the
+need for a direct `tools.jar` dependency.
+
+It appears that `system` dependencies are always pulled in when
+used in a Maven plugin. This makes the the dependency on `tools.jar`
+particularly brittle since we need to make assumptions about where
+the jar is located.
+
+Since the tools jar is *only* needed for Spring Loaded support, the
+plugin has now been updated to locate the jar programmatically and
+call it via reflection. This should reduce the risk of problems when
+using the plugin and at the very least isolate them to Spring Loaded
+support.
+
+(See original commit b8c4720)
+
+Fixes gh-497

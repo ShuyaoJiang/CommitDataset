@@ -1,0 +1,13 @@
+Align precedence of @SpringBootTest properties with @TestPropertySource
+
+This commit updates the precedence of properties configured using
+@SpringBootTest to align with @TestPropertySource. Properties configured
+using properties on @SpringBootTest are now added to the same property
+source as those configured using properties on @TestPropertySource so
+the precedence described in the javadoc of @TestPropertySource now
+applies in full. Additionally, if both @TestPropertySource properties
+and @SpringBootTest properties configure the same property, the value
+from @TestPropertySource will win.
+
+Closes gh-4828
+

@@ -1,0 +1,10 @@
+Make InvalidMark an IO rather than a Runtime exception
+
+If we're asked to read partial data (ie a screenshot in Android), we may
+read a valid image header but an invalid image body. We should treat
+overring our mark as a soft failure, rather than an assertion failure so
+that when we fix our mark limit to read the image body, we don't throw
+if body is invalid.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=88966755

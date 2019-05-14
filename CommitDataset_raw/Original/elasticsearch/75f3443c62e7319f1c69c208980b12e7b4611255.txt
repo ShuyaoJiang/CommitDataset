@@ -1,0 +1,12 @@
+Rename setting to enable mmap
+
+With this commit we rename `node.store.allow_mmapfs` to
+`node.store.allow_mmap`. Previously this setting has controlled whether
+`mmapfs` could be used as a store type. With the introduction of
+`hybridfs` which also relies on memory-mapping,
+`node.store.allow_mmapfs` also applies to `hybridfs` and thus we rename
+it in order to convey that it is actually used to allow memory-mapping
+but not a specific store type.
+
+Relates #36668
+Relates #37070

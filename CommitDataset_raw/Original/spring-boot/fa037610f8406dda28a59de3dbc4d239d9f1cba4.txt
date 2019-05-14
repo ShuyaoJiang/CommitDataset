@@ -1,0 +1,9 @@
+Add missing class check on Neo4jDataAutoConfiguration
+
+Neo4jDataAutoConfiguration is meant to kick in when Spring Data Neo4J is
+on the classpath. Yet, we were only checking for the presence of neo4j
+itself and the transaction manager provided by spring-tx.
+
+This commit makes sure to back off if Spring Data Neo4J is not present.
+
+Closes gh-10038

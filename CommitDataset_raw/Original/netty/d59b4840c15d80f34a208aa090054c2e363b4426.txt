@@ -1,0 +1,17 @@
+Cleanup ChannelId handling of basic methods
+
+Motiviation:
+
+Simplify implementation of compareTo/equals/hashCode for ChannelIds.
+
+Modifications:
+
+We simplfy the hashCode implementation for DefaultChannelId by not
+making it random, but making it based on the underlying data. We fix the
+compareTo implementation for DefaultChannelId by using lexicographic
+comparison of the underlying data array. We fix the compareTo
+implementation for CustomChannelId to avoid the possibility of overflow.
+
+Result:
+
+Cleaner code that is easier to maintain.

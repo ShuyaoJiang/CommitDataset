@@ -1,0 +1,10 @@
+Retained[Duplicate|Slice] operations should not increase the reference count for UnreleasableByteBuf
+
+Motivation:
+UnreleasableByteBuf operations are designed to not modify the reference count of the underlying buffer. The Retained[Duplicate|Slice] operations violate this assumption and can cause the underlying buffer's reference count to be increased, but never allow for it to be decreased. This may lead to memory leaks.
+
+Modifications:
+- UnreleasableByteBuf's Retained[Duplicate|Slice] should leave the reference count of the parent buffer unchanged after the operation completes.
+
+Result:
+No more memory leaks due to usage of the Retained[Duplicate|Slice] on an UnreleasableByteBuf object.

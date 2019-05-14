@@ -1,0 +1,30 @@
+Don't detect annotations on superclass in StAnMeta
+
+Changes introduced in conjunction with issue SPR-11475 altered the
+behavior of StandardAnnotationMetadata such that annotations could be
+detected on superclasses, specifically in the case where the
+AnnotatedElementUtils.getAllAnnotationAttributes() method is invoked to
+obtain multiple annotations of the same type (on the lowest level in the
+class hierarchy), as is the case for @Profile and @Conditional.
+
+This commit partially reverts these changes as follows:
+
+ - All methods in AnnotatedElementUtils now set the
+   traverseClassHierarchy to false, thereby effectively reverting the
+   changes made in commit 1d30bf83a0d6f303ce38526286b90172c3c596c6.
+   Note, however, that the changes made to AnnotationUtils remain in
+   place.
+
+ - Introduced tests in AnnotationMetadataTests that verify behavior
+   present in Spring Framework 4.0.2 and earlier.
+
+ - Updated tests in AnnotatedElementUtilsTests so that they pass against
+   the reverted changes (i.e., align with the behavior present in Spring
+   Framework 4.0.2 and earlier).
+
+ - Refined Javadoc in AnnotationMetadata with regard to annotations
+   being "present" vs. "defined".
+
+ - Refined Javadoc in AnnotatedTypeMetadata.
+
+Issue: SPR-11475, SPR-11595

@@ -1,0 +1,14 @@
+Introduce Kerberos Test Fixture for Repository HDFS Security Tests (#24493)
+
+This PR introduces a subproject in test/fixtures that contains a Vagrantfile used for standing up a 
+KRB5 KDC (Kerberos). The PR also includes helper scripts for provisioning principals, a few 
+changes to the HDFS Fixture to allow it to interface with the KDC, as well as a new suite of 
+integration tests for the HDFS Repository plugin.
+
+The HDFS Repository plugin senses if the local environment can support the HDFS Fixture 
+(Windows is generally a restricted environment). If it can use the regular fixture, it then tests if 
+Vagrant is installed with a compatible version to determine if the secure test fixtures should be 
+enabled. If the secure tests are enabled, then we create a Kerberos KDC fixture, tasks for adding 
+the required principals, and an HDFS fixture configured for security. A new integration test task is 
+also configured to use the KDC and secure HDFS fixture and to run a testing suite that uses 
+authentication. At the end of the secure integration test the fixtures are torn down.

@@ -1,0 +1,16 @@
+Let CombinedChannelDuplexHandler correctly handle exceptionCaught. Related to [#4528]
+
+Motivation:
+
+ChannelInboundHandler and ChannelOutboundHandler both can implement exceptionCaught(...) method and so we need to dispatch to both of them.
+
+Modifications:
+
+- Correctly first dispatch exceptionCaught to the ChannelInboundHandler but also make sure the next handler it will be dispatched to will be the ChannelOutboundHandler
+- Add removeInboundHandler() and removeOutboundHandler() which allows to remove one of the combined handlers
+- Let *Codec extends it and not ChannelHandlerAppender
+- Remove ChannelHandlerAppender
+
+Result:
+
+Correctly handle events and also have same behavior as in 4.0

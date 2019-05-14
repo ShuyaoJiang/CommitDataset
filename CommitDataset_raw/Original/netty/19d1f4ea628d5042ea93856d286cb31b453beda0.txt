@@ -1,0 +1,21 @@
+Propagate pong frames in WebSocketProtocolHandler (#7955)
+
+Motivation:
+
+Currently, on recipt of a PongWebSocketFrame, the
+WebSocketProtocolHandler will drop the frame, rather than passing it
+along so it can be referenced by other handlers.
+
+Modifications:
+
+Add boolean field to WebSocketProtocolHandler to indicate whether Pong
+frames should be dropped or propagated, defaulting to "true" to preserve
+existing functionality.
+
+Add new constructors to the client and server implementations of
+WebSocketProtocolHandler that allow for overriding the behavior for the
+handling of Pong frames.
+
+Result:
+
+PongWebSocketFrames are passed along the channel, if specified.

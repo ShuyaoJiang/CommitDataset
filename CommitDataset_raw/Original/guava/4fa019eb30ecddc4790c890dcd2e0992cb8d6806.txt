@@ -1,0 +1,6 @@
+Fix thread-safety of EventBus.
+
+In a previous change, handlersByType was converted from a ConcurrentMap to a SetMultimap. However, the SetMultimap returned by Multimaps.newSetMultimap is not threadsafe when concurrent operations update the multimap, even if the map and set factory are. This can cause registered subscribers to stop receiving events because they are dropped from the multimap.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=33680249

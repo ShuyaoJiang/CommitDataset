@@ -1,0 +1,30 @@
+Pass config path as a system property
+
+A previous change enabled it so that users could configure the
+configuration path via a command-line option --path.conf. However, a
+subsequent change has made it so that we expect users to set the
+configuration path via the environment variable CONF_DIR. To enable
+this, we now pass the value of CONF_DIR as the value for the
+command-line option --path.conf. This has two problems:
+ - the presence of --path.conf always being on the command line breaks
+   other flags like --help for multi-commands
+ - the scripts for which --help is not broken say that you can pass
+   --path.conf but this is a lie since passing it will make it appear
+   twice in the command-line arguments breaking the script
+
+Since --path.conf is no longer the way that we want users to set the
+configuration path, we should remove the --path.conf option. However, we
+still need a way to get the configuration path from the scripts to the
+running Java process. To do this, we now pass the configuration path as
+a system property. This keeps it off the script command line fixing the
+above problems.
+
+The only remaining question (that I can see) is whether or not to
+respect -Des.path.conf=<some path> if the user sets this in their
+jvm.options or via ES_JAVA_OPTS. I think that we should not do this (as
+has been our tradition), es.path.home and es.path.conf are special,
+should be set by our scripts only so users should not be setting them at
+all so we should not take any effort to respect these flags if the user
+tries to otherwise use them.
+
+Relates #25943

@@ -1,0 +1,12 @@
+[Tests] Improve testing of FieldSortBuilder (#26437)
+
+Currently we don't have much unit testing about the SortField that is created then
+calling the SortBuilders `build` method. Most of this is covered by integration tests
+somewhere but it would be good to have some basic checks in FieldSortBuilderTest
+as well.
+
+This adds testing for the sort order, mode, missing values and checks that `nested` 
+gets set in the XFieldComparatorSource when `nestedPath` and `nestedFilter` are 
+set on the builder.
+
+Relates to #17286

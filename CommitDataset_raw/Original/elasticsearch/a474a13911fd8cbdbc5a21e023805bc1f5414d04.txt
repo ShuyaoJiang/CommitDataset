@@ -1,0 +1,5 @@
+testRerouteRecovery should use assertBusy when checking recovery counters
+
+The test check that the number of outgoing/incoming recoveries of a shard is 0 after recoveries were done. Sadly that is not guaranteed by the current recovery logic as we decrement the counters only when all references to the relevant RecoveryTarget object have been released. This may happen in an async fashion to the recovery completion which causes the test to fail. I looked at options to change the recovery logic to have the recovery counters decrease before the recovery is done *under normally circumstances* but I don't see a clean way to do it. Since it won't give hard guarantees anyway I opted to add assertBusy to the test
+
+Closes #24669

@@ -1,0 +1,21 @@
+update rollover to leverage write-alias semantics (#32216)
+
+Rollover should not swap aliases when `is_write_index` is set to `true`.
+Instead, both the new and old indices should have the rollover alias,
+with the newly created index as the new write index
+
+Updates Rollover to leverage the ability to preserve aliases and swap which is the write index.
+
+Historically, Rollover would swap which index had the designated alias for writing documents against. This required users to keep a separate read-alias that enabled reading against both rolled over and newly created indices, whiles the write-alias was being re-assigned at every rollover.
+
+With the ability for aliases to designate a write index, Rollover can be a bit more flexible with its use of aliases.
+
+Updates include:
+
+- Rollover validates that the target alias has a write index (the index that is being rolled over). This means that the restriction that aliases only point to one index is no longer necessary.
+- Rollover explicitly (and atomically) swaps which index is the write-index by explicitly assigning the existing index to have `is_write_index: false` and have the newly created index have its rollover alias as `is_write_index: true`. This is only done when `is_write_index: true` on the write index. Default behavior of removing the alias from the rolled over index stays when `is_write_index` is not explicitly set
+
+Relevant things that are staying the same:
+
+- Rollover is rejected if there exist any templates that match the newly-created index and configure the rollover-alias
+   - I think this existed to prevent the situation where an alias pointed to two indices for a short while. Although this can technically be relaxed, the specific cases that are safe are really particular and difficult to reason, so leaving the broad restriction sounds good

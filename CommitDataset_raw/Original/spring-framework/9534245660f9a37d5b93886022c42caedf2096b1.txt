@@ -1,0 +1,15 @@
+Exclude overloaded from equals & hashCode in MethodOverride
+
+Prior to this commit, the inclusion of the 'overloaded' flag in the
+implementations of equals() and hashCode() in MethodOverride could lead
+to adverse effects in the outcome of equals() in AbstractBeanDefinition.
+
+For example, given two bean definitions A and B that represent the
+exact same bean definition metadata for a bean that relies on method
+injection, if A has been validated and B has not, then A.equals(B) will
+potentially return false, which is not acceptable behavior.
+
+This commit addresses this issue by removing the 'overloaded' flag from
+the implementations of equals() and hashCode() for MethodOverride.
+
+Issue: SPR-11420

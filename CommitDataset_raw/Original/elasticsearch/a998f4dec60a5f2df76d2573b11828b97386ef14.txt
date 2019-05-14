@@ -1,0 +1,9 @@
+Core: Remove parseDefaulting from DateFormatter (#36386)
+
+This commit removes the parseDefaulting method from DateFormatter,
+bringing it more inline with the joda equivalent
+FormatDateTimeFormatter. This method was only needed for the java
+time implementation of DateMathParser. Instead, a DateFormatter now
+returns an implementation of DateMathParser for the given format,
+allowing the java time implementation to construct the appropriate date
+math parser internally.

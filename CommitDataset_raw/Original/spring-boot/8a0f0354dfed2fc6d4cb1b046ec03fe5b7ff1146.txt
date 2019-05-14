@@ -1,0 +1,14 @@
+Disable Log4J2's shutdown hook by default
+
+Log4J2 enables its shutdown hook by default. When the JVM is exiting,
+this creates a race between logging that happens during the
+application context being closed and Log4J2 being shut down such that
+the logging is lost.
+
+This commit updates SpringBootConfigurationFactory so that it
+produces a custom sub-class of DefaultConfiguration that disables the
+shutdown hook by default. In addition to solving the problem described
+above, this also aligns the Log4J2 logging system with the
+logging.register-shutdown-hook property which defaults to false.
+
+Closes gh-11360

@@ -1,0 +1,15 @@
+Exclude native transport related test and dependency when not running under Linux, close #4409
+
+Motivation:
+
+The build fails on OSX, due to it trying to pull in an epoll specific OSX dependency. See #4409.
+
+Modifications:
+
+* move netty-transport-native-epoll to linux profile
+* exclude Http2FrameWriterBenchmark from compiler
+* include Http2FrameWriterBenchmark back only in linux profile (please check)
+
+Result:
+
+Build succeeds on OSX.

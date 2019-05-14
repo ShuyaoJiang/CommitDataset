@@ -1,0 +1,17 @@
+Build: Assert jar LICENSE and NOTICE files match
+
+Adds tasks that check that the all jars that we build have LICENSE.txt
+and NOTICE.txt files and that the files are correct. Sets check to
+depend on these task.
+
+This is mostly there for extra parnoia because we automatically
+configure all Jar tasks to include the LICENSE.txt and NOTICE.txt
+files anyway. But it is quite possible to add configuration to those
+tasks that would override either file.
+
+This causes check to depend on several more things than it used to.
+Take, for example, javadoc:
+
+check depends on the new verifyJavadocJarNotice which depends on
+extractJavadocJar which depends on javadocJar which depends on
+javadoc, this check now depends on javadoc.

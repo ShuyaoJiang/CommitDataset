@@ -1,0 +1,6 @@
+Watcher: Ensure correct method is used to read secure settings (#31753)
+
+As SecureSetting is extended from Setting, you can easily accidentally
+use `SecureSetting.simpleString()` to read a secure setting instead of
+`SecureSetting.secureString()`. This commit changes this behaviour in
+some watcher notification services.

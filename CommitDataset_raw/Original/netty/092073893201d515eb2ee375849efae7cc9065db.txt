@@ -1,0 +1,20 @@
+Do not log explicit no unsafe, fixes helper method. (#8111)
+
+Motivation:
+
+Users should not see a scary log message when Netty is initialized if
+Netty configuration explicitly disables unsafe. The log message that
+produces this warning was previously guarded but by recent refactoring
+a bug was introduced inside the guard helper method.
+
+Modifications:
+
+This commit brings back the guard against the scary log message if
+unsafe is explicitly disabled.
+
+Result:
+
+No log message is produced when unsafe is unavailable because Netty was
+told to not look for it.
+
+Relates https://github.com/netty/netty/pull/5624, https://github.com/netty/netty/pull/6696

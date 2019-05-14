@@ -1,0 +1,11 @@
+Tolerate possible null Flyway MigrationVersion when using Flyway 4.0
+
+Flyway 4.0 provides support for repeatable migrations that do not
+have a version. When such a migration has been performed,
+MigrationInfo.getMigrationVersion() will return null and, previously,
+FlywayEndpoint would fail with an NPE.
+
+This commit updates FlywayEndpoint to use null as the version when
+MigrationInfo.getMigrationVersion() returns null.
+
+Closes gh-5700

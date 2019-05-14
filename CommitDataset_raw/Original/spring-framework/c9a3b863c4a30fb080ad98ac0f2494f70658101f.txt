@@ -1,0 +1,11 @@
+Move toEntity(List) from WebClient.ResponseSpec to ClientResponse
+
+This commit moves `toEntity(Class<T>)` and `toEntityList(Class<T>)`
+from WebClient.ResponseSpec to ClientResponse. The main reason for doing
+so is that the newly introduced `onStatus` method (see
+2f9bd6e075facbf13edd629a98da88115c130b98) does not apply to these two
+methods, and the result would be confusing. Also, `ClientResponse` and
+`ResponseEntity` represent the same data: status code, headers, and a
+body.
+
+Issue: SPR-15724

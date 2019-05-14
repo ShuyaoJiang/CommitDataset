@@ -1,0 +1,29 @@
+Delay path expansion on Windows
+
+There is a bug in the for statement where we execute the JVM options
+parser. The bug manfiests in the handling of paths with ) in the
+name. The problem is this: we use a for statement to capture the output
+of the JVM options parser. A for statement that executes a command
+defers execution to cmd. There is this gem from the help:
+
+  1.  If all of the following conditions are met, then quote characters
+      on the command line are preserved:
+
+      - no /S switch
+      - exactly two quote characters
+      - no special characters between the two quote characters,
+        where special is one of: &<>()@^|
+      - there are one or more whitespace characters between the
+        two quote characters
+      - the string between the two quote characters is the name
+        of an executable file.
+
+  2.  Otherwise, old behavior is to see if the first character is
+      a quote character and if so, strip the leading character and
+      remove the last quote character on the command line, preserving
+      any text after the last quote character.
+
+This means that the ) causes the quotes to be stripped which ruins
+everything. This commit fixes this by delaying expansion of the paths.
+
+Relates #28753

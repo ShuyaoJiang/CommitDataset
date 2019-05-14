@@ -1,0 +1,10 @@
+fcbeebf6dff759a1e0cfe2e20fe5103e4c40075c unit test bug
+
+Motivation:
+fcbeebf6dff759a1e0cfe2e20fe5103e4c40075c introduced a unit test to verify ApplicationProtocolNegotiationHandler is compatible with SniHandler. However only the server attempts ALPN and verifies that it completes and the client doesn't verify the handshake is completed. This can lead to the client side SSL engine to prematurely close and throw an exception.
+
+Modifications:
+- The client should wait for the SSL handshake and ALPN to complete before the test exits.
+
+Result:
+SniHandlerTest.testSniWithApnHandler is more reliable.

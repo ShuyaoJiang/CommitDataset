@@ -1,0 +1,11 @@
+Fix lock accounting in releasable lock
+
+Releasble locks hold accounting on who holds the lock when assertions
+are enabled. However, the underlying lock can be re-entrant yet we mark
+the lock as not held by the current thread as soon as the releasable is
+closed. For a re-entrant lock this is not right because the thread could
+have entered the lock multiple times. Instead, we have to count how many
+times the thread has entered the lock and only mark the lock as not held
+by the current thread when the counter reaches zero.
+
+Relates #28202

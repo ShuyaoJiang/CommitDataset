@@ -1,0 +1,12 @@
+Consistent descriptions for ConfigurationClass
+
+Previously, a ConfigurationClass created from AnnotationMetadata
+and a ConfigurationClass created from a class would have subtly
+different descriptions. Given a class named com.example.Foo, the
+former’s description would be “com.example.Foo”, whereas the latter’s
+description would be “class com.example.Foo”.
+
+This commit updates ConfigurationClass to make the description
+consistent, preferring the description without “class” in it.
+
+Closes gh-970

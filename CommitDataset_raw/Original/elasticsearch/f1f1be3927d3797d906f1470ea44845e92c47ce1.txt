@@ -1,0 +1,13 @@
+Test: tests that use security index should not delete template
+
+Tests that rely on the security index and security index template being present should not remove
+the template between tests as this can cause test failures. The template upgrade service relies
+on cluster state updates to trigger the template being added after a delete, but there is a
+scenario where the test will just wait for template that never shows up as there is no cluster
+state update in that time. Instead of fighting ourselves, we should just leave the template in
+place.
+
+Relates elastic/x-pack-elasticsearch#2915
+Relates elastic/x-pack-elasticsearch#2911
+
+Original commit: elastic/x-pack-elasticsearch@3ca4aef0bedc2892f8063553d6744ad12f4e71ce

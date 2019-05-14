@@ -1,0 +1,9 @@
+remove testUnassignedShardAndEmptyNodesInRoutingTable
+
+testUnassignedShardAndEmptyNodesInRoutingTable and that test is as old as time and does a very bogus thing.
+it is an IT test which extracts the GatewayAllocator from the node and tells it to allocated unassigned
+shards, while giving it a conjured cluster state with no nodes in it (it uses the DiscoveryNodes.EMPTY_NODES.
+This is never a cluster state we want to reroute on (we always have at least master node in it).
+I'm going to just delete the test as I don't think it adds much value.
+
+Closes #21463

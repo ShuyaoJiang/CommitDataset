@@ -1,0 +1,13 @@
+[#4841] Fix segfault if UnpooledUnsafeHeapByteBuf.getShort(..) is used and UNALGINED access is not possible.
+
+Motivation:
+
+We missed to take the byte[] into account when try to access the bytes and so produce a segfault.
+
+Modifications:
+
+Correctly pass the byte[] in.
+
+Result:
+
+No more segfault.

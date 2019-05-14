@@ -1,0 +1,21 @@
+Add support for Spring Loaded in Maven and Gradle
+
+Requires Loaded 1.1.5 (or better).
+
+For Maven you can just add springloaded to the dependencies of the
+spring-boot plugin (and also set MAVEN_OPTS=-noverify).
+
+For Gradle add springloaded to the build dependencies (-noverify
+can be added by the plugin).
+
+In both cases there is also support for adding an arbitrary java agent
+via configuration. Samples are provided in
+spring-boot-sample-[simple,web-ui].
+
+The ApplicationPlugin is only added if there is no JavaExec task
+already present, and additionally it computes its own man class if
+none is provided. So "gradle run" and "gradle bootRun" look
+superficially similar, but "bootRun" has extra options, including
+the agent and Loaded support.
+
+Fixes gh-251, gh-183

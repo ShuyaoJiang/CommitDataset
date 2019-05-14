@@ -1,0 +1,10 @@
+Fix buffer leak in EpollDatagramChannel
+
+Motivation:
+EpollDatagramChannel produced buffer leaks when tried to read from the channel and nothing was ready to be read.
+
+Modifications:
+Correctly release buffer if nothing was read
+
+Result:
+No buffer leak

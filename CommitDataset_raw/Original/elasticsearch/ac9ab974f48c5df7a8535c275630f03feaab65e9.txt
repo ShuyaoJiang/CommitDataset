@@ -1,0 +1,18 @@
+Ensure token service can boostrap itself without a pre-shared key (elastic/x-pack-elasticsearch#2240)
+
+Today we require a pre-shared key to use the token service. Beside the
+additional setup step it doesn't allow for key-rotation which is a major downside.
+
+This change adds a TokenService private ClusterState.Custom that is used to distribute
+the keys used to encrypt tokens. It also has the infrastructur to add automatic key
+rotation which is not in use yet but included here to illustrate how it can work down
+the road.
+
+This is considered a prototype and requires additioanl integration testing. Yet, it's fully
+BWC with a rolling / full cluster restart from a previous version (also from 5.6 to 6.x)
+since if the password is set it will just use it instead of generating a new one.
+Once we implement the automatic key rotation via the clusterstate we need to ensure that we are
+fully upgraded before we do that.
+Also note that the ClusterState.Custom is fully transient and will never be serialized to disk.
+
+Original commit: elastic/x-pack-elasticsearch@1ae22f5d417698bd7419f21fe0fb0cbad5309b24

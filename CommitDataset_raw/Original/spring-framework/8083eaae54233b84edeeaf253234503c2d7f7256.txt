@@ -1,0 +1,19 @@
+syncBody better differentiates plain vs multipart forms
+
+FromHttpMessageWriter and MultipartHttpMessageWriter both support
+MultiValueMap except the former supports String values only. This
+presents an issue since either full generic type information must be
+provided, which is cumbersome on the client side, or if left out there
+is no good way to order the writers to make a proper decision.
+
+This commit:
+
+- refines the canWrite behavior of   to not a
+accept MultiValueMap without proper generic information unless the
+MediaType is explicitly set providing a strong hint.
+
+- modifies MultipartHttpMessageWriter to be configured with a
+FormHttpMessageWriter so it can write both plan and multipart data with
+the ability to properly differentiate based on actual map values.
+
+Issue: SPR-16131

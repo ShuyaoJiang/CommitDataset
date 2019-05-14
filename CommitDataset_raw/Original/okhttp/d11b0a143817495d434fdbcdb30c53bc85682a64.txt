@@ -1,0 +1,5 @@
+Fix flaky HttpOverHttp2Test.emptyDataFrameSentWithEmptyBody
+
+The test fails when there is a context switch to the MockWebServer thread after the client sends the HEADERS frame but before it sends the DATA frame. The MockWebServer then reads the client's HEADER frame and sends a DATA frame with the response body. As a result, the first DATA frame that is logged is not the expected empty DATA frame sent by the client.
+
+Fixes https://github.com/square/okhttp/issues/4757

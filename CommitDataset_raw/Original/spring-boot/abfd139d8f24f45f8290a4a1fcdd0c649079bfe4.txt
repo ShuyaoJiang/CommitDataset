@@ -1,0 +1,12 @@
+Fix `spring.application.exclude` YAML property
+
+`spring.application.exclude` is retrieved via the
+`RelaxedPropertyResolver` API explicitly and it does not have any
+standard API to retrieve a list of values. As a consequence that property
+could only be specified as a comma-separated value.
+
+This felt convoluted in YAML. `RelaxedPropertyResolver` has now a
+`getProperties` method that works with both comma-separated value and
+index elements (i.e. list).
+
+Closes gh-4352

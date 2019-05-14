@@ -1,0 +1,31 @@
+Security: cache users in PKI realm (elastic/x-pack-elasticsearch#4428)
+
+The PKI realm has never been a caching realm as the need had not
+presented itself until now. The PKI realm relies on role mappings to
+map the DN from a certificate to roles so that the users have the
+appropriate access permissions. Without caching, this role mapping will
+happen on every request. For file based role mappings, this is not an
+issue as the mappings are based on equality checks for the DN.
+
+However, the design of the API based role mappings allows for more
+complex matches. These matches are implemented using automata, which
+are built on every request that needs role mappings. Building automata
+is an expensive operation and in combination with the PKI realm's lack
+of caching leads to a significant performance impact.
+
+The change in this commit makes the PkiRealm a caching realm using the
+same pattern as other caching realms. The cache provided by
+elasticsearch core is used to map the fingerprint of a certificate to
+the user that was resolved from this certificate. The semantics of
+modifications to this cache during iteration requires that we use a
+read-write lock to protect access. There can be multiple concurrent
+modifications and retrievals but iteration must be protected from any
+attempts to modify the cache.
+
+Additionally, some PKI tests were converted to single node tests as
+part of this change. One test only used a single node and the other did
+not require multiple nodes.
+
+relates elastic/x-pack-elasticsearch#4406
+
+Original commit: elastic/x-pack-elasticsearch@214772e1c13ff418570a4ab8043b5a19266f5193

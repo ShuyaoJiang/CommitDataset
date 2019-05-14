@@ -1,0 +1,13 @@
+Fixing isDone in SimpleChannelPromiseAggregator
+
+Motivation:
+
+The isDone method is currently broken in the aggregator because the doneAllocatingPromises accidentally calls the overridden version of setSuccess, rather than calling the base class version. This causes the base class's version to never be called since allowNotificationEvent will evaluate to false. This means that setSuccess0 will never be set, resulting in isDone always returning false.
+
+Modifications:
+
+Changed setSuccess() to call the base class when appropriate, regardless of the result of allowNotificationEvent.
+
+Result:
+
+isDone now behaves properly for the promise aggregator.

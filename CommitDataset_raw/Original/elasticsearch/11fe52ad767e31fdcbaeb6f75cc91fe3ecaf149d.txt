@@ -1,0 +1,7 @@
+Add log warnings for long running event handling (#39729)
+
+Recently we have had a number of test issues related to blocking
+activity occuring on the io thread. This commit adds a log warning for
+when handling event takes a >150 milliseconds. This is implemented
+for the MockNioTransport which is the transport used in
+ESIntegTestCase.

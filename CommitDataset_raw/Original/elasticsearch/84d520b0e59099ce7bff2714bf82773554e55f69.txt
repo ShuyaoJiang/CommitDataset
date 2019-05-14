@@ -1,0 +1,6 @@
+Throw an ISE rather than an hard assertion in SearchPhaseController#getTotalHits
+
+This change turns an assertion into an IllegalStateException in SearchPhaseController#getTotalHits.
+The goal is to help identify the cause of the failures in https://github.com/elastic/elasticsearch/issues/37179
+which seems to fail only in CI.
+The assertion will be restored when the issue is solved (NORELEASE).

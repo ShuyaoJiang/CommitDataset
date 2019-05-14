@@ -1,0 +1,14 @@
+Use ResourceLeakDetectorFactory in HashedWheelTimer
+
+Motivation:
+
+We recently added the ResourceLeakDetectorFactory but missed to updated HashedWheelTimer to use it.
+
+Modifications:
+
+- Add new abstract method to ResourceLeakDetectorFactory that allows to provide also samplingInterval and maxActive args.
+- Deprecate most constructors in ResourceLeakDetector and add doc explaining that people should use ResourceLeakDetectorFactory
+
+Result:
+
+Custom ResourceLeakDetectorFactory will also be used in HashedWheelTimer if configured.

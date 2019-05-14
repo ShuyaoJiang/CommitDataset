@@ -1,0 +1,8 @@
+Fix scroll query with a sort that is a prefix of the index sort (#27498)
+
+During a scroll, if the search sort matches the index sort we use the sort values of the last doc returned by
+the previous scroll to optimize the main query with a `SearchAfterSortedDocQuery`.
+This query can "jump" directly to the first document that sorts after the provided sort values.
+This optim is also applied if the search sort is a prefix of the index sort but this case throws an exception
+because we use the index sort (instead of the search sort) to validate the sort values of the last document.
+This change fixes this bug and adds a test for it.

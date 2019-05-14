@@ -1,0 +1,24 @@
+Make SslHandler work when autoRead is turned off
+
+Related: #2958
+
+Motivation:
+
+SslHandler currently does not issue a read() request when it is
+handshaking. It makes a connection with autoRead off stall, because a
+user's read() request can be used to read the handshake response which
+is invisible to the user.
+
+Modifications:
+
+- SslHandler now issues a read() request when:
+  - the current handshake is in progress and channelReadComplete() is
+    invoked
+  - the current handshake is complete and a user issued a read() request
+    during handshake
+- Rename flushedBeforeHandshakeDone to flushedBeforeHandshake for
+  consistency with the new variable 'readDuringHandshake'
+
+Result:
+
+SslHandler should work regardless whether autoRead is on or off.

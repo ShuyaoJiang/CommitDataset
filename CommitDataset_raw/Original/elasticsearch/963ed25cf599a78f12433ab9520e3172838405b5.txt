@@ -1,0 +1,10 @@
+Only fsync global checkpoint if needed
+
+In the global checkpoint sync action, we fsync the translog. However,
+the last synced global checkpoint might already be equal to the current
+global checkpoint in which case the fsyncing the translog is unnecessary
+as either the sync needed guard in the translog will skip the translog,
+or the translog needs an fsync for another reason that will be picked up
+elsewhere (e.g., at the end of a bulk request).
+
+Relates #27652

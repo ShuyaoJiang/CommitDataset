@@ -1,0 +1,15 @@
+Validate MQTT CONNECT reserved flag in variable header
+
+Motivation:
+
+According to the MQTT 3.1.1 Protocol Specification: The Server MUST validate that the reserved flag in the CONNECT Control Packet is set to zero and disconnect the Client if it is not zero. (http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349230)
+
+Resolves #4182
+
+Modifications:
+
+Check the CONNECT reserved flag for MQTT 3.1.1. If it's not 0, throw an exception.
+
+Result:
+
+If the CONNECT reserved flag, a decode failure will be emitted.

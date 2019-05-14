@@ -1,0 +1,12 @@
+ResourceWebHandler signals error for missing resources
+
+Prior to this commit, the `ResourceWebHandler` would itself handle the
+response with an HTTP 404 in many cases, including a missing static
+resource.
+
+This does not give a chance to `WebExceptionHandler` instances to handle
+that error and, for example, display an error page.
+
+See spring-projects/spring-boot#8625
+
+Issue: SPR-16023

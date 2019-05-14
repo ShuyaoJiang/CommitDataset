@@ -1,0 +1,14 @@
+Make CCR resilient against missing remote cluster connections (#36682)
+
+Both index following and auto following should be resilient against missing remote connections.
+This happens in the case that they get accidentally removed by a user. When this happens
+auto following and index following will retry to continue instead of failing with unrecoverable exceptions.
+
+Both the put follow and put auto follow APIs validate whether the
+remote cluster connection. The logic added in this change only exists
+in case during the lifetime of a follower index or auto follow pattern
+the remote connection gets removed. This retry behavior similar how CCR
+deals with authorization errors.
+
+Closes #36667
+Closes #36255

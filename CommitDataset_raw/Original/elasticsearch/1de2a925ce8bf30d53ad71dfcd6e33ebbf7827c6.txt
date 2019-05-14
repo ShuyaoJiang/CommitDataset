@@ -1,0 +1,21 @@
+Watcher: Ensure that execution triggers properly on initial setup (#33360)
+
+This commit reverts most of #33157 as it introduces another race
+condition and breaks a common case of watcher, when the first watch is
+added to the system and the index does not exist yet.
+
+This means, that the index will be created, which triggers a reload, but
+during this time the put watch operation that triggered this is not yet
+indexed, so that both processes finish roughly add the same time and
+should not overwrite each other but act complementary.
+
+This commit reverts the logic of cleaning out the ticker engine watches
+on start up, as this is done already when the execution is paused -
+which also gets paused on the cluster state listener again, as we can be
+sure here, that the watches index has not yet been created.
+
+This also adds a new test, that starts a one node cluster and emulates
+the case of a non existing watches index and a watch being added, which
+should result in proper execution.
+
+Closes #33320

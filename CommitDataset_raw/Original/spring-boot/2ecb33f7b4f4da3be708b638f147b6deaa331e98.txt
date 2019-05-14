@@ -1,0 +1,11 @@
+Try to fix problems caused by stricter config checking in docker-java 3.0
+
+Previously, the launch script integration tests ran happily on OS X and
+on Bamboo’s Linux instances. With the upgrade to docker-java 3.0 that
+is no longer the case with the default DockerClientConfig failing on
+Bamboo as the default DOCKER_CERT_PATH location does not exist.
+
+This commit updates the client configuration so that it attempts to
+build the configuration once in it default configuration and, if this
+fails, it tries again without TLS verification. This skips the check
+of DOCKER_CERT_PATH’s validity.

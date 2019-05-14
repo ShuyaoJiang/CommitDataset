@@ -1,0 +1,18 @@
+Support arbitrary meta-annotation levels in the TCF
+
+Prior to this commit, the findAnnotationDescriptor() and
+findAnnotationDescriptorForTypes() methods in MetaAnnotationUtils only
+supported a single level of meta-annotations. In particular, this kept
+the following annotations from being used as meta-annotations on
+meta-annotations:
+
+- @ContextConfiguration
+- @ContextHierarchy
+- @ActiveProfiles
+- @TestExecutionListeners
+
+This commit alters the search algorithms used in MetaAnnotationUtils so
+that arbitrary levels of meta-annotations are now supported for the
+aforementioned test-related annotations.
+
+Issue: SPR-11470

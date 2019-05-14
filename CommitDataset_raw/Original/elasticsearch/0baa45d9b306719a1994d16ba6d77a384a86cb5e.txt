@@ -1,0 +1,9 @@
+[SAML] Find all tokens for a realm, not just the first 10 (elastic/x-pack-elasticsearch#3689)
+
+This commit changes the token service to use a scroll based approach when finding all tokens by
+the realm. Without this, we may only find a few tokens and leave some active that need to be
+invalidated.
+
+relates elastic/x-pack-elasticsearch#3688
+
+Original commit: elastic/x-pack-elasticsearch@20e97b6aae6a051f64be08fc3d263a6e5c857b73

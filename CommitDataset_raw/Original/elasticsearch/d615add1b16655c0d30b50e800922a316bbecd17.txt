@@ -1,0 +1,12 @@
+Add pipeline parent validation for auto date histogram (#35670)
+
+Allow `auto_date_histogram` as a valid parent agg for derivative, 
+cumulative sum, moving average, moving function and serial 
+differencing pipeline aggregations.
+
+Since all these aggs share the same requirement (sequentially
+ordered parent aggs), this commit also refactors to share
+the same validation code so that any newly added aggs won't
+be forgotten.
+
+Closes #35578

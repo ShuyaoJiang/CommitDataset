@@ -1,0 +1,7 @@
+Fix NOOP bulk updates (#32819)
+
+#31821 introduced an unreleased bug where NOOP updates were incorrectly mutating the bulk
+shard request, inserting null item to be replicated, which would result in NullPointerExceptions when
+serializing the request to be shipped to the replicas.
+
+Closes #32808

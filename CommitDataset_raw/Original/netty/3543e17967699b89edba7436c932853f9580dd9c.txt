@@ -1,0 +1,13 @@
+Ensure OpenSslEngine will not try to call SSL_free multiple times even when constructor throws. (#8399)
+
+Motivation:
+
+When the constructor of OpenSslEngine threw we could end up to self call SSL_free by ourself and then have the finalizer do the same which may lead to double free-ing and so SIGSEV.
+
+Modifications:
+
+Just call shutdown() when the constructor throws and so ensure SSL_free is guarded correctly in the finalizer.
+
+Result:
+
+No more SIGSEV possible.

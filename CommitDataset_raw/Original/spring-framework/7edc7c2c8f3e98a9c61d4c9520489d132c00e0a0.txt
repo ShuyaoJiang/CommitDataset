@@ -1,0 +1,19 @@
+Fully support XML config in GroovyBeanDefinitionReader
+
+Prior to this commit, the GroovyBeanDefinitionReader claimed (via its
+Javadoc) that it fully supported XML configuration files in addition to
+its Groovy DSL; however, this was unfortunately inaccurate since XML
+validation was disabled by default which led to certain features of XML
+configuration not working. For example, it was impossible to define a
+<qualifier> in an XML config file without specifying the 'type'
+attribute (which has a default value defined in the spring-beans XSD).
+
+This commit fixes this issue by ensuring that bean definitions in XML
+resources are loaded with a "standard" XmlBeanDefinitionReader that is
+created with default settings (i.e., with XML validation enabled). With
+regard to backwards compatibility, bean definitions defined using the
+Groovy DSL are still loaded with an XmlBeanDefinitionReader that has
+XML validation disabled by default which is necessary for proper
+parsing of the Groovy DSL.
+
+Issue: SPR-12769

@@ -1,0 +1,18 @@
+Security: fix joining cluster with production license (#31341)
+
+The changes made to disable security for trial licenses unless security
+is explicitly enabled caused issues when a 6.3 node attempts to join a
+cluster that already has a production license installed. The new node
+starts off with a trial license and `xpack.security.enabled` is not
+set for the node, which causes the security code to skip attaching the
+user to the request. The existing cluster has security enabled and the
+lack of a user attached to the requests causes the request to be
+rejected.
+
+This commit changes the security code to check if the state has been
+recovered yet when making the decision on whether or not to attach a
+user. If the state has not yet been recovered, the code will attach
+the user to the request in case security is enabled on the cluster
+being joined.
+
+Closes #31332

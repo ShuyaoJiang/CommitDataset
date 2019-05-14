@@ -1,0 +1,10 @@
+Handle possible regexes defensively in NamePatternFilter
+
+Previously, if a name contained part of a regex but wasn't actually
+a regex, a PatternSyntaxException would be thrown and the request
+would fail.
+
+This commit updates NamePatternFilter to catch PatternSyntaxException
+and treat the regex-like input as a name insteead.
+
+See gh-9730

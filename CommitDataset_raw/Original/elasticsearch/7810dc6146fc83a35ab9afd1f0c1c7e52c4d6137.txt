@@ -1,0 +1,16 @@
+[Rollup] Add `value_count` metric (elastic/x-pack-elasticsearch#4315)
+
+Adds `value_count` as one of the accepted metrics.  The caveat is that
+it only accepts numeric values for two reasons:
+
+- Job validation at creation makes sure all metrics are numeric fields.
+Changing this would require new syntax (or disallowing anything but
+value_count on mixed fields)
+- when `toBuilders()` is called, we have to supply a ValueSource to
+the ValueCountBuilder, and we don't know what the field type is at that
+time.
+
+These are both fixable, but relatively more involved.  I think numeric-only
+is a reasonable limitation to start with
+
+Original commit: elastic/x-pack-elasticsearch@270f24c8bf626acacddaa562268783c5f30f8cb4

@@ -1,0 +1,10 @@
+Write prelude on successive SockJS streaming requests
+
+sockjs-client expects a prelude to be written on every request with
+streaming transports. The protocol tests don't make this clear and
+don't expose this issue.
+
+The test case for SPR-11183 (writing 20K messages in succession) did
+expose the issue and this commit addresses it.
+
+Issue: SPR-11183

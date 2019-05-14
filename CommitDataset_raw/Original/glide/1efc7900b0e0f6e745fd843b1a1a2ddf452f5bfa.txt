@@ -1,0 +1,9 @@
+Post release() in EngineJob#reschedule.
+
+Prevents a race condition where the key is nulled
+out on a background thread while simultaneously
+being used to remove the job from Engine's list
+of active jobs. As a result of this race, the job
+may not be removed from the Engine's list, and so
+the Engine may later try to add a new callback to
+the now recycled job, triggering an assertion.

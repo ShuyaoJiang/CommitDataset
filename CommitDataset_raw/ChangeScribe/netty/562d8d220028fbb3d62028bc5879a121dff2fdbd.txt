@@ -1,0 +1,160 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (pom.xml). 
+ This change set is mainly composed of:  
+
+1. Changes to package io.netty.handler.codec.smtp:  
+
+1.1. Add a class for default last smtp content. It allows to:
+
+	Instantiate default last smtp content  with data byte buf;
+	Get copy;
+	Duplicate default last smtp content;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain default last smtp content;
+	Touch default last smtp content;
+
+1.2. Add a class for default smtp content. It allows to:
+
+	Instantiate default smtp content  with data byte buf;
+	Get copy;
+	Duplicate default smtp content;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain default smtp content;
+	Touch default smtp content;
+
+1.3. Add a class for default smtp request. It allows to:
+
+	Instantiate default smtp request  with smtp command;
+	Instantiate default smtp request  with smtp command, parameters char sequence and parameters char sequence;
+	Instantiate default smtp request  with command char sequence, parameters char sequence and parameters char sequence;
+	Instantiate default smtp request  with smtp command, parameters list and parameters list;
+	Get command;
+	Get parameters;
+	Hash code;
+	Check if default smtp request equals;
+	Convert default smtp request to string
+
+1.4. Add a class for default smtp response. It allows to:
+
+	Instantiate default smtp response;
+	Instantiate default smtp response  with details char sequence;
+	Instantiate default smtp response  with details list;
+	Get code;
+	Get details;
+	Hash code;
+	Check if default smtp response equals;
+	Convert default smtp response to string
+
+1.5. Add an interface declaration  for last smtp content. It allows to:
+
+	Get copy;
+	Duplicate;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain;
+	Touch;
+	Handle content;
+	Ref cnt;
+	Handle release;
+	Duplicate last smtp content;
+	Retain last smtp content;
+	Touch last smtp content;
+
+1.6. Add a class for smtp command. It allows to:
+
+	Get value of;
+	Instantiate smtp command  with name ascii string;
+	Name smtp command;
+	Encode buffer;
+	Check if smtp command is content expected;
+	Hash code;
+	Check if smtp command equals;
+	Convert smtp command to string
+
+1.7. Add an interface declaration  for smtp content. It allows to:
+
+	Get copy;
+	Duplicate smtp content;
+	Get retained duplicate;
+	Replace content byte buf;
+	Retain smtp content;
+	Touch smtp content;
+
+1.8. Add an interface declaration  for smtp request. It allows to:
+
+	Get command;
+	Get parameters
+
+1.9. Add a class for smtp request encoder. It allows to:
+
+	Accept outbound message;
+	Encode ctx channel handler context;
+	Write parameters
+
+1.10. Add a class for smtp request encoder test. It allows to:
+
+	Handle test encode ehlo;
+	Handle test encode helo;
+	Handle test encode mail;
+	Handle test encode mail null sender;
+	Handle test encode rcpt;
+	Handle test encode noop;
+	Handle test encode rset;
+	Handle test encode help;
+	Handle test encode help with arg;
+	Handle test encode data;
+	Handle test encode data and content;
+	Handle test throws if content expected;
+	Handle test rset clears content expected flag;
+	Get written string;
+	Handle test encode
+
+1.11. Add a class for smtp requests. It allows to:
+
+	Get helo;
+	Ehlo hostname char sequence;
+	Get noop;
+	Get data;
+	Get rset;
+	Help smtp requests;
+	Quit smtp requests;
+	Get mail;
+	Rcpt recipient char sequence;
+	Expn mailing list char sequence;
+	Get vrfy;
+	Instantiate smtp requests
+
+1.12. Add an interface declaration  for smtp response. It allows to:
+
+	Get code;
+	Get details
+
+1.13. Add a class for smtp response decoder. It allows to:
+
+	Instantiate smtp response decoder;
+	Decode ctx channel handler context;
+	Handle new decoder exception;
+	Parse code;
+	Parse number
+
+1.14. Add a class for smtp response decoder test. It allows to:
+
+	Handle test decode one line response;
+	Handle test decode one line response no details;
+	Handle test decode one line response chunked;
+	Handle test decode two line response;
+	Handle test decode two line response chunked;
+	Handle test decode invalid separator;
+	Handle test decode invalid code;
+	Handle test decode invalid line;
+	Handle new channel;
+	Handle new buffer
+
+1.15. Add a class for smtp utils. It allows to:
+
+	Convert smtp utils to unmodifiable list;
+	Instantiate smtp utils
+

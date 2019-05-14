@@ -1,0 +1,7 @@
+Full Quartz 2.2 support, including LocalDataSourceJobStore
+
+While we've had basic Quartz 2.2 support before, a few details were missing:
+* LocalDataSourceJobStore's ConnectionProvider adapters need to provide an empty implementation of Quartz 2.2's new initialize method.
+* SchedulerFactoryBean's "schedulerContextMap" needs to be explicitly declared with String keys, otherwise it can't be compiled against Quartz 2.2 (forward compatibility once we're dropping Quartz 1.x support). This doesn't hurt against older Quartz versions either, since the keys need to be Strings anyway.
+
+Issue: SPR-11284

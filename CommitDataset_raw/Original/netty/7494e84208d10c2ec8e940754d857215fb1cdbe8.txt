@@ -1,0 +1,10 @@
+PlatformDependent static initialization ExceptionInInitializerError
+
+Motivation:
+PlatformDependent allows some exceptions to escape during static initialization. If an exception escapes it will be translated into a java.lang.ExceptionInInitializerError and render the application unable to run.
+
+Modifications:
+- Make sure to catch Throwable during static initialization.
+
+Result:
+PlatformDependent static initialization doesn't result in java.lang.ExceptionInInitializerError.

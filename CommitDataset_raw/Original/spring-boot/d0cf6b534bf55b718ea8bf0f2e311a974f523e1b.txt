@@ -1,0 +1,12 @@
+Add 3xx redirects to the "unmapped" class of requests for metrics
+
+When Spring Security sends 302 responses to a login page we don't get
+any information about the request matching in Spring MVC. Consequently
+apps can end up with a lot of counter.status.302.* metrics (where
+"*" can be whatever the user sent).
+
+This change treats 3xx the same as 4xx (if it is unmapped it just gets
+added to a metric called "unmapped" instead of using the actual request
+path).
+
+Fixes gh-2563

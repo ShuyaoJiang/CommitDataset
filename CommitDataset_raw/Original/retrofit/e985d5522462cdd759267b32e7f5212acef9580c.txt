@@ -1,0 +1,5 @@
+Add converters which facilitate the use of Optional.
+
+Both Java 8 and Guava are supported, just like in the adapters.
+
+This is especially useful in the use of RxJava 2 as it does not allow null values in the stream. This means a return type declaration of Single<BodyType> might result in an NPE should a converter deserialize the response body into null. By adding one of these delegating converters before your normal converter, it allows you to use Single<Optional<BodyType>> to support this case.

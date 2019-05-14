@@ -1,0 +1,11 @@
+Avoid including default source sets in repackaged compiler jar.
+
+Unless you override the jar task completely, any files you specified are
+added to the original files, not replaced. To make matters worse, gradle
+does not fail jar tasks when duplicate classes are added by default.
+
+We’ve fixed the immediate issue with compiler’s jar file by excluding classes that do not originate from our repackaged/proguarded jar to 
+avoid duplicate class files.We’ve hopefully also prevented future occurrences by forcing all jar tasks in the project to fail by default 
+if duplicate classes are added.
+
+Fixes #2452.

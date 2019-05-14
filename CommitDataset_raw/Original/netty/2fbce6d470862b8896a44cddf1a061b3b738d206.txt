@@ -1,0 +1,21 @@
+Delete temporary self-signed certs in SSLEngineTest-based tests
+
+Motivation:
+
+Lots of usages of SelfSignedCertificates were not deleting the certs at
+the end of the test. This includes setupHandlers() which is used by
+extending classes. Although these files will be deleted at JVM exit and
+deleting them early does not free the JVM from trying to delete them at
+shutdown, it's good practice to delete eagerly and since users sometimes
+use tests as a form of documentation, it'd be good for them to see the
+explicit deletes.
+
+Modifications:
+
+Add missing delete() calls to ½ of the SelfSignedCertificates-using
+tests.
+
+Result:
+
+Tests that more clearly communicates which resources are created and
+may accumulate without early delete.

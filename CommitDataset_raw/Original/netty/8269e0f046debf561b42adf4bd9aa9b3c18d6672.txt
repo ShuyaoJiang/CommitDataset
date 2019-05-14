@@ -1,0 +1,13 @@
+[#5892] Correct handle HttpMessage that is EOF terminated
+
+Motivation:
+
+We need to ensure we not add the Transfer-Encoding header if the HttpMessage is EOF terminated.
+
+Modifications:
+
+Only add the Transfer-Encoding header if an Content-Length header is present.
+
+Result:
+
+Correctly handle HttpMessage that is EOF terminated.

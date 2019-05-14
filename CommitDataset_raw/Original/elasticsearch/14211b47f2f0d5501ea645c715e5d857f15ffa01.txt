@@ -1,0 +1,8 @@
+Use the correct Environment object in NativeControllerHolder (elastic/x-pack-elasticsearch#2847)
+
+We should not be constructing a temporary Environment object in production
+code.  This currently isn't causing any problems, but it might in the future
+if elastic/elasticsearch#27144 or something similar is ever merged.  Instead
+the master Environment of the node should always be used.
+
+Original commit: elastic/x-pack-elasticsearch@6276a54a45ada88ee6e5e53edc4f90dd97fd5376

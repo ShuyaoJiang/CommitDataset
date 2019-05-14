@@ -1,0 +1,9 @@
+Build: Add mavenPlugin cluster configuration method (#30541)
+
+This commit adds the ability to specify a plugin from maven for a
+test cluster to use. Currently, only local projects may be used as
+plugins, except when testing bwc, where the coordinates of the project
+are used. However, that assumes all projects always keep the same
+coordinates, or are even still plugins, which is no longer the case for
+x-pack. The full cluster and rolling restart tests are changed to use
+this new method when pulling x-pack versions before 6.3.0.

@@ -1,0 +1,13 @@
+Perform initialization in foreground if BackgroundPreinitializer fails
+
+Google App Engine probits the creation of new threads. This leads to a
+failure in BackgroundPreinitializer when the single thread executor
+attempts to create its single thread.
+
+This commit enhances the existing fail safety of
+BackgroundPreinitializer by catching any exceptions thrown while
+creating the executor and submitting the tasks to it. Any initialisation
+that has not performed in the background will be performed in the
+foreground instead.
+
+Closes gh-4662

@@ -1,0 +1,13 @@
+Test: Remove broken yml test feature (#31255)
+
+The `requires_replica` yaml test feature hasn't worked for years. This
+is what happens if you try to use it:
+```
+   > Throwable #1: java.lang.NullPointerException
+   >    at __randomizedtesting.SeedInfo.seed([E6602FB306244B12:6E341069A8D826EA]:0)
+   >    at org.elasticsearch.test.rest.yaml.Features.areAllSupported(Features.java:58)
+   >    at org.elasticsearch.test.rest.yaml.section.SkipSection.skip(SkipSection.java:144)
+   >    at org.elasticsearch.test.rest.yaml.ESClientYamlSuiteTestCase.test(ESClientYamlSuiteTestCase.java:321)
+```
+
+None of our tests use it.

@@ -1,0 +1,12 @@
+Introduce durability of circuit breaking exception
+
+With this commit we differentiate between permanent circuit breaking
+exceptions (which require intervention from an operator and should not
+be automatically retried) and transient ones (which may heal themselves
+eventually and should be retried). Furthermore, the parent circuit
+breaker will categorize a circuit breaking exception as either transient
+or permanent based on the categorization of memory usage of its child
+circuit breakers.
+
+Closes #31986
+Relates #34460

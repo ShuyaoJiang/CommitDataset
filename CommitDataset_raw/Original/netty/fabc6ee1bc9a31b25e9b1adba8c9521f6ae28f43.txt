@@ -1,0 +1,13 @@
+Fix flaky ChannelInitializerTest.testChannelInitializerEventExecutor() (#8738)
+
+Motivation:
+
+testChannelInitializerEventExecutor() did sometimes fail as we sometimes miss to count down the latch. This can happen when we remove the handler from the pipeline before channelUnregistered(...) was called for it.
+
+Modifications:
+
+Countdown the latch in handlerRemoved(...).
+
+Result:
+
+Fix flaky test.

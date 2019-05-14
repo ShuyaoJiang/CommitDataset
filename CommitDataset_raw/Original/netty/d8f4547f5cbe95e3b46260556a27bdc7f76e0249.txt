@@ -1,0 +1,16 @@
+Unify {Epoll,KQueue}EventLoopGroup initialization.
+
+Motivation:
+`Epoll.ensureAvailability()` is called multiple times, once in
+static initialization and in a couple of the constructors.  This is
+redundant and confusing to read.
+
+Modifications:
+Move `Epoll.ensureAvailability()` call into an instance initializer
+and remove all other references.  This ensures that every EELG
+checks availability, while still delaying the check until
+construction.  This pattern is used when there are multiple ctors,
+as in this class.
+
+Result:
+Easier to read code.

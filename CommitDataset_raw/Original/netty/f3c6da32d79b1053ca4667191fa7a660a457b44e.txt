@@ -1,0 +1,13 @@
+Fix concurrency issue in DnsNameResolver when DefaultDnsCache is used.
+
+Motivation:
+
+We need to ensure we only call List.* methods in the synchronized block as the returned List may not be thread-safe.
+
+Modifications:
+
+Do not call isEmpty() outside of the synchronized block.
+
+Result:
+
+Fixes [#7583]

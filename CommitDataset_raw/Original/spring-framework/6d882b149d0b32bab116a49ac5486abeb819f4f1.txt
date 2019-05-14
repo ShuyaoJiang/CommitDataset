@@ -1,0 +1,11 @@
+Add targetIsClass to SpEL property cache key
+
+Update the `CacheKey` class used by `ReflectivePropertyAccessor` to
+include if the target object is class. The prevents an incorrect cache
+hit from being returned when a property with the same name is read on
+both an object and its class. For example:
+
+	#{class.name}
+	#{name}
+
+Issue: SPR-10486

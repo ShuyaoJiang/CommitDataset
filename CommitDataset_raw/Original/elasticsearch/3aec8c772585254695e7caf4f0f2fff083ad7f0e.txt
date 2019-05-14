@@ -1,0 +1,9 @@
+Packaging: Set elasticsearch user to have non-existent homedir (#29007)
+
+This commit adds setting the homedir for the elasticsearch user to the
+adduser command in the packaging preinstall script. While the
+elasticsearch user is a system user, it is sometimes conventient to have
+an existing homedir (even if it is not writeable). For example, running
+cron as the elasticsearch user will try to change dir to the homedir.
+
+closes #14453

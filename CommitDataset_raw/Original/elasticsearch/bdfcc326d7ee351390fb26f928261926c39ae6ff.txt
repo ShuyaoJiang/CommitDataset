@@ -1,0 +1,13 @@
+Enable avoiding mmap bootstrap check (#32421)
+
+The maximum map count boostrap check can be a hindrance to users that do
+not own the underlying platform on which they are executing
+Elasticsearch. This is because addressing it requires tuning the kernel
+and a platform provider might now allow this, especially on shared
+infrastructure. However, this bootstrap check is not needed if mmapfs is
+not in use. Today we do not have a way for the user to communicate that
+they are not going to use mmapfs. This commit therefore adds a setting
+that enables the user to disallow mmapfs. When mmapfs is disallowed, the
+maximum map count bootstrap check is not enforced. Additionally, we
+fallback to a different default index store and prevent the explicit use
+of mmapfs for an index.

@@ -1,0 +1,10 @@
+Add build utility to check cluster health over ssl (#40573)
+
+By default, in integ tests we wait for the standalone cluster to start
+by using the ant Get task to retrieve the cluster health endpoint.
+However the ant task has no facilities for customising the trusted
+CAs for a https resource, so if the integ test cluster has TLS enabled
+on the http interface (using a custom CA) we need a separate utility
+for that purpose.
+
+Resolves: #38072

@@ -1,0 +1,11 @@
+[TEST][Monitoring] Move payload = null above call (elastic/x-pack-elasticsearch#4053)
+
+This moves the `payload = null;` statement to above the asynchronous
+HTTP call. This helps to avoid a race condition relative to `doClose`
+asserting that it is `null`.
+
+This is only a realistic situation during a shutdown situation because
+the thread responds immediately before it can be nullified and freeable,
+which is not a realistic scenario in any other situation.
+
+Original commit: elastic/x-pack-elasticsearch@eb3a6ff11822455d361a12b6e685a7b07ecfeafe

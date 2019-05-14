@@ -1,0 +1,20 @@
+Skip execution of Channel*Handler method if annotated with @Skip and … (#8988)
+
+
+Motivation:
+
+Invoking ChannelHandlers is not free and can result in some overhead when the ChannelPipeline becomes very long. This is especially true if most handlers will just forward the call to the next handler in the pipeline. When the user extends Channel*HandlerAdapter we can easily detect if can just skip the handler and invoke the next handler in the pipeline directly. This reduce the overhead of dispatch but also reduce the call-stack in many cases.
+
+This backports https://github.com/netty/netty/pull/8723 and https://github.com/netty/netty/pull/8987 to 4.1
+
+Modifications:
+
+Detect if we can skip the handler when walking the pipeline.
+
+Result:
+
+Reduce overhead for long pipelines.
+
+Benchmark                                       (extraHandlers)   Mode  Cnt       Score      Error  Units
+DefaultChannelPipelineBenchmark.propagateEventOld             4  thrpt   10  267313.031 ± 9131.140  ops/s
+DefaultChannelPipelineBenchmark.propagateEvent                4  thrpt   10  824825.673 ± 12727.594  ops/s

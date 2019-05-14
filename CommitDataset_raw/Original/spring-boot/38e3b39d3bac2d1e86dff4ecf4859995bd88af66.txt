@@ -1,0 +1,14 @@
+Improves metrics performance by not guarding map.get
+
+ConcurrentHashMap implements `containsKey` with `get`. By removing a
+redundant call to `containsKey`, we guarantee better performance in our
+counter services.
+
+The geek inside measured this with JMH, and found under 4 threads of
+contention, throughput on this check was 40% higher in success case.
+
+Benchmark                                  Mode  Cnt     Score     Error   Units
+TestBenchmarks.containsKeyAndGet_success  thrpt   30   432.389 ±  20.616  ops/us
+TestBenchmarks.get_success                thrpt   30   606.789 ±  10.848  ops/us
+
+Closes gh-6379

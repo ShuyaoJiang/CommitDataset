@@ -1,0 +1,16 @@
+[#3709] Ensure all data is read from socket when EPOLLRDUP is received
+
+Motivation:
+
+When EPOLLRDHUP is received we need to try to read at least one time to ensure
+that we read all pending data from the socket. Otherwise we may loose data.
+
+Modifications:
+
+- Ensure we read all data from socket
+- Ensure file descriptor is closed on doClose() even if doDeregister() throws an Exception.
+- Only handle either EPOLLRDHUP or EPOLLIN as only one is needed to detect connection reset.
+
+Result:
+
+No more data loss on connection reset.

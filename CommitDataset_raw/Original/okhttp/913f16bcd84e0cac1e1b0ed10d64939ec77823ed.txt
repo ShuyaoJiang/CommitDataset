@@ -1,0 +1,20 @@
+Relay. This is a single entry in the upcoming DiskLruCache2.
+
+At the moment there are some things still incomplete:
+ - Timeouts. Not yet tested, and no great implementation plan.
+ - Thread interrupts. This has been quite problematic for
+   the original DiskLruCache. We should test and support this
+   in Relay.
+ - File system problems. If the host file system is full or not
+   accepting writes, we should fallback gracefully. This may
+   be difficult.
+ - Metadata updates. At the moment the metadata is permanent
+   and immutable.
+
+That said, many nice features are already implemented:
+ - Metadata and stream data in one file.
+ - No locks held during file I/O or network I/O.
+ - Read from the buffer, the file, or the socket in that order.
+ - Reference counting on open sources. It is assumed that the
+   creator of each Relay will take a source, and that guarantees
+   that the count will always reach 0.

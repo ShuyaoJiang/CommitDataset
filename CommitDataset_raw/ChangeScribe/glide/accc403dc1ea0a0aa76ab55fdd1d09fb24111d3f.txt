@@ -1,0 +1,503 @@
+BUG - FEATURE: <type-ID> 
+
+This is a degenerate modifier commit: this change set is composed of empty, incidental, and abstract methods. These methods indicate that a new feature is planned. This commit  includes changes to internationalization, properties or configuration files (.gitignore, .gitmodules, AndroidManifest.xml, ... ).  renames some files.
+ This change set is mainly composed of:  
+
+1. Changes to package com.bumptech.glide:  
+
+1.1. Add a class for glide. It allows to:
+
+	Get photo cache dir;
+	Get context;
+	Check context;
+	Handle init;
+	Tear glide;
+	Glide context;
+	Get annotation generated glide modules;
+	Throw incorrect glide module;
+	Instantiate glide  with context, engine, memory cache, bitmap pool, array pool, request manager retriever, connectivity monitor factory, default request options, default transition options map, default request listeners and default request listeners;
+	Get bitmap pool;
+	Get array pool;
+	Get connectivity monitor factory;
+	Get glide context;
+	Pre fill bitmap pool;
+	Handle clear memory;
+	Handle trim memory;
+	Handle clear disk cache;
+	Get request manager retriever;
+	Set memory category;
+	Get retriever;
+	Process glide glide with;
+	Get registry;
+	Remove target from managers;
+	Register request manager;
+	Handle unregister request manager;
+	Process glide glide on trim memory;
+	Handle on configuration changed;
+	On low memory
+
+1.2. Add a class for glide builder. It allows to:
+
+	Set bitmap pool;
+	Set array pool;
+	Set memory cache;
+	Set disk cache;
+	Set resize executor;
+	Set source executor;
+	Set disk cache executor;
+	Set animation executor;
+	Set default request options;
+	Set default transition options;
+	Set memory size calculator;
+	Set connectivity monitor factory;
+	Set log level;
+	Set is active resource retention allowed;
+	Add global request listener;
+	Set log request origins;
+	Set request manager factory;
+	Set engine;
+	Build context
+
+2. Changes to package com.bumptech.glide.gifdecoder:  
+
+2.1. Add a class for gif frame
+
+2.2. Add a class for gif header. It allows to:
+
+	Get height;
+	Get width;
+	Get num frames;
+	Get status
+
+2.3. Add a class for gif header parser. It allows to:
+
+	Get set data;
+	Handle clear;
+	Reset gif header parser;
+	Parse header;
+	Check if gif header parser is animated;
+	Read contents;
+	Read graphic control ext;
+	Read bitmap;
+	Read netscape ext;
+	Read header;
+	Read LSD;
+	Read color table;
+	Skip image data;
+	Skip gif header parser;
+	Read block;
+	Read gif header parser;
+	Read short;
+	Err gif header parser
+
+3. Changes to package com.bumptech.glide.load:  
+
+3.1. Add an interface declaration  for key. It allows to:
+
+	Update disk cache key;
+	Check if key equals;
+	Hash code
+
+3.2. Add a class for multi transformation. It allows to:
+
+	Instantiate multi transformation  with transformations;
+	Instantiate multi transformation  with transformation list collection;
+	Transform context;
+	Check if multi transformation equals;
+	Hash code;
+	Update disk cache key
+
+3.3. Add an interface declaration  for resource decoder. It allows to:
+
+	Check if resource decoder handles;
+	Decode source
+
+3.4. Add an interface declaration  for resource encoder. It allows to:
+
+	Get encode strategy
+
+3.5. Add an interface declaration  for transformation. It allows to:
+
+	Transform context
+
+4. Changes to package com.bumptech.glide.load.data:  
+
+4.1. Add a class for file descriptor local uri fetcher. It allows to:
+
+	Instantiate file descriptor local uri fetcher  with content resolver, uri and uri;
+	Load resource;
+	Close file descriptor local uri fetcher;
+	Get data class
+
+4.2. Add a class for local uri fetcher. It allows to:
+
+	Instantiate local uri fetcher  with content resolver, uri and uri;
+	Load data;
+	Handle cleanup;
+	Cancel local uri fetcher;
+	Get data source;
+	Load resource;
+	Close local uri fetcher
+
+4.3. Add a class for stream local uri fetcher. It allows to:
+
+	Instantiate stream local uri fetcher  with content resolver, uri and uri;
+	Load resource;
+	Load resource  from uri;
+	Handle open contact photo input stream;
+	Close stream local uri fetcher;
+	Get data class
+
+5. Changes to package com.bumptech.glide.load.engine:  
+
+5.1. Add an interface declaration  for engine job listener. It allows to:
+
+	Process engine job listener engine job listener on engine job complete;
+	Handle on engine job canceled
+
+5.2. Add a class for engine key. It allows to:
+
+	Instantiate engine key  with signature key, transformations map, resource class, transcode class, options and options;
+	Check if engine key equals;
+	Hash code;
+	Convert engine key to string;
+	Update disk cache key
+
+5.3. Add an object creator class for engine key factory. It allows to:
+
+	Build key
+
+6. Changes to package com.bumptech.glide.load.engine.bitmap_recycle:  
+
+6.1. Rename type BaseKeyPool with BaseKeyPool
+
+6.2. Add an interface declaration  for bitmap pool. It allows to:
+
+	Get max size;
+	Set size multiplier;
+	Put bitmap;
+	Get bitmap config;
+	Get dirty;
+	Handle clear memory;
+	Handle trim memory
+
+6.3. Add a class for bitmap pool adapter. It allows to:
+
+	Get max size;
+	Set size multiplier;
+	Put bitmap;
+	Get bitmap config;
+	Get dirty;
+	Handle clear memory;
+	Handle trim memory
+
+6.4. Add an interface declaration  for lru pool strategy. It allows to:
+
+	Put bitmap;
+	Get bitmap config;
+	Remove last;
+	Log bitmap;
+	Get size
+
+6.5. Add an interface declaration  for poolable. It allows to:
+
+	Offer poolable
+
+7. Changes to package com.bumptech.glide.load.engine.cache:  
+
+7.1. Add a class for disk lru cache wrapper. It allows to:
+
+	Get directory file;
+	Create directory file;
+	Instantiate disk lru cache wrapper  with directory file;
+	Get disk cache;
+	Get key;
+	Put key;
+	Delete key;
+	Handle clear;
+	Reset disk cache
+
+7.2. Add a class for lru resource cache. It allows to:
+
+	Instantiate lru resource cache;
+	Set resource removed listener;
+	Handle on item evicted;
+	Get size;
+	Handle trim memory
+
+7.3. Add a class for memory cache adapter. It allows to:
+
+	Get current size;
+	Get max size;
+	Set size multiplier;
+	Remove key;
+	Put key;
+	Set resource removed listener;
+	Handle clear memory;
+	Handle trim memory
+
+8. Changes to package com.bumptech.glide.load.model:  
+
+8.1. Add a class for glide url. It allows to:
+
+	Instantiate glide url  with URL;
+	Instantiate glide url;
+	Instantiate glide url  with URL, headers and headers;
+	Instantiate glide url  with headers;
+	Convert glide url to URL;
+	Get safe url;
+	Convert glide url to string url;
+	Get safe string url;
+	Get headers;
+	Get cache key;
+	Convert glide url to string;
+	Update disk cache key;
+	Get cache key bytes;
+	Check if glide url equals;
+	Hash code
+
+8.2. Add an interface declaration  for model loader factory. It allows to:
+
+	Build multi model loader factory;
+	Handle teardown
+
+9. Changes to package com.bumptech.glide.load.model.stream:  
+
+9.1. Add a class for base glide url loader. It allows to:
+
+	Instantiate base glide url loader  with concrete loader;
+	Instantiate base glide url loader  with concrete loader, model cache and model cache;
+	Build load data;
+	Get alternate keys;
+	Get url;
+	Get alternate urls;
+	Get headers
+
+10. Changes to package com.bumptech.glide.load.resource.bitmap:  
+
+10.1. Add a class for bitmap drawable resource. It allows to:
+
+	Instantiate bitmap drawable resource  with bitmap drawable, bitmap pool and bitmap pool;
+	Get resource class;
+	Get size;
+	Recycle bitmap drawable resource;
+	Initialize bitmap drawable resource
+
+10.2. Add a class for bitmap encoder. It allows to:
+
+	Instantiate bitmap encoder  with array pool;
+	Instantiate bitmap encoder;
+	Encode resource;
+	Get format;
+	Get encode strategy
+
+10.3. Add a class for bitmap resource. It allows to:
+
+	Obtain bitmap;
+	Instantiate bitmap resource  with bitmap, bitmap pool and bitmap pool;
+	Get resource class;
+	Get bitmap resource;
+	Get size;
+	Recycle bitmap resource;
+	Initialize bitmap resource
+
+10.4. Add a class for center crop. It allows to:
+
+	Transform bitmap pool;
+	Check if center crop equals;
+	Hash code;
+	Update disk cache key
+
+10.5. Add a class for fit center. It allows to:
+
+	Transform bitmap pool;
+	Check if fit center equals;
+	Hash code;
+	Update disk cache key
+
+10.6. Add a class for video bitmap decoder. It allows to:
+
+	Instantiate video bitmap decoder  with context;
+	Instantiate video bitmap decoder  with bitmap pool
+
+11. Changes to package com.bumptech.glide.load.resource.bytes:  
+
+11.1. Add a class for bytes resource. It allows to:
+
+	Instantiate bytes resource;
+	Get resource class;
+	Get bytes resource;
+	Get size;
+	Recycle bytes resource
+
+12. Changes to package com.bumptech.glide.load.resource.gif:  
+
+12.1. Add a class for gif drawable resource. It allows to:
+
+	Instantiate gif drawable resource  with gif drawable;
+	Get resource class;
+	Get size;
+	Recycle gif drawable resource;
+	Initialize gif drawable resource
+
+12.2. Add a class for gif frame resource decoder. It allows to:
+
+	Instantiate gif frame resource decoder  with bitmap pool;
+	Check if gif frame resource decoder handles;
+	Decode source gif decoder
+
+13. Changes to package com.bumptech.glide.load.resource.transcode:  
+
+13.1. Add an object creator class for bitmap bytes transcoder. It allows to:
+
+	Instantiate bitmap bytes transcoder;
+	Instantiate bitmap bytes transcoder  with bitmap compress format;
+	Get transcode
+
+13.2. Add a class for bitmap drawable transcoder. It allows to:
+
+	Instantiate bitmap drawable transcoder  with context;
+	Instantiate bitmap drawable transcoder  with resources, bitmap pool and bitmap pool;
+	Instantiate bitmap drawable transcoder  with resources;
+	Get transcode
+
+13.3. Add an interface declaration  for resource transcoder. It allows to:
+
+	Get transcode
+
+13.4. Add a class for unit transcoder. It allows to:
+
+	Get unit transcoder;
+	Get transcode
+
+14. Changes to package com.bumptech.glide.request:  
+
+14.1. Add an interface declaration  for request. It allows to:
+
+	Begin request;
+	Handle clear;
+	Check if request is running;
+	Check if request is complete;
+	Check if request is resource set;
+	Check if request is cleared;
+	Check if request is failed;
+	Recycle request;
+	Check if request is equivalent to
+
+14.2. Add an interface declaration  for request coordinator. It allows to:
+
+	Can set image;
+	Handle can notify status changed;
+	Handle can notify cleared;
+	Check if request coordinator is any resource set;
+	Process request coordinator request coordinator on request success;
+	Handle on request failed
+
+14.3. Add an interface declaration  for request listener. It allows to:
+
+	Handle on load failed;
+	Process request listener request listener on resource ready
+
+14.4. Add an interface declaration  for resource callback. It allows to:
+
+	Process resource callback resource callback on resource ready;
+	Handle on load failed
+
+14.5. Add a class for thumbnail request coordinator. It allows to:
+
+	Instantiate thumbnail request coordinator;
+	Instantiate thumbnail request coordinator  with parent request coordinator;
+	Set requests;
+	Can set image;
+	Handle parent can set image;
+	Handle can notify status changed;
+	Handle can notify cleared;
+	Handle parent can notify cleared;
+	Handle parent can notify status changed;
+	Check if thumbnail request coordinator is any resource set;
+	Process thumbnail request coordinator thumbnail request coordinator on request success;
+	Handle on request failed;
+	Handle parent is any resource set;
+	Begin thumbnail request coordinator;
+	Handle clear;
+	Check if thumbnail request coordinator is running;
+	Check if thumbnail request coordinator is complete;
+	Check if thumbnail request coordinator is resource set;
+	Check if thumbnail request coordinator is cleared;
+	Check if thumbnail request coordinator is failed;
+	Recycle thumbnail request coordinator;
+	Check if thumbnail request coordinator is equivalent to
+
+15. Changes to package com.bumptech.glide.request.target:  
+
+15.1. Add a class for base target. It allows to:
+
+	Set request;
+	Get request;
+	Handle on load cleared;
+	Handle on load started;
+	Handle on load failed;
+	Process base target base target on start;
+	Process base target base target on stop;
+	Process base target base target on destroy
+
+15.2. Add a class for bitmap image view target. It allows to:
+
+	Instantiate bitmap image view target  with image view;
+	Set resource
+
+15.3. Add a class for drawable image view target. It allows to:
+
+	Instantiate drawable image view target  with image view;
+	Set resource
+
+15.4. Add an object creator class for image view target factory. It allows to:
+
+	Build target
+
+15.5. Add a class for simple target. It allows to:
+
+	Instantiate simple target;
+	Get size;
+	Remove callback
+
+15.6. Add an interface declaration  for target. It allows to:
+
+	Handle on load started;
+	Handle on load failed;
+	Process target target on resource ready;
+	Handle on load cleared;
+	Get size;
+	Remove callback;
+	Set request;
+	Get request
+
+16. Changes to package com.bumptech.glide.samples.flickr:  
+
+16.1. Rename type PhotoViewer with PhotoViewer
+
+17. Changes to package com.bumptech.glide.samples.flickr.api:  
+
+17.1. Rename type Photo with Photo
+
+18. Changes to package com.bumptech.glide.util:  
+
+18.1. Add a class for lru cache. It allows to:
+
+	Instantiate lru cache;
+	Set size multiplier;
+	Get size;
+	Get count;
+	Handle on item evicted;
+	Get max size;
+	Get current size;
+	Check if lru cache contains;
+	Get key;
+	Put key;
+	Remove key;
+	Handle clear memory;
+	Trim lru cache to size;
+	Evict lru cache
+
+18.2. Rename type Util with Util
+

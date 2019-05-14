@@ -1,0 +1,14 @@
+[Rollup] Re-factor Rollup Indexer into a generic indexer for re-usability   (#32743)
+
+This extracts a super class out of the rollup indexer called the AsyncTwoPhaseIterator. 
+The implementor of it can define the query, transformation of the response, 
+indexing and the object to persist the position/state of the indexer.
+
+The stats object used by the indexer to record progress is also now abstract, allowing
+the implementation provide custom stats beyond what the indexer provides.  It also
+allows the implementation to decide how the stats are presented (leaves toXContent()
+up to the implementation).
+
+This should allow new projects to reuse the search-then-index persistent task that Rollup
+uses, but without the restrictions/baggage of how Rollup has to work internally to
+satisfy time-based rollups.

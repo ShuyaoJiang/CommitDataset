@@ -1,0 +1,8 @@
+HttpContentDecompressor should change decompressed requests to chunked encoding. Fixes issue #5428
+
+`HttpContentDecoder` was removing `Content-Length` header but not adding a `Transfer-Encoding` header which goes against the HTTP spec.
+
+Added `Transfer-Encoding` header with value `chunked` when `Content-Length` is removed.
+Modified existing unit test to also check for this condition.
+
+Compliance with HTTP spec.

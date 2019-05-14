@@ -1,0 +1,13 @@
+Harmonize ConfigurationProperties bean name
+
+When `@EnableConfigurationProperties` is defined, Spring Boot
+automatically registers a bean in the context for each class specified
+on the annotation. Previously, the name of the bean only included the
+prefix which leads to conflict if two different classes use the same
+prefix.
+
+This commit changes the bean name structure to be <prefix>-<fqn> where
+prefix is the prefix used on the annotation and <fqn> the fully qualified
+name of the target class.
+
+Closes gh-4395

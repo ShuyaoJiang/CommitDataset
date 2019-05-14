@@ -1,0 +1,11 @@
+Track EWMA[1] of task execution time in search threadpool executor
+
+This is the first step towards adaptive replica selection (#24915). This PR
+tracks the execution time, also known as the "service time" of a task in the
+threadpool. The `QueueResizingEsThreadPoolExecutor` then stores a moving average
+of these task times which can be retrieved from the executor.
+
+Currently there is no functionality using the EWMA yet (other than tests), this
+is only a bite-sized building block so that it's easier to review.
+
+[1]: EWMA = Exponentially Weighted Moving Average

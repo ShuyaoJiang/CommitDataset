@@ -1,0 +1,9 @@
+Allow customization of SpEL method resolution
+
+This change introduces a protected ReflectiveMethodResolver#getMethods,
+allowing subclasses to specify additional static methods not
+declared directly on the type being evaluated. These methods then become
+candidates for filtering by any registered MethodFilters and ultimately
+become available within for use within SpEL expressions.
+
+Issue: SPR-9038

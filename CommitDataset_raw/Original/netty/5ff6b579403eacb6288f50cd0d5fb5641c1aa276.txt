@@ -1,0 +1,16 @@
+PemPrivateKey.toPem(...) should throw IllegalArgumentException when P… (#8253)
+
+* PemPrivateKey.toPem(...) should throw IllegalArgumentException when PrivateKey which does not support encoding is used.
+
+Motivation:
+
+At the moment when a PrivateKey is used that does not support encoding we throw a NPE when trying to convert the key. We should better throw an IllegalArgumentException with the details about what key we tried to encode.
+
+Modifications:
+
+- Check if PrivateKey.getEncoded() returns null and if so throw an IllegalArgumentException
+- Add unit test.
+
+Result:
+
+Better handling of non-supported PrivateKey implementations.

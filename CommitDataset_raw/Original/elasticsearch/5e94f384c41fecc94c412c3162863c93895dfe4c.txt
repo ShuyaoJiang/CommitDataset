@@ -1,0 +1,10 @@
+Remove the use of AbstracLifecycleComponent constructor #37488 (#37488)
+
+The AbstracLifecycleComponent used to extend AbstractComponent, so it had to pass settings to the constractor of its supper class.
+It no longer extends the AbstractComponent so there is no need for this constructor
+There is also no need for AbstracLifecycleComponent subclasses to have Settings in their constructors if they were only passing it over to super constructor.
+This is part 1. which will be backported to 6.x with a migration guide/deprecation log.
+part 2 will have this constructor removed in 7
+relates #35560
+
+relates #34488

@@ -1,0 +1,17 @@
+Support 'unless' expression for cache veto
+
+Allow @Cachable, @CachePut and equivalent XML configuration to provide
+a SpEL expression that can be used to veto putting an item into the
+cache. Unlike 'condition' the 'unless' parameter is evaluated after
+the method has been called and can therefore reference the #result.
+
+For example:
+
+    @Cacheable(value="book",
+        condition="#name.length < 32",
+        unless="#result.hardback")
+
+This commit also allows #result to be referenced from @CacheEvict
+expressions as long as 'beforeInvocation' is false.
+
+Issue: SPR-8871

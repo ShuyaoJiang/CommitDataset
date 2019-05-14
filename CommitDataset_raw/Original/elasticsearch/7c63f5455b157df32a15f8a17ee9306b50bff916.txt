@@ -1,0 +1,13 @@
+Use a threadsafe map in SearchAsyncActionTests (#33700)
+
+Today `SearchAsyncActionTests#testFanOutAndCollect` uses a simple `HashMap` for
+the `nodeToContextMap` variable, which is then accessed from multiple threads
+without, apparently, explicit synchronisation. This provides an explanation for
+the test failure identified in #29242 in which `.toString()` returns `"[]"`
+just before `.isEmpty` returns `false`, without any concurrent modifications.
+
+This change converts `nodeToContextMap` to a `newConcurrentMap()` so that this
+cannot occur. It also fixes a race condition in the detection of double-calling
+the subsequent search phase.
+
+Closes #29242.

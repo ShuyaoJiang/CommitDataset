@@ -1,0 +1,11 @@
+Add a test for interceptors throwing unchecked exceptions.
+
+Our behavior here is not good. Right now it looks like we're leaking
+resources; nothing is releasing the socket in a 'finally' clause when
+interceptors crash. We're also not notifying the callback that the
+call has failed; that's left hanging.
+
+That said, we don't expect applications to recover from these
+exceptions.
+
+Closes https://github.com/square/okhttp/issues/1482

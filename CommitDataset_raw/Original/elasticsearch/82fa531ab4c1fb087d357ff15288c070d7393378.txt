@@ -1,0 +1,3 @@
+Remove `_index` fielddata hack if cluster alias is present (#26082)
+
+We introduced a hack in #25885 to respect the cluster alias if available on the `_index` field. This is important if aggregations or other field data related operations are executed. Yet, we added a small hack that duplicated an implementation detail from the `_index` field data builder to make this work. This change adds a necessary but simple API change that allows us to remove the hack and only have a single implementation.

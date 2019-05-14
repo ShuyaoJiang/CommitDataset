@@ -1,0 +1,7 @@
+SpanNearQueryBuilder should return the inner clause when a single clause is provided (#25856)
+
+This change handles the case where a SpanNearQueryBuilder tries to create a query with a single clause.
+This is not allowed in the SpanNearQuery so instead of throwing an exception when the weight is built, this change builds and returns
+the singleton inner clause on toQuery.
+
+Fixes #25630

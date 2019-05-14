@@ -1,0 +1,12 @@
+Support for simple numeric Flyway version
+
+While Flyway's `MigrationVersion` is a String value, a simple "0" is
+also a valid number. When such value is not wrapped in YAML, an integer
+is injected rather than a String which leads to a failure as we can't
+convert it.
+
+This commit updates the `StringToMigrationVersionConverter` to also
+supports conversion from a Number. This is a convenience for users
+using YAML for configuration
+
+Closes gh-4981

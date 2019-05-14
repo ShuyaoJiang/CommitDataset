@@ -1,0 +1,19 @@
+separate out IndexLifecycleService cluster-state change concerns (#33033)
+
+Changes to the IndexLifecycleService were necessary since relying on
+ClusterChangedEvents for a full picture of the cluster state's settings was
+a mistake. It is not necessary that these events hold all settings, especially ones
+that are set at node start-up.
+
+Changes to main include:
+
+- move poll interval updates to a SettingsUpdateConsumer
+- move scheduler start/stop to a localMasterNodeListener
+- keep triggerPolicies in clusterChanged
+
+Changes to tests include:
+
+- removal of some low-level state transition checks in the Service that no longer make sense
+  since the changes are unconditionally specified in the appropriate listeners
+- add integration tests for poll-interval updates
+- add integration test assertions for verifying scheduler is started up correctly

@@ -1,0 +1,12 @@
+[Security] Cache action privilege testing for bulk items (elastic/x-pack-elasticsearch#2526)
+
+Since we are authorising on a single shard of a single index,
+and there are only 3 possible actions that an item might represent,
+we can test which items are authorised with a maximum of 3 permission
+evaluations, regardless of how many items are actually in the shard
+request. Previously we would test them all independently which had
+a much higher overhead for large bulk requests.
+
+Relates: elastic/x-pack-elasticsearch#2369 
+
+Original commit: elastic/x-pack-elasticsearch@aceacf0aa31c05889b0c35e136108ff748862a24

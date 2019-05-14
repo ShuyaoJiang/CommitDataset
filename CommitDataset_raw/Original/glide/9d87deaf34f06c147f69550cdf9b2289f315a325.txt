@@ -1,0 +1,7 @@
+Stop GifDrawable in onFrameReady if all callbacks are Drawables.
+
+When we use TransitionDrawable, the GifDrawable’s callback is always
+non-null and always the TransitionDrawable, even if the
+TransitionDrawable was removed from the view hierarchy. Checking up
+the callback chain allows us to ensure that there’s a non-Drawable 
+callback eventually.

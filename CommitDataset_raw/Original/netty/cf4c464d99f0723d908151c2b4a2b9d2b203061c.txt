@@ -1,0 +1,37 @@
+Modify HttpObjectDecoder to allow parsing the HTTP headers in multiple steps.
+
+Motivation:
+At the moment the whole HTTP header must be parsed at once which can lead to multiple parsing of the same bytes. We can do better here and allow to parse it in multiple steps.
+
+Modifications:
+
+ - Not parse headers multiple times
+ - Simplify the code
+ - Eliminate uncessary String[] creations
+ - Use readSlice(...).retain() when possible.
+
+Result:
+
+Performance improvements as shown in the included benchmark below.
+
+Before change:
+[nmaurer@xxx]~% ./wrk-benchmark
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    21.55ms   15.10ms 245.02ms   90.26%
+    Req/Sec   196.33k    30.17k  297.29k    76.03%
+  373954750 requests in 2.00m, 50.15GB read
+Requests/sec: 3116466.08
+Transfer/sec:    427.98MB
+
+After change:
+[nmaurer@xxx]~% ./wrk-benchmark
+Running 2m test @ http://xxx:8080/plaintext
+  16 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    20.91ms   36.79ms   1.26s    98.24%
+    Req/Sec   206.67k    21.69k  243.62k    94.96%
+  393071191 requests in 2.00m, 52.71GB read
+Requests/sec: 3275971.50
+Transfer/sec:    449.89MB

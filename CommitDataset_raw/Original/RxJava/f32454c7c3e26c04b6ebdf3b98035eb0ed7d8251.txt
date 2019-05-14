@@ -1,0 +1,3 @@
+Do not leak the DISPOSED marker instance into public API. (#4081)
+
+If this were to be used by public code it could have have Very Bad™ effects by causing operators to think that they already disposed resources when they actually had not. Since `Disposable` is stateless it's safe for `disposed()` and `empty()` to be synonymous, although that might change in the future so both methods are retained.

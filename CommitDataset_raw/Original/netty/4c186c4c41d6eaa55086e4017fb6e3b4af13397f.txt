@@ -1,0 +1,20 @@
+Make netty-transport-native-epoll-*-linux-x86_64.jar working in OSGi
+
+Motivation:
+
+Currenlty, netty-transport-native-epoll-*-linux-x86_64.jar is not packed as OSGi bundle
+and thus not working in OSGi environment.
+
+Modifications:
+
+In netty-transport-native-epoll's pom.xml added configuration
+to attach manifest to the jar with a native library.
+In netty-common's pom.xml added configuration instruction (DynamicImport-Package)
+to maven bnd plugin to make sure the native code is loaded from
+netty-transport-native-epoll bundle.
+
+Result:
+
+The netty-transport-native-epoll-*-linux-x86_64.jar is a bundle (MANIFEST.MF attached)
+and the inluced native library can be successfuly loaded in OSGi environment.
+Fixing #5119

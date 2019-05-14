@@ -1,0 +1,14 @@
+Change HttpServerUpgradeHandler.UpgradeCodec to allow aborting upgrade
+
+Motivation:
+
+HttpServerUpgradeHandler.UpgradeCodec.prepareUpgradeResponse should allow to abort the upgrade and so just continue with using HTTP. Beside this we should only pass in the response HttpHeaders as this is inline with the docs.
+
+Modifications:
+
+- UpgradeCodec.prepareUpgradeResponse now allows to return a boolean and so allows to specifiy if the upgrade should take place.
+- Change the param from FullHttpResponse to HttpHeaders to be inline with the javadocs.
+
+Result:
+
+More flexible and correct handling of upgrades.

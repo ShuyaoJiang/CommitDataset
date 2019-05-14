@@ -1,0 +1,19 @@
+Promote ReferenceEntry to a top-level class for weird reasons.
+
+Specifically: With the switch to the Checker Framework annotations, PackageSanityTests.testNulls fails:
+
+  No exception thrown for parameter at index 3 from static com.google.common.cache.LocalCache$ReferenceEntry com.google.common.cache.LocalCache.newEntry(com.google.common.cache.LocalCache,java.lang.Object,int,com.google.common.cache.LocalCache$ReferenceEntry)[{}, , 1, null] for class com.google.common.cache.LocalCache
+
+NullPointerTester, even when updated to look for the Checker Framework @Nullable, can't detect it -- not as a parameter annotation, not as a type annotation. The annotation is on the method in the .class file according to javap (though I don't know for sure that it's in the "right" place), but Java doesn't see it at runtime. This class is the only place I'm having this problem.
+
+I suspect that this is a bug specific to nested classes: NullPointerTester can detect the Checker Framework @Nullable annotation if the parameter type is a top-level ReferenceEntry class but not a nested one. I tried "LocalCache.@Nullable ReferenceEntry<K, V>" and variants of that with no luck, so I'm going with top-level.
+
+(We're looking into reporting the bug upstream.)
+
+Update: There is a decent chance that I won't use the Checker Frameworks' *type* annotations at all (instead using declaration annotations), in which case this CL won't be strictly necessary. But given that we may well migrate to those annotations someday, it seems worth working around this now while it's fresh on my mind.
+
+RELNOTES=n/a
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=177456013

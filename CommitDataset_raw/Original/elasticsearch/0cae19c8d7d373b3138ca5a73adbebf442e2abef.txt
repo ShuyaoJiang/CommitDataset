@@ -1,0 +1,13 @@
+IndicesClusterStateService should replace an init. replica with an init. primary with the same aId (#32374)
+
+In rare cases it is possible that a nodes gets an instruction to replace a replica
+shard that's in `POST_RECOVERY` with a new initializing primary with the same allocation id.
+This can happen by batching cluster states that include the starting of the replica, with
+closing of the indices, opening it up again and allocating the primary shard to the node in
+question. The node should then clean it's initializing replica and replace it with a new
+initializing primary.
+
+I'm not sure whether the test I added really adds enough value as existing tests found this. The main reason I added is to allow for simpler reproduction and to double check I fixed it. I'm open to discuss if we should keep.
+
+Closes #32308
+

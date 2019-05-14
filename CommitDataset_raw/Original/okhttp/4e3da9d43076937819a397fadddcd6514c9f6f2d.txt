@@ -1,0 +1,11 @@
+FaultRecoveringOutputStream.
+
+This is the first step in a change that'll permit the underlying
+socket stream to change out-from-under-you while you're uploading
+POST data to a server.
+
+It'll recover from failures writing the request body that occur
+within the first N bytes, where N will be determined by the number
+of bytes that can be written without positive confirmation.
+
+See https://github.com/square/okhttp/issues/137

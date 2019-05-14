@@ -1,0 +1,7 @@
+Main response should not have status 503 when okay (#29045)
+
+The REST status 503 means "I can not handle the request that you sent
+me." However today we respond to a main request with a 503 when there
+are certain cluster blocks despite still responding with an actual main
+response. This is broken, we should respond with a 200 status. This
+commit removes this silliness.

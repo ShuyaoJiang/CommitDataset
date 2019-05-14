@@ -1,0 +1,9 @@
+Handle case where the hole vertex is south of the containing polygon(s) (#27685)
+
+Normally the hole is assigned to the component of the first edge to the south
+of one of its vertices, but if the chosen hole vertex is south of everything
+then the binary search returns -1 yielding an ArrayIndexOutOfBoundsException.
+Instead, assign the vertex to the component of the first edge to its north.
+Subsequent validation catches the fact that the hole is outside its component.
+
+Fixes #25933

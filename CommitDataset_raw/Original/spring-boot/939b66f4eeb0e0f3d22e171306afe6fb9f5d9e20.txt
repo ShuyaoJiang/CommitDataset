@@ -1,0 +1,10 @@
+Use fast exceptions in findResource(s)
+
+Some libraries like aspectj are using findResource to see the raw
+bytecode of a class. It will even call findResource for every method of
+every class of beans that are post processed. This can be significant
+performance hit on startup when LaunchedURLClassLoader and there are a
+lot of nested jars.
+
+See gh-3640
+Fixes gh-4557

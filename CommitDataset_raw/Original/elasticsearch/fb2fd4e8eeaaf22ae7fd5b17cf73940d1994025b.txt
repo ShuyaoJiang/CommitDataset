@@ -1,0 +1,6 @@
+Fix preserving FiltersAggregationBuilder#keyed field on rewrite (#27900)
+
+Currently FiltersAggregationBuilder#doRewrite creates a new FiltersAggregationBuilder which doesn't correctly copy the original "keyed" field if a non-keyed filter gets rewritten.
+This can cause rendering bugs of the output aggregations like the one reported in #27841.
+
+Closes #27841

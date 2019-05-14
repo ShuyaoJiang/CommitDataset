@@ -1,0 +1,27 @@
+Suppress new CollectionIncompatibleType Error Prone check by casting
+incompatibly-typed argument to query methods in generic collection types.
+This will enable us to make this pattern an error, preventing
+future occurrences of this bug.
+
+REVIEWERS TAKE NOTE: We are *not* fixing this bug.  Fixing it requires making
+a behavioral change, and we need your team to assume any risks associated
+with that. Please approve this CL, so we can enable the new compiler error
+and prevent future occurrences of this bug.
+
+Background:
+
+Various generic collection types have methods that take Object rather than the type parameter you would expect, e.g. Collection#contains. Consider a
+Collection<String>.  If someone invokes contains() on that collection and
+passes in an argument of type Integer, it can never return true because the
+Collection cannot contain any Integers.
+
+This CL changes places where these methods are called with an incompatible
+type by casting the argument to the declared type of the method, such as
+Object or Collection<?>.  **This does not fix the bug.**  It is
+semantically-equivalent code that bypasses the Error Prone check so that the
+code will continue to compile after we enable the check in the compiler.
+Fixing the bug mechanically is not feasible because the fixes are too complex,
+but we want to prevent more instances of this bug from entering the codebase.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=106628443

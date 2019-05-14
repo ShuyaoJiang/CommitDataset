@@ -1,0 +1,12 @@
+Let tests provide raw InputStream bodies.
+
+Original AOSP change by Jeff Sharkey:
+  This enables testing of large files, such as those beyond the 2GB
+  boundary.  Also switches to streaming in MTU-sized chunks.
+
+  Bug: 8209169
+  Change-Id: Iab6b299c13a3d67bbbaa80a9e5bc563ef6cf9302
+
+This modifies Jeff's change to permit empty bodies, and to remove the getBody() accessor. Since reading the body is now destructive, that accessor must be removed!
+
+git-svn-id: https://mockwebserver.googlecode.com/svn/trunk@35 cf848351-439f-e86a-257f-67fa721851d5

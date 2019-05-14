@@ -1,0 +1,11 @@
+Tests: Check watcher state before starting/stopping (elastic/x-pack-elasticsearch#4362)
+
+This changes the behaviour of AbstractWatcherIntegrationTestCase and its
+startWatcher/stopWatcher methods. Instead of checking for the target
+state and just starting or stopping if it does not match, the methods
+now wait for certain states to be reached before starting or stopping.
+
+This will fix test failures where a failure is started instead of
+stopped or vice versa.
+
+Original commit: elastic/x-pack-elasticsearch@f0b09548033e888144e91589e6d3d116074d6bfd

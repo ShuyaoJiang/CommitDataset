@@ -1,0 +1,8 @@
+Remove TransportSingleItemBulkWriteAction as replication action (#40424)
+
+The implementation of TransportIndexAction and TransportDeleteAction as
+TransportReplicationAction existed for interoperability with older 5.x nodes, as these older nodes
+coordinated single index / deletes as replication requests. This BWC layer is no longer needed in 7.x,
+where these single actions are now mapped to bulk requests. Completely removing the deprecated
+transport actions is not possible yet if we want to keep BWC with a 6.x transport client. The best
+way here is to wait for the transport client to go away and then just remove the actions.

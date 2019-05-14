@@ -1,0 +1,15 @@
+Fix remote context handling in UrlTag
+
+Prior to this change, the `UrlTag` would simply append the remote
+context and the path value in case of a context relative URL.
+
+The following code snippet would output "//foo":
+
+```
+<spring:url value="/foo" context="/" />
+```
+
+This change now removes trailing slashes in remote context to avoid
+this.
+
+Issue: SPR-12782

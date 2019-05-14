@@ -1,0 +1,11 @@
+Allow default DevTools properties to be overridden
+
+Previously the default DevTools property source was added in first place
+to the environment’s property sources in an unordered environment
+post-processor. This made it difficult to override them.
+
+This commit updates the post-processor to be ordered with lowest
+precedence and to add the property source in last place. This should
+allow any other property sources and to override the defaults.
+
+Closes gh-3851

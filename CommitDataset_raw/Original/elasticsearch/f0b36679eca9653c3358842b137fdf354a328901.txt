@@ -1,0 +1,9 @@
+[Kerberos] Remove Kerberos bootstrap checks (#32451)
+
+This commit removes Kerberos bootstrap checks as they were more
+validation checks and better done in Kerberos realm constructor
+than as bootstrap checks. This also moves the check
+for one Kerberos realm per node to where we initialize realms.
+This commit adds few validations which were missing earlier
+like missing read permissions on keytab file or if it is directory
+to throw exception with error message.

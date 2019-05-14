@@ -1,0 +1,13 @@
+Prepare to promote HttpConnection + Pool to public API.
+
+Giving the application code access to the connection pool
+is tricky: it exposes more implementation details from
+OkHttp; details that are quite inaccessible through the
+conventional HttpURLConnection APIs. Currently the only
+thing regular users get are a pair of awkward system
+properties.
+
+But exposing these should also be useful: it'll allow the
+application to observe the pool (for performance monitoring)
+and possibly also to directly manage it (by setting policy,
+or to evict when the application is paused).

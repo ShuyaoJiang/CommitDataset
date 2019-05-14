@@ -1,0 +1,13 @@
+Correctly register for EPOLLRDHUP when construct EpollSocketChannel from FileDescriptor
+
+Motivation:
+
+We missed to register for EPOLLRDHUP events when construct the EpollSocketChannel from an existing FileDescriptor. This could cause to miss connection-resets.
+
+Modifications:
+
+Add Native.EPOLLRDHUP to the events we are interested in.
+
+Result:
+
+Connection-resets are detected correctly.

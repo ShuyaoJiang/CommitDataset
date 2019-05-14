@@ -1,0 +1,13 @@
+Fix test-failures introduced 325cc84a2ebbf4f5e362ec9ca09202b4647bd100 on Java7
+
+Motivation:
+
+325cc84a2ebbf4f5e362ec9ca09202b4647bd100 introduced new tests which uses classes only provided by Java8+. We need to ensure we only try to load classes needed for these when we run the tests on Java8+ so we still can run the testsuite with Java7.
+
+Modifications:
+
+Add extra class which only gets loaded when Java8+ is used and move code there.
+
+Result:
+
+No more class-loader issue when running tests with Java7.

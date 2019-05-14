@@ -1,0 +1,12 @@
+Make web security config require spring-security-web on classpath
+
+Previously, SpringBootWebSecurityConfiguration required a web
+application and @EnableWebSecurity to be on the classpath.
+@EnableWebSecurity is in spring-security-config so this could lead
+to the configuration being active when spring-security-web isn't
+on the classpath but the rest of Spring Security is.
+
+This commit updates SpringBootWebSecurityConfiguration to also make it
+conditional on a class in spring-security-web.
+
+Fixes gh-2717

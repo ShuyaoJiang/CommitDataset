@@ -1,0 +1,20 @@
+SPDY: fix support for pushed resources in SpdyHttpEncoder
+
+Motivation:
+
+The SpdyHttpDecoder was modified to support pushed resources that are
+divided into multiple frames. The decoder accepts a pushed
+SpdySynStreamFrame containing the request headers, followed by a
+SpdyHeadersFrame containing the response headers.
+
+Modifications:
+
+This commit modifies the SpdyHttpEncoder so that it encodes pushed
+resources in a format that the SpdyHttpDecoder can decode. The encoder
+will accept an HttpRequest object containing the request headers,
+followed by an HttpResponse object containing the response headers.
+
+Result:
+
+The SpdyHttpEncoder will create a SpdySynStreamFrame followed by a
+SpdyHeadersFrame when sending pushed resources.

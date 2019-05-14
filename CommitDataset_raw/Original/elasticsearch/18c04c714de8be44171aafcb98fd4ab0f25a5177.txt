@@ -1,0 +1,9 @@
+[Security] handle null values when attempting to parse as DN when mapping roles (elastic/x-pack-elasticsearch#3791)
+
+This commit adds special handling for null values when building a DistinguishedNamePredicate for
+role mapping. Previously this would have resulted in an exception from the unboundid ldapsdk as
+the DN is invalid.
+
+relates elastic/x-pack-elasticsearch#3787
+
+Original commit: elastic/x-pack-elasticsearch@9386dae03e6c099592ade57d28bacb873276ce50

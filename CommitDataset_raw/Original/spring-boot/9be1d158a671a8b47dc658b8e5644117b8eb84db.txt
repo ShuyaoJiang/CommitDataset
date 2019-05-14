@@ -1,0 +1,10 @@
+Don't use reflection to verify interceptor registration
+
+A recent change to the internals of RequestMappingHandlerMapping
+broke to Spring Mobile-related tests as they were using reflection
+to verify that the configuration had been applied correctly.
+
+This commit makes the tests more robust by using the Java API to
+access the interceptors for a request and verify that the expected
+interceptor is present. To further simplify the tests, the unnecessary
+use of an embedded servlet container factory has also been removed.

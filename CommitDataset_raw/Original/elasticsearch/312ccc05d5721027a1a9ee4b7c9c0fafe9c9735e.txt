@@ -1,0 +1,9 @@
+[Tests] Fix GetResultTests and DocumentFieldTests failures (#29083)
+
+Changes made in #28972 seems to have changed some assumptions about how
+SMILE and CBOR write byte[] values and how this is tested. This changes
+the generation of the randomized DocumentField values back to BytesArray
+while expecting the JSON and YAML deserialisation to produce Base64
+encoded strings and SMILE and CBOR to parse back BytesArray instances.
+
+Closes #29080

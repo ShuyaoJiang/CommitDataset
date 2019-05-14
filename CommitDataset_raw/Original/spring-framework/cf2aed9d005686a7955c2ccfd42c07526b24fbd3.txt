@@ -1,0 +1,17 @@
+Add a dateValue HeaderResultMatcher
+
+HTTP headers such as "Expires", "Last-Modified" all use date
+strings like "Tue, 21 Jul 2015 10:00:00 GMT". Prior to this commit,
+there was no way to match those header values, besides formatting dates
+manually.
+
+This commit introduces a new HeaderResultMatcher to test those date
+headers using a long timestamp:
+
+```
+this.mockMvc.perform(get("/persons/1").header("If-Modified-Since", now))
+  .andExpect(status().isNotModified())
+  .andExpect(header().dateValue("Last-Modified", timestamp));
+```
+
+Issue: SPR-13263

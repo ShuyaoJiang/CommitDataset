@@ -1,0 +1,5 @@
+Don't load global ordinals with the `map` execution_hint (#37833)
+
+The terms aggregator loads the global ordinals to retrieve the cardinality of the field to aggregate on. This information is then used to select the strategy to use for the aggregation (breadth_first or depth_first). However this should be avoided if the execution_hint is explicitly set to map since this mode doesn't really need the global ordinals. Since we still need the cardinality of the field this change picks the maximum cardinality in the segments as an estimation of the total cardinality to select the strategy to use (breadth_first or depth_first). This estimation is only used if the execution hint is set to map, otherwise the global ordinals are still used to retrieve the accurate cardinality.
+
+Closes #37705

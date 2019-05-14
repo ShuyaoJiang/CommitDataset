@@ -1,0 +1,11 @@
+Fix InternalEngineTests#assertOpsOnPrimary (#37746)
+
+The assertion `assertOpsOnPrimary` does not store seq_no and primary
+term of successful deletes to the `lastOpSeqNo` and `lastOpTerm`. This
+leads to failures of the subsequence CAS deletes or indexes with seq_no
+and term. Moreover, this assertion trips a translog assertion because it
+bumps the primary term of some operations but not the primary term of
+the engine.
+
+Relates #36467
+Closes #37684

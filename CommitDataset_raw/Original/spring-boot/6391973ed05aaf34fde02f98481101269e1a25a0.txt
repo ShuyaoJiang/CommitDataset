@@ -1,0 +1,12 @@
+Always reinitialize logging system
+
+Update LoggingSystems so that they can reinitialize themselves
+before logging begins. This allows reset of the root logger (which
+may have been set to OFF in beforeInitialize) and also re-evaluation
+of systems properties such as PID which may not have been set when
+logging configuration was first loaded.
+
+This commit may possibly reintroduce gh-1091, but it seems like
+reloading is our only option.
+
+Fixes gh-2125

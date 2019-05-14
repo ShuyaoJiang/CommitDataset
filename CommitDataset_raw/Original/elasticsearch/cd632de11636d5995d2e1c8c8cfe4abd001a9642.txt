@@ -1,0 +1,13 @@
+Do not resolve addresses in remote connection info (#36671)
+
+The remote connection info API leads to resolving addresses of seed
+nodes when invoked. This is problematic because if a hostname fails to
+resolve, we would not display any remote connection info. Yet, a
+hostname not resolving can happen across remote clusters, especially in
+the modern world of cloud services with dynamically chaning
+IPs. Instead, the remote connection info API should be providing the
+configured seed nodes. This commit changes the remote connection info to
+display the configured seed nodes, avoiding a hostname resolution. Note
+that care was taken to preserve backwards compatibility with previous
+versions that expect the remote connection info to serialize a transport
+address instead of a string representing the hostname.

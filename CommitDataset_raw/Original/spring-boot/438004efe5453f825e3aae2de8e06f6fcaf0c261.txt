@@ -1,0 +1,12 @@
+Simplify HTTP compression support for Reactor Netty
+
+This commit simplifies the HTTP compression configuration for Reactor
+Netty servers.
+
+Also, this commit removes a test for the
+`server.compression.min-response-size` support, as this is only
+supported when the HTTP response contains a `Content-Length` header.
+Since most Spring WebFlux responses are using
+`Transfer-Encoding: chunked`, we should not test for that case.
+
+See gh-12268

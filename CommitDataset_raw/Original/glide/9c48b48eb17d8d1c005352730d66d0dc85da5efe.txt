@@ -1,0 +1,8 @@
+Catch/ignore SecurityException opening MediaStore thumbnails.
+
+A Uri permission grant for a MediaStore Uri will only grant access to the main Uri, not the thumbnail Uri. Applications that have only Uri permissions and not the storage runtime permissions will receive a SecurityException when they try to open the corresponding thumbnail. 
+
+Prior to this change, the thumbnail exception would cause the entire
+request to fail. After this change only the thumbnail portion of the request will fail so the image may still be loaded via the original MediaStore Uri. 
+
+Fixes #3504.

@@ -1,0 +1,21 @@
+Increase wait time.
+
+I saw a failure with the current value, and I assume that it just didn't wait long enough:
+
+-------------------------------------------------------------------------------
+Test set: com.google.common.util.concurrent.InterruptibleMonitorTest
+-------------------------------------------------------------------------------
+Tests run: 16, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.447 sec <<< FAILURE!
+testTryEnterIf_initiallyTrue(com.google.common.util.concurrent.InterruptibleMonitorTest)  Time elapsed: 0.067 sec  <<< FAILURE!
+junit.framework.AssertionFailedError: expected:<true> but was:<false>
+	at junit.framework.Assert.fail(Assert.java:47)
+	at junit.framework.Assert.failNotEquals(Assert.java:283)
+	at junit.framework.Assert.assertEquals(Assert.java:64)
+	at junit.framework.Assert.assertEquals(Assert.java:71)
+	at com.google.common.util.concurrent.TestThread.callAndAssertBlocks(TestThread.java:145)
+	at com.google.common.util.concurrent.MonitorTestCase.testTryEnterIf_initiallyTrue(MonitorTestCase.java:186)
+
+This is the first time I've seen this test be flaky.
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=110375968

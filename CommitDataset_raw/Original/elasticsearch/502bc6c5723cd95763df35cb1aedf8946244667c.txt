@@ -1,0 +1,16 @@
+Clarify index operations for create privilege (elastic/x-pack-elasticsearch#4337)
+
+The `create` privilege can be misleading based on a user's
+interpretation of the meaning of the privilege. The create privilege
+grants the user access to the index api and the put mapping api. The
+index api allows for a document to be created but it also allows for
+an existing document to be overwritten (assuming the CREATE operation
+type is not used). However, the name `create` implies the ability to
+only create a document and not be able to modify an existing document,
+which may not be clear to users unfamiliar with the index API.
+
+This commit adds a small note under the privilege in the documentation
+that should add some clarity to the operations allowed by this
+privilege.
+
+Original commit: elastic/x-pack-elasticsearch@24596c41b0a0d5c45959b1c6ca8843772c83cd6c

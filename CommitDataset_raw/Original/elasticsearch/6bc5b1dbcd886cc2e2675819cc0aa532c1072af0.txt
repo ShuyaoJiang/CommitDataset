@@ -1,0 +1,9 @@
+Guarantee that translog generations are seqNo conflict free (#24825)
+
+With #24779 in place, we can now guaranteed that a single translog generation file will never have a sequence number conflict that needs to be resolved by looking at primary terms. These conflicts can a occur when a replica contains an operation which isn't part of the history of a newly promoted primary. That primary can then assign a different operation to the same slot and replicate it to the replica.
+
+PS. Knowing that each generation file is conflict free will simplifying repairing these conflicts when we read from the translog.
+
+PPS. This PR also fixes some bugs in the piping of primary terms in the bulk shard action. These bugs are a result of the legacy of IndexRequest/DeleteRequest being a ReplicationRequest. We need to change that as a follow up.
+
+Relates to #10708 

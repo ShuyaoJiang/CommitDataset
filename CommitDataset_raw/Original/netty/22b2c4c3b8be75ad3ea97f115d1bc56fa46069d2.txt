@@ -1,0 +1,13 @@
+Fix concurrency problem in UniqueIpFilter (#8635)
+
+Motivation:
+
+If two requests from the same IP are reached at the same time, `connected.contains(remoteIp)` may return false in both threads.
+
+Modifications:
+
+Check if there is already a connection with the same IP using return values.
+
+Result:
+
+Become thread safe.

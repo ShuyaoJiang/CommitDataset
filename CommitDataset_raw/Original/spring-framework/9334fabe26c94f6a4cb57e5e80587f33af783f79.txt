@@ -1,0 +1,11 @@
+Don't throw NPE when serving webjar directories
+
+Prior to this change, serving resources with ResourceHttpRequestHandler
+could result in NPE when requesting an existing folder located in a JAR.
+
+This commit swallows those exceptions, as it is not possible to foresee
+those cases without reading the actual resource. This result in a HTTP
+200 response with a zero Content-Length instead of a HTTP 500 internal
+exception.
+
+Issue: SPR-13620

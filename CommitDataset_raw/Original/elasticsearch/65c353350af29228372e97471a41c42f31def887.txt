@@ -1,0 +1,9 @@
+Add safer empty variable checking for Windows
+
+We need to check if JAVA_TOOL_OPTIONS, and JAVA_OPTS are set, and if
+ES_PATH_CONF is not set. However, if these variables are defined and
+contain quotes, the current mechanism busts on them. Instead, we should
+use safer mechanism for checking if these variable are defined or
+not. This commit does that.
+
+Relates #26268

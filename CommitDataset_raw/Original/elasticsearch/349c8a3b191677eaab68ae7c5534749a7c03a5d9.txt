@@ -1,0 +1,12 @@
+Do not close bad indices on startup (#39500)
+
+With #17187, we verified IndexService creation during initial state recovery on the master and if the
+recovery failed the index was imported as closed, not allocating any shards. This was mainly done to
+prevent endless allocation loops and full log files on data-nodes when the indexmetadata contained
+broken settings / analyzers. Zen2 loads the cluster state eagerly, and this check currently runs on all
+nodes (not only the elected master), which can significantly slow down startup on data nodes.
+Furthermore, with replicated closed indices (#33888) on the horizon, importing the index as closed
+will no longer not allocate any shards. Fortunately, the original issue for endless allocation loops is
+no longer a problem due to #18467, where we limit the retries of failed allocations. The solution here
+is therefore to just undo #17187, as it's no longer necessary, and covered by #18467, which will solve
+the issue for Zen2 and replicated closed indices as well.

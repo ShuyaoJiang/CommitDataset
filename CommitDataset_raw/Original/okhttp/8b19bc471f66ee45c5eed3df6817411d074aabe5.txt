@@ -1,0 +1,26 @@
+Fix URLConnectionTest.writeTimeouts with large receive buffers
+
+The test relies on small client send / server receive buffers
+to force blocking and generate a timeout.
+
+The switch to make MockWebServer a @Rule (commit
+785d9e94387f404f571775a49c3a9438508bb659) moved the
+MockWebServer.start() call earlier in the test execution.
+Setting the ServerSocketFactory became a no-op so the server
+receive buffer size was left as the default.
+
+The test became reliant on either:
+1) The default server socket receive buffer being small enough
+(e.g. less than the data being transmitted).
+2) The device being too slow to send the requested data in the
+time allowed.
+
+The test was recently made less reliable by:
+1) The okio commit
+f30955cb15eb234f874dd55819686832c960765b, which made the segment
+size bigger (increasing throughput / transfer efficiency).
+2) The OkHttp commit f30955cb15eb234f874dd55819686832c960765b,
+which reduced the amount of data being sent in the test from
+16MB to 2MB.
+3) Recent Android devices have large default buffer sizes. e.g.
+Nexus 5: 1MB, Nexus 5X: 6MB.

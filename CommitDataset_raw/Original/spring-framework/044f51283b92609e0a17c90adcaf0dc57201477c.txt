@@ -1,0 +1,27 @@
+Introduce ActiveProfilesResolver in the TCF
+
+Prior to this commit, the active bean definition profiles to use when
+loading an ApplicationContext for tests could only be configured
+declaratively (i.e., via hard-coded values supplied to the 'value' or
+'profiles' attribute of @ActiveProfiles).
+
+This commit makes it possible to programmatically configure active bean
+definition profiles in tests via a new ActiveProfileResolver interface.
+Custom resolvers can be registered via a new 'resolver' attribute
+introduced in @ActiveProfiles.
+
+Overview of changes:
+
+ - Introduced a new ActiveProfilesResolver API.
+ - Added a 'resolver' attribute to @ActiveProfiles.
+ - Updated ContextLoaderUtils.resolveActiveProfiles() to support
+   ActiveProfilesResolvers.
+ - Documented these new features in the reference manual.
+ - Added new content to the reference manual regarding the
+   'inheritProfiles' attribute of @ActiveProfiles
+ - Removed the use of <lineannotation> Docbook markup in the testing
+   chapter of the reference manual for Java code examples in order to
+   allow comments to have proper syntax highlighting in the generated
+   HTML and PDF.
+
+Issue: SPR-10338

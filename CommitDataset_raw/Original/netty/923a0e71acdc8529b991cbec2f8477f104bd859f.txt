@@ -1,0 +1,15 @@
+Raise a meaningful exception instead of NPE
+
+Motivation:
+
+When decoding the NAME field in a DNS Resource Record, DnsResponseDecoder
+can raise a NullPointerException if the NAME field contains a loop.
+
+Modification:
+
+Instead of raising an NPE, raise CorruptedFrameException so that the
+exception itself has meaning.
+
+Result:
+
+Less confusing when a malformed DNS RR is received

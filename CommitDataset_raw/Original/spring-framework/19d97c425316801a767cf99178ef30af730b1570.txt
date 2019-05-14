@@ -1,0 +1,36 @@
+Support for multi-threaded cache access
+
+Previously, if a `@Cacheable` method was accessed with the same key by
+multiple threads, the underlying method was invoked several times instead
+of blocking the threads while the value is computed. This scenario
+typically affects users that enable caching to avoid calling a costly
+method too often. When said method can be invoked by an arbitrary number
+of clients on startup, caching has close to no effect.
+
+This commit adds a new method on `Cache` that implements the read-through
+pattern:
+
+```
+<T> T get(Object key, Callable<T> valueLoader);
+```
+
+If an entry for a given key is not found, the specified `Callable` is
+invoked to "load" the value and cache it before returning it to the
+caller. Because the entire operation is managed by the underlying cache
+provider, it is much more easier to guarantee that the loader (e.g. the
+annotated method) will be called only once in case of concurrent access.
+
+A new `sync` attribute to the `@Cacheable` annotation has been addded.
+When this flag is enabled, the caching abstraction invokes the new
+`Cache` method define above. This new mode bring a set of limitations:
+
+* It can't be combined with other cache operations
+* Only one `@Cacheable` operation can be specified
+* Only one cache is allowed
+* `condition` and `unless` attribute are not supported
+
+The rationale behind those limitations is that the underlying Cache is
+taking care of the actual caching operation so we can't really apply
+any SpEL or multiple caches handling there.
+
+Issue: SPR-9254

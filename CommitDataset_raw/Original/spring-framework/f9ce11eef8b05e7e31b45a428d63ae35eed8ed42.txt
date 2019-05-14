@@ -1,0 +1,18 @@
+Provide controller level Cache-Control support
+
+Prior to this commit, Cache-Control HTTP headers could be set using
+a WebContentInterceptor and configured cache mappings.
+
+This commit adds support for cache-related HTTP headers at the controller
+method level, by returning a ResponseEntity instance:
+
+ResponseEntity.status(HttpStatus.OK)
+    .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic())
+    .eTag("deadb33f8badf00d")
+    .body(entity);
+
+Also, this change now automatically checks the "ETag" and
+"Last-Modified" headers in ResponseEntity, in order to respond HTTP
+"304 - Not Modified" if necessary.
+
+Issue: SPR-8550

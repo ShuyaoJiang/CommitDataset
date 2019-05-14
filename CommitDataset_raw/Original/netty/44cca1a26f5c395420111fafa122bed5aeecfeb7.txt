@@ -1,0 +1,22 @@
+Avoid allocations when wrapping byte[] and ByteBuffer arrays as ByteBuf (#8420)
+
+Motivation:
+
+Unpooled.wrap(byte[]...) and Unpooled.wrap(ByteBuffer...) currently
+allocate/copy an intermediate ByteBuf ArrayList and array, which can be
+avoided.
+
+Modifications:
+
+- Define new internal ByteWrapper interface and add a CompositeByteBuf
+constructor which takes a ByteWrapper with an array of the type that it
+wraps, and modify the appropriate Unpooled.wrap(...) methods to take
+advantage of it
+- Tidy up other constructors in CompositeByteBuf to remove duplication
+and misleading len arg (which is really an end offset into provided
+array)
+
+Result:
+
+Less allocation/copying when wrapping byte[] and ByteBuffer arrays,
+tidier code.

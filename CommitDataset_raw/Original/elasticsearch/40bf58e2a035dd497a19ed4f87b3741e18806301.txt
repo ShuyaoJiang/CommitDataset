@@ -1,0 +1,24 @@
+Fix RealmInteg test failures
+
+As part of the changes in #31234,the password verification logic
+determines the algorithm used for hashing the password from the
+format of the stored password hash itself. Thus, it is generally
+possible to validate a password even if it's associated stored hash
+was not created with the same algorithm than the one currently set
+in the settings.
+At the same time, we introduced a check for incoming client change
+password requests to make sure that the request's password is hashed
+with the same algorithm that is configured to be used in the node
+settings.
+In the spirit of randomizing the algorithms used, the
+{@code SecurityClient} used in the {@code NativeRealmIntegTests} and
+{@code ReservedRealmIntegTests} would send all requests dealing with
+user passwords by randomly selecting a hashing algorithm each time.
+This meant that some change password requests were using a different
+password hashing algorithm than the one used for the node and the
+request would fail.
+This commit changes this behavior in the two aforementioned Integ
+tests to use the same password hashing algorithm for the node and the
+clients, no matter what the request is.
+
+Resolves #31670

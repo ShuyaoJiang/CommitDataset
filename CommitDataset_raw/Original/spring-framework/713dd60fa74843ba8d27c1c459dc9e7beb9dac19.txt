@@ -1,0 +1,53 @@
+JMS annotation-driven endpoints.
+
+This commit adds the support of JMS annotated endpoint. Can be
+activated both by @EnableJms or <jms:annotation-driven/> and
+detects methods of managed beans annotated with @JmsListener,
+either directly or through a meta-annotation.
+
+Containers are created and managed under the cover by a registry
+at application startup time. Container creation is delegated to a
+JmsListenerContainerFactory that is identified by the containerFactory
+attribute of the JmsListener annotation. Containers can be
+retrieved from the registry using a custom id that can be specified
+directly on the annotation.
+
+A "factory-id" attribute is available on the container element of
+the XML namespace. When it is present, the configuration defined at
+the namespace level is used to build a JmsListenerContainerFactory
+that is exposed with the value of the "factory-id" attribute. This can
+be used as a smooth migration path for users having listener containers
+defined at the namespace level. It is also possible to migrate all
+listeners to annotated endpoints and yet keep the
+<jms:listener-container> or <jms:jca-listener-container> element to
+share the container configuration.
+
+The configuration can be fine-tuned by implementing the
+JmsListenerConfigurer interface which gives access to the registrar
+used to register endpoints. This includes a programmatic registration
+of endpoints in complement to the declarative approach. A default
+JmsListenerContainerFactory can also be specified to be used if no
+containerFactory has been set on the annotation.
+
+Annotated methods can have flexible method arguments that are similar
+to what @MessageMapping provides. In particular, jms listener endpoint
+methods can fully use the messaging abstraction, including convenient
+header accessors. It is also possible to inject the raw
+javax.jms.Message and the Session for more advanced use cases. The
+payload can be injected as long as the conversion service is able to
+convert it from the original type of the JMS payload. By
+default, a DefaultJmsHandlerMethodFactory is used but it can be
+configured further to support additional method arguments or to
+customize conversion and validation support.
+
+The return type of an annotated method can also be an instance of
+Spring's Message abstraction. Instead of just converting the payload,
+such response type allows to communicate standard and custom headers.
+
+The JmsHeaderMapper infrastructure from Spring integration has also
+been migrated to the Spring framework. SimpleJmsHeaderMapper is based
+on SI's DefaultJmsHeaderMapper. The simple implementation maps all
+JMS headers so that the generated Message abstraction has all the
+information stored in the protocol specific message.
+
+Issue: SPR-9882

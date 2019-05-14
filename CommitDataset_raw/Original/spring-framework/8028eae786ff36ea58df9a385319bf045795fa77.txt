@@ -1,0 +1,18 @@
+Fix CGLIB memory leak for method injection
+
+This commit continues the work for fixing memory leaks resulting from
+CGLIB subclass generation for beans relying on method injection.
+
+- Set proxy callbacks on the CGLIB Factory (i.e., the instance) instead
+  of in the generated subclass (i.e., via the Enhancer).
+
+- Convert private inner classes in CglibSubclassingInstantiationStrategy
+  to private static classes in order to avoid unnecessary coupling to
+  classes generated using CGLIB.
+
+- Tidy up XmlBeanFactoryTests.
+
+- Update logic in serializableMethodReplacerAndSuperclass() so that it
+  finally aligns with the decision made for SPR-356.
+
+Issue: SPR-10785, SPR-356

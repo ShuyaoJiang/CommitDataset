@@ -1,0 +1,3 @@
+Eliminate allocs - Cache formatted Strings (#1892)
+
+ValueFormatter objects now rely on a FormattedStringCache to return already-formatted Strings.  We might want to create primitive-enabled versions since all our values to format are float or double primitives, and the keys are also all primitives.  This will eliminate auto-boxing penalties.

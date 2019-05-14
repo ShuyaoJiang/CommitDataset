@@ -1,0 +1,11 @@
+Adapt to resync rename and add assertion for missing user when sending a request (elastic/x-pack-elasticsearch#2345)
+
+This commit adapts to the renaming of the TransportResyncReplicationAction in core and also adds
+an assertion to the check for a user being present when sending a request. The assertion is added
+so that we can hopefully catch these scenarios in our testing as the assertion error will cause the
+node to die but the ISE will just be seen in the logs. Since we do not run with assertions enabled
+in production, the ISE is left to handle those cases.
+
+relates elastic/x-pack-elasticsearch#2335
+
+Original commit: elastic/x-pack-elasticsearch@c5ce0c93af255c7b69d4805e87aae74d2afc0afd

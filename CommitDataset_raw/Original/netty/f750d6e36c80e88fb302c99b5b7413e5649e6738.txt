@@ -1,0 +1,10 @@
+ByteBufUtil.writeUtf8 Surrogate Support
+
+Motivation:
+UTF-16 can not represent the full range of Unicode characters, and thus has the concept of Surrogate Pair (http://unicode.org/glossary/#surrogate_pair) where 2 16-bit code units can be used to represent the missing characters. ByteBufUtil.writeUtf8 is currently does not support this and is thus incomplete.
+
+Modifications:
+- Add support for surrogate pairs in ByteBufUtil.writeUtf8
+
+Result:
+ByteBufUtil.writeUtf8 now supports surrogate pairs and is correctly converting to UTF-8.

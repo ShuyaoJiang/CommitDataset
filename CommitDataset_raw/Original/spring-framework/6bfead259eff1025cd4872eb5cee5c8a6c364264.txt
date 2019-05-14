@@ -1,0 +1,22 @@
+Further compensation for STS version mismatch
+
+Current STS version of Spring (3.0.5) does not contain
+the BeanUtils.instantiateClass(Class<?>, Class<T>) signature
+that was added in 3.1.0, therefore NoSuchMethodErrors are
+being thrown when STS classloads and delegates to
+3.1.0 NamespaceHandler and BeanDefinitionParser implementations
+on the user project classpath.
+
+In this case, it's AbstractSpecificationBeanDefinitionParser
+doing the calling to the unknown new method.  In this specific
+example, reverting back to the old single-arg signature is actually
+not a problem, because it does accept Class<T> and returns an
+instance of type T, which was the desired behavior in the first
+place.
+
+The newer signature remains in order to accommodate callers
+who do not know the generic type of the Class to be instantiated
+(i.e. Class<?>), but do know the type that it should be assignable
+to -- this becomes the second argument Class<T>, and an instance
+of type T is returned (if indeed it is assignable to the specified
+type; otherwise IllegalArgumentException.

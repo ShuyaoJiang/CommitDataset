@@ -1,0 +1,9 @@
+Remove some misleading interruption docs:
+- Our interruption behavior doesn't fully match the JDK. My point in CL 23833126 was that both AbstractFuture and the JDK implementations throw if the thread was interrupted *before* the get() call as well as during. But:
+  - We differ from the JDK in a different area: We throw InterruptedException even if the get() call wouldn't have had to wait. (We see this as a feature: Since the task is apparently cancelled anyway, we might as well take this opportunity to abort.)
+  - My phrasing may be equally misleading in the other direction: It may suggest that get() throws if the thread was *ever* interrupted in the past. More generally, by changing the phrasing at all, I may be suggesting a change in behavior where none exists.
+- InterruptedException support is probably in some sense "optional," but there's no reason to call it out as specifically optional for AbstractFuture.
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=155865732

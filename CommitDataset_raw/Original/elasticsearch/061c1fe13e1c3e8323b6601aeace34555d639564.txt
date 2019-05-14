@@ -1,0 +1,14 @@
+Ensure random timestamps are within search boundary (#38753)
+
+The random timestamps were landing too close to the current time,
+so an unlucky rollup interval would round such that the doc wasn't
+included in the search range (and thus not "rolled up") which
+would then fail the test.
+
+The fix is to make sure the timestamp of all docs is sufficiently behind
+'now' that the possible rounding intervals will always include them.
+
+Unmutes testRandomizedDateHisto, closes #34762
+
+"Forward-port" of 368c6f279064ff9f5836cfdbfa86f90fb04f6da5 (wasn't
+merged into master for some reason)

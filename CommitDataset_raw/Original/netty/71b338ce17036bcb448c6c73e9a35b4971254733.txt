@@ -1,0 +1,14 @@
+Non-latin character broken on HttpHeader by HttpObjectDecoder.
+
+Motivation:
+
+Currently netty is receiving HTTP request by ByteBuf and store it as "CharSequence" on HttpObjectDecoder. During this operation, all character on ByteBuf is moving to char[] without breaking encoding.
+But in process() function, type casting from byte to char does not consider msb (sign-bit). So the value over 127 can be casted wrong value. (ex : 0xec in byte -> 0xffec in char). This is type casting bug.
+
+Modification:
+
+Fix type casting
+
+Result:
+
+Non-latin characters work.

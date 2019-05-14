@@ -1,0 +1,14 @@
+Ensure intended key is selected in SamlAuthenticatorTests (#30993)
+
+* Ensure that a purposefully wrong key is used
+
+Uses a specific keypair for tests that require a purposefully wrong
+keypair instead of selecting one randomly from the same pull from
+which the correct one is selected. Entropy is low because of the
+small space and the same key can be randomly selected as both the
+correct one and the wrong one, causing the tests to fail.
+The purposefully wrong key is also used in 
+testSigningKeyIsReloadedForEachRequest and needs to be cleaned
+up afterwards so the rest of the tests don't use that for signing.
+
+Resolves #30970

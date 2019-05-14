@@ -1,0 +1,17 @@
+For all of //java/com/google/common/... and //javatests/com/google/common/...
+-sort imports
+-remove unused imports
+
+g4 edit java/com/google/common/... javatests/com/google/common/...
+
+g4 change
+
+/home/build/[]/tools/java/remove_unused_imports.py --fix -c 27791544
+
+g4 list -s 27791544  | sed "s%//depot/[]/%%" | xargs
+/home/build/[]/tools/java/sort_java_imports.py
+
+g4 revert -c 27791544 -a
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=27803889

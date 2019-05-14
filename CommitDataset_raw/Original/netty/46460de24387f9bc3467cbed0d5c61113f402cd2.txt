@@ -1,0 +1,13 @@
+Correctly init X509Certificate array when testing if we need to wrap the KeyManager due of TLSv1.3 (#8435)
+
+Motivation:
+
+201e984cb3995d59cf8254f851f0ffb9090c2fea added support to use native TLSv1.3 support even with Java versions prior to 11. For this we try to detect if we need to wrap the used KeyManager or not. This testing code did create an X509Certificate[1] but does not correctly also set the certficiate on index 0. While this should be harmless we should better do the right thing and set it.
+
+Modifications:
+
+Correctly init the array.
+
+Result:
+
+Cleaner and more correct code.

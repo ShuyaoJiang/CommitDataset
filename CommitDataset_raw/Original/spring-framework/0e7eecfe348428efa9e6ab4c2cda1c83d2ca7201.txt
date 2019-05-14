@@ -1,0 +1,11 @@
+Add copyToUriComponentsBuilder method
+
+After this change UriComponentsBuilder#uriComponents method no longer
+no longer copies from the given UriComponents but rather lets the
+UriComponents instance copy itself to the UriComponentsBuilder.
+
+This avoids the need for instanceof checks and also makes it possible
+to distinguish between path and path segments, which otherwise is
+internal knowledge of UriComponentsBuilder.
+
+Issue: SPR-12742

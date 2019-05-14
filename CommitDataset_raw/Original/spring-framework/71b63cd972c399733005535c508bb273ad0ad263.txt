@@ -1,0 +1,20 @@
+Update MockMvcConfigurer support
+
+This is a follow-up on the commit introducing MockMvcConfigurer:
+https://github.com/spring-projects/spring-framework/commit/c2b0fac852dd9f865699fb374ad78543767fec05
+
+This commit refines the MockMvcConfigurer contract to use (the new)
+ConfigurableMockMvcBuilder hence not requiring downcasting to
+AbstractMockMvcBuilder.
+
+The same also no longer passes the "default" RequestBuilder which would
+also require a downcast, but rather allows a RequestPostProcessor to be
+returned so that a 3rd party framework or application can modify any
+property of every performed MockHttpServletRequest.
+
+To make this possible the new SmartRequestBuilder interface separates
+request building from request post processing while the new
+ConfigurableSmartRequestBuilder allows adding a RequestPostProcessor
+to a MockMvcBuilder.
+
+Issue: SPR-11497

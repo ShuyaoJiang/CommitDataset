@@ -1,0 +1,37 @@
+Roll forward of [] going back to exactly the original semantics while we're at it.
+
+*** Reason for rollback ***
+
+Fixed the targets that were really broken deep down, but we also reverted the slight semantics change that exposed the issues.  I think the changed semantics were fine, but I don't think it's important enough to make a fuss.
+
+New effects on IterablesProGuard:
+95045 bytes => 94834 bytes
+53 classes => 52 classes
+265 methods => 263 methods
+
+Additionally, added IterablesAllocationTest, which measures the actual effects of this optimization.
+
+Walking concat(collection1, collection2) changed from requiring 13 allocations to requiring 8.
+Walking concat(concat(c1, c2), concat(c3, c4)) changed from requiring 41 allocations to requiring 22.
+
+*** Original change description ***
+
+Automated g4 rollback of changelist 156329581.
+
+*** Reason for rollback ***
+
+Broke some tests.  (I think they're doing something that should've failed and this just revealed the error, but I'm still attempting to discern what really happened.)
+
+*** Original change description ***
+
+Simplify Iterators.concat and optimize it for minimizing allocations, while preserving the smart behavior for nested Iterators.concats.
+
+Effects on IterablesProGuard:
+97559 bytes => 95471 bytes
+57 classes => 54 class...
+
+***
+
+-------------
+Created by MOE: https://github.com/google/moe
+MOE_MIGRATED_REVID=156493253

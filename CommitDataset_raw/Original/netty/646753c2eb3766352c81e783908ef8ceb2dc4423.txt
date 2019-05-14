@@ -1,0 +1,14 @@
+Allow to write CompositeByteBuf directly via EpollDatagramChannel. Related to [#2719]
+
+Motivation:
+
+On linux it is possible to use the sendMsg(...) system call to write multiple buffers with one system call when using datagram/udp.
+
+Modifications:
+
+- Implement the needed changes and make use of sendMsg(...) if possible for max performance
+- Add tests that test sending datagram packets with all kind of different ByteBuf implementations.
+
+Result:
+
+Performance improvement when using CompoisteByteBuf and EpollDatagramChannel.

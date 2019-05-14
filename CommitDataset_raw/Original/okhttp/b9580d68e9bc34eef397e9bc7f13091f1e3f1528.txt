@@ -1,0 +1,12 @@
+Be more careful around IOExceptions.
+
+This adds a first test where a frame is truncated. That has some
+unpleasant consequences for the other tests because it means the
+MockSpdyPeer is more aggressive about closing the socket when all
+frames have been sent.
+
+It also reduces the use of exceptions for flow control when handling
+bogus incoming frames. This is a bit worse and a bit better; my
+goal is to make it easier to differentiate between protocol-level
+problems (bogus frames) from transport-level problems (closed sockets
+and EOF streams).

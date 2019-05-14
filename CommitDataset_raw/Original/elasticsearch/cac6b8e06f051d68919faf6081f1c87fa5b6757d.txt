@@ -1,0 +1,43 @@
+Add ECS schema for user-agent ingest processor (#37727) (#37984)
+
+* Add ECS schema for user-agent ingest processor (#37727)
+
+This switches the format of the user agent processor to use the schema from [ECS](https://github.com/elastic/ecs).
+So rather than something like this:
+
+```
+{
+  "patch" : "3538",
+  "major" : "70",
+  "minor" : "0",
+  "os" : "Mac OS X 10.14.1",
+  "os_minor" : "14",
+  "os_major" : "10",
+  "name" : "Chrome",
+  "os_name" : "Mac OS X",
+  "device" : "Other"
+}
+```
+
+The structure is now like this:
+
+```
+{
+  "name" : "Chrome",
+  "original" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36",
+  "os" : {
+    "name" : "Mac OS X",
+    "version" : "10.14.1",
+    "full" : "Mac OS X 10.14.1"
+  },
+  "device" : "Other",
+  "version" : "70.0.3538.102"
+}
+```
+
+This is now the default for 7.0. The deprecated `ecs` setting in 6.x is not
+supported.
+
+Resolves #37329
+
+* Remove `ecs` setting from docs

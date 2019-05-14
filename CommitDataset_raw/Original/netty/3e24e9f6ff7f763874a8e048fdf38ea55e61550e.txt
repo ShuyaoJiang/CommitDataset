@@ -1,0 +1,15 @@
+ReferenceCountedOpenSslEngines SSLSession must provide local certific… (#8918)
+
+
+Motivation:
+
+The SSLSession that is returned by SSLEngine.getHandshakeSession() must be able to provide the local certificates when the TrustManager is invoked on the server-side.
+
+Modifications:
+
+- Correctly return the local certificates
+- Add unit test
+
+Result:
+
+Be able to obtain local certificates from handshake SSLSession during verification on the server side.

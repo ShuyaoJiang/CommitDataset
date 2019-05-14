@@ -1,0 +1,15 @@
+Keep cumulative elapsed scroll time in microseconds
+
+Today we internally accumulate elapsed scroll time in nanoseconds. The
+problem here is that this can reasonably overflow. For example, on a
+system with scrolls that are open for ten minutes on average, after
+sixteen million scrolls the largest value that can be represented by a
+long will be executed. To address this, we switch to internally
+representing scrolls using microseconds as this enables with the same
+number of scrolls scrolls that are open for seven days on average, or
+with the same average elapsed time sixteen billion scrolls which will
+never happen (executing one scroll a second until sixteen billion have
+executed would not occur until more than five-hundred years had
+elapsed).
+
+Relates #27068

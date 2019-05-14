@@ -1,0 +1,41 @@
+Fix backward compatibility from the previous backport
+
+Motivation:
+
+The commit 50e06442c3f2753c9b2a506f68ea70273b829e21 changed the type of
+the constants in HttpHeaders.Names and HttpHeaders.Values, making 4.1
+backward-incompatible with 4.0.
+
+It also introduces newer utility classes such as HttpHeaderUtil, which
+deprecates most static methods in HttpHeaders.  To ease the migration
+between 4.1 and 5.0, we should deprecate all static methods that are
+non-existent in 5.0, and provide proper counterpart.
+
+Modification:
+
+- Revert the changes in HttpHeaders.Names and Values
+- Deprecate all static methods in HttpHeaders in favor of:
+  - HttpHeaderUtil
+  - the member methods of HttpHeaders
+  - AsciiString
+- Add integer and date access methods to HttpHeaders for easier future
+  migration to 5.0
+- Add HttpHeaderNames and HttpHeaderValues which provide standard HTTP
+  constants in AsciiString
+  - Deprecate HttpHeaders.Names and Values
+  - Make HttpHeaderValues.WEBSOCKET lowercased because it's actually
+    lowercased in all WebSocket versions but the oldest one
+- Add RtspHeaderNames and RtspHeaderValues which provide standard RTSP
+  constants in AsciiString
+  - Deprecate RtspHeaders.*
+- Do not use AsciiString.equalsIgnoreCase(CharSeq, CharSeq) if one of
+  the parameters are AsciiString
+- Avoid using AsciiString.toString() repetitively
+  - Change the parameter type of some methods from String to
+    CharSequence
+
+Result:
+
+Backward compatibility is recovered.  New classes and methods will make
+the migration to 5.0 easier, once (Http|Rtsp)Header(Names|Values) are
+ported to master.

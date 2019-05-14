@@ -1,0 +1,13 @@
+[#4373] Fix assert error when trying to release Channel to closed FixedChannelPool
+
+Motivation:
+
+Once a FixedChannelPool was closed we must not allow to acquire or release Channels to prevent assert errors.
+
+Modifications:
+
+Fail release and acquire calls when FixedChannelPool is closed.
+
+Result:
+
+No more assert errors.1

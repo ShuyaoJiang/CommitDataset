@@ -1,0 +1,11 @@
+Fix regression in determineTransactionManager
+
+One more (and hopefully last) attempt at making sure
+determineTransactionManager does not break existing use cases.
+
+This commit prevents any lookup if no transaction attributes are set
+which is more compliant with the original version and prevents a lookup
+if a non existing bean name is provided explicitly (as it can be the case
+with Spring Boot).
+
+Issue: SPR-12541

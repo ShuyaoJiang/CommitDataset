@@ -1,0 +1,15 @@
+Require JDK 9 for compilation (#28071)
+
+This commit modifies the build to require JDK 9 for
+compilation. Henceforth, we will compile with a JDK 9 compiler targeting
+JDK 8 as the class file format. Optionally, RUNTIME_JAVA_HOME can be set
+as the runtime JDK used for running tests. To enable this change, we
+separate the meaning of the compiler Java home versus the runtime Java
+home. If the runtime Java home is not set (via RUNTIME_JAVA_HOME) then
+we fallback to using JAVA_HOME as the runtime Java home. This enables:
+ - developers only have to set one Java home (JAVA_HOME)
+ - developers can set an optional Java home (RUNTIME_JAVA_HOME) to test
+   on the minimum supported runtime
+ - we can test compiling with JDK 9 running on JDK 8 and compiling with
+   JDK 9 running on JDK 9 in CI
+

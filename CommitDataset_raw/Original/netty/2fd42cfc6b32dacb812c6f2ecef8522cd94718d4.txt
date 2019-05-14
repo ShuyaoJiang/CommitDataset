@@ -1,0 +1,14 @@
+HTTP/2 Max Header List Size Bug
+
+Motivation:
+If the HPACK Decoder detects that SETTINGS_MAX_HEADER_LIST_SIZE has been violated it aborts immediately and sends a RST_STREAM frame for what ever stream caused the issue. Because HPACK is stateful this means that the HPACK state may become out of sync between peers, and the issue won't be detected until the next headers frame. We should make a best effort to keep processing to keep the HPACK state in sync with our peer, or completely close the connection.
+If the HPACK Encoder is configured to verify SETTINGS_MAX_HEADER_LIST_SIZE it checks the limit and encodes at the same time. This may result in modifying the HPACK local state but not sending the headers to the peer if SETTINGS_MAX_HEADER_LIST_SIZE is violated. This will also lead to an inconsistency in HPACK state that will be flagged at some later time.
+
+Modifications:
+- HPACK Decoder now has 2 levels of limits related to SETTINGS_MAX_HEADER_LIST_SIZE. The first will attempt to keep processing data and send a RST_STREAM after all data is processed. The second will send a GO_AWAY and close the entire connection.
+- When the HPACK Encoder enforces SETTINGS_MAX_HEADER_LIST_SIZE it should not modify the HPACK state until the size has been checked.
+- https://tools.ietf.org/html/rfc7540#section-6.5.2 states that the initial value of SETTINGS_MAX_HEADER_LIST_SIZE is "unlimited". We currently use 8k as a limit. We should honor the specifications default value so we don't unintentionally close a connection before the remote peer is aware of the local settings.
+- Remove unnecessary object allocation in DefaultHttp2HeadersDecoder and DefaultHttp2HeadersEncoder.
+
+Result:
+Fixes https://github.com/netty/netty/issues/6209.

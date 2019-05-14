@@ -1,0 +1,18 @@
+Satisfy write promise when writing an Http2WindowUpdateFrame to Http2FrameCodec.
+
+Motivation:
+
+When writing an Http2WindowUpdateFrame to an Http2FrameCodec, the
+ChannelPromise is never satisfied, so callers cannot generically rely on the
+write future being satisfied on success.
+
+Modifications:
+
+When writing Http2WindowUpdateFrame, Http2FrameCodec now satisfies the
+ChannelPromise immediately.
+
+Result:
+
+The write future is satisfied on successful writes.
+
+Fixes netty/netty#5530.

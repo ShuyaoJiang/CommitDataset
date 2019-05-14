@@ -1,0 +1,49 @@
+Watcher: Add transform input for chained input (elastic/x-pack-elasticsearch#2861)
+
+The chained input in watcher is a useful feature to
+call several endpoints before execution a condition.
+However it was pretty hard to modify data from a previous
+input in order to be able to execute it in another input.
+
+This commit adds a another input, called a `transform` input,
+which allows you to do a transform as another input in a chained
+input.
+
+See this example
+
+```
+"input" : {
+  "chain" : {
+    "inputs" : [ <1>
+      {
+        "first" : {
+          "simple" : { "path" : "/_search" }
+        }
+      },
+      {
+        "second" : {
+          "transform" : {
+            "script" : "return [ 'path' : 'ctx.payload.first.path' + '/' ]"
+          }
+        }
+      },
+      {
+        "third" : {
+          "http" : {
+            "request" : {
+              "host" : "localhost",
+              "port" : 9200,
+              "path" : "{{ctx.payload.second.path}}" <2>
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+This allows for far more flexibility before executing the next input in a chained
+one.
+
+Original commit: elastic/x-pack-elasticsearch@3af9ba6e9b4369b3d6425c00bebfb51f867155c9

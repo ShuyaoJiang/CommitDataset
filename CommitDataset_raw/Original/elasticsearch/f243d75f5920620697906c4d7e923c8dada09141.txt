@@ -1,0 +1,9 @@
+Remove special-casing of Synonym filters in AnalysisRegistry (#34034)
+
+The synonym filters no longer need access to the AnalysisRegistry in their
+constructors, so we can remove the special-case code and move them to the
+common analysis module.
+
+This commit means that synonyms are no longer available for `server` integration tests,
+so several of these are either rewritten or migrated to the common analysis module
+as rest-spec-api tests

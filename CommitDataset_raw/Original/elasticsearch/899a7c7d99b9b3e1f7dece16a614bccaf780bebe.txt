@@ -1,0 +1,17 @@
+Fix remote cluster seeds fallback (#34090)
+
+Recently we introduced the settings cluster.remote to take the place of
+search.remote for configuring remote cluster connections. We made this
+change due to the fact that we have generalized the remote cluster
+infrastructure to also be used within cross-cluster replication and not
+only cross-cluster search. For backwards compatibility, when we made this
+change, we allowed that cluster.remote would fallback to
+search.remote. Alas, the initial change for this contained a bug for
+handling the proxy and seeds settings. The bug for the seeds settings
+arose because we were manually iterating over the concrete settings only
+for cluster.remote seeds but not for search.remote seeds. This commit
+addresses this by iterating over both cluster.remote seeds and
+search.remote seeds. Additionally, when checking for existence of proxy
+settings, we have to not only check cluster.remote proxy settings, but
+also fallback to search.remote proxy settings. This commit addresses
+both issues, and adds tests for these situations.

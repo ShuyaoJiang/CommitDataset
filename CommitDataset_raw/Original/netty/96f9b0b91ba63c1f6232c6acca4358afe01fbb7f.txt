@@ -1,0 +1,13 @@
+Remote flow controller incorrectly updates stream state
+
+Motivation:
+
+The `DefaultHttp2RemoteFlowController` does not correctly determine `hasFrame` when updating the stream state for the distributor. Adding a check to enforce `hasFrame` when `streamableBytes > 0` causes several test failures.
+
+Modifications:
+
+Modified `DefaultHttp2RemoteFlowController` to simplify the writing logic and to correct the bookkeeping for `hasFrame`.
+
+Result:
+
+The distributors are always called with valid arguments.

@@ -1,0 +1,14 @@
+Add explicit dependencies to make Gradle pull in the desired version
+
+Due to the lack of dependency management in Gradle a number of the
+starters were pulling in old versions of spring-tx (and in some cases
+spring-context-support as well) as the only dependency was a
+transitive one that pulled in an older version.
+
+This commit adds explicit dependencies on spring-context-support and
+spring-tx where appropriate. These dependencies will specify Boot's
+preferred version of Spring causing Gradle to do the right thing as it
+prefers the latest version of a dependency when there is more than one
+to choose from.
+
+Fixes #1028

@@ -1,0 +1,5 @@
+Adapt TranslogTests.testWithRandomException to checkpoint syncing on trim
+
+#25005 changed the translog dynamic to fsync the checkpoint before trimming a file. This changed the dynamics of potential failure modes which requires a change to testWithRandomException - it's now possible that we had an exception but the translog was trimmed.
+
+Closes #25133

@@ -1,0 +1,7 @@
+conditionally update CS only if StepInfo changes (#33004)
+
+If we are waiting on a condition to be met, and the reason
+it is not completed is unchanged, we find ourselves updating
+cluster state over and over again and kicking of the ILM listeners
+to re-check. This is overkill and can generate way too many
+cluster state updates

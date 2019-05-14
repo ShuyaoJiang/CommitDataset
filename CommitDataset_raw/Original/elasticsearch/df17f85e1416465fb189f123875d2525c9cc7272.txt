@@ -1,0 +1,7 @@
+Remove Discovery.AckListener.onTimeout() (#30514)
+
+The MasterService takes responsibility for timeouts of the AckListeners that it
+creates, and the rest of the Discovery subsystem is unaware of these timeouts,
+so there's no need for this to appear in the Discovery.AckListener interface.
+
+Also fix a typo in the name of DelegatingAckListener.

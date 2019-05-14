@@ -1,0 +1,58 @@
+Support destroy method inference
+
+Anywhere the value of a destroy method may be expressed, specifying
+the value "(inferred)" now indicates that the container should attempt
+to automatically discover a destroy method. This functionality is
+currently limited to detecting public, no-arg methods named 'close';
+this is particularly useful for commonly used types such as Hibernate
+SessionFactory most JDBC DataSource implementations, JMS connection
+factories, and so forth.
+
+This special value is captured as the constant
+AbstractBeanDefinition#INFER_METHOD, which in turn serves as the default
+value of the @Bean#destroyMethod attribute.
+
+For example in the following case
+
+    @Bean
+    public BasicDataSource dataSource() { ... }
+
+the container will automatically detect BasicDataSource#close and invoke
+it when the enclosing ApplicationContext is closed. This is exactly
+equivalent to
+
+    @Bean(destroyMethod="(inferred)")
+    public BasicDataSource dataSource() { ... }
+
+A user may override this inference-by-default convention simply by
+specifying a different method
+
+    @Bean(destroyMethod="myClose")
+    public MyBasicDataSource dataSource() { ... }
+
+or, in the case of a bean that has an otherwise inferrable 'close'
+method, but the user wishes to disable handling it entirely, an empty
+string may be specified
+
+    @Bean(destroyMethod="")
+    public MyBasicDataSource dataSource() { ... }
+
+The special destroy method name "(inferred)" may also be specified in
+an XML context, e.g.
+
+    <bean destroy-method="(inferred)">
+        or
+    <beans default-destroy-method="(inferred)">
+
+Note that "(inferred)" is the default value for @Bean#destroyMethod,
+but NOT for the destroy-method and default-destroy-method attributes
+in the spring-beans XML schema.
+
+The principal reason for introducing this feature is to avoid forcing
+@Configuration class users to type destroyMethod="close" every time a
+closeable bean is configured. This kind of boilerplate is easily
+forgotten, and this simple convention means the right thing is done
+by default, while allowing the user full control over customization or
+disablement in special cases.
+
+Issue: SPR-8751

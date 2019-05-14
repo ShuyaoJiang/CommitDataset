@@ -1,0 +1,19 @@
+CCR: Following primary should process operations once (#34288)
+
+Today we rewrite the operations from the leader with the term of the
+following primary because the follower should own its history. The
+problem is that a newly promoted primary may re-assign its term to
+operations which were replicated to replicas before by the previous
+primary. If this happens, some operations with the same seq_no may be
+assigned different terms. This is not good for the future optimistic
+locking using a combination of seqno and term.
+
+This change ensures that the primary of a follower only processes an
+operation if that operation was not processed before. The skipped
+operations are guaranteed to be delivered to replicas via either
+primary-replica resync or peer-recovery. However, the primary must not
+acknowledge until the global checkpoint is at least the highest seqno of
+all skipped ops (i.e., they all have been processed on every replica).
+
+Relates #31751
+Relates #31113

@@ -1,0 +1,13 @@
+DefaultPromise.getNow() does not correctly handle DefaultPromise.setUncancellable() (#8154)
+
+Motivation:
+
+We do not correctly check for previous calles of setUncancellable() in getNow() which may result in ClassCastException as we incorrectly return the internally UNCANCELLABLE object and not null if setUncancellable() we as called before.
+
+Modifications:
+
+Correctly check for UNCANCELLABLE and add unit test.
+
+Result:
+
+Fixes https://github.com/netty/netty/issues/8135.

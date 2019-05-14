@@ -1,0 +1,16 @@
+[ML] Move open job failure explanation out of root cause (#31925)
+
+When an ML job cannot be allocated to a node the exception
+contained an explanation of why the job couldn't be
+allocated to each node in the cluster.  For large clusters
+this was not particularly easy to read and made the error
+displayed in the UI look very scary.
+
+This commit changes the structure of the error to an outer
+ElasticsearchException with a high level message and an
+inner IllegalStateException containing the detailed
+explanation.  Because the definition of root cause is the
+innermost ElasticsearchException the detailed explanation
+will not be the root cause (which is what Kibana displays).
+
+Fixes #29950

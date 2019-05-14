@@ -1,0 +1,13 @@
+Remove javabuilder from spring-aspects .project
+
+Previously, the build script was configured to add ajbuilder to the set
+of Eclipse/STS build commands, meaning that both javabuilder and
+ajbuilder would be present for spring-aspects. This causes unpredictable
+behavior, as these two builders compete with each other. As ajbuilder is
+a functional superset of javabuilder, this commit ensures that only the
+former is present for spring-aspects' .project file.
+
+Also removed warning language in import-into-eclipse.sh about
+spring-aspects failing after adding Git support, as this intermittent
+problem was almost certainly an artifact of the situation described
+above.

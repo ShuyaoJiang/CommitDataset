@@ -1,0 +1,16 @@
+Support for @Order at the bean declaration level
+
+This commit introduces OrderProvider and OrderProviderComparator, two
+interfaces designed to externalize how a collection of element is sorted
+according to their order value.
+
+FactoryAwareOrderProvider is an OrderProvider implementation that knows
+about the objects to order and the corresponding BeanFactory instance.
+This allows to retrieve additional metadata about the actual instances
+to sort, such as its factory method.
+
+A @Bean method can now holds an additional @Order to define the order
+value that this bean should have when injected as part of a collection
+or array.
+
+Issue: SPR-11310

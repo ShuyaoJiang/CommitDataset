@@ -1,0 +1,59 @@
+Prune only gc deletes below local checkpoint (#28790)
+
+Once a document is deleted and Lucene is refreshed, we will not be able 
+to look up the `version/seq#` associated with that delete in Lucene. As
+conflicting operations can still be indexed, we need another mechanism
+to remember these deletes. Therefore deletes should still be stored in
+the Version Map, even after Lucene is refreshed. Obviously, we can't
+remember all deletes forever so a trimming mechanism is needed.
+Currently, we remember deletes for at least 1 minute (the default GC
+deletes cycle) and clean them periodically. This is, at the moment, the
+best we can do on the primary for user facing APIs but this arbitrary
+time limit is problematic for replicas. Furthermore, we can't rely on
+the primary and replicas doing the trimming in a synchronized manner,
+and failing to do so results in the replica and primary making different
+decisions. 
+
+The following scenario can cause inconsistency between
+primary and replica.
+
+1. Primary index doc (index, id=1, v2)
+2. Network packet issue causes index operation to back off and wait
+3. Primary deletes doc (delete, id=1, v3)
+4. Replica processes delete (delete, id=1, v3)
+5. 1+ minute passes (GC deletes runs replica)
+6. Indexing op is finally sent to the replica which no processes it 
+   because it forgot about the delete.
+
+We can reply on sequence-numbers to prevent this issue. If we prune only 
+deletes whose seqno at most the local checkpoint, a replica will
+correctly remember what it needs. The correctness is explained as
+follows:
+
+Suppose o1 and o2 are two operations on the same document with seq#(o1) 
+< seq#(o2), and o2 arrives before o1 on the replica. o2 is processed
+normally since it arrives first; when o1 arrives it should be discarded:
+ 
+1. If seq#(o1) <= LCP, then it will be not be added to Lucene, as it was
+  already previously added.
+
+2. If seq#(o1)  > LCP, then it depends on the nature of o2:
+  - If o2 is a delete then its seq# is recorded in the VersionMap,
+    since seq#(o2) > seq#(o1) > LCP, so a lookup can find it and
+    determine that o1 is stale.
+  
+  - If o2 is an indexing then its seq# is either in Lucene (if
+    refreshed) or the VersionMap (if not refreshed yet), so a 
+    real-time lookup can find it and determine that o1 is stale.
+
+In this PR, we prefer to deploy a single trimming strategy, which 
+satisfies both requirements, on primary and replicas because:
+
+- It's simpler - no need to distinguish if an engine is running at
+primary mode or replica mode or being promoted.
+
+- If a replica subsequently is promoted, user experience is fully
+maintained as that replica remembers deletes for the last GC cycle.
+
+However, the version map may consume less memory if we deploy two 
+different trimming strategies for primary and replicas.

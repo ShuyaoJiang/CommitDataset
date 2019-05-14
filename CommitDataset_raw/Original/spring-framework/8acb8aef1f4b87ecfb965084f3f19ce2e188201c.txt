@@ -1,0 +1,13 @@
+Exclude commons-logging from spring-test dependencies
+
+Prior to this commit, various dependencies in the spring-test module
+pulled in commons-logging as a transitive dependency. Consequently,
+the presence of commons-logging in the generated Eclipse classpath
+overrode the intended use of the spring-jcl module causing JUL to be
+used instead of log4j for tests executed within Eclipse, thereby
+ignoring the configuration in src/test/resources/log4j2-test.xml.
+
+This commit addresses this issue by excluding commons-logging in
+spring-test.gradle for all Selenium dependencies.
+
+Issue: SPR-15930

@@ -1,0 +1,5 @@
+Fix using a recycled DecodeJob object when ResourceEncoders throw.
+
+It’s possible that a ResourceEncoder will throw unexpectedly. If they do
+so, the exception is caught by the DecodeJob’s top level try/catch block. Unfortunately, in a finally block lower down the stack, we were
+calling onEncodeComplete and returning the DecodeJob to the pool. As a result, the logic in the catch block higher up was running after the DecodeJob was already in the pool, causing an exception. Now we avoid calling onEncodeComplete and returning the DecodeJob to the pool if an exception is thrown, which allows the logic in the top level catch block to function as we expect.

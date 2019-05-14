@@ -1,0 +1,23 @@
+Support HTTP range requests in Controllers
+
+Prior to this commit, HTTP Range requests were only supported by the
+ResourceHttpRequestHandler when serving static resources.
+
+This commit improves the ResourceHttpMessageConverter that
+now supports partial writes of Resources.
+For this, the `HttpEntityMethodProcessor` and
+`RequestResponseBodyMethodProcessor` now wrap resources with HTTP
+range information in a `HttpRangeResource`, if necessary. The
+message converter handle those types and knows how to handle partial
+writes.
+
+Controller methods can now handle Range requests for
+return types that extend Resource or HttpEntity:
+
+    @RequestMapping("/example/video.mp4")
+    public Resource handler() { }
+
+    @RequestMapping("/example/video.mp4")
+    public HttpEntity<Resource> handler() { }
+
+Issue: SPR-13834

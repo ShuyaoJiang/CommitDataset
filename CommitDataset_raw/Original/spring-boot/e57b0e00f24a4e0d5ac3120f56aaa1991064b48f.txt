@@ -1,0 +1,31 @@
+Use ServletContainerInitializers to start servers
+
+The Servlet spec prohibits ServletContextListeners from being registered
+programatically other than from with a call to
+`ServletContainerInitializer.onStartup`. This restriction is not
+consistently enforced by the various embedded servlet containers that
+Boot supports:
+
+- Jetty 8 does not enforce the restriction.
+- Jetty 9 enforces the restriction. We were working around it be calling
+  setExendedListenerTypes(true) on the context.
+- Tomcat somewhat enforces the restriction: it doesn't allow a
+  ServletContextListener to be added once the first
+  ServletContextListener has been called. We were using a
+  LifecycleListener to drive the ServletContextListeners.
+- Undertow enforces the restriction and we were not working around it.
+  This resulted in gh-2192 being raised.
+
+ServletListenerRegistrationBean is a ServletContextListener and is used
+to register listeners, including ServletContextListeners, with the
+servlet context. To adhere to the letter of the servlet spec this means
+that ServletListenerRegistrationBeans need to be called from with
+ServletContainerInitializer.onStartup. This commit updates all of the
+embedded servlet container implementations to use a
+ServletContainerInitializer to drive any ServletContextInitializers.
+
+This makes the lifecycle more consistent across the supported containers
+and allows ServletListenerRegistrationBeans to be able to register
+ServletContextListeners on all supported embedded containers.
+
+Fixes gh-2192

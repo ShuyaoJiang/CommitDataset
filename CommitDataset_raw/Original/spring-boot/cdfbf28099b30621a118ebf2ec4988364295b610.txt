@@ -1,0 +1,20 @@
+Allow @MockBean/@SpyBean on Spring AOP proxies
+
+Update Mockito support so that AOP Proxies automatically get additional
+`Advice` that allows them to work with Mockito. Prior to this commit a
+call to `verify` would fail because exiting AOP advice would confuse
+Mockito and an `UnfinishedVerificationException` would be thrown.
+
+The `MockitoAopProxyTargetInterceptor` works by detecting calls to a
+mock that have been proceeded by `verify()` and bypassing AOP to
+directly call the mock.
+
+The order that `@SpyBean` creation occurs has also been updated to
+ensure that that the spy is created before AOP advice is applied.
+Without this, the creation of a spy would fail because Mockito copies
+'state' to the newly created spied instance. Unfortunately, in the case
+of AOP proxies, 'state' includes cglib interceptor fields. This means
+that Mockito's own interceptors are clobbered by Spring's AOP
+interceptors.
+
+Fixes gh-5837

@@ -1,0 +1,12 @@
+Share `NioGroup` between http and transport impls (#37396)
+
+Currently we create dedicated network threads for both the http and
+transport implementations. Since these these threads should never
+perform blocking operations, these threads could be shared. This commit
+modifies the nio-transport to have 0 http workers be default. If the
+default configs are used, this will cause the http transport to be run
+on the transport worker threads. The http worker setting will still exist
+in case the user would like to configure dedicated workers. Additionally,
+this commmit deletes dedicated acceptor threads. We have never had these
+for the netty transport and they can be added back if a need is
+determined in the future.

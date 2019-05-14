@@ -1,0 +1,20 @@
+Improve the logic around acquire channel function is improved.
+
+Motivation:
+The acquire channel function resulted in calling itself several times in case when channel polled from the pool queue was unhealthy, which resulted FixedChannelPool to be called several times which in it's turn caused FixedChannelPool.acquire() to be called and resulted into acquireChannelCount to be unnecessary increased.
+Example use case:
+1) Create FixedChannelPool instance with one channel in the pool: new FixedChannelPool(cb, handler, 1)
+2) Acquire channel A from the pool
+3) close the channel A
+4) Return it back to the pool
+5) Acquire channel from the same pool again
+Expected result:
+new channel created and acquired, channel A that has been closed discarded and removed from the pool from being unhealthy
+Actual result:
+Channel A had been removed from the pool, how ever the new channel had never be acquired, instead the request to acquire had been added to the pending queue in FixedChannelPool and the acquireChannelCount is increased by one. The reason is that at the time when SimpleChannelPool figured out that the channel was unhealthy called FixedChannelPool.acquire to try to acquire new channel, how ever the request was added to the pendingTakQueue because by the time when FixedChannelPool.acquire was called, the acquireChannelCount was already "1" so new channel ould not be created cause of maxChannelsLimit=1.
+
+Modifications:
+The suggested approach modifies the SimpleChannelPool in a way so that when channel detected to be unhealthy it calls private method SimpleChannelPool.acquireHealthyFromPoolOrNew() which guarantees that SimpleChannelPool actually either finds a healthy channel in the pool and returns it or causes the promise.cause() in case when new channel was failed to be created.
+
+ Result:
+The  ```acquiredChannelCount``` is now calculated correctly as a result of SimpleChannelPool.acquire() of not being recursive on overridable acquire method.

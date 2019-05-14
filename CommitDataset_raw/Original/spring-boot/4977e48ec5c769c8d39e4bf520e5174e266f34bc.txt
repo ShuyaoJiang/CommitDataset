@@ -1,0 +1,16 @@
+Don’t rely on deduction of main application class when running tests
+
+Previously, when SpringApplicationContextLoader created a
+SpringApplication and used it to load the test’s application context,
+it relied upon SpringApplication correctly deducing the application’s
+main class. This would result in the wrong class being deduced as the
+application’s main method is not called so the test runner’s main method
+would be found instead.
+
+This commit updates SpringApplicationContextLoader to explicitly set
+SpringApplication’s main class to be the current test’s class. While
+not strictly the application’s main class, it is the next best thing
+available in this situation and prevents misleading log messages and
+application versions from being logged.
+
+Fixes gh-2930

@@ -1,0 +1,37 @@
+Fix media type lookup case sensitivity
+
+Fixed a bug where the URL content negotiation "format" parameter values
+were case sensitive and only lowercase values were accepted. For
+example, URL query parameter format=json returned the appropriate JSON
+response but format=JSON resulted in a
+HttpMediaTypeNotAcceptableException and returned:
+
+406 - The resource identified by this request is only capable of
+generating responses with characteristics not acceptable according to
+the request "accept" headers.
+
+When the MappingMediaTypeFileExtensionResolver is constructed, it is
+passed a map containing the media type key to MediaType mappings
+defined in the ContentNegotiationConfigurer. In the constructor of
+MappingMediaTypeFileExtensionResolver, the keys are converted to
+lowercase and the mappings of keys to MediaTypes are added to the
+ConcurrentMap<String, MediaType> mediaTypes using the lowercase
+version of the keys. However, when retrieving the MediaType from a key
+in the lookupMediaType method, no conversion to lowercase is performed
+so any value for the URL "format" parameter other than the lowercase
+version will not return the proper MediaType result.
+
+On May 1st, 2014, a change was made to
+ParameterContentNegotiationStrategy to handle cases where the content
+negotiation format URL parameter does not result in a match for a
+MediaType. If no match is found, a HttpMediaTypeNotAcceptableException
+is thrown resulting in the 406 response above. Prior to this commit, a
+null was returned instead of throwing an exception so this issue was
+hidden and appeared to function correctly.
+
+To make the media type lookup case insensitive, added a line to the
+lookupMediaType method in MediaTypeFileExtensionResolver to first
+convert the extension (media type key) to lowercase prior to attempting
+to retrieve it from the mediaTypes map.
+
+Issue: SPR-13747

@@ -1,0 +1,12 @@
+Treat query param w/o "=" as empty string in HtmlUnitRequestBuilder
+
+Prior to this commit, HtmlUnitRequestBuilder stored empty query
+parameters declared without an equals sign as null (i.e., query
+parameters such as 'error' in 'http://example.com/login?error').
+
+This commit addresses this issue by ensuring that
+HtmlUnitRequestBuilder treats all empty query parameter values as empty
+strings. Consequently, query strings such as '?error' and '?error=' now
+both result in 'error' being stored as an empty string.
+
+Issue: SPR-13524

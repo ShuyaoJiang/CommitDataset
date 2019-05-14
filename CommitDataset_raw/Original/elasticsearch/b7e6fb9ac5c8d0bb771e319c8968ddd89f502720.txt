@@ -1,0 +1,11 @@
+[test] remove Streamable serde assertions (#29307)
+
+Removes a set of assertions in the test framework that verified that
+Streamable objects could be serialized and deserialized across different
+versions. When this was discussed the consensus was that this approach
+has not caught many bugs in a long time and that serialization testing of
+objects was best left to their respective unit and integration tests.
+
+This commit also removes a transport interceptor that was used in
+ESIntegTestCase tests to make these assertions about objects coming in
+or off the wire.

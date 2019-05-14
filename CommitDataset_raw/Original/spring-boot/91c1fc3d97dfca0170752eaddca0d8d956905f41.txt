@@ -1,0 +1,13 @@
+Ignore unbound collection properties if collection bound
+
+As of Spring Boot 2.0, if Collection properties are specified in
+multiple property sources, only the elements from the property source
+with the highest precedence are used for binding. This caused an
+`UnboundConfigurationPropertiesException` if the size of the collection
+from the higher order property source was smaller and `ignoreUnknownFields`
+was set to true.
+
+This commit ignores unbound collection properties if the
+collection was properly bound.
+
+Fixes gh-16290

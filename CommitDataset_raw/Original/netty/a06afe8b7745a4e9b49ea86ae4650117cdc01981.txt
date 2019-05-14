@@ -1,0 +1,13 @@
+Improvement: simplified AbstractConstant compareTo.
+
+Motivation:
+
+AbstractConstant.compareTo seems complex and hard to understand. Also it allocates unnecessary 1 byte in direct buffer and holds unnecessary pointer to this byte butter.
+
+Modifications:
+
+uniquifier (id) variable now initialized during Constant creation and thus no need in volatile and no need in uniquifier() method as it could be easily replaced with AtomicLong.
+
+Result:
+
+Every Constant instance now consumes less bytes for pointer, don't consume anything in direct buffer.

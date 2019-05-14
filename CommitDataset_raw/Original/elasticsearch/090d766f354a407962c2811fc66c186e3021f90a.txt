@@ -1,0 +1,8 @@
+[Kerberos] Find if port is available before using it for Kdc server (#36192)
+
+If the randomly selected port was already in use the Kerberos
+tests would fail. This commit adds check to see if the network
+port is available and if not continue to find one for KDC server.
+If it does not find port after 100 retries it throws an exception.
+
+Closes #34261

@@ -1,0 +1,16 @@
+Don’t check that a Gauge’s value is a Number until it’s being read
+
+Spring Boot’s metrics require all values to be Numbers. A Dropwizard
+Gauge can have a non-Number value. Previously, to prevent this causing
+a problem, MetricRegistryMetricReader would check the value of a Gauge
+when it’s being added and ignore it if it had a non-Number value.
+Unfortunately, retrieving the value of a Gauge can take a non-trivial
+amount of time (hence CachedGauge) so this approach, while functional,
+could be improved.
+
+This commit updates the filtering to happen when a Metric is being
+retrieved from MetricRegistryMetricReader (via findOne or findAll)
+when its value is required anyway. At this point, any Gauge with a
+non-Number value is ignored.
+
+Closes gh-4874

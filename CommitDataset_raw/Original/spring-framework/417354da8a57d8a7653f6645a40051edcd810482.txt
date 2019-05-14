@@ -1,0 +1,24 @@
+Remove dependency management noise from POMs
+
+Prior to this commit, the generated POMs for Spring Framework modules
+would contain unneeded/harmful information from the Spring Framework
+build:
+
+1. The BOM imports applied to each module by the dependency
+management plugin, for example for Netty or Reactor Netty.
+Spring should not export that opinion to its POMs.
+
+2. The exclusion of "org.slf4:jcl-over-slf4j" from *all* dependencies,
+which made the POMs much larger than necessary and suggested to
+developers that they should exclude it as well when using all those
+listed dependencies. In fact, only Apache Tiles currently brings that
+transitively.
+
+This commit removes that information from the POMs.
+The dependencyManagement Gradle plugin is disabled for POM generation
+and we manually resolve the dependency versions during the generation
+phase.
+The Gradle build is streamlined to exclude "org.slf4:jcl-over-slf4j"
+only when necessary.
+
+Issue: SPR-16893

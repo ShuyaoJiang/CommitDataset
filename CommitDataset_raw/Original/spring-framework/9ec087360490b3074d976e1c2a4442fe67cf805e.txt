@@ -1,0 +1,10 @@
+MockWebResponseBuilder defaults cookie domain
+
+Previously MockWebResponseBuilder would use the cookie domain of the cookie
+received from MockMvc response. This caused problems because the cookie
+domain can be null, but HtmlUnit forbids a null domain.
+
+This commit defaults the domain of the cookie to the domain of the
+WebRequest.
+
+Issues SPR-14169

@@ -1,0 +1,22 @@
+Added default-value auto generation to NullPointerTester, for interfaces (and
+got rid of the manual registration of Function, Predicate and BinaryPredicate).
+
+To support generics correctly, I added common/reflect as dependency (which might
+be
+the biggest issue).
+
+Along the way, I needed the dynamic proxy to handler equals/hashCode/toString.
+
+Searched around for similar pattern and found about 30 clients that are rolling
+their own version:
+[]
+So I added AbstractInvocationHandler that deals with this. Since NPT needs it, I
+went ahead and just made it @Beta and apache and everything. If we don't think
+it's worth releasing, I can move it to the common/testing package and make it
+package-private.
+
+Tested:
+[][]
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=28462273

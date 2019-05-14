@@ -1,0 +1,19 @@
+Automatically close SessionFactory objects
+
+SessionFactory objects created by
+SessionFactoryBuilderSupport#buildSessionFactory are now DisposableBean
+proxies that call SessionFactory#close and release any threadlocal
+DataSource object.
+
+This is the same behavior that has always occurred during LSFBean and
+ASFBean destruction lifecycles (and still does). This destruction logic
+has now been factored out into
+SessionFactoryBuilderSupport#closeHibernateSessionFactory such that all
+SFB types can reuse it easily.
+
+Note that LSFBean and ASFBean are subclasses, respectively, of SFBuilder
+and ASFBuilder and they each must disable the DisposableBean proxying in
+order to avoid duplicate attempts at closing the SessionFactory. See
+the implementations of wrapSessionFactoryIfNeccesary() for details.
+
+Issue: SPR-8114

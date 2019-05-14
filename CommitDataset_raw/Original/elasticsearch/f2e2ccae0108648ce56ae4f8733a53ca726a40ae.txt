@@ -1,0 +1,11 @@
+[ML] Extract parent field when job has text multi-field (elastic/x-pack-elasticsearch#1705)
+
+In the case where a field is a text multi-field, it has
+no doc values and it is not in source. Thus, the datafeed
+will not be able to extract it.
+
+However, it is possible to extract it by getting its parent
+field instead. This commit implements the logic to look
+in parent fields when the field in question is a text field.
+
+Original commit: elastic/x-pack-elasticsearch@f116e899211b5f69c2712917cc357113f98a9901

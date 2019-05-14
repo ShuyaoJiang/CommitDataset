@@ -1,0 +1,9 @@
+Handle null outConfigs from BitmapFactory on API 26.
+
+We may be able to be smarter about how we perform this fallback. Not
+all images are affected and those that are may be limited to some
+subtypes of images. This fix may have negative side affects if it causes
+us to use the wrong config for the inBitmap. Although the image should
+still decode if we use the wrong config because we retry on failures
+with a null inBitmap, it can prevent us from re-using Bitmaps and waste
+memory and CPU cycles.

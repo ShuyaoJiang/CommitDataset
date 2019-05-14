@@ -1,0 +1,18 @@
+Enhance license detection for various licenses (#31198)
+
+This commit enhances the license detection that we have for various
+licenses. Here we improve the detection for all licenses (especially the
+Apache 2.0 License), the BSD 2-clause license, the MIT (with
+attribution) license, and we add detection for the BSD 3-clause
+license. One way that we achieved this improvement is by changing how
+the license files are read so that rather than reading them as a
+multi-line string which ended up represented as "[line1, line2, line3,
+...]" internally, we read the full bytes of the license text and replace
+all whitespace with a single space so the license text is now loaded as
+"line1 line2 line3". For the MIT license we add the actual license text
+and remove the "MIT" string as not all copies of the license clearly
+indicate that the text is the MIT license. We take a similar strategy
+for the BSD-2 and BSD-3 clause licenses. With this change, we reduce the
+number of "custom" licenses in the codebase from 31 to 2. The two
+remaining appear to be truly custom licenses, not carrying licenses
+identifiable by SPDX. A follow-up will address "unknown" licenses.

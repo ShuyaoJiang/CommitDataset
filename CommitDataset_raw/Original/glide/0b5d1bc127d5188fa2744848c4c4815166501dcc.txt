@@ -1,0 +1,8 @@
+Obtain the correct size Bitmap in TransformationUtils.roundedCorners.
+
+Previously we were obtaining the requested image size. The requested
+image size is ignored in roundedCorners because the transformation 
+doesn’t scale. As a result we were weirdly stretching the image with
+some combinations of image and requested dimensions.
+
+Fixes #2472.

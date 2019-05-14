@@ -1,0 +1,55 @@
+Allow @Configuration classes to self-@ComponentScan
+
+Prior to this change, a @Configuration classes that @ComponentScan
+themselves would result in a ConflictingBeanDefinitionException.
+
+For example:
+
+    package com.foo.config;
+
+    @Configuration
+    @ComponentScan("com.foo");
+    public class AppConfig {
+        // ...
+    }
+
+This resulted in a ConflictingBeanDefinitionException that users have
+typically worked around in the following fashion:
+
+    package com.foo.config;
+
+    @Configuration
+    @ComponentScan(basePackages="com.foo",
+        excludeFilters=@Filter(value=ANNOTATION_TYPE, type=Configuration.class);
+    public class AppConfig {
+        // ...
+    }
+
+This is obviously more verbose and cumbersome than would be desirable,
+and furthermore potentially too constraining as it prohibits the ability
+to include other legitimate @Configuration classes via scanning.
+
+The exception was being thrown because of a logic problem in
+ClassPathBeanDefinitionScanner.  The bean definition for AppConfig gets
+registered once by the user (e.g. when constructing an
+AnnotationConfigApplicationContext), then again when performing the
+component scan for 'com.foo'. Prior to this change,
+ClassPathBeanDefinitionScanner's #isCompatible returned false if the new
+bean definition was anything other than an AnnotatedBeanDefinition.  The
+intention of this check is really to see whether the new bean definition
+is a *scanned* bean definition, i.e. the result of a component-scanning
+operation.  If so, then it becomes safe to assume that the original bean
+definition is the one that should be kept, as it is the one explicitly
+registered by the user.
+
+Therefore, the fix is as simple as narrowing the instanceof check from
+AnnotatedBeanDefinition to its ScannedGenericBeanDefinition subtype.
+
+Note that this commit partially reverts changes introduced in SPR-8307
+that explicitly caught ConflictingBeanDefinitionExceptions when
+processing recursive @ComponentScan definitions, and rethrew as a
+"CircularComponentScanException.  With the changes in this commit,
+such CBDEs will no longer occur, obviating the need for this check and
+for this custom exception type altogether.
+
+Issue: SPR-8808, SPR-8307

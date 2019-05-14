@@ -1,0 +1,29 @@
+[#5505] Enforce Recycler limit when recycling from different threads
+
+Motivation:
+
+Currently, the recycler max capacity it's only enforced on the
+thread-local stack which is used when the recycling happens on the
+same thread that requested the object.
+
+When the recycling happens in a different thread, then the objects
+will be queued into a linked list (where each node holds N objects,
+default=16). These objects are then transfered into the stack when
+new objects are requested and the stack is empty.
+
+The problem is that the queue doesn't have a max capacity and that
+can lead to bad scenarios. Eg:
+
+- Allocate 1M object from recycler
+- Recycle all of them from different thread
+- Recycler WeakOrderQueue will contain 1M objects
+- Reference graph will be very long to traverse and GC timeseems to be negatively impacted
+- Size of the queue will never shrink after this
+
+Modifications:
+
+Add some shared counter which is used to manage capacity limits when recycle from different thread then the allocation thread. We modify the counter whenever we allocate a new Link to reduce the overhead of increment / decrement it.
+
+Result:
+
+More predictable number of objects mantained in the recycler pool.

@@ -1,0 +1,16 @@
+Epoll and Kqueue shouldn't read by default (#8024)
+
+Motivation:
+Epoll and Kqueue channels have internal state which forces
+a single read operation after channel construction. This
+violates the Channel#read() interface which indicates that
+data shouldn't be delivered until this method is called.
+The behavior is also inconsistent with the NIO transport.
+
+Modifications:
+- Epoll and Kqueue shouldn't unconditionally read upon
+initialization, and instead should rely upon Channel#read()
+or auto_read.
+
+Result:
+Epoll and Kqueue are more consistent with NIO.

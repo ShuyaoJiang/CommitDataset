@@ -1,0 +1,17 @@
+Use LF line endings in SQL generated files (elastic/x-pack-elasticsearch#26822) (elastic/x-pack-elasticsearch#2706)
+
+Right now if you run `gradle regen` on Windows you'll get `CRLF` line
+endings on all the ANTLR generated files because we run
+```
+ant.fixcrlf(srcdir: outputPath) {
+    patternset(includes: 'SqlBase*.java')
+}
+```
+
+The docs for fixcrlf say that the default line endings that it
+corrects to is based on the OS:
+https://ant.apache.org/manual/Tasks/fixcrlf.html
+
+This change locks it to `LF`.
+
+Original commit: elastic/x-pack-elasticsearch@4396729e04b3c518bb31b82f8c70c9eff017e4d3

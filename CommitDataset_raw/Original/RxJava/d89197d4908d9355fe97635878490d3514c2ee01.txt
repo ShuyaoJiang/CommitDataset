@@ -1,0 +1,10 @@
+GroupBy unsubscribe logic
+
+- support unsubscribing from parent and/or child
+- The following is now possible:
+
+```
+groupBy().take(1).mapMany(group -> group.take(20))
+```
+
+- the subscription on the parent will cause new groups to stop being sent, but it will keep sending events until all previously created groups are unsubscribed from

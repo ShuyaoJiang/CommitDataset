@@ -1,0 +1,19 @@
+Deprecate Unpooled.unmodifiableBuffer(ByteBuf...) (#8096)
+
+Motivation:
+
+Recent PR https://github.com/netty/netty/pull/8040 introduced
+Unpooled.wrappedUnmodifiableBuffer(ByteBuf...) which has the same
+behaviour but wraps the provided array directly. This is preferred for
+most uses (including varargs-based use) and if there are any unusual
+cases of an explicit array which is re-used before the ByteBuf is
+finished with, it can just be copied first.
+
+Modifications:
+
+Added @Deprecated annotation and javadoc to
+Unpooled.unmodifiableBuffer(ByteBuf...).
+
+Result:
+
+Unpooled.unmodifiableBuffer(ByteBuf...) will be deprecated.

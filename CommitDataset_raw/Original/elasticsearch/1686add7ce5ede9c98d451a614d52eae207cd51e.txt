@@ -1,0 +1,11 @@
+The configured role-mapping file must be valid. (elastic/x-pack-elasticsearch#1940)
+
+This adds a bootstrap-check that makes it an error to configure a role mapping file that doesn't exist or cannot be parsed.
+
+We are still lenient on dynamic reload because
+(a) killing a running node is quite drastic
+(b) file writes aren't atomic, so we might be picking up a file that is half way through being written (etc).
+
+If you rely on the default role mapping filename, then it doesn't need to exist (because you might be using the role mapping API instead) but if it does exist it has to parse successfully
+
+Original commit: elastic/x-pack-elasticsearch@5424dea4c4b9fab20a52d0cc19d627d79a98d2e3

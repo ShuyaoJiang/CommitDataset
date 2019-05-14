@@ -1,0 +1,15 @@
+Get memory address from Unsafe for OpenSSL
+
+Motivation:
+Profiling tcnative SSL code showed a non trivial percentage (1%)
+of time spent in JNI code for InstaceOf.   This turned out to be
+from `Buffer.address` which makes a JNI call, which safely checks
+on each call that The ByteBuffer is direct.
+
+Modification:
+Prefer using the address field of the pojo rather than looking it
+up with JNI.  This is the same approach taken by the `OpenSsl`
+class.
+
+Result:
+Less JNI overhead

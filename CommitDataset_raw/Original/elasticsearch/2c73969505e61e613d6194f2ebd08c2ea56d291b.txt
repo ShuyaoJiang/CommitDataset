@@ -1,0 +1,17 @@
+Introduce soft-deletes retention policy based on global checkpoint (#30335)
+
+This commit introduces a soft-deletes retention merge policy based on
+the global checkpoint. Some notes on this simple retention policy:
+
+- This policy keeps all operations whose seq# is greater than the 
+persisted global checkpoint and configurable extra operations prior to
+the global checkpoint. This is good enough for querying history changes.
+
+- This policy is not watertight for peer-recovery. We send the 
+safe-commit in peer-recovery, thus we need to also send all operations
+after the local checkpoint of that commit. This is analog to the min
+translog generation for recovery.
+
+- This policy is too simple to support rollback.
+
+Relates #29530

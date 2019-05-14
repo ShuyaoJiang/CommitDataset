@@ -1,0 +1,21 @@
+TestRestTemplate should not override request factory
+
+Previously `TestRestTemplate` would override the configured
+`ClientHttpRequestFactory` if the Apache HTTP client library was on
+classpath.
+
+This commit fixes two issues:
+
+1. The existing `ClientHttpRequestFactory` is overridden *only* if it is
+using the Apache HTTP client variant, in order to wrap it with the
+`TestRestTemplate` custom support
+
+2. Calling `withBasicAuth` will no longer directly use the request
+factory returned by the internal `RestTemplate`; if client interceptors
+are configured, the request factory is wrapped with an
+`InterceptingClientHttpRequestFactory`. If we don't unwrap it,
+interceptors are copied/applied twice in the newly created
+`TestRestTemplate` instance. For that, we need to use reflection as the
+underlying request factory is not accessible directly.
+
+Closes gh-8697

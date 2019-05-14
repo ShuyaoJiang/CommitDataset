@@ -1,0 +1,12 @@
+HTTP/2 ByteBufUtil.writeUtf8 cleanup
+
+Motiviation:
+691bc1690e9542d6093b91ffe1fbdf7d075bcd42 made writeUtf8 consistent with String.getBytes() so that it never throws.
+94f27be59b637c74763cc3b9fd27cf628b59f7bd provided a writeUtf8 method which takes a ByteBufAllocator to do an appropriately sized buffer allocation.
+
+Result:
+- Assume writeUtf8 will not throw in HTTP/2 codec
+- Use the new writeUtf8 method
+
+Result:
+Cleaner code in codec-http2.

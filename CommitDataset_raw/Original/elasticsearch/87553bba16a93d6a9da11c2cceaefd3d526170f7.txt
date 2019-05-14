@@ -1,0 +1,47 @@
+Add ingest-attachment support for per document `indexed_chars` limit (#28977)
+
+We today support a global `indexed_chars` processor parameter. But in some cases, users would like to set this limit depending on the document itself.
+It used to be supported in mapper-attachments plugin by extracting the limit value from a meta field in the document sent to indexation process.
+
+We add an option which reads this limit value from the document itself
+by adding a setting named `indexed_chars_field`.
+
+Which allows running:
+
+```
+PUT _ingest/pipeline/attachment
+{
+  "description" : "Extract attachment information. Used to parse pdf and office files",
+  "processors" : [
+    {
+      "attachment" : {
+        "field" : "data",
+        "indexed_chars_field" : "size"
+      }
+    }
+  ]
+}
+```
+
+Then index either:
+
+```
+PUT index/doc/1?pipeline=attachment
+{
+  "data": "BASE64"
+}
+```
+
+Which will use the default value (or the one defined by `indexed_chars`)
+
+Or
+
+```
+PUT index/doc/2?pipeline=attachment
+{
+  "data": "BASE64",
+  "size": 1000
+}
+```
+
+Closes #28942

@@ -1,0 +1,16 @@
+Make repackage depend on jar tasks from runtime project dependencies
+
+By default, when building a project's jar its runtime dependencies
+are not taken into account as they are not needed to successfully
+compile the code that will be packaged in the jar. A side-effect of
+this was that, if a project that was being repackaged had a runtime
+dependency on another project, then the repackaged jar would not
+include the jar of the project on which it has the runtime dependency
+as the jar had not been built.
+
+This commit updates Boot's repackage task to have a dependency on the
+jar task of any project dependencies in the runtime configuration
+thereby ensuring that those dependencies' jars will have been built
+before the repackaging occurs.
+
+Fixes gh-2344

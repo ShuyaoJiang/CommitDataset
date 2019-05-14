@@ -1,0 +1,21 @@
+Move EmptyHttpHeaders.INSTANCE initialization to inner class.
+
+Motivation:
+
+If the HttpUtil class is initialized before HttpHeaders or
+EmptyHttpHeaders, EmptyHttpHeaders.INSTANCE will be null. This
+can lead to NPEs in code that relies on this field being
+non-null. One example is the
+LastHttpContent.EMPTY_LAST_CONTENT.trailingHeaders method.
+
+Modifications:
+
+- Move HttpUtil.EMPTY_HEADERS to a private static final inner class
+  of EmptyHttpHeaders called InstanceInitializer.
+- Add tests, that when run in isolation, validate the fix for the issue.
+
+Result:
+
+Any initialization order of HttpUtil, EmptyHttpHeaders or
+HttpHeaders will result in EmptyHttpHeaders.INSTANCE being initialized
+correctly.

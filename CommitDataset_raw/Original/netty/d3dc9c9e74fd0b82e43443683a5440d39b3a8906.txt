@@ -1,0 +1,13 @@
+Allow to limit the maximum number of WeakOrderQueue instances per Thread.
+
+Motivation:
+
+To better restrict resource usage we should limit the number of WeakOrderQueue instances per Thread. Once this limit is reached object that are recycled from a different Thread then the allocation Thread are dropped on the floor.
+
+Modifications:
+
+Add new system property io.netty.recycler.maxDelayedQueuesPerThread and constructor that allows to limit the max number of WeakOrderQueue instances per Thread for Recycler instance. The default is 2 * cores (the same as the default number of EventLoop instances per EventLoopGroup).
+
+Result:
+
+Better way to restrict resource / memory usage per Recycler instance.

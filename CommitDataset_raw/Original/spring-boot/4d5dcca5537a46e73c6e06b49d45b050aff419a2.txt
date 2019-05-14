@@ -1,0 +1,15 @@
+Add Thymeleaf auto-configuration for WebFlux
+
+Thymeleaf 3.0 implements the Spring 5.0 view infrastructure for WebMVC
+and the new WebFlux framework. This commit adds auto-configuration for
+the WebFlux support.
+
+In that process, the configuration property for `spring.thymeleaf` has
+been changed to add `spring.thymeleaf.servlet` and
+`spring.thymeleaf.reactive` for MVC/WebFlux specific properties.
+
+Now that the `spring-boot-starter-thymeleaf` does not only support
+Spring MVC, the transitive dependency on `spring-boot-starter-web` is
+removed from it.
+
+Fixes gh-8124

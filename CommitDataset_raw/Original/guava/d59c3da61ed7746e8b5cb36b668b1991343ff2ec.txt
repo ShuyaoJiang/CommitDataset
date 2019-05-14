@@ -1,0 +1,6 @@
+Added TypeToInstanceMap, ImmutableTypeToInstanceMap and MutableTypeToInstanceMap, mirroring ClassToInstanceMap. One major difference, is that put() and putAll() aren't supported. This is because there is no way to check isInstance() for generic types at runtime. In addition:
+1. I added ImmutableTypeToInstanceMap.of() for empty map. I've wanted similar thing for ClassToInstanceMap in the past.
+2. Omitted MutableTypeToInstanceMap.create(). With diamond operator coming along soon, do we still benefit from hiding default constructor and exposing static factory? For one thing, default constructor works better with reflection-based frameworks, such as ArbitraryInstances.
+-------------
+Created by MOE: http://code.google.com/p/moe-java
+MOE_MIGRATED_REVID=30580364

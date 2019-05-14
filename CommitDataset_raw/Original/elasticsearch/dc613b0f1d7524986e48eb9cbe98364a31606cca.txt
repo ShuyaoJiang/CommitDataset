@@ -1,0 +1,8 @@
+Add lower bound on poll_interval (#39593)
+
+A poll_interval of less than 1 second doesn't make much sense,
+and can cause  excess load on the master node if 
+it's set too low (e.g. single digit milliseconds).
+
+However, we still want to allow relatively short poll intervals,
+for testing purposes, so we put a lower limit of 1 second.

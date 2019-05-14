@@ -1,0 +1,9 @@
+Translate user-defined exception when invoking JMX operation
+
+This commit makes sure to respect the MBeanServer#invoke contract by
+wrapping any user-defined exception in an MBeanException. Also, any
+exception not from the JDK is translated, as it may lead to unexpected
+issue on the client if that class isn't present. This is consistent
+with our operation result mapping strategy.
+
+Closes gh-10448

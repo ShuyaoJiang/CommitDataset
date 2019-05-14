@@ -1,0 +1,13 @@
+[Close Index API] Add unique UUID to ClusterBlock (#36775)
+
+This commit adds a unique id to cluster blocks, so that they can be uniquely 
+identified if needed. This is important for the Close Index API where multiple 
+concurrent closing requests can be executed at the same time. By adding a 
+UUID to the cluster block, we can generate unique "closing block" that can 
+later be verified on shards and then checked again from the cluster state 
+before closing the index. When the verification on shard is done, the closing 
+block is replaced by the regular INDEX_CLOSED_BLOCK instance.
+
+If something goes wrong, calling the Open Index API will remove the block.
+
+Related to #33888 

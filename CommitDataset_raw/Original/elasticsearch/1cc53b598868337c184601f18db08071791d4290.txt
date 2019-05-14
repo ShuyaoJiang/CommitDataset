@@ -1,0 +1,6 @@
+Bad regex in CORS settings should throw a nicer error (#34035)
+
+Currently a bad regex in CORS settings throws a PatternSyntaxException, which
+then bubbles up through the bootstrap code, meaning users have to parse a
+stack trace to work out where the problem is.  We should instead catch this
+exception and rethrow with a more useful error message.

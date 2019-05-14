@@ -1,0 +1,12 @@
+Fix transitive dependency issue with slf4j-api
+
+Before this change, IDE settings generated via import-into-eclipse.sh
+created a classpath dependency on slf4j-api version 1.6.1 and
+slf4j-log4j12 version 1.5.10. As a result running tests inside the IDE
+resulted in a NoSuchMethodException.
+
+build.gradle sets the variable slf4jLog4jVersion to '1.5.10'. However,
+the hibernate-validator dependency in spring-context pulls in
+slf4j-api version 1.6.1. The change ensures the version specified in
+the build script variable is used consistently. Whether it should be
+1.5.10 or 1.6.1 is a separate concern.

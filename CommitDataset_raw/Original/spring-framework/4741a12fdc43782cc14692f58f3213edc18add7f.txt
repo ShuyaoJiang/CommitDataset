@@ -1,0 +1,19 @@
+Support for transactional event listener
+
+Update the application event listener infrastructure to support events
+that are processed according to a transactional phase.
+
+Introduce EventListenerFactory that can be implemented to provide support
+for additional event listener types. TransactionalEventListener is a new
+annotation that can be used in lieu of the regular EventListener. Its
+related factory implementation is registered in the context automatically
+via @EnableTransactionManagement or <tx:annotation-driven/>
+
+By default, a TransactionalEventListener is invoked when the transaction
+has completed successfully (i.e. AFTER_COMMIT). Additional phases are
+provided to handle BEFORE_COMMIT and AFTER_ROLLBACK events.
+
+If no transaction is running, such listener is not invoked at all unless
+the `fallbackExecution` flag has been explicitly set.
+
+Issue: SPR-12080

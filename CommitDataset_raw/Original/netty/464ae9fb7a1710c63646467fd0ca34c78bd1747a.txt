@@ -1,0 +1,12 @@
+Expose CharSequence version of HttpUtil#getMimeType and HttpUtil#getCharset
+
+Motivation:
+
+It would be more flexible to make getCharset and getMimeType code usable not only for HttpMessage entity but just for any CharSequence. This will improve usability in general purpose code and will help to avoid multiple fetching of ContentType header from a message. It could be done in an external code once and CharSequence method versions could be applied.
+
+Modification:
+Expose HttpUtil#getMimeType, HttpUtil#getCharsetAsString, HttpUtil#getCharset versions which works with CharSequence. New methods are reused in the old ones which work with HttpMessage entity.
+
+Result:
+
+More flexible methods set with a good code reusing.

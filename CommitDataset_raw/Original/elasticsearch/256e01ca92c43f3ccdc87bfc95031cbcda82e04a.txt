@@ -1,0 +1,5 @@
+Fix potential NPE in UsersTool (#37660)
+
+It looks like the output of FileUserPasswdStore.parseFile shouldn't be wrapped 
+into another map since its output can be null. Doing this wrapping after the null
+check (which potentially raises an exception) instead.

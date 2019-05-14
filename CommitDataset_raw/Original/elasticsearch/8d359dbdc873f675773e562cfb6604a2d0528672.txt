@@ -1,0 +1,14 @@
+Don't emit deprecation warnings on calls to the monitoring bulk API. (#39805)
+
+The monitoring bulk API accepts the same format as the bulk API, yet its concept
+of types is different from "mapping types" and the deprecation warning is only
+emitted as a side-effect of this API reusing the parsing logic of bulk requests.
+
+This commit extracts the parsing logic from `_bulk` into its own class with a
+new flag that allows to configure whether usage of `_type` should emit a warning
+or not. Support for payloads has been removed for simplicity since they were
+unused.
+
+@jakelandis has a separate change that removes this notion of type from the
+monitoring bulk API that we are considering bringing to 8.0.
+

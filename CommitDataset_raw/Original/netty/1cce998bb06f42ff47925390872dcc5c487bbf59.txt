@@ -1,0 +1,13 @@
+[#3662] Fail the connect future on close
+
+Motivation:
+
+Because of a bug we missed to fail the connect future when doClose() is called. This can lead to a future which is never notified and so may lead to deadlocks in user-programs.
+
+Modifications:
+
+Correctly fail the connect future when doClose() is called and the connection was not established yet.
+
+Result:
+
+Connect future is always notified.

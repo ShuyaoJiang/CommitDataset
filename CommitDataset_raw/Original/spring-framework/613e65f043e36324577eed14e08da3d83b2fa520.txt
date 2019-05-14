@@ -1,0 +1,8 @@
+Fix URL decoding issue in reactive @RequestParam
+
+%-encoded strings were injected undecoded into @RequestParam variables,
+which does not coincide with spring-webmvc behaviour. This commit
+fixes AbstractServerHttpRequest.getQueryParams() to correctly return
+decoded name-value pairs.
+
+Issue: SPR-15140

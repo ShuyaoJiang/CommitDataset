@@ -1,0 +1,13 @@
+MultipartHttpMessageWriter consumes source once only
+
+The previous fix #09f1f7 did not actually address the issue but only
+moved it further down, so instead of the subscribe(), it was consuming
+it inside the MultipartHttpMessageWriter#write method which returned
+this.body.then(), and then again for the actual request body writing.
+
+In this commit MultipartHttpMessageWriter#write returns Mono.empty()
+since we don't actually want to write the part content from there, but
+only want to access it as soon as it is availabele, for writing to
+the request body.
+
+Issue: SPR-16402

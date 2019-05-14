@@ -1,0 +1,13 @@
+ObjectCleanerThread must be a deamon thread to ensure the JVM can always terminate.
+
+Motivation:
+
+The ObjectCleanerThread must be a daemon thread as otherwise we may block the JVM from exit. By using a daemon thread we basically give the same garantees as the JVM when it comes to cleanup of resources (as the GC threads are also daemon threads and the CleanerImpl uses a deamon thread as well in Java9+).
+
+Modifications:
+
+Change ObjectCleanThread to be a daemon thread.
+
+Result:
+
+JVM shutdown will always be able to complete. Fixed [#7617].

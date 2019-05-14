@@ -1,0 +1,10 @@
+Transport client: Don't validate node in handshake (#30737)
+
+This is related to #30141. Right now in the transport client we open a
+temporary node connection and take the node information. This node
+information is used to open a permanent connection that is used for the
+client. However, we continue to use the configured transport address.
+If the configured transport address is a load balancer, you might
+connect to a different node for the permanent connection. This causes
+the handshake validation to fail. This commit removes the handshake
+validation for the transport client when it simple node sample mode.

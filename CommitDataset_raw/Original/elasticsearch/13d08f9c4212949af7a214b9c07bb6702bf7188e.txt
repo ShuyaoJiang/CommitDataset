@@ -1,0 +1,16 @@
+Test: don't reset node in ClusterPrivilegeTests
+
+In the ClusterPrivilegeTests class, the code was resetting the node
+after each test and failures were seen in CI that were HTTP 401 when
+a 403 was expected. This commit removes the resetting of the node
+between tests as this was not necessary.
+
+Additionally, there is an issue in the SecuritySingleNodeTestCase where
+the rest client was not torn down afterstopping a node and starting a
+new node. This means the client used in other tests would not be
+connected to the right cluster. This change resolves this by tearing
+down the rest client after the old node is torn down.
+
+relates elastic/x-pack-elasticsearch#4383
+
+Original commit: elastic/x-pack-elasticsearch@2f81a4b2e2e31240249d164210de84a718f453a4

@@ -1,0 +1,31 @@
+Refactor CLI internals for REPL shell
+
+Numerous updates to the Spring CLI, primarily for better embedded REPL
+shell support:
+
+* Refactor the CLI application to help separate concerts between the
+  main CLI and the embedded shell. Both the CLI and embedded shell now
+  delegate to a new `CommandRunner` to handle running commands. The
+  runner can be configured differently depending depending on need.
+  For example, the embedded shell adds the 'prompt' and 'clear'
+  commands.
+
+* Most `Command` implementations have been moved to sub-packages so that
+  they can be co-located with the classes that they use.
+
+* Option commands are now only used in the CLI, the embedded shell
+  does not user them and details have been removed from the Command
+  interface.
+
+* The REPL shell has been significantly refactored to:
+    - Support CTRL-C to cancel the running process. This is supported
+      when running external commands and most internal commands.
+    - Fork a new JVM when running commands (primarily for CTRL-C support
+      but also for potential memory and classpath issues)
+    - Change the "continue" trigger from `<<` to `\`
+    - Support command completion of files
+    - Add ANSI color output
+    - Provide 'help' support for internal commands (such as 'clear')
+    - Remove the now redundant `stop` command
+
+Fixes gh-227

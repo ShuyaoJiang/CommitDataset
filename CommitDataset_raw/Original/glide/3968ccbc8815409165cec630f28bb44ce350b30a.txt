@@ -1,0 +1,11 @@
+Disable all release variants in Glide.
+
+There’s no difference whatsoever in any of our configurations between
+the two variants. As a result we’ve been building all of our code
+and running all of our tests twice, which is slow and doesn’t add any
+value. It’s a little weird to see that the jars we upload to maven are
+based on ‘debug’ variants, but that should be fine since we do nothing
+different for release vs debug builds.
+
+We can’t default to the release build only because AndroidStudio and
+other dev tools assume that the debug variant will be present.

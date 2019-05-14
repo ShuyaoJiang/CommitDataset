@@ -1,0 +1,20 @@
+[ML] Add ML filter update API (#31437)
+
+This adds an api to allow updating a filter:
+
+POST _xpack/ml/filters/{filter_id}/_update
+
+The request body may have:
+
+- description: setting a new description
+- add_items: a list of the items to add
+- remove_items: a list of the items to remove
+
+This commit also changes the PUT filter api to
+error when the filter_id is already used. As
+now there is an api for updating filters, the
+put api should only be used to create new ones.
+
+Also, updating a filter results into a notification
+message auditing the change for every job that is
+using that filter.

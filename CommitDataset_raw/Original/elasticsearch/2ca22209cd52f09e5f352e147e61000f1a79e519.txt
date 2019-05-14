@@ -1,0 +1,13 @@
+Enable TLSv1.3 by default for JDKs with support (#38103)
+
+This commit enables the use of TLSv1.3 with security by enabling us to
+properly map `TLSv1.3` in the supported protocols setting to the
+algorithm for a SSLContext. Additionally, we also enable TLSv1.3 by
+default on JDKs that support it.
+
+An issue was uncovered with the MockWebServer when TLSv1.3 is used that
+ultimately winds up in an endless loop when the client does not trust
+the server's certificate. Due to this, SSLConfigurationReloaderTests
+has been pinned to TLSv1.2.
+
+Closes #32276

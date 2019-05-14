@@ -1,0 +1,26 @@
+Partially revert connection timeout behavior
+
+Related to issue #1790.
+
+If there is a *connection* timeout the next route should
+be tried. Timeouts during a request/response should
+probably not be retried.
+
+The timeout/interrupt behavior was changed in PR #1257
+for issue #1146. This modified both connection and
+request/response behavior. The issue reported was actually
+about the use of Thread.interrupt(), not timeouts, but the
+behavior change modified both behavior for interrupt and
+timeout.
+
+PR #1388 split the handling of exceptions so that separate
+code now handles connection errors from that which handles
+request/response errors. It faithfully kept the behavior
+from PR #1257.
+
+The modification of the timeout behavior during *connection*
+caused problems on Android. Now that the two types of error
+handling are split it's possible to deal with them
+differently and return the connection behavior to trying
+the next route. This does not modify behavior during
+request/response.

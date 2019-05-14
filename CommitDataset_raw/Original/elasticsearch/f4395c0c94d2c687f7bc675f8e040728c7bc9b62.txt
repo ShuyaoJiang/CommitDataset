@@ -1,0 +1,29 @@
+Fixed a msm accounting error that can occur during analyzing a percolator query.
+
+In case of a disjunction query with both range and term based clauses and
+msm specified, the query analyzer needs to also reduce the msn if a range
+based clause for the same field is encountered. This did not happen.
+
+Instead of fixing this bug the logic has been simplified to just set a
+percolator query's msm to 1 if a disjunction contains range clauses and
+msm on disjunction has been specified. The logic would otherwise just get
+to complex and the performance gain isn't that much for this kind of
+percolator queries.
+
+In case a percolator query has clauses that have duplicate terms or ranges then
+for disjunction clauses with a minimum should match the query extraction of the
+clause with the lowest msm should be used and for conjunction queries query
+extractions wiht duplicate terms/ranges the msn should be ignored. If this
+is not done then percolator queries that should match never match.
+
+Example percolator query: value1 OR value2 OR value2 OR value3 OR value3 OR value3 OR value4 OR value5 (msm set to 3)
+In the above example query the extracted msm would be 3
+Example document1: value1 value2 value3
+With the msm and extracted terms this would match and is expected behaviour
+Example document2: value3
+This document should match too (value3 appears in 3 clauses), but with msm set to 3 and the fact
+that fact that only distinct values are indexed in extracted terms field this document would
+
+Also added another random duel test.
+
+Closes #29393

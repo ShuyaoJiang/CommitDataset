@@ -1,0 +1,12 @@
+[Rollup] Validate timezone in range queries (#30338)
+
+When validating the search request, we make sure any date_histogram
+aggregations have timezones that match the jobs.  But we didn't
+do any such validation on range queries.
+
+While it wouldn't produce incorrect results, it would be confusing
+to the user as no documents would match the aggregation (because we
+add a filter clause on the timezone for the agg).
+
+Now the user gets an exception up front, and some helpful text about
+why the range query didnt match, and which timezones are acceptable
