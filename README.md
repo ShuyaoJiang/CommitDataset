@@ -1,5 +1,5 @@
-# CommitDaset
-## CommitDaset_raw
+# CommitDataset
+## CommitDataset_raw
 原始数据
 
 * diff：每个项目每次提交的代码更改文件
@@ -7,7 +7,7 @@
 * ChangeScribe：每个项目每次提交通过 ChangeScribe 生成的总结文本
 * msgprocess.sh：对原始数据进行预处理的脚本
 
-## CommitDaset_processed
+## CommitDataset_processed
 预处理后的数据
 
 * Original：每个项目每次提交的原始提交信息（处理后）
